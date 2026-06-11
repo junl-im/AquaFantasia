@@ -1,0 +1,9 @@
+{
+  "name": "aqua-fantasia-static",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node tools/validate-static.mjs"
+  }
+}

@@ -1,7 +1,7 @@
 {
-  "version": "1.3.0",
+  "version": "1.9.0",
   "updated": "2026-06-11",
-  "notes": "AquaFantasia Patch 02 fish database. Free GitHub Pages friendly static JSON.",
+  "notes": "AquaFantasia Patch 08 boss fish database. Boss fish include boss=true and bossPower fields.",
   "fish": [
     {
       "id": "lake_crucian_carp",
@@ -362,6 +362,96 @@
       "exp": 1600,
       "weight": 1,
       "desc": "게임의 이름을 가진 꿈의 어종. 최고의 낚시꾼만 만날 수 있습니다."
+    },
+    {
+      "id": "boss_lake_ancient_koi",
+      "region": "호수",
+      "name": "고대 비단잉어 왕",
+      "emoji": "👑",
+      "rarity": 4,
+      "minValue": 1250,
+      "maxValue": 2100,
+      "exp": 260,
+      "weight": 0.75,
+      "boss": true,
+      "bossPower": 1.1,
+      "bossTitle": "호수의 첫 대어",
+      "desc": "초보 낚시꾼도 강화 장비로 도전할 수 있는 첫 보스 어종입니다."
+    },
+    {
+      "id": "boss_river_thunder_catfish",
+      "region": "강",
+      "name": "천둥 메기 장군",
+      "emoji": "⚡",
+      "rarity": 5,
+      "minValue": 2300,
+      "maxValue": 3900,
+      "exp": 430,
+      "weight": 0.46,
+      "boss": true,
+      "bossPower": 1.25,
+      "bossTitle": "급류의 장군",
+      "desc": "장력을 갑자기 끌어올리는 급류 패턴을 사용합니다."
+    },
+    {
+      "id": "boss_harbor_iron_tuna",
+      "region": "항구",
+      "name": "철갑 참치 제독",
+      "emoji": "🚢",
+      "rarity": 5,
+      "minValue": 3200,
+      "maxValue": 5600,
+      "exp": 620,
+      "weight": 0.35,
+      "boss": true,
+      "bossPower": 1.38,
+      "bossTitle": "항구의 제독",
+      "desc": "묵직한 몸통 돌진으로 릴 진행도를 되감는 바다 보스입니다."
+    },
+    {
+      "id": "boss_deep_abyss_leviathan",
+      "region": "심해",
+      "name": "심연 레비아탄",
+      "emoji": "🐋",
+      "rarity": 6,
+      "minValue": 7600,
+      "maxValue": 13200,
+      "exp": 1200,
+      "weight": 0.22,
+      "boss": true,
+      "bossPower": 1.62,
+      "bossTitle": "심해의 재앙",
+      "desc": "심해의 압력으로 장력을 폭발시키는 최상위 보스입니다."
+    },
+    {
+      "id": "boss_palace_dragon_king",
+      "region": "용궁",
+      "name": "청룡왕",
+      "emoji": "🐲",
+      "rarity": 6,
+      "minValue": 11200,
+      "maxValue": 18800,
+      "exp": 1750,
+      "weight": 0.16,
+      "boss": true,
+      "bossPower": 1.82,
+      "bossTitle": "용궁의 왕",
+      "desc": "용궁 문이 열릴 때만 조우한다는 왕급 신화 보스입니다."
+    },
+    {
+      "id": "boss_dimension_aqua_origin",
+      "region": "차원의 바다",
+      "name": "근원의 아쿠아 판타지아",
+      "emoji": "🌌",
+      "rarity": 6,
+      "minValue": 18000,
+      "maxValue": 32000,
+      "exp": 2600,
+      "weight": 0.1,
+      "boss": true,
+      "bossPower": 2.08,
+      "bossTitle": "차원의 근원",
+      "desc": "차원 균열에서 등장하는 현재 버전의 최종 보스 어종입니다."
     }
   ]
 }

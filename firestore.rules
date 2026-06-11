@@ -14,6 +14,10 @@ service cloud.firestore {
       return name is string && name.size() > 0 && name.size() <= 24;
     }
 
+    function validSeasonKey(key) {
+      return key is string && key.size() >= 0 && key.size() <= 12;
+    }
+
     function validUserProfile(userId) {
       let d = request.resource.data;
       return d.keys().hasOnly(['uid', 'nickname', 'gold', 'level', 'state', 'createdAt', 'updatedAt'])
@@ -25,11 +29,25 @@ service cloud.firestore {
 
     function validLeaderboardEntry(userId) {
       let d = request.resource.data;
-      return d.keys().hasOnly(['uid', 'name', 'score', 'level', 'updatedAt'])
+      return d.keys().hasOnly(['uid', 'name', 'score', 'level', 'seasonKey', 'equipmentScore', 'bossDefeated', 'updatedAt'])
         && d.uid == userId
         && validNickname(d.name)
         && d.score is number && d.score >= 0 && d.score <= 999999999
-        && d.level is number && d.level >= 1 && d.level <= 9999;
+        && d.level is number && d.level >= 1 && d.level <= 9999
+        && validSeasonKey(d.seasonKey)
+        && d.equipmentScore is number && d.equipmentScore >= 0 && d.equipmentScore <= 9999999
+        && d.bossDefeated is number && d.bossDefeated >= 0 && d.bossDefeated <= 999999;
+    }
+
+    function validBossLeaderboardEntry(userId) {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['uid', 'name', 'bossDefeated', 'bossBestValue', 'level', 'seasonKey', 'updatedAt'])
+        && d.uid == userId
+        && validNickname(d.name)
+        && d.bossDefeated is number && d.bossDefeated >= 0 && d.bossDefeated <= 999999
+        && d.bossBestValue is number && d.bossBestValue >= 0 && d.bossBestValue <= 999999999
+        && d.level is number && d.level >= 1 && d.level <= 9999
+        && validSeasonKey(d.seasonKey);
     }
 
     // 개인 저장 데이터: 본인만 읽기/쓰기
@@ -39,10 +57,17 @@ service cloud.firestore {
       allow delete: if isOwner(userId);
     }
 
-    // 글로벌 리더보드: 로그인 사용자는 읽기 가능, 자기 점수만 쓰기 가능
+    // 글로벌 시즌 리더보드: 로그인 사용자는 읽기 가능, 자기 점수만 쓰기 가능
     match /leaderboard/{userId} {
       allow read: if signedIn();
       allow create, update: if isOwner(userId) && validLeaderboardEntry(userId);
+      allow delete: if isOwner(userId);
+    }
+
+    // 보스 토벌 리더보드: 로그인 사용자는 읽기 가능, 자기 보스 기록만 쓰기 가능
+    match /bossLeaderboard/{userId} {
+      allow read: if signedIn();
+      allow create, update: if isOwner(userId) && validBossLeaderboardEntry(userId);
       allow delete: if isOwner(userId);
     }
 
