@@ -713,6 +713,35 @@
         .world-map-scroll { padding-bottom:calc(6.5rem + var(--safe-bottom)); }
         @media (max-width:420px){ .route-node { grid-template-columns:auto 1fr; } .route-node .route-badge { grid-column:2; width:max-content; } }
 
+
+        /* v2.8 Inventory Core / Practical bag and sale UX */
+        .inventory-coach { position:relative; overflow:hidden; border:1px solid rgba(251,191,36,.18); background:linear-gradient(145deg, rgba(69,26,3,.34), rgba(8,47,73,.64), rgba(15,23,42,.74)); box-shadow:0 18px 58px rgba(251,191,36,.10); }
+        .inventory-coach::before { content:""; position:absolute; inset:-65% -20% auto; height:170px; background:radial-gradient(circle at 24% 50%, rgba(251,191,36,.18), transparent 45%), radial-gradient(circle at 78% 40%, rgba(34,211,238,.16), transparent 42%); pointer-events:none; }
+        .inventory-kpi-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.55rem; }
+        .inventory-kpi { border:1px solid rgba(255,255,255,.09); background:rgba(255,255,255,.055); border-radius:1.05rem; padding:.7rem .55rem; text-align:center; }
+        .inventory-kpi b { display:block; font-size:1rem; line-height:1.05; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; }
+        .inventory-kpi span { display:block; margin-top:.25rem; font-size:.62rem; color:rgba(255,255,255,.54); font-weight:900; }
+        .inventory-toolbar { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
+        .inventory-toolbar select { width:100%; border-radius:1rem; border:1px solid rgba(255,255,255,.12); background:rgba(15,23,42,.72); color:white; padding:.76rem .8rem; font-size:.78rem; font-weight:900; outline:none; }
+        .inventory-actions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.55rem; }
+        .inventory-actions button { min-height:3rem; border-radius:1.05rem; border:1px solid rgba(255,255,255,.11); background:rgba(255,255,255,.08); font-size:.72rem; font-weight:950; }
+        .inventory-actions button.primary { background:linear-gradient(135deg, rgba(251,191,36,.28), rgba(34,211,238,.18)); border-color:rgba(251,191,36,.28); color:#fef3c7; }
+        .inventory-list { display:grid; grid-template-columns:1fr; gap:.65rem; }
+        .fish-row { display:grid; grid-template-columns:auto 1fr auto; gap:.75rem; align-items:center; padding:.82rem .88rem; border-radius:1.25rem; border:1px solid rgba(255,255,255,.09); background:rgba(255,255,255,.055); }
+        .fish-row.keep { border-color:rgba(168,85,247,.25); background:rgba(88,28,135,.12); }
+        .fish-row.settled { opacity:.72; }
+        .fish-emoji-box { width:3rem; height:3rem; display:flex; align-items:center; justify-content:center; border-radius:1.05rem; background:rgba(255,255,255,.08); font-size:1.85rem; }
+        .fish-meta-title { font-weight:950; line-height:1.05; }
+        .fish-meta-sub { font-size:.66rem; color:rgba(255,255,255,.54); margin-top:.22rem; }
+        .fish-price { font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-weight:950; color:#fbbf24; font-size:.86rem; text-align:right; }
+        .fish-sale-state { font-size:.6rem; font-weight:900; color:rgba(255,255,255,.55); text-align:right; margin-top:.15rem; }
+        .sale-plan { border-radius:1.35rem; border:1px solid rgba(251,191,36,.18); background:rgba(251,191,36,.075); padding:.86rem; }
+        .sale-meter { height:7px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; }
+        .sale-meter span { display:block; height:100%; width:0%; border-radius:inherit; background:linear-gradient(90deg,#fbbf24,#34d399,#22d3ee); transition:width .32s ease; }
+        @media (min-width:421px){ .inventory-list.compact-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .inventory-list.compact-grid .fish-row { grid-template-columns:auto 1fr; } .inventory-list.compact-grid .fish-row .fish-sale { grid-column:1 / -1; display:flex; align-items:center; justify-content:space-between; } }
+        @media (max-width:420px){ .inventory-actions { grid-template-columns:1fr; } .fish-row { grid-template-columns:auto 1fr; } .fish-sale { grid-column:1 / -1; display:flex; align-items:center; justify-content:space-between; } }
+
+
     </style>
 </head>
 <body class="bg-[#0a3d5c] text-white antialiased">
@@ -724,8 +753,8 @@
             <div class="flex items-center gap-3 min-w-0">
                 <div class="top-logo-mark">🌊</div>
                 <div class="min-w-0">
-                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v2.5</span></div>
-                    <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Focus UI · 플레이 중심 정리</div>
+                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v2.8</span></div>
+                    <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Inventory Core · 가방/판매 정리</div>
                 </div>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
@@ -757,7 +786,7 @@
             <div class="text-center mb-10">
                 <div class="text-[5.5rem] mb-3">🎣</div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-300 mt-2">v2.7 Route Map · 지역 해금과 성장 동선 정리</p>
+                <p class="text-sky-300 mt-2">v2.8 Inventory Core · 가방/판매 루프 정리</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
@@ -844,6 +873,10 @@
                     <div id="boss-quick-status" class="hidden">장비 점수가 높을수록 보스 조우가 안정됩니다</div>
                     <div class="mt-3 boss-meter"><span id="boss-quick-fill"></span></div>
                 </div>
+            </div>
+
+            <div class="px-5 mt-3">
+                <div id="inventory-coach-mini" class="inventory-coach premium-card rounded-[1.35rem] p-4 cursor-pointer" onclick="switchScreen('inventory')"></div>
             </div>
 
             <div class="px-5 mt-3">
@@ -1029,8 +1062,36 @@
 
         <!-- INVENTORY -->
         <div id="screen-inventory" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto screen-scroll">
-            <div class="flex justify-between mb-4"><div class="font-extrabold text-3xl">가방</div><button onclick="sellAll()" class="px-6 py-2 text-sm bg-rose-500 rounded-2xl font-bold">전체 판매</button></div>
-            <div id="inv-grid" class="grid grid-cols-2 gap-3"></div>
+            <div class="flex justify-between items-center mb-5">
+                <button onclick="switchScreen('village')" class="text-sky-300">← 마을</button>
+                <div class="text-right">
+                    <h2 class="section-title text-3xl font-black">가방</h2>
+                    <div class="text-[11px] text-cyan-200/75">보관 · 판매 · 가치 비교</div>
+                </div>
+            </div>
+            <div id="inventory-summary-panel" class="inventory-coach rounded-[1.65rem] p-5 mb-4"></div>
+            <div id="inventory-sale-plan" class="sale-plan mb-3"></div>
+            <div class="inventory-actions mb-3">
+                <button class="primary" onclick="sellRecommendedFish()">💰 추천 판매</button>
+                <button onclick="sellLowTierFish()">🐟 일반 판매</button>
+                <button onclick="sellAll()">🧺 전체 정리</button>
+            </div>
+            <div class="inventory-toolbar mb-3">
+                <select id="inventory-sort" onchange="setInventorySort(this.value)">
+                    <option value="value">가치 높은 순</option>
+                    <option value="newest">최근 포획 순</option>
+                    <option value="rarity">희귀도 높은 순</option>
+                    <option value="region">지역별 정렬</option>
+                </select>
+                <select id="inventory-filter" onchange="setInventoryFilter(this.value)">
+                    <option value="all">전체 보기</option>
+                    <option value="sell">판매 추천</option>
+                    <option value="keep">보관 추천</option>
+                    <option value="unsettled">미정산만</option>
+                    <option value="boss">보스만</option>
+                </select>
+            </div>
+            <div id="inv-grid" class="inventory-list"></div>
         </div>
 
         <!-- RECORD -->
@@ -1277,7 +1338,7 @@ try {
 // ==================== v2.4 MEGA EXPANSION PATCH / Firebase Ready ====================
 let graphicsMode = localStorage.getItem('aqua_graphics_mode') || ((navigator.deviceMemory && navigator.deviceMemory <= 3) ? 'low' : 'high');
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '2.7.0';
+const APP_VERSION = '2.8.0';
 const GAME_CANONICAL_URL = 'https://junl-im.github.io/AquaFantasia/';
 let gameState = {
     gold: 1240, level: 12, exp: 870, expToNext: 1000,
@@ -1303,6 +1364,7 @@ let gameState = {
     sensory: { sound: true, haptic: true, music: false, volume: 0.55, impact: 1, unlocked: false },
     captain: { supplyClaimed: false, guideDismissed: false, completed: {}, lastTip: '', startedAt: '' },
     quality: { preset: localStorage.getItem('aqua_quality_preset') || 'auto', longTasks: 0, lastFps: 0, directorMode: 'auto', lastTuneAt: '' },
+    inventoryPrefs: { sort: 'value', filter: 'all', lastSaleAt: '', compact: true },
     ui: { compactHud: localStorage.getItem('aqua_compact_hud') === '1', oneHand: localStorage.getItem('aqua_one_hand_mode') === '1', coachHints: true },
     world: { mapOpened: false, lastRecommended: '호수', unlockedRegions: ['호수'] },
     bossWindowActive: false,
@@ -2620,7 +2682,8 @@ function getFocusGoal() {
     const nextCost = getEnhanceCost(rod.id);
     if (!daily.checkedIn) return { title:'오늘 출석 보상 받기', desc:'무료 골드와 경험치를 먼저 챙기면 초반 성장 속도가 좋아집니다.', label:'미션으로', action:() => switchScreen('quests') };
     if (claimableQuest) return { title:`${claimableQuest.icon} 보상 수령 가능`, desc:`${claimableQuest.name} 완료. 미션 보상을 받아 장비 성장에 사용하세요.`, label:'수령', action:() => switchScreen('quests') };
-    if (inventoryCount >= 6) return { title:'가방 판매로 골드 확보', desc:`가방에 ${inventoryCount}마리가 있습니다. 판매 후 강화/미끼 구매를 추천합니다.`, label:'판매', action:() => switchScreen('inventory') };
+    if (getInventoryStats().recommended.length >= 3) return { title:'추천 판매로 골드 확보', desc:`판매 추천 어종 ${getInventoryStats().recommended.length}마리로 강화 자금을 마련하세요.`, label:'판매', action:() => switchScreen('inventory') };
+    if (inventoryCount >= 10) return { title:'가방 정리 필요', desc:`가방에 ${inventoryCount}마리가 있습니다. 보스/희귀 어종은 보관하고 일반 어종을 정리하세요.`, label:'정리', action:() => switchScreen('inventory') };
     if (Number(gameState.gold || 0) >= nextCost && enhance < 10) return { title:`${rod.name} +${enhance + 1} 강화 가능`, desc:`예상 비용 ${nextCost.toLocaleString()}골드. 릴 파워와 보스 안정성이 올라갑니다.`, label:'강화', action:() => switchScreen('equipment') };
     if (Number(gameState.bossStats?.defeated || 0) === 0 && Number(gameState.level || 1) >= 4) return { title:'첫 보스 토벌 준비', desc:'장비를 점검하고 심해/용궁에서 보스 신호를 노려보세요.', label:'장비', action:() => switchScreen('equipment') };
     return { title:`${gameState.currentRegion || '호수'}에서 낚시 시작`, desc:'현재 성장 단계에서는 포획 → 판매 → 강화 루프가 가장 효율적입니다.', label:'낚시', action:() => selectRegion(gameState.currentRegion || '호수') };
@@ -3123,6 +3186,7 @@ function updateUI() {
     renderBossQuickPanel();
     renderFocusHud();
     renderWorldMapQuick();
+    renderInventoryCoachMini();
     updatePWAStatus();
     applyGraphicsMode();
     renderSensoryPanel();
@@ -3582,7 +3646,8 @@ function endReelGame(success) {
             soldValue: value,
             boss: bossMode,
             bossTitle: species.bossTitle || '',
-            caughtAt: new Date().toISOString()
+            caughtAt: new Date().toISOString(),
+            settled: false
         };
 
         gameState.inventory.push(fish);
@@ -3590,17 +3655,15 @@ function endReelGame(success) {
         gameState.catchHistory.unshift(fish);
         gameState.catchHistory = gameState.catchHistory.slice(0, 50);
         gameState.totalCaught = (gameState.totalCaught || 0) + 1;
-        gameState.totalGoldEarned = (gameState.totalGoldEarned || 0) + value;
         if (bossMode) {
             gameState.bossStats = gameState.bossStats || { encounters: 0, defeated: 0, escaped: 0, bestValue: 0 };
             gameState.bossStats.defeated = Number(gameState.bossStats.defeated || 0) + 1;
             gameState.bossStats.bestValue = Math.max(Number(gameState.bossStats.bestValue || 0), value);
         }
-        recordDailyCatch(fish, value);
+        recordDailyCatch(fish, 0);
 
         if (!gameState.bestCatch || value > Number(gameState.bestCatch.soldValue || 0)) gameState.bestCatch = fish;
 
-        addGold(value);
         addExp(Math.round(Number(species.exp || 50) * (1 + stats.expBonus) * (bossMode ? 1.18 : 1)));
         checkAchievements();
 
@@ -3612,7 +3675,7 @@ function endReelGame(success) {
         createImpactBurst(bossMode ? 'bossWin' : 'success');
 
         setTimeout(() => {
-            showToast(`${fish.emoji} ${fish.name} 획득! ${bossMode ? '보스 · ' : ''}${rarity.name} · +${value.toLocaleString()} 골드`, bossMode ? '👑' : getRod().emoji, 3800);
+            showToast(`${fish.emoji} ${fish.name} 포획! ${bossMode ? '보스 · ' : ''}${rarity.name} · 가방 보관`, bossMode ? '👑' : getRod().emoji, 3800);
             gameState.pendingFish = null;
             resetBossVisuals();
             castBtn.style.display = 'flex';
@@ -3945,55 +4008,260 @@ function buyStarterBaitPack() {
     buyBait(best.id);
 }
 
-// ==================== 인벤토리 ====================
+// ==================== Inventory Core Patch v2.8 ====================
+function normalizeInventoryFish(item = {}) {
+    const legacySettled = item.settled === undefined;
+    return {
+        ...item,
+        id: String(item.id || `fish_${Date.now()}_${Math.random().toString(16).slice(2)}`),
+        speciesId: String(item.speciesId || item.id || 'unknown'),
+        name: String(item.name || '이름 없는 물고기'),
+        emoji: String(item.emoji || '🐟'),
+        region: String(item.region || '호수'),
+        rarity: clamp(Number(item.rarity || 1), 1, 6),
+        rarityName: String(item.rarityName || getRarityConfig(item.rarity || 1).name),
+        soldValue: Math.max(0, Number(item.soldValue || item.value || 0)),
+        boss: item.boss === true,
+        caughtAt: item.caughtAt || new Date().toISOString(),
+        settled: legacySettled ? true : item.settled === true
+    };
+}
+
+function ensureInventoryPrefs() {
+    if (!gameState.inventoryPrefs || typeof gameState.inventoryPrefs !== 'object') gameState.inventoryPrefs = { sort:'value', filter:'all', lastSaleAt:'', compact:true };
+    gameState.inventoryPrefs.sort = ['value','newest','rarity','region'].includes(gameState.inventoryPrefs.sort) ? gameState.inventoryPrefs.sort : 'value';
+    gameState.inventoryPrefs.filter = ['all','sell','keep','unsettled','boss'].includes(gameState.inventoryPrefs.filter) ? gameState.inventoryPrefs.filter : 'all';
+    gameState.inventoryPrefs.compact = gameState.inventoryPrefs.compact !== false;
+    return gameState.inventoryPrefs;
+}
+
+function getFishSaleValue(fish) {
+    return fish && fish.settled ? 0 : Math.max(0, Number(fish?.soldValue || 0));
+}
+
+function shouldKeepFish(fish) {
+    if (!fish) return false;
+    if (fish.boss) return true;
+    if (Number(fish.rarity || 1) >= 4) return true;
+    if (gameState.bestCatch && fish.id === gameState.bestCatch.id) return true;
+    return false;
+}
+
+function shouldRecommendSell(fish) {
+    if (!fish || fish.settled) return false;
+    if (shouldKeepFish(fish)) return false;
+    const rarity = Number(fish.rarity || 1);
+    if (rarity <= 2) return true;
+    const stats = getInventoryStats();
+    return stats.count >= 10 && rarity <= 3 && Number(fish.soldValue || 0) <= stats.averageValue * 1.08;
+}
+
+function getInventoryStats() {
+    const items = (gameState.inventory || []).map(normalizeInventoryFish);
+    const count = items.length;
+    const totalPotential = items.reduce((sum, f) => sum + Number(f.soldValue || 0), 0);
+    const unsettledValue = items.reduce((sum, f) => sum + getFishSaleValue(f), 0);
+    const recommended = items.filter(shouldRecommendSell);
+    const recommendedValue = recommended.reduce((sum, f) => sum + getFishSaleValue(f), 0);
+    const keepCount = items.filter(shouldKeepFish).length;
+    const bossCount = items.filter((f) => f.boss).length;
+    const averageValue = count ? totalPotential / count : 0;
+    const top = [...items].sort((a,b) => Number(b.soldValue || 0) - Number(a.soldValue || 0))[0] || null;
+    return { items, count, totalPotential, unsettledValue, recommended, recommendedValue, keepCount, bossCount, averageValue, top };
+}
+
+function getInventoryAdvice(stats = getInventoryStats()) {
+    if (!stats.count) return { title:'가방이 비어 있어요', desc:'추천 항로에서 물고기를 잡고 판매 루프를 시작하세요.', action:'낚시', fn:() => goFishing() };
+    if (stats.unsettledValue <= 0) return { title:'정리만 남았습니다', desc:'이전 버전에서 이미 정산된 물고기는 가방 정리만 가능합니다.', action:'정리', fn:() => sellAll() };
+    if (stats.recommended.length >= 3) return { title:'추천 판매 가능', desc:`일반/저가 어종 ${stats.recommended.length}마리를 팔면 ${stats.recommendedValue.toLocaleString()}골드를 확보합니다.`, action:'추천 판매', fn:() => sellRecommendedFish() };
+    if (stats.count >= 12) return { title:'가방이 복잡합니다', desc:'보스/영웅 이상은 보관하고 일반 어종 위주로 정리하세요.', action:'정리', fn:() => switchScreen('inventory') };
+    return { title:'보관 상태 양호', desc:'희귀 어종은 남기고, 장비 강화 전 골드가 필요할 때 판매하세요.', action:'가방 보기', fn:() => switchScreen('inventory') };
+}
+
+function renderInventoryCoachMini() {
+    const box = document.getElementById('inventory-coach-mini');
+    if (!box) return;
+    const stats = getInventoryStats();
+    const advice = getInventoryAdvice(stats);
+    const ratio = stats.totalPotential ? Math.min(100, Math.round((stats.unsettledValue / stats.totalPotential) * 100)) : 0;
+    box.innerHTML = `
+        <div class="relative z-10 flex items-start justify-between gap-3">
+            <div class="min-w-0">
+                <div class="text-[10px] text-amber-100/75 font-black tracking-wide">BAG COACH 2.8</div>
+                <div class="font-black text-lg mt-0.5 truncate">${escapeHTML(advice.title)}</div>
+                <div class="text-xs text-white/58 mt-1 leading-relaxed">${escapeHTML(advice.desc)}</div>
+            </div>
+            <button onclick="event.stopPropagation(); ${stats.recommended.length ? 'sellRecommendedFish()' : "switchScreen('inventory')"}" class="px-3 py-2 rounded-2xl bg-white/10 border border-white/10 text-xs font-black shrink-0">${stats.recommended.length ? '판매' : '가방'}</button>
+        </div>
+        <div class="relative z-10 mt-3 sale-meter"><span style="width:${ratio}%"></span></div>
+        <div class="relative z-10 mt-2 flex justify-between text-[10px] text-white/50"><span>${stats.count}마리 보관</span><span>미정산 ${stats.unsettledValue.toLocaleString()}골드</span></div>`;
+}
+
+function setInventorySort(value) {
+    ensureInventoryPrefs().sort = value;
+    savePlayerData(false);
+    renderInventory();
+}
+
+function setInventoryFilter(value) {
+    ensureInventoryPrefs().filter = value;
+    savePlayerData(false);
+    renderInventory();
+}
+
+function getVisibleInventoryItems() {
+    const prefs = ensureInventoryPrefs();
+    const items = (gameState.inventory || []).map((item, index) => ({ item: normalizeInventoryFish(item), index }));
+    let filtered = items;
+    if (prefs.filter === 'sell') filtered = filtered.filter(({ item }) => shouldRecommendSell(item));
+    if (prefs.filter === 'keep') filtered = filtered.filter(({ item }) => shouldKeepFish(item));
+    if (prefs.filter === 'unsettled') filtered = filtered.filter(({ item }) => !item.settled);
+    if (prefs.filter === 'boss') filtered = filtered.filter(({ item }) => item.boss);
+    const sorters = {
+        value: (a,b) => Number(b.item.soldValue || 0) - Number(a.item.soldValue || 0),
+        newest: (a,b) => new Date(b.item.caughtAt || 0) - new Date(a.item.caughtAt || 0),
+        rarity: (a,b) => Number(b.item.rarity || 0) - Number(a.item.rarity || 0) || Number(b.item.soldValue || 0) - Number(a.item.soldValue || 0),
+        region: (a,b) => String(a.item.region || '').localeCompare(String(b.item.region || ''), 'ko') || Number(b.item.soldValue || 0) - Number(a.item.soldValue || 0)
+    };
+    return filtered.sort(sorters[prefs.sort] || sorters.value);
+}
+
+function renderInventorySummary() {
+    const summary = document.getElementById('inventory-summary-panel');
+    const plan = document.getElementById('inventory-sale-plan');
+    if (!summary || !plan) return;
+    const stats = getInventoryStats();
+    const advice = getInventoryAdvice(stats);
+    const topLabel = stats.top ? `${stats.top.emoji} ${stats.top.name}` : '-';
+    const recRatio = stats.unsettledValue ? Math.min(100, Math.round((stats.recommendedValue / stats.unsettledValue) * 100)) : 0;
+    summary.innerHTML = `
+        <div class="relative z-10">
+            <div class="flex items-start justify-between gap-3 mb-4">
+                <div>
+                    <div class="text-[10px] text-amber-100/75 font-black tracking-wide">INVENTORY CORE 2.8</div>
+                    <div class="font-black text-xl mt-0.5">${escapeHTML(advice.title)}</div>
+                    <div class="text-xs text-white/58 mt-1 leading-relaxed">${escapeHTML(advice.desc)}</div>
+                </div>
+                <button onclick="switchScreen('worldmap')" class="px-3 py-2 rounded-2xl bg-white/10 border border-white/10 text-xs font-black shrink-0">항로</button>
+            </div>
+            <div class="inventory-kpi-grid">
+                <div class="inventory-kpi"><b>${stats.count}</b><span>보관</span></div>
+                <div class="inventory-kpi"><b>${stats.unsettledValue.toLocaleString()}</b><span>판매 가능</span></div>
+                <div class="inventory-kpi"><b>${stats.keepCount}</b><span>보관 추천</span></div>
+            </div>
+            <div class="mt-3 text-[11px] text-white/55 truncate">최고 가치: ${escapeHTML(topLabel)} · ${Number(stats.top?.soldValue || 0).toLocaleString()}골드</div>
+        </div>`;
+    plan.innerHTML = `
+        <div class="flex justify-between items-start gap-3">
+            <div><div class="text-[10px] font-black text-amber-100/80">SALE PLAN</div><div class="text-sm font-black mt-0.5">추천 판매 ${stats.recommended.length}마리 · ${stats.recommendedValue.toLocaleString()}골드</div></div>
+            <div class="text-[11px] text-white/55 text-right">보스/영웅 이상 자동 보관</div>
+        </div>
+        <div class="sale-meter mt-3"><span style="width:${recRatio}%"></span></div>`;
+}
+
 function renderInventory() {
+    ensureInventoryPrefs();
+    gameState.inventory = (gameState.inventory || []).map(normalizeInventoryFish);
     const grid = document.getElementById('inv-grid');
+    if (!grid) return;
+    const sortEl = document.getElementById('inventory-sort');
+    const filterEl = document.getElementById('inventory-filter');
+    if (sortEl) sortEl.value = gameState.inventoryPrefs.sort;
+    if (filterEl) filterEl.value = gameState.inventoryPrefs.filter;
+    renderInventorySummary();
+    renderInventoryCoachMini();
     grid.innerHTML = '';
+    grid.classList.toggle('compact-grid', gameState.inventory.length >= 8);
+    const visible = getVisibleInventoryItems();
     if (!gameState.inventory.length) {
-        grid.innerHTML = `<div class="col-span-2 premium-glass p-5 rounded-2xl text-sm text-white/70">아직 가방에 물고기가 없습니다. 낚시터에서 첫 어종을 잡아보세요.</div>`;
+        grid.innerHTML = `<div class="premium-glass p-5 rounded-2xl text-sm text-white/70">아직 가방에 물고기가 없습니다. 추천 항로에서 첫 어종을 잡아보세요.</div>`;
         return;
     }
-    gameState.inventory.slice().reverse().forEach((item, idx) => {
-        const originalIdx = gameState.inventory.length - 1 - idx;
+    if (!visible.length) {
+        grid.innerHTML = `<div class="premium-glass p-5 rounded-2xl text-sm text-white/70">현재 필터에 맞는 물고기가 없습니다. 필터를 전체 보기로 바꿔보세요.</div>`;
+        return;
+    }
+    visible.forEach(({ item, index }) => {
+        const keep = shouldKeepFish(item);
         const div = document.createElement('div');
-        div.className = `premium-card premium-glass p-4 rounded-2xl`;
+        div.className = `fish-row premium-card ${keep ? 'keep' : ''} ${item.settled ? 'settled' : ''}`;
+        const saleLabel = item.settled ? '정리' : '판매';
+        const saleState = item.settled ? '이미 정산됨' : (shouldRecommendSell(item) ? '판매 추천' : (keep ? '보관 추천' : '판매 가능'));
         div.innerHTML = `
-            <div class="flex items-start justify-between gap-2">
-                <div class="text-3xl">${escapeHTML(item.emoji || '🐟')}</div>
-                ${rarityBadge(item.rarity || 1)}
+            <div class="fish-emoji-box">${escapeHTML(item.emoji || '🐟')}</div>
+            <div class="min-w-0">
+                <div class="fish-meta-title truncate">${item.boss ? '👑 ' : ''}${escapeHTML(item.name)}</div>
+                <div class="fish-meta-sub truncate">${escapeHTML(item.region)} · ${escapeHTML(item.rarityName || getRarityConfig(item.rarity).name)}${item.boss ? ' · BOSS' : ''}</div>
+                <div class="mt-1">${rarityBadge(item.rarity || 1)}</div>
             </div>
-            <div class="font-extrabold mt-2">${item.boss ? '👑 ' : ''}${escapeHTML(item.name)}</div>
-            <div class="text-xs text-white/50">${escapeHTML(item.region)}${item.boss ? ' · BOSS' : ''}</div>
-            <div class="mt-3 flex justify-between items-center gap-2">
-                <div class="text-amber-400 font-mono font-bold text-sm">${Number(item.soldValue || 0).toLocaleString()} 골드</div>
-                <button onclick="sellFish(${originalIdx}, this)" class="text-xs px-4 py-1 bg-white/10 rounded-xl">판매</button>
+            <div class="fish-sale">
+                <div>
+                    <div class="fish-price">${Number(item.soldValue || 0).toLocaleString()}G</div>
+                    <div class="fish-sale-state">${saleState}</div>
+                </div>
+                <button onclick="sellFish(${index}, this)" class="mt-2 text-xs px-4 py-2 bg-white/10 rounded-xl font-black">${saleLabel}</button>
             </div>`;
         grid.appendChild(div);
     });
 }
 
+function settleFishValue(fish) {
+    const value = getFishSaleValue(fish);
+    if (value > 0) {
+        addGold(value);
+        gameState.totalGoldEarned = Number(gameState.totalGoldEarned || 0) + value;
+        ensureDailyState(true);
+        gameState.daily.stats.goldEarned = Number(gameState.daily.stats.goldEarned || 0) + value;
+    }
+    return value;
+}
+
 function sellFish(idx, el) {
+    gameState.inventory = (gameState.inventory || []).map(normalizeInventoryFish);
     const fish = gameState.inventory[idx];
     if (!fish) return;
-    addGold(Number(fish.soldValue || 0));
+    const value = settleFishValue(fish);
     gameState.inventory.splice(idx, 1);
-    el?.closest('.premium-card')?.remove();
+    ensureInventoryPrefs().lastSaleAt = new Date().toISOString();
+    el?.closest('.fish-row,.premium-card')?.remove();
+    playSound(value > 0 ? 'reward' : 'ui');
+    haptic(value > 0 ? [12, 24, 12] : 8);
+    showToast(value > 0 ? `${fish.emoji} ${fish.name} 판매 +${value.toLocaleString()}골드` : `${fish.emoji} ${fish.name} 정리 완료`, value > 0 ? '💰' : '🧺');
     renderInventory();
+    updateUI();
     savePlayerData();
 }
 
-function sellAll() {
-    if (!gameState.inventory.length) {
-        alert('판매할 물고기가 없습니다.');
+function sellFishBatch(predicate, label = '판매') {
+    gameState.inventory = (gameState.inventory || []).map(normalizeInventoryFish);
+    const selected = [];
+    const kept = [];
+    gameState.inventory.forEach((fish) => (predicate(fish) ? selected : kept).push(fish));
+    if (!selected.length) {
+        showToast(`${label}할 물고기가 없습니다`, '🧺');
         return;
     }
-    let total = 0;
-    gameState.inventory.forEach(f => total += Number(f.soldValue || 0));
-    addGold(total);
-    gameState.inventory = [];
+    const total = selected.reduce((sum, fish) => sum + settleFishValue(fish), 0);
+    gameState.inventory = kept;
+    ensureInventoryPrefs().lastSaleAt = new Date().toISOString();
+    playSound(total > 0 ? 'reward' : 'ui');
+    haptic(total > 0 ? [18, 32, 18] : 10);
     renderInventory();
+    updateUI();
     savePlayerData();
-    alert(`${total.toLocaleString()} 골드를 획득했습니다!`);
+    showToast(total > 0 ? `${label} 완료 · +${total.toLocaleString()}골드` : `${label} 정리 완료`, total > 0 ? '💰' : '🧺', 3600);
+}
+
+function sellRecommendedFish() {
+    sellFishBatch((fish) => shouldRecommendSell(fish), '추천 판매');
+}
+
+function sellLowTierFish() {
+    sellFishBatch((fish) => !fish.settled && !shouldKeepFish(fish) && Number(fish.rarity || 1) <= 2, '일반 판매');
+}
+
+function sellAll() {
+    sellFishBatch((fish) => !shouldKeepFish(fish), '전체 정리');
 }
 
 // ==================== 기록 ====================
@@ -4188,6 +4456,7 @@ const ACHIEVEMENTS = [
     { id: 'sensory_master', name: '감각 엔진 조율사', desc: 'v2.4 사운드/햅틱 엔진 활성화', check: (s) => s.sensory && s.sensory.unlocked === true },
     { id: 'captain_coach', name: '캡틴 코치 입문', desc: 'v2.4 캡틴 코치 허브 열기', check: () => APP_VERSION >= '2.4.0' },
     { id: 'focus_ui_clean', name: '깔끔한 항해자', desc: 'v2.5 Focus UI 정리 패치 접속', check: () => APP_VERSION >= '2.5.0' },
+    { id: 'inventory_curator', name: '가방 정리 전문가', desc: 'v2.8 가방/판매 정리 패치 접속', check: () => APP_VERSION >= '2.8.0' },
     { id: 'route_map_captain', name: '항로 설계자', desc: 'v2.7 월드맵과 지역 해금 패치 접속', check: () => APP_VERSION >= '2.7.0' },
     { id: 'quality_director', name: '품질 감독관', desc: '자동 품질 감독관 점검 기록', check: (s) => Number(s.quality?.lastFps || 0) > 0 },
     { id: 'boss_first_win', name: '대어 토벌자', desc: '보스 어종 1마리 포획', check: (s) => Number(s.bossStats?.defeated || 0) >= 1 },
@@ -4411,6 +4680,7 @@ function normalizeGameState(data) {
     if (Array.isArray(next.discovered)) next.discovered = new Set(next.discovered);
     else if (!(next.discovered instanceof Set)) next.discovered = new Set();
     if (!Array.isArray(next.inventory)) next.inventory = [];
+    next.inventory = next.inventory.map(normalizeInventoryFish);
     if (!Array.isArray(next.catchHistory)) next.catchHistory = [];
     next.isFishing = false;
     next.currentFish = null;
@@ -4468,6 +4738,10 @@ function normalizeGameState(data) {
     next.ui.compactHud = next.ui.compactHud === true || localStorage.getItem('aqua_compact_hud') === '1';
     next.ui.oneHand = next.ui.oneHand === true || localStorage.getItem('aqua_one_hand_mode') === '1';
     next.ui.coachHints = next.ui.coachHints !== false;
+    if (!next.inventoryPrefs || typeof next.inventoryPrefs !== 'object') next.inventoryPrefs = { sort:'value', filter:'all', lastSaleAt:'', compact:true };
+    next.inventoryPrefs.sort = ['value','newest','rarity','region'].includes(next.inventoryPrefs.sort) ? next.inventoryPrefs.sort : 'value';
+    next.inventoryPrefs.filter = ['all','sell','keep','unsettled','boss'].includes(next.inventoryPrefs.filter) ? next.inventoryPrefs.filter : 'all';
+    next.inventoryPrefs.compact = next.inventoryPrefs.compact !== false;
     if (!next.world || typeof next.world !== 'object') next.world = { mapOpened:false, lastRecommended:'호수', unlockedRegions:['호수'] };
     if (!Array.isArray(next.world.unlockedRegions)) next.world.unlockedRegions = ['호수'];
     next.world.lastRecommended = String(next.world.lastRecommended || '호수');
@@ -4477,6 +4751,7 @@ function normalizeGameState(data) {
 function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
+        localStorage.setItem('aqua_v2.8', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.7', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.6', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.5', JSON.stringify(plain));
@@ -4647,7 +4922,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) gameState = normalizeGameState(JSON.parse(saved));
         else gameState = normalizeGameState(gameState);
         
@@ -4672,7 +4947,7 @@ async function init() {
         scheduleAquaTask(initMegaPerformanceObserver, 'background');
         startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v2.7] Route Map Patch Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v2.8] Inventory Core Patch Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
         alert('게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.');

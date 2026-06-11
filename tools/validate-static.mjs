@@ -28,7 +28,7 @@ for (const file of requiredFiles) {
 
 const index = readFileSync(join(root, 'index.html'), 'utf8');
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!index.includes("const APP_VERSION = '2.7.0'")) fail('APP_VERSION must be 2.7.0 for this patch.');
+if (!index.includes("const APP_VERSION = '2.8.0'")) fail('APP_VERSION must be 2.8.0 for this patch.');
 if (!index.includes('serviceWorker.register')) fail('PWA service worker registration is missing.');
 if (!index.includes('season-ranking-panel')) fail('Season ranking UI is missing.');
 if (!index.includes('weekly-reward-vault')) fail('Weekly reward vault UI is missing.');
@@ -45,6 +45,9 @@ if (!index.includes('toggleQuickMenu')) fail('v2.5 quick menu is missing.');
 if (!index.includes('REGION_ROUTE')) fail('v2.7 route map data is missing.');
 if (!index.includes('world-route-mini')) fail('v2.7 route mini UI is missing.');
 if (!index.includes('screen-worldmap')) fail('v2.7 world map screen is missing.');
+if (!index.includes('INVENTORY CORE 2.8')) fail('v2.8 inventory summary UI is missing.');
+if (!index.includes('sellRecommendedFish')) fail('v2.8 recommended sale function is missing.');
+if (!index.includes('settled: false')) fail('v2.8 post-catch settlement flag is missing.');
 
 const manifest = JSON.parse(readFileSync(join(root, 'manifest.webmanifest'), 'utf8'));
 if (manifest.display !== 'fullscreen') fail('manifest.webmanifest must use display: fullscreen for mobile game mode.');
@@ -60,7 +63,7 @@ for (const item of fish.fish) {
 }
 
 const sw = readFileSync(join(root, 'sw.js'), 'utf8');
-if (!sw.includes('aqua-fantasia-v2.7.0')) fail('Service worker cache version was not updated.');
+if (!sw.includes('aqua-fantasia-v2.8.0')) fail('Service worker cache version was not updated.');
 
 const scripts = [...index.matchAll(/<script(?:\s+[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map((m) => m[1].trim())

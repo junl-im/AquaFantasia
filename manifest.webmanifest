@@ -1,11 +1,11 @@
 {
-  "name": "Aqua Fantasia v2.7",
-  "short_name": "Aqua v2.7",
-  "description": "Aqua Fantasia - 지역 해금, 추천 항로, 밸런스 코치가 정리된 모바일 낚시 RPG",
+  "name": "Aqua Fantasia v2.8",
+  "short_name": "Aqua v2.8",
+  "description": "Aqua Fantasia - 가방, 판매, 지역 해금, 밸런스 코치가 정리된 모바일 낚시 RPG",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "./?app=aqua-fantasia-v27",
-  "start_url": "./?source=pwa&fullscreen=1&route=1",
+  "id": "./?app=aqua-fantasia-v28",
+  "start_url": "./?source=pwa&fullscreen=1&route=1&inventory=1",
   "scope": "./",
   "display": "fullscreen",
   "display_override": [
@@ -82,6 +82,18 @@
       "short_name": "지도",
       "description": "지역 해금과 추천 항로 확인",
       "url": "./?shortcut=worldmap",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "가방 정리",
+      "short_name": "가방",
+      "description": "판매 추천과 보관 어종 확인",
+      "url": "./?shortcut=inventory",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",
