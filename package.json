@@ -1,6 +1,6 @@
 {
   "name": "aqua-fantasia-static",
-  "version": "4.0.0",
+  "version": "4.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,5 +8,5 @@
     "audit": "node tools/audit-bundle.mjs",
     "audit:bundle": "node tools/audit-bundle.mjs"
   },
-  "description": "Aqua Fantasia static mobile web game - v4.0 Boss Action Fishing Patch"
+  "description": "Aqua Fantasia static mobile web game - v4.2 Result Flow Polish Patch"
 }

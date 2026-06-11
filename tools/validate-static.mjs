@@ -180,7 +180,8 @@ const requiredFiles = [
   'assets/ui-kit/fishing_minigame/tension_meter_120px.png',
   'assets/ui-kit/icons/reel_progress.png',
   'assets/ui-kit/icons/tension_gauge.png',
-  'assets/ui-kit/icons/bobber.png'
+  'assets/ui-kit/icons/bobber.png',
+  'assets/art/v42_result_scroll.svg'
 
 ];
 
@@ -197,7 +198,7 @@ for (const file of requiredFiles) {
 const index = readFileSync(join(root, 'index.html'), 'utf8');
 const sw = readFileSync(join(root, 'sw.js'), 'utf8');
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!index.includes("const APP_VERSION = '4.0.0'")) fail('APP_VERSION must be 4.0.0 for this patch.');
+if (!index.includes("const APP_VERSION = '4.2.0'")) fail('APP_VERSION must be 4.2.0 for this patch.');
 if (!index.includes('serviceWorker.register')) fail('PWA service worker registration is missing.');
 if (!index.includes('season-ranking-panel')) fail('Season ranking UI is missing.');
 if (!index.includes('weekly-reward-vault')) fail('Weekly reward vault UI is missing.');
@@ -263,6 +264,7 @@ if (!index.includes('bite-target')) fail('v3.8 bite target touch UI is missing.'
 if (!index.includes('hookFishFromTarget')) fail('v3.8 hook target handler is missing.');
 if (!index.includes('action-reel-panel')) fail('v3.8 reel action panel is missing.');
 if (!index.includes('setFishingPhase')) fail('v3.8 fishing phase guide is missing.');
+if (!index.includes('catch-result-overlay') || !index.includes('showCatchResultFlow') || !index.includes('closeCatchResultFlow')) fail('v4.2 staged catch result flow is missing.');
 if (!index.includes('renderLegacyDirectorPanelsIfNeeded')) fail('v3.6.3 legacy render gate is missing.');
 if (!index.includes('v363_painterly_ocean.svg')) fail('v3.6.4 painterly ocean asset reference is missing.');
 if (!index.includes('src/core/state.js')) fail('v3.6 modular scaffold reference is missing.');
@@ -295,7 +297,7 @@ for (const item of fish.fish) {
   if (!item.region || !item.name || !item.rarity) fail(`Fish entry is incomplete: ${item.id}`);
 }
 
-if (!sw.includes('aqua-fantasia-v4.0.0')) fail('Service worker cache version was not updated.');
+if (!sw.includes('aqua-fantasia-v4.2.0')) fail('Service worker cache version was not updated.');
 
 const scripts = [...index.matchAll(/<script(?:\s+[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map((m) => m[1].trim())
