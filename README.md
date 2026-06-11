@@ -103,3 +103,8 @@ manifest.webmanifest PWA 앱 설정
 ## Patch 13 · v2.4 Mega Expansion
 
 이번 패치는 캡틴 코치 온보딩, 첫 10분 항해 체크리스트, 자동 품질 감독관, 원핸드 모드, 컴팩트 HUD, Long Task 성능 감시, PWA/Service Worker v2.4 캐시 갱신을 포함합니다. 기존 `aqua_v2.3` 이하 저장 데이터는 계속 읽고, 새 저장 키는 `aqua_v2.4`입니다.
+
+
+## v2.7 Route Map Core
+
+지역 해금, 추천 항로, 준비도 미터를 추가해 플레이어가 다음 목표를 바로 판단할 수 있게 정리했습니다.
