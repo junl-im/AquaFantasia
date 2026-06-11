@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'aqua-fantasia-v4.2.0';
+const CACHE_VERSION = 'aqua-fantasia-v4.3.0';
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const CORE_ASSETS = [
@@ -19,6 +19,9 @@ const CORE_ASSETS = [
   "./assets/art/v41_hud_panel.svg",
   "./assets/art/v41_flow_fishing_stage.svg",
   "./assets/art/v42_result_scroll.svg",
+  "./assets/art/v43_perf_fishing_shell.svg",
+  "./assets/art/v43_fullscreen_shell.svg",
+  "./assets/art/v43_perf_meter.svg",
   "./assets/art/v39_reel_lane.svg",
   "./assets/ui-kit/fishing_minigame/bobber_large.png",
   "./assets/ui-kit/icons/reel_progress.png"

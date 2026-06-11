@@ -1,6 +1,6 @@
 # AquaFantasia
 
-GitHub Pages 무료 배포용 모바일 웹 낚시 RPG입니다. 현재 패치: **v3.6 Core Navigator Mega Stabilization**.
+GitHub Pages 무료 배포용 모바일 웹 낚시 RPG입니다. 현재 패치: **v4.3 Fullscreen Performance Boost
 
 - 실행: `index.html`
 - 데이터: `data/fish.json`

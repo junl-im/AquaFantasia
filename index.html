@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Aqua Fantasia - v4.2 Result Flow Polish - 단계형 포획 결과, 보상 연출 정리, 낚시 몰입 유지">
+    <meta name="description" content="Aqua Fantasia - v4.3 Fullscreen Performance Boost - 단계형 포획 결과, 보상 연출 정리, 낚시 몰입 유지">
     <meta name="theme-color" content="#082f49">
     <meta name="color-scheme" content="dark">
     <meta name="mobile-web-app-capable" content="yes">
@@ -20,7 +20,40 @@
     <link rel="preload" as="image" href="assets/art/v38_action_ocean.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/art/v38_fishing_arena.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/art/v38_action_hud.svg" type="image/svg+xml">
-    <title>Aqua Fantasia • v4.2 Result Flow Polish</title>
+
+    <script>
+    /* v4.3 Early Fullscreen Primer: attaches before app boot, then upgrades to the full game shell after the first real gesture. */
+    (() => {
+      const ua = navigator.userAgent || '';
+      const mobile = /Android|iPhone|iPad|iPod|Mobile|KAKAOTALK|wv/i.test(ua);
+      const standalone = matchMedia?.('(display-mode: fullscreen)')?.matches || matchMedia?.('(display-mode: standalone)')?.matches || navigator.standalone;
+      const requested = new URL(location.href).searchParams.get('fullscreen') === '1';
+      if (!mobile && !standalone && !requested) return;
+      document.documentElement.classList.add('aqua-early-immersive');
+      try { localStorage.setItem('aqua_mobile_game_mode', '1'); } catch (error) {}
+      const attempt = () => {
+        document.removeEventListener('pointerdown', attempt, true);
+        document.removeEventListener('touchstart', attempt, true);
+        document.removeEventListener('click', attempt, true);
+        document.removeEventListener('keydown', attempt, true);
+        try {
+          const el = document.documentElement;
+          const fn = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+          if (fn && !document.fullscreenElement && !document.webkitFullscreenElement) {
+            const result = fn.call(el, { navigationUI: 'hide' });
+            if (result && typeof result.catch === 'function') result.catch(() => {});
+          }
+        } catch (error) {}
+        try { screen.orientation?.lock?.('portrait'); } catch (error) {}
+        try { window.__aquaEarlyFullscreenAttempted = true; } catch (error) {}
+      };
+      document.addEventListener('pointerdown', attempt, { once:true, capture:true, passive:true });
+      document.addEventListener('touchstart', attempt, { once:true, capture:true, passive:true });
+      document.addEventListener('click', attempt, { once:true, capture:true });
+      document.addEventListener('keydown', attempt, { once:true, capture:true });
+    })();
+    </script>
+    <title>Aqua Fantasia • v4.3 Fullscreen Performance Boost</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -2053,7 +2086,7 @@
         body.ui-v41.perf-lite .v41-touch-map { opacity:.32 !important; }
         body.ui-v41.perf-lite .v41-flow-card::before { display:none; }
 
-        /* ==================== v4.2 Result Flow Polish ==================== */
+        /* ==================== v4.3 Fullscreen Performance Boost ==================== */
         .catch-result-overlay { position:absolute; inset:0; z-index:96; display:flex; align-items:flex-end; justify-content:center; padding:calc(1rem + var(--safe-top)) 1rem calc(1rem + var(--safe-bottom)); background:linear-gradient(180deg,rgba(2,6,23,.05),rgba(2,6,23,.58)); pointer-events:none; opacity:0; transition:opacity .18s ease; }
         .catch-result-overlay.active { opacity:1; pointer-events:auto; }
         .catch-result-card { width:min(100%, 420px); border-radius:1.75rem; overflow:hidden; transform:translateY(20px) scale(.985); opacity:0; background-image:linear-gradient(145deg,rgba(8,21,42,.95),rgba(14,116,144,.36) 55%,rgba(88,28,135,.32)), url('assets/art/v42_result_scroll.svg'); background-size:cover; background-position:center; border:1px solid rgba(255,247,221,.18); box-shadow:0 22px 70px rgba(0,0,0,.58), inset 0 1px 0 rgba(255,255,255,.14); transition:transform .22s cubic-bezier(.2,.85,.2,1), opacity .22s ease; }
@@ -2087,6 +2120,23 @@
             .v41-flow-card.action { display:none; }
             body.ui-v41 .v39-action-lane { bottom:6.2rem; }
         }
+
+
+        /* ==================== v4.3 Fullscreen Performance Boost CSS ==================== */
+        html.aqua-early-immersive, body.auto-immersive-v43 { overscroll-behavior:none; background:#020617; }
+        body.auto-immersive-v43 { min-height:100dvh; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+        body.auto-immersive-v43 #app-shell { height:var(--aqua-vh, 100dvh); min-height:var(--aqua-vh, 100dvh); max-height:var(--aqua-vh, 100dvh); width:100vw; max-width:480px; overflow:hidden; border-left:0 !important; border-right:0 !important; }
+        body.auto-immersive-v43 #main-content { height:calc(var(--aqua-vh, 100dvh) - 118px); overflow:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
+        body.auto-immersive-v43[data-screen="fishing"] #main-content { height:var(--aqua-vh, 100dvh); padding:0 !important; overflow:hidden; }
+        body.auto-immersive-v43[data-screen="fishing"] .top-hud, body.auto-immersive-v43[data-screen="fishing"] .bottom-nav, body.auto-immersive-v43[data-screen="fishing"] #immersive-btn, body.auto-immersive-v43[data-screen="fishing"] .v30-smart-dock, body.auto-immersive-v43[data-screen="fishing"] .onehand-fab { display:none !important; }
+        body.auto-immersive-v43[data-screen="fishing"] #screen-fishing { height:var(--aqua-vh, 100dvh); min-height:var(--aqua-vh, 100dvh); border-radius:0; margin:0; background-image:linear-gradient(180deg, rgba(2,6,23,.16), rgba(2,6,23,.74)), url('assets/art/v43_perf_fishing_shell.svg'), url('assets/art/v41_mobile_fishing_shell.svg'); background-size:cover, cover, cover; background-position:center; }
+        .v43-fullscreen-status { position:fixed; left:50%; top:calc(var(--safe-top) + 8px); transform:translateX(-50%); z-index:150; display:none; gap:.45rem; align-items:center; padding:.44rem .7rem; border-radius:999px; border:1px solid rgba(134,239,172,.24); background:rgba(2,6,23,.70); backdrop-filter:blur(12px); color:#dcfce7; font-size:.66rem; font-weight:950; pointer-events:none; }
+        body.v43-fullscreen-ok .v43-fullscreen-status { display:flex; animation:toast-in .18s ease both, toast-out .24s ease forwards 1800ms; }
+        body.v43-scroll-active .premium-card::before, body.v43-scroll-active .v37-art-director::before, body.v43-scroll-active .v36-core-navigator::before, body.v43-scroll-active .v38-action-director::before { animation-play-state:paused !important; opacity:.25 !important; }
+        body.v43-perf-boost .fx-aurora, body.v43-perf-boost .depth-rays, body.v43-perf-boost .bubble-field, body.v43-perf-boost .mobile-hero-scan, body.v43-perf-boost .v34-smart-rail, body.v43-perf-boost .v30-smart-dock { display:none !important; }
+        body.v43-perf-boost .premium-card, body.v43-perf-boost .v36-core-navigator, body.v43-perf-boost .v37-art-director, body.v43-perf-boost .v38-action-director, body.v43-perf-boost .result-card { box-shadow:0 14px 34px rgba(0,0,0,.22) !important; backdrop-filter:blur(10px); }
+        body.v43-perf-boost * { scroll-behavior:auto !important; }
+        body.v43-perf-boost .fish-shadow:nth-child(n+4) { display:none !important; }
 
 </style>
 </head>
@@ -2133,7 +2183,7 @@
             <div class="text-center mb-10">
                 <div class="v37-login-emblem" aria-hidden="true"></div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-100/80 mt-2 font-bold">v4.2 Result Flow Polish · 포획 결과 단계 표시 · 연출 정리</p>
+                <p class="text-sky-100/80 mt-2 font-bold">v4.3 Fullscreen Performance Boost · 포획 결과 단계 표시 · 연출 정리</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="startLocalGuestGame()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">🎣 로컬 게스트로 바로 시작</button>
@@ -2675,6 +2725,7 @@
     </div>
     <div id="toast-stack" class="toast-stack" aria-live="polite" aria-atomic="false"></div>
 
+    <div id="v43-fullscreen-status" class="v43-fullscreen-status">🎮 게임 화면 최적화 적용</div>
     <div id="fullscreen-ribbon" class="fullscreen-ribbon">
         <div>
             <div class="text-xs font-black text-cyan-100">모바일 게임 모드</div>
@@ -2819,7 +2870,7 @@ let graphicsMode = localStorage.getItem('aqua_graphics_mode') || (() => {
     return (mobileLike || saveData || lowMemory || lowCores) ? 'low' : 'high';
 })();
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '4.2.0';
+const APP_VERSION = '4.3.0';
 function versionAtLeast(minVersion) {
     const parse = (value) => String(value || '0').split('.').map((part) => Number(part) || 0);
     const current = parse(APP_VERSION);
@@ -3303,22 +3354,28 @@ async function requestAquaWakeLock() {
 
 async function enableMobileGameMode(options = {}) {
     const silent = typeof options === 'object' && options.silent;
-    document.body.classList.add('mobile-game-mode', 'art-v29', 'art-v30');
+    document.body.classList.add('mobile-game-mode', 'auto-immersive-v43', 'art-v29', 'art-v30');
+    document.documentElement.classList.add('aqua-early-immersive');
     localStorage.setItem('aqua_mobile_game_mode', '1');
     updateViewportMetrics();
     let full = false;
     try {
-        const env = getLaunchEnvironment();
-        if (!document.fullscreenElement && !env.standalone && document.documentElement.requestFullscreen) {
-            await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
-            full = true;
+        if (typeof requestV43FullscreenNow === 'function') full = await requestV43FullscreenNow();
+        else {
+            const env = getLaunchEnvironment();
+            const fn = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen || document.documentElement.msRequestFullscreen;
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && !env.standalone && fn) {
+                const result = fn.call(document.documentElement, { navigationUI: 'hide' });
+                if (result && typeof result.then === 'function') await result;
+                full = true;
+            }
         }
     } catch (error) {}
     try { await screen.orientation?.lock?.('portrait'); } catch (error) {}
     const wake = await requestAquaWakeLock();
     const ribbon = document.getElementById('fullscreen-ribbon');
     if (ribbon) ribbon.classList.remove('show');
-    if (!silent) showToast(`게임모드 시작${full ? ' · 전체화면' : ''}${wake ? ' · 화면 켜짐 유지' : ''}`, '🎮', 3200);
+    if (!silent) showToast(`게임모드 시작${full ? ' · 전체화면' : ' · 화면 맞춤'}${wake ? ' · 화면 켜짐 유지' : ''}`, '🎮', 3000);
     updatePWAStatus();
 }
 
@@ -6123,7 +6180,96 @@ function initDirectorArchivePerformanceGate() {
 
 
 
-// ==================== v4.2 Result Flow Polish / Staged Completion ====================
+// ==================== v4.3 Fullscreen Performance Boost / Staged Completion ====================
+
+// ==================== v4.3 Fullscreen Performance Boost Runtime ====================
+const V43_CRITICAL_ASSETS = [
+    'assets/art/v43_perf_fishing_shell.svg',
+    'assets/art/v43_fullscreen_shell.svg',
+    'assets/art/v43_perf_meter.svg',
+    'assets/art/v41_precision_ring.svg',
+    'assets/ui-kit/fishing_minigame/bobber_large.png'
+];
+function isV43MobileRuntime() {
+    const env = getLaunchEnvironment();
+    return Boolean(env.isKakao || env.isAndroid || env.isIOS || env.standalone || new URL(location.href).searchParams.get('fullscreen') === '1');
+}
+function markV43FullscreenStatus(ok = true) {
+    document.body.classList.toggle('v43-fullscreen-ok', !!ok);
+    clearTimeout(markV43FullscreenStatus.timer);
+    markV43FullscreenStatus.timer = setTimeout(() => document.body.classList.remove('v43-fullscreen-ok'), 2100);
+}
+async function requestV43FullscreenNow() {
+    document.body.classList.add('auto-immersive-v43');
+    document.documentElement.classList.add('aqua-early-immersive');
+    updateViewportMetrics();
+    let ok = false;
+    try {
+        const env = getLaunchEnvironment();
+        const el = document.documentElement;
+        const fn = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+        if (fn && !document.fullscreenElement && !document.webkitFullscreenElement && !env.standalone) {
+            const result = fn.call(el, { navigationUI:'hide' });
+            if (result && typeof result.then === 'function') await result;
+            ok = true;
+        } else if (env.standalone || document.fullscreenElement || document.webkitFullscreenElement) ok = true;
+    } catch (error) {}
+    try { await screen.orientation?.lock?.('portrait'); } catch (error) {}
+    try { await requestAquaWakeLock(); } catch (error) {}
+    if (ok) markV43FullscreenStatus(true);
+    return ok;
+}
+function installV43FirstGestureFullscreen() {
+    if (installV43FirstGestureFullscreen.bound) return;
+    installV43FirstGestureFullscreen.bound = true;
+    const run = () => {
+        document.removeEventListener('pointerdown', run, true);
+        document.removeEventListener('touchstart', run, true);
+        document.removeEventListener('click', run, true);
+        document.removeEventListener('keydown', run, true);
+        requestV43FullscreenNow();
+    };
+    document.addEventListener('pointerdown', run, { once:true, capture:true });
+    document.addEventListener('touchstart', run, { once:true, capture:true });
+    document.addEventListener('click', run, { once:true, capture:true });
+    document.addEventListener('keydown', run, { once:true, capture:true });
+}
+function applyV43PerfBoost(reason = 'auto') {
+    const ua = navigator.userAgent || '';
+    const mobile = /Android|iPhone|iPad|iPod|Mobile|KAKAOTALK|wv/i.test(ua);
+    const mem = Number(navigator.deviceMemory || 4);
+    const cores = Number(navigator.hardwareConcurrency || 4);
+    const saveData = !!navigator.connection?.saveData;
+    const should = mobile || saveData || mem <= 4 || cores <= 4 || graphicsMode === 'low';
+    document.body.classList.toggle('v43-perf-boost', should);
+    if (should && gameState?.fishingOptions) gameState.fishingOptions.perfLock = gameState.fishingOptions.perfLock || 'lite';
+    return should;
+}
+function installV43ScrollThrottle() {
+    if (installV43ScrollThrottle.bound) return;
+    installV43ScrollThrottle.bound = true;
+    const scroller = document.getElementById('main-content') || window;
+    let timer = 0;
+    const onScroll = () => {
+        document.body.classList.add('v43-scroll-active');
+        clearTimeout(timer);
+        timer = setTimeout(() => document.body.classList.remove('v43-scroll-active'), 180);
+    };
+    scroller.addEventListener?.('scroll', onScroll, { passive:true });
+    document.addEventListener('touchmove', onScroll, { passive:true });
+}
+function initV43PerformanceRuntime() {
+    document.body.classList.add('ui-v43');
+    if (isV43MobileRuntime()) {
+        document.body.classList.add('mobile-game-mode', 'auto-immersive-v43');
+        localStorage.setItem('aqua_mobile_game_mode', '1');
+        installV43FirstGestureFullscreen();
+    }
+    applyV43PerfBoost('init');
+    installV43ScrollThrottle();
+    scheduleAquaTask(() => warmAssetsSafely(V43_CRITICAL_ASSETS, document.body.classList.contains('v43-perf-boost') ? 1 : 2), 'background');
+}
+
 let catchResultTimers = [];
 let catchResultState = { active:false, fish:null, meta:null };
 function clearCatchResultTimers() {
@@ -8124,16 +8270,21 @@ function renderFishingCoach() {
 }
 
 function initAutoImmersiveShell() {
-    document.body.classList.add('auto-immersive');
+    document.body.classList.add('auto-immersive', 'auto-immersive-v43');
+    updateViewportMetrics();
+    if (typeof installV43FirstGestureFullscreen === 'function') installV43FirstGestureFullscreen();
     const run = () => {
         document.removeEventListener('pointerdown', run, true);
         document.removeEventListener('touchstart', run, true);
+        document.removeEventListener('click', run, true);
         document.removeEventListener('keydown', run, true);
-        enableMobileGameMode({ silent:true, auto:true });
+        if (typeof requestV43FullscreenNow === 'function') requestV43FullscreenNow();
+        else enableMobileGameMode({ silent:true, auto:true });
         setTimeout(() => window.scrollTo(0, 1), 50);
     };
     document.addEventListener('pointerdown', run, { once:true, capture:true });
     document.addEventListener('touchstart', run, { once:true, capture:true });
+    document.addEventListener('click', run, { once:true, capture:true });
     document.addEventListener('keydown', run, { once:true, capture:true });
 }
 
@@ -8254,7 +8405,7 @@ function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
         const json = JSON.stringify(plain);
-        ['aqua_v4.1', 'aqua_v3.9', 'aqua_latest_state'].forEach((key) => localStorage.setItem(key, json)); // 성능 보호: 과거 전체 버전 키 반복 저장 제거
+        ['aqua_v4.3', 'aqua_v4.2', 'aqua_latest_state'].forEach((key) => localStorage.setItem(key, json)); // 성능 보호: 과거 전체 버전 키 반복 저장 제거
         setCloudSaveStatus('ok', '로컬 저장됨');
 
         if (syncCloud && isFirebaseConnected && gameState.userId && window.AquaFirebase) {
@@ -8478,7 +8629,7 @@ function exposeAquaHandlers() {
     Object.assign(window, {
         autoEnhanceEquippedRod, buyBait, buyBestAffordableRod, buyRod, buyStarterBaitPack,
         castLine, claimAttendance, claimCaptainSupply, claimWeeklyReward, copyGameLink,
-        createImpactBurst, cycleImpactLevel, dismissKakaoBridge, enableMobileGameMode,
+        createImpactBurst, cycleImpactLevel, dismissKakaoBridge, enableMobileGameMode, requestV43FullscreenNow,
         enhanceRod, equipBait, equipRod, escapeHTML, exitFishing, goFishing,
         goRecommendedRegion, installAquaApp, loginAnonymous, loginWithEmail, loginWithGoogle,
         logoutGame, openInExternalBrowser, playSound, quickCoachAction, rebalanceEconomyHint,
@@ -8501,7 +8652,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v4.1') || localStorage.getItem('aqua_v4.0') || localStorage.getItem('aqua_v3.9') || localStorage.getItem('aqua_v3.8') || localStorage.getItem('aqua_v3.7') || localStorage.getItem('aqua_v3.6.4') || localStorage.getItem('aqua_v3.6.3') || localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v4.3') || localStorage.getItem('aqua_v4.2') || localStorage.getItem('aqua_v4.1') || localStorage.getItem('aqua_v4.0') || localStorage.getItem('aqua_v3.9') || localStorage.getItem('aqua_v3.8') || localStorage.getItem('aqua_v3.7') || localStorage.getItem('aqua_v3.6.4') || localStorage.getItem('aqua_v3.6.3') || localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) {
             const parsed = JSON.parse(saved);
             if (isDemoSeedState(parsed)) {
@@ -8539,6 +8690,7 @@ async function init() {
         initV39Runtime();
         initV41Runtime();
     initV42Runtime();
+        initV43PerformanceRuntime();
         initDirectorArchivePerformanceGate();
         initMobileLaunchBridge();
         initAutoImmersiveShell();
@@ -8559,10 +8711,10 @@ async function init() {
         if (shouldEnterGame) switchScreen('village');
         else showLoginScreen();
         
-        console.log('%c[AquaFantasia v4.1] Flow Combat Polish Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v4.3] Fullscreen Performance Boost Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
-        alert('게임 초기화 중 오류가 발생했습니다. v4.1 플로우 액션 낚시 패치가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
+        alert('게임 초기화 중 오류가 발생했습니다. v4.3 전체화면/성능 부스트 패치가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
     }
 }
 

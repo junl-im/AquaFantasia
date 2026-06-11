@@ -181,7 +181,10 @@ const requiredFiles = [
   'assets/ui-kit/icons/reel_progress.png',
   'assets/ui-kit/icons/tension_gauge.png',
   'assets/ui-kit/icons/bobber.png',
-  'assets/art/v42_result_scroll.svg'
+  'assets/art/v42_result_scroll.svg',
+  'assets/art/v43_perf_fishing_shell.svg',
+  'assets/art/v43_fullscreen_shell.svg',
+  'assets/art/v43_perf_meter.svg'
 
 ];
 
@@ -198,8 +201,12 @@ for (const file of requiredFiles) {
 const index = readFileSync(join(root, 'index.html'), 'utf8');
 const sw = readFileSync(join(root, 'sw.js'), 'utf8');
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!index.includes("const APP_VERSION = '4.2.0'")) fail('APP_VERSION must be 4.2.0 for this patch.');
+if (!index.includes("const APP_VERSION = '4.3.0'")) fail('APP_VERSION must be 4.3.0 for this patch.');
 if (!index.includes('serviceWorker.register')) fail('PWA service worker registration is missing.');
+if (!index.includes('v4.3 Early Fullscreen Primer')) fail('v4.3 early fullscreen primer is missing.');
+if (!index.includes('requestV43FullscreenNow')) fail('v4.3 fullscreen request runtime is missing.');
+if (!index.includes('initV43PerformanceRuntime')) fail('v4.3 performance runtime is missing.');
+if (!index.includes('v43-perf-boost')) fail('v4.3 perf boost CSS/runtime is missing.');
 if (!index.includes('season-ranking-panel')) fail('Season ranking UI is missing.');
 if (!index.includes('weekly-reward-vault')) fail('Weekly reward vault UI is missing.');
 if (!index.includes('kakao-autopilot')) fail('v2.9 Kakao autopilot runtime is missing.');
@@ -297,7 +304,8 @@ for (const item of fish.fish) {
   if (!item.region || !item.name || !item.rarity) fail(`Fish entry is incomplete: ${item.id}`);
 }
 
-if (!sw.includes('aqua-fantasia-v4.2.0')) fail('Service worker cache version was not updated.');
+if (!sw.includes('aqua-fantasia-v4.3.0')) fail('Service worker cache version was not updated.');
+if (!sw.includes('./assets/art/v43_perf_fishing_shell.svg')) fail('v4.3 performance fishing shell cache entry is missing.');
 
 const scripts = [...index.matchAll(/<script(?:\s+[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map((m) => m[1].trim())
