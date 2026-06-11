@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Aqua Fantasia - Core Navigator 3.6.1 초기화 오류 수정, 모바일 아트 UI, 에셋 확장 낚시 RPG">
+    <meta name="description" content="Aqua Fantasia - Core Navigator 3.6.2 성능 최적화, 모바일 랙 감소, 가벼운 아트 캐시 낚시 RPG">
     <meta name="theme-color" content="#082f49">
     <meta name="color-scheme" content="dark">
     <meta name="mobile-web-app-capable" content="yes">
@@ -19,7 +19,7 @@
 
     <link rel="preload" as="image" href="assets/art/v36_core_navigator.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/art/v36_mobile_canvas.svg" type="image/svg+xml">
-    <title>Aqua Fantasia • v3.6.1 Core Navigator Hotfix</title>
+    <title>Aqua Fantasia • v3.6.2 Performance Core Hotfix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -1343,7 +1343,7 @@
         }
 
 
-        /* ==================== v3.6.1 Core Navigator Hotfix ==================== */
+        /* ==================== v3.6.2 Performance Core Hotfix ==================== */
         :root {
             --v36-bg:#020617;
             --v36-panel:#061527;
@@ -1453,6 +1453,56 @@
             .v36-core-navigator::before, .v36-core-navigator::after { animation:none !important; }
         }
 
+
+
+        /* ==================== v3.6.2 Performance Core Hotfix ==================== */
+        body.perf-lite { --shadow-heavy: 0 10px 26px rgba(0,0,0,.22); }
+        body.perf-lite .premium-card,
+        body.perf-lite .premium-glass,
+        body.perf-lite .region-card,
+        body.perf-lite .quick-menu-panel,
+        body.perf-lite .bottom-nav {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            box-shadow: var(--shadow-heavy) !important;
+            filter: none !important;
+        }
+        body.perf-lite .screen-scroll,
+        body.perf-lite .premium-card,
+        body.perf-lite .region-card,
+        body.perf-lite .v36-core-navigator {
+            content-visibility: auto;
+            contain: layout paint style;
+            contain-intrinsic-size: 300px;
+        }
+        body.perf-lite .fx-aurora,
+        body.perf-lite .depth-rays,
+        body.perf-lite .bubble-field,
+        body.perf-lite .cast-orb,
+        body.perf-lite .sonar-pulse,
+        body.perf-lite .reward-particle:nth-child(n+6),
+        body.perf-lite .fish-shadow:nth-child(n+4),
+        body.perf-lite .v30-atmosphere::before,
+        body.perf-lite .v30-atmosphere::after,
+        body.perf-lite .v31-action-deck::before,
+        body.perf-lite .v32-command-center::before,
+        body.perf-lite .v33-command-bridge::before,
+        body.perf-lite .v34-command-canvas::before,
+        body.perf-lite .v35-tide-master::before,
+        body.perf-lite .v36-core-navigator::before,
+        body.perf-lite .v36-core-navigator::after {
+            display: none !important;
+            animation: none !important;
+        }
+        body.perf-lite .v36-core-navigator,
+        body.perf-lite #fishing-visual,
+        body.perf-lite .focus-hero {
+            background-attachment: scroll !important;
+            transform: translateZ(0);
+        }
+        body.perf-lite .aqua-toast { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+        body.perf-lite * { scroll-behavior: auto !important; }
+
 </style>
 </head>
 <body class="bg-[#0a3d5c] text-white antialiased">
@@ -1466,7 +1516,7 @@
             <div class="flex items-center gap-3 min-w-0">
                 <div class="top-logo-mark">🌊</div>
                 <div class="min-w-0">
-                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v3.6.1</span></div>
+                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v3.6.2</span></div>
                     <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Core Navigator · 구조 안정화/디자인 통합</div>
                 </div>
             </div>
@@ -1499,7 +1549,7 @@
             <div class="text-center mb-10">
                 <div class="text-[5.5rem] mb-3">🎣</div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-300 mt-2">v3.6.1 Core Navigator · 초기화 오류 핫픽스/고급 아트/모바일 UX</p>
+                <p class="text-sky-300 mt-2">v3.6.2 Core Navigator · 성능 최적화/랙 감소/모바일 UX</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
@@ -2084,9 +2134,16 @@ try {
 
 <script>
 // ==================== v2.4 MEGA EXPANSION PATCH / Firebase Ready ====================
-let graphicsMode = localStorage.getItem('aqua_graphics_mode') || ((navigator.deviceMemory && navigator.deviceMemory <= 3) ? 'low' : 'high');
+let graphicsMode = localStorage.getItem('aqua_graphics_mode') || (() => {
+    const ua = navigator.userAgent || '';
+    const mobileLike = /Android|iPhone|iPad|iPod|Mobile|KAKAOTALK|wv/i.test(ua);
+    const saveData = navigator.connection?.saveData === true;
+    const lowMemory = navigator.deviceMemory && navigator.deviceMemory <= 4;
+    const lowCores = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+    return (mobileLike || saveData || lowMemory || lowCores) ? 'low' : 'high';
+})();
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '3.6.1';
+const APP_VERSION = '3.6.2';
 function versionAtLeast(minVersion) {
     const parse = (value) => String(value || '0').split('.').map((part) => Number(part) || 0);
     const current = parse(APP_VERSION);
@@ -2099,6 +2156,47 @@ function versionAtLeast(minVersion) {
     }
     return true;
 }
+
+function isPerformanceSensitiveDevice() {
+    const ua = navigator.userAgent || '';
+    const mobileLike = /Android|iPhone|iPad|iPod|Mobile|KAKAOTALK|wv/i.test(ua);
+    const saveData = navigator.connection?.saveData === true;
+    const lowMemory = navigator.deviceMemory && navigator.deviceMemory <= 4;
+    const lowCores = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+    return Boolean(mobileLike || saveData || lowMemory || lowCores || reduceMotion);
+}
+
+function shouldSkipAssetWarm() {
+    return graphicsMode === 'low' || reduceMotion || isPerformanceSensitiveDevice() || gameState?.quality?.preset !== 'ultra';
+}
+
+function applyPerformanceLiteMode(reason = 'auto') {
+    const lite = graphicsMode === 'low' || isPerformanceSensitiveDevice() || gameState?.quality?.preset === 'low';
+    document.body.classList.toggle('perf-lite', lite);
+    document.body.dataset.perfMode = lite ? 'lite' : 'cinema';
+    if (lite && graphicsMode !== 'low') {
+        graphicsMode = 'low';
+        localStorage.setItem('aqua_graphics_mode', graphicsMode);
+    }
+    gameState.performance = { ...(gameState.performance || {}), lite, reason, updatedAt: new Date().toISOString() };
+    return lite;
+}
+
+function warmAssetsSafely(list = [], limit = 4) {
+    if (!Array.isArray(list) || shouldSkipAssetWarm()) return;
+    const queue = list.slice(0, Math.max(0, limit));
+    const loadNext = () => {
+        const src = queue.shift();
+        if (!src) return;
+        const img = new Image();
+        img.decoding = 'async';
+        img.loading = 'lazy';
+        img.onload = img.onerror = () => scheduleAquaTask(loadNext, 'background');
+        img.src = src;
+    };
+    scheduleAquaTask(loadNext, 'background');
+}
+
 const GAME_CANONICAL_URL = 'https://junl-im.github.io/AquaFantasia/';
 let gameState = {
     gold: 1240, level: 12, exp: 870, expToNext: 1000,
@@ -2429,8 +2527,8 @@ function initVisualObserver() {
             target.classList.toggle('is-visible', entry.isIntersecting);
             if (!entry.isIntersecting && target.classList.contains('premium-card')) target.style.removeProperty('will-change');
         });
-    }, { root: document.getElementById('app-shell'), threshold: .08 });
-    document.querySelectorAll('.premium-card, .rank-panel, .reward-vault, .visual-lab-card, .mega-panel, .captain-panel, .quality-director').forEach((el) => observer.observe(el));
+    }, { root: document.getElementById('app-shell') || null, threshold: .08 });
+    document.querySelectorAll('.premium-card, .rank-panel, .reward-vault, .visual-lab-card, .mega-panel, .captain-panel, .quality-director, .v36-core-navigator, .region-card').forEach((el) => observer.observe(el));
 }
 
 function getLocalLeaderboardFallback() {
@@ -2698,11 +2796,11 @@ async function runPerformanceCheck(silent = false) {
 
 function applyAdaptivePerformance() {
     document.body.classList.add('gpu-boost');
-    if ((navigator.connection && navigator.connection.saveData) || (navigator.deviceMemory && navigator.deviceMemory <= 3)) {
-        graphicsMode = 'low';
-        localStorage.setItem('aqua_graphics_mode', graphicsMode);
+    applyPerformanceLiteMode('startup');
+    applyGraphicsMode();
+    if (!reduceMotion && document.visibilityState !== 'hidden') {
+        scheduleAquaTask(() => setTimeout(() => runPerformanceCheck(true), 2600), 'background');
     }
-    if (!reduceMotion) setTimeout(() => runPerformanceCheck(true), 1200);
 }
 
 async function toggleImmersiveMode() {
@@ -3693,6 +3791,7 @@ function haptic(pattern = 12) {
 function applyGraphicsMode() {
     const low = graphicsMode === 'low' || reduceMotion;
     document.body.classList.toggle('quality-low', low);
+    applyPerformanceLiteMode('graphics-mode');
     const toggle = document.getElementById('graphics-toggle');
     if (toggle) toggle.textContent = low ? '그래픽 절전' : '그래픽 고급';
     applyMegaQualityClasses();
@@ -3708,6 +3807,7 @@ function toggleGraphicsMode() {
 function bindPremiumCardPointer() {
     let raf = 0;
     document.addEventListener('pointermove', (event) => {
+        if (graphicsMode === 'low' || document.body.classList.contains('perf-lite')) return;
         const card = event.target.closest?.('.premium-card');
         if (!card) return;
         if (raf) cancelAnimationFrame(raf);
@@ -4132,11 +4232,9 @@ function renderDirectorCutPanel() {
 
 function warmDirectorCutAssets() {
     const state = ensureDirectorCutState();
-    if (state.assetWarm || graphicsMode === 'low') return;
+    if (state.assetWarm || shouldSkipAssetWarm()) return;
     state.assetWarm = true;
-    scheduleAquaTask(() => {
-        V31_ASSETS.forEach((src) => { const img = new Image(); img.decoding = 'async'; img.loading = 'lazy'; img.src = src; });
-    }, 'background');
+    warmAssetsSafely(V31_ASSETS, 3);
 }
 
 function initDirectorCutRuntime() {
@@ -4240,11 +4338,9 @@ function renderVisualAtlasPanel() {
 
 function warmVisualAtlasAssets() {
     const state = ensureVisualAtlasState();
-    if (state.warmed || graphicsMode === 'low') return;
+    if (state.warmed || shouldSkipAssetWarm()) return;
     state.warmed = true;
-    scheduleAquaTask(() => {
-        V32_ASSETS.forEach((src) => { const img = new Image(); img.decoding = 'async'; img.loading = 'lazy'; img.src = src; });
-    }, 'background');
+    warmAssetsSafely(V32_ASSETS, 3);
 }
 
 function initVisualAtlasRuntime() {
@@ -4352,11 +4448,9 @@ function renderV33CommandBridge() {
 
 function warmV33Assets() {
     const state = ensureV33State();
-    if (state.warmed || graphicsMode === 'low') return;
+    if (state.warmed || shouldSkipAssetWarm()) return;
     state.warmed = true;
-    scheduleAquaTask(() => {
-        V33_ASSETS.forEach((src) => { const img = new Image(); img.decoding = 'async'; img.loading = 'lazy'; img.src = src; });
-    }, 'background');
+    warmAssetsSafely(V33_ASSETS, 3);
 }
 
 function initV33Runtime() {
@@ -4474,11 +4568,9 @@ function renderV34CommandCanvas() {
 
 function warmV34Assets() {
     const state = ensureV34State();
-    if (state.warmed || graphicsMode === 'low') return;
+    if (state.warmed || shouldSkipAssetWarm()) return;
     state.warmed = true;
-    scheduleAquaTask(() => {
-        V34_ASSETS.forEach((src) => { const img = new Image(); img.decoding = 'async'; img.loading = 'lazy'; img.src = src; });
-    }, 'background');
+    warmAssetsSafely(V34_ASSETS, 3);
 }
 
 function initV34Runtime() {
@@ -4632,11 +4724,9 @@ function renderV35TideMaster() {
 
 function warmV35Assets() {
     const state = ensureV35State();
-    if (state.warmed || graphicsMode === 'low') return;
+    if (state.warmed || shouldSkipAssetWarm()) return;
     state.warmed = true;
-    scheduleAquaTask(() => {
-        V35_ASSETS.forEach((src) => { const img = new Image(); img.decoding = 'async'; img.loading = 'lazy'; img.src = src; });
-    }, 'background');
+    warmAssetsSafely(V35_ASSETS, 3);
 }
 
 function initV35Runtime() {
@@ -4646,7 +4736,7 @@ function initV35Runtime() {
 }
 
 
-// ==================== v3.6.1 Core Navigator Hotfix ====================
+// ==================== v3.6.2 Performance Core Hotfix ====================
 const V36_ASSETS = [
     'assets/art/v36_core_navigator.svg',
     'assets/art/v36_mobile_canvas.svg',
@@ -4739,7 +4829,7 @@ function runV36Audit() {
     const state = ensureV36State();
     state.audits = Number(state.audits || 0) + 1;
     runMegaQualityDirector();
-    showToast('v3.6.1 구조/성능/화면 점검 완료 · Core Navigator를 갱신했습니다', '🧭', 2500);
+    showToast('v3.6.2 성능/캐시/저장 최적화 완료 · Performance Core를 갱신했습니다', '🧭', 2500);
     renderV36CoreNavigator();
 }
 
@@ -4757,7 +4847,7 @@ function renderV36CoreNavigator() {
         <div class="v36-inner">
             <div class="v36-head">
                 <div class="min-w-0">
-                    <div class="v36-kicker">CORE NAVIGATOR 3.6.1 · INIT HOTFIX / ART / MOBILE</div>
+                    <div class="v36-kicker">CORE NAVIGATOR 3.6.2 · PERFORMANCE / LIGHT CACHE / MOBILE</div>
                     <div class="v36-title">${escapeHTML(snap.primary.title)}</div>
                     <div class="v36-copy">${escapeHTML(snap.primary.desc)} · 추천 항로 ${escapeHTML(snap.route?.region || '호수')} · 단일 파일 확장 위험을 줄이기 위한 구조 분리 준비를 포함했습니다.</div>
                 </div>
@@ -4785,11 +4875,9 @@ function renderV36CoreNavigator() {
 
 function warmV36Assets() {
     const state = ensureV36State();
-    if (state.warmed || graphicsMode === 'low') return;
+    if (state.warmed || shouldSkipAssetWarm()) return;
     state.warmed = true;
-    scheduleAquaTask(() => {
-        V36_ASSETS.forEach((src) => { const img = new Image(); img.decoding = 'async'; img.loading = 'lazy'; img.src = src; });
-    }, 'background');
+    warmAssetsSafely(V36_ASSETS, 3);
 }
 
 function initV36Runtime() {
@@ -5061,7 +5149,7 @@ function createFishShadows(region) {
     container.innerHTML = '';
     const meta = getRegionMeta(region);
     const highQuality = graphicsMode !== 'low' && !reduceMotion;
-    const count = highQuality ? (region.includes('용') || region.includes('차원') ? 9 : region.includes('심해') ? 7 : 5) : 3;
+    const count = highQuality ? (region.includes('용') || region.includes('차원') ? 7 : region.includes('심해') ? 5 : 4) : 2;
     for (let i = 0; i < count; i++) {
         const fish = document.createElement('div');
         fish.className = 'fish-shadow';
@@ -6461,7 +6549,8 @@ function normalizeGameState(data) {
 function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
-        ['aqua_v3.6.1','aqua_v3.6','aqua_v3.5','aqua_v3.4','aqua_v3.3','aqua_v3.2','aqua_v3.1','aqua_v3.0','aqua_v2.9','aqua_v2.8','aqua_v2.7','aqua_v2.6','aqua_v2.5','aqua_v2.4','aqua_v2.3','aqua_v2.2','aqua_v2.1','aqua_v2.0','aqua_v1.9','aqua_v1.8','aqua_v1.7','aqua_v1.6','aqua_v1.5','aqua_v1.4','aqua_v1.3','aqua_v1.2','aqua_v1.1'].forEach((key) => localStorage.setItem(key, JSON.stringify(plain))); // 이전 버전과 호환 유지
+        const json = JSON.stringify(plain);
+        ['aqua_v3.6.2', 'aqua_v3.6.1', 'aqua_latest_state'].forEach((key) => localStorage.setItem(key, json)); // 성능 보호: 과거 전체 버전 키 반복 저장 제거
         setCloudSaveStatus('ok', '로컬 저장됨');
 
         if (syncCloud && isFirebaseConnected && gameState.userId && window.AquaFirebase) {
@@ -6699,7 +6788,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) gameState = normalizeGameState(JSON.parse(saved));
         else gameState = normalizeGameState(gameState);
         
@@ -6716,6 +6805,7 @@ async function init() {
         ensureV33State();
         ensureV34State();
         ensureV35State();
+        applyPerformanceLiteMode('init-before-art');
         
         initArtUIMegaRefresh();
         document.body.classList.add('art-v30');
@@ -6740,10 +6830,10 @@ async function init() {
         scheduleAquaTask(initMegaPerformanceObserver, 'background');
         startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v3.6.1] Core Navigator Hotfix Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v3.6.2] Performance Core Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
-        alert('게임 초기화 중 오류가 발생했습니다. v3.6.1 핫픽스가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
+        alert('게임 초기화 중 오류가 발생했습니다. v3.6.2 핫픽스가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
     }
 }
 

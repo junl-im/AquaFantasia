@@ -1,6 +1,6 @@
 {
   "name": "aqua-fantasia-static",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,5 +8,5 @@
     "audit": "node tools/audit-bundle.mjs",
     "audit:bundle": "node tools/audit-bundle.mjs"
   },
-  "description": "Aqua Fantasia static mobile web game - v3.6.1 Core Navigator Mega Stabilization"
+  "description": "Aqua Fantasia static mobile web game - v3.6.2 Performance Core Hotfix"
 }

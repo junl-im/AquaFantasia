@@ -1,6 +1,6 @@
 {
-  "name": "Aqua Fantasia v3.6.1",
-  "short_name": "Aqua v3.6.1",
+  "name": "Aqua Fantasia v3.6.2",
+  "short_name": "Aqua v3.6.2",
   "description": "Aqua Fantasia - Core Navigator 3.6 mega stabilization, modular scaffold, mobile art UI, 150 fish atlas",
   "lang": "ko-KR",
   "dir": "ltr",
@@ -44,7 +44,7 @@
     {
       "name": "코어 내비게이터",
       "short_name": "코어",
-      "description": "v3.6.1 핵심 추천과 구조 안정화 패널 열기",
+      "description": "v3.6.2 성능 최적화와 Core Navigator 열기",
       "url": "./?shortcut=core-navigator",
       "icons": [
         {
