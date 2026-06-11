@@ -28,12 +28,15 @@ for (const file of requiredFiles) {
 
 const index = readFileSync(join(root, 'index.html'), 'utf8');
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!index.includes("const APP_VERSION = '2.2.0'")) fail('APP_VERSION must be 2.2.0 for this patch.');
+if (!index.includes("const APP_VERSION = '2.3.0'")) fail('APP_VERSION must be 2.3.0 for this patch.');
 if (!index.includes('serviceWorker.register')) fail('PWA service worker registration is missing.');
 if (!index.includes('season-ranking-panel')) fail('Season ranking UI is missing.');
 if (!index.includes('weekly-reward-vault')) fail('Weekly reward vault UI is missing.');
 if (!index.includes('kakao-bridge')) fail('Kakao launch bridge UI is missing.');
 if (!index.includes('enableMobileGameMode')) fail('Mobile game mode function is missing.');
+if (!index.includes('sensory-panel')) fail('Sensory panel UI is missing.');
+if (!index.includes('unlockSensoryEngine')) fail('Sensory engine function is missing.');
+if (!index.includes('createImpactBurst')) fail('Impact feedback function is missing.');
 
 const manifest = JSON.parse(readFileSync(join(root, 'manifest.webmanifest'), 'utf8'));
 if (manifest.display !== 'fullscreen') fail('manifest.webmanifest must use display: fullscreen for mobile game mode.');
@@ -49,7 +52,7 @@ for (const item of fish.fish) {
 }
 
 const sw = readFileSync(join(root, 'sw.js'), 'utf8');
-if (!sw.includes('aqua-fantasia-v2.2.0')) fail('Service worker cache version was not updated.');
+if (!sw.includes('aqua-fantasia-v2.3.0')) fail('Service worker cache version was not updated.');
 
 const scripts = [...index.matchAll(/<script(?:\s+[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map((m) => m[1].trim())

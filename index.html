@@ -16,7 +16,7 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
-    <title>Aqua Fantasia • Dev v2.2 Mobile Launch Visual Max</title>
+    <title>Aqua Fantasia • Dev v2.3 Sensory Visual Max</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -480,7 +480,48 @@
         body.quality-low .fx-aurora, body.quality-low .depth-rays, body.quality-low .bubble-field, body.quality-low .fish-shadow:nth-child(n+5), body.quality-low .equipment-card::after { display:none; }
         body.quality-low .premium-glass { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 8px 24px rgba(0,0,0,.18); }
 
-        /* ==================== v2.2 Mobile Launch Visual Max ==================== */
+
+
+        /* ==================== v2.3 Sensory Visual Max ==================== */
+        :root { --impact-shift-x: 0px; --impact-shift-y: 0px; --sensory-glow: rgba(217,70,239,.26); }
+        body.sensory-impact #app-shell { animation: sensory-hitstop 160ms cubic-bezier(.2,.8,.2,1) both; }
+        body.sound-off .sound-bars i { animation-play-state: paused; opacity:.28; }
+        .sensory-panel { position:relative; overflow:hidden; }
+        .sensory-panel::before {
+            content:''; position:absolute; inset:-40%; pointer-events:none; opacity:.72;
+            background: conic-gradient(from 120deg, transparent, rgba(217,70,239,.18), rgba(34,211,238,.16), rgba(52,211,153,.12), transparent 65%);
+            animation: sensory-rotate 12s linear infinite;
+        }
+        .sensory-panel::after {
+            content:''; position:absolute; inset:0; pointer-events:none; opacity:.36;
+            background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,.16) 44%, transparent 56%);
+            transform: translateX(-110%); animation: sensory-scan 4.8s ease-in-out infinite;
+        }
+        .sound-bars { display:flex; align-items:end; gap:3px; height:26px; }
+        .sound-bars i { width:4px; border-radius:999px; background:linear-gradient(180deg,#f0abfc,#67e8f9); height:9px; animation:sound-eq 840ms ease-in-out infinite alternate; box-shadow:0 0 14px rgba(217,70,239,.35); }
+        .sound-bars i:nth-child(2){ animation-delay:90ms; height:18px; }
+        .sound-bars i:nth-child(3){ animation-delay:180ms; height:12px; }
+        .sound-bars i:nth-child(4){ animation-delay:270ms; height:22px; }
+        .sensory-meter { height:8px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.11); }
+        .sensory-meter span { display:block; height:100%; width:65%; border-radius:inherit; background:linear-gradient(90deg,#67e8f9,#d946ef,#facc15); box-shadow:0 0 18px rgba(217,70,239,.45); }
+        .sensory-toggle-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.5rem; }
+        .sensory-toggle-grid button { padding:.72rem .55rem; border-radius:1rem; font-size:.72rem; font-weight:900; background:rgba(255,255,255,.075); border:1px solid rgba(255,255,255,.13); }
+        .sensory-toggle-grid button.active { background:linear-gradient(135deg, rgba(34,211,238,.24), rgba(217,70,239,.22)); border-color:rgba(217,70,239,.42); box-shadow:0 12px 32px rgba(217,70,239,.12); }
+        .sensory-slider { accent-color:#d946ef; width:100%; }
+        .touch-ripple { position:fixed; z-index:110; width:16px; height:16px; margin:-8px 0 0 -8px; border-radius:999px; pointer-events:none; border:1px solid rgba(186,230,253,.75); background:rgba(34,211,238,.18); animation:touch-ripple 520ms cubic-bezier(.2,.8,.2,1) forwards; }
+        .impact-flash { position:fixed; inset:0; z-index:90; pointer-events:none; background:radial-gradient(circle at var(--fx,50%) var(--fy,50%), rgba(255,255,255,.34), rgba(34,211,238,.13) 18%, transparent 48%); animation:impact-flash 360ms ease-out forwards; mix-blend-mode:screen; }
+        .reel-stress { box-shadow: inset 0 0 0 2px rgba(244,63,94,.22), 0 0 45px rgba(244,63,94,.20); }
+        .audio-unlocked-badge { display:inline-flex; align-items:center; gap:.35rem; padding:.28rem .55rem; border-radius:999px; border:1px solid rgba(217,70,239,.24); background:rgba(217,70,239,.10); color:#f5d0fe; font-size:.65rem; font-weight:900; }
+        @keyframes sensory-rotate { to { transform:rotate(360deg); } }
+        @keyframes sensory-scan { 0%, 58% { transform:translateX(-110%); } 100% { transform:translateX(110%); } }
+        @keyframes sound-eq { from { transform:scaleY(.42); opacity:.54; } to { transform:scaleY(1.15); opacity:1; } }
+        @keyframes touch-ripple { 0% { opacity:.95; transform:scale(.4); } 100% { opacity:0; transform:scale(5.4); } }
+        @keyframes impact-flash { 0% { opacity:.85; } 100% { opacity:0; } }
+        @keyframes sensory-hitstop { 0% { transform:translate3d(0,0,0) scale(1); } 36% { transform:translate3d(var(--impact-shift-x), var(--impact-shift-y),0) scale(1.006); } 100% { transform:translate3d(0,0,0) scale(1); } }
+        body.quality-low .sensory-panel::before, body.quality-low .sensory-panel::after, body.quality-low .touch-ripple, body.quality-low .impact-flash { animation:none; opacity:.28; }
+        @media (prefers-reduced-motion: reduce) { .sensory-panel::before, .sensory-panel::after, .sound-bars i, .touch-ripple, .impact-flash { animation:none !important; } }
+
+        /* ==================== v2.3 Sensory Visual Max ==================== */
         :root { --vvh: 100svh; --launch-glow: rgba(45,212,191,.28); }
         body.mobile-game-mode {
             background:
@@ -549,7 +590,7 @@
             <div>
                 <span class="font-black text-3xl tracking-[-1.5px]">AQUA</span>
                 <span class="font-bold text-3xl tracking-[-1.5px] text-sky-400">FANTASIA</span>
-                <span class="ml-2 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20">v2.2</span>
+                <span class="ml-2 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20">v2.3</span>
             </div>
         </div>
         <div class="flex items-center gap-x-2 text-sm flex-wrap justify-end">
@@ -559,6 +600,7 @@
             </div>
             <div id="cloud-save-status" class="px-3 py-1 text-[11px] rounded-full bg-white/10 text-white/70 hidden">로컬 저장</div>
             <button id="graphics-toggle" onclick="toggleGraphicsMode()" class="px-3 py-1 text-[11px] rounded-full bg-cyan-300/10 text-cyan-100 border border-cyan-200/20">그래픽 고급</button>
+            <button id="sensory-toggle" onclick="toggleSoundEnabled()" class="px-3 py-1 text-[11px] rounded-full bg-fuchsia-300/10 text-fuchsia-100 border border-fuchsia-200/20">🔊 감각</button>
             <button id="install-app-btn" onclick="installAquaApp()" class="hidden px-3 py-1 text-[11px] rounded-full bg-emerald-400/15 text-emerald-100 border border-emerald-200/20 install-pulse">📲 설치</button>
             <button onclick="enableMobileGameMode()" class="px-3 py-1 text-[11px] rounded-full bg-violet-400/15 text-violet-100 border border-violet-200/20">🎮 게임모드</button>
             <button id="logout-btn" onclick="logoutGame()" class="hidden px-3 py-1 text-[11px] rounded-full bg-white/10 hover:bg-white/20">로그아웃</button>
@@ -581,7 +623,7 @@
             <div class="text-center mb-10">
                 <div class="text-[5.5rem] mb-3">🎣</div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-300 mt-2">v2.2 Mobile Launch Visual Max · 카카오 브릿지 & 풀스크린 모바일 최적화</p>
+                <p class="text-sky-300 mt-2">v2.3 Sensory Visual Max · 사운드/햅틱/타격감 모바일 최적화</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
@@ -649,6 +691,32 @@
                             </div>
                             <span class="actions-badge">● READY</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-5 mt-3">
+                <div id="sensory-panel" class="sensory-panel premium-card premium-glass liquid-border rounded-[1.75rem] p-4 cursor-pointer" onclick="unlockSensoryEngine(true)">
+                    <div class="relative z-10 flex items-start justify-between gap-3">
+                        <div class="min-w-0">
+                            <div class="text-[11px] text-fuchsia-100/75 font-black tracking-wide">SENSORY ENGINE 2.3</div>
+                            <div class="font-black text-xl tracking-tight mt-0.5">사운드 · 햅틱 · 타격감 엔진</div>
+                            <div id="sensory-status" class="text-xs text-white/60 mt-1">첫 터치 후 오디오 엔진이 활성화됩니다</div>
+                        </div>
+                        <div class="shrink-0 text-right">
+                            <div class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+                            <div id="audio-unlock-badge" class="audio-unlocked-badge mt-2">대기</div>
+                        </div>
+                    </div>
+                    <div class="relative z-10 mt-3 sensory-meter"><span id="sensory-meter-fill"></span></div>
+                    <div class="relative z-10 mt-3 sensory-toggle-grid">
+                        <button id="sound-mode-btn" onclick="event.stopPropagation(); toggleSoundEnabled()">🔊 사운드 ON</button>
+                        <button id="haptic-mode-btn" onclick="event.stopPropagation(); toggleHapticEnabled()">📳 햅틱 ON</button>
+                        <button id="impact-mode-btn" onclick="event.stopPropagation(); cycleImpactLevel()">💥 타격감 1x</button>
+                    </div>
+                    <div class="relative z-10 mt-3 grid grid-cols-[1fr_auto] gap-3 items-center">
+                        <input id="sensory-volume" class="sensory-slider" type="range" min="0" max="100" value="55" oninput="setSensoryVolume(this.value)">
+                        <button onclick="event.stopPropagation(); unlockSensoryEngine(false).then(() => { playSound('preview'); createImpactBurst('preview'); });" class="px-3 py-2 rounded-2xl bg-white/10 border border-white/10 text-xs font-black">테스트</button>
                     </div>
                 </div>
             </div>
@@ -731,6 +799,7 @@
                 <div id="sonar-layer" class="sonar-layer" aria-hidden="true"></div>
                 <div id="depth-meter" class="depth-meter" aria-hidden="true"></div>
                 <div id="cast-orb" class="cast-orb" aria-hidden="true"></div>
+                <div id="impact-layer" class="absolute inset-0 pointer-events-none z-40" aria-hidden="true"></div>
                 <div id="boss-overlay" class="boss-overlay" aria-hidden="true">
                     <div class="boss-warning">⚠️ BOSS ENCOUNTER</div>
                     <div class="boss-crown">👑</div>
@@ -1024,10 +1093,10 @@ try {
 </script>
 
 <script>
-// ==================== v2.2 MOBILE LAUNCH VISUAL MAX PATCH / Firebase Ready ====================
+// ==================== v2.3 MOBILE LAUNCH VISUAL MAX PATCH / Firebase Ready ====================
 let graphicsMode = localStorage.getItem('aqua_graphics_mode') || ((navigator.deviceMemory && navigator.deviceMemory <= 3) ? 'low' : 'high');
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '2.2.0';
+const APP_VERSION = '2.3.0';
 const GAME_CANONICAL_URL = 'https://junl-im.github.io/AquaFantasia/';
 let gameState = {
     gold: 1240, level: 12, exp: 870, expToNext: 1000,
@@ -1050,12 +1119,17 @@ let gameState = {
     seasonRank: { seasonKey: '', bestScore: 0, submittedAt: '' },
     weeklyRewards: { weekKey: '', claimed: {}, lastClaimAt: '', history: [] },
     visualLab: { lastFps: 0, lastMode: graphicsMode, tunedAt: '' },
+    sensory: { sound: true, haptic: true, music: false, volume: 0.55, impact: 1, unlocked: false },
     bossWindowActive: false,
     bossSurgeTick: 0
 };
 
 let isFirebaseConnected = false;
 let audioContext;
+let sensoryMasterGain = null;
+let ambientOscillator = null;
+let sensoryUnlocked = false;
+let lastHapticAt = 0;
 let firebaseListenerStarted = false;
 let leaderboardUnsubscribe = null;
 let bossLeaderboardUnsubscribe = null;
@@ -1586,7 +1660,7 @@ async function runPerformanceCheck(silent = false) {
 
 function applyAdaptivePerformance() {
     document.body.classList.add('gpu-boost');
-    if (navigator.deviceMemory && navigator.deviceMemory <= 3) {
+    if ((navigator.connection && navigator.connection.saveData) || (navigator.deviceMemory && navigator.deviceMemory <= 3)) {
         graphicsMode = 'low';
         localStorage.setItem('aqua_graphics_mode', graphicsMode);
     }
@@ -1834,6 +1908,8 @@ function renderBossPhasePanel() {
 }
 
 function activateBossEncounter(species) {
+    playSound('boss');
+    createImpactBurst('boss');
     const visual = document.getElementById('fishing-visual');
     const reel = document.getElementById('reel-game');
     if (visual) visual.classList.add('boss-encounter');
@@ -2213,7 +2289,16 @@ function clearFishingTimers() {
 }
 
 function haptic(pattern = 12) {
-    try { if (navigator.vibrate) navigator.vibrate(pattern); } catch(e) {}
+    ensureSensoryState();
+    if (!gameState.sensory.haptic) return;
+    const now = performance.now();
+    if (now - lastHapticAt < 32) return;
+    lastHapticAt = now;
+    const impact = Math.max(0.4, Math.min(1.8, Number(gameState.sensory.impact || 1)));
+    const scaled = Array.isArray(pattern)
+        ? pattern.map((v) => Math.max(1, Math.round(Number(v || 0) * impact)))
+        : Math.max(1, Math.round(Number(pattern || 0) * impact));
+    try { if (navigator.vibrate) navigator.vibrate(scaled); } catch(e) {}
 }
 
 function applyGraphicsMode() {
@@ -2256,58 +2341,226 @@ function showToast(message, icon = '✨', life = 2600) {
 }
 
 
-// ==================== SOUND SYSTEM (NEW) ====================
+// ==================== SENSORY ENGINE v2.3 ====================
+function ensureSensoryState() {
+    if (!gameState.sensory || typeof gameState.sensory !== 'object') {
+        gameState.sensory = { sound: true, haptic: true, music: false, volume: 0.55, impact: 1, unlocked: false };
+    }
+    gameState.sensory.volume = clamp(Number(gameState.sensory.volume ?? 0.55), 0, 1);
+    gameState.sensory.impact = clamp(Number(gameState.sensory.impact || 1), 0.5, 1.5);
+    gameState.sensory.sound = gameState.sensory.sound !== false;
+    gameState.sensory.haptic = gameState.sensory.haptic !== false;
+    gameState.sensory.music = gameState.sensory.music === true;
+    return gameState.sensory;
+}
+
 function initAudio() {
+    ensureSensoryState();
     try {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return false;
+        if (!audioContext) audioContext = new Ctx({ latencyHint: 'interactive' });
+        if (!sensoryMasterGain) {
+            sensoryMasterGain = audioContext.createGain();
+            sensoryMasterGain.gain.value = gameState.sensory.volume;
+            sensoryMasterGain.connect(audioContext.destination);
+        }
+        renderSensoryPanel();
+        return true;
     } catch(e) {
-        console.log("Web Audio not supported");
+        console.log('Web Audio not supported');
+        return false;
     }
 }
 
-function playSound(type) {
-    if (!audioContext) return;
-    
-    const oscillator = audioContext.createOscillator();
+async function unlockSensoryEngine(forceToast = false) {
+    ensureSensoryState();
+    if (!gameState.sensory.sound) { renderSensoryPanel(); return false; }
+    if (!initAudio() || !audioContext) return false;
+    try {
+        if (audioContext.state === 'suspended') await audioContext.resume();
+        sensoryUnlocked = audioContext.state === 'running';
+        gameState.sensory.unlocked = sensoryUnlocked;
+        if (sensoryMasterGain) sensoryMasterGain.gain.setTargetAtTime(gameState.sensory.volume, audioContext.currentTime, 0.015);
+        if (forceToast && sensoryUnlocked) {
+            playSound('ui');
+            haptic(8);
+            showToast('감각 엔진 활성화: 사운드/햅틱 준비 완료', '🔊', 2800);
+        }
+        if (sensoryUnlocked) {
+            checkAchievements();
+            savePlayerData(false);
+        }
+        renderSensoryPanel();
+        return sensoryUnlocked;
+    } catch (e) {
+        renderSensoryPanel();
+        return false;
+    }
+}
+
+function setSensoryVolume(value) {
+    ensureSensoryState();
+    gameState.sensory.volume = clamp(Number(value || 0) / 100, 0, 1);
+    if (sensoryMasterGain && audioContext) sensoryMasterGain.gain.setTargetAtTime(gameState.sensory.volume, audioContext.currentTime, 0.02);
+    renderSensoryPanel();
+    savePlayerData(false);
+}
+
+function toggleSoundEnabled() {
+    ensureSensoryState();
+    gameState.sensory.sound = !gameState.sensory.sound;
+    document.body.classList.toggle('sound-off', !gameState.sensory.sound);
+    if (gameState.sensory.sound) unlockSensoryEngine(false).then(() => playSound('toggle'));
+    else stopAmbientSea();
+    renderSensoryPanel();
+    savePlayerData(false);
+    showToast(gameState.sensory.sound ? '사운드 ON' : '사운드 OFF', gameState.sensory.sound ? '🔊' : '🔇', 2200);
+}
+
+function toggleHapticEnabled() {
+    ensureSensoryState();
+    gameState.sensory.haptic = !gameState.sensory.haptic;
+    if (gameState.sensory.haptic) haptic([8, 18, 8]);
+    renderSensoryPanel();
+    savePlayerData(false);
+    showToast(gameState.sensory.haptic ? '햅틱 ON' : '햅틱 OFF', '📳', 2200);
+}
+
+function cycleImpactLevel() {
+    ensureSensoryState();
+    const levels = [0.6, 1, 1.35, 1.5];
+    const idx = levels.findIndex((v) => Math.abs(v - Number(gameState.sensory.impact || 1)) < 0.02);
+    gameState.sensory.impact = levels[(idx + 1) % levels.length];
+    createImpactBurst('toggle');
+    playSound('toggle');
+    haptic([10, 20, 10]);
+    renderSensoryPanel();
+    savePlayerData(false);
+}
+
+function renderSensoryPanel() {
+    ensureSensoryState();
+    const soundBtn = document.getElementById('sound-mode-btn');
+    const hapticBtn = document.getElementById('haptic-mode-btn');
+    const impactBtn = document.getElementById('impact-mode-btn');
+    const status = document.getElementById('sensory-status');
+    const badge = document.getElementById('audio-unlock-badge');
+    const fill = document.getElementById('sensory-meter-fill');
+    const slider = document.getElementById('sensory-volume');
+    const top = document.getElementById('sensory-toggle');
+    document.body.classList.toggle('sound-off', !gameState.sensory.sound);
+    if (soundBtn) { soundBtn.textContent = gameState.sensory.sound ? '🔊 사운드 ON' : '🔇 사운드 OFF'; soundBtn.classList.toggle('active', gameState.sensory.sound); }
+    if (hapticBtn) { hapticBtn.textContent = gameState.sensory.haptic ? '📳 햅틱 ON' : '📴 햅틱 OFF'; hapticBtn.classList.toggle('active', gameState.sensory.haptic); }
+    if (impactBtn) { impactBtn.textContent = `💥 타격감 ${Number(gameState.sensory.impact || 1).toFixed(2).replace('.00','')}x`; impactBtn.classList.toggle('active', Number(gameState.sensory.impact || 1) >= 1); }
+    if (slider) slider.value = Math.round(gameState.sensory.volume * 100);
+    if (fill) fill.style.width = `${Math.round((gameState.sensory.volume * 70) + (gameState.sensory.impact * 20))}%`;
+    if (badge) badge.textContent = sensoryUnlocked ? 'LIVE' : (gameState.sensory.sound ? '대기' : 'OFF');
+    if (status) status.textContent = sensoryUnlocked ? '캐스팅·입질·릴·보스전 감각 피드백이 활성화되었습니다' : '첫 터치 후 오디오 엔진이 활성화됩니다';
+    if (top) top.textContent = gameState.sensory.sound ? '🔊 감각' : '🔇 감각';
+}
+
+function makeTone(freq, duration = 0.12, type = 'sine', gainValue = 0.12, start = 0) {
+    if (!audioContext || !sensoryMasterGain) return;
+    const t = audioContext.currentTime + start;
+    const osc = audioContext.createOscillator();
     const gain = audioContext.createGain();
     const filter = audioContext.createBiquadFilter();
-    
-    oscillator.type = type === 'success' ? 'sine' : 'sawtooth';
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t);
     filter.type = 'lowpass';
-    filter.frequency.value = type === 'success' ? 1200 : 800;
-    
-    if (type === 'cast') {
-        oscillator.frequency.value = 220;
-        gain.gain.value = 0.3;
-        setTimeout(() => gain.gain.value = 0, 180);
-    } else if (type === 'bite') {
-        oscillator.frequency.value = 880;
-        gain.gain.value = 0.5;
-        setTimeout(() => gain.gain.value = 0, 120);
-    } else if (type === 'success') {
-        oscillator.frequency.value = 660;
-        gain.gain.value = 0.4;
-        setTimeout(() => { oscillator.frequency.value = 880; }, 150);
-        setTimeout(() => gain.gain.value = 0, 450);
-    } else if (type === 'fail') {
-        oscillator.frequency.value = 180;
-        gain.gain.value = 0.4;
-        setTimeout(() => gain.gain.value = 0, 300);
-    } else if (type === 'upgrade') {
-        oscillator.type = 'triangle';
-        oscillator.frequency.value = 520;
-        gain.gain.value = 0.36;
-        setTimeout(() => { oscillator.frequency.value = 760; }, 90);
-        setTimeout(() => { oscillator.frequency.value = 1040; }, 190);
-        setTimeout(() => gain.gain.value = 0, 420);
+    filter.frequency.setValueAtTime(Math.max(640, freq * 2.2), t);
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(Math.max(0.0002, gainValue), t + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+    osc.connect(filter); filter.connect(gain); gain.connect(sensoryMasterGain);
+    osc.start(t); osc.stop(t + duration + 0.025);
+}
+
+function playNoise(duration = 0.12, gainValue = 0.08, start = 0) {
+    if (!audioContext || !sensoryMasterGain) return;
+    const sampleRate = audioContext.sampleRate;
+    const frameCount = Math.floor(sampleRate * duration);
+    const buffer = audioContext.createBuffer(1, frameCount, sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < frameCount; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / frameCount, 1.7);
+    const source = audioContext.createBufferSource();
+    const filter = audioContext.createBiquadFilter();
+    const gain = audioContext.createGain();
+    source.buffer = buffer;
+    filter.type = 'bandpass'; filter.frequency.value = 820; filter.Q.value = 0.9;
+    const t = audioContext.currentTime + start;
+    gain.gain.setValueAtTime(gainValue, t);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+    source.connect(filter); filter.connect(gain); gain.connect(sensoryMasterGain);
+    source.start(t); source.stop(t + duration + 0.02);
+}
+
+function playSound(type = 'ui') {
+    ensureSensoryState();
+    if (!gameState.sensory.sound) return;
+    if (!audioContext || !sensoryMasterGain || audioContext.state !== 'running') { unlockSensoryEngine(false); return; }
+    const v = Math.max(0.03, gameState.sensory.volume);
+    const impact = Math.max(0.5, Number(gameState.sensory.impact || 1));
+    const baseGain = 0.10 * v;
+    if (type === 'ui') { makeTone(540, .075, 'triangle', baseGain*.72); makeTone(760, .08, 'sine', baseGain*.58, .045); }
+    else if (type === 'toggle' || type === 'preview') { makeTone(440, .08, 'triangle', baseGain); makeTone(660, .1, 'triangle', baseGain*.92, .075); makeTone(990, .12, 'sine', baseGain*.7, .16); }
+    else if (type === 'select') { makeTone(330, .08, 'sine', baseGain*.9); makeTone(520, .11, 'triangle', baseGain*.8, .055); }
+    else if (type === 'cast') { playNoise(.18, baseGain*.95); makeTone(220, .18, 'sawtooth', baseGain*.72); makeTone(370, .16, 'sine', baseGain*.55, .09); }
+    else if (type === 'bite') { makeTone(880, .08, 'square', baseGain*1.25); makeTone(1320, .08, 'triangle', baseGain*.92, .07); }
+    else if (type === 'reel') { makeTone(260 + Math.random()*34, .045, 'triangle', baseGain*.46); }
+    else if (type === 'counter') { makeTone(740, .055, 'triangle', baseGain*1.05); makeTone(1110, .11, 'sine', baseGain*.95, .045); playNoise(.07, baseGain*.42, .02); }
+    else if (type === 'boss') { makeTone(92, .24, 'sawtooth', baseGain*1.2*impact); makeTone(138, .24, 'sawtooth', baseGain*.9*impact, .03); playNoise(.16, baseGain*.75, .02); }
+    else if (type === 'success') { makeTone(523, .11, 'sine', baseGain); makeTone(659, .13, 'sine', baseGain*.9, .1); makeTone(784, .16, 'triangle', baseGain*.82, .22); makeTone(1046, .18, 'sine', baseGain*.7, .34); }
+    else if (type === 'reward') { makeTone(660, .08, 'triangle', baseGain*.9); makeTone(990, .12, 'sine', baseGain*.82, .08); makeTone(1320, .12, 'sine', baseGain*.68, .18); }
+    else if (type === 'upgrade') { makeTone(420, .11, 'triangle', baseGain*.9); makeTone(620, .11, 'triangle', baseGain*.86, .1); makeTone(920, .16, 'sine', baseGain*.74, .22); }
+    else if (type === 'fail') { makeTone(190, .22, 'sawtooth', baseGain*.92); makeTone(125, .26, 'sine', baseGain*.72, .14); }
+}
+
+function stopAmbientSea() {
+    if (ambientOscillator) { try { ambientOscillator.stop(); } catch(e) {} ambientOscillator = null; }
+}
+
+function createImpactBurst(type = 'soft') {
+    if (reduceMotion || graphicsMode === 'low') return;
+    const visual = document.getElementById('fishing-visual');
+    const flash = document.createElement('div');
+    flash.className = 'impact-flash';
+    flash.style.setProperty('--fx', (45 + Math.random()*18) + '%');
+    flash.style.setProperty('--fy', (42 + Math.random()*24) + '%');
+    document.body.appendChild(flash);
+    flash.addEventListener('animationend', () => flash.remove(), { once:true });
+    const shell = document.getElementById('app-shell');
+    if (shell) {
+        document.documentElement.style.setProperty('--impact-shift-x', ((Math.random() - .5) * 5) + 'px');
+        document.documentElement.style.setProperty('--impact-shift-y', ((Math.random() - .5) * 4) + 'px');
+        document.body.classList.remove('sensory-impact');
+        void shell.offsetWidth;
+        document.body.classList.add('sensory-impact');
+        setTimeout(() => document.body.classList.remove('sensory-impact'), 180);
     }
-    
-    oscillator.connect(filter);
-    filter.connect(gain);
-    gain.connect(audioContext.destination);
-    
-    oscillator.start();
-    setTimeout(() => oscillator.stop(), 600);
+    if (visual && type !== 'preview') {
+        visual.classList.add('reel-stress');
+        setTimeout(() => visual.classList.remove('reel-stress'), 260);
+    }
+}
+
+function bindResponsiveTouchFX() {
+    let last = 0;
+    document.addEventListener('pointerdown', (event) => {
+        unlockSensoryEngine(false);
+        if (event.target.closest?.('button,.premium-card,.nav-tile,input')) playSound('ui');
+        if (graphicsMode === 'low' || reduceMotion) return;
+        const now = performance.now();
+        if (now - last < 130) return;
+        last = now;
+        const ripple = document.createElement('span');
+        ripple.className = 'touch-ripple';
+        ripple.style.left = `${event.clientX}px`;
+        ripple.style.top = `${event.clientY}px`;
+        document.body.appendChild(ripple);
+        ripple.addEventListener('animationend', () => ripple.remove(), { once:true });
+    }, { passive:true });
 }
 
 // ==================== UI ====================
@@ -2337,9 +2590,11 @@ function updateUI() {
     renderBossQuickPanel();
     updatePWAStatus();
     applyGraphicsMode();
+    renderSensoryPanel();
 }
 
 function switchScreen(screen) {
+    playSound('ui');
     const apply = () => {
         document.querySelectorAll('#main-content > div').forEach(d => {
             d.classList.add('hidden');
@@ -2371,6 +2626,8 @@ function switchScreen(screen) {
 
 // ==================== 지역 & 낚시 ====================
 function selectRegion(region) {
+    playSound('select');
+    haptic([6, 14]);
     gameState.currentRegion = region;
     switchScreen('fishing');
     const meta = getRegionMeta(region);
@@ -2478,6 +2735,7 @@ function castLine() {
         createSonarPulse(3);
         haptic([18, 30, 18]);
         playSound('bite');
+        createImpactBurst('bite');
         status.innerHTML = `<span class="text-rose-400 font-extrabold">🎣 물었다! 탭해서 낚아채세요</span>`;
 
         const visual = document.getElementById('fishing-visual');
@@ -2573,6 +2831,7 @@ function updateReelUI() {
 
 function reelAction() {
     haptic(gameState.bossWindowActive ? [8, 16, 8] : 6);
+    playSound(gameState.bossWindowActive ? 'counter' : 'reel');
     const species = gameState.pendingFish;
     const rarity = Number(species?.rarity || 1);
     const stats = getEquipmentStats();
@@ -2589,6 +2848,7 @@ function reelAction() {
             const status = document.getElementById('fishing-status');
             if (status) status.innerHTML = '<span class="text-amber-200 font-extrabold">✨ 퍼펙트 카운터!</span>';
             createBossRipple(1);
+            createImpactBurst('counter');
         }
     }
     gameState.reelProgress += gain;
@@ -2654,6 +2914,7 @@ function endReelGame(success) {
             : `<span style="color:${rarity.color}" class="font-extrabold">${fish.emoji} ${escapeHTML(fish.name)} 포획!</span>`;
         if (bossMode) createBossVictoryBurst();
         createBigConfetti();
+        createImpactBurst(bossMode ? 'bossWin' : 'success');
 
         setTimeout(() => {
             showToast(`${fish.emoji} ${fish.name} 획득! ${bossMode ? '보스 · ' : ''}${rarity.name} · +${value.toLocaleString()} 골드`, bossMode ? '👑' : getRod().emoji, 3800);
@@ -3228,7 +3489,8 @@ const ACHIEVEMENTS = [
     { id: 'season_ranker', name: '시즌 랭커', desc: '시즌 점수 20,000점 이상 달성', check: () => getSeasonScore() >= 20000 },
     { id: 'actions_ready', name: '자동 배포 선장', desc: 'v2.0 자동 배포 패치 접속', check: () => APP_VERSION >= '2.0.0' },
     { id: 'reward_vault_open', name: '보상함 관리자', desc: 'v2.1 주간 보상함 패치 접속', check: () => APP_VERSION >= '2.1.0' },
-    { id: 'mobile_launch_master', name: '모바일 런처 마스터', desc: 'v2.2 카카오 브릿지와 게임 모드 패치 접속', check: () => APP_VERSION === '2.2.0' },
+    { id: 'mobile_launch_master', name: '모바일 런처 마스터', desc: 'v2.2 카카오 브릿지와 게임 모드 패치 접속', check: () => APP_VERSION >= '2.2.0' },
+    { id: 'sensory_master', name: '감각 엔진 조율사', desc: 'v2.3 사운드/햅틱 엔진 활성화', check: (s) => s.sensory && s.sensory.unlocked === true },
     { id: 'boss_first_win', name: '대어 토벌자', desc: '보스 어종 1마리 포획', check: (s) => Number(s.bossStats?.defeated || 0) >= 1 },
     { id: 'boss_master', name: '균열의 정복자', desc: '보스 어종 3마리 포획', check: (s) => Number(s.bossStats?.defeated || 0) >= 3 }
 ];
@@ -3480,6 +3742,12 @@ function normalizeGameState(data) {
     if (!next.weeklyRewards.claimed || typeof next.weeklyRewards.claimed !== 'object') next.weeklyRewards.claimed = {};
     if (!Array.isArray(next.weeklyRewards.history)) next.weeklyRewards.history = [];
     if (!next.visualLab || typeof next.visualLab !== 'object') next.visualLab = { lastFps: 0, lastMode: graphicsMode, tunedAt: '' };
+    if (!next.sensory || typeof next.sensory !== 'object') next.sensory = { sound: true, haptic: true, music: false, volume: 0.55, impact: 1, unlocked: false };
+    next.sensory.volume = clamp(Number(next.sensory.volume ?? 0.55), 0, 1);
+    next.sensory.impact = clamp(Number(next.sensory.impact || 1), 0.5, 1.5);
+    next.sensory.sound = next.sensory.sound !== false;
+    next.sensory.haptic = next.sensory.haptic !== false;
+    next.sensory.music = next.sensory.music === true;
     next.visualLab.lastFps = Math.max(0, Number(next.visualLab.lastFps || 0));
     next.bossStats.encounters = Math.max(0, Number(next.bossStats.encounters || 0));
     next.bossStats.defeated = Math.max(0, Number(next.bossStats.defeated || 0));
@@ -3493,7 +3761,7 @@ function normalizeGameState(data) {
 function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
-        localStorage.setItem('aqua_v2.2', JSON.stringify(plain));
+        localStorage.setItem('aqua_v2.3', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.1', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.0', JSON.stringify(plain));
         localStorage.setItem('aqua_v1.9', JSON.stringify(plain));
@@ -3660,7 +3928,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) gameState = normalizeGameState(JSON.parse(saved));
         else gameState = normalizeGameState(gameState);
         
@@ -3679,10 +3947,11 @@ async function init() {
         initAudio();
         bindLoginEnterKey();
         bindPremiumCardPointer();
+        bindResponsiveTouchFX();
         scheduleAquaTask(initVisualObserver, 'background');
         startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v2.2] Mobile Launch Visual Max Patch Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v2.3] Mobile Launch Visual Max Patch Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
         alert('게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.');

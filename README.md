@@ -92,3 +92,9 @@ manifest.webmanifest PWA 앱 설정
 - 시즌/보스 랭킹 예상 보상 수령 시스템 추가
 - Visual Lab FPS 표시 및 IntersectionObserver 기반 화면 최적화 추가
 - GitHub Actions 정적 검증 기준 v2.1로 갱신
+
+
+## v2.3 Sensory Visual Max
+- Web Audio 기반 사운드/햅틱/타격감 엔진 추가
+- 모바일 터치 리플, 임팩트 플래시, 릴 피드백 강화
+- GitHub Actions 자동 배포 구조 유지

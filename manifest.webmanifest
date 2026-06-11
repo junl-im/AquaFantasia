@@ -1,11 +1,11 @@
 {
-  "name": "Aqua Fantasia v2.2",
-  "short_name": "Aqua v2.2",
-  "description": "Aqua Fantasia - 카카오 브라우저 브릿지, 풀스크린 게임모드, 랭킹 보상이 적용된 모바일 낚시 RPG",
+  "name": "Aqua Fantasia v2.3",
+  "short_name": "Aqua v2.3",
+  "description": "Aqua Fantasia - 사운드, 햅틱, 타격감 엔진과 모바일 풀스크린 최적화가 적용된 웹 낚시 RPG",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "./?app=aqua-fantasia-v22",
-  "start_url": "./?source=pwa&fullscreen=1",
+  "id": "./?app=aqua-fantasia-v23",
+  "start_url": "./?source=pwa&fullscreen=1&sensory=1",
   "scope": "./",
   "display": "fullscreen",
   "display_override": [
