@@ -155,7 +155,7 @@ for (const file of requiredFiles) {
 const index = readFileSync(join(root, 'index.html'), 'utf8');
 const sw = readFileSync(join(root, 'sw.js'), 'utf8');
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!index.includes("const APP_VERSION = '3.6.3'")) fail('APP_VERSION must be 3.6.3 for this patch.');
+if (!index.includes("const APP_VERSION = '3.6.4'")) fail('APP_VERSION must be 3.6.4 for this patch.');
 if (!index.includes('serviceWorker.register')) fail('PWA service worker registration is missing.');
 if (!index.includes('season-ranking-panel')) fail('Season ranking UI is missing.');
 if (!index.includes('weekly-reward-vault')) fail('Weekly reward vault UI is missing.');
@@ -203,9 +203,9 @@ if (!index.includes('v36-core-navigator')) fail('v3.6 Core Navigator panel is mi
 if (!index.includes('renderV36CoreNavigator')) fail('v3.6 Core Navigator renderer is missing.');
 if (!index.includes('runV36Action')) fail('v3.6 Core Navigator action handler is missing.');
 if (!index.includes('art-v36')) fail('v3.6 art runtime class is missing.');
-if (!index.includes('art-v363')) fail('v3.6.3 painterly art runtime class is missing.');
+if (!index.includes('art-v363')) fail('v3.6.4 painterly art runtime class is missing.');
 if (!index.includes('renderLegacyDirectorPanelsIfNeeded')) fail('v3.6.3 legacy render gate is missing.');
-if (!index.includes('v363_painterly_ocean.svg')) fail('v3.6.3 painterly ocean asset reference is missing.');
+if (!index.includes('v363_painterly_ocean.svg')) fail('v3.6.4 painterly ocean asset reference is missing.');
 if (!index.includes('src/core/state.js')) fail('v3.6 modular scaffold reference is missing.');
 if (!index.includes('perf-lite')) fail('v3.6.2 performance-lite CSS/runtime is missing.');
 if (!index.includes('warmAssetsSafely')) fail('v3.6.2 safe asset warmer is missing.');
@@ -236,7 +236,7 @@ for (const item of fish.fish) {
   if (!item.region || !item.name || !item.rarity) fail(`Fish entry is incomplete: ${item.id}`);
 }
 
-if (!sw.includes('aqua-fantasia-v3.6.3')) fail('Service worker cache version was not updated.');
+if (!sw.includes('aqua-fantasia-v3.6.4')) fail('Service worker cache version was not updated.');
 
 const scripts = [...index.matchAll(/<script(?:\s+[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map((m) => m[1].trim())

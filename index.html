@@ -109,7 +109,7 @@
         .screen-scroll { content-visibility: auto; contain-intrinsic-size: 720px; }
         .screen-enter { animation: screen-enter .22s cubic-bezier(.2,.8,.2,1) both; }
         .wave-layer { position:absolute; bottom:0; left:0; width:200%; height:120px; background-repeat:repeat-x; animation: wave-move linear infinite; will-change: transform; opacity:.95; }
-        .wave-1 { background:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%230ea5e9%22 fill-opacity=%220.25%22 d=%22M0,192L60,186.7C120,181,240,171,360,186.7C480,203,600,245,720,250.7C840,256,960,224,1080,213.3C1200,203,1320,213,1380,218.7L1440,224L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z%22%3E%3C/path%3E%3C/svg%3E'); background-size:1440px 120px; animation-duration:7s; }
+        .wave-1 { background:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%230ea5e9%22 fill-opacity=%220.25%22 d=%22M0,192L60,186.7C120,180,171,360,186.7C480,203,600,245,720,250.7C840,256,960,224,1080,213.3C1200,203,1320,213,1380,218.7L1440,224L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z%22%3E%3C/path%3E%3C/svg%3E'); background-size:1440px 120px; animation-duration:7s; }
         .wave-2 { background:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%2338bdf8%22 fill-opacity=%220.18%22 d=%22M0,160L48,181.3C96,203,192,245,288,250.7C384,256,480,224,576,197.3C672,171,768,149,864,154.7C960,160,1056,192,1152,197.3C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z%22%3E%3C/path%3E%3C/svg%3E'); background-size:1440px 120px; animation-duration:4.5s; animation-direction:reverse; }
         .fx-aurora { position:absolute; inset:-20%; pointer-events:none; opacity:.55; background: conic-gradient(from 180deg at 50% 50%, rgba(34,211,238,.0), rgba(34,211,238,.18), rgba(99,102,241,.12), rgba(16,185,129,.12), rgba(34,211,238,.0)); filter: blur(30px); animation: aurora-drift 12s linear infinite; }
         .depth-rays { position:absolute; inset:0; pointer-events:none; opacity:.28; background: repeating-conic-gradient(from -16deg at 50% -14%, rgba(255,255,255,.16) 0deg 5deg, transparent 5deg 15deg); mask-image: linear-gradient(to bottom, rgba(0,0,0,.9), transparent 78%); }
@@ -1617,6 +1617,46 @@
         body.perf-lite.art-v363 .v36-core-navigator { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
         @media (prefers-reduced-motion:reduce) { body.art-v363 .v36-core-navigator::after { animation:none !important; } }
 
+        /* v3.6.4 Start Flow / Mobile Immersion Hotfix */
+        html, body { height:100%; overflow:hidden; overscroll-behavior:none; touch-action:manipulation; }
+        #app-shell { height:var(--aqua-vh, 100dvh); max-height:var(--aqua-vh, 100dvh); min-height:var(--aqua-vh, 100dvh); overflow:hidden; }
+        #main-content { min-height:0; overflow:hidden; }
+        body.login-mode .top-bar-focus,
+        body.login-mode .bottom-nav,
+        body.login-mode #v30-smart-dock,
+        body.login-mode #immersive-btn,
+        body.login-mode #onehand-fab { display:none !important; }
+        #immersive-btn,
+        #fullscreen-ribbon,
+        .kakao-autopilot-pill { display:none !important; }
+        body.auto-immersive #app-shell { border-left:0 !important; border-right:0 !important; box-shadow:none !important; }
+        .start-flow-note { font-size:.72rem; line-height:1.45; color:rgba(224,242,254,.72); text-align:center; }
+        .first-play-guide {
+            position:relative; overflow:hidden; border-radius:1.9rem; padding:1rem; margin-bottom:.85rem;
+            background:
+                linear-gradient(135deg, rgba(5,13,26,.86), rgba(16,102,132,.42) 42%, rgba(245,199,107,.14)),
+                url('assets/art/v363_command_canvas.svg') center/cover no-repeat;
+            border:1px solid rgba(248,244,223,.18);
+            box-shadow:0 20px 56px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.14);
+        }
+        .first-play-guide::before { content:""; position:absolute; inset:-30%; background:radial-gradient(circle at 22% 20%, rgba(245,199,107,.18), transparent 22%), radial-gradient(circle at 78% 14%, rgba(79,209,197,.15), transparent 24%); pointer-events:none; }
+        .guide-steps { display:grid; gap:.45rem; margin-top:.75rem; }
+        .guide-step { display:flex; align-items:center; gap:.55rem; padding:.64rem .72rem; border-radius:1.05rem; background:rgba(255,255,255,.075); border:1px solid rgba(255,255,255,.09); font-size:.76rem; color:rgba(240,249,255,.86); }
+        .guide-step b { color:white; font-weight:900; }
+        .guide-actions { display:grid; grid-template-columns:1.15fr .85fr; gap:.55rem; margin-top:.8rem; }
+        .guide-actions button { border-radius:1.2rem; padding:.82rem .7rem; font-weight:900; font-size:.8rem; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.09); }
+        .guide-actions button.primary { background:linear-gradient(135deg, rgba(34,211,238,.78), rgba(99,102,241,.82)); box-shadow:0 14px 32px rgba(34,211,238,.18); }
+        .fishing-coach-panel { margin:.65rem 1rem 0; padding:.74rem .9rem; border-radius:1.25rem; background:rgba(5,13,26,.56); border:1px solid rgba(125,211,252,.16); color:rgba(224,242,254,.86); font-size:.74rem; line-height:1.45; }
+        .fishing-coach-panel b { color:white; }
+        .fishing-coach-chips { display:flex; flex-wrap:wrap; gap:.38rem; margin-top:.48rem; }
+        .fishing-coach-chips span { border-radius:999px; padding:.32rem .56rem; background:rgba(34,211,238,.12); border:1px solid rgba(125,211,252,.13); font-size:.67rem; font-weight:800; }
+        .login-secondary-grid { display:grid; grid-template-columns:1fr 1fr; gap:.55rem; }
+        .login-secondary-grid button { padding:.82rem .6rem; border-radius:1.25rem; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.10); font-size:.76rem; font-weight:900; }
+        .login-keep-row { display:flex; align-items:center; justify-content:center; gap:.45rem; font-size:.72rem; color:rgba(224,242,254,.72); }
+        @media (max-width:420px) { .focus-hero { padding:.86rem !important; } .first-play-guide { padding:.88rem; border-radius:1.55rem; } .guide-actions { grid-template-columns:1fr; } }
+        @media (prefers-reduced-motion:reduce) { .first-play-guide::before { display:none; } }
+
+
 </style>
 </head>
 <body class="bg-[#0a3d5c] text-white antialiased">
@@ -1630,13 +1670,13 @@
             <div class="flex items-center gap-3 min-w-0">
                 <div class="top-logo-mark">🌊</div>
                 <div class="min-w-0">
-                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v3.6.2</span></div>
-                    <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Core Navigator · 구조 안정화/디자인 통합</div>
+                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v3.6.4</span></div>
+                    <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Start Flow · 자동 몰입 · 초보 가이드</div>
                 </div>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
-                <div class="hud-pill"><span>💰</span><span id="gold-display" class="font-mono tabular-nums">1,240</span></div>
-                <div class="hud-pill"><span>⭐</span><span id="level-display">12</span></div>
+                <div class="hud-pill"><span>💰</span><span id="gold-display" class="font-mono tabular-nums">0</span></div>
+                <div class="hud-pill"><span>⭐</span><span id="level-display">1</span></div>
                 <button onclick="toggleQuickMenu()" class="hud-pill" aria-label="빠른 메뉴">☰</button>
             </div>
         </div>
@@ -1648,7 +1688,6 @@
                 <button id="sensory-toggle" onclick="toggleSoundEnabled()">🔊 감각</button>
                 <button onclick="switchScreen('captain')">🧭 코치/설정</button>
                 <button id="install-app-btn" onclick="installAquaApp()" class="hidden install-pulse">📲 설치</button>
-                <button onclick="enableMobileGameMode()">🎮 게임모드</button>
                 <button onclick="runPerformanceCheck()">⚡ 성능점검</button>
                 <button id="logout-btn" onclick="logoutGame()" class="hidden">로그아웃</button>
             </div>
@@ -1663,10 +1702,16 @@
             <div class="text-center mb-10">
                 <div class="text-[5.5rem] mb-3">🎣</div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-300 mt-2">v3.6.2 Core Navigator · 성능 최적화/랙 감소/모바일 UX</p>
+                <p class="text-sky-300 mt-2">v3.6.4 Start Flow · 자동 몰입/초보 가이드/랙 개선</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
-                <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
+                <button onclick="startLocalGuestGame()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">🎣 로컬 게스트로 바로 시작</button>
+                <div class="login-secondary-grid">
+                    <button onclick="startLocalGuestGame(true)">✨ 처음부터 새 게임</button>
+                    <button onclick="loginAnonymous()">☁️ Firebase 익명 연동</button>
+                </div>
+                <div class="start-flow-note">재접속 시 자동 로그인하지 않습니다. 이메일/Google 로그인은 선택 사항이고, 로컬 게스트도 저장됩니다.</div>
+                <label class="login-keep-row"><input id="keep-login-toggle" type="checkbox"> 이 기기에서 로그인 유지</label>
                 <div class="premium-glass rounded-3xl p-5">
                     <div class="text-xs text-white/50 mb-3 text-center">이메일 로그인</div>
                     <input id="email" type="email" placeholder="이메일" class="w-full bg-white/10 rounded-2xl px-5 py-3.5 mb-2 text-sm outline-none">
@@ -1678,7 +1723,7 @@
                 </div>
                 <button onclick="loginWithGoogle()" class="w-full py-4 bg-white text-[#0a3d5c] font-extrabold rounded-3xl flex items-center justify-center gap-x-3 active:scale-[0.985]"><span class="font-black text-xl">G</span> Google로 계속하기</button>
                 <button id="install-app-btn-login" onclick="installAquaApp()" class="hidden w-full py-3 premium-glass rounded-3xl text-sm font-extrabold text-emerald-100 border border-emerald-200/20">📲 홈화면에 설치</button>
-                <button onclick="enableMobileGameMode()" class="w-full py-3 premium-glass rounded-3xl text-sm font-extrabold text-violet-100 border border-violet-200/20">🎮 전체화면 게임모드</button>
+                <div class="start-flow-note">모바일에서는 첫 터치 순간 자동으로 전체화면/주소창 숨김을 시도합니다.</div>
             </div>
         </div>
 
@@ -1686,6 +1731,7 @@
         <!-- VILLAGE -->
         <div id="screen-village" class="hidden absolute inset-0 flex flex-col ocean-deep overflow-auto screen-scroll">
             <div class="px-5 pt-5">
+                <div id="first-play-guide" class="first-play-guide hidden"></div>
                 <div class="focus-hero">
                     <div class="relative z-10 flex items-start gap-3">
                         <img id="avatar-img" onclick="showCharacterModal()" src="assets/images/zZHXu.jpg" class="focus-avatar cursor-pointer" alt="플레이어">
@@ -1693,7 +1739,7 @@
                             <div class="flex items-center justify-between gap-2">
                                 <div>
                                     <div id="player-name" class="font-black text-2xl tracking-tight truncate">여우</div>
-                                    <div class="text-emerald-300 text-xs font-bold">Lv.<span id="village-level">12</span> · <span id="focus-rank-label">항해자</span></div>
+                                    <div class="text-emerald-300 text-xs font-bold">Lv.<span id="village-level">1</span> · <span id="focus-rank-label">항해자</span></div>
                                 </div>
                                 <button onclick="switchScreen('captain')" class="px-3 py-2 rounded-2xl bg-white/10 border border-white/10 text-xs font-black">설정</button>
                             </div>
@@ -1888,6 +1934,7 @@
                 <button onclick="exitFishing()" class="text-sky-300">← 마을</button>
                 <div class="text-right"><div id="fishing-region-name" class="font-extrabold text-3xl tracking-tighter"></div><div id="fishing-region-info" class="text-[11px] text-sky-200/80 mt-0.5"></div></div>
             </div>
+            <div id="fishing-coach-panel" class="fishing-coach-panel"></div>
             <div id="fishing-visual" class="flex-1 mx-4 mt-3 mb-2 rounded-[2.5rem] overflow-hidden border border-white/10 relative">
                 <div class="absolute inset-0 bg-gradient-to-b from-[#0a3d5c] via-[#0f4c6b] to-[#0a3d5c]"></div>
                 <div class="fx-aurora" aria-hidden="true"></div>
@@ -2152,7 +2199,7 @@
             </div>
         </div>
     </div>
-    <div class="kakao-autopilot-pill">⚙️ 카카오 자동 최적화 · 전체화면은 첫 터치에서 자동 시도</div>
+    <div class="kakao-autopilot-pill">⚙️ 자동 몰입 최적화 · 첫 터치에서 전체화면 시도</div>
     <div id="exit-confirm-modal" class="exit-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="exit-confirm-title">
         <div class="exit-card v30-exit-card">
             <div class="text-[11px] text-cyan-100/70 font-black tracking-wide">AQUA FANTASIA</div>
@@ -2180,7 +2227,9 @@ import {
     GoogleAuthProvider,
     signInWithPopup,
     onAuthStateChanged,
-    signOut
+    signOut,
+    setPersistence,
+    browserSessionPersistence
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 import {
     getFirestore,
@@ -2208,6 +2257,7 @@ const firebaseConfig = {
 try {
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    try { await setPersistence(auth, browserSessionPersistence); } catch (error) { console.warn('Auth session persistence fallback:', error?.message || error); }
     const db = getFirestore(app);
     const googleProvider = new GoogleAuthProvider();
     googleProvider.setCustomParameters({ prompt: "select_account" });
@@ -2229,6 +2279,8 @@ try {
         signInWithPopup,
         onAuthStateChanged,
         signOut,
+        setPersistence,
+        browserSessionPersistence,
         doc,
         getDoc,
         setDoc,
@@ -2257,7 +2309,7 @@ let graphicsMode = localStorage.getItem('aqua_graphics_mode') || (() => {
     return (mobileLike || saveData || lowMemory || lowCores) ? 'low' : 'high';
 })();
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '3.6.3';
+const APP_VERSION = '3.6.4';
 function versionAtLeast(minVersion) {
     const parse = (value) => String(value || '0').split('.').map((part) => Number(part) || 0);
     const current = parse(APP_VERSION);
@@ -2313,11 +2365,11 @@ function warmAssetsSafely(list = [], limit = 4) {
 
 const GAME_CANONICAL_URL = 'https://junl-im.github.io/AquaFantasia/';
 let gameState = {
-    gold: 1240, level: 12, exp: 870, expToNext: 1000,
+    gold: 0, level: 1, exp: 0, expToNext: 120,
     inventory: [], discovered: new Set(),
     currentRegion: null, isFishing: false,
     reelProgress: 0, tension: 0, currentFish: null, pendingFish: null,
-    nickname: "여우", gender: "male", userId: null,
+    nickname: "낚시꾼", gender: "male", userId: null,
     catchHistory: [], bestCatch: null, totalCaught: 0, totalGoldEarned: 0,
     todayBest: 0, leaderboard: [],
     achievements: {},
@@ -2760,13 +2812,7 @@ async function enableMobileGameMode(options = {}) {
     updatePWAStatus();
 }
 
-function showFullscreenRibbon() {
-    const env = getLaunchEnvironment();
-    const ribbon = document.getElementById('fullscreen-ribbon');
-    if (!ribbon || env.isKakao || env.standalone || localStorage.getItem('aqua_mobile_game_mode') === '1') return;
-    ribbon.classList.add('show');
-    setTimeout(() => ribbon.classList.remove('show'), 7000);
-}
+function showFullscreenRibbon() { /* v3.6.4: hidden by design. Auto immersive shell handles first gesture. */ }
 
 let aquaAutoFullscreenPrimed = false;
 function primeAutoFullscreenOnGesture() {
@@ -3860,6 +3906,9 @@ function sanitizeNickname(value) {
 }
 
 function showLoginScreen() {
+    aquaCurrentScreen = 'login';
+    document.body.dataset.screen = 'login';
+    document.body.classList.add('login-mode');
     document.querySelectorAll('[id^="screen-"]').forEach(el => el.classList.add('hidden'));
     document.getElementById('screen-login')?.classList.remove('hidden');
     document.getElementById('logout-btn')?.classList.add('hidden');
@@ -5038,6 +5087,7 @@ function updateUI() {
     renderMissionQuickSummary();
     renderBossQuickPanel();
     renderFocusHud();
+    renderFirstPlayGuide();
     renderWorldMapQuick();
     renderInventoryCoachMini();
     updatePWAStatus();
@@ -5047,14 +5097,17 @@ function updateUI() {
     renderQualityDirectorMini();
     renderLegacyDirectorPanelsIfNeeded(false);
     renderV36CoreNavigator();
+    renderFishingCoach();
     renderSmartDock();
     applyMegaQualityClasses();
     applyOceanDirectorRuntime();
 }
 
 function switchScreen(screen) {
+    if (screen === 'login') return showLoginScreen();
     aquaCurrentScreen = screen;
     document.body.dataset.screen = screen;
+    document.body.classList.remove('login-mode');
     playSound('ui');
     const apply = () => {
         document.querySelectorAll('#main-content > div').forEach(d => {
@@ -5079,10 +5132,11 @@ function switchScreen(screen) {
             if (screen === 'worldmap') renderWorldMap();
             if (screen === 'achievements') renderAchievements();
             if (screen === 'encyclopedia') renderEncyclopedia();
-            renderOceanDirectorPanel();
-            renderDirectorCutPanel();
-            renderVisualAtlasPanel();
-            renderV33CommandBridge();
+            if (screen === 'fishing') renderFishingCoach();
+            if (screen === 'village') {
+                renderFirstPlayGuide();
+                renderV36CoreNavigator();
+            }
             renderSmartDock();
         };
         if (screen === 'fishing' || screen === 'village') heavyRender();
@@ -6477,6 +6531,8 @@ async function logoutGame() {
     try {
         if (!confirm('로그아웃할까요? 현재 데이터는 로컬에 저장됩니다.')) return;
         savePlayerData(false);
+        sessionStorage.removeItem('aqua_session_started');
+        localStorage.removeItem('aqua_keep_login');
         if (leaderboardUnsubscribe) {
             leaderboardUnsubscribe();
             leaderboardUnsubscribe = null;
@@ -6508,6 +6564,7 @@ function getEmailPassword() {
 
 async function loginAnonymous() {
     try {
+        markSessionStarted();
         setFirebaseStatus('wait', '로그인 중');
         const fb = await waitForFirebase();
         await fb.signInAnonymously(fb.auth);
@@ -6520,6 +6577,7 @@ async function loginAnonymous() {
 
 async function loginWithEmail() {
     try {
+        markSessionStarted();
         setFirebaseStatus('wait', '로그인 중');
         const { email, password } = getEmailPassword();
         const fb = await waitForFirebase();
@@ -6533,6 +6591,7 @@ async function loginWithEmail() {
 
 async function registerWithEmail() {
     try {
+        markSessionStarted();
         setFirebaseStatus('wait', '가입 중');
         const { email, password } = getEmailPassword();
         const fb = await waitForFirebase();
@@ -6546,6 +6605,7 @@ async function registerWithEmail() {
 
 async function loginWithGoogle() {
     try {
+        markSessionStarted();
         setFirebaseStatus('wait', 'Google 로그인');
         const fb = await waitForFirebase();
         await fb.signInWithPopup(fb.auth, fb.googleProvider);
@@ -6554,6 +6614,141 @@ async function loginWithGoogle() {
         setFirebaseStatus('error', 'Firebase 오류');
         alert('Google 로그인 오류: ' + e.message);
     }
+}
+
+
+function markSessionStarted() {
+    sessionStorage.setItem('aqua_session_started', '1');
+    const keep = document.getElementById('keep-login-toggle')?.checked === true;
+    if (keep) localStorage.setItem('aqua_keep_login', '1');
+    else localStorage.removeItem('aqua_keep_login');
+}
+
+function getStarterStateData() {
+    return {
+        gold:0, level:1, exp:0, expToNext:120,
+        inventory:[], discovered:[], currentRegion:'호수', isFishing:false,
+        reelProgress:0, tension:0, currentFish:null, pendingFish:null,
+        nickname:'낚시꾼', gender:'male', userId:null,
+        catchHistory:[], bestCatch:null, totalCaught:0, totalGoldEarned:0, todayBest:0,
+        leaderboard:[], achievements:{}, ownedRods:['starter_rod'], rodEnhance:{ starter_rod:0 },
+        baitInventory:{ basic_bait:999999 }, equipment:{ rod:'starter_rod', bait:'basic_bait' },
+        economy:{ upgradeSpent:0, enhancementAttempts:0, enhancementSuccess:0, lastUpgradeAt:'' },
+        daily:{ dateKey:'', checkedIn:false, streak:0, lastCheckIn:'', claimedQuests:{}, stats:{ casts:0, caught:0, rareCaught:0, goldEarned:0 } },
+        season:{ claimed:{} }, bossStats:{ encounters:0, defeated:0, escaped:0, bestValue:0 }, bossLeaderboard:[],
+        seasonRank:{ seasonKey:'', bestScore:0, submittedAt:'' }, weeklyRewards:{ weekKey:'', claimed:{}, lastClaimAt:'', history:[] },
+        visualLab:{ lastFps:0, lastMode:graphicsMode, tunedAt:'' }, sensory:{ sound:true, haptic:true, music:false, volume:.55, impact:1, unlocked:false },
+        captain:{ supplyClaimed:false, guideDismissed:false, completed:{}, lastTip:'', startedAt:'' },
+        quality:{ preset:localStorage.getItem('aqua_quality_preset') || 'auto', longTasks:0, lastFps:0, directorMode:'auto', lastTuneAt:'' },
+        inventoryPrefs:{ sort:'value', filter:'all', lastSaleAt:'', compact:true },
+        ui:{ compactHud:false, oneHand:false, coachHints:true },
+        world:{ mapOpened:false, lastRecommended:'호수', unlockedRegions:['호수'] },
+        artDirector:{ firstRun:true, lastSnapshot:'', assetsSeen:false, lastAction:'' },
+        nexusForge:{ seen:false, warmed:false, lastAction:'', detail:'focus' },
+        v36:{ seen:false, warmed:false, audits:0, lastAction:'', modulePlanSeen:false },
+        bossWindowActive:false, bossSurgeTick:0
+    };
+}
+
+function isDemoSeedState(data) {
+    if (!data || typeof data !== 'object') return false;
+    const discoveredCount = Array.isArray(data.discovered) ? data.discovered.length : 0;
+    const invCount = Array.isArray(data.inventory) ? data.inventory.length : 0;
+    return String(data.nickname || '') === '여우'
+        && Number(data.level || 0) === 12
+        && Number(data.gold || 0) === 1240
+        && Number(data.totalCaught || 0) === 0
+        && invCount === 0
+        && discoveredCount === 0;
+}
+
+function clearAquaProgressKeys() {
+    Object.keys(localStorage).filter((key) => key.startsWith('aqua_v') || key === 'aqua_latest_state').forEach((key) => localStorage.removeItem(key));
+}
+
+function startLocalGuestGame(reset = false) {
+    markSessionStarted();
+    if (reset) {
+        clearAquaProgressKeys();
+        gameState = normalizeGameState(getStarterStateData());
+        savePlayerData(false);
+    } else if (isDemoSeedState(gameState)) {
+        gameState = normalizeGameState(getStarterStateData());
+        savePlayerData(false);
+    }
+    document.body.classList.remove('login-mode');
+    switchScreen('village');
+    updateUI();
+    showToast(reset ? '새 게임으로 시작합니다' : '로컬 게스트로 시작합니다', '🎣', 2400);
+}
+
+async function resetLocalProgress() {
+    if (!confirm('저장 데이터를 지우고 처음부터 시작할까요? 이 기기의 로컬 진행도가 삭제됩니다.')) return;
+    clearAquaProgressKeys();
+    sessionStorage.setItem('aqua_session_started', '1');
+    try { const fb = await waitForFirebase(1200); await fb.signOut(fb.auth); } catch (error) {}
+    gameState = normalizeGameState(getStarterStateData());
+    savePlayerData(false);
+    document.body.classList.remove('login-mode');
+    switchScreen('village');
+    updateUI();
+    showToast('초기화 완료 · 호수부터 시작합니다', '✨', 2600);
+}
+
+function shouldShowFirstPlayGuide() {
+    return Number(gameState.totalCaught || 0) < 1 || !gameState.captain?.guideDismissed;
+}
+
+function renderFirstPlayGuide() {
+    const box = document.getElementById('first-play-guide');
+    if (!box) return;
+    const show = shouldShowFirstPlayGuide();
+    box.classList.toggle('hidden', !show);
+    if (!show) return;
+    box.innerHTML = `
+        <div class="relative z-10">
+            <div class="text-[10px] font-black tracking-[.18em] text-amber-100/80">FIRST RUN GUIDE</div>
+            <div class="text-2xl font-black tracking-tight mt-1">처음엔 이렇게 하면 됩니다</div>
+            <div class="text-xs text-white/65 mt-1 leading-relaxed">복잡한 메뉴보다 먼저 <b>호수에서 한 마리 잡기</b>를 목표로 진행하세요.</div>
+            <div class="guide-steps">
+                <div class="guide-step"><span>1</span><b>호수로 출항</b><span>추천 지역에서 낚시 시작</span></div>
+                <div class="guide-step"><span>2</span><b>낚싯대 던지기</b><span>입질이 올 때까지 기다리기</span></div>
+                <div class="guide-step"><span>3</span><b>물었다! 화면 터치</b><span>그다음 릴 감기 버튼 연타</span></div>
+                <div class="guide-step"><span>4</span><b>가방에서 판매</b><span>골드로 장비 강화</span></div>
+            </div>
+            <div class="guide-actions">
+                <button class="primary" onclick="selectRegion('호수')">🎣 호수에서 시작</button>
+                <button onclick="dismissFirstPlayGuide()">알겠어요</button>
+            </div>
+        </div>`;
+}
+
+function dismissFirstPlayGuide() {
+    if (!gameState.captain || typeof gameState.captain !== 'object') gameState.captain = { completed:{} };
+    gameState.captain.guideDismissed = true;
+    savePlayerData(false);
+    renderFirstPlayGuide();
+}
+
+function renderFishingCoach() {
+    const box = document.getElementById('fishing-coach-panel');
+    if (!box) return;
+    const region = gameState.currentRegion || '호수';
+    box.innerHTML = `<b>${escapeHTML(region)} 낚시 방법</b><div class="fishing-coach-chips"><span>1 낚싯대 던지기</span><span>2 입질 오면 수면 터치</span><span>3 릴 감기 연타</span><span>4 장력 100% 전에 포획</span></div>`;
+}
+
+function initAutoImmersiveShell() {
+    document.body.classList.add('auto-immersive');
+    const run = () => {
+        document.removeEventListener('pointerdown', run, true);
+        document.removeEventListener('touchstart', run, true);
+        document.removeEventListener('keydown', run, true);
+        enableMobileGameMode({ silent:true, auto:true });
+        setTimeout(() => window.scrollTo(0, 1), 50);
+    };
+    document.addEventListener('pointerdown', run, { once:true, capture:true });
+    document.addEventListener('touchstart', run, { once:true, capture:true });
+    document.addEventListener('keydown', run, { once:true, capture:true });
 }
 
 function serializeGameState() {
@@ -6571,7 +6766,7 @@ function serializeGameState() {
 
 function normalizeGameState(data) {
     const next = { ...gameState, ...(data || {}) };
-    next.nickname = sanitizeNickname(next.nickname || '여우');
+    next.nickname = sanitizeNickname(next.nickname || '낚시꾼');
     next.gold = Math.max(0, Number(next.gold || 0));
     next.level = Math.max(1, Number(next.level || 1));
     next.exp = Math.max(0, Number(next.exp || 0));
@@ -6671,7 +6866,7 @@ function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
         const json = JSON.stringify(plain);
-        ['aqua_v3.6.3', 'aqua_v3.6.2', 'aqua_latest_state'].forEach((key) => localStorage.setItem(key, json)); // 성능 보호: 과거 전체 버전 키 반복 저장 제거
+        ['aqua_v3.6.4', 'aqua_v3.6.3', 'aqua_latest_state'].forEach((key) => localStorage.setItem(key, json)); // 성능 보호: 과거 전체 버전 키 반복 저장 제거
         setCloudSaveStatus('ok', '로컬 저장됨');
 
         if (syncCloud && isFirebaseConnected && gameState.userId && window.AquaFirebase) {
@@ -6786,6 +6981,15 @@ async function startFirebaseAuthListener() {
         setFirebaseStatus('wait', 'Firebase 준비');
         fb.onAuthStateChanged(fb.auth, async (user) => {
             if (user) {
+                const explicitSession = sessionStorage.getItem('aqua_session_started') === '1' || localStorage.getItem('aqua_keep_login') === '1';
+                if (!explicitSession) {
+                    try { await fb.signOut(fb.auth); } catch (error) {}
+                    isFirebaseConnected = false;
+                    gameState.userId = null;
+                    setFirebaseStatus('wait', '로그인 필요');
+                    showLoginScreen();
+                    return;
+                }
                 isFirebaseConnected = true;
                 gameState.userId = user.uid;
                 setFirebaseStatus('ok', user.isAnonymous ? '익명 접속' : '로그인됨');
@@ -6909,9 +7113,14 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v3.6.3') || localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
-        if (saved) gameState = normalizeGameState(JSON.parse(saved));
-        else gameState = normalizeGameState(gameState);
+        const saved = localStorage.getItem('aqua_v3.6.4') || localStorage.getItem('aqua_v3.6.3') || localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            if (isDemoSeedState(parsed)) {
+                clearAquaProgressKeys();
+                gameState = normalizeGameState(getStarterStateData());
+            } else gameState = normalizeGameState(parsed);
+        } else gameState = normalizeGameState(getStarterStateData());
         
         if (!gameState.leaderboard || gameState.leaderboard.length === 0) gameState.leaderboard = getLocalLeaderboardFallback();
         if (!gameState.bossLeaderboard || gameState.bossLeaderboard.length === 0) gameState.bossLeaderboard = getBossLeaderboardFallback();
@@ -6938,6 +7147,7 @@ async function init() {
         initV36Runtime();
         initDirectorArchivePerformanceGate();
         initMobileLaunchBridge();
+        initAutoImmersiveShell();
         initBackExitGuard();
         exposeAquaHandlers();
         applyAdaptivePerformance();
@@ -6951,11 +7161,14 @@ async function init() {
         scheduleAquaTask(initVisualObserver, 'background');
         scheduleAquaTask(initMegaPerformanceObserver, 'background');
         startFirebaseAuthListener();
+        const shouldEnterGame = sessionStorage.getItem('aqua_session_started') === '1' || localStorage.getItem('aqua_keep_login') === '1' || new URL(location.href).searchParams.get('autostart') === '1';
+        if (shouldEnterGame) switchScreen('village');
+        else showLoginScreen();
         
-        console.log('%c[AquaFantasia v3.6.3] Painterly Performance Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v3.6.4] Start Flow Hotfix Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
-        alert('게임 초기화 중 오류가 발생했습니다. v3.6.3 최적화 패치가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
+        alert('게임 초기화 중 오류가 발생했습니다. v3.6.4 시작 흐름 패치가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
     }
 }
 
