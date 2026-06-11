@@ -1,11 +1,11 @@
 {
-  "name": "Aqua Fantasia v3.4",
-  "short_name": "Aqua v3.4",
-  "description": "Aqua Fantasia - Abyss Canvas 3.4 mega design polish, mobile-first fishing RPG",
+  "name": "Aqua Fantasia v3.6",
+  "short_name": "Aqua v3.6",
+  "description": "Aqua Fantasia - Core Navigator 3.6 mega stabilization, modular scaffold, mobile art UI, 150 fish atlas",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "./?app=aqua-fantasia-v34",
-  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=3.4",
+  "id": "./?app=aqua-fantasia-v36",
+  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=3.6",
   "scope": "./",
   "display": "fullscreen",
   "display_override": [
@@ -15,7 +15,7 @@
   ],
   "orientation": "portrait",
   "background_color": "#020617",
-  "theme_color": "#03111f",
+  "theme_color": "#041525",
   "categories": [
     "games",
     "entertainment"
@@ -41,6 +41,30 @@
     }
   ],
   "shortcuts": [
+    {
+      "name": "코어 내비게이터",
+      "short_name": "코어",
+      "description": "v3.6 핵심 추천과 구조 안정화 패널 열기",
+      "url": "./?shortcut=core-navigator",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "타이드 마스터",
+      "short_name": "타이드",
+      "description": "v3.5 핵심 추천과 모바일 아트 패널 열기",
+      "url": "./?shortcut=tide-master",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
     {
       "name": "어비스 캔버스",
       "short_name": "캔버스",
@@ -82,54 +106,6 @@
       "short_name": "장비",
       "description": "낚싯대와 미끼 관리",
       "url": "./?shortcut=equipment",
-      "icons": [
-        {
-          "src": "assets/icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "캡틴 코치",
-      "short_name": "코치",
-      "description": "초보자 항해 루프와 품질 감독관 열기",
-      "url": "./?shortcut=coach",
-      "icons": [
-        {
-          "src": "assets/icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "월드맵",
-      "short_name": "지도",
-      "description": "지역 해금과 추천 항로 확인",
-      "url": "./?shortcut=worldmap",
-      "icons": [
-        {
-          "src": "assets/icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "가방 정리",
-      "short_name": "가방",
-      "description": "판매 추천과 보관 어종 확인",
-      "url": "./?shortcut=inventory",
-      "icons": [
-        {
-          "src": "assets/icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "오션 디렉터",
-      "short_name": "디렉터",
-      "description": "추천 행동과 성장 요약 확인",
-      "url": "./?shortcut=director",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",

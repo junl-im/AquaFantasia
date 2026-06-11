@@ -85,7 +85,47 @@ const requiredFiles = [
   'assets/art/v34_region_harbor.svg',
   'assets/art/v34_region_deep.svg',
   'assets/art/v34_region_palace.svg',
-  'assets/art/v34_region_dimension.svg'
+  'assets/art/v34_region_dimension.svg',
+  'assets/art/v35_tide_master.svg',
+  'assets/art/v35_mobile_stage.svg',
+  'assets/art/v35_fishing_stage.svg',
+  'assets/art/v35_fish_cabinet.svg',
+  'assets/art/v35_boss_gate.svg',
+  'assets/art/v35_inventory_wall.svg',
+  'assets/art/v35_ui_frame.svg',
+  'assets/art/v35_tide_radar.svg',
+  'assets/art/v35_button_glyphs.svg',
+  'assets/art/v35_route_map.svg',
+  'assets/art/v35_reward_chest.svg',
+  'assets/art/v35_encyclopedia_plate.svg',
+  'assets/art/v35_region_lake.svg',
+  'assets/art/v35_region_river.svg',
+  'assets/art/v35_region_harbor.svg',
+  'assets/art/v35_region_deep.svg',
+  'assets/art/v35_region_palace.svg',
+  'assets/art/v35_region_dimension.svg',
+  'assets/art/v36_core_navigator.svg',
+  'assets/art/v36_mobile_canvas.svg',
+  'assets/art/v36_fishing_stage.svg',
+  'assets/art/v36_fish_atlas.svg',
+  'assets/art/v36_region_lake.svg',
+  'assets/art/v36_region_river.svg',
+  'assets/art/v36_region_harbor.svg',
+  'assets/art/v36_region_deep.svg',
+  'assets/art/v36_region_palace.svg',
+  'assets/art/v36_region_dimension.svg',
+  'assets/art/v36_inventory_deck.svg',
+  'assets/art/v36_boss_crest.svg',
+  'assets/art/v36_route_orbit.svg',
+  'assets/art/v36_hud_frame.svg',
+  'assets/art/v36_button_runes.svg',
+  'assets/art/v36_reward_vault.svg',
+  'assets/art/v36_pwa_shell.svg',
+  'assets/art/v36_performance_radar.svg',
+  'assets/art/v36_world_console.svg',
+  'assets/art/v36_module_map.svg',
+  'assets/art/v36_encyclopedia_wall.svg',
+  'assets/art/v36_touch_overlay.svg'
 ];
 
 function fail(message) {
@@ -100,7 +140,7 @@ for (const file of requiredFiles) {
 
 const index = readFileSync(join(root, 'index.html'), 'utf8');
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!index.includes("const APP_VERSION = '3.4.0'")) fail('APP_VERSION must be 3.4.0 for this patch.');
+if (!index.includes("const APP_VERSION = '3.6.0'")) fail('APP_VERSION must be 3.6.0 for this patch.');
 if (!index.includes('serviceWorker.register')) fail('PWA service worker registration is missing.');
 if (!index.includes('season-ranking-panel')) fail('Season ranking UI is missing.');
 if (!index.includes('weekly-reward-vault')) fail('Weekly reward vault UI is missing.');
@@ -140,6 +180,15 @@ if (!index.includes('runVisualAtlasAction')) fail('v3.2 Visual Atlas action hand
 if (!index.includes('art-v32')) fail('v3.2 art runtime class is missing.');
 if (!index.includes('v33-command-bridge')) fail('v3.3 Nexus Forge command bridge is missing.');
 if (!index.includes('v34-command-canvas')) fail('v3.4 Abyss Canvas command canvas is missing.');
+if (!index.includes('v35-tide-master')) fail('v3.5 Tide Master panel is missing.');
+if (!index.includes('renderV35TideMaster')) fail('v3.5 Tide Master renderer is missing.');
+if (!index.includes('runV35Action')) fail('v3.5 Tide Master action handler is missing.');
+if (!index.includes('art-v35')) fail('v3.5 art runtime class is missing.');
+if (!index.includes('v36-core-navigator')) fail('v3.6 Core Navigator panel is missing.');
+if (!index.includes('renderV36CoreNavigator')) fail('v3.6 Core Navigator renderer is missing.');
+if (!index.includes('runV36Action')) fail('v3.6 Core Navigator action handler is missing.');
+if (!index.includes('art-v36')) fail('v3.6 art runtime class is missing.');
+if (!index.includes('src/core/state.js')) fail('v3.6 modular scaffold reference is missing.');
 if (!index.includes('renderV34CommandCanvas')) fail('v3.4 Abyss Canvas renderer is missing.');
 if (!index.includes('runV34Action')) fail('v3.4 Abyss Canvas action handler is missing.');
 if (!index.includes('art-v34')) fail('v3.4 art runtime class is missing.');
@@ -154,7 +203,7 @@ if (manifest.display !== 'fullscreen') fail('manifest.webmanifest must use displ
 if (!Array.isArray(manifest.icons) || manifest.icons.length < 3) fail('manifest icons are incomplete.');
 
 const fish = JSON.parse(readFileSync(join(root, 'data/fish.json'), 'utf8'));
-if (!Array.isArray(fish.fish) || fish.fish.length < 100) fail('data/fish.json must include at least 100 fish entries.');
+if (!Array.isArray(fish.fish) || fish.fish.length < 150) fail('data/fish.json must include at least 150 fish entries.');
 const fishIds = new Set();
 for (const item of fish.fish) {
   if (!item.id || fishIds.has(item.id)) fail(`Invalid or duplicate fish id: ${item.id}`);
@@ -163,7 +212,7 @@ for (const item of fish.fish) {
 }
 
 const sw = readFileSync(join(root, 'sw.js'), 'utf8');
-if (!sw.includes('aqua-fantasia-v3.4.0')) fail('Service worker cache version was not updated.');
+if (!sw.includes('aqua-fantasia-v3.6.0')) fail('Service worker cache version was not updated.');
 
 const scripts = [...index.matchAll(/<script(?:\s+[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map((m) => m[1].trim())

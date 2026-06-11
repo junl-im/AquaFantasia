@@ -1,3 +1,9 @@
-# AquaFantasia v3.4
+# AquaFantasia
 
-Abyss Canvas Mega Refresh 패키지입니다. GitHub Pages + Firebase 무료 구성을 유지하면서 모바일 중심 디자인, SVG 에셋, 추천 행동 UI, PWA/Actions 검증을 포함합니다.
+GitHub Pages 무료 배포용 모바일 웹 낚시 RPG입니다. 현재 패치: **v3.6 Core Navigator Mega Stabilization**.
+
+- 실행: `index.html`
+- 데이터: `data/fish.json`
+- PWA: `manifest.webmanifest`, `sw.js`
+- 자동 검증: `npm run validate`, `npm run audit`
+- 모듈 분리 준비: `src/`, `docs/ARCHITECTURE_v3.6.md`

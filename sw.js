@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'aqua-fantasia-v3.4.0';
+const CACHE_VERSION = 'aqua-fantasia-v3.6.0';
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const CORE_ASSETS = [
@@ -82,7 +82,30 @@ const CORE_ASSETS = [
   "./assets/art/v34_region_harbor.svg",
   "./assets/art/v34_region_deep.svg",
   "./assets/art/v34_region_palace.svg",
-  "./assets/art/v34_region_dimension.svg"
+  "./assets/art/v34_region_dimension.svg",
+  "./assets/art/v35_tide_master.svg",
+  "./assets/art/v36_core_navigator.svg",
+  "./assets/art/v36_mobile_canvas.svg",
+  "./assets/art/v36_fishing_stage.svg",
+  "./assets/art/v36_fish_atlas.svg",
+  "./assets/art/v36_region_lake.svg",
+  "./assets/art/v36_region_river.svg",
+  "./assets/art/v36_region_harbor.svg",
+  "./assets/art/v36_region_deep.svg",
+  "./assets/art/v36_region_palace.svg",
+  "./assets/art/v36_region_dimension.svg",
+  "./assets/art/v36_inventory_deck.svg",
+  "./assets/art/v36_boss_crest.svg",
+  "./assets/art/v36_route_orbit.svg",
+  "./assets/art/v36_hud_frame.svg",
+  "./assets/art/v36_button_runes.svg",
+  "./assets/art/v36_reward_vault.svg",
+  "./assets/art/v36_pwa_shell.svg",
+  "./assets/art/v36_performance_radar.svg",
+  "./assets/art/v36_world_console.svg",
+  "./assets/art/v36_module_map.svg",
+  "./assets/art/v36_encyclopedia_wall.svg",
+  "./assets/art/v36_touch_overlay.svg",
 ];
 
 self.addEventListener('install', (event) => {

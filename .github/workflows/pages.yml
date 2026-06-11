@@ -30,6 +30,9 @@ jobs:
       - name: Validate HTML, JSON, Service Worker, and game scripts
         run: node tools/validate-static.mjs
 
+      - name: Audit bundle size, assets, and mobile guards
+        run: node tools/audit-bundle.mjs
+
   deploy:
     name: Deploy to GitHub Pages
     needs: validate

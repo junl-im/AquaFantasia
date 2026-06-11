@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Aqua Fantasia - Abyss Canvas 3.4 원화급 모바일 UI와 자동 최적화 낚시 RPG">
+    <meta name="description" content="Aqua Fantasia - Core Navigator 3.6 대형 구조 안정화, 모바일 아트 UI, 에셋 확장 낚시 RPG">
     <meta name="theme-color" content="#082f49">
     <meta name="color-scheme" content="dark">
     <meta name="mobile-web-app-capable" content="yes">
@@ -17,9 +17,9 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
-    <link rel="preload" as="image" href="assets/art/v34_abyss_canvas.svg" type="image/svg+xml">
-    <link rel="preload" as="image" href="assets/art/v34_region_panorama.svg" type="image/svg+xml">
-    <title>Aqua Fantasia • v3.4 Abyss Canvas Mega Refresh</title>
+    <link rel="preload" as="image" href="assets/art/v36_core_navigator.svg" type="image/svg+xml">
+    <link rel="preload" as="image" href="assets/art/v36_mobile_canvas.svg" type="image/svg+xml">
+    <title>Aqua Fantasia • v3.6 Core Navigator Mega Stabilization</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -1234,7 +1234,226 @@
             .v34-command-canvas::before, .v34-command-canvas::after { animation:none !important; }
         }
 
-    </style>
+    
+        /* ==================== v3.5 Tide Master Mega Refinement ==================== */
+        :root {
+            --v35-ink:#010816;
+            --v35-ocean:#082f49;
+            --v35-cyan:#67e8f9;
+            --v35-mint:#5eead4;
+            --v35-gold:#fcd34d;
+            --v35-rose:#fb7185;
+            --v35-violet:#a78bfa;
+        }
+        body.art-v35 #app-shell {
+            background-image:
+                radial-gradient(circle at 18% 8%, rgba(103,232,249,.20), transparent 32%),
+                radial-gradient(circle at 82% 22%, rgba(167,139,250,.16), transparent 34%),
+                linear-gradient(180deg, rgba(1,8,22,.98), rgba(8,47,73,.96) 44%, rgba(2,6,23,.98));
+        }
+        body.art-v35 .top-bar-focus {
+            background:linear-gradient(180deg, rgba(2,6,23,.76), rgba(8,47,73,.42));
+            backdrop-filter:blur(18px);
+            -webkit-backdrop-filter:blur(18px);
+        }
+        body.art-v35 .focus-hero {
+            background-image:linear-gradient(135deg, rgba(2,6,23,.38), rgba(8,47,73,.30)), url('assets/art/v35_mobile_stage.svg');
+            background-size:cover;
+            background-position:center;
+        }
+        .v35-tide-master {
+            position:relative;
+            overflow:hidden;
+            border-radius:2rem;
+            padding:1rem;
+            border:1px solid rgba(255,255,255,.14);
+            box-shadow:0 30px 90px rgba(2,6,23,.44), inset 0 1px 0 rgba(255,255,255,.14);
+            background:
+                linear-gradient(135deg, rgba(2,6,23,.28), rgba(8,47,73,.34)),
+                url('assets/art/v35_tide_master.svg') center / cover no-repeat;
+            isolation:isolate;
+        }
+        .v35-tide-master::before {
+            content:"";
+            position:absolute;
+            inset:-44%;
+            background:conic-gradient(from 30deg, transparent, rgba(103,232,249,.26), transparent, rgba(252,211,77,.18), transparent, rgba(167,139,250,.20), transparent);
+            opacity:.55;
+            animation:v35-orbit 23s linear infinite;
+            z-index:-1;
+        }
+        .v35-tide-master::after {
+            content:"";
+            position:absolute;
+            inset:0;
+            background:
+                linear-gradient(90deg, transparent, rgba(255,255,255,.14), transparent),
+                radial-gradient(circle at 72% 12%, rgba(255,255,255,.14), transparent 24%);
+            transform:translateX(-115%);
+            animation:v35-scan 9s ease-in-out infinite;
+            pointer-events:none;
+            mix-blend-mode:screen;
+        }
+        @keyframes v35-orbit { to { transform:rotate(360deg); } }
+        @keyframes v35-scan { 0%,72%{transform:translateX(-115%)} 100%{transform:translateX(115%)} }
+        .v35-inner { position:relative; z-index:2; }
+        .v35-head { display:grid; grid-template-columns:1fr 5.35rem; gap:.85rem; align-items:start; }
+        .v35-kicker { font-size:.58rem; letter-spacing:.18em; text-transform:uppercase; color:rgba(186,230,253,.78); font-weight:1000; }
+        .v35-title { margin-top:.18rem; font-size:1.32rem; line-height:1.04; letter-spacing:-.055em; font-weight:1000; color:#f8fafc; text-shadow:0 12px 30px rgba(0,0,0,.42); }
+        .v35-copy { margin-top:.36rem; font-size:.70rem; line-height:1.45; color:rgba(236,254,255,.72); }
+        .v35-cover { width:5.35rem; height:5.35rem; border-radius:1.55rem; background:url('assets/art/v35_fish_cabinet.svg') center/cover no-repeat; border:1px solid rgba(255,255,255,.15); box-shadow:0 18px 44px rgba(0,0,0,.36), inset 0 1px 0 rgba(255,255,255,.18); }
+        .v35-metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:.46rem; margin-top:.86rem; }
+        .v35-metric { min-width:0; padding:.64rem .34rem; border-radius:1.05rem; background:rgba(255,255,255,.075); border:1px solid rgba(255,255,255,.10); text-align:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.07); }
+        .v35-metric b { display:block; font-size:.86rem; line-height:1; color:#ecfeff; font-weight:1000; }
+        .v35-metric span { display:block; margin-top:.23rem; font-size:.55rem; color:rgba(255,255,255,.58); font-weight:900; }
+        .v35-flow { display:grid; grid-template-columns:1.25fr 1fr 1fr; gap:.50rem; margin-top:.78rem; }
+        .v35-flow button { min-height:3.18rem; border-radius:1.08rem; border:1px solid rgba(255,255,255,.12); background:rgba(2,6,23,.34); color:#f8fafc; font-weight:1000; font-size:.70rem; text-align:left; padding:.62rem; box-shadow:inset 0 1px 0 rgba(255,255,255,.07); }
+        .v35-flow button.primary { background:linear-gradient(135deg, rgba(34,211,238,.30), rgba(94,234,212,.18)); border-color:rgba(103,232,249,.32); box-shadow:0 14px 34px rgba(34,211,238,.16), inset 0 1px 0 rgba(255,255,255,.10); }
+        .v35-flow button:active { transform:scale(.972); }
+        .v35-flow small { display:block; margin-top:.14rem; color:rgba(255,255,255,.60); font-size:.56rem; line-height:1.18; font-weight:800; }
+        .v35-tide-track { display:grid; grid-template-columns:1fr auto; gap:.65rem; align-items:center; margin-top:.76rem; }
+        .v35-track { height:.60rem; border-radius:999px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.08); overflow:hidden; }
+        .v35-fill { height:100%; width:var(--ready, 0%); border-radius:inherit; background:linear-gradient(90deg, #22d3ee, #5eead4, #fcd34d, #fb7185); box-shadow:0 0 18px rgba(94,234,212,.36); }
+        .v35-track-label { font-size:.61rem; color:rgba(236,254,255,.78); font-weight:1000; }
+        .v35-quick-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.42rem; margin-top:.68rem; }
+        .v35-quick-grid button { padding:.56rem .26rem; border-radius:.94rem; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.075); color:rgba(236,254,255,.85); font-size:.58rem; font-weight:950; }
+        .v35-audit-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:.45rem; margin-top:.72rem; }
+        .v35-audit-item { min-height:3.1rem; padding:.52rem .46rem; border-radius:.96rem; border:1px solid rgba(255,255,255,.08); background:rgba(2,6,23,.26); font-size:.55rem; color:rgba(255,255,255,.58); line-height:1.25; }
+        .v35-audit-item b { display:block; color:#e0f2fe; font-size:.61rem; margin-bottom:.14rem; }
+        body.art-v35 #fishing-visual { background-image:linear-gradient(180deg, rgba(3,17,31,.16), rgba(2,6,23,.34)), url('assets/art/v35_fishing_stage.svg'); background-size:cover; background-position:center bottom; }
+        body.art-v35 .region-card[data-region="호수"] { background-image:linear-gradient(135deg, rgba(2,6,23,.38), rgba(8,47,73,.32)), url('assets/art/v35_region_lake.svg'); background-size:cover; background-position:center; }
+        body.art-v35 .region-card[data-region="강"] { background-image:linear-gradient(135deg, rgba(2,6,23,.38), rgba(8,47,73,.32)), url('assets/art/v35_region_river.svg'); background-size:cover; background-position:center; }
+        body.art-v35 .region-card[data-region="항구"] { background-image:linear-gradient(135deg, rgba(2,6,23,.38), rgba(8,47,73,.32)), url('assets/art/v35_region_harbor.svg'); background-size:cover; background-position:center; }
+        body.art-v35 .region-card[data-region="심해"] { background-image:linear-gradient(135deg, rgba(2,6,23,.38), rgba(8,47,73,.32)), url('assets/art/v35_region_deep.svg'); background-size:cover; background-position:center; }
+        body.art-v35 .region-card[data-region="용궁"] { background-image:linear-gradient(135deg, rgba(2,6,23,.38), rgba(8,47,73,.32)), url('assets/art/v35_region_palace.svg'); background-size:cover; background-position:center; }
+        body.art-v35 .region-card[data-region='차원의 바다'] { background-image:linear-gradient(135deg, rgba(2,6,23,.38), rgba(8,47,73,.32)), url('assets/art/v35_region_dimension.svg'); background-size:cover; background-position:center; }
+        body.quality-low .v35-tide-master::before, body.art-lite .v35-tide-master::before, body.fx-paused .v35-tide-master::before { animation:none; opacity:.30; }
+        body.quality-low .v35-tide-master::after, body.art-lite .v35-tide-master::after, body.fx-paused .v35-tide-master::after { animation:none; opacity:.18; }
+        @media (max-width:380px) {
+            .v35-tide-master { border-radius:1.48rem; padding:.82rem; }
+            .v35-head { grid-template-columns:1fr 4.25rem; gap:.60rem; }
+            .v35-cover { width:4.25rem; height:4.25rem; border-radius:1.12rem; }
+            .v35-title { font-size:1.08rem; }
+            .v35-metrics { grid-template-columns:repeat(2,1fr); }
+            .v35-flow { grid-template-columns:1fr; }
+            .v35-audit-strip { grid-template-columns:1fr; }
+        }
+        @media (prefers-reduced-motion:reduce) {
+            .v35-tide-master::before, .v35-tide-master::after { animation:none !important; }
+        }
+
+
+        /* ==================== v3.6 Core Navigator Mega Stabilization ==================== */
+        :root {
+            --v36-bg:#020617;
+            --v36-panel:#061527;
+            --v36-cyan:#22d3ee;
+            --v36-blue:#60a5fa;
+            --v36-mint:#34d399;
+            --v36-gold:#fbbf24;
+            --v36-pink:#fb7185;
+            --v36-violet:#8b5cf6;
+        }
+        body.art-v36 #app-shell {
+            background-image:
+                radial-gradient(circle at 12% 5%, rgba(34,211,238,.22), transparent 30%),
+                radial-gradient(circle at 78% 16%, rgba(139,92,246,.18), transparent 34%),
+                radial-gradient(circle at 45% 98%, rgba(52,211,153,.14), transparent 30%),
+                linear-gradient(180deg, rgba(2,6,23,.99), rgba(4,21,37,.98) 42%, rgba(1,8,18,.99));
+        }
+        body.art-v36 .top-bar-focus {
+            background:linear-gradient(180deg, rgba(2,6,23,.82), rgba(8,47,73,.36));
+            backdrop-filter:blur(20px) saturate(1.24);
+            -webkit-backdrop-filter:blur(20px) saturate(1.24);
+        }
+        body.art-v36 .focus-hero {
+            background-image:linear-gradient(135deg, rgba(2,6,23,.46), rgba(8,47,73,.24)), url('assets/art/v36_mobile_canvas.svg');
+            background-size:cover;
+            background-position:center;
+        }
+        .v36-core-navigator {
+            --v36-ready: 0%;
+            position:relative;
+            overflow:hidden;
+            border-radius:2.15rem;
+            padding:1.05rem;
+            border:1px solid rgba(255,255,255,.16);
+            background:
+                linear-gradient(135deg, rgba(1,8,18,.34), rgba(6,21,39,.30)),
+                url('assets/art/v36_core_navigator.svg') center / cover no-repeat;
+            box-shadow:0 32px 100px rgba(2,6,23,.52), inset 0 1px 0 rgba(255,255,255,.16);
+            isolation:isolate;
+        }
+        .v36-core-navigator::before {
+            content:"";
+            position:absolute;
+            inset:-48%;
+            background:conic-gradient(from 15deg, transparent, rgba(34,211,238,.28), transparent, rgba(251,191,36,.18), transparent, rgba(139,92,246,.22), transparent, rgba(52,211,153,.20), transparent);
+            opacity:.56;
+            animation:v36-nav-orbit 25s linear infinite;
+            z-index:-1;
+        }
+        .v36-core-navigator::after {
+            content:"";
+            position:absolute;
+            inset:0;
+            background:
+                linear-gradient(100deg, transparent 38%, rgba(255,255,255,.16), transparent 62%),
+                radial-gradient(circle at 72% 11%, rgba(255,255,255,.14), transparent 24%);
+            transform:translateX(-118%);
+            animation:v36-nav-scan 10.5s ease-in-out infinite;
+            pointer-events:none;
+            mix-blend-mode:screen;
+        }
+        @keyframes v36-nav-orbit { to { transform:rotate(360deg); } }
+        @keyframes v36-nav-scan { 0%,76%{transform:translateX(-118%)} 100%{transform:translateX(118%)} }
+        .v36-inner { position:relative; z-index:2; }
+        .v36-head { display:grid; grid-template-columns:1fr 5.45rem; gap:.86rem; align-items:start; }
+        .v36-kicker { font-size:.58rem; letter-spacing:.20em; text-transform:uppercase; color:rgba(186,230,253,.80); font-weight:1000; }
+        .v36-title { margin-top:.16rem; font-size:1.34rem; line-height:1.04; letter-spacing:-.06em; font-weight:1000; color:#f8fafc; text-shadow:0 14px 30px rgba(0,0,0,.46); }
+        .v36-copy { margin-top:.36rem; font-size:.70rem; line-height:1.45; color:rgba(236,254,255,.74); }
+        .v36-emblem { width:5.45rem; height:5.45rem; border-radius:1.62rem; background:url('assets/art/v36_fish_atlas.svg') center/cover no-repeat; border:1px solid rgba(255,255,255,.15); box-shadow:0 18px 44px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.18); }
+        .v36-metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:.46rem; margin-top:.86rem; }
+        .v36-metric { min-width:0; padding:.66rem .34rem; border-radius:1.08rem; background:rgba(255,255,255,.078); border:1px solid rgba(255,255,255,.10); text-align:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.07); }
+        .v36-metric b { display:block; font-size:.84rem; line-height:1; color:#ecfeff; font-weight:1000; }
+        .v36-metric span { display:block; margin-top:.23rem; font-size:.54rem; color:rgba(255,255,255,.58); font-weight:900; }
+        .v36-action-grid { display:grid; grid-template-columns:1.25fr 1fr 1fr; gap:.50rem; margin-top:.80rem; }
+        .v36-action-grid button { min-height:3.15rem; border-radius:1.10rem; border:1px solid rgba(255,255,255,.12); background:rgba(2,6,23,.34); color:#f8fafc; font-weight:1000; font-size:.70rem; text-align:left; padding:.64rem; box-shadow:inset 0 1px 0 rgba(255,255,255,.07); }
+        .v36-action-grid button.primary { background:linear-gradient(135deg, rgba(34,211,238,.31), rgba(52,211,153,.18)); border-color:rgba(103,232,249,.34); box-shadow:0 14px 36px rgba(34,211,238,.17), inset 0 1px 0 rgba(255,255,255,.10); }
+        .v36-action-grid button:active { transform:scale(.972); }
+        .v36-action-grid small { display:block; margin-top:.14rem; color:rgba(255,255,255,.60); font-size:.56rem; line-height:1.18; font-weight:800; }
+        .v36-readiness { display:grid; grid-template-columns:1fr auto; gap:.65rem; align-items:center; margin-top:.78rem; }
+        .v36-track { height:.62rem; border-radius:999px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.08); overflow:hidden; }
+        .v36-fill { height:100%; width:var(--v36-ready); border-radius:inherit; background:linear-gradient(90deg, #22d3ee, #34d399, #fbbf24, #fb7185); box-shadow:0 0 20px rgba(52,211,153,.38); }
+        .v36-track-label { font-size:.61rem; color:rgba(236,254,255,.78); font-weight:1000; }
+        .v36-lane { display:grid; grid-template-columns:repeat(4,1fr); gap:.42rem; margin-top:.68rem; }
+        .v36-lane button { padding:.56rem .26rem; border-radius:.94rem; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.075); color:rgba(236,254,255,.86); font-size:.58rem; font-weight:950; }
+        .v36-audit-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.45rem; margin-top:.72rem; }
+        .v36-audit { min-height:3.22rem; padding:.54rem .48rem; border-radius:.98rem; border:1px solid rgba(255,255,255,.08); background:rgba(2,6,23,.27); font-size:.55rem; color:rgba(255,255,255,.58); line-height:1.25; }
+        .v36-audit b { display:block; color:#e0f2fe; font-size:.61rem; margin-bottom:.14rem; }
+        body.art-v36 #fishing-visual { background-image:linear-gradient(180deg, rgba(3,17,31,.12), rgba(2,6,23,.33)), url('assets/art/v36_fishing_stage.svg'); background-size:cover; background-position:center bottom; }
+        body.art-v36 .region-card[data-region="호수"] { background-image:linear-gradient(135deg, rgba(2,6,23,.40), rgba(8,47,73,.30)), url('assets/art/v36_region_lake.svg'); background-size:cover; background-position:center; }
+        body.art-v36 .region-card[data-region="강"] { background-image:linear-gradient(135deg, rgba(2,6,23,.40), rgba(8,47,73,.30)), url('assets/art/v36_region_river.svg'); background-size:cover; background-position:center; }
+        body.art-v36 .region-card[data-region="항구"] { background-image:linear-gradient(135deg, rgba(2,6,23,.40), rgba(8,47,73,.30)), url('assets/art/v36_region_harbor.svg'); background-size:cover; background-position:center; }
+        body.art-v36 .region-card[data-region="심해"] { background-image:linear-gradient(135deg, rgba(2,6,23,.40), rgba(8,47,73,.30)), url('assets/art/v36_region_deep.svg'); background-size:cover; background-position:center; }
+        body.art-v36 .region-card[data-region="용궁"] { background-image:linear-gradient(135deg, rgba(2,6,23,.40), rgba(8,47,73,.30)), url('assets/art/v36_region_palace.svg'); background-size:cover; background-position:center; }
+        body.art-v36 .region-card[data-region='차원의 바다'] { background-image:linear-gradient(135deg, rgba(2,6,23,.40), rgba(8,47,73,.30)), url('assets/art/v36_region_dimension.svg'); background-size:cover; background-position:center; }
+        body.quality-low .v36-core-navigator::before, body.art-lite .v36-core-navigator::before, body.fx-paused .v36-core-navigator::before { animation:none; opacity:.30; }
+        body.quality-low .v36-core-navigator::after, body.art-lite .v36-core-navigator::after, body.fx-paused .v36-core-navigator::after { animation:none; opacity:.16; }
+        @media (max-width:380px) {
+            .v36-core-navigator { border-radius:1.50rem; padding:.82rem; }
+            .v36-head { grid-template-columns:1fr 4.25rem; gap:.60rem; }
+            .v36-emblem { width:4.25rem; height:4.25rem; border-radius:1.14rem; }
+            .v36-title { font-size:1.08rem; }
+            .v36-metrics { grid-template-columns:repeat(2,1fr); }
+            .v36-action-grid { grid-template-columns:1fr; }
+            .v36-audit-grid { grid-template-columns:1fr; }
+        }
+        @media (prefers-reduced-motion:reduce) {
+            .v36-core-navigator::before, .v36-core-navigator::after { animation:none !important; }
+        }
+
+</style>
 </head>
 <body class="bg-[#0a3d5c] text-white antialiased">
 <div id="app-shell" class="max-w-md mx-auto min-h-screen flex flex-col shadow-2xl border-x border-white/10 bg-[#0a3d5c]">
@@ -1247,8 +1466,8 @@
             <div class="flex items-center gap-3 min-w-0">
                 <div class="top-logo-mark">🌊</div>
                 <div class="min-w-0">
-                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v3.4</span></div>
-                    <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Abyss Canvas · 대형 디자인/에셋/모바일 재정리</div>
+                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v3.6</span></div>
+                    <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Core Navigator · 구조 안정화/디자인 통합</div>
                 </div>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
@@ -1280,7 +1499,7 @@
             <div class="text-center mb-10">
                 <div class="text-[5.5rem] mb-3">🎣</div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-300 mt-2">v3.4 Abyss Canvas · 원화급 비주얼/모바일 UI 대형 정리</p>
+                <p class="text-sky-300 mt-2">v3.6 Core Navigator · 구조 안정화/고급 아트/모바일 UX 통합</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
@@ -1299,6 +1518,7 @@
             </div>
         </div>
 
+        <!-- v3.6 modular scaffold reference: src/core/state.js src/ui/navigator.js src/systems/fishing.js src/integrations/pwa.js -->
         <!-- VILLAGE -->
         <div id="screen-village" class="hidden absolute inset-0 flex flex-col ocean-deep overflow-auto screen-scroll">
             <div class="px-5 pt-5">
@@ -1349,13 +1569,15 @@
             </div>
 
             <div class="px-5 mt-3">
-                <div id="v34-command-canvas" class="v34-command-canvas"></div>
+                <div id="v36-core-navigator" class="v36-core-navigator"></div>
             </div>
 
             <div class="px-5 mt-3">
                 <details class="director-archive">
-                    <summary><span>세부 분석 카드</span><span>v33 · Ocean · Director · Atlas</span></summary>
+                    <summary><span>세부 분석 카드</span><span>v35 · v34 · v33 · Director · Atlas</span></summary>
                     <div class="director-archive-body">
+                        <div id="v35-tide-master" class="v35-tide-master"></div>
+                        <div id="v34-command-canvas" class="v34-command-canvas"></div>
                         <div id="v33-command-bridge" class="v33-command-bridge"></div>
                         <div id="v30-director-panel" class="v30-director-card cursor-pointer" onclick="runOceanDirectorAction()"></div>
                         <div id="v31-action-deck" class="v31-action-deck"></div>
@@ -1864,7 +2086,7 @@ try {
 // ==================== v2.4 MEGA EXPANSION PATCH / Firebase Ready ====================
 let graphicsMode = localStorage.getItem('aqua_graphics_mode') || ((navigator.deviceMemory && navigator.deviceMemory <= 3) ? 'low' : 'high');
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '3.4.0';
+const APP_VERSION = '3.6.0';
 function versionAtLeast(minVersion) {
     const parse = (value) => String(value || '0').split('.').map((part) => Number(part) || 0);
     const current = parse(APP_VERSION);
@@ -1904,6 +2126,7 @@ let gameState = {
     quality: { preset: localStorage.getItem('aqua_quality_preset') || 'auto', longTasks: 0, lastFps: 0, directorMode: 'auto', lastTuneAt: '' },
     inventoryPrefs: { sort: 'value', filter: 'all', lastSaleAt: '', compact: true },
     ui: { compactHud: localStorage.getItem('aqua_compact_hud') === '1', oneHand: localStorage.getItem('aqua_one_hand_mode') === '1', coachHints: true },
+    v36: { seen:false, warmed:false, audits:0, lastAction:'', modulePlanSeen:false },
     world: { mapOpened: false, lastRecommended: '호수', unlockedRegions: ['호수'] },
     artDirector: { firstRun: true, lastSnapshot: '', assetsSeen: false, lastAction: '' },
     nexusForge: { seen:false, warmed:false, lastAction:'', detail:'focus' },
@@ -4264,6 +4487,317 @@ function initV34Runtime() {
     warmV34Assets();
 }
 
+
+// ==================== v3.5 Tide Master Mega Refinement ====================
+const V35_ASSETS = [
+    'assets/art/v35_tide_master.svg',
+    'assets/art/v35_mobile_stage.svg',
+    'assets/art/v35_fishing_stage.svg',
+    'assets/art/v35_fish_cabinet.svg',
+    'assets/art/v35_region_lake.svg',
+    'assets/art/v35_region_river.svg',
+    'assets/art/v35_region_harbor.svg',
+    'assets/art/v35_region_deep.svg',
+    'assets/art/v35_region_palace.svg',
+    'assets/art/v35_region_dimension.svg',
+    'assets/art/v35_boss_gate.svg',
+    'assets/art/v35_inventory_wall.svg',
+    'assets/art/v35_ui_frame.svg',
+    'assets/art/v35_tide_radar.svg',
+    'assets/art/v35_button_glyphs.svg',
+    'assets/art/v35_route_map.svg',
+    'assets/art/v35_reward_chest.svg',
+    'assets/art/v35_encyclopedia_plate.svg'
+];
+
+function ensureV35State() {
+    if (!gameState.v35) gameState.v35 = { seen:false, warmed:false, audits:0, lastAction:'' };
+    return gameState.v35;
+}
+
+function getV35Snapshot() {
+    const base = getV34Snapshot();
+    const inv = getInventoryPlan();
+    const route = getRecommendedRegion();
+    const daily = ensureDailyState(true);
+    const pendingDaily = Object.values(daily.daily || {}).filter((m) => m.done && !m.claimed).length;
+    const rewardState = ensureWeeklyRewardState(true);
+    const weeklyAvailable = (rewardState.seasonWeek !== getCurrentWeekKey()) || (rewardState.bossWeek !== getCurrentWeekKey());
+    const fishTotal = FISH_DATABASE.length || 1;
+    const fishKnown = gameState.discovered instanceof Set ? gameState.discovered.size : 0;
+    const inventoryCount = (gameState.inventory || []).length;
+    const unsettledValue = Math.max(0, Math.floor(inv.unsettledValue || 0));
+    const score = getEquipmentScore();
+    const recommendedReady = route?.readiness ?? 0;
+    const gaps = [];
+    if (pendingDaily > 0) gaps.push('수령 대기 미션');
+    if (unsettledValue > 0) gaps.push('정산 가능 가방');
+    if (recommendedReady < 76) gaps.push('장비/레벨 준비 필요');
+    if (inventoryCount >= Math.floor((gameState.inventoryMax || 40) * .75)) gaps.push('가방 압박');
+    if (!gaps.length) gaps.push('출항 준비 양호');
+    let primary = base.primary || { type:'fish', icon:'🎣', label:'출항', title:'추천 항로 출항', desc:'현재 성장에 맞는 지역에서 낚시' };
+    if (pendingDaily > 0) primary = { type:'reward', icon:'🎁', label:'수령', title:'보상 먼저 받기', desc:`수령 대기 ${pendingDaily}개` };
+    else if (unsettledValue > 0) primary = { type:'sale', icon:'💰', label:'정산', title:'가방 정산하기', desc:`예상 ${unsettledValue.toLocaleString()}G` };
+    else if (route?.hardLocked) primary = { type:'forge', icon:'🧰', label:'강화', title:'장비 보강하기', desc:`${route.region} 준비도 ${recommendedReady}%` };
+    else if (weeklyAvailable && (gameState.totalCaught || 0) >= 5) primary = { type:'reward', icon:'🏆', label:'보상', title:'주간 보상 확인', desc:'경쟁 탭 보상함 확인' };
+    const actions = [primary,
+        { type:'fish', icon:'🎣', label:'출항', title:`${route?.region || '호수'} 낚시`, desc:`준비도 ${recommendedReady}%` },
+        { type:'bag', icon:'🎒', label:'가방', title:'판매/보관 정리', desc:`${inventoryCount}/${gameState.inventoryMax || 40}` },
+        { type:'forge', icon:'🧰', label:'공방', title:'강화와 미끼', desc:`전투력 ${score.toLocaleString()}` },
+        { type:'route', icon:'🗺️', label:'지도', title:'해금 조건', desc:'다음 항로 확인' },
+        { type:'perf', icon:'⚡', label:'점검', title:'성능 최적화', desc:'FPS/품질 재점검' }
+    ];
+    const seenIds = new Set();
+    const uniqueActions = actions.filter((a) => {
+        const key = `${a.type}-${a.title}`;
+        if (seenIds.has(key)) return false;
+        seenIds.add(key);
+        return true;
+    });
+    const auditNotes = [
+        { title:'중복 정리', body:'v34 스마트 레일 중복 DOM 제거 · 이전 분석 카드는 접이식 보관' },
+        { title:'모바일 시선', body:'추천 행동/정산/강화/지도 판단을 Tide Master 한 장으로 압축' },
+        { title:'에셋 보강', body:'v35 지역/가방/보스/낚시/도감 SVG 에셋 18종 추가' }
+    ];
+    return { ...base, route, inv, primary, actions:uniqueActions, gaps, fishKnown, fishTotal, inventoryCount, unsettledValue, score, recommendedReady, auditNotes };
+}
+
+function runV35Action(type) {
+    const state = ensureV35State();
+    state.seen = true;
+    state.lastAction = type || '';
+    if (type === 'reward') return switchScreen('quests');
+    if (type === 'sale' || type === 'bag') return switchScreen('inventory');
+    if (type === 'forge') return switchScreen('equipment');
+    if (type === 'route') return switchScreen('worldmap');
+    if (type === 'perf') return runV35Audit();
+    const snap = getV35Snapshot();
+    return selectRegionFromMap(snap.route?.region || gameState.currentRegion || '호수');
+}
+
+function runV35SmartLaunch() {
+    const snap = getV35Snapshot();
+    return runV35Action(snap.primary?.type || 'fish');
+}
+
+function runV35Audit() {
+    const state = ensureV35State();
+    state.audits = Number(state.audits || 0) + 1;
+    runMegaQualityDirector();
+    showToast('v3.5 런타임 점검 완료 · 화면/성능 상태를 다시 정리했습니다', '🧭', 2400);
+    renderV35TideMaster();
+}
+
+function renderV35TideMaster() {
+    const box = document.getElementById('v35-tide-master');
+    if (!box) return;
+    ensureV35State();
+    const snap = getV35Snapshot();
+    const actions = snap.actions.slice(0, 5);
+    while (actions.length < 5) actions.push({ type:'route', icon:'🗺️', label:'지도', title:'항로 점검', desc:'다음 지역 확인' });
+    const fpsText = snap.fps ? `${snap.fps}FPS` : 'AUTO';
+    const ready = Math.max(0, Math.min(125, Number(snap.recommendedReady || 0)));
+    box.style.setProperty('--ready', `${Math.min(100, ready)}%`);
+    const gapText = snap.gaps.slice(0, 3).map((item) => `<button onclick="event.stopPropagation(); runV35Action('perf')">${escapeHTML(item)}</button>`).join('');
+    box.innerHTML = `
+        <div class="v35-inner">
+            <div class="v35-head">
+                <div class="min-w-0">
+                    <div class="v35-kicker">TIDE MASTER 3.5 · MEGA AUDIT / MOBILE ART UI</div>
+                    <div class="v35-title">${escapeHTML(snap.primary.title)}</div>
+                    <div class="v35-copy">${escapeHTML(snap.primary.desc)} · 추천 항로 ${escapeHTML(snap.route?.region || '호수')} · 화면은 줄이고 판단은 더 빠르게 정리했습니다.</div>
+                </div>
+                <div class="v35-cover" aria-hidden="true"></div>
+            </div>
+            <div class="v35-metrics">
+                <div class="v35-metric"><b>${snap.score.toLocaleString()}</b><span>장비점수</span></div>
+                <div class="v35-metric"><b>${ready}%</b><span>항로준비</span></div>
+                <div class="v35-metric"><b>${snap.fishKnown}/${snap.fishTotal}</b><span>도감</span></div>
+                <div class="v35-metric"><b>${fpsText}</b><span>${escapeHTML(snap.visualTier || 'AUTO')}</span></div>
+            </div>
+            <div class="v35-flow">
+                ${actions.slice(0,3).map((item, index) => `<button class="${index === 0 ? 'primary' : ''}" onclick="event.stopPropagation(); runV35Action('${item.type}')"><span>${escapeHTML(item.icon)} ${escapeHTML(item.label)}</span><small>${escapeHTML(item.title)} · ${escapeHTML(item.desc)}</small></button>`).join('')}
+            </div>
+            <div class="v35-tide-track"><div class="v35-track"><div class="v35-fill"></div></div><div class="v35-track-label">${escapeHTML(snap.route?.region || '호수')} · ${ready}%</div></div>
+            <div class="v35-quick-grid">
+                <button onclick="event.stopPropagation(); runV35Action('fish')">🎣 출항</button>
+                <button onclick="event.stopPropagation(); runV35Action('bag')">🎒 정산</button>
+                <button onclick="event.stopPropagation(); runV35Action('forge')">🧰 강화</button>
+                <button onclick="event.stopPropagation(); runV35Action('route')">🗺️ 지도</button>
+            </div>
+            <div class="v35-quick-grid">${gapText}</div>
+            <div class="v35-audit-strip">${snap.auditNotes.map((item) => `<div class="v35-audit-item"><b>${escapeHTML(item.title)}</b>${escapeHTML(item.body)}</div>`).join('')}</div>
+        </div>`;
+}
+
+function warmV35Assets() {
+    const state = ensureV35State();
+    if (state.warmed || graphicsMode === 'low') return;
+    state.warmed = true;
+    scheduleAquaTask(() => {
+        V35_ASSETS.forEach((src) => { const img = new Image(); img.decoding = 'async'; img.loading = 'lazy'; img.src = src; });
+    }, 'background');
+}
+
+function initV35Runtime() {
+    document.body.classList.add('art-v35');
+    ensureV35State();
+    warmV35Assets();
+}
+
+
+// ==================== v3.6 Core Navigator Mega Stabilization ====================
+const V36_ASSETS = [
+    'assets/art/v36_core_navigator.svg',
+    'assets/art/v36_mobile_canvas.svg',
+    'assets/art/v36_fishing_stage.svg',
+    'assets/art/v36_fish_atlas.svg',
+    'assets/art/v36_region_lake.svg',
+    'assets/art/v36_region_river.svg',
+    'assets/art/v36_region_harbor.svg',
+    'assets/art/v36_region_deep.svg',
+    'assets/art/v36_region_palace.svg',
+    'assets/art/v36_region_dimension.svg',
+    'assets/art/v36_inventory_deck.svg',
+    'assets/art/v36_boss_crest.svg',
+    'assets/art/v36_route_orbit.svg',
+    'assets/art/v36_hud_frame.svg',
+    'assets/art/v36_button_runes.svg',
+    'assets/art/v36_reward_vault.svg',
+    'assets/art/v36_pwa_shell.svg',
+    'assets/art/v36_performance_radar.svg',
+    'assets/art/v36_world_console.svg',
+    'assets/art/v36_module_map.svg',
+    'assets/art/v36_encyclopedia_wall.svg',
+    'assets/art/v36_touch_overlay.svg'
+];
+
+function ensureV36State() {
+    if (!gameState.v36) gameState.v36 = { seen:false, warmed:false, audits:0, lastAction:'', modulePlanSeen:false };
+    return gameState.v36;
+}
+
+function getV36Snapshot() {
+    const base = getV35Snapshot();
+    const inv = getInventoryPlan();
+    const route = getRecommendedRegion();
+    const score = getEquipmentScore();
+    const ready = Math.max(0, Math.min(125, Number(route?.readiness ?? base.recommendedReady ?? 0)));
+    const daily = ensureDailyState(true);
+    const pendingDaily = Object.values(daily.daily || {}).filter((m) => m.done && !m.claimed).length;
+    const unsettledValue = Math.max(0, Math.floor(inv.unsettledValue || 0));
+    const inventoryCount = (gameState.inventory || []).length;
+    const fishTotal = FISH_DATABASE.length || 1;
+    const fishKnown = gameState.discovered instanceof Set ? gameState.discovered.size : 0;
+    const moduleRisk = (document.documentElement.innerHTML.length > 380000 || (FISH_DATABASE.length || 0) >= 140) ? '분리 준비' : '안정';
+    let primary = base.primary || { type:'fish', icon:'🎣', label:'출항', title:'추천 항로 출항', desc:'현재 성장에 맞는 지역에서 낚시' };
+    if (pendingDaily > 0) primary = { type:'reward', icon:'🎁', label:'수령', title:'보상 먼저 수령', desc:`수령 대기 ${pendingDaily}개` };
+    else if (unsettledValue > 0) primary = { type:'sale', icon:'💰', label:'정산', title:'가방 정산 먼저', desc:`예상 ${unsettledValue.toLocaleString()}G` };
+    else if (ready < 72) primary = { type:'forge', icon:'🧰', label:'강화', title:'장비 안정화 필요', desc:`${route?.region || '호수'} 준비도 ${ready}%` };
+    else primary = { type:'fish', icon:'🎣', label:'출항', title:`${route?.region || '호수'}로 출항`, desc:`준비도 ${ready}% · 전투력 ${score.toLocaleString()}` };
+    const actions = [primary,
+        { type:'fish', icon:'🎣', label:'출항', title:`${route?.region || '호수'} 낚시`, desc:`준비도 ${ready}%` },
+        { type:'bag', icon:'🎒', label:'정산', title:'가방 판매/보관', desc:`${inventoryCount}/${gameState.inventoryMax || 40}` },
+        { type:'forge', icon:'🧰', label:'강화', title:'장비/미끼 보강', desc:`${score.toLocaleString()}점` },
+        { type:'route', icon:'🗺️', label:'지도', title:'항로 해금', desc:route?.nextGoal || '지역 조건 확인' },
+        { type:'perf', icon:'⚡', label:'점검', title:'품질/성능 점검', desc:moduleRisk }
+    ];
+    const seen = new Set();
+    const uniqueActions = actions.filter((item) => {
+        const key = `${item.type}-${item.title}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+    const audits = [
+        { title:'구조 분리 준비', body:'src/core · src/ui · src/systems · src/integrations 스캐폴드 추가' },
+        { title:'첫 화면 단일화', body:'Tide Master는 세부 분석으로 이동 · Core Navigator를 최상단에 배치' },
+        { title:'아트 확장', body:'v36 모바일 캔버스/지역/보스/가방/도감 SVG 에셋 22종 추가' }
+    ];
+    return { ...base, route, inv, score, ready, pendingDaily, unsettledValue, inventoryCount, fishTotal, fishKnown, primary, actions:uniqueActions, moduleRisk, audits };
+}
+
+function runV36Action(type) {
+    const state = ensureV36State();
+    state.seen = true;
+    state.lastAction = type || '';
+    if (type === 'reward') return switchScreen('quests');
+    if (type === 'sale' || type === 'bag') return switchScreen('inventory');
+    if (type === 'forge') return switchScreen('equipment');
+    if (type === 'route') return switchScreen('worldmap');
+    if (type === 'perf') return runV36Audit();
+    const snap = getV36Snapshot();
+    return selectRegionFromMap(snap.route?.region || gameState.currentRegion || '호수');
+}
+
+function runV36SmartLaunch() {
+    const snap = getV36Snapshot();
+    return runV36Action(snap.primary?.type || 'fish');
+}
+
+function runV36Audit() {
+    const state = ensureV36State();
+    state.audits = Number(state.audits || 0) + 1;
+    runMegaQualityDirector();
+    showToast('v3.6 구조/성능/화면 점검 완료 · Core Navigator를 갱신했습니다', '🧭', 2500);
+    renderV36CoreNavigator();
+}
+
+function renderV36CoreNavigator() {
+    const box = document.getElementById('v36-core-navigator');
+    if (!box) return;
+    ensureV36State();
+    const snap = getV36Snapshot();
+    const actions = snap.actions.slice(0, 5);
+    while (actions.length < 5) actions.push({ type:'route', icon:'🗺️', label:'지도', title:'항로 점검', desc:'다음 지역 확인' });
+    const fpsText = snap.fps ? `${snap.fps}FPS` : 'AUTO';
+    const ready = Math.max(0, Math.min(125, Number(snap.ready || 0)));
+    box.style.setProperty('--v36-ready', `${Math.min(100, ready)}%`);
+    box.innerHTML = `
+        <div class="v36-inner">
+            <div class="v36-head">
+                <div class="min-w-0">
+                    <div class="v36-kicker">CORE NAVIGATOR 3.6 · STRUCTURE / ART / MOBILE</div>
+                    <div class="v36-title">${escapeHTML(snap.primary.title)}</div>
+                    <div class="v36-copy">${escapeHTML(snap.primary.desc)} · 추천 항로 ${escapeHTML(snap.route?.region || '호수')} · 단일 파일 확장 위험을 줄이기 위한 구조 분리 준비를 포함했습니다.</div>
+                </div>
+                <div class="v36-emblem" aria-hidden="true"></div>
+            </div>
+            <div class="v36-metrics">
+                <div class="v36-metric"><b>${snap.score.toLocaleString()}</b><span>장비점수</span></div>
+                <div class="v36-metric"><b>${ready}%</b><span>항로준비</span></div>
+                <div class="v36-metric"><b>${snap.fishKnown}/${snap.fishTotal}</b><span>도감</span></div>
+                <div class="v36-metric"><b>${fpsText}</b><span>${escapeHTML(snap.moduleRisk)}</span></div>
+            </div>
+            <div class="v36-action-grid">
+                ${actions.slice(0,3).map((item, index) => `<button class="${index === 0 ? 'primary' : ''}" onclick="event.stopPropagation(); runV36Action('${item.type}')"><span>${escapeHTML(item.icon)} ${escapeHTML(item.label)}</span><small>${escapeHTML(item.title)} · ${escapeHTML(item.desc)}</small></button>`).join('')}
+            </div>
+            <div class="v36-readiness"><div class="v36-track"><div class="v36-fill"></div></div><div class="v36-track-label">${escapeHTML(snap.route?.region || '호수')} · ${ready}%</div></div>
+            <div class="v36-lane">
+                <button onclick="event.stopPropagation(); runV36Action('fish')">🎣 출항</button>
+                <button onclick="event.stopPropagation(); runV36Action('bag')">🎒 정산</button>
+                <button onclick="event.stopPropagation(); runV36Action('forge')">🧰 강화</button>
+                <button onclick="event.stopPropagation(); runV36Action('route')">🗺️ 지도</button>
+            </div>
+            <div class="v36-audit-grid">${snap.audits.map((item) => `<div class="v36-audit"><b>${escapeHTML(item.title)}</b>${escapeHTML(item.body)}</div>`).join('')}</div>
+        </div>`;
+}
+
+function warmV36Assets() {
+    const state = ensureV36State();
+    if (state.warmed || graphicsMode === 'low') return;
+    state.warmed = true;
+    scheduleAquaTask(() => {
+        V36_ASSETS.forEach((src) => { const img = new Image(); img.decoding = 'async'; img.loading = 'lazy'; img.src = src; });
+    }, 'background');
+}
+
+function initV36Runtime() {
+    document.body.classList.add('art-v36');
+    ensureV36State();
+    warmV36Assets();
+}
+
 // ==================== UI ====================
 function updateUI() {
     gameState.nickname = sanitizeNickname(gameState.nickname);
@@ -4302,6 +4836,8 @@ function updateUI() {
     renderVisualAtlasPanel();
     renderV33CommandBridge();
     renderV34CommandCanvas();
+    renderV35TideMaster();
+    renderV36CoreNavigator();
     renderSmartDock();
     applyMegaQualityClasses();
     applyOceanDirectorRuntime();
@@ -5913,13 +6449,19 @@ function normalizeGameState(data) {
     next.artDirector.firstRun = next.artDirector.firstRun !== false;
     next.artDirector.assetsSeen = next.artDirector.assetsSeen === true;
     next.artDirector.lastAction = String(next.artDirector.lastAction || '');
+    if (!next.v36 || typeof next.v36 !== 'object') next.v36 = { seen:false, warmed:false, audits:0, lastAction:'', modulePlanSeen:false };
+    next.v36.seen = next.v36.seen === true;
+    next.v36.warmed = next.v36.warmed === true;
+    next.v36.audits = Math.max(0, Number(next.v36.audits || 0));
+    next.v36.lastAction = String(next.v36.lastAction || '');
+    next.v36.modulePlanSeen = next.v36.modulePlanSeen === true;
     return next;
 }
 
 function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
-        ['aqua_v3.4','aqua_v3.3','aqua_v3.2','aqua_v3.1','aqua_v3.0','aqua_v2.9','aqua_v2.8','aqua_v2.7','aqua_v2.6','aqua_v2.5','aqua_v2.4','aqua_v2.3','aqua_v2.2','aqua_v2.1','aqua_v2.0','aqua_v1.9','aqua_v1.8','aqua_v1.7','aqua_v1.6','aqua_v1.5','aqua_v1.4','aqua_v1.3','aqua_v1.2','aqua_v1.1'].forEach((key) => localStorage.setItem(key, JSON.stringify(plain))); // 이전 버전과 호환 유지
+        ['aqua_v3.6','aqua_v3.5','aqua_v3.4','aqua_v3.3','aqua_v3.2','aqua_v3.1','aqua_v3.0','aqua_v2.9','aqua_v2.8','aqua_v2.7','aqua_v2.6','aqua_v2.5','aqua_v2.4','aqua_v2.3','aqua_v2.2','aqua_v2.1','aqua_v2.0','aqua_v1.9','aqua_v1.8','aqua_v1.7','aqua_v1.6','aqua_v1.5','aqua_v1.4','aqua_v1.3','aqua_v1.2','aqua_v1.1'].forEach((key) => localStorage.setItem(key, JSON.stringify(plain))); // 이전 버전과 호환 유지
         setCloudSaveStatus('ok', '로컬 저장됨');
 
         if (syncCloud && isFirebaseConnected && gameState.userId && window.AquaFirebase) {
@@ -6142,7 +6684,7 @@ function exposeAquaHandlers() {
         runFocusGoalAction, runMegaQualityDirector, runPerformanceCheck, selectRegion,
         selectRegionFromMap, sellAll, sellFish, sellLowTierFish, sellRecommendedFish,
         setQualityPreset, showCharacterModal, submitBossLeaderboard, submitToGlobalLeaderboard,
-        switchScreen, runDirectorCutAction, runVisualAtlasAction, runV33Action, runV33SmartLaunch, runV34Action, runV34SmartLaunch, toggleCoachHints, toggleCompactHud, toggleGraphicsMode, toggleHapticEnabled,
+        switchScreen, runDirectorCutAction, runVisualAtlasAction, runV33Action, runV33SmartLaunch, runV34Action, runV34SmartLaunch, runV35Action, runV35SmartLaunch, runV35Audit, runV36Action, runV36SmartLaunch, runV36Audit, toggleCoachHints, toggleCompactHud, toggleGraphicsMode, toggleHapticEnabled,
         toggleImmersiveMode, toggleOneHandMode, toggleQuickMenu, toggleSoundEnabled, runOceanDirectorAction,
         unlockSensoryEngine, updateTodayBest, closeExitConfirm, confirmExitGame
     });
@@ -6157,7 +6699,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) gameState = normalizeGameState(JSON.parse(saved));
         else gameState = normalizeGameState(gameState);
         
@@ -6173,6 +6715,7 @@ async function init() {
         ensureVisualAtlasState();
         ensureV33State();
         ensureV34State();
+        ensureV35State();
         
         initArtUIMegaRefresh();
         document.body.classList.add('art-v30');
@@ -6180,6 +6723,8 @@ async function init() {
         initVisualAtlasRuntime();
         initV33Runtime();
         initV34Runtime();
+        initV35Runtime();
+        initV36Runtime();
         initMobileLaunchBridge();
         initBackExitGuard();
         exposeAquaHandlers();
@@ -6195,7 +6740,7 @@ async function init() {
         scheduleAquaTask(initMegaPerformanceObserver, 'background');
         startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v3.4] Abyss Canvas Mega Refresh Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v3.6] Core Navigator Mega Stabilization Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
         alert('게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.');
