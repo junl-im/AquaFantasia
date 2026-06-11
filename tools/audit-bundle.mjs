@@ -10,7 +10,7 @@ const bytes = (path) => statSync(join(root, path)).size;
 const refs = [...index.matchAll(/assets\/(?:art|icons|images)\/[^'"\)\s]+/g)].map((m) => m[0]);
 const missing = [...new Set(refs)].filter((ref) => { try { statSync(join(root, ref)); return false; } catch { return true; } });
 const report = {
-  version: '3.6.0',
+  version: '3.6.1',
   indexBytes: bytes('index.html'),
   indexLines: index.split('\n').length,
   fishCount: fish.length,
@@ -24,7 +24,7 @@ const report = {
     backExitGuard: index.includes('initBackExitGuard'),
     tideMaster: index.includes('renderV35TideMaster'),
     coreNavigator: index.includes('renderV36CoreNavigator'),
-    moduleScaffold: index.includes('v3.6 Core Navigator')
+    moduleScaffold: index.includes('v3.6.1 Core Navigator') || index.includes('CORE NAVIGATOR 3.6.1')
   }
 };
 console.log(JSON.stringify(report, null, 2));

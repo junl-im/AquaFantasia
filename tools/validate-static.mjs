@@ -140,7 +140,7 @@ for (const file of requiredFiles) {
 
 const index = readFileSync(join(root, 'index.html'), 'utf8');
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!index.includes("const APP_VERSION = '3.6.0'")) fail('APP_VERSION must be 3.6.0 for this patch.');
+if (!index.includes("const APP_VERSION = '3.6.1'")) fail('APP_VERSION must be 3.6.1 for this patch.');
 if (!index.includes('serviceWorker.register')) fail('PWA service worker registration is missing.');
 if (!index.includes('season-ranking-panel')) fail('Season ranking UI is missing.');
 if (!index.includes('weekly-reward-vault')) fail('Weekly reward vault UI is missing.');
@@ -189,6 +189,8 @@ if (!index.includes('renderV36CoreNavigator')) fail('v3.6 Core Navigator rendere
 if (!index.includes('runV36Action')) fail('v3.6 Core Navigator action handler is missing.');
 if (!index.includes('art-v36')) fail('v3.6 art runtime class is missing.');
 if (!index.includes('src/core/state.js')) fail('v3.6 modular scaffold reference is missing.');
+if (/\bFISH_DB\b/.test(index)) fail('legacy FISH_DB reference found. Use FISH_DATABASE.');
+if (/\bgetCurrentWeekKey\b/.test(index)) fail('legacy getCurrentWeekKey reference found. Use getRewardWeekKey/weeklyRewards.claimed.');
 if (!index.includes('renderV34CommandCanvas')) fail('v3.4 Abyss Canvas renderer is missing.');
 if (!index.includes('runV34Action')) fail('v3.4 Abyss Canvas action handler is missing.');
 if (!index.includes('art-v34')) fail('v3.4 art runtime class is missing.');
@@ -212,7 +214,7 @@ for (const item of fish.fish) {
 }
 
 const sw = readFileSync(join(root, 'sw.js'), 'utf8');
-if (!sw.includes('aqua-fantasia-v3.6.0')) fail('Service worker cache version was not updated.');
+if (!sw.includes('aqua-fantasia-v3.6.1')) fail('Service worker cache version was not updated.');
 
 const scripts = [...index.matchAll(/<script(?:\s+[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map((m) => m[1].trim())
