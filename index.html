@@ -2,25 +2,229 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aqua Fantasia • Dev v1.3 Fish Data</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Aqua Fantasia - Firebase 기반 모바일 웹 낚시 RPG">
+    <meta name="theme-color" content="#082f49">
+    <meta name="color-scheme" content="dark">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Aqua Fantasia">
+    <meta name="application-name" content="Aqua Fantasia">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    <title>Aqua Fantasia • Dev v1.6 PWA Visual Max</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
-        body { font-family: 'Noto Sans KR', system-ui, sans-serif; }
-        .ocean-deep { background: linear-gradient(180deg, #0a3d5c 0%, #0f4c6b 100%); }
-        .premium-glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.12); }
-        .premium-card { transition: transform 0.2s cubic-bezier(0.4,0,0.2,1); }
-        .premium-card:active { transform: scale(0.985); }
-        .wave-layer { position:absolute; bottom:0; left:0; width:200%; height:120px; background-repeat:repeat-x; animation: wave-move linear infinite; }
+        :root {
+            --aqua-bg-0:#020617;
+            --aqua-bg-1:#082f49;
+            --aqua-bg-2:#0e7490;
+            --aqua-cyan:#67e8f9;
+            --aqua-blue:#38bdf8;
+            --aqua-glass:rgba(255,255,255,0.105);
+            --aqua-stroke:rgba(255,255,255,0.16);
+            --safe-top:env(safe-area-inset-top, 0px);
+            --safe-bottom:env(safe-area-inset-bottom, 0px);
+        }
+        * { -webkit-tap-highlight-color: transparent; }
+        html { min-height:100%; background: var(--aqua-bg-0); }
+        body {
+            font-family: 'Noto Sans KR', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100svh;
+            overscroll-behavior: none;
+            touch-action: manipulation;
+            background:
+                radial-gradient(circle at 50% -10%, rgba(103,232,249,.20), transparent 34rem),
+                linear-gradient(180deg, #03162b 0%, #082f49 42%, #020617 100%);
+        }
+        button, .cursor-pointer { touch-action: manipulation; user-select: none; }
+        button:focus-visible, input:focus-visible { outline: 2px solid rgba(125, 211, 252, .95); outline-offset: 3px; }
+        #app-shell {
+            position: relative;
+            isolation: isolate;
+            padding-top: var(--safe-top);
+            padding-bottom: var(--safe-bottom);
+            background:
+                radial-gradient(circle at 25% 0%, rgba(34,211,238,.18), transparent 14rem),
+                radial-gradient(circle at 85% 16%, rgba(59,130,246,.20), transparent 18rem),
+                linear-gradient(180deg, rgba(8,47,73,.94), rgba(3,7,18,.98));
+        }
+        #app-shell::before {
+            content:'';
+            position:absolute; inset:0; z-index:-1; pointer-events:none;
+            background-image:
+                linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+            background-size: 38px 38px;
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,.55), transparent 70%);
+        }
+        .ocean-deep {
+            background:
+                radial-gradient(circle at 30% 10%, rgba(103,232,249,.16), transparent 16rem),
+                radial-gradient(circle at 80% 25%, rgba(14,165,233,.16), transparent 18rem),
+                linear-gradient(180deg, rgba(8,47,73,.98) 0%, rgba(14,116,144,.78) 50%, rgba(3,7,18,.98) 100%);
+        }
+        .premium-glass {
+            background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.055));
+            backdrop-filter: blur(22px) saturate(145%);
+            -webkit-backdrop-filter: blur(22px) saturate(145%);
+            border: 1px solid var(--aqua-stroke);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 18px 44px rgba(0,0,0,.22);
+        }
+        @supports not (backdrop-filter: blur(10px)) {
+            .premium-glass { background: rgba(15, 76, 107, .92); }
+        }
+        .premium-card {
+            position: relative;
+            overflow: hidden;
+            transition: transform .18s cubic-bezier(.2,.8,.2,1), border-color .18s ease, background .18s ease;
+            will-change: transform;
+            contain: layout paint;
+        }
+        .premium-card::before {
+            content:''; position:absolute; inset:-1px; pointer-events:none; opacity:0;
+            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(125,211,252,.26), transparent 9rem);
+            transition: opacity .2s ease;
+        }
+        .premium-card:hover::before, .premium-card:active::before { opacity:1; }
+        .premium-card:active { transform: scale(.975); }
+        .section-title { letter-spacing: -0.04em; text-shadow: 0 10px 30px rgba(0,0,0,.30); }
+        .hud-chip {
+            background: rgba(255,255,255,.10);
+            border: 1px solid rgba(255,255,255,.12);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+        }
+        .xp-track { height: 8px; background: rgba(255,255,255,.12); border-radius: 999px; overflow:hidden; }
+        .xp-fill { height:100%; width:0%; border-radius:inherit; background: linear-gradient(90deg, #22d3ee, #34d399, #facc15); box-shadow: 0 0 18px rgba(34,211,238,.5); transition: width .45s ease; }
+        .region-card { min-height: 124px; }
+        .region-card .region-emoji { filter: drop-shadow(0 12px 22px rgba(56,189,248,.25)); transform: translateZ(0); }
+        .screen-scroll { content-visibility: auto; contain-intrinsic-size: 720px; }
+        .screen-enter { animation: screen-enter .22s cubic-bezier(.2,.8,.2,1) both; }
+        .wave-layer { position:absolute; bottom:0; left:0; width:200%; height:120px; background-repeat:repeat-x; animation: wave-move linear infinite; will-change: transform; opacity:.95; }
         .wave-1 { background:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%230ea5e9%22 fill-opacity=%220.25%22 d=%22M0,192L60,186.7C120,181,240,171,360,186.7C480,203,600,245,720,250.7C840,256,960,224,1080,213.3C1200,203,1320,213,1380,218.7L1440,224L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z%22%3E%3C/path%3E%3C/svg%3E'); background-size:1440px 120px; animation-duration:7s; }
         .wave-2 { background:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%2338bdf8%22 fill-opacity=%220.18%22 d=%22M0,160L48,181.3C96,203,192,245,288,250.7C384,256,480,224,576,197.3C672,171,768,149,864,154.7C960,160,1056,192,1152,197.3C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z%22%3E%3C/path%3E%3C/svg%3E'); background-size:1440px 120px; animation-duration:4.5s; animation-direction:reverse; }
-        .splash-particle { position:absolute; width:6px; height:6px; background:#bae6fd; border-radius:50%; pointer-events:none; animation:splash-pop 600ms ease-out forwards; }
-        @keyframes splash-pop { 0%{transform:scale(0.5);opacity:1} 100%{transform:scale(1.8) translateY(-40px);opacity:0} }
+        .fx-aurora { position:absolute; inset:-20%; pointer-events:none; opacity:.55; background: conic-gradient(from 180deg at 50% 50%, rgba(34,211,238,.0), rgba(34,211,238,.18), rgba(99,102,241,.12), rgba(16,185,129,.12), rgba(34,211,238,.0)); filter: blur(30px); animation: aurora-drift 12s linear infinite; }
+        .depth-rays { position:absolute; inset:0; pointer-events:none; opacity:.28; background: repeating-conic-gradient(from -16deg at 50% -14%, rgba(255,255,255,.16) 0deg 5deg, transparent 5deg 15deg); mask-image: linear-gradient(to bottom, rgba(0,0,0,.9), transparent 78%); }
+        .bubble-field { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+        .bubble-field span { position:absolute; bottom:-18px; width: var(--s, 7px); height: var(--s, 7px); left: var(--x, 50%); border-radius:999px; background:rgba(186,230,253,.38); box-shadow: inset 0 0 0 1px rgba(255,255,255,.35); animation: bubble-rise var(--d, 7s) linear infinite; animation-delay: var(--delay, 0s); }
+        .fish-shadow { position:absolute; font-size:var(--size, 2.2rem); opacity:.12; filter: blur(.1px) drop-shadow(0 8px 18px rgba(0,0,0,.35)); animation: fish-drift var(--duration, 8s) ease-in-out infinite alternate; will-change: transform; }
+        .splash-particle { position:absolute; width:6px; height:6px; background:#bae6fd; border-radius:50%; pointer-events:none; animation:splash-pop 600ms ease-out forwards; z-index:40; box-shadow:0 0 14px rgba(186,230,253,.9); }
+        .toast-stack { position:absolute; z-index:80; left:12px; right:12px; top:calc(12px + var(--safe-top)); display:flex; flex-direction:column; gap:8px; pointer-events:none; }
+        .aqua-toast { transform: translateY(-8px); opacity:0; animation: toast-in .22s ease forwards, toast-out .25s ease forwards var(--life, 2400ms); }
+        .bottom-nav { padding-bottom: calc(.625rem + var(--safe-bottom)); }
+
+        /* ==================== v1.6 PWA Visual Max ==================== */
+        html { scrollbar-gutter: stable; text-rendering: optimizeLegibility; }
+        body.gpu-boost #app-shell { transform: translateZ(0); }
+        #app-shell::after {
+            content:''; position:absolute; inset:0; z-index:-1; pointer-events:none;
+            background:
+                radial-gradient(circle at 35% 18%, rgba(125,211,252,.13), transparent 14rem),
+                radial-gradient(circle at 75% 72%, rgba(34,197,94,.09), transparent 17rem),
+                linear-gradient(115deg, transparent 0 42%, rgba(255,255,255,.045) 47%, transparent 54% 100%);
+            mix-blend-mode: screen;
+            opacity:.86;
+            animation: caustic-pan 18s ease-in-out infinite alternate;
+        }
+        .liquid-border {
+            position:relative;
+            isolation:isolate;
+        }
+        .liquid-border::before {
+            content:''; position:absolute; inset:-1px; z-index:-1; border-radius:inherit; padding:1px;
+            background: linear-gradient(135deg, rgba(103,232,249,.88), rgba(96,165,250,.24), rgba(167,139,250,.58), rgba(52,211,153,.30));
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity:.75;
+        }
+        .pwa-panel {
+            position: relative;
+            overflow:hidden;
+            contain: layout paint;
+        }
+        .pwa-panel::after {
+            content:''; position:absolute; width:130px; height:130px; right:-46px; top:-54px; border-radius:999px;
+            background: radial-gradient(circle, rgba(103,232,249,.24), transparent 68%);
+            pointer-events:none;
+        }
+        .install-pulse { animation: install-pulse 2.7s ease-in-out infinite; }
+        .network-dot { width:8px; height:8px; border-radius:999px; background:#22c55e; box-shadow:0 0 16px rgba(34,197,94,.7); }
+        .network-dot.offline { background:#f59e0b; box-shadow:0 0 16px rgba(245,158,11,.7); }
+        .perf-bar { height:8px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.10); }
+        .perf-bar > span { display:block; height:100%; width:0%; border-radius:inherit; background:linear-gradient(90deg,#22d3ee,#34d399,#facc15); transition:width .3s ease; }
+        .micro-shine { position:relative; overflow:hidden; }
+        .micro-shine::after { content:''; position:absolute; inset:-140% -70%; pointer-events:none; background:linear-gradient(110deg, transparent 42%, rgba(255,255,255,.16), transparent 58%); transform:translateX(-60%); animation:holo-sheen 7.5s ease-in-out infinite; }
+        .region-card { transform: translateZ(0); backface-visibility:hidden; }
+        .region-card::after {
+            content:''; position:absolute; inset:auto 16px 14px 16px; height:1px; pointer-events:none;
+            background:linear-gradient(90deg, transparent, rgba(103,232,249,.45), transparent);
+            opacity:.72;
+        }
+        .immersive-fab {
+            position:absolute; right:14px; bottom:calc(88px + var(--safe-bottom)); z-index:70;
+            width:48px; height:48px; border-radius:18px; display:grid; place-items:center;
+            background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.16);
+            backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+            box-shadow:0 18px 40px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.12);
+        }
+        body.quality-low #app-shell::after, body.quality-low .micro-shine::after, body.quality-low .install-pulse { animation:none; opacity:.35; }
+        @keyframes caustic-pan { from { transform:translate3d(-2%, -1%, 0) scale(1); } to { transform:translate3d(2%, 1.5%, 0) scale(1.04); } }
+        @keyframes install-pulse { 0%,100% { box-shadow:0 0 0 rgba(34,211,238,0); } 50% { box-shadow:0 0 28px rgba(34,211,238,.32); } }
+
+
+        .nav-tile { transition: transform .16s ease, background .16s ease, color .16s ease; }
+        .nav-tile:active { transform: scale(.94); }
+        .equipment-card {
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.055)),
+                radial-gradient(circle at 20% 10%, rgba(103,232,249,.18), transparent 14rem);
+        }
+        .equipment-card::after {
+            content:'';
+            position:absolute; inset:-35% -60%; pointer-events:none;
+            background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,.18), transparent 60%);
+            transform: translateX(-60%) rotate(4deg);
+            animation: holo-sheen 6.5s ease-in-out infinite;
+        }
+        .equipment-card > * { position:relative; z-index:1; }
+        .equipped-ring { box-shadow: 0 0 0 1px rgba(45,212,191,.58), 0 0 30px rgba(45,212,191,.14), inset 0 1px 0 rgba(255,255,255,.14); }
+        .stat-pill { background: rgba(2,6,23,.28); border: 1px solid rgba(255,255,255,.12); }
+        .depth-meter { position:absolute; left:18px; top:82px; bottom:98px; width:4px; border-radius:999px; background:linear-gradient(to bottom, rgba(125,211,252,.55), rgba(59,130,246,.20), rgba(15,23,42,.85)); opacity:.9; }
+        .depth-meter::before { content:''; position:absolute; left:-4px; top:var(--depth, 32%); width:12px; height:12px; border-radius:999px; background:#67e8f9; box-shadow:0 0 18px rgba(103,232,249,.75); transform:translateY(-50%); }
+        .cast-orb { position:absolute; inset:auto auto 26% 50%; width:12px; height:12px; border-radius:999px; background:#fef3c7; box-shadow:0 0 24px rgba(250,204,21,.95); opacity:0; transform:translate3d(-50%,0,0) scale(.6); pointer-events:none; z-index:35; }
+        .cast-orb.active { animation: cast-orb 900ms cubic-bezier(.2,.8,.2,1) forwards; }
+        body.fx-paused *, body.fx-paused *::before, body.fx-paused *::after { animation-play-state: paused !important; }
+        @supports (container-type: inline-size) {
+            .equipment-list { container-type: inline-size; }
+        }
+
+        @keyframes wave-move { from{ transform: translate3d(0,0,0); } to{ transform: translate3d(-50%,0,0); } }
+        @keyframes splash-pop { 0%{transform:scale(.45);opacity:1} 100%{transform:scale(1.85) translate3d(var(--dx, 0), -46px, 0);opacity:0} }
+        @keyframes aurora-drift { from{ transform: rotate(0deg) scale(1); } to{ transform: rotate(360deg) scale(1.04); } }
+        @keyframes bubble-rise { from{ transform: translate3d(0,0,0) scale(.7); opacity:0; } 12%{ opacity:.7; } to{ transform: translate3d(var(--drift, 16px), -115%, 0) scale(1.25); opacity:0; } }
+        @keyframes fish-drift { from{ transform: translate3d(-12px, 0, 0) scaleX(1); } to{ transform: translate3d(var(--drift, 54px), var(--rise, 9px), 0) scaleX(-1); } }
+        @keyframes screen-enter { from{ opacity:0; transform: translate3d(0, 8px, 0) scale(.995); } to{ opacity:1; transform: translate3d(0,0,0) scale(1); } }
+        @keyframes toast-in { to{ transform: translateY(0); opacity:1; } }
+        @keyframes toast-out { to{ transform: translateY(-8px); opacity:0; } }
+        @keyframes holo-sheen { 0%, 72%{ transform:translateX(-65%) rotate(4deg); opacity:0; } 82%{ opacity:1; } 100%{ transform:translateX(68%) rotate(4deg); opacity:0; } }
+        @keyframes cast-orb { 0%{opacity:0; transform:translate3d(-50%,20px,0) scale(.6);} 20%{opacity:1;} 100%{opacity:0; transform:translate3d(-50%,-150px,0) scale(1.4);} }
+        body.quality-low .fx-aurora, body.quality-low .depth-rays, body.quality-low .bubble-field, body.quality-low .fish-shadow:nth-child(n+5), body.quality-low .equipment-card::after { display:none; }
+        body.quality-low .premium-glass { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 8px 24px rgba(0,0,0,.18); }
+        @media (hover: hover) { .premium-card:hover { transform: translateY(-2px); border-color: rgba(125,211,252,.32); } }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .001ms !important; }
+            .bubble-field, .fx-aurora, .depth-rays { display:none !important; }
+        }
     </style>
 </head>
-<body class="bg-[#0a3d5c] text-white">
-<div class="max-w-md mx-auto min-h-screen flex flex-col shadow-2xl border-x border-white/10 bg-[#0a3d5c]">
+<body class="bg-[#0a3d5c] text-white antialiased">
+<div id="app-shell" class="max-w-md mx-auto min-h-screen flex flex-col shadow-2xl border-x border-white/10 bg-[#0a3d5c]">
     
     <!-- Top Bar -->
     <div class="px-4 pt-3 pb-2 flex justify-between items-center border-b border-white/10 bg-black/20">
@@ -29,7 +233,7 @@
             <div>
                 <span class="font-black text-3xl tracking-[-1.5px]">AQUA</span>
                 <span class="font-bold text-3xl tracking-[-1.5px] text-sky-400">FANTASIA</span>
-                <span class="ml-2 text-[10px] px-2 py-0.5 bg-white/10 rounded-full">v1.3</span>
+                <span class="ml-2 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20">v1.6</span>
             </div>
         </div>
         <div class="flex items-center gap-x-2 text-sm flex-wrap justify-end">
@@ -38,6 +242,8 @@
                 <span class="font-medium">Firebase</span>
             </div>
             <div id="cloud-save-status" class="px-3 py-1 text-[11px] rounded-full bg-white/10 text-white/70 hidden">로컬 저장</div>
+            <button id="graphics-toggle" onclick="toggleGraphicsMode()" class="px-3 py-1 text-[11px] rounded-full bg-cyan-300/10 text-cyan-100 border border-cyan-200/20">그래픽 고급</button>
+            <button id="install-app-btn" onclick="installAquaApp()" class="hidden px-3 py-1 text-[11px] rounded-full bg-emerald-400/15 text-emerald-100 border border-emerald-200/20 install-pulse">📲 설치</button>
             <button id="logout-btn" onclick="logoutGame()" class="hidden px-3 py-1 text-[11px] rounded-full bg-white/10 hover:bg-white/20">로그아웃</button>
             <div class="flex items-center bg-white/10 px-3.5 py-1.5 rounded-2xl">
                 <span class="text-amber-400 mr-1.5">💰</span>
@@ -54,10 +260,11 @@
         
         <!-- LOGIN -->
         <div id="screen-login" class="absolute inset-0 flex flex-col items-center justify-center px-6 ocean-deep">
+            <div class="bubble-field" aria-hidden="true"><span style="--x:12%;--s:8px;--d:7s"></span><span style="--x:28%;--s:5px;--d:9s;--delay:-2s"></span><span style="--x:58%;--s:10px;--d:8s;--delay:-4s"></span><span style="--x:82%;--s:6px;--d:10s;--delay:-1s"></span></div>
             <div class="text-center mb-10">
                 <div class="text-[5.5rem] mb-3">🎣</div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-300 mt-2">v1.3 Fish Data Patch</p>
+                <p class="text-sky-300 mt-2">v1.6 PWA Visual Max · 설치형 앱 & 그래픽 최고화</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
@@ -71,6 +278,7 @@
                     </div>
                 </div>
                 <button onclick="loginWithGoogle()" class="w-full py-4 bg-white text-[#0a3d5c] font-extrabold rounded-3xl flex items-center justify-center gap-x-3 active:scale-[0.985]"><span class="font-black text-xl">G</span> Google로 계속하기</button>
+                <button id="install-app-btn-login" onclick="installAquaApp()" class="hidden w-full py-3 premium-glass rounded-3xl text-sm font-extrabold text-emerald-100 border border-emerald-200/20">📲 홈화면에 설치</button>
             </div>
         </div>
 
@@ -82,25 +290,53 @@
                         <img id="avatar-img" src="assets/images/zZHXu.jpg" class="w-[120px] h-[120px] object-cover rounded-full border-[7px] border-sky-400 shadow-2xl mx-auto">
                         <div id="player-name" class="mt-3 font-extrabold text-2xl tracking-tight">여우</div>
                         <div class="text-emerald-400 text-sm -mt-0.5">Lv.<span id="village-level">12</span></div>
+                        <div class="mt-3 w-44 mx-auto">
+                            <div class="flex justify-between text-[10px] text-white/55 mb-1"><span>EXP</span><span id="xp-text">0%</span></div>
+                            <div class="xp-track"><div id="xp-fill" class="xp-fill"></div></div>
+                        </div>
+                        <button onclick="switchScreen('equipment')" class="mt-4 px-4 py-2 premium-glass rounded-2xl text-xs font-extrabold text-cyan-100 border border-cyan-200/20">
+                            <span id="equipped-mini">🎣 기본 낚싯대 · 🪱 기본 미끼</span>
+                        </button>
                     </div>
                 </div>
             </div>
             
-            <div class="px-5 mt-7 flex-1">
+            <div class="px-5 mt-5">
+                <div class="pwa-panel premium-glass liquid-border rounded-[1.75rem] p-4 micro-shine">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <div class="text-[11px] text-cyan-100/70 font-bold tracking-wide">MOBILE APP MODE</div>
+                            <div id="pwa-status-text" class="font-black text-lg leading-tight">브라우저 모드</div>
+                            <div id="network-status-text" class="text-[11px] text-white/55 mt-0.5 flex items-center gap-1.5"><span id="network-dot" class="network-dot"></span><span>온라인</span></div>
+                        </div>
+                        <div class="grid grid-cols-1 gap-2 shrink-0">
+                            <button onclick="installAquaApp()" id="install-app-btn-card" class="hidden px-4 py-2 bg-emerald-400/18 border border-emerald-200/20 rounded-2xl text-xs font-extrabold install-pulse">📲 설치</button>
+                            <button onclick="runPerformanceCheck()" class="px-4 py-2 bg-cyan-300/12 border border-cyan-200/20 rounded-2xl text-xs font-extrabold">⚡ 점검</button>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="flex justify-between text-[10px] text-white/55 mb-1"><span id="perf-readout">성능 점검 대기</span><span id="sw-status-text">오프라인 준비 중</span></div>
+                        <div class="perf-bar"><span id="perf-fill"></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-5 mt-4 flex-1">
                 <div class="px-1 flex justify-between items-end mb-3">
                     <div class="font-extrabold text-2xl tracking-tight">낚시 지역</div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
-                    <div onclick="selectRegion('호수')" class="premium-card premium-glass p-5 rounded-3xl active:scale-[0.97] cursor-pointer">🏞️<br><span class="font-extrabold text-xl">호수</span></div>
-                    <div onclick="selectRegion('강')" class="premium-card premium-glass p-5 rounded-3xl active:scale-[0.97] cursor-pointer">🏞<br><span class="font-extrabold text-xl">강</span></div>
-                    <div onclick="selectRegion('항구')" class="premium-card premium-glass p-5 rounded-3xl active:scale-[0.97] cursor-pointer">⚓<br><span class="font-extrabold text-xl">항구</span></div>
-                    <div onclick="selectRegion('심해')" class="premium-card premium-glass p-5 rounded-3xl active:scale-[0.97] cursor-pointer">🌊<br><span class="font-extrabold text-xl">심해</span></div>
-                    <div onclick="selectRegion('용궁')" class="premium-card premium-glass p-5 rounded-3xl active:scale-[0.97] cursor-pointer col-span-2">🐉<br><span class="font-extrabold text-2xl">용궁 (전설~신화)</span></div>
-                    <div onclick="selectRegion('차원의 바다')" class="premium-card premium-glass p-5 rounded-3xl active:scale-[0.97] cursor-pointer col-span-2">🌀<br><span class="font-extrabold text-2xl">차원의 바다 (신화)</span></div>
+                    <div onclick="selectRegion('호수')" class="region-card premium-card premium-glass p-5 rounded-3xl cursor-pointer" data-region="호수"><div class="region-emoji text-4xl">🏞️</div><div class="font-extrabold text-xl mt-2">호수</div><div class="text-[11px] text-sky-100/70 mt-1">일반~영웅 · 입문</div></div>
+                    <div onclick="selectRegion('강')" class="region-card premium-card premium-glass p-5 rounded-3xl cursor-pointer" data-region="강"><div class="region-emoji text-4xl">🏞</div><div class="font-extrabold text-xl mt-2">강</div><div class="text-[11px] text-sky-100/70 mt-1">민물 대어 · 빠른 물살</div></div>
+                    <div onclick="selectRegion('항구')" class="region-card premium-card premium-glass p-5 rounded-3xl cursor-pointer" data-region="항구"><div class="region-emoji text-4xl">⚓</div><div class="font-extrabold text-xl mt-2">항구</div><div class="text-[11px] text-sky-100/70 mt-1">고급~전설 · 바다</div></div>
+                    <div onclick="selectRegion('심해')" class="region-card premium-card premium-glass p-5 rounded-3xl cursor-pointer" data-region="심해"><div class="region-emoji text-4xl">🌊</div><div class="font-extrabold text-xl mt-2">심해</div><div class="text-[11px] text-sky-100/70 mt-1">희귀~전설 · 깊은 물</div></div>
+                    <div onclick="selectRegion('용궁')" class="region-card premium-card premium-glass p-5 rounded-3xl cursor-pointer col-span-2" data-region="용궁"><div class="flex items-center justify-between"><div><div class="region-emoji text-4xl">🐉</div><div class="font-extrabold text-2xl mt-2">용궁</div><div class="text-[11px] text-sky-100/70 mt-1">영웅~신화 · 용의 기운</div></div><div class="text-right text-xs text-cyan-200/80">HIGH RISK<br><span class="text-rose-200">HIGH REWARD</span></div></div></div>
+                    <div onclick="selectRegion('차원의 바다')" class="region-card premium-card premium-glass p-5 rounded-3xl cursor-pointer col-span-2" data-region="차원의 바다"><div class="flex items-center justify-between"><div><div class="region-emoji text-4xl">🌀</div><div class="font-extrabold text-2xl mt-2">차원의 바다</div><div class="text-[11px] text-sky-100/70 mt-1">전설~신화 · 최종 어장</div></div><div class="text-right text-xs text-fuchsia-200/80">MYTHIC<br><span class="text-cyan-200">ZONE</span></div></div></div>
                 </div>
             </div>
             
-            <div class="px-5 pb-6 pt-4 grid grid-cols-5 gap-2 text-sm">
+            <div class="px-5 pb-6 pt-4 grid grid-cols-6 gap-2 text-sm">
+                <button onclick="switchScreen('equipment')" class="py-3 premium-glass rounded-2xl font-semibold">🧰</button>
                 <button onclick="switchScreen('inventory')" class="py-3 premium-glass rounded-2xl font-semibold">🎒</button>
                 <button onclick="switchScreen('record')" class="py-3 premium-glass rounded-2xl font-semibold">📜</button>
                 <button onclick="switchScreen('competition')" class="py-3 premium-glass rounded-2xl font-semibold">🏆</button>
@@ -117,14 +353,19 @@
             </div>
             <div id="fishing-visual" class="flex-1 mx-4 mt-3 mb-2 rounded-[2.5rem] overflow-hidden border border-white/10 relative">
                 <div class="absolute inset-0 bg-gradient-to-b from-[#0a3d5c] via-[#0f4c6b] to-[#0a3d5c]"></div>
+                <div class="fx-aurora" aria-hidden="true"></div>
+                <div class="depth-rays" aria-hidden="true"></div>
+                <div class="bubble-field" aria-hidden="true"><span style="--x:10%;--s:7px;--d:8s"></span><span style="--x:22%;--s:4px;--d:10s;--delay:-2s"></span><span style="--x:37%;--s:9px;--d:7s;--delay:-4s"></span><span style="--x:61%;--s:5px;--d:11s;--delay:-1s"></span><span style="--x:74%;--s:10px;--d:9s;--delay:-5s"></span><span style="--x:88%;--s:6px;--d:12s;--delay:-3s"></span></div>
                 <div class="wave-layer wave-1" style="bottom:12%; height:110px; animation-duration:7s;"></div>
                 <div class="wave-layer wave-2" style="bottom:5%; height:95px; animation-duration:4.5s; animation-direction:reverse;"></div>
                 <div id="fish-shadow-container" class="absolute inset-0 pointer-events-none"></div>
+                <div id="depth-meter" class="depth-meter" aria-hidden="true"></div>
+                <div id="cast-orb" class="cast-orb" aria-hidden="true"></div>
                 <div class="absolute bottom-8 right-9 z-30"><div id="rod" class="rod w-[7px] h-32 bg-gradient-to-t from-amber-900 to-amber-600 rounded-full shadow-xl" style="transform:rotate(-38deg);"></div></div>
-                <div id="fishing-status" class="absolute bottom-9 left-1/2 -translate-x-1/2 px-8 py-2 bg-black/50 backdrop-blur-xl rounded-3xl text-sm font-medium z-20">물고기를 기다리는 중...</div>
+                <div id="fishing-status" aria-live="polite" class="absolute bottom-9 left-1/2 -translate-x-1/2 px-8 py-2 bg-black/50 backdrop-blur-xl rounded-3xl text-sm font-medium z-20 shadow-2xl border border-white/10">물고기를 기다리는 중...</div>
             </div>
             <div class="px-5 pb-7">
-                <button id="cast-btn" onclick="castLine()" class="w-full py-[18px] bg-gradient-to-r from-sky-400 via-blue-500 to-sky-500 font-extrabold text-2xl rounded-3xl active:scale-[0.985] flex items-center justify-center gap-x-3"><span class="text-3xl">🎣</span> <span>낚시대 던지기</span></button>
+                <button id="cast-btn" onclick="castLine()" class="w-full py-[18px] bg-gradient-to-r from-sky-400 via-blue-500 to-sky-500 font-extrabold text-2xl rounded-3xl active:scale-[0.985] flex items-center justify-center gap-x-3"><span class="text-3xl">🎣</span> <span>낚싯대 던지기</span></button>
                 <div id="reel-game" class="hidden mt-4 premium-glass p-5 rounded-3xl">
                     <div class="mb-4"><div class="flex justify-between text-xs mb-1.5 px-1"><span>릴 진행도</span><span id="reel-text">0%</span></div><div class="h-3 bg-white/10 rounded-full"><div id="reel-bar" class="h-full bg-emerald-400 transition-all rounded-full" style="width:0%"></div></div></div>
                     <div class="mb-5"><div class="flex justify-between text-xs mb-1.5 px-1"><span>줄 장력</span><span id="tension-text">0%</span></div><div class="h-3 bg-white/10 rounded-full"><div id="tension-bar" class="h-full bg-rose-500 transition-all rounded-full" style="width:0%"></div></div></div>
@@ -133,14 +374,44 @@
             </div>
         </div>
 
+        <!-- EQUIPMENT -->
+        <div id="screen-equipment" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto screen-scroll">
+            <div class="flex justify-between items-center mb-5">
+                <button onclick="switchScreen('village')" class="text-sky-300">← 마을</button>
+                <div class="text-right">
+                    <h2 class="section-title text-3xl font-black">장비 공방</h2>
+                    <div class="text-[11px] text-cyan-200/75">낚싯대 · 미끼 · 확률 보정</div>
+                </div>
+            </div>
+            <div id="equipment-summary" class="equipment-card premium-glass rounded-[2rem] p-5 mb-5"></div>
+            <div class="grid grid-cols-2 gap-3 mb-5">
+                <button onclick="buyBestAffordableRod()" class="premium-card premium-glass rounded-2xl py-3 font-extrabold text-sm">✨ 추천 강화</button>
+                <button onclick="buyStarterBaitPack()" class="premium-card premium-glass rounded-2xl py-3 font-extrabold text-sm">🪱 추천 미끼</button>
+            </div>
+            <div class="mb-5">
+                <div class="flex justify-between items-end mb-2">
+                    <h3 class="font-black text-xl tracking-tight">낚싯대</h3>
+                    <div class="text-[11px] text-white/50">구매 후 장착</div>
+                </div>
+                <div id="rod-list" class="equipment-list space-y-3"></div>
+            </div>
+            <div class="pb-10">
+                <div class="flex justify-between items-end mb-2">
+                    <h3 class="font-black text-xl tracking-tight">미끼</h3>
+                    <div class="text-[11px] text-white/50">소모형 · 기본 미끼 무제한</div>
+                </div>
+                <div id="bait-list" class="equipment-list space-y-3"></div>
+            </div>
+        </div>
+
         <!-- INVENTORY -->
-        <div id="screen-inventory" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto">
+        <div id="screen-inventory" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto screen-scroll">
             <div class="flex justify-between mb-4"><div class="font-extrabold text-3xl">가방</div><button onclick="sellAll()" class="px-6 py-2 text-sm bg-rose-500 rounded-2xl font-bold">전체 판매</button></div>
             <div id="inv-grid" class="grid grid-cols-2 gap-3"></div>
         </div>
 
         <!-- RECORD -->
-        <div id="screen-record" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto">
+        <div id="screen-record" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto screen-scroll">
             <div class="font-extrabold text-3xl mb-6">기록</div>
             <div class="premium-glass p-5 rounded-3xl mb-4">
                 <div class="text-sm text-white/60 mb-2">전체 통계</div>
@@ -157,7 +428,7 @@
         </div>
 
         <!-- COMPETITION -->
-        <div id="screen-competition" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto">
+        <div id="screen-competition" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto screen-scroll">
             <div class="font-extrabold text-3xl mb-6">경쟁</div>
             <div class="premium-glass p-5 rounded-3xl mb-4">
                 <div class="text-sm text-white/60 mb-2">오늘의 최고 기록</div>
@@ -174,13 +445,13 @@
         </div>
 
         <!-- ACHIEVEMENTS (NEW) -->
-        <div id="screen-achievements" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto">
+        <div id="screen-achievements" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto screen-scroll">
             <div class="font-extrabold text-3xl mb-6">업적</div>
             <div id="achievements-list" class="space-y-3"></div>
         </div>
 
         <!-- ENCYCLOPEDIA -->
-        <div id="screen-encyclopedia" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto">
+        <div id="screen-encyclopedia" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto screen-scroll">
             <div class="font-extrabold text-3xl mb-4">도감</div>
             <input id="search-box" oninput="renderEncyclopedia()" placeholder="검색..." class="w-full premium-glass px-5 py-4 rounded-2xl mb-4">
             <div id="enc-list" class="space-y-2"></div>
@@ -188,13 +459,15 @@
         
     </div>
     
-    <div class="grid grid-cols-5 text-center text-xs py-2.5 border-t border-white/10 bg-black/30">
-        <div onclick="switchScreen('village')" class="cursor-pointer">🏠<br>마을</div>
-        <div onclick="goFishing()" class="cursor-pointer">🎣<br>낚시</div>
-        <div onclick="switchScreen('inventory')" class="cursor-pointer">🎒<br>가방</div>
-        <div onclick="switchScreen('record')" class="cursor-pointer">📜<br>기록</div>
-        <div onclick="switchScreen('competition')" class="cursor-pointer">🏆<br>경쟁</div>
+    <div class="bottom-nav grid grid-cols-5 text-center text-xs py-2.5 border-t border-white/10 bg-black/30 backdrop-blur-xl">
+        <div onclick="switchScreen('village')" class="cursor-pointer nav-tile">🏠<br>마을</div>
+        <div onclick="goFishing()" class="cursor-pointer nav-tile">🎣<br>낚시</div>
+        <div onclick="switchScreen('equipment')" class="cursor-pointer nav-tile">🧰<br>장비</div>
+        <div onclick="switchScreen('inventory')" class="cursor-pointer nav-tile">🎒<br>가방</div>
+        <div onclick="switchScreen('competition')" class="cursor-pointer nav-tile">🏆<br>경쟁</div>
     </div>
+    <button id="immersive-btn" onclick="toggleImmersiveMode()" class="immersive-fab" title="몰입 모드">⛶</button>
+    <div id="toast-stack" class="toast-stack" aria-live="polite" aria-atomic="false"></div>
 </div>
 
 <script type="module">
@@ -277,7 +550,7 @@ try {
 </script>
 
 <script>
-// ==================== v1.3 FISH DATA PATCH / Firebase Ready ====================
+// ==================== v1.6 PWA VISUAL MAX PATCH / Firebase Ready ====================
 let gameState = {
     gold: 1240, level: 12, exp: 870, expToNext: 1000,
     inventory: [], discovered: new Set(),
@@ -286,7 +559,10 @@ let gameState = {
     nickname: "여우", gender: "male", userId: null,
     catchHistory: [], bestCatch: null, totalCaught: 0, totalGoldEarned: 0,
     todayBest: 0, leaderboard: [],
-    achievements: {}
+    achievements: {},
+    ownedRods: ['starter_rod'],
+    baitInventory: { basic_bait: 999999 },
+    equipment: { rod: 'starter_rod', bait: 'basic_bait' }
 };
 
 let isFirebaseConnected = false;
@@ -294,6 +570,13 @@ let audioContext;
 let firebaseListenerStarted = false;
 let leaderboardUnsubscribe = null;
 let cloudSaveTimer = null;
+let fishingTimers = [];
+let graphicsMode = localStorage.getItem('aqua_graphics_mode') || ((navigator.deviceMemory && navigator.deviceMemory <= 3) ? 'low' : 'high');
+let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const APP_VERSION = '1.6.0';
+let deferredInstallPrompt = null;
+let pwaReady = false;
+let lastPerfScore = null;
 
 // ==================== Fish Data Patch v1.3 ====================
 const RARITY_CONFIG = {
@@ -313,6 +596,21 @@ const REGION_META = {
     '용궁': { emoji: '🐉', desc: '전설 어종과 용의 기운', minRarity: 4, maxRarity: 6, biteMin: 2300, biteMax: 3700 },
     '차원의 바다': { emoji: '🌀', desc: '신화 등급을 노리는 최종 어장', minRarity: 5, maxRarity: 6, biteMin: 2500, biteMax: 4200 }
 };
+
+// ==================== Equipment Patch v1.5 ====================
+const RODS = [
+    { id:'starter_rod', name:'기본 낚싯대', emoji:'🎣', tier:'BASIC', cost:0, powerBonus:0, tensionControl:0, tensionRelief:0, rarityBoost:0, valueBonus:0, expBonus:0, desc:'처음부터 지급되는 안정적인 낚싯대입니다.' },
+    { id:'carbon_rod', name:'카본 낚싯대', emoji:'🪶', tier:'RARE', cost:2500, powerBonus:.10, tensionControl:.05, tensionRelief:1.5, rarityBoost:.035, valueBonus:.04, expBonus:.02, desc:'가볍고 탄성이 좋아 릴 감기와 입질이 부드러워집니다.' },
+    { id:'crystal_rod', name:'수정 낚싯대', emoji:'💎', tier:'EPIC', cost:8500, powerBonus:.22, tensionControl:.10, tensionRelief:3.2, rarityBoost:.075, valueBonus:.09, expBonus:.05, desc:'수정 진동으로 희귀한 기운을 더 잘 감지합니다.' },
+    { id:'dragon_rod', name:'용린 낚싯대', emoji:'🐉', tier:'MYTHIC', cost:24000, powerBonus:.38, tensionControl:.16, tensionRelief:5.4, rarityBoost:.13, valueBonus:.16, expBonus:.10, desc:'용의 비늘로 만든 최상급 장비. 신화 어종 도전에 유리합니다.' }
+];
+
+const BAITS = [
+    { id:'basic_bait', name:'기본 미끼', emoji:'🪱', tier:'FREE', cost:0, pack:0, biteSpeed:.00, rarityBoost:0, valueBonus:0, expBonus:0, desc:'무제한으로 제공되는 기본 미끼입니다.' },
+    { id:'glow_bait', name:'반짝 미끼', emoji:'✨', tier:'PLUS', cost:420, pack:5, biteSpeed:.08, rarityBoost:.025, valueBonus:.03, expBonus:.02, desc:'입질 대기 시간을 줄이고 고급 어종 확률을 살짝 올립니다.' },
+    { id:'pearl_bait', name:'진주 미끼', emoji:'🦪', tier:'PREMIUM', cost:1450, pack:5, biteSpeed:.13, rarityBoost:.055, valueBonus:.07, expBonus:.04, desc:'희귀 이상 어종을 노릴 때 좋은 균형형 미끼입니다.' },
+    { id:'dragon_bait', name:'용궁 미끼', emoji:'🔥', tier:'RAID', cost:4200, pack:3, biteSpeed:.18, rarityBoost:.095, valueBonus:.12, expBonus:.08, desc:'전설과 신화 등급을 노리는 고위험 고보상 미끼입니다.' }
+];
 
 const FALLBACK_FISH_DATABASE = [
     { id:'lake_crucian_carp', region:'호수', name:'붕어', emoji:'🐟', rarity:1, minValue:45, maxValue:85, exp:24, weight:70, desc:'잔잔한 호수에서 가장 자주 만나는 기본 어종입니다.' },
@@ -365,7 +663,7 @@ function randomInt(min, max) {
 
 async function loadFishDatabase() {
     try {
-        const res = await fetch('data/fish.json', { cache: 'no-store' });
+        const res = await fetch('data/fish.json');
         if (!res.ok) throw new Error('fish.json not found');
         const data = await res.json();
         if (!Array.isArray(data.fish) || data.fish.length === 0) throw new Error('fish.json format error');
@@ -385,13 +683,22 @@ function getFishListForRegion(region) {
     return list.length ? list : FISH_DATABASE.filter((fish) => fish.region === region);
 }
 
+function getEffectiveFishWeight(fish) {
+    const stats = getEquipmentStats();
+    const rarity = Number(fish.rarity || 1);
+    let weight = Math.max(1, Number(fish.weight || getRarityConfig(rarity).weight || 1));
+    if (rarity >= 4) weight *= (1 + stats.rarityBoost * (rarity - 2));
+    if (rarity <= 2) weight *= Math.max(.42, 1 - stats.rarityBoost * .55);
+    return Math.max(1, weight);
+}
+
 function pickWeightedFish(region) {
     const list = getFishListForRegion(region || '호수');
     if (!list.length) return FALLBACK_FISH_DATABASE[0];
-    const totalWeight = list.reduce((sum, fish) => sum + Math.max(1, Number(fish.weight || getRarityConfig(fish.rarity).weight || 1)), 0);
+    const totalWeight = list.reduce((sum, fish) => sum + getEffectiveFishWeight(fish), 0);
     let roll = Math.random() * totalWeight;
     for (const fish of list) {
-        roll -= Math.max(1, Number(fish.weight || getRarityConfig(fish.rarity).weight || 1));
+        roll -= getEffectiveFishWeight(fish);
         if (roll <= 0) return fish;
     }
     return list[list.length - 1];
@@ -410,6 +717,57 @@ function getDiscoveredSpeciesCount() {
     if (!(gameState.discovered instanceof Set)) return 0;
     const validIds = new Set(FISH_DATABASE.map((fish) => fish.id));
     return Array.from(gameState.discovered).filter((id) => validIds.has(id)).length;
+}
+
+function getRod(id = gameState.equipment?.rod) {
+    return RODS.find((rod) => rod.id === id) || RODS[0];
+}
+
+function getBait(id = gameState.equipment?.bait) {
+    return BAITS.find((bait) => bait.id === id) || BAITS[0];
+}
+
+function getEquipmentStats() {
+    const rod = getRod();
+    const bait = getBait();
+    return {
+        powerBonus: Number(rod.powerBonus || 0),
+        tensionControl: Number(rod.tensionControl || 0),
+        tensionRelief: Number(rod.tensionRelief || 0),
+        rarityBoost: Number(rod.rarityBoost || 0) + Number(bait.rarityBoost || 0),
+        valueBonus: Number(rod.valueBonus || 0) + Number(bait.valueBonus || 0),
+        expBonus: Number(rod.expBonus || 0) + Number(bait.expBonus || 0),
+        biteSpeed: Number(bait.biteSpeed || 0)
+    };
+}
+
+function isRodOwned(id) {
+    return Array.isArray(gameState.ownedRods) && gameState.ownedRods.includes(id);
+}
+
+function getBaitCount(id) {
+    if (id === 'basic_bait') return 999999;
+    return Math.max(0, Number(gameState.baitInventory?.[id] || 0));
+}
+
+function ensureUsableBait() {
+    const baitId = gameState.equipment?.bait || 'basic_bait';
+    if (baitId !== 'basic_bait' && getBaitCount(baitId) <= 0) {
+        gameState.equipment.bait = 'basic_bait';
+        showToast('미끼가 부족해 기본 미끼로 교체했어요', '🪱');
+    }
+}
+
+function consumeEquippedBait() {
+    ensureUsableBait();
+    const baitId = gameState.equipment?.bait || 'basic_bait';
+    if (baitId === 'basic_bait') return;
+    gameState.baitInventory[baitId] = Math.max(0, getBaitCount(baitId) - 1);
+    if (gameState.baitInventory[baitId] <= 0) gameState.equipment.bait = 'basic_bait';
+}
+
+function formatPercent(value) {
+    return `${Math.round(Number(value || 0) * 100)}%`;
 }
 
 
@@ -456,6 +814,65 @@ function waitForFirebase(timeoutMs = 7000) {
         window.addEventListener('aqua-firebase-error', (e) => { clearTimeout(timer); reject(e.detail || new Error('Firebase 초기화 실패')); }, { once: true });
     });
 }
+
+// ==================== Visual / Performance Helpers (v1.4) ====================
+function runFishingTimer(callback, delay) {
+    const id = setTimeout(() => {
+        fishingTimers = fishingTimers.filter((timerId) => timerId !== id);
+        callback();
+    }, delay);
+    fishingTimers.push(id);
+    return id;
+}
+
+function clearFishingTimers() {
+    fishingTimers.forEach((timerId) => clearTimeout(timerId));
+    fishingTimers = [];
+}
+
+function haptic(pattern = 12) {
+    try { if (navigator.vibrate) navigator.vibrate(pattern); } catch(e) {}
+}
+
+function applyGraphicsMode() {
+    const low = graphicsMode === 'low' || reduceMotion;
+    document.body.classList.toggle('quality-low', low);
+    const toggle = document.getElementById('graphics-toggle');
+    if (toggle) toggle.textContent = low ? '그래픽 절전' : '그래픽 고급';
+}
+
+function toggleGraphicsMode() {
+    graphicsMode = graphicsMode === 'low' ? 'high' : 'low';
+    localStorage.setItem('aqua_graphics_mode', graphicsMode);
+    applyGraphicsMode();
+    showToast(graphicsMode === 'low' ? '그래픽 절전 모드로 변경' : '그래픽 고급 모드로 변경', '🌊');
+}
+
+function bindPremiumCardPointer() {
+    let raf = 0;
+    document.addEventListener('pointermove', (event) => {
+        const card = event.target.closest?.('.premium-card');
+        if (!card) return;
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty('--mx', `${event.clientX - rect.left}px`);
+            card.style.setProperty('--my', `${event.clientY - rect.top}px`);
+        });
+    }, { passive: true });
+}
+
+function showToast(message, icon = '✨', life = 2600) {
+    const stack = document.getElementById('toast-stack');
+    if (!stack) return;
+    const item = document.createElement('div');
+    item.className = 'aqua-toast premium-glass rounded-2xl px-4 py-3 text-sm shadow-2xl';
+    item.style.setProperty('--life', life + 'ms');
+    item.innerHTML = `<div class="flex items-center gap-3"><div class="text-xl">${escapeHTML(icon)}</div><div class="font-bold leading-snug">${escapeHTML(message)}</div></div>`;
+    stack.appendChild(item);
+    setTimeout(() => item.remove(), life + 420);
+}
+
 
 // ==================== SOUND SYSTEM (NEW) ====================
 function initAudio() {
@@ -514,13 +931,36 @@ function updateUI() {
     
     const avatarImg = document.getElementById('avatar-img');
     if (avatarImg) avatarImg.src = gameState.gender === 'male' ? 'assets/images/zZHXu.jpg' : 'assets/images/sN0n9.jpg';
+    const expRatio = Math.max(0, Math.min(100, Math.floor((Number(gameState.exp || 0) / Math.max(1, Number(gameState.expToNext || 1000))) * 100)));
+    const xpFill = document.getElementById('xp-fill');
+    const xpText = document.getElementById('xp-text');
+    if (xpFill) xpFill.style.width = expRatio + '%';
+    if (xpText) xpText.textContent = expRatio + '%';
+    const mini = document.getElementById('equipped-mini');
+    if (mini) {
+        const rod = getRod();
+        const bait = getBait();
+        const countText = bait.id === 'basic_bait' ? '∞' : getBaitCount(bait.id).toLocaleString();
+        mini.textContent = `${rod.emoji} ${rod.name} · ${bait.emoji} ${bait.name} x${countText}`;
+    }
+    applyGraphicsMode();
 }
 
 function switchScreen(screen) {
-    document.querySelectorAll('#main-content > div').forEach(d => d.classList.add('hidden'));
+    document.querySelectorAll('#main-content > div').forEach(d => {
+        d.classList.add('hidden');
+        d.classList.remove('screen-enter');
+    });
     const el = document.getElementById('screen-' + screen);
-    if (el) el.classList.remove('hidden');
+    if (el) {
+        el.classList.remove('hidden');
+        if (!reduceMotion) {
+            void el.offsetWidth;
+            el.classList.add('screen-enter');
+        }
+    }
     
+    if (screen === 'equipment') renderEquipment();
     if (screen === 'inventory') renderInventory();
     if (screen === 'record') renderRecord();
     if (screen === 'competition') renderCompetition();
@@ -535,7 +975,9 @@ function selectRegion(region) {
     const meta = getRegionMeta(region);
     document.getElementById('fishing-region-name').textContent = `${meta.emoji} ${region}`;
     const info = document.getElementById('fishing-region-info');
-    if (info) info.textContent = describeRegion(region);
+    if (info) info.textContent = `${describeRegion(region)} · ${getRod().name}`;
+    const depth = document.getElementById('depth-meter');
+    if (depth) depth.style.setProperty('--depth', `${22 + Math.random()*56}%`);
     createFishShadows(region);
 }
 
@@ -544,15 +986,30 @@ function createFishShadows(region) {
     if (!container) return;
     container.innerHTML = '';
     const meta = getRegionMeta(region);
-    const count = region.includes('용') || region.includes('차원') ? 7 : region.includes('심해') ? 5 : 4;
+    const highQuality = graphicsMode !== 'low' && !reduceMotion;
+    const count = highQuality ? (region.includes('용') || region.includes('차원') ? 9 : region.includes('심해') ? 7 : 5) : 3;
     for (let i = 0; i < count; i++) {
         const fish = document.createElement('div');
-        fish.className = 'absolute text-4xl opacity-[0.08]';
-        fish.style.left = Math.random()*75 + '%';
-        fish.style.top = (18 + Math.random()*50) + '%';
-        fish.innerHTML = Math.random() < 0.25 ? meta.emoji : (region.includes('용') || region.includes('차원') ? '🐉' : '🐟');
+        fish.className = 'fish-shadow';
+        fish.style.left = Math.random()*78 + '%';
+        fish.style.top = (16 + Math.random()*54) + '%';
+        fish.style.setProperty('--duration', (6 + Math.random()*7) + 's');
+        fish.style.setProperty('--drift', (28 + Math.random()*80) + 'px');
+        fish.style.setProperty('--rise', ((Math.random() - 0.5) * 24) + 'px');
+        fish.style.setProperty('--size', (1.8 + Math.random()*1.6) + 'rem');
+        fish.style.animationDelay = (-Math.random()*5) + 's';
+        fish.textContent = Math.random() < 0.25 ? meta.emoji : (region.includes('용') || region.includes('차원') ? '🐉' : '🐟');
         container.appendChild(fish);
     }
+}
+
+function animateCastOrb() {
+    if (graphicsMode === 'low' || reduceMotion) return;
+    const orb = document.getElementById('cast-orb');
+    if (!orb) return;
+    orb.classList.remove('active');
+    void orb.offsetWidth;
+    orb.classList.add('active');
 }
 
 function castLine() {
@@ -563,19 +1020,27 @@ function castLine() {
         return;
     }
 
+    clearFishingTimers();
+    ensureUsableBait();
+    consumeEquippedBait();
+    updateUI();
+    savePlayerData(false);
     gameState.isFishing = true;
     gameState.pendingFish = pickWeightedFish(gameState.currentRegion);
+    haptic(10);
     playSound('cast');
+    animateCastOrb();
     const status = document.getElementById('fishing-status');
     const castBtn = document.getElementById('cast-btn');
     const rod = document.getElementById('rod');
     const meta = getRegionMeta(gameState.currentRegion);
-    const biteDelay = randomInt(meta.biteMin, meta.biteMax);
+    const stats = getEquipmentStats();
+    const biteDelay = Math.max(650, Math.floor(randomInt(meta.biteMin, meta.biteMax) * (1 - stats.biteSpeed)));
     const rarity = getRarityConfig(gameState.pendingFish.rarity);
     const hintDelay = Math.max(700, biteDelay - 850);
 
     castBtn.style.display = 'none';
-    status.textContent = '미끼를 기다리는 중...';
+    status.textContent = `${getBait().emoji} ${getBait().name} 투척! 입질을 기다리는 중...`;
 
     if (rod) {
         rod.style.transition = 'transform 0.55s cubic-bezier(0.34,1.56,0.64,1)';
@@ -583,15 +1048,16 @@ function castLine() {
         setTimeout(() => { if (rod) rod.style.transform = 'rotate(-32deg)'; }, 580);
     }
 
-    setTimeout(() => {
+    runFishingTimer(() => {
         if (gameState.isFishing && gameState.pendingFish) {
             status.innerHTML = `<span style="color:${rarity.color}" class="font-extrabold">${rarity.emoji} ${rarity.name} 기운이 느껴집니다...</span>`;
         }
     }, hintDelay);
 
-    setTimeout(() => {
+    runFishingTimer(() => {
         if (!gameState.isFishing || !gameState.pendingFish) return;
         createSplashEffect();
+        haptic([18, 30, 18]);
         playSound('bite');
         status.innerHTML = `<span class="text-rose-400 font-extrabold">🎣 물었다! 탭해서 낚아채세요</span>`;
 
@@ -600,10 +1066,11 @@ function castLine() {
         visual.onclick = () => {
             visual.onclick = null;
             gameState.currentFish = null;
+            haptic(18);
             startReelGame();
         };
 
-        setTimeout(() => {
+        runFishingTimer(() => {
             if (gameState.currentFish) {
                 gameState.currentFish = null;
                 gameState.pendingFish = null;
@@ -618,11 +1085,13 @@ function castLine() {
 
 function createSplashEffect() {
     const visual = document.getElementById('fishing-visual');
-    for (let i = 0; i < 16; i++) {
+    const count = (graphicsMode === 'low' || reduceMotion) ? 6 : 16;
+    for (let i = 0; i < count; i++) {
         const p = document.createElement('div');
         p.className = 'splash-particle';
         p.style.left = (42 + Math.random()*28) + '%';
         p.style.bottom = (28 + Math.random()*18) + '%';
+        p.style.setProperty('--dx', ((Math.random() - 0.5) * 34) + 'px');
         visual.appendChild(p);
         setTimeout(() => p.remove(), 650);
     }
@@ -633,19 +1102,22 @@ function startReelGame() {
     const reel = document.getElementById('reel-game');
     const castBtn = document.getElementById('cast-btn');
     
+    haptic(12);
     status.textContent = '릴을 감는 중...';
     castBtn.style.display = 'none';
     reel.classList.remove('hidden');
     
     const rarity = Number(gameState.pendingFish?.rarity || 1);
-    gameState.reelProgress = Math.max(4, 12 - rarity);
-    gameState.tension = 18 + rarity * 4;
+    const stats = getEquipmentStats();
+    gameState.reelProgress = Math.max(5, 12 - rarity + stats.powerBonus * 16);
+    gameState.tension = Math.max(5, 18 + rarity * 4 - stats.tensionRelief);
     updateReelUI();
     
     if (gameState.reelInterval) clearInterval(gameState.reelInterval);
     
     gameState.reelInterval = setInterval(() => {
-        gameState.tension += 1.0 + rarity * 0.24;
+        const stats = getEquipmentStats();
+        gameState.tension += (1.0 + rarity * 0.24) * Math.max(.62, 1 - stats.tensionControl);
         if (gameState.tension >= 100) { clearInterval(gameState.reelInterval); endReelGame(false); }
         updateReelUI();
     }, 130);
@@ -659,9 +1131,11 @@ function updateReelUI() {
 }
 
 function reelAction() {
+    haptic(6);
     const rarity = Number(gameState.pendingFish?.rarity || 1);
-    gameState.reelProgress += Math.max(5.2, 9.4 - rarity * 0.45);
-    gameState.tension = Math.max(5, gameState.tension - Math.max(6, 11 - rarity * 0.45));
+    const stats = getEquipmentStats();
+    gameState.reelProgress += Math.max(5.2, 9.4 - rarity * 0.45) * (1 + stats.powerBonus);
+    gameState.tension = Math.max(5, gameState.tension - (Math.max(6, 11 - rarity * 0.45) + stats.tensionRelief));
     updateReelUI();
     if (gameState.reelProgress >= 100) { clearInterval(gameState.reelInterval); endReelGame(true); }
 }
@@ -676,10 +1150,12 @@ function endReelGame(success) {
     reel.classList.add('hidden');
 
     if (success) {
+        haptic([20, 35, 20]);
         playSound('success');
         const species = gameState.pendingFish || pickWeightedFish(gameState.currentRegion || '호수');
         const rarity = getRarityConfig(species.rarity);
-        const value = randomInt(species.minValue, species.maxValue);
+        const stats = getEquipmentStats();
+        const value = Math.round(randomInt(species.minValue, species.maxValue) * (1 + stats.valueBonus));
         const fish = {
             id: `${species.id}_${Date.now()}`,
             speciesId: species.id,
@@ -702,19 +1178,20 @@ function endReelGame(success) {
         if (!gameState.bestCatch || value > Number(gameState.bestCatch.soldValue || 0)) gameState.bestCatch = fish;
 
         addGold(value);
-        addExp(Number(species.exp || 50));
+        addExp(Math.round(Number(species.exp || 50) * (1 + stats.expBonus)));
         checkAchievements();
 
         status.innerHTML = `<span style="color:${rarity.color}" class="font-extrabold">${fish.emoji} ${escapeHTML(fish.name)} 포획!</span>`;
         createBigConfetti();
 
         setTimeout(() => {
-            alert(`${fish.emoji} ${fish.name} 획득!\n등급: ${rarity.name}\n가치: +${value.toLocaleString()} 골드`);
+            showToast(`${fish.emoji} ${fish.name} 획득! ${rarity.name} · +${value.toLocaleString()} 골드`, getRod().emoji, 3200);
             gameState.pendingFish = null;
             castBtn.style.display = 'flex';
             status.textContent = '물고기를 기다리는 중...';
         }, 850);
     } else {
+        haptic(80);
         playSound('fail');
         gameState.pendingFish = null;
         status.textContent = '줄이 끊어졌어요...';
@@ -724,6 +1201,7 @@ function endReelGame(success) {
 }
 
 function createBigConfetti() {
+    if (graphicsMode === 'low' || reduceMotion) return;
     const visual = document.getElementById('fishing-visual');
     const colors = ['#fbbf24', '#f43f5e', '#a855f7', '#38bdf8'];
     for (let i = 0; i < 40; i++) {
@@ -742,6 +1220,162 @@ function createBigConfetti() {
 
 function addGold(v){ gameState.gold += v; updateUI(); }
 function addExp(v){ gameState.exp += v; while(gameState.exp >= gameState.expToNext){ gameState.exp -= gameState.expToNext; gameState.level++; gameState.expToNext = Math.floor(gameState.expToNext*1.22); } updateUI(); checkAchievements(); }
+
+// ==================== 장비 공방 ====================
+function renderEquipment() {
+    const summary = document.getElementById('equipment-summary');
+    const rodList = document.getElementById('rod-list');
+    const baitList = document.getElementById('bait-list');
+    if (!summary || !rodList || !baitList) return;
+    ensureUsableBait();
+    const rod = getRod();
+    const bait = getBait();
+    const stats = getEquipmentStats();
+    summary.innerHTML = `
+        <div class="flex items-start justify-between gap-4">
+            <div>
+                <div class="text-[11px] text-cyan-100/70 font-bold">CURRENT LOADOUT</div>
+                <div class="text-2xl font-black tracking-tight mt-1">${escapeHTML(rod.emoji)} ${escapeHTML(rod.name)}</div>
+                <div class="text-sm text-white/70 mt-1">${escapeHTML(bait.emoji)} ${escapeHTML(bait.name)} 장착 중</div>
+            </div>
+            <div class="text-right">
+                <div class="text-[11px] text-white/45">보유 골드</div>
+                <div class="font-mono text-amber-300 font-black text-xl">${Number(gameState.gold || 0).toLocaleString()}</div>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 mt-4 text-xs">
+            <div class="stat-pill rounded-2xl p-3"><div class="text-white/45">릴 파워</div><div class="font-black text-cyan-200">+${formatPercent(stats.powerBonus)}</div></div>
+            <div class="stat-pill rounded-2xl p-3"><div class="text-white/45">장력 제어</div><div class="font-black text-emerald-200">+${formatPercent(stats.tensionControl)}</div></div>
+            <div class="stat-pill rounded-2xl p-3"><div class="text-white/45">희귀 기운</div><div class="font-black text-fuchsia-200">+${formatPercent(stats.rarityBoost)}</div></div>
+            <div class="stat-pill rounded-2xl p-3"><div class="text-white/45">판매/경험</div><div class="font-black text-amber-200">+${formatPercent(stats.valueBonus)} / +${formatPercent(stats.expBonus)}</div></div>
+        </div>`;
+
+    rodList.innerHTML = '';
+    RODS.forEach((item) => {
+        const owned = isRodOwned(item.id);
+        const equipped = getRod().id === item.id;
+        const canBuy = Number(gameState.gold || 0) >= Number(item.cost || 0);
+        const div = document.createElement('div');
+        div.className = `premium-card premium-glass rounded-3xl p-4 ${equipped ? 'equipped-ring' : ''}`;
+        div.innerHTML = `
+            <div class="flex items-start gap-3">
+                <div class="text-4xl">${escapeHTML(item.emoji)}</div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex justify-between gap-2">
+                        <div><div class="text-[10px] text-cyan-200/70 font-black">${escapeHTML(item.tier)}</div><div class="font-black text-lg truncate">${escapeHTML(item.name)}</div></div>
+                        <div class="text-right text-amber-300 font-mono font-black">${owned ? '보유' : Number(item.cost || 0).toLocaleString()}</div>
+                    </div>
+                    <div class="text-xs text-white/58 mt-1">${escapeHTML(item.desc)}</div>
+                    <div class="grid grid-cols-2 gap-1.5 mt-3 text-[11px] text-white/75">
+                        <div>릴 +${formatPercent(item.powerBonus)}</div><div>희귀 +${formatPercent(item.rarityBoost)}</div>
+                        <div>장력 +${Number(item.tensionRelief || 0).toFixed(1)}</div><div>판매 +${formatPercent(item.valueBonus)}</div>
+                    </div>
+                    <button onclick="${owned ? `equipRod('${item.id}')` : `buyRod('${item.id}')`}" class="mt-3 w-full py-2 rounded-2xl text-sm font-extrabold ${equipped ? 'bg-emerald-400/20 text-emerald-200' : canBuy || owned ? 'bg-sky-400/20 text-sky-100' : 'bg-white/10 text-white/40'}">${equipped ? '장착 중' : owned ? '장착하기' : '구매하기'}</button>
+                </div>
+            </div>`;
+        rodList.appendChild(div);
+    });
+
+    baitList.innerHTML = '';
+    BAITS.forEach((item) => {
+        const count = getBaitCount(item.id);
+        const equipped = getBait().id === item.id;
+        const canBuy = item.id === 'basic_bait' || Number(gameState.gold || 0) >= Number(item.cost || 0);
+        const div = document.createElement('div');
+        div.className = `premium-card premium-glass rounded-3xl p-4 ${equipped ? 'equipped-ring' : ''}`;
+        div.innerHTML = `
+            <div class="flex items-start gap-3">
+                <div class="text-4xl">${escapeHTML(item.emoji)}</div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex justify-between gap-2">
+                        <div><div class="text-[10px] text-cyan-200/70 font-black">${escapeHTML(item.tier)}</div><div class="font-black text-lg truncate">${escapeHTML(item.name)}</div></div>
+                        <div class="text-right"><div class="font-mono text-amber-300 font-black">${item.id === 'basic_bait' ? 'FREE' : Number(item.cost || 0).toLocaleString()}</div><div class="text-[10px] text-white/50">보유 ${item.id === 'basic_bait' ? '∞' : count}</div></div>
+                    </div>
+                    <div class="text-xs text-white/58 mt-1">${escapeHTML(item.desc)}</div>
+                    <div class="grid grid-cols-2 gap-1.5 mt-3 text-[11px] text-white/75">
+                        <div>입질 -${formatPercent(item.biteSpeed)}</div><div>희귀 +${formatPercent(item.rarityBoost)}</div>
+                        <div>판매 +${formatPercent(item.valueBonus)}</div><div>경험 +${formatPercent(item.expBonus)}</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-3">
+                        <button onclick="equipBait('${item.id}')" class="py-2 rounded-2xl text-sm font-extrabold ${equipped ? 'bg-emerald-400/20 text-emerald-200' : count > 0 || item.id === 'basic_bait' ? 'bg-sky-400/20 text-sky-100' : 'bg-white/10 text-white/40'}">${equipped ? '장착 중' : '장착'}</button>
+                        <button onclick="buyBait('${item.id}')" class="py-2 rounded-2xl text-sm font-extrabold ${canBuy && item.id !== 'basic_bait' ? 'bg-amber-400/20 text-amber-100' : 'bg-white/10 text-white/40'}">${item.id === 'basic_bait' ? '무제한' : `x${item.pack} 구매`}</button>
+                    </div>
+                </div>
+            </div>`;
+        baitList.appendChild(div);
+    });
+    updateUI();
+}
+
+function buyRod(id) {
+    const rod = getRod(id);
+    if (isRodOwned(id)) return equipRod(id);
+    if (Number(gameState.gold || 0) < Number(rod.cost || 0)) {
+        showToast('골드가 부족합니다', '💰');
+        return;
+    }
+    gameState.gold -= Number(rod.cost || 0);
+    gameState.ownedRods.push(id);
+    gameState.equipment.rod = id;
+    showToast(`${rod.emoji} ${rod.name} 구매 및 장착!`, '🧰');
+    checkAchievements();
+    updateUI();
+    renderEquipment();
+    savePlayerData();
+}
+
+function equipRod(id) {
+    if (!isRodOwned(id)) return buyRod(id);
+    gameState.equipment.rod = id;
+    showToast(`${getRod(id).name} 장착`, getRod(id).emoji);
+    checkAchievements();
+    updateUI();
+    renderEquipment();
+    savePlayerData();
+}
+
+function buyBait(id) {
+    const bait = getBait(id);
+    if (bait.id === 'basic_bait') return equipBait('basic_bait');
+    if (Number(gameState.gold || 0) < Number(bait.cost || 0)) {
+        showToast('골드가 부족합니다', '💰');
+        return;
+    }
+    gameState.gold -= Number(bait.cost || 0);
+    gameState.baitInventory[bait.id] = getBaitCount(bait.id) + Number(bait.pack || 1);
+    gameState.equipment.bait = bait.id;
+    showToast(`${bait.emoji} ${bait.name} ${bait.pack}개 구매`, '🪱');
+    updateUI();
+    renderEquipment();
+    savePlayerData();
+}
+
+function equipBait(id) {
+    const bait = getBait(id);
+    if (bait.id !== 'basic_bait' && getBaitCount(bait.id) <= 0) {
+        showToast('보유 미끼가 없습니다. 먼저 구매해주세요', '🪱');
+        return;
+    }
+    gameState.equipment.bait = bait.id;
+    showToast(`${bait.emoji} ${bait.name} 장착`, '🪱');
+    updateUI();
+    renderEquipment();
+    savePlayerData();
+}
+
+function buyBestAffordableRod() {
+    const next = RODS.filter((rod) => !isRodOwned(rod.id) && Number(gameState.gold || 0) >= Number(rod.cost || 0)).pop();
+    if (!next) {
+        showToast('지금 구매 가능한 새 낚싯대가 없습니다', '✨');
+        return;
+    }
+    buyRod(next.id);
+}
+
+function buyStarterBaitPack() {
+    const best = [...BAITS].reverse().find((bait) => bait.id !== 'basic_bait' && Number(gameState.gold || 0) >= Number(bait.cost || 0)) || BAITS.find((bait) => bait.id === 'glow_bait');
+    buyBait(best.id);
+}
 
 // ==================== 인벤토리 ====================
 function renderInventory() {
@@ -887,7 +1521,9 @@ const ACHIEVEMENTS = [
     { id: 'hero_catcher', name: '영웅 어종 포획', desc: '영웅 등급 이상 어종 잡기', check: (s) => s.bestCatch && Number(s.bestCatch.rarity || 1) >= 4 },
     { id: 'mythic_catcher', name: '신화의 낚시꾼', desc: '신화 등급 어종 잡기', check: (s) => Array.isArray(s.catchHistory) && s.catchHistory.some(f => Number(f.rarity || 1) >= 6) },
     { id: 'rich_fisher', name: '부유한 낚시꾼', desc: '총 5,000 골드 이상 벌기', check: (s) => (s.totalGoldEarned || 0) >= 5000 },
-    { id: 'legend_catcher', name: '전설의 낚시꾼', desc: '최고 가치 3,000골드 이상 물고기 잡기', check: (s) => s.bestCatch && Number(s.bestCatch.soldValue || 0) >= 3000 }
+    { id: 'legend_catcher', name: '전설의 낚시꾼', desc: '최고 가치 3,000골드 이상 물고기 잡기', check: (s) => s.bestCatch && Number(s.bestCatch.soldValue || 0) >= 3000 },
+    { id: 'gear_owner', name: '장비 수집 입문', desc: '낚싯대 2종 이상 보유', check: (s) => Array.isArray(s.ownedRods) && s.ownedRods.length >= 2 },
+    { id: 'dragon_loadout', name: '용의 장비', desc: '용린 낚싯대 장착', check: (s) => s.equipment && s.equipment.rod === 'dragon_rod' }
 ];
 
 function checkAchievements() {
@@ -896,7 +1532,7 @@ function checkAchievements() {
         if (!gameState.achievements[ach.id] && ach.check(gameState)) {
             gameState.achievements[ach.id] = { unlockedAt: new Date().toISOString() };
             unlocked = true;
-            alert(`🏅 업적 달성: ${ach.name}\n${ach.desc}`);
+            showToast(`업적 달성: ${ach.name}`, '🏅', 3200);
         }
     });
     if (unlocked) savePlayerData();
@@ -970,6 +1606,7 @@ function goFishing() {
     selectRegion(gameState.currentRegion);
 }
 function exitFishing() {
+    clearFishingTimers();
     const visual = document.getElementById('fishing-visual');
     const castBtn = document.getElementById('cast-btn');
     const reel = document.getElementById('reel-game');
@@ -1102,12 +1739,24 @@ function normalizeGameState(data) {
     next.pendingFish = null;
     if (!Array.isArray(next.leaderboard)) next.leaderboard = [];
     if (!next.achievements || typeof next.achievements !== 'object') next.achievements = {};
+    if (!Array.isArray(next.ownedRods)) next.ownedRods = ['starter_rod'];
+    if (!next.ownedRods.includes('starter_rod')) next.ownedRods.unshift('starter_rod');
+    next.ownedRods = next.ownedRods.filter((id, idx, arr) => RODS.some((rod) => rod.id === id) && arr.indexOf(id) === idx);
+    if (!next.baitInventory || typeof next.baitInventory !== 'object') next.baitInventory = { basic_bait: 999999 };
+    next.baitInventory.basic_bait = 999999;
+    BAITS.forEach((bait) => { next.baitInventory[bait.id] = Math.max(0, Number(next.baitInventory[bait.id] || 0)); });
+    if (!next.equipment || typeof next.equipment !== 'object') next.equipment = { rod: 'starter_rod', bait: 'basic_bait' };
+    if (!next.ownedRods.includes(next.equipment.rod)) next.equipment.rod = 'starter_rod';
+    if (!BAITS.some((bait) => bait.id === next.equipment.bait) || (next.equipment.bait !== 'basic_bait' && Number(next.baitInventory[next.equipment.bait] || 0) <= 0)) next.equipment.bait = 'basic_bait';
     return next;
 }
 
 function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
+        localStorage.setItem('aqua_v1.6', JSON.stringify(plain));
+        localStorage.setItem('aqua_v1.5', JSON.stringify(plain));
+        localStorage.setItem('aqua_v1.4', JSON.stringify(plain));
         localStorage.setItem('aqua_v1.3', JSON.stringify(plain));
         localStorage.setItem('aqua_v1.2', JSON.stringify(plain));
         localStorage.setItem('aqua_v1.1', JSON.stringify(plain)); // 이전 버전과 호환 유지
@@ -1238,10 +1887,15 @@ function bindLoginEnterKey() {
     });
 }
 
+
+document.addEventListener('visibilitychange', () => {
+    document.body.classList.toggle('fx-paused', document.hidden);
+});
+
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) gameState = normalizeGameState(JSON.parse(saved));
         else gameState = normalizeGameState(gameState);
         
@@ -1255,12 +1909,16 @@ async function init() {
         
         if (!gameState.achievements) gameState.achievements = {};
         
+        applyAdaptivePerformance();
+        applyGraphicsMode();
+        await initPWA();
         updateUI();
         initAudio();
         bindLoginEnterKey();
+        bindPremiumCardPointer();
         startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v1.3] Fish Data Patch Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v1.6] PWA Visual Max Patch Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
         alert('게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.');
