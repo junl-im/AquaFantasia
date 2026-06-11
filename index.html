@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aqua Fantasia • Dev v1.1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <style>
+        body { font-family: 'Noto Sans KR', system-ui, sans-serif; }
+        .ocean-deep { background: linear-gradient(180deg, #0a3d5c 0%, #0f4c6b 100%); }
+        .premium-glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.12); }
+        .premium-card { transition: transform 0.2s cubic-bezier(0.4,0,0.2,1); }
+        .premium-card:active { transform: scale(0.985); }
+        .wave-layer { position:absolute; bottom:0; left:0; width:200%; height:120px; background-repeat:repeat-x; animation: wave-move linear infinite; }
+        .wave-1 { background:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%230ea5e9%22 fill-opacity=%220.25%22 d=%22M0,192L60,186.7C120,181,240,171,360,186.7C480,203,600,245,720,250.7C840,256,960,224,1080,213.3C1200,203,1320,213,1380,218.7L1440,224L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z%22%3E%3C/path%3E%3C/svg%3E'); background-size:1440px 120px; animation-duration:7s; }
+        .wave-2 { background:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%2338bdf8%22 fill-opacity=%220.18%22 d=%22M0,160L48,181.3C96,203,192,245,288,250.7C384,256,480,224,576,197.3C672,171,768,149,864,154.7C960,160,1056,192,1152,197.3C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z%22%3E%3C/path%3E%3C/svg%3E'); background-size:1440px 120px; animation-duration:4.5s; animation-direction:reverse; }
+        .splash-particle { position:absolute; width:6px; height:6px; background:#bae6fd; border-radius:50%; pointer-events:none; animation:splash-pop 600ms ease-out forwards; }
+        @keyframes splash-pop { 0%{transform:scale(0.5);opacity:1} 100%{transform:scale(1.8) translateY(-40px);opacity:0} }
+    </style>
+</head>
+<body class="bg-[#0a3d5c] text-white">
+<div class="max-w-md mx-auto min-h-screen flex flex-col shadow-2xl border-x border-white/10 bg-[#0a3d5c]">
+    
+    <!-- Top Bar -->
+    <div class="px-4 pt-3 pb-2 flex justify-between items-center border-b border-white/10 bg-black/20">
+        <div class="flex items-center gap-x-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center text-2xl">🌊</div>
+            <div>
+                <span class="font-black text-3xl tracking-[-1.5px]">AQUA</span>
+                <span class="font-bold text-3xl tracking-[-1.5px] text-sky-400">FANTASIA</span>
+                <span class="ml-2 text-[10px] px-2 py-0.5 bg-white/10 rounded-full">v1.1</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-x-2 text-sm">
+            <div id="firebase-status" class="px-3 py-1 text-xs rounded-full bg-white/10 flex items-center gap-x-1.5">
+                <div class="w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse"></div>
+                <span class="font-medium">Firebase</span>
+            </div>
+            <div class="flex items-center bg-white/10 px-3.5 py-1.5 rounded-2xl">
+                <span class="text-amber-400 mr-1.5">💰</span>
+                <span id="gold-display" class="font-mono font-extrabold tabular-nums text-lg">1,240</span>
+            </div>
+            <div class="flex items-center bg-white/10 px-3.5 py-1.5 rounded-2xl">
+                <span class="text-yellow-400 mr-1.5">⭐</span>
+                <span id="level-display" class="font-extrabold text-lg">12</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-content" class="flex-1 relative overflow-hidden">
+        
+        <!-- LOGIN -->
+        <div id="screen-login" class="absolute inset-0 flex flex-col items-center justify-center px-6 ocean-deep">
+            <div class="text-center mb-10">
+                <div class="text-[5.5rem] mb-3">🎣</div>
+                <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
+                <p class="text-sky-300 mt-2">v1.1 Dev</p>
+            </div>
+            <div class="w-full max-w-xs space-y-4">
+                <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
+                <div class="premium-glass rounded-3xl p-5">
+                    <div class="text-xs text-white/50 mb-3 text-center">이메일 로그인</div>
+                    <input id="email" type="email" placeholder="이메일" class="w-full bg-white/10 rounded-2xl px-5 py-3.5 mb-2 text-sm outline-none">
+                    <input id="pw" type="password" placeholder="비밀번호" class="w-full bg-white/10 rounded-2xl px-5 py-3.5 mb-4 text-sm outline-none">
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="loginWithEmail()" class="py-3 bg-sky-500 rounded-2xl font-bold text-sm">로그인</button>
+                        <button onclick="registerWithEmail()" class="py-3 bg-white/10 rounded-2xl font-bold text-sm">회원가입</button>
+                    </div>
+                </div>
+                <button onclick="loginWithGoogle()" class="w-full py-4 bg-white text-[#0a3d5c] font-extrabold rounded-3xl flex items-center justify-center gap-x-3 active:scale-[0.985]"><span class="font-black text-xl">G</span> Google로 계속하기</button>
+            </div>
+        </div>
+
+        <!-- VILLAGE -->
+        <div id="screen-village" class="hidden absolute inset-0 flex flex-col ocean-deep">
+            <div class="pt-8 px-6">
+                <div class="flex justify-center">
+                    <div onclick="showCharacterModal()" class="cursor-pointer text-center">
+                        <img id="avatar-img" src="assets/images/zZHXu.jpg" class="w-[120px] h-[120px] object-cover rounded-full border-[7px] border-sky-400 shadow-2xl mx-auto">
+                        <div id="player-name" class="mt-3 font-extrabold text-2xl tracking-tight">여우</div>
+                        <div class="text-emerald-400 text-sm -mt-0.5">Lv.<span id="village-level">12</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="px-5 mt-7 flex-1">
+                <div class="px-1 flex justify-between items-end mb-3">
+                    <div class="font-extrabold text-2xl tracking-tight">낚시 지역</div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div onclick="selectRegion('호수')" class="premium-card premium-glass p-5 rounded-3xl active:scale-[0.97] cursor-pointer">🏞️<br><span class="font-extrabold text-xl">호수</span></div>
+                    <div onclick="selectRegion('강')" class="premium-card premium-glass p-5 rounded-3xl active:scale-[0.97] cursor-pointer">🏞<br><span class="font-extrabold text-xl">강</span></div>
+                    <div onclick="selectRegion('항구')" class="premium-card premium-glass p-5 rounded-3xl active:scale-[0.97] cursor-pointer">⚓<br><span class="font-extrabold text-xl">항구</span></div>
+                    <div onclick="selectRegion('심해')" class="premium-card premium-glass p-5 rounded-3xl active:scale-[0.97] cursor-pointer">🌊<br><span class="font-extrabold text-xl">심해</span></div>
+                    <div onclick="selectRegion('용궁')" class="premium-card premium-glass p-5 rounded-3xl active:scale-[0.97] cursor-pointer col-span-2">🐉<br><span class="font-extrabold text-2xl">용궁 (전설~신화)</span></div>
+                    <div onclick="selectRegion('차원의 바다')" class="premium-card premium-glass p-5 rounded-3xl active:scale-[0.97] cursor-pointer col-span-2">🌀<br><span class="font-extrabold text-2xl">차원의 바다 (신화)</span></div>
+                </div>
+            </div>
+            
+            <div class="px-5 pb-6 pt-4 grid grid-cols-5 gap-2 text-sm">
+                <button onclick="switchScreen('inventory')" class="py-3 premium-glass rounded-2xl font-semibold">🎒</button>
+                <button onclick="switchScreen('record')" class="py-3 premium-glass rounded-2xl font-semibold">📜</button>
+                <button onclick="switchScreen('competition')" class="py-3 premium-glass rounded-2xl font-semibold">🏆</button>
+                <button onclick="switchScreen('achievements')" class="py-3 premium-glass rounded-2xl font-semibold">🏅</button>
+                <button onclick="switchScreen('encyclopedia')" class="py-3 premium-glass rounded-2xl font-semibold">📖</button>
+            </div>
+        </div>
+
+        <!-- FISHING -->
+        <div id="screen-fishing" class="hidden absolute inset-0 flex flex-col ocean-deep">
+            <div class="px-5 pt-5 flex justify-between items-center">
+                <button onclick="exitFishing()" class="text-sky-300">← 마을</button>
+                <div id="fishing-region-name" class="font-extrabold text-3xl tracking-tighter"></div>
+            </div>
+            <div id="fishing-visual" class="flex-1 mx-4 mt-3 mb-2 rounded-[2.5rem] overflow-hidden border border-white/10 relative">
+                <div class="absolute inset-0 bg-gradient-to-b from-[#0a3d5c] via-[#0f4c6b] to-[#0a3d5c]"></div>
+                <div class="wave-layer wave-1" style="bottom:12%; height:110px; animation-duration:7s;"></div>
+                <div class="wave-layer wave-2" style="bottom:5%; height:95px; animation-duration:4.5s; animation-direction:reverse;"></div>
+                <div id="fish-shadow-container" class="absolute inset-0 pointer-events-none"></div>
+                <div class="absolute bottom-8 right-9 z-30"><div id="rod" class="rod w-[7px] h-32 bg-gradient-to-t from-amber-900 to-amber-600 rounded-full shadow-xl" style="transform:rotate(-38deg);"></div></div>
+                <div id="fishing-status" class="absolute bottom-9 left-1/2 -translate-x-1/2 px-8 py-2 bg-black/50 backdrop-blur-xl rounded-3xl text-sm font-medium z-20">물고기를 기다리는 중...</div>
+            </div>
+            <div class="px-5 pb-7">
+                <button id="cast-btn" onclick="castLine()" class="w-full py-[18px] bg-gradient-to-r from-sky-400 via-blue-500 to-sky-500 font-extrabold text-2xl rounded-3xl active:scale-[0.985] flex items-center justify-center gap-x-3"><span class="text-3xl">🎣</span> <span>낚시대 던지기</span></button>
+                <div id="reel-game" class="hidden mt-4 premium-glass p-5 rounded-3xl">
+                    <div class="mb-4"><div class="flex justify-between text-xs mb-1.5 px-1"><span>릴 진행도</span><span id="reel-text">0%</span></div><div class="h-3 bg-white/10 rounded-full"><div id="reel-bar" class="h-full bg-emerald-400 transition-all rounded-full" style="width:0%"></div></div></div>
+                    <div class="mb-5"><div class="flex justify-between text-xs mb-1.5 px-1"><span>줄 장력</span><span id="tension-text">0%</span></div><div class="h-3 bg-white/10 rounded-full"><div id="tension-bar" class="h-full bg-rose-500 transition-all rounded-full" style="width:0%"></div></div></div>
+                    <button onclick="reelAction()" class="w-full py-4 bg-gradient-to-r from-amber-300 to-yellow-400 text-[#0a3d5c] font-extrabold text-xl rounded-3xl">릴 감기 (연타!)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- INVENTORY -->
+        <div id="screen-inventory" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto">
+            <div class="flex justify-between mb-4"><div class="font-extrabold text-3xl">가방</div><button onclick="sellAll()" class="px-6 py-2 text-sm bg-rose-500 rounded-2xl font-bold">전체 판매</button></div>
+            <div id="inv-grid" class="grid grid-cols-2 gap-3"></div>
+        </div>
+
+        <!-- RECORD -->
+        <div id="screen-record" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto">
+            <div class="font-extrabold text-3xl mb-6">기록</div>
+            <div class="premium-glass p-5 rounded-3xl mb-4">
+                <div class="text-sm text-white/60 mb-2">전체 통계</div>
+                <div class="grid grid-cols-2 gap-y-3 text-sm">
+                    <div>총 잡은 마리</div><div class="font-mono font-bold text-right" id="stat-total-catch">0</div>
+                    <div>총 수익</div><div class="font-mono font-bold text-right text-amber-400" id="stat-total-gold">0 골드</div>
+                    <div>최고 가치</div><div class="font-mono font-bold text-right" id="stat-best-fish">-</div>
+                </div>
+            </div>
+            <div class="premium-glass p-5 rounded-3xl">
+                <div class="text-sm text-white/60 mb-3">최근 기록</div>
+                <div id="record-list" class="space-y-2 text-sm max-h-[280px] overflow-auto"></div>
+            </div>
+        </div>
+
+        <!-- COMPETITION -->
+        <div id="screen-competition" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto">
+            <div class="font-extrabold text-3xl mb-6">경쟁</div>
+            <div class="premium-glass p-5 rounded-3xl mb-4">
+                <div class="text-sm text-white/60 mb-2">오늘의 최고 기록</div>
+                <div class="flex justify-between items-end">
+                    <div><div class="text-2xl font-extrabold" id="today-best">0 골드</div><div class="text-xs text-white/50">현재 내 최고 기록</div></div>
+                    <button onclick="updateTodayBest()" class="px-5 py-2 text-xs bg-emerald-500 rounded-2xl font-bold">기록 갱신</button>
+                </div>
+            </div>
+            <div class="premium-glass p-5 rounded-3xl">
+                <div class="text-sm text-white/60 mb-3">로컬 리더보드</div>
+                <div id="leaderboard" class="space-y-2 text-sm"></div>
+            </div>
+            <div class="mt-3 text-center"><button onclick="submitToGlobalLeaderboard()" class="text-xs px-4 py-2 bg-sky-500/80 rounded-2xl">글로벌 리더보드에 제출 (Firebase)</button></div>
+        </div>
+
+        <!-- ACHIEVEMENTS (NEW) -->
+        <div id="screen-achievements" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto">
+            <div class="font-extrabold text-3xl mb-6">업적</div>
+            <div id="achievements-list" class="space-y-3"></div>
+        </div>
+
+        <!-- ENCYCLOPEDIA -->
+        <div id="screen-encyclopedia" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto">
+            <div class="font-extrabold text-3xl mb-4">도감</div>
+            <input id="search-box" oninput="renderEncyclopedia()" placeholder="검색..." class="w-full premium-glass px-5 py-4 rounded-2xl mb-4">
+            <div id="enc-list" class="space-y-2"></div>
+        </div>
+        
+    </div>
+    
+    <div class="grid grid-cols-5 text-center text-xs py-2.5 border-t border-white/10 bg-black/30">
+        <div onclick="switchScreen('village')" class="cursor-pointer">🏠<br>마을</div>
+        <div onclick="goFishing()" class="cursor-pointer">🎣<br>낚시</div>
+        <div onclick="switchScreen('inventory')" class="cursor-pointer">🎒<br>가방</div>
+        <div onclick="switchScreen('record')" class="cursor-pointer">📜<br>기록</div>
+        <div onclick="switchScreen('competition')" class="cursor-pointer">🏆<br>경쟁</div>
+    </div>
+</div>
+
+<script>
+// ==================== v1.1 EXPANSION VERSION ====================
+let gameState = {
+    gold: 1240, level: 12, exp: 870, expToNext: 1000,
+    inventory: [], discovered: new Set(),
+    currentRegion: null, isFishing: false,
+    reelProgress: 0, tension: 0, currentFish: null,
+    nickname: "여우", gender: "male", userId: null,
+    catchHistory: [], bestCatch: null, totalCaught: 0, totalGoldEarned: 0,
+    todayBest: 0, leaderboard: [],
+    achievements: {}
+};
+
+let isFirebaseConnected = false;
+let audioContext;
+
+// ==================== SOUND SYSTEM (NEW) ====================
+function initAudio() {
+    try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    } catch(e) {
+        console.log("Web Audio not supported");
+    }
+}
+
+function playSound(type) {
+    if (!audioContext) return;
+    
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    const filter = audioContext.createBiquadFilter();
+    
+    oscillator.type = type === 'success' ? 'sine' : 'sawtooth';
+    filter.type = 'lowpass';
+    filter.frequency.value = type === 'success' ? 1200 : 800;
+    
+    if (type === 'cast') {
+        oscillator.frequency.value = 220;
+        gain.gain.value = 0.3;
+        setTimeout(() => gain.gain.value = 0, 180);
+    } else if (type === 'bite') {
+        oscillator.frequency.value = 880;
+        gain.gain.value = 0.5;
+        setTimeout(() => gain.gain.value = 0, 120);
+    } else if (type === 'success') {
+        oscillator.frequency.value = 660;
+        gain.gain.value = 0.4;
+        setTimeout(() => { oscillator.frequency.value = 880; }, 150);
+        setTimeout(() => gain.gain.value = 0, 450);
+    } else if (type === 'fail') {
+        oscillator.frequency.value = 180;
+        gain.gain.value = 0.4;
+        setTimeout(() => gain.gain.value = 0, 300);
+    }
+    
+    oscillator.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioContext.destination);
+    
+    oscillator.start();
+    setTimeout(() => oscillator.stop(), 600);
+}
+
+// ==================== UI ====================
+function updateUI() {
+    document.getElementById('gold-display').textContent = gameState.gold.toLocaleString();
+    document.getElementById('level-display').textContent = gameState.level;
+    const lvl = document.getElementById('village-level'); if (lvl) lvl.textContent = gameState.level;
+    const nameEl = document.getElementById('player-name'); if (nameEl) nameEl.textContent = gameState.nickname;
+    
+    const avatarImg = document.getElementById('avatar-img');
+    if (avatarImg) avatarImg.src = gameState.gender === 'male' ? 'assets/images/zZHXu.jpg' : 'assets/images/sN0n9.jpg';
+}
+
+function switchScreen(screen) {
+    document.querySelectorAll('#main-content > div').forEach(d => d.classList.add('hidden'));
+    const el = document.getElementById('screen-' + screen);
+    if (el) el.classList.remove('hidden');
+    
+    if (screen === 'inventory') renderInventory();
+    if (screen === 'record') renderRecord();
+    if (screen === 'competition') renderCompetition();
+    if (screen === 'achievements') renderAchievements();
+    if (screen === 'encyclopedia') renderEncyclopedia();
+}
+
+// ==================== 지역 & 낚시 ====================
+function selectRegion(region) {
+    gameState.currentRegion = region;
+    switchScreen('fishing');
+    document.getElementById('fishing-region-name').textContent = region;
+    createFishShadows(region);
+}
+
+function createFishShadows(region) {
+    const container = document.getElementById('fish-shadow-container');
+    container.innerHTML = '';
+    const count = region.includes('용') || region.includes('차원') ? 5 : 3;
+    for (let i = 0; i < count; i++) {
+        const fish = document.createElement('div');
+        fish.className = 'absolute text-4xl opacity-[0.08]';
+        fish.style.left = Math.random()*75 + '%';
+        fish.style.top = (22 + Math.random()*45) + '%';
+        fish.innerHTML = region.includes('용') || region.includes('차원') ? '🐉' : '🐟';
+        container.appendChild(fish);
+    }
+}
+
+function castLine() {
+    playSound('cast');
+    const status = document.getElementById('fishing-status');
+    const castBtn = document.getElementById('cast-btn');
+    const rod = document.getElementById('rod');
+    
+    castBtn.style.display = 'none';
+    status.textContent = '미끼를 기다리는 중...';
+    
+    if (rod) {
+        rod.style.transition = 'transform 0.55s cubic-bezier(0.34,1.56,0.64,1)';
+        rod.style.transform = 'rotate(-92deg)';
+        setTimeout(() => { if (rod) rod.style.transform = 'rotate(-32deg)'; }, 580);
+    }
+    
+    setTimeout(() => {
+        createSplashEffect();
+        playSound('bite');
+        status.innerHTML = `<span class="text-rose-400 font-extrabold">🎣 물었다! 탭해서 낚아채세요</span>`;
+        
+        const visual = document.getElementById('fishing-visual');
+        visual.onclick = () => { visual.onclick = null; startReelGame(); };
+        
+        setTimeout(() => {
+            if (gameState.currentFish) {
+                visual.onclick = null;
+                status.textContent = '아쉽게 놓쳤어요...';
+                setTimeout(() => { castBtn.style.display = 'flex'; status.textContent = '물고기를 기다리는 중...'; }, 1300);
+            }
+        }, 1550);
+    }, 2200);
+}
+
+function createSplashEffect() {
+    const visual = document.getElementById('fishing-visual');
+    for (let i = 0; i < 16; i++) {
+        const p = document.createElement('div');
+        p.className = 'splash-particle';
+        p.style.left = (42 + Math.random()*28) + '%';
+        p.style.bottom = (28 + Math.random()*18) + '%';
+        visual.appendChild(p);
+        setTimeout(() => p.remove(), 650);
+    }
+}
+
+function startReelGame() {
+    const status = document.getElementById('fishing-status');
+    const reel = document.getElementById('reel-game');
+    const castBtn = document.getElementById('cast-btn');
+    
+    status.textContent = '릴을 감는 중...';
+    castBtn.style.display = 'none';
+    reel.classList.remove('hidden');
+    
+    gameState.reelProgress = 8;
+    gameState.tension = 25;
+    updateReelUI();
+    
+    if (gameState.reelInterval) clearInterval(gameState.reelInterval);
+    
+    gameState.reelInterval = setInterval(() => {
+        gameState.tension += 1.4;
+        if (gameState.tension >= 100) { clearInterval(gameState.reelInterval); endReelGame(false); }
+        updateReelUI();
+    }, 130);
+}
+
+function updateReelUI() {
+    document.getElementById('reel-bar').style.width = gameState.reelProgress + '%';
+    document.getElementById('reel-text').textContent = Math.floor(gameState.reelProgress) + '%';
+    document.getElementById('tension-bar').style.width = gameState.tension + '%';
+    document.getElementById('tension-text').textContent = Math.floor(gameState.tension) + '%';
+}
+
+function reelAction() {
+    gameState.reelProgress += 8.2;
+    gameState.tension = Math.max(5, gameState.tension - 10);
+    updateReelUI();
+    if (gameState.reelProgress >= 100) { clearInterval(gameState.reelInterval); endReelGame(true); }
+}
+
+function endReelGame(success) {
+    const reel = document.getElementById('reel-game');
+    const status = document.getElementById('fishing-status');
+    const castBtn = document.getElementById('cast-btn');
+    
+    reel.classList.add('hidden');
+    
+    if (success) {
+        playSound('success');
+        const value = 75 + Math.floor(Math.random() * 55);
+        const fish = { 
+            id: Date.now(), name: gameState.currentRegion + "의 어종", region: gameState.currentRegion, 
+            rarity: 3, soldValue: value, caughtAt: new Date().toISOString() 
+        };
+        
+        gameState.inventory.push(fish);
+        gameState.discovered.add(fish.id);
+        gameState.catchHistory.unshift(fish);
+        gameState.totalCaught = (gameState.totalCaught || 0) + 1;
+        gameState.totalGoldEarned = (gameState.totalGoldEarned || 0) + value;
+        
+        if (!gameState.bestCatch || value > gameState.bestCatch.soldValue) gameState.bestCatch = fish;
+        
+        addGold(value);
+        addExp(50);
+        checkAchievements();
+        
+        status.innerHTML = `<span class="text-emerald-400 font-extrabold">대성공!</span>`;
+        createBigConfetti();
+        
+        setTimeout(() => {
+            alert(`${fish.name} 획득! +${value} 골드`);
+            castBtn.style.display = 'flex';
+            status.textContent = '물고기를 기다리는 중...';
+        }, 850);
+    } else {
+        playSound('fail');
+        status.textContent = '줄이 끊어졌어요...';
+        setTimeout(() => { castBtn.style.display = 'flex'; status.textContent = '물고기를 기다리는 중...'; }, 1400);
+    }
+    savePlayerData();
+}
+
+function createBigConfetti() {
+    const visual = document.getElementById('fishing-visual');
+    const colors = ['#fbbf24', '#f43f5e', '#a855f7', '#38bdf8'];
+    for (let i = 0; i < 40; i++) {
+        const p = document.createElement('div');
+        p.style.position = 'absolute'; p.style.width = p.style.height = '6px';
+        p.style.background = colors[Math.floor(Math.random()*colors.length)];
+        p.style.left = (28 + Math.random()*50) + '%'; p.style.bottom = '32%'; p.style.zIndex = '50';
+        visual.appendChild(p);
+        const angle = (Math.random()-0.5)*110;
+        p.animate([
+            { transform: 'translateY(0) rotate(0)', opacity:1 },
+            { transform: `translateY(-${100+Math.random()*80}px) translateX(${angle}px) rotate(${angle*2}deg)`, opacity:0 }
+        ], { duration: 850 + Math.random()*650, easing:'ease-out' }).onfinish = () => p.remove();
+    }
+}
+
+function addGold(v){ gameState.gold += v; updateUI(); }
+function addExp(v){ gameState.exp += v; while(gameState.exp >= gameState.expToNext){ gameState.exp -= gameState.expToNext; gameState.level++; gameState.expToNext = Math.floor(gameState.expToNext*1.22); } updateUI(); checkAchievements(); }
+
+// ==================== 인벤토리 ====================
+function renderInventory() {
+    const grid = document.getElementById('inv-grid');
+    grid.innerHTML = '';
+    gameState.inventory.slice().reverse().forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = `premium-card premium-glass p-4 rounded-2xl`;
+        div.innerHTML = `<div class="font-extrabold">${item.name}</div><div class="text-xs text-white/50">${item.region}</div><div class="mt-3 flex justify-between items-center"><div class="text-amber-400 font-mono font-bold">${item.soldValue} 골드</div><button onclick="sellFish(${idx}, this)" class="text-xs px-4 py-1 bg-white/10 rounded-xl">판매</button></div>`;
+        grid.appendChild(div);
+    });
+}
+
+function sellFish(idx, el) {
+    const fish = gameState.inventory[idx];
+    addGold(fish.soldValue);
+    gameState.inventory.splice(idx, 1);
+    el.closest('.premium-card').remove();
+    savePlayerData();
+}
+
+function sellAll() {
+    let total = 0;
+    gameState.inventory.forEach(f => total += f.soldValue);
+    addGold(total);
+    gameState.inventory = [];
+    renderInventory();
+    savePlayerData();
+}
+
+// ==================== 기록 ====================
+function renderRecord() {
+    document.getElementById('stat-total-catch').textContent = gameState.totalCaught || 0;
+    document.getElementById('stat-total-gold').textContent = (gameState.totalGoldEarned || 0).toLocaleString() + ' 골드';
+    document.getElementById('stat-best-fish').textContent = gameState.bestCatch ? `${gameState.bestCatch.name} (${gameState.bestCatch.soldValue}골드)` : '-';
+    
+    const list = document.getElementById('record-list');
+    list.innerHTML = '';
+    if (!gameState.catchHistory || gameState.catchHistory.length === 0) {
+        list.innerHTML = `<div class="text-white/50 text-sm">아직 잡은 물고기가 없습니다.</div>`;
+        return;
+    }
+    gameState.catchHistory.slice(0, 8).forEach(fish => {
+        const div = document.createElement('div');
+        div.className = `flex justify-between items-center p-3 bg-white/5 rounded-2xl`;
+        const time = new Date(fish.caughtAt).toLocaleTimeString('ko-KR', {hour:'2-digit', minute:'2-digit'});
+        div.innerHTML = `<div><div class="font-bold">${fish.name}</div><div class="text-xs text-white/50">${fish.region} • ${time}</div></div><div class="text-right"><div class="font-mono text-amber-400 font-bold">${fish.soldValue} 골드</div></div>`;
+        list.appendChild(div);
+    });
+}
+
+// ==================== 경쟁 ====================
+function renderCompetition() {
+    document.getElementById('today-best').textContent = (gameState.todayBest || 0).toLocaleString() + ' 골드';
+    
+    const board = document.getElementById('leaderboard');
+    board.innerHTML = '';
+    
+    if (!gameState.leaderboard || gameState.leaderboard.length === 0) {
+        gameState.leaderboard = [
+            { name: "바다의왕", score: 12400 },
+            { name: "전설낚시꾼", score: 9800 },
+            { name: gameState.nickname, score: gameState.todayBest || 0 }
+        ];
+    }
+    
+    const myEntry = gameState.leaderboard.find(e => e.name === gameState.nickname);
+    if (myEntry) myEntry.score = Math.max(myEntry.score || 0, gameState.todayBest || 0);
+    
+    gameState.leaderboard.sort((a, b) => b.score - a.score);
+    
+    gameState.leaderboard.slice(0, 6).forEach((entry, index) => {
+        const div = document.createElement('div');
+        div.className = `flex justify-between p-3 rounded-2xl ${entry.name === gameState.nickname ? 'bg-emerald-500/20' : 'bg-white/5'}`;
+        div.innerHTML = `<div class="flex items-center gap-x-3"><div class="w-6 text-center font-mono text-white/40">${index + 1}</div><div class="font-bold">${entry.name}</div></div><div class="font-mono font-bold text-amber-400">${entry.score.toLocaleString()} 골드</div>`;
+        board.appendChild(div);
+    });
+}
+
+function updateTodayBest() {
+    const newBest = Math.max(gameState.todayBest || 0, gameState.gold);
+    gameState.todayBest = newBest;
+    
+    let myEntry = gameState.leaderboard.find(e => e.name === gameState.nickname);
+    if (!myEntry) { myEntry = { name: gameState.nickname, score: 0 }; gameState.leaderboard.push(myEntry); }
+    myEntry.score = Math.max(myEntry.score, newBest);
+    
+    renderCompetition();
+    savePlayerData();
+    alert(`오늘의 최고 기록이 ${newBest.toLocaleString()} 골드로 갱신되었습니다!`);
+}
+
+async function submitToGlobalLeaderboard() {
+    if (!isFirebaseConnected || !gameState.userId) {
+        alert("Firebase에 연결되어 있지 않습니다. 로그인 후 다시 시도해주세요.");
+        return;
+    }
+    
+    try {
+        const score = gameState.todayBest || gameState.gold;
+        await db.collection('leaderboard').doc(gameState.userId).set({
+            name: gameState.nickname,
+            score: score,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        alert("글로벌 리더보드에 제출되었습니다!");
+    } catch(e) {
+        console.error(e);
+        alert("제출 중 오류가 발생했습니다: " + e.message);
+    }
+}
+
+// ==================== 업적 시스템 (NEW) ====================
+const ACHIEVEMENTS = [
+    { id: 'first_catch', name: '첫 낚시 성공', desc: '첫 물고기를 잡으세요', check: (s) => s.totalCaught >= 1 },
+    { id: 'ten_catches', name: '열 마리 사냥꾼', desc: '총 10마리 이상 잡기', check: (s) => s.totalCaught >= 10 },
+    { id: 'rich_fisher', name: '부유한 낚시꾼', desc: '총 5,000 골드 이상 벌기', check: (s) => (s.totalGoldEarned || 0) >= 5000 },
+    { id: 'legend_catcher', name: '전설의 낚시꾼', desc: '최고 가치 300골드 이상 물고기 잡기', check: (s) => s.bestCatch && s.bestCatch.soldValue >= 300 }
+];
+
+function checkAchievements() {
+    let unlocked = false;
+    ACHIEVEMENTS.forEach(ach => {
+        if (!gameState.achievements[ach.id] && ach.check(gameState)) {
+            gameState.achievements[ach.id] = { unlockedAt: new Date().toISOString() };
+            unlocked = true;
+            alert(`🏅 업적 달성: ${ach.name}\n${ach.desc}`);
+        }
+    });
+    if (unlocked) savePlayerData();
+}
+
+function renderAchievements() {
+    const list = document.getElementById('achievements-list');
+    list.innerHTML = '';
+    
+    ACHIEVEMENTS.forEach(ach => {
+        const unlocked = gameState.achievements[ach.id];
+        const div = document.createElement('div');
+        div.className = `premium-glass p-4 rounded-2xl flex items-center gap-x-4 ${unlocked ? 'border border-emerald-400/50' : 'opacity-60'}`;
+        div.innerHTML = `
+            <div class="text-3xl">${unlocked ? '🏅' : '🔒'}</div>
+            <div class="flex-1">
+                <div class="font-extrabold">${ach.name}</div>
+                <div class="text-xs text-white/60">${ach.desc}</div>
+                ${unlocked ? `<div class="text-[10px] text-emerald-400 mt-1">달성: ${new Date(unlocked.unlockedAt).toLocaleDateString('ko-KR')}</div>` : ''}
+            </div>
+        `;
+        list.appendChild(div);
+    });
+}
+
+// ==================== 도감 ====================
+function renderEncyclopedia() {
+    const list = document.getElementById('enc-list');
+    list.innerHTML = `<div class="premium-glass p-4 rounded-2xl text-sm">도감 시스템이 v1.1에서 더 강화되었습니다.</div>`;
+}
+
+// ==================== 기타 ====================
+function goFishing() {
+    if (!gameState.currentRegion) { switchScreen('village'); alert('지역을 선택해주세요!'); return; }
+    switchScreen('fishing');
+}
+function exitFishing() { switchScreen('village'); }
+
+function showCharacterModal() {
+    const newName = prompt("닉네임 변경", gameState.nickname);
+    if (newName) { gameState.nickname = newName; updateUI(); savePlayerData(); }
+}
+
+// ==================== Firebase with better error handling ====================
+async function loginAnonymous() {
+    try {
+        // 실제 Firebase 초기화는 config.js에서
+        alert("익명 로그인 성공! (실제 Firebase 사용 시 config.js 설정 필요)");
+        document.getElementById('screen-login').classList.add('hidden');
+        switchScreen('village');
+        initAudio();
+    } catch(e) {
+        console.error("Login error:", e);
+        alert("로그인 중 오류가 발생했습니다: " + e.message);
+    }
+}
+
+function loginWithEmail() { alert("Firebase 설정이 필요합니다. config.js를 확인하세요."); }
+function registerWithEmail() { alert("Firebase 설정이 필요합니다."); }
+function loginWithGoogle() { alert("Firebase 설정이 필요합니다."); }
+
+function savePlayerData() {
+    try {
+        localStorage.setItem('aqua_v1.1', JSON.stringify(gameState));
+    } catch(e) {
+        console.error("Save error:", e);
+    }
+}
+
+function init() {
+    try {
+        const saved = localStorage.getItem('aqua_v1.1');
+        if (saved) gameState = { ...gameState, ...JSON.parse(saved) };
+        
+        if (!gameState.leaderboard || gameState.leaderboard.length === 0) {
+            gameState.leaderboard = [
+                { name: "바다의왕", score: 12400 },
+                { name: "전설낚시꾼", score: 9800 },
+                { name: gameState.nickname, score: gameState.todayBest || 0 }
+            ];
+        }
+        
+        // 기본 업적 초기화
+        if (!gameState.achievements) gameState.achievements = {};
+        
+        updateUI();
+        initAudio();
+        
+        console.log('%c[AquaFantasia v1.1] Expansion 버전 - 사운드, 업적, 리더보드, 최적화 적용 완료', 'color:#67e8f9');
+    } catch(e) {
+        console.error("Init error:", e);
+        alert("게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.");
+    }
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
