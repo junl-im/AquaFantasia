@@ -171,6 +171,10 @@ const requiredFiles = [
   'assets/art/v39_input_coach.svg',
   'assets/art/v39_button_plate.svg',
   'assets/art/v39_perf_tuner.svg',
+  'assets/art/v40_boss_ocean_theater.svg',
+  'assets/art/v40_boss_command.svg',
+  'assets/art/v40_action_button.svg',
+  'assets/art/v40_fish_track.svg',
   'assets/ui-kit/fishing_minigame/bobber_large.png',
   'assets/ui-kit/fishing_minigame/reel_bar_220px.png',
   'assets/ui-kit/fishing_minigame/tension_meter_120px.png',
@@ -193,7 +197,7 @@ for (const file of requiredFiles) {
 const index = readFileSync(join(root, 'index.html'), 'utf8');
 const sw = readFileSync(join(root, 'sw.js'), 'utf8');
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!index.includes("const APP_VERSION = '3.9.0'")) fail('APP_VERSION must be 3.9.0 for this patch.');
+if (!index.includes("const APP_VERSION = '4.0.0'")) fail('APP_VERSION must be 4.0.0 for this patch.');
 if (!index.includes('serviceWorker.register')) fail('PWA service worker registration is missing.');
 if (!index.includes('season-ranking-panel')) fail('Season ranking UI is missing.');
 if (!index.includes('weekly-reward-vault')) fail('Weekly reward vault UI is missing.');
@@ -283,7 +287,7 @@ if (manifest.display !== 'fullscreen') fail('manifest.webmanifest must use displ
 if (!Array.isArray(manifest.icons) || manifest.icons.length < 3) fail('manifest icons are incomplete.');
 
 const fish = JSON.parse(readFileSync(join(root, 'data/fish.json'), 'utf8'));
-if (!Array.isArray(fish.fish) || fish.fish.length < 170) fail('data/fish.json must include at least 170 fish entries.');
+if (!Array.isArray(fish.fish) || fish.fish.length < 174) fail('data/fish.json must include at least 170 fish entries.');
 const fishIds = new Set();
 for (const item of fish.fish) {
   if (!item.id || fishIds.has(item.id)) fail(`Invalid or duplicate fish id: ${item.id}`);
@@ -291,7 +295,7 @@ for (const item of fish.fish) {
   if (!item.region || !item.name || !item.rarity) fail(`Fish entry is incomplete: ${item.id}`);
 }
 
-if (!sw.includes('aqua-fantasia-v3.9.0')) fail('Service worker cache version was not updated.');
+if (!sw.includes('aqua-fantasia-v4.0.0')) fail('Service worker cache version was not updated.');
 
 const scripts = [...index.matchAll(/<script(?:\s+[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map((m) => m[1].trim())

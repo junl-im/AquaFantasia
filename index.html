@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Aqua Fantasia - v3.9 Grand Action Fishing - UI 키트 통합, 실전 낚시 액션감, 성능 튜닝">
+    <meta name="description" content="Aqua Fantasia - v4.0 Boss Action Fishing - UI 키트 통합, 실전 낚시 액션감, 성능 튜닝">
     <meta name="theme-color" content="#082f49">
     <meta name="color-scheme" content="dark">
     <meta name="mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
     <link rel="preload" as="image" href="assets/art/v38_action_ocean.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/art/v38_fishing_arena.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/art/v38_action_hud.svg" type="image/svg+xml">
-    <title>Aqua Fantasia • v3.9 Grand Action Fishing</title>
+    <title>Aqua Fantasia • v4.0 Boss Action Fishing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -1915,7 +1915,7 @@
         }
 
 
-        /* ==================== v3.9 Grand Action Fishing / UI Kit Integration ==================== */
+        /* ==================== v4.0 Boss Action Fishing / UI Kit Integration ==================== */
         body.ui-v39 #v30-smart-dock { display:none !important; }
         body.ui-v39[data-screen="fishing"] .top-bar-focus,
         body.ui-v39[data-screen="fishing"] .bottom-nav { display:none !important; }
@@ -2009,8 +2009,8 @@
             <div class="flex items-center gap-3 min-w-0">
                 <div class="top-logo-mark">🌊</div>
                 <div class="min-w-0">
-                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v3.9</span></div>
-                    <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Grand Action Fishing · 자동 몰입 · 실전 가이드</div>
+                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v4.0</span></div>
+                    <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Boss Action Fishing · 자동 몰입 · 실전 가이드</div>
                 </div>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
@@ -2041,7 +2041,7 @@
             <div class="text-center mb-10">
                 <div class="v37-login-emblem" aria-hidden="true"></div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-100/80 mt-2 font-bold">v3.9 Grand Action Fishing · 터치/릴/장력/성능 튜닝</p>
+                <p class="text-sky-100/80 mt-2 font-bold">v4.0 Boss Action Fishing · 터치/릴/장력/성능 튜닝</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="startLocalGuestGame()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">🎣 로컬 게스트로 바로 시작</button>
@@ -2277,6 +2277,11 @@
             </div>
             <div id="fishing-coach-panel" class="fishing-coach-panel"></div>
             <div id="v39-fishing-tuning" class="v39-fishing-tuning-panel"></div>
+            <div id="v40-settings-bar" class="v40-settings-bar">
+                <button onclick="cycleV40CombatDetail()">디테일 <span id="v40-detail-label">표준</span></button>
+                <button onclick="cycleV40CombatAssist()">조작 <span id="v40-assist-label">안내</span></button>
+                <button onclick="cycleV40CombatPerf()">성능 <span id="v40-perf-label">자동</span></button>
+            </div>
             <div id="fishing-visual" class="flex-1 mx-4 mt-3 mb-2 rounded-[2.5rem] overflow-hidden border border-white/10 relative">
                 <div class="absolute inset-0 bg-gradient-to-b from-[#0a3d5c] via-[#0f4c6b] to-[#0a3d5c]"></div>
                 <div class="fx-aurora" aria-hidden="true"></div>
@@ -2301,6 +2306,12 @@
                 </button>
                 <div id="v39-action-lane" class="v39-action-lane hidden" aria-hidden="true"><div class="v39-lane-title"><b id="v39-lane-rating">타이밍 대기</b><span id="v39-lane-help">GOOD/PERFECT 구간에서 릴!</span></div><div class="v39-skill-track"><i id="v39-perfect-zone"></i><em id="v39-timing-cursor"></em></div></div>
                 <div id="v39-fish-intent" class="v39-fish-intent hidden" aria-hidden="true">↔ 물고기 저항</div>
+                <div id="v40-battle-shell" class="v40-battle-shell" aria-hidden="true">
+                    <div id="v40-boss-command" class="v40-boss-command"><div><b id="v40-command-title">보스 패턴 대기</b><span id="v40-command-desc">텔레그래프를 보고 대응하세요.</span></div><em id="v40-command-badge">READY</em></div>
+                    <div id="v40-fish-track" class="v40-fish-track"><div id="v40-target-zone" class="v40-target-zone"></div><div id="v40-fish-marker" class="v40-fish-marker"></div></div>
+                    <div id="v40-telegraph" class="v40-telegraph"></div>
+                    <div id="v40-danger-sweep" class="v40-danger-sweep"></div>
+                </div>
                 <div id="action-float-layer" class="absolute inset-0 pointer-events-none z-50" aria-hidden="true"></div>
                 <div id="impact-layer" class="absolute inset-0 pointer-events-none z-40" aria-hidden="true"></div>
                 <div id="boss-overlay" class="boss-overlay" aria-hidden="true">
@@ -2333,6 +2344,12 @@
                     </div>
                     <div id="reel-timing-strip" class="reel-timing-strip"><span>SAFE</span><span>GOOD</span><span>DANGER</span></div>
                     <button id="reel-action-btn" onclick="reelAction()" class="reel-action-button"><span><img src="assets/ui-kit/icons/reel_progress.png" alt="" aria-hidden="true"> 릴 감기</span><small>커서가 GOOD/PERFECT 구간일 때 누르면 강력합니다</small></button>
+                    <div id="v40-reel-actions" class="v40-reel-actions hidden">
+                        <button class="release" onclick="releaseLineAction()">🟢 줄 풀기<br><small>장력 감소</small></button>
+                        <button class="charge" onclick="chargeReelAction()">🟡 차지 릴<br><small>게이지 폭발</small></button>
+                        <button class="dodge" onclick="dodgeBossAction()">🔵 돌진 회피<br><small>보스 대응</small></button>
+                    </div>
+                    <div id="v40-combat-tips" class="v40-combat-tips hidden"><span>붉은 경고=회피</span><span>장력 높음=줄 풀기</span><span>노란 창=차지 릴</span></div>
                 </div>
             </div>
         </div>
@@ -2671,7 +2688,7 @@ let graphicsMode = localStorage.getItem('aqua_graphics_mode') || (() => {
     return (mobileLike || saveData || lowMemory || lowCores) ? 'low' : 'high';
 })();
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '3.9.0';
+const APP_VERSION = '4.0.0';
 function versionAtLeast(minVersion) {
     const parse = (value) => String(value || '0').split('.').map((part) => Number(part) || 0);
     const current = parse(APP_VERSION);
@@ -5581,7 +5598,7 @@ window.runV38Action = runV38Action;
 window.renderV38ActionDirector = renderV38ActionDirector;
 
 
-// ==================== v3.9 Grand Action Fishing Runtime ====================
+// ==================== v4.0 Boss Action Fishing Runtime ====================
 const V39_ASSETS = [
     'assets/art/v39_fishing_grand_stage.svg',
     'assets/art/v39_fishing_director.svg',
@@ -5659,7 +5676,7 @@ function renderV39FishingDirector() {
     const mode = getFishingDetailLabel();
     const assist = getFishingAssistLabel();
     box.innerHTML = `<div class="v39-director-inner">
-        <div><div class="v39-kicker">GRAND ACTION FISHING 3.9 · UI KIT INTEGRATED</div><div class="v39-title">실전 낚시 손맛 개선</div><div class="v39-desc">입질 위치, 챔질 타이밍, 릴 GOOD/PERFECT 구간, 장력 위험을 한 화면에서 안내합니다. 모바일은 자동 절전과 런타임 캐시로 렉을 줄입니다.</div></div>
+        <div><div class="v39-kicker">BOSS ACTION FISHING 4.0 · BOSS PATTERN SYSTEM</div><div class="v39-title">보스 액션 낚시 확장</div><div class="v39-desc">입질 위치, 챔질 타이밍, 릴 GOOD/PERFECT, 줄 풀기, 차지 릴, 돌진 회피를 한 화면에서 안내합니다. 모바일은 자동 절전과 런타임 캐시로 렉을 줄입니다.</div></div>
         <div class="v39-flow"><button class="primary" onclick="runV39Action('fish')">🎣 실전 낚시<small>${escapeHTML(route?.region || gameState.currentRegion || '호수')} 추천</small></button><button onclick="runV39Action('bag')">🎒 정산<small>${plan.unsettledCount || 0}마리 판매 가능</small></button><button onclick="runV39Action('tune')">🎛️ 조작 설정<small>${escapeHTML(mode)} · ${escapeHTML(assist)}</small></button></div>
         <div class="v39-metrics"><div class="v39-metric"><b>${Number(getEquipmentScore() || 0).toLocaleString()}</b><span>장비</span></div><div class="v39-metric"><b>${Number(route?.readiness || 0)}%</b><span>준비도</span></div><div class="v39-metric"><b>${gameState.fishingOptions?.detail === 'performance' ? 'LOW' : gameState.fishingOptions?.detail === 'cinematic' ? 'HIGH' : 'MID'}</b><span>연출</span></div><div class="v39-metric"><b>${FISH_DATABASE.length}</b><span>어종</span></div></div>
     </div>`;
@@ -5736,6 +5753,7 @@ function getReelTimingRating() {
     return { grade:'OK', gain:1, relief:1 };
 }
 function hideV39FishingOverlays() {
+    resetV40CombatUI();
     ['v39-action-lane','v39-touch-radar','v39-fish-path','v39-fish-intent'].forEach((id) => document.getElementById(id)?.classList.add('hidden'));
     gameState.reelTiming = null;
 }
@@ -5744,6 +5762,208 @@ window.renderV39FishingDirector = renderV39FishingDirector;
 window.cycleFishingDetail = cycleFishingDetail;
 window.cycleFishingAssist = cycleFishingAssist;
 window.cycleFishingPerfLock = cycleFishingPerfLock;
+
+
+
+// ==================== v4.0 Boss Action Fishing / Combat System ====================
+function ensureV40CombatOptions() {
+    if (!gameState.v40Combat || typeof gameState.v40Combat !== 'object') {
+        gameState.v40Combat = { detail:'standard', assist:'guide', perf:'auto' };
+    }
+    if (!['simple','standard','cinematic'].includes(gameState.v40Combat.detail)) gameState.v40Combat.detail = 'standard';
+    if (!['guide','manual','expert'].includes(gameState.v40Combat.assist)) gameState.v40Combat.assist = 'guide';
+    if (!['auto','lite','high'].includes(gameState.v40Combat.perf)) gameState.v40Combat.perf = 'auto';
+    applyV40CombatOptions();
+}
+function applyV40CombatOptions() {
+    const c = gameState.v40Combat || {};
+    document.body.classList.add('ui-v40');
+    document.body.classList.toggle('v40-simple', c.detail === 'simple');
+    document.body.classList.toggle('v40-cinematic', c.detail === 'cinematic');
+    if (c.perf === 'lite') document.body.classList.add('perf-lite');
+    if (c.perf === 'high' && !isLowEndDevice()) document.body.classList.remove('perf-lite');
+    const detail = document.getElementById('v40-detail-label');
+    const assist = document.getElementById('v40-assist-label');
+    const perf = document.getElementById('v40-perf-label');
+    if (detail) detail.textContent = c.detail === 'simple' ? '간단' : c.detail === 'cinematic' ? '연출' : '표준';
+    if (assist) assist.textContent = c.assist === 'manual' ? '수동' : c.assist === 'expert' ? '전문' : '안내';
+    if (perf) perf.textContent = c.perf === 'lite' ? '절전' : c.perf === 'high' ? '고급' : '자동';
+}
+function cycleV40CombatDetail() {
+    ensureV40CombatOptions();
+    const order = ['simple','standard','cinematic'];
+    gameState.v40Combat.detail = order[(order.indexOf(gameState.v40Combat.detail) + 1) % order.length];
+    applyV40CombatOptions(); savePlayerData(false); haptic(8); showToast(`낚시 디테일: ${document.getElementById('v40-detail-label')?.textContent || '표준'}`, '🎛️');
+}
+function cycleV40CombatAssist() {
+    ensureV40CombatOptions();
+    const order = ['guide','manual','expert'];
+    gameState.v40Combat.assist = order[(order.indexOf(gameState.v40Combat.assist) + 1) % order.length];
+    applyV40CombatOptions(); savePlayerData(false); haptic(8); showToast(`조작 안내: ${document.getElementById('v40-assist-label')?.textContent || '안내'}`, '🎮');
+}
+function cycleV40CombatPerf() {
+    ensureV40CombatOptions();
+    const order = ['auto','lite','high'];
+    gameState.v40Combat.perf = order[(order.indexOf(gameState.v40Combat.perf) + 1) % order.length];
+    applyV40CombatOptions(); savePlayerData(false); haptic(8); showToast(`낚시 성능: ${document.getElementById('v40-perf-label')?.textContent || '자동'}`, '⚡');
+}
+function resetV40CombatUI() {
+    ['v40-boss-command','v40-fish-track','v40-telegraph','v40-danger-sweep','v40-reel-actions','v40-combat-tips'].forEach((id) => document.getElementById(id)?.classList.add('hidden'));
+    document.getElementById('v40-boss-command')?.classList.remove('active');
+    document.getElementById('v40-fish-track')?.classList.remove('active');
+    document.getElementById('v40-telegraph')?.classList.remove('active','safe');
+    document.getElementById('v40-danger-sweep')?.classList.remove('active');
+    gameState.v40Pattern = null;
+    gameState.v40Charge = 0;
+    gameState.v40FishPos = 50;
+    gameState.v40ZonePos = 50;
+}
+function showV40CombatUI(bossMode = false) {
+    document.getElementById('v40-fish-track')?.classList.add('active');
+    document.getElementById('v40-reel-actions')?.classList.remove('hidden');
+    document.getElementById('v40-combat-tips')?.classList.remove('hidden');
+    const command = document.getElementById('v40-boss-command');
+    if (command) command.classList.toggle('active', bossMode);
+    updateV40CombatHud(bossMode ? '보스전 시작' : '물고기 궤적 추적', bossMode ? '패턴을 보고 줄 풀기/회피/차지 릴을 선택하세요.' : '마커가 중앙 구간에 가까울 때 릴을 감으면 효율이 좋습니다.', bossMode ? 'BOSS' : 'TRACK');
+}
+function updateV40CombatHud(title, desc, badge) {
+    const t = document.getElementById('v40-command-title');
+    const d = document.getElementById('v40-command-desc');
+    const b = document.getElementById('v40-command-badge');
+    if (t) t.textContent = title;
+    if (d) d.textContent = desc;
+    if (b) b.textContent = badge;
+}
+function tickV40FishTrack(bossMode = false) {
+    const marker = document.getElementById('v40-fish-marker');
+    const zone = document.getElementById('v40-target-zone');
+    if (!marker || !zone) return;
+    marker.classList.toggle('boss', bossMode);
+    const species = gameState.pendingFish || {};
+    const rarity = Number(species.rarity || 1);
+    const speed = bossMode ? 5.5 + Number(species.bossPower || 1) * 1.2 : 2.8 + rarity * .35;
+    const drift = Math.sin(Date.now() / (bossMode ? 280 : 420)) * speed + (Math.random() - .5) * (bossMode ? 4.2 : 2.2);
+    gameState.v40FishPos = clamp(Number(gameState.v40FishPos || 50) + drift, 10, 90);
+    if (Math.random() < (bossMode ? .10 : .045)) gameState.v40ZonePos = clamp(50 + (Math.random() - .5) * (bossMode ? 34 : 22), 16, 84);
+    marker.style.left = `${gameState.v40FishPos}%`;
+    zone.style.left = `${gameState.v40ZonePos}%`;
+}
+function getV40TrackBonus() {
+    const dist = Math.abs(Number(gameState.v40FishPos || 50) - Number(gameState.v40ZonePos || 50));
+    if (dist <= 4) return { grade:'TRACK PERFECT', gain:1.22, relief:1.12 };
+    if (dist <= 11) return { grade:'TRACK GOOD', gain:1.08, relief:1.04 };
+    if (dist >= 32) return { grade:'OUT OF LINE', gain:.86, relief:.84, tensionPenalty:2.4 };
+    return { grade:'TRACK OK', gain:1, relief:1 };
+}
+function openV40Telegraph(type = 'surge', duration = 900) {
+    const tele = document.getElementById('v40-telegraph');
+    const sweep = document.getElementById('v40-danger-sweep');
+    if (!tele) return;
+    const x = 28 + Math.random() * 44;
+    const y = 30 + Math.random() * 34;
+    tele.style.setProperty('--tx', `${x}%`);
+    tele.style.setProperty('--ty', `${y}%`);
+    tele.classList.toggle('safe', type === 'counter');
+    tele.classList.add('active');
+    if (sweep && type === 'surge') { sweep.classList.remove('active'); void sweep.offsetWidth; sweep.classList.add('active'); }
+    gameState.v40Pattern = { type, until: Date.now() + duration, answered:false };
+    if (type === 'surge') updateV40CombatHud('돌진 경고!', '붉은 파동이 보이면 회피하거나 줄을 풀어 장력을 낮추세요.', 'DODGE');
+    if (type === 'counter') updateV40CombatHud('카운터 창!', '지금 차지 릴을 누르면 보스 게이지를 크게 밀어냅니다.', 'CHARGE');
+    if (type === 'tension') updateV40CombatHud('장력 폭주!', '줄 풀기를 눌러 장력을 먼저 낮추세요.', 'RELEASE');
+    runFishingTimer(() => {
+        if (gameState.v40Pattern && Date.now() >= gameState.v40Pattern.until) {
+            resolveV40PatternTimeout();
+        }
+    }, duration + 30);
+}
+function resolveV40PatternTimeout() {
+    const pattern = gameState.v40Pattern;
+    const tele = document.getElementById('v40-telegraph');
+    const sweep = document.getElementById('v40-danger-sweep');
+    if (!pattern) return;
+    if (!pattern.answered && pattern.type === 'surge') {
+        gameState.tension = Math.min(100, Number(gameState.tension || 0) + 12);
+        gameState.reelProgress = Math.max(0, Number(gameState.reelProgress || 0) - 4);
+        createActionFloat('돌진 피격!', 'danger');
+        haptic([20,30,20]);
+    }
+    if (!pattern.answered && pattern.type === 'tension') {
+        gameState.tension = Math.min(100, Number(gameState.tension || 0) + 8);
+        createActionFloat('장력 폭주!', 'danger');
+    }
+    tele?.classList.remove('active','safe');
+    sweep?.classList.remove('active');
+    gameState.v40Pattern = null;
+    updateReelUI();
+}
+function answerV40Pattern(kind) {
+    const pattern = gameState.v40Pattern;
+    if (!pattern) return false;
+    let matched = false;
+    if (pattern.type === 'surge' && kind === 'dodge') matched = true;
+    if (pattern.type === 'tension' && kind === 'release') matched = true;
+    if (pattern.type === 'counter' && kind === 'charge') matched = true;
+    pattern.answered = true;
+    document.getElementById('v40-telegraph')?.classList.remove('active','safe');
+    document.getElementById('v40-danger-sweep')?.classList.remove('active');
+    gameState.v40Pattern = null;
+    if (matched) { createActionFloat('PATTERN BREAK!', 'combo'); createImpactBurst('counter'); haptic([8,18,8]); }
+    else { createActionFloat('대응 빗나감', 'danger'); gameState.tension = Math.min(100, Number(gameState.tension || 0) + 5); }
+    return matched;
+}
+function releaseLineAction() {
+    if (!gameState.isFishing || !gameState.pendingFish) return;
+    const matched = answerV40Pattern('release');
+    const relief = matched ? 22 : 13;
+    gameState.tension = Math.max(3, Number(gameState.tension || 0) - relief);
+    gameState.reelProgress = Math.max(0, Number(gameState.reelProgress || 0) - (matched ? 1.2 : 3.8));
+    createActionFloat(matched ? '완벽한 줄 풀기!' : '줄 풀기', 'combo');
+    playSound('reel'); haptic(10); updateReelUI();
+}
+function chargeReelAction() {
+    if (!gameState.isFishing || !gameState.pendingFish) return;
+    const matched = answerV40Pattern('charge');
+    const track = getV40TrackBonus();
+    const base = matched ? 21 : 11;
+    gameState.reelProgress = Math.min(100, Number(gameState.reelProgress || 0) + base * track.gain);
+    gameState.tension = Math.min(100, Number(gameState.tension || 0) + (matched ? 2 : 8));
+    createActionFloat(matched ? 'CHARGE BREAK!' : '차지 릴!', matched ? 'combo' : 'info');
+    createImpactBurst('counter'); playSound(matched ? 'counter' : 'reel'); haptic([10,12,10]); updateReelUI();
+    if (gameState.reelProgress >= 100) { clearInterval(gameState.reelInterval); endReelGame(true); }
+}
+function dodgeBossAction() {
+    if (!gameState.isFishing || !gameState.pendingFish) return;
+    const matched = answerV40Pattern('dodge');
+    if (matched) {
+        gameState.tension = Math.max(4, Number(gameState.tension || 0) - 18);
+        gameState.reelProgress = Math.min(100, Number(gameState.reelProgress || 0) + 6);
+        createActionFloat('회피 성공!', 'combo');
+    } else {
+        gameState.tension = Math.min(100, Number(gameState.tension || 0) + 7);
+        createActionFloat('헛회피', 'danger');
+    }
+    haptic(matched ? [8,10,8] : 18); updateReelUI();
+}
+function tickV40BossActionLoop(bossMode = false) {
+    tickV40FishTrack(bossMode);
+    if (!bossMode) return;
+    const species = gameState.pendingFish || {};
+    const power = Number(species.bossPower || 1);
+    const current = gameState.v40Pattern;
+    if (current && Date.now() < Number(current.until || 0)) return;
+    const roll = Math.random();
+    const threshold = 0.028 + Math.min(.03, power * .008);
+    if (roll < threshold) {
+        const type = roll < threshold * .42 ? 'surge' : roll < threshold * .73 ? 'tension' : 'counter';
+        openV40Telegraph(type, type === 'counter' ? 820 : 1080);
+    }
+}
+window.releaseLineAction = releaseLineAction;
+window.chargeReelAction = chargeReelAction;
+window.dodgeBossAction = dodgeBossAction;
+window.cycleV40CombatDetail = cycleV40CombatDetail;
+window.cycleV40CombatAssist = cycleV40CombatAssist;
+window.cycleV40CombatPerf = cycleV40CombatPerf;
 
 function renderLegacyDirectorPanelsIfNeeded(force = false) {
     const archive = document.getElementById('director-archive');
@@ -5770,6 +5990,7 @@ function initDirectorArchivePerformanceGate() {
 
 // ==================== UI ====================
 function updateUI() {
+    ensureV40CombatOptions();
     gameState.nickname = sanitizeNickname(gameState.nickname);
     document.getElementById('gold-display').textContent = Number(gameState.gold || 0).toLocaleString();
     document.getElementById('level-display').textContent = Number(gameState.level || 1);
@@ -6077,7 +6298,7 @@ function getFishingPhaseText(phase) {
     if (phase === 'ready') return { title:'STEP 1 · 낚싯대 던지기', desc:`${region}에서 시작하려면 아래 큰 버튼을 누르세요.` };
     if (phase === 'casting') return { title:'STEP 2 · 입질 대기', desc:'수면을 보다가 큰 원이 뜨면 그 위치를 터치하세요.' };
     if (phase === 'bite') return { title:'STEP 3 · 물었다!', desc:'화면의 빛나는 원을 지금 터치하세요.' };
-    if (phase === 'reel') return { title:'STEP 4 · 릴 감기', desc:'버튼 또는 수면을 빠르게 터치해 포획 게이지를 채우세요.' };
+    if (phase === 'reel') return { title:'STEP 4 · 액션 릴', desc:'GOOD/PERFECT 타이밍에 릴, 장력 높으면 줄 풀기, 붉은 경고는 회피하세요.' };
     if (phase === 'success') return { title:'포획 성공', desc:'물고기는 가방에 보관됩니다. 가방에서 판매하세요.' };
     if (phase === 'fail') return { title:'놓쳤어요', desc:'장력이 높으면 실패합니다. 장비 강화 후 다시 도전하세요.' };
     return { title:'낚시 준비', desc:'낚싯대를 던져 첫 입질을 기다리세요.' };
@@ -6098,6 +6319,7 @@ function setFishingPhase(phase, detail = '') {
     if (status && phase === 'ready') status.textContent = '낚싯대를 던질 준비 완료';
 }
 function resetFishingActionUI() {
+    resetV40CombatUI();
     const visual = document.getElementById('fishing-visual');
     if (visual) {
         visual.onclick = null;
@@ -6271,6 +6493,7 @@ function startReelGame() {
     const stats = getEquipmentStats();
     const bossMode = isBossFish(species);
     const bossPower = Number(species?.bossPower || 1);
+    ensureV40CombatOptions();
 
     haptic(bossMode ? [18, 35, 18] : 12);
     if (bossMode) activateBossEncounter(species);
@@ -6288,6 +6511,7 @@ function startReelGame() {
     gameState.reelProgress = Math.max(bossMode ? 2 : 5, 12 - rarity + stats.powerBonus * 16 - (bossMode ? bossPower * 2.4 : 0));
     gameState.tension = Math.max(bossMode ? 22 : 5, 18 + rarity * 4 - stats.tensionRelief + (bossMode ? bossPower * 7.8 : 0));
     renderBossPhasePanel();
+    showV40CombatUI(bossMode);
     initReelTimingLane(species);
     updateReelUI();
 
@@ -6295,6 +6519,7 @@ function startReelGame() {
 
     gameState.reelInterval = setInterval(() => {
         tickReelTimingLane();
+        tickV40BossActionLoop(bossMode);
         const loopStats = getEquipmentStats();
         const pressureMult = bossMode ? (1.12 + bossPower * .20) : 1;
         gameState.tension += (1.0 + rarity * 0.24) * pressureMult * Math.max(.58, 1 - loopStats.tensionControl);
@@ -6333,10 +6558,14 @@ function reelAction() {
     const stats = getEquipmentStats();
     const bossMode = isBossFish(species);
     const timing = getReelTimingRating();
-    let gain = Math.max(5.2, 9.4 - rarity * 0.45) * (1 + stats.powerBonus) * timing.gain;
-    let relief = (Math.max(6, 11 - rarity * 0.45) + stats.tensionRelief) * timing.relief;
+    const trackBonus = getV40TrackBonus();
+    let gain = Math.max(5.2, 9.4 - rarity * 0.45) * (1 + stats.powerBonus) * timing.gain * trackBonus.gain;
+    let relief = (Math.max(6, 11 - rarity * 0.45) + stats.tensionRelief) * timing.relief * trackBonus.relief;
+    if (trackBonus.tensionPenalty) gameState.tension += trackBonus.tensionPenalty;
     if (timing.tensionPenalty) gameState.tension += timing.tensionPenalty;
     updateReelTimingLaneUI(timing.grade);
+    if (trackBonus.grade === 'TRACK PERFECT') createActionFloat('궤적 PERFECT!', 'combo');
+    else if (trackBonus.grade === 'OUT OF LINE') createActionFloat('라인 이탈!', 'danger');
     if (timing.grade === 'PERFECT') { createActionFloat('PERFECT!', 'combo'); createImpactBurst('counter'); haptic([8,10,8]); }
     else if (timing.grade === 'GOOD') createActionFloat('GOOD!', 'combo');
     else if (timing.grade === 'DANGER') createActionFloat('위험 릴!', 'danger');
@@ -7705,7 +7934,7 @@ function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
         const json = JSON.stringify(plain);
-        ['aqua_v3.9', 'aqua_v3.8', 'aqua_latest_state'].forEach((key) => localStorage.setItem(key, json)); // 성능 보호: 과거 전체 버전 키 반복 저장 제거
+        ['aqua_v4.0', 'aqua_v3.9', 'aqua_latest_state'].forEach((key) => localStorage.setItem(key, json)); // 성능 보호: 과거 전체 버전 키 반복 저장 제거
         setCloudSaveStatus('ok', '로컬 저장됨');
 
         if (syncCloud && isFirebaseConnected && gameState.userId && window.AquaFirebase) {
@@ -7952,7 +8181,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v3.9') || localStorage.getItem('aqua_v3.8') || localStorage.getItem('aqua_v3.7') || localStorage.getItem('aqua_v3.6.4') || localStorage.getItem('aqua_v3.6.3') || localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v4.0') || localStorage.getItem('aqua_v3.9') || localStorage.getItem('aqua_v3.8') || localStorage.getItem('aqua_v3.7') || localStorage.getItem('aqua_v3.6.4') || localStorage.getItem('aqua_v3.6.3') || localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) {
             const parsed = JSON.parse(saved);
             if (isDemoSeedState(parsed)) {
@@ -8008,10 +8237,10 @@ async function init() {
         if (shouldEnterGame) switchScreen('village');
         else showLoginScreen();
         
-        console.log('%c[AquaFantasia v3.9] Grand Action Fishing Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v4.0] Boss Action Fishing Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
-        alert('게임 초기화 중 오류가 발생했습니다. v3.9 그랜드 액션 낚시 패치가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
+        alert('게임 초기화 중 오류가 발생했습니다. v4.0 그랜드 액션 낚시 패치가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
     }
 }
 
