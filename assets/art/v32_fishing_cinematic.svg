@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-label="Aqua Fantasia v32_fishing_cinematic.svg">
+<defs>
+<linearGradient id="sea" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#082f49"/><stop offset=".48" stop-color="#075985"/><stop offset="1" stop-color="#020617"/></linearGradient>
+<radialGradient id="glow" cx="50%" cy="20%" r="65%"><stop offset="0" stop-color="#67e8f9" stop-opacity=".52"/><stop offset=".55" stop-color="#38bdf8" stop-opacity=".12"/><stop offset="1" stop-color="#020617" stop-opacity="0"/></radialGradient>
+<filter id="soft"><feGaussianBlur stdDeviation="10"/></filter>
+</defs>
+<rect width="1200" height="720" fill="url(#sea)"/>
+<rect width="1200" height="720" fill="url(#glow)"/>
+
+<circle cx="580" cy="210" r="280" fill="#67e8f9" opacity=".11" filter="url(#soft)"/>
+<path d="M0 520 C190 430 320 570 510 500 S850 420 1200 530 V720 H0Z" fill="#020617" opacity=".55"/>
+<path d="M210 130 C390 250 640 245 830 120" fill="none" stroke="#e0f2fe" stroke-width="6" opacity=".18"/>
+<path d="M450 395 C555 320 720 340 840 425 C690 490 545 485 450 395Z" fill="#0f172a" opacity=".72"/>
+<path d="M835 425 L990 350 L955 505Z" fill="#0f172a" opacity=".65"/>
+<circle cx="535" cy="392" r="9" fill="#67e8f9" opacity=".8"/>
+</svg>

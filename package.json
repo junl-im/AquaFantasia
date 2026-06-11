@@ -1,9 +1,10 @@
 {
   "name": "aqua-fantasia-static",
-  "version": "2.8.0",
+  "version": "3.4.0",
   "private": true,
   "type": "module",
   "scripts": {
     "validate": "node tools/validate-static.mjs"
-  }
+  },
+  "description": "Aqua Fantasia static mobile web game - v3.4 Abyss Canvas Mega Refresh"
 }

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1800" viewBox="0 0 1200 1800">
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#093a5b"/><stop offset="0.45" stop-color="#062844"/><stop offset="1" stop-color="#020617"/></linearGradient>
+    <radialGradient id="glow" cx="50%" cy="18%" r="62%"><stop stop-color="#67e8f9" stop-opacity=".34"/><stop offset=".55" stop-color="#2563eb" stop-opacity=".10"/><stop offset="1" stop-color="#020617" stop-opacity="0"/></radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="shine"><feGaussianBlur stdDeviation="4"/><feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0.08  0 0 1 0 0.18  0 0 0 .75 0"/></filter>
+    
+  </defs>
+  <rect width="100%" height="100%" fill="url(#sea)"/>
+  <rect width="100%" height="100%" fill="url(#glow)"/>
+  
+  <g opacity=".16" stroke="#e0f2fe" stroke-width="1"><path d="M80 0V1800M240 0V1800M400 0V1800M560 0V1800M720 0V1800M880 0V1800M1040 0V1800"/><path d="M0 180H1200M0 360H1200M0 540H1200M0 720H1200M0 900H1200M0 1080H1200M0 1260H1200M0 1440H1200M0 1620H1200"/></g>
+  <g opacity=".22" fill="#67e8f9"><path d="M0 1120 C240 1050 390 1180 610 1110 C820 1042 960 1110 1200 1030 V1800 H0Z"/></g>
+
+</svg>

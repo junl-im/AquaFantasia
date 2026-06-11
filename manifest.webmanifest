@@ -1,11 +1,11 @@
 {
-  "name": "Aqua Fantasia v2.8",
-  "short_name": "Aqua v2.8",
-  "description": "Aqua Fantasia - 가방, 판매, 지역 해금, 밸런스 코치가 정리된 모바일 낚시 RPG",
+  "name": "Aqua Fantasia v3.4",
+  "short_name": "Aqua v3.4",
+  "description": "Aqua Fantasia - Abyss Canvas 3.4 mega design polish, mobile-first fishing RPG",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "./?app=aqua-fantasia-v28",
-  "start_url": "./?source=pwa&fullscreen=1&route=1&inventory=1",
+  "id": "./?app=aqua-fantasia-v34",
+  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=3.4",
   "scope": "./",
   "display": "fullscreen",
   "display_override": [
@@ -15,7 +15,7 @@
   ],
   "orientation": "portrait",
   "background_color": "#020617",
-  "theme_color": "#082f49",
+  "theme_color": "#03111f",
   "categories": [
     "games",
     "entertainment"
@@ -41,6 +41,30 @@
     }
   ],
   "shortcuts": [
+    {
+      "name": "어비스 캔버스",
+      "short_name": "캔버스",
+      "description": "v3.4 핵심 추천과 비주얼 캔버스 열기",
+      "url": "./?shortcut=abyss-canvas",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "넥서스 포지",
+      "short_name": "넥서스",
+      "description": "추천 행동과 대형 UI 요약 확인",
+      "url": "./?shortcut=nexus",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
     {
       "name": "낚시 시작",
       "short_name": "낚시",
@@ -94,6 +118,18 @@
       "short_name": "가방",
       "description": "판매 추천과 보관 어종 확인",
       "url": "./?shortcut=inventory",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "오션 디렉터",
+      "short_name": "디렉터",
+      "description": "추천 행동과 성장 요약 확인",
+      "url": "./?shortcut=director",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",

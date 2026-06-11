@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-label="Aqua Fantasia v32_route_panorama_deep.svg">
+<defs>
+<linearGradient id="sea" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#082f49"/><stop offset=".48" stop-color="#075985"/><stop offset="1" stop-color="#020617"/></linearGradient>
+<radialGradient id="glow" cx="50%" cy="20%" r="65%"><stop offset="0" stop-color="#67e8f9" stop-opacity=".52"/><stop offset=".55" stop-color="#38bdf8" stop-opacity=".12"/><stop offset="1" stop-color="#020617" stop-opacity="0"/></radialGradient>
+<filter id="soft"><feGaussianBlur stdDeviation="10"/></filter>
+</defs>
+<rect width="1200" height="720" fill="url(#sea)"/>
+<rect width="1200" height="720" fill="url(#glow)"/>
+<rect width="1200" height="720" fill="#111827" opacity=".55"/><circle cx="920" cy="150" r="230" fill="#a78bfa" opacity=".18" filter="url(#soft)"/><path d="M0 520 C220 430 340 580 560 500 S870 420 1200 535 V720 H0Z" fill="#020617" opacity=".45"/><text x="90" y="160" fill="#e0f2fe" opacity=".55" font-size="46" font-family="sans-serif" font-weight="800">심해 협곡</text><path d="M120 340 C280 260 420 355 560 285 S850 220 1040 310" fill="none" stroke="#a78bfa" stroke-width="5" opacity=".25"/>
+</svg>

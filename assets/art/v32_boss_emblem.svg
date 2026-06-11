@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-label="Aqua Fantasia v32_boss_emblem.svg">
+<defs>
+<linearGradient id="sea" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#082f49"/><stop offset=".48" stop-color="#075985"/><stop offset="1" stop-color="#020617"/></linearGradient>
+<radialGradient id="glow" cx="50%" cy="20%" r="65%"><stop offset="0" stop-color="#67e8f9" stop-opacity=".52"/><stop offset=".55" stop-color="#38bdf8" stop-opacity=".12"/><stop offset="1" stop-color="#020617" stop-opacity="0"/></radialGradient>
+<filter id="soft"><feGaussianBlur stdDeviation="10"/></filter>
+</defs>
+<rect width="1200" height="720" fill="url(#sea)"/>
+<rect width="1200" height="720" fill="url(#glow)"/>
+
+<path d="M600 90 L760 250 L1110 280 L845 505 L930 655 L600 565 L270 655 L355 505 L90 280 L440 250Z" fill="#7f1d1d" opacity=".35" stroke="#facc15" stroke-width="8"/>
+<circle cx="600" cy="360" r="150" fill="#020617" opacity=".58" stroke="#67e8f9" stroke-width="5"/>
+<path d="M470 360 C535 270 665 270 730 360 C655 445 540 445 470 360Z" fill="#fb7185" opacity=".28"/>
+<circle cx="600" cy="350" r="34" fill="#facc15" opacity=".72"/>
+</svg>

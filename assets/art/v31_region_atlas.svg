@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1800" viewBox="0 0 1200 1800">
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#093a5b"/><stop offset="0.45" stop-color="#062844"/><stop offset="1" stop-color="#020617"/></linearGradient>
+    <radialGradient id="glow" cx="50%" cy="18%" r="62%"><stop stop-color="#67e8f9" stop-opacity=".34"/><stop offset=".55" stop-color="#2563eb" stop-opacity=".10"/><stop offset="1" stop-color="#020617" stop-opacity="0"/></radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="shine"><feGaussianBlur stdDeviation="4"/><feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0.08  0 0 1 0 0.18  0 0 0 .75 0"/></filter>
+    
+  </defs>
+  <rect width="100%" height="100%" fill="url(#sea)"/>
+  <rect width="100%" height="100%" fill="url(#glow)"/>
+  
+  <g opacity=".25" stroke="#bae6fd" stroke-width="5" fill="none"><path d="M120 320 C260 200 420 270 520 390 S760 540 900 420 S1050 320 1110 500"/><path d="M190 780 C390 650 540 780 690 760 S920 630 1060 780"/><path d="M120 1180 C340 1010 540 1170 720 1120 S990 1010 1110 1200"/></g>
+  <g fill="#facc15" opacity=".5"><circle cx="520" cy="390" r="12"/><circle cx="690" cy="760" r="12"/><circle cx="720" cy="1120" r="12"/></g>
+
+</svg>
