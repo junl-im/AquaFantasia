@@ -1,0 +1,71 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function validNickname(name) {
+      return name is string && name.size() > 0 && name.size() <= 24;
+    }
+
+    function validUserProfile(userId) {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['uid', 'nickname', 'gold', 'level', 'state', 'createdAt', 'updatedAt'])
+        && d.uid == userId
+        && validNickname(d.nickname)
+        && d.gold is number && d.gold >= 0 && d.gold <= 999999999
+        && d.level is number && d.level >= 1 && d.level <= 9999;
+    }
+
+    function validLeaderboardEntry(userId) {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['uid', 'name', 'score', 'level', 'updatedAt'])
+        && d.uid == userId
+        && validNickname(d.name)
+        && d.score is number && d.score >= 0 && d.score <= 999999999
+        && d.level is number && d.level >= 1 && d.level <= 9999;
+    }
+
+    // 개인 저장 데이터: 본인만 읽기/쓰기
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId) && validUserProfile(userId);
+      allow delete: if isOwner(userId);
+    }
+
+    // 글로벌 리더보드: 로그인 사용자는 읽기 가능, 자기 점수만 쓰기 가능
+    match /leaderboard/{userId} {
+      allow read: if signedIn();
+      allow create, update: if isOwner(userId) && validLeaderboardEntry(userId);
+      allow delete: if isOwner(userId);
+    }
+
+    // 향후 도감/어종 마스터 데이터: 공개 읽기, 클라이언트 쓰기 금지
+    match /fish/{fishId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // 거래소/길드는 아직 서버 검증 로직 전까지 쓰기 금지
+    match /market/{itemId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /guilds/{guildId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    // 명시하지 않은 모든 컬렉션 차단
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

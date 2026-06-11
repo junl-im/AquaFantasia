@@ -1,47 +1,43 @@
-# Aqua Fantasia - Development v1.1 Expansion
+# AquaFantasia
 
-**지속적인 대규모 개발 버전**
+웹 모바일 낚시 RPG **AquaFantasia** 개발 버전입니다.
 
-## 이번 업데이트 방향
+- 정적 웹앱: `index.html` 단일 실행
+- 배포: GitHub Pages
+- 백엔드: Firebase Authentication + Cloud Firestore
+- 로그인: 익명, 이메일/비밀번호, Google
+- 저장: localStorage + Firestore `users/{uid}`
+- 랭킹: Firestore `leaderboard/{uid}`
 
-### 추가된 / 강화된 내용
-- **더 많은 일러스트 에셋 준비 구조** (추가 생성 가이드 포함)
-- **실제 글로벌 리더보드** Firebase Firestore 기반 실시간 랭킹 스켈레톤
-- **업적 시스템** 기초 구현 (통계 기반 자동 해금)
-- **사운드 시스템** Web Audio API 기본 효과음 (캐스팅, 바이트, 성공, 실패)
-- **버그/에러 처리** 강화 (Firebase 에러 핸들링, 데이터 검증)
-- **성능 최적화** (불필요한 DOM 조작 최소화, localStorage 최적화)
-- **디자인/그래픽 진화** (더 세련된 글래스모피즘, 애니메이션 타이밍 개선, 일러스트 통합 강화)
-- **코드 품질** 주석 대폭 추가, 구조 정리
+## 실행
 
-## 앞으로의 개발 로드맵 제안
+브라우저에서 `index.html`을 열거나 GitHub Pages로 배포하세요.
 
-1. **에셋 파이프라인**
-   - 더 많은 지역 배경, 물고기 일러스트, UI 아이콘 생성
-   - WebP 변환 자동화
+## Firebase 설정
 
-2. **글로벌 리더보드 완성**
-   - Firestore `leaderboard` 컬렉션 + 실시간 리스너
-   - 점수 제출 + 상위 50위 표시
+자세한 설정은 `FIREBASE_SETUP_GITHUB_DESKTOP.md`를 참고하세요.
 
-3. **업적 시스템 확장**
-   - 더 많은 업적 (지역별, 희귀도별, 연속 낚시 등)
-   - 업적 보상 (골드, 코스튬 포인트)
+필수 콘솔 작업:
 
-4. **사운드 고도화**
-   - BGM (배경음악)
-   - 더 다양한 효과음
-   - 볼륨 조절 UI
+1. Authentication에서 Anonymous, Email/Password, Google 활성화
+2. Authorized domains에 `junl-im.github.io` 추가
+3. Firestore Database 생성
+4. `firestore.rules` 내용을 Rules에 반영
 
-5. **성능 & 품질**
-   - Canvas 기반 낚시 미니게임으로 전환 검토 (더 부드러운 애니메이션)
-   - 이미지 지연 로딩
-   - PWA 완성 (오프라인 지원 강화)
+## 폴더
 
-## 사용 방법
-- `index.html` 실행
-- Firebase 사용 시 `firebase/config.js` 생성 후 설정
-- GitHub Desktop으로 지속 관리 추천
+```text
+assets/images/   게임 이미지
+css/             향후 분리용
+js/              향후 분리용
+data/            어종/지역 JSON 확장용
+firebase/        Firebase 관련 문서/확장용
+```
 
-이 버전부터는 **지속적인 확장**을 염두에 두고 개발했습니다.
-필요한 부분을 우선순위로 말씀해 주세요!
+## 다음 개발 우선순위
+
+1. 어종 데이터를 `data/fish.json`으로 분리
+2. 지역별 확률 테이블 추가
+3. 리더보드 시즌제 도입
+4. PWA manifest/service worker 추가
+5. 거래소와 길드는 Cloud Functions 또는 검증 로직 설계 후 오픈

@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aqua Fantasia • Dev v1.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
         body { font-family: 'Noto Sans KR', system-ui, sans-serif; }
         .ocean-deep { background: linear-gradient(180deg, #0a3d5c 0%, #0f4c6b 100%); }
@@ -197,8 +195,87 @@
     </div>
 </div>
 
+<script type="module">
+// ==================== Firebase v12 Modular SDK ====================
+// GitHub Pages + Firebase 무료 플랜용 정적 웹앱 설정입니다.
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import { getAnalytics, isSupported as isAnalyticsSupported } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
+import {
+    getAuth,
+    signInAnonymously,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    collection,
+    query,
+    orderBy,
+    limit,
+    onSnapshot,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDDXIaFpwPZPI_YKvZ8E0nxjTea1813Ij4",
+    authDomain: "fishing-game-71e8b.firebaseapp.com",
+    projectId: "fishing-game-71e8b",
+    storageBucket: "fishing-game-71e8b.firebasestorage.app",
+    messagingSenderId: "576322657158",
+    appId: "1:576322657158:web:024fd944576af07131ea07",
+    measurementId: "G-P6PRSGCK1L"
+};
+
+try {
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const googleProvider = new GoogleAuthProvider();
+    googleProvider.setCustomParameters({ prompt: "select_account" });
+
+    let analytics = null;
+    isAnalyticsSupported().then((supported) => {
+        if (supported) analytics = getAnalytics(app);
+    }).catch(() => {});
+
+    window.AquaFirebase = {
+        app,
+        analytics,
+        auth,
+        db,
+        googleProvider,
+        signInAnonymously,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        signInWithPopup,
+        onAuthStateChanged,
+        signOut,
+        doc,
+        getDoc,
+        setDoc,
+        collection,
+        query,
+        orderBy,
+        limit,
+        onSnapshot,
+        serverTimestamp
+    };
+    window.dispatchEvent(new CustomEvent("aqua-firebase-ready"));
+} catch (error) {
+    console.error("Firebase init error:", error);
+    window.dispatchEvent(new CustomEvent("aqua-firebase-error", { detail: error }));
+}
+</script>
+
 <script>
-// ==================== v1.1 EXPANSION VERSION ====================
+// ==================== v1.1 EXPANSION VERSION / Firebase Ready ====================
 let gameState = {
     gold: 1240, level: 12, exp: 870, expToNext: 1000,
     inventory: [], discovered: new Set(),
@@ -212,6 +289,25 @@ let gameState = {
 
 let isFirebaseConnected = false;
 let audioContext;
+let firebaseListenerStarted = false;
+let leaderboardUnsubscribe = null;
+let cloudSaveTimer = null;
+
+function setFirebaseStatus(mode, text) {
+    const el = document.getElementById('firebase-status');
+    if (!el) return;
+    const color = mode === 'ok' ? '#22c55e' : mode === 'error' ? '#ef4444' : '#facc15';
+    el.innerHTML = `<div style="width:6px;height:6px;background:${color};border-radius:9999px"></div><span class="font-medium">${text}</span>`;
+}
+
+function waitForFirebase(timeoutMs = 7000) {
+    if (window.AquaFirebase) return Promise.resolve(window.AquaFirebase);
+    return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => reject(new Error('Firebase SDK 로딩 시간이 초과되었습니다.')), timeoutMs);
+        window.addEventListener('aqua-firebase-ready', () => { clearTimeout(timer); resolve(window.AquaFirebase); }, { once: true });
+        window.addEventListener('aqua-firebase-error', (e) => { clearTimeout(timer); reject(e.detail || new Error('Firebase 초기화 실패')); }, { once: true });
+    });
+}
 
 // ==================== SOUND SYSTEM (NEW) ====================
 function initAudio() {
@@ -326,10 +422,16 @@ function castLine() {
         status.innerHTML = `<span class="text-rose-400 font-extrabold">🎣 물었다! 탭해서 낚아채세요</span>`;
         
         const visual = document.getElementById('fishing-visual');
-        visual.onclick = () => { visual.onclick = null; startReelGame(); };
+        gameState.currentFish = { hookedAt: Date.now() };
+        visual.onclick = () => {
+            visual.onclick = null;
+            gameState.currentFish = null;
+            startReelGame();
+        };
         
         setTimeout(() => {
             if (gameState.currentFish) {
+                gameState.currentFish = null;
                 visual.onclick = null;
                 status.textContent = '아쉽게 놓쳤어요...';
                 setTimeout(() => { castBtn.style.display = 'flex'; status.textContent = '물고기를 기다리는 중...'; }, 1300);
@@ -387,6 +489,7 @@ function reelAction() {
 }
 
 function endReelGame(success) {
+    gameState.currentFish = null;
     const reel = document.getElementById('reel-game');
     const status = document.getElementById('fishing-status');
     const castBtn = document.getElementById('cast-btn');
@@ -454,9 +557,10 @@ function renderInventory() {
     const grid = document.getElementById('inv-grid');
     grid.innerHTML = '';
     gameState.inventory.slice().reverse().forEach((item, idx) => {
+        const originalIdx = gameState.inventory.length - 1 - idx;
         const div = document.createElement('div');
         div.className = `premium-card premium-glass p-4 rounded-2xl`;
-        div.innerHTML = `<div class="font-extrabold">${item.name}</div><div class="text-xs text-white/50">${item.region}</div><div class="mt-3 flex justify-between items-center"><div class="text-amber-400 font-mono font-bold">${item.soldValue} 골드</div><button onclick="sellFish(${idx}, this)" class="text-xs px-4 py-1 bg-white/10 rounded-xl">판매</button></div>`;
+        div.innerHTML = `<div class="font-extrabold">${item.name}</div><div class="text-xs text-white/50">${item.region}</div><div class="mt-3 flex justify-between items-center"><div class="text-amber-400 font-mono font-bold">${item.soldValue} 골드</div><button onclick="sellFish(${originalIdx}, this)" class="text-xs px-4 py-1 bg-white/10 rounded-xl">판매</button></div>`;
         grid.appendChild(div);
     });
 }
@@ -547,12 +651,15 @@ async function submitToGlobalLeaderboard() {
     }
     
     try {
-        const score = gameState.todayBest || gameState.gold;
-        await db.collection('leaderboard').doc(gameState.userId).set({
-            name: gameState.nickname,
+        const fb = await waitForFirebase();
+        const score = Math.max(Number(gameState.todayBest || 0), Number(gameState.gold || 0));
+        await fb.setDoc(fb.doc(fb.db, 'leaderboard', gameState.userId), {
+            uid: gameState.userId,
+            name: String(gameState.nickname || '낚시꾼').slice(0, 24),
             score: score,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
+            level: Number(gameState.level || 1),
+            updatedAt: fb.serverTimestamp()
+        }, { merge: true });
         alert("글로벌 리더보드에 제출되었습니다!");
     } catch(e) {
         console.error(e);
@@ -618,55 +725,221 @@ function showCharacterModal() {
     if (newName) { gameState.nickname = newName; updateUI(); savePlayerData(); }
 }
 
-// ==================== Firebase with better error handling ====================
+// ==================== Firebase Auth + Firestore ====================
+function getEmailPassword() {
+    const email = document.getElementById('email')?.value?.trim();
+    const password = document.getElementById('pw')?.value || '';
+    if (!email || !password) throw new Error('이메일과 비밀번호를 입력해주세요.');
+    if (password.length < 6) throw new Error('비밀번호는 최소 6자 이상이어야 합니다.');
+    return { email, password };
+}
+
 async function loginAnonymous() {
     try {
-        // 실제 Firebase 초기화는 config.js에서
-        alert("익명 로그인 성공! (실제 Firebase 사용 시 config.js 설정 필요)");
-        document.getElementById('screen-login').classList.add('hidden');
-        switchScreen('village');
-        initAudio();
+        setFirebaseStatus('wait', '로그인 중');
+        const fb = await waitForFirebase();
+        await fb.signInAnonymously(fb.auth);
     } catch(e) {
-        console.error("Login error:", e);
-        alert("로그인 중 오류가 발생했습니다: " + e.message);
+        console.error('Anonymous login error:', e);
+        setFirebaseStatus('error', 'Firebase 오류');
+        alert('익명 로그인 중 오류가 발생했습니다: ' + e.message);
     }
 }
 
-function loginWithEmail() { alert("Firebase 설정이 필요합니다. config.js를 확인하세요."); }
-function registerWithEmail() { alert("Firebase 설정이 필요합니다."); }
-function loginWithGoogle() { alert("Firebase 설정이 필요합니다."); }
-
-function savePlayerData() {
+async function loginWithEmail() {
     try {
-        localStorage.setItem('aqua_v1.1', JSON.stringify(gameState));
+        setFirebaseStatus('wait', '로그인 중');
+        const { email, password } = getEmailPassword();
+        const fb = await waitForFirebase();
+        await fb.signInWithEmailAndPassword(fb.auth, email, password);
     } catch(e) {
-        console.error("Save error:", e);
+        console.error('Email login error:', e);
+        setFirebaseStatus('error', 'Firebase 오류');
+        alert('이메일 로그인 오류: ' + e.message);
+    }
+}
+
+async function registerWithEmail() {
+    try {
+        setFirebaseStatus('wait', '가입 중');
+        const { email, password } = getEmailPassword();
+        const fb = await waitForFirebase();
+        await fb.createUserWithEmailAndPassword(fb.auth, email, password);
+    } catch(e) {
+        console.error('Email register error:', e);
+        setFirebaseStatus('error', 'Firebase 오류');
+        alert('회원가입 오류: ' + e.message);
+    }
+}
+
+async function loginWithGoogle() {
+    try {
+        setFirebaseStatus('wait', 'Google 로그인');
+        const fb = await waitForFirebase();
+        await fb.signInWithPopup(fb.auth, fb.googleProvider);
+    } catch(e) {
+        console.error('Google login error:', e);
+        setFirebaseStatus('error', 'Firebase 오류');
+        alert('Google 로그인 오류: ' + e.message);
+    }
+}
+
+function serializeGameState() {
+    const plain = { ...gameState };
+    plain.discovered = Array.from(gameState.discovered instanceof Set ? gameState.discovered : []);
+    delete plain.reelInterval;
+    delete plain.currentFish;
+    delete plain.isFishing;
+    return plain;
+}
+
+function normalizeGameState(data) {
+    const next = { ...gameState, ...(data || {}) };
+    if (Array.isArray(next.discovered)) next.discovered = new Set(next.discovered);
+    else if (!(next.discovered instanceof Set)) next.discovered = new Set();
+    if (!Array.isArray(next.inventory)) next.inventory = [];
+    if (!Array.isArray(next.catchHistory)) next.catchHistory = [];
+    if (!Array.isArray(next.leaderboard)) next.leaderboard = [];
+    if (!next.achievements || typeof next.achievements !== 'object') next.achievements = {};
+    if (!next.nickname) next.nickname = '여우';
+    return next;
+}
+
+function savePlayerData(syncCloud = true) {
+    try {
+        const plain = serializeGameState();
+        localStorage.setItem('aqua_v1.1', JSON.stringify(plain));
+
+        if (syncCloud && isFirebaseConnected && gameState.userId && window.AquaFirebase) {
+            clearTimeout(cloudSaveTimer);
+            cloudSaveTimer = setTimeout(async () => {
+                try {
+                    const fb = await waitForFirebase();
+                    await fb.setDoc(fb.doc(fb.db, 'users', gameState.userId), {
+                        uid: gameState.userId,
+                        nickname: String(gameState.nickname || '낚시꾼').slice(0, 24),
+                        gold: Number(gameState.gold || 0),
+                        level: Number(gameState.level || 1),
+                        state: serializeGameState(),
+                        updatedAt: fb.serverTimestamp()
+                    }, { merge: true });
+                } catch (e) {
+                    console.warn('Cloud save skipped:', e.message);
+                }
+            }, 600);
+        }
+    } catch(e) {
+        console.error('Save error:', e);
+    }
+}
+
+async function loadPlayerDataFromCloud() {
+    if (!isFirebaseConnected || !gameState.userId) return;
+    try {
+        const fb = await waitForFirebase();
+        const ref = fb.doc(fb.db, 'users', gameState.userId);
+        const snap = await fb.getDoc(ref);
+        if (snap.exists()) {
+            const cloud = snap.data();
+            if (cloud.state) {
+                const localUserId = gameState.userId;
+                gameState = normalizeGameState({ ...cloud.state, userId: localUserId });
+                updateUI();
+                savePlayerData(false);
+            }
+        } else {
+            await fb.setDoc(ref, {
+                uid: gameState.userId,
+                nickname: String(gameState.nickname || '낚시꾼').slice(0, 24),
+                gold: Number(gameState.gold || 0),
+                level: Number(gameState.level || 1),
+                state: serializeGameState(),
+                createdAt: fb.serverTimestamp(),
+                updatedAt: fb.serverTimestamp()
+            }, { merge: true });
+        }
+    } catch(e) {
+        console.warn('Cloud load skipped:', e.message);
+    }
+}
+
+async function subscribeGlobalLeaderboard() {
+    if (!isFirebaseConnected || !window.AquaFirebase) return;
+    try {
+        const fb = await waitForFirebase();
+        if (leaderboardUnsubscribe) leaderboardUnsubscribe();
+        const q = fb.query(fb.collection(fb.db, 'leaderboard'), fb.orderBy('score', 'desc'), fb.limit(20));
+        leaderboardUnsubscribe = fb.onSnapshot(q, (snapshot) => {
+            const remoteBoard = snapshot.docs.map((docSnap) => docSnap.data());
+            if (remoteBoard.length > 0) {
+                gameState.leaderboard = remoteBoard.map((entry) => ({
+                    name: entry.name || '낚시꾼',
+                    score: Number(entry.score || 0),
+                    level: Number(entry.level || 1)
+                }));
+                const competition = document.getElementById('screen-competition');
+                if (competition && !competition.classList.contains('hidden')) renderCompetition();
+                savePlayerData(false);
+            }
+        }, (error) => console.warn('Leaderboard listen error:', error.message));
+    } catch(e) {
+        console.warn('Leaderboard subscribe skipped:', e.message);
+    }
+}
+
+async function startFirebaseAuthListener() {
+    if (firebaseListenerStarted) return;
+    firebaseListenerStarted = true;
+    try {
+        const fb = await waitForFirebase();
+        setFirebaseStatus('wait', 'Firebase 준비');
+        fb.onAuthStateChanged(fb.auth, async (user) => {
+            if (user) {
+                isFirebaseConnected = true;
+                gameState.userId = user.uid;
+                setFirebaseStatus('ok', user.isAnonymous ? '익명 접속' : '로그인됨');
+                await loadPlayerDataFromCloud();
+                await subscribeGlobalLeaderboard();
+                document.getElementById('screen-login').classList.add('hidden');
+                switchScreen('village');
+                initAudio();
+                savePlayerData(false);
+            } else {
+                isFirebaseConnected = false;
+                gameState.userId = null;
+                setFirebaseStatus('wait', '로그인 필요');
+            }
+        });
+    } catch(e) {
+        console.error('Firebase listener error:', e);
+        setFirebaseStatus('error', 'Firebase 오류');
     }
 }
 
 function init() {
     try {
         const saved = localStorage.getItem('aqua_v1.1');
-        if (saved) gameState = { ...gameState, ...JSON.parse(saved) };
+        if (saved) gameState = normalizeGameState(JSON.parse(saved));
+        else gameState = normalizeGameState(gameState);
         
         if (!gameState.leaderboard || gameState.leaderboard.length === 0) {
             gameState.leaderboard = [
-                { name: "바다의왕", score: 12400 },
-                { name: "전설낚시꾼", score: 9800 },
+                { name: '바다의왕', score: 12400 },
+                { name: '전설낚시꾼', score: 9800 },
                 { name: gameState.nickname, score: gameState.todayBest || 0 }
             ];
         }
         
-        // 기본 업적 초기화
         if (!gameState.achievements) gameState.achievements = {};
         
         updateUI();
         initAudio();
+        startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v1.1] Expansion 버전 - 사운드, 업적, 리더보드, 최적화 적용 완료', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v1.1] GitHub Pages + Firebase Ready', 'color:#67e8f9');
     } catch(e) {
-        console.error("Init error:", e);
-        alert("게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.");
+        console.error('Init error:', e);
+        alert('게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.');
     }
 }
 
