@@ -98,3 +98,8 @@ manifest.webmanifest PWA 앱 설정
 - Web Audio 기반 사운드/햅틱/타격감 엔진 추가
 - 모바일 터치 리플, 임팩트 플래시, 릴 피드백 강화
 - GitHub Actions 자동 배포 구조 유지
+
+
+## Patch 13 · v2.4 Mega Expansion
+
+이번 패치는 캡틴 코치 온보딩, 첫 10분 항해 체크리스트, 자동 품질 감독관, 원핸드 모드, 컴팩트 HUD, Long Task 성능 감시, PWA/Service Worker v2.4 캐시 갱신을 포함합니다. 기존 `aqua_v2.3` 이하 저장 데이터는 계속 읽고, 새 저장 키는 `aqua_v2.4`입니다.

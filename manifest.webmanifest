@@ -1,11 +1,11 @@
 {
-  "name": "Aqua Fantasia v2.3",
-  "short_name": "Aqua v2.3",
-  "description": "Aqua Fantasia - 사운드, 햅틱, 타격감 엔진과 모바일 풀스크린 최적화가 적용된 웹 낚시 RPG",
+  "name": "Aqua Fantasia v2.5",
+  "short_name": "Aqua v2.5",
+  "description": "Aqua Fantasia - 핵심 플레이 중심 Focus UI와 모바일 웹게임 최적화가 적용된 낚시 RPG",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "./?app=aqua-fantasia-v23",
-  "start_url": "./?source=pwa&fullscreen=1&sensory=1",
+  "id": "./?app=aqua-fantasia-v25",
+  "start_url": "./?source=pwa&fullscreen=1&focus=1",
   "scope": "./",
   "display": "fullscreen",
   "display_override": [
@@ -58,6 +58,18 @@
       "short_name": "장비",
       "description": "낚싯대와 미끼 관리",
       "url": "./?shortcut=equipment",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "캡틴 코치",
+      "short_name": "코치",
+      "description": "초보자 항해 루프와 품질 감독관 열기",
+      "url": "./?shortcut=coach",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",

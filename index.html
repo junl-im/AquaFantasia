@@ -16,7 +16,7 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
-    <title>Aqua Fantasia • Dev v2.3 Sensory Visual Max</title>
+    <title>Aqua Fantasia • Dev v2.5 Focus UI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -573,6 +573,117 @@
         .safe-viewport-guide { border:1px dashed rgba(125,211,252,.22); background: rgba(14,165,233,.08); }
         @keyframes mobile-scan { 0%, 22% { transform: translateX(-130%); opacity:0; } 42% { opacity:.5; } 70%, 100% { transform: translateX(130%); opacity:0; } }
 
+
+        /* ==================== v2.4 Mega Expansion: Coach / Quality / Mobile UX ==================== */
+        .mega-panel, .captain-panel, .quality-director {
+            position: relative; overflow: hidden; isolation: isolate;
+            background:
+                radial-gradient(circle at 18% 18%, rgba(125,211,252,.20), transparent 34%),
+                radial-gradient(circle at 82% 0%, rgba(217,70,239,.16), transparent 32%),
+                rgba(15,23,42,.38);
+        }
+        .mega-panel::before, .captain-panel::before, .quality-director::before {
+            content:""; position:absolute; inset:-1px; pointer-events:none; opacity:.65;
+            background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.12) 42%, transparent 62%);
+            transform: translateX(-130%); animation: mobile-scan 5.8s ease-in-out infinite;
+        }
+        .mega-panel::after, .captain-panel::after {
+            content:""; position:absolute; width:140px; height:140px; border-radius:999px; right:-50px; top:-55px;
+            background: conic-gradient(from 120deg, rgba(34,211,238,.0), rgba(34,211,238,.22), rgba(168,85,247,.18), rgba(34,211,238,.0));
+            filter: blur(1px); opacity:.8; animation: forge-spin 12s linear infinite;
+        }
+        .coach-progress-track, .quality-track, .first-run-track {
+            height: .55rem; border-radius:999px; overflow:hidden; background: rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.10);
+        }
+        .coach-progress-track span, .quality-track span, .first-run-track span {
+            display:block; height:100%; width:0%; border-radius:inherit;
+            background: linear-gradient(90deg, #22d3ee, #a78bfa, #f0abfc);
+            box-shadow: 0 0 24px rgba(34,211,238,.36);
+            transition: width .35s ease;
+        }
+        .coach-step {
+            display:grid; grid-template-columns:auto 1fr auto; gap:.75rem; align-items:center;
+            padding:.72rem .82rem; border-radius:1.15rem; background: rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.10);
+        }
+        .coach-step.done { background: rgba(16,185,129,.13); border-color: rgba(110,231,183,.22); }
+        .coach-step .step-dot { width:2.2rem; height:2.2rem; border-radius:.9rem; display:grid; place-items:center; background: rgba(14,165,233,.14); }
+        .coach-chip, .quality-chip {
+            border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.08); border-radius:999px; padding:.55rem .7rem; font-size:.72rem; font-weight:900;
+        }
+        .quality-chip.active { background: rgba(34,211,238,.18); border-color: rgba(125,211,252,.35); color:#cffafe; }
+        .mega-stat-grid { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:.55rem; }
+        .mega-stat-grid > div { padding:.75rem .62rem; border-radius:1.2rem; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.10); }
+        .captain-hero {
+            min-height: 138px; border-radius: 2rem; padding: 1.1rem; position:relative; overflow:hidden;
+            background: linear-gradient(135deg, rgba(14,165,233,.24), rgba(88,28,135,.18)), rgba(255,255,255,.07);
+            border:1px solid rgba(125,211,252,.18);
+        }
+        .captain-hero .orbit { position:absolute; width:160px; height:160px; right:-54px; top:-64px; border-radius:999px; border:1px solid rgba(125,211,252,.26); animation: forge-spin 18s linear infinite; }
+        .captain-hero .orbit::before { content:""; position:absolute; width:12px; height:12px; border-radius:999px; background:#67e8f9; top:20px; left:24px; box-shadow:0 0 22px #67e8f9; }
+        .onehand-fab {
+            position: fixed; right: calc(1rem + env(safe-area-inset-right)); bottom: calc(5.2rem + env(safe-area-inset-bottom)); z-index: 60;
+            width: 3.25rem; height:3.25rem; border-radius:1.25rem; display:none; place-items:center; font-size:1.15rem;
+            background: rgba(15,23,42,.70); border:1px solid rgba(125,211,252,.24); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            box-shadow:0 18px 46px rgba(0,0,0,.30);
+        }
+        body.one-hand-mode .onehand-fab { display:grid; }
+        body.one-hand-mode .bottom-nav { padding-bottom: calc(1.05rem + env(safe-area-inset-bottom)); }
+        body.compact-hud #app-shell > .px-4.pt-3 { padding-top:.45rem !important; padding-bottom:.35rem !important; }
+        body.compact-hud #app-shell > .px-4.pt-3 .text-3xl { font-size:1.35rem !important; }
+        body.compact-hud #firebase-status, body.compact-hud #cloud-save-status { display:none !important; }
+        body.quality-ultra .fx-aurora, body.quality-ultra .depth-rays { filter:saturate(1.18) contrast(1.06); }
+        body.quality-ultra .premium-card { box-shadow: 0 24px 70px rgba(8,47,73,.28), inset 0 1px 0 rgba(255,255,255,.08); }
+        body.quality-balanced .premium-card { transition-duration: .16s; }
+        body.quality-low .mega-panel::before, body.quality-low .captain-panel::before, body.quality-low .quality-director::before { display:none; }
+        .coach-pulse { animation: coach-pulse 2.2s ease-in-out infinite; }
+        @keyframes coach-pulse { 0%,100% { box-shadow:0 0 0 0 rgba(34,211,238,.0); } 50% { box-shadow:0 0 0 8px rgba(34,211,238,.08); } }
+
+
+
+        /* ==================== v2.5 Focus UI Cleanup ==================== */
+        .top-bar-focus {
+            position: sticky; top: 0; z-index: 55;
+            background: linear-gradient(180deg, rgba(2,6,23,.92), rgba(8,47,73,.72));
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+        }
+        .top-logo-mark { width:2.65rem; height:2.65rem; border-radius:1.05rem; display:grid; place-items:center; font-size:1.45rem; background:linear-gradient(135deg,#38bdf8,#2563eb,#0f172a); box-shadow:0 10px 30px rgba(56,189,248,.22); }
+        .hud-pill { display:flex; align-items:center; gap:.35rem; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.09); border-radius:999px; padding:.42rem .68rem; font-size:.78rem; font-weight:900; }
+        .quick-menu-panel { border-top:1px solid rgba(255,255,255,.08); background:rgba(2,6,23,.74); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+        .quick-menu-grid { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:.55rem; }
+        .quick-menu-grid button, .quick-menu-grid .status-chip { min-height:2.65rem; border-radius:1rem; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.08); font-size:.72rem; font-weight:900; display:flex; align-items:center; justify-content:center; gap:.35rem; }
+        .focus-hero { position:relative; overflow:hidden; border-radius:2rem; padding:1rem; border:1px solid rgba(125,211,252,.20); background:linear-gradient(145deg, rgba(15,23,42,.72), rgba(8,47,73,.58)); box-shadow:0 22px 58px rgba(2,6,23,.32); }
+        .focus-hero::before { content:""; position:absolute; inset:-40% -20% auto; height:130px; background:radial-gradient(circle, rgba(103,232,249,.18), transparent 62%); transform:rotate(-8deg); pointer-events:none; }
+        .focus-avatar { width:4.6rem; height:4.6rem; border-radius:1.55rem; object-fit:cover; border:4px solid rgba(56,189,248,.75); box-shadow:0 14px 38px rgba(56,189,248,.18); }
+        .focus-stat-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.55rem; }
+        .focus-stat { border:1px solid rgba(255,255,255,.09); background:rgba(255,255,255,.06); border-radius:1.05rem; padding:.72rem .55rem; text-align:center; }
+        .focus-stat b { display:block; font-size:1.05rem; line-height:1.05; }
+        .focus-stat span { display:block; margin-top:.25rem; font-size:.62rem; color:rgba(255,255,255,.52); font-weight:800; }
+        .primary-action-grid { display:grid; grid-template-columns:1.25fr 1fr 1fr; gap:.6rem; }
+        .primary-action-grid button { border-radius:1.15rem; min-height:3.1rem; font-weight:950; font-size:.78rem; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.08); }
+        .primary-action-grid button.main { background:linear-gradient(135deg,#38bdf8,#2563eb); color:white; box-shadow:0 14px 38px rgba(56,189,248,.22); }
+        .priority-card { border-radius:1.45rem; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.07); padding:.85rem; }
+        .utility-collapse { border-radius:1.45rem; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.045); overflow:hidden; }
+        .utility-collapse summary { cursor:pointer; list-style:none; padding:.9rem 1rem; font-weight:950; display:flex; justify-content:space-between; align-items:center; color:rgba(255,255,255,.88); }
+        .utility-collapse summary::-webkit-details-marker { display:none; }
+        .utility-collapse summary::after { content:"＋"; color:rgba(125,211,252,.8); }
+        .utility-collapse[open] summary::after { content:"－"; }
+        .utility-body { padding:0 1rem 1rem; }
+        .region-grid-clean { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.65rem; }
+        .region-card.clean { padding:1rem; border-radius:1.45rem; min-height:7.1rem; }
+        .region-card.clean .region-emoji { font-size:2.15rem; }
+        .region-card.clean .region-title { font-size:1.05rem; font-weight:950; margin-top:.35rem; }
+        .region-card.clean .region-desc { font-size:.66rem; color:rgba(224,242,254,.68); margin-top:.2rem; }
+        .bottom-nav { grid-template-columns: repeat(5,minmax(0,1fr)) !important; }
+        .bottom-nav .optional-nav { display:none; }
+        body.show-advanced-nav .bottom-nav { grid-template-columns: repeat(6,minmax(0,1fr)) !important; }
+        body.show-advanced-nav .bottom-nav .optional-nav { display:block; }
+        @media (max-width: 420px) {
+            .top-bar-focus .brand-title { font-size:1.02rem; }
+            .hud-pill { padding:.38rem .55rem; font-size:.72rem; }
+            .primary-action-grid { grid-template-columns:1fr; }
+            .focus-stat-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+        }
+
         @media (hover: hover) { .premium-card:hover { transform: translateY(-2px); border-color: rgba(125,211,252,.32); } }
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .001ms !important; }
@@ -583,34 +694,33 @@
 <body class="bg-[#0a3d5c] text-white antialiased">
 <div id="app-shell" class="max-w-md mx-auto min-h-screen flex flex-col shadow-2xl border-x border-white/10 bg-[#0a3d5c]">
     
-    <!-- Top Bar -->
-    <div class="px-4 pt-3 pb-2 flex justify-between items-center border-b border-white/10 bg-black/20">
-        <div class="flex items-center gap-x-3">
-            <div class="w-10 h-10 bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center text-2xl">🌊</div>
-            <div>
-                <span class="font-black text-3xl tracking-[-1.5px]">AQUA</span>
-                <span class="font-bold text-3xl tracking-[-1.5px] text-sky-400">FANTASIA</span>
-                <span class="ml-2 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20">v2.3</span>
+    <!-- Top Bar / v2.5 Focus UI -->
+    <div class="top-bar-focus px-4 pt-3 pb-2 border-b border-white/10">
+        <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="top-logo-mark">🌊</div>
+                <div class="min-w-0">
+                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v2.5</span></div>
+                    <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Focus UI · 플레이 중심 정리</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+                <div class="hud-pill"><span>💰</span><span id="gold-display" class="font-mono tabular-nums">1,240</span></div>
+                <div class="hud-pill"><span>⭐</span><span id="level-display">12</span></div>
+                <button onclick="toggleQuickMenu()" class="hud-pill" aria-label="빠른 메뉴">☰</button>
             </div>
         </div>
-        <div class="flex items-center gap-x-2 text-sm flex-wrap justify-end">
-            <div id="firebase-status" class="px-3 py-1 text-xs rounded-full bg-white/10 flex items-center gap-x-1.5">
-                <div class="w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse"></div>
-                <span class="font-medium">Firebase</span>
-            </div>
-            <div id="cloud-save-status" class="px-3 py-1 text-[11px] rounded-full bg-white/10 text-white/70 hidden">로컬 저장</div>
-            <button id="graphics-toggle" onclick="toggleGraphicsMode()" class="px-3 py-1 text-[11px] rounded-full bg-cyan-300/10 text-cyan-100 border border-cyan-200/20">그래픽 고급</button>
-            <button id="sensory-toggle" onclick="toggleSoundEnabled()" class="px-3 py-1 text-[11px] rounded-full bg-fuchsia-300/10 text-fuchsia-100 border border-fuchsia-200/20">🔊 감각</button>
-            <button id="install-app-btn" onclick="installAquaApp()" class="hidden px-3 py-1 text-[11px] rounded-full bg-emerald-400/15 text-emerald-100 border border-emerald-200/20 install-pulse">📲 설치</button>
-            <button onclick="enableMobileGameMode()" class="px-3 py-1 text-[11px] rounded-full bg-violet-400/15 text-violet-100 border border-violet-200/20">🎮 게임모드</button>
-            <button id="logout-btn" onclick="logoutGame()" class="hidden px-3 py-1 text-[11px] rounded-full bg-white/10 hover:bg-white/20">로그아웃</button>
-            <div class="flex items-center bg-white/10 px-3.5 py-1.5 rounded-2xl">
-                <span class="text-amber-400 mr-1.5">💰</span>
-                <span id="gold-display" class="font-mono font-extrabold tabular-nums text-lg">1,240</span>
-            </div>
-            <div class="flex items-center bg-white/10 px-3.5 py-1.5 rounded-2xl">
-                <span class="text-yellow-400 mr-1.5">⭐</span>
-                <span id="level-display" class="font-extrabold text-lg">12</span>
+        <div id="quick-menu-panel" class="quick-menu-panel hidden -mx-4 mt-3 px-4 py-3">
+            <div class="quick-menu-grid">
+                <div id="firebase-status" class="status-chip"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full inline-block animate-pulse"></span><span>Firebase</span></div>
+                <div id="cloud-save-status" class="status-chip text-white/70">로컬 저장</div>
+                <button id="graphics-toggle" onclick="toggleGraphicsMode()">🎨 그래픽 고급</button>
+                <button id="sensory-toggle" onclick="toggleSoundEnabled()">🔊 감각</button>
+                <button onclick="switchScreen('captain')">🧭 코치/설정</button>
+                <button id="install-app-btn" onclick="installAquaApp()" class="hidden install-pulse">📲 설치</button>
+                <button onclick="enableMobileGameMode()">🎮 게임모드</button>
+                <button onclick="runPerformanceCheck()">⚡ 성능점검</button>
+                <button id="logout-btn" onclick="logoutGame()" class="hidden">로그아웃</button>
             </div>
         </div>
     </div>
@@ -623,7 +733,7 @@
             <div class="text-center mb-10">
                 <div class="text-[5.5rem] mb-3">🎣</div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-300 mt-2">v2.3 Sensory Visual Max · 사운드/햅틱/타격감 모바일 최적화</p>
+                <p class="text-sky-300 mt-2">v2.5 Focus UI · 핵심 플레이 중심 정리</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
@@ -644,141 +754,141 @@
 
         <!-- VILLAGE -->
         <div id="screen-village" class="hidden absolute inset-0 flex flex-col ocean-deep overflow-auto screen-scroll">
-            <div class="pt-8 px-6">
-                <div class="flex justify-center">
-                    <div onclick="showCharacterModal()" class="cursor-pointer text-center">
-                        <img id="avatar-img" src="assets/images/zZHXu.jpg" class="w-[120px] h-[120px] object-cover rounded-full border-[7px] border-sky-400 shadow-2xl mx-auto">
-                        <div id="player-name" class="mt-3 font-extrabold text-2xl tracking-tight">여우</div>
-                        <div class="text-emerald-400 text-sm -mt-0.5">Lv.<span id="village-level">12</span></div>
-                        <div class="mt-3 w-44 mx-auto">
-                            <div class="flex justify-between text-[10px] text-white/55 mb-1"><span>EXP</span><span id="xp-text">0%</span></div>
-                            <div class="xp-track"><div id="xp-fill" class="xp-fill"></div></div>
-                        </div>
-                        <button onclick="switchScreen('equipment')" class="mt-4 px-4 py-2 premium-glass rounded-2xl text-xs font-extrabold text-cyan-100 border border-cyan-200/20">
-                            <span id="equipped-mini">🎣 기본 낚싯대 · 🪱 기본 미끼</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="px-5 mt-5">
-                <div class="pwa-panel premium-glass liquid-border rounded-[1.75rem] p-4 micro-shine">
-                    <div class="flex items-center justify-between gap-3">
-                        <div>
-                            <div class="text-[11px] text-cyan-100/70 font-bold tracking-wide">MOBILE APP MODE</div>
-                            <div id="pwa-status-text" class="font-black text-lg leading-tight">브라우저 모드</div>
-                            <div id="network-status-text" class="text-[11px] text-white/55 mt-0.5 flex items-center gap-1.5"><span id="network-dot" class="network-dot"></span><span>온라인</span></div>
-                        </div>
-                        <div class="grid grid-cols-1 gap-2 shrink-0">
-                            <button onclick="installAquaApp()" id="install-app-btn-card" class="hidden px-4 py-2 bg-emerald-400/18 border border-emerald-200/20 rounded-2xl text-xs font-extrabold install-pulse">📲 설치</button>
-                            <button onclick="enableMobileGameMode()" class="px-4 py-2 bg-violet-300/14 border border-violet-200/20 rounded-2xl text-xs font-extrabold">🎮 게임</button>
-                            <button onclick="openInExternalBrowser('default')" id="external-browser-card-btn" class="hidden px-4 py-2 bg-amber-300/14 border border-amber-200/20 rounded-2xl text-xs font-extrabold">🌐 브라우저</button>
-                            <button onclick="runPerformanceCheck()" class="px-4 py-2 bg-cyan-300/12 border border-cyan-200/20 rounded-2xl text-xs font-extrabold">⚡ 점검</button>
-                        </div>
-                    </div>
-                    <div class="mt-3 safe-viewport-guide rounded-2xl px-3 py-2">
-                        <div class="flex justify-between text-[10px] text-white/55"><span>실행 환경</span><span id="launch-status-text">일반 브라우저</span></div>
-                    </div>
-                    <div class="mt-3">
-                        <div class="flex justify-between text-[10px] text-white/55 mb-1"><span id="perf-readout">성능 점검 대기</span><span id="sw-status-text">오프라인 준비 중</span></div>
-                        <div class="perf-bar"><span id="perf-fill"></span></div>
-                    </div>
-                    <div class="mt-3 deploy-panel rounded-2xl p-3 border border-white/10 bg-white/5">
-                        <div class="relative z-10 flex items-center justify-between gap-2">
-                            <div>
-                                <div class="text-[10px] text-cyan-100/70 font-black tracking-wide">GITHUB ACTIONS</div>
-                                <div id="actions-runtime-status" class="text-xs text-white/70 mt-0.5">Push → 검사 → Pages 자동 배포 준비</div>
+            <div class="px-5 pt-5">
+                <div class="focus-hero">
+                    <div class="relative z-10 flex items-start gap-3">
+                        <img id="avatar-img" onclick="showCharacterModal()" src="assets/images/zZHXu.jpg" class="focus-avatar cursor-pointer" alt="플레이어">
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center justify-between gap-2">
+                                <div>
+                                    <div id="player-name" class="font-black text-2xl tracking-tight truncate">여우</div>
+                                    <div class="text-emerald-300 text-xs font-bold">Lv.<span id="village-level">12</span> · <span id="focus-rank-label">항해자</span></div>
+                                </div>
+                                <button onclick="switchScreen('captain')" class="px-3 py-2 rounded-2xl bg-white/10 border border-white/10 text-xs font-black">설정</button>
                             </div>
-                            <span class="actions-badge">● READY</span>
+                            <div class="mt-3">
+                                <div class="flex justify-between text-[10px] text-white/55 mb-1"><span>EXP</span><span id="xp-text">0%</span></div>
+                                <div class="xp-track"><div id="xp-fill" class="xp-fill"></div></div>
+                            </div>
+                            <button onclick="switchScreen('equipment')" class="mt-3 w-full px-3 py-2 premium-glass rounded-2xl text-xs font-extrabold text-cyan-100 border border-cyan-200/20 text-left truncate">
+                                <span id="equipped-mini">🎣 기본 낚싯대 · 🪱 기본 미끼</span>
+                            </button>
                         </div>
+                    </div>
+                    <div class="relative z-10 mt-4 priority-card">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0">
+                                <div class="text-[10px] text-cyan-100/65 font-black tracking-wide">NEXT BEST ACTION</div>
+                                <div id="focus-goal-title" class="font-black text-lg mt-0.5">오늘 출석 보상 받기</div>
+                                <div id="focus-goal-desc" class="text-xs text-white/58 mt-1 leading-relaxed">미션 탭에서 무료 보상을 먼저 챙기세요.</div>
+                            </div>
+                            <button id="focus-goal-btn" onclick="runFocusGoalAction()" class="px-4 py-3 rounded-2xl bg-cyan-400/18 border border-cyan-200/20 text-xs font-black shrink-0">바로가기</button>
+                        </div>
+                    </div>
+                    <div class="relative z-10 mt-3 focus-stat-grid">
+                        <div class="focus-stat"><b id="focus-inventory-count">0</b><span>가방</span></div>
+                        <div class="focus-stat"><b id="focus-mission-count">0/0</b><span>미션</span></div>
+                        <div class="focus-stat"><b id="focus-boss-count">0</b><span>보스승</span></div>
+                    </div>
+                    <div class="relative z-10 mt-3 primary-action-grid">
+                        <button class="main" onclick="selectRegion(gameState.currentRegion || '호수')">🎣 바로 낚시</button>
+                        <button onclick="switchScreen('inventory')">🎒 판매</button>
+                        <button onclick="switchScreen('equipment')">🧰 강화</button>
                     </div>
                 </div>
             </div>
 
-            <div class="px-5 mt-3">
-                <div id="sensory-panel" class="sensory-panel premium-card premium-glass liquid-border rounded-[1.75rem] p-4 cursor-pointer" onclick="unlockSensoryEngine(true)">
-                    <div class="relative z-10 flex items-start justify-between gap-3">
+            <div class="px-5 mt-3 grid grid-cols-2 gap-3">
+                <div onclick="switchScreen('quests')" class="mission-panel premium-card premium-glass rounded-[1.35rem] p-4 cursor-pointer">
+                    <div class="flex items-start justify-between gap-2">
                         <div class="min-w-0">
-                            <div class="text-[11px] text-fuchsia-100/75 font-black tracking-wide">SENSORY ENGINE 2.3</div>
-                            <div class="font-black text-xl tracking-tight mt-0.5">사운드 · 햅틱 · 타격감 엔진</div>
-                            <div id="sensory-status" class="text-xs text-white/60 mt-1">첫 터치 후 오디오 엔진이 활성화됩니다</div>
+                            <div class="text-[10px] text-cyan-100/70 font-black">오늘 미션</div>
+                            <div id="mission-quick-status" class="text-xs text-white/65 mt-1 truncate">출석 보상 대기</div>
                         </div>
-                        <div class="shrink-0 text-right">
-                            <div class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-                            <div id="audio-unlock-badge" class="audio-unlocked-badge mt-2">대기</div>
-                        </div>
+                        <div id="mission-quick-count" class="mission-chip rounded-xl px-2 py-1 text-xs font-black">0/0</div>
                     </div>
-                    <div class="relative z-10 mt-3 sensory-meter"><span id="sensory-meter-fill"></span></div>
-                    <div class="relative z-10 mt-3 sensory-toggle-grid">
-                        <button id="sound-mode-btn" onclick="event.stopPropagation(); toggleSoundEnabled()">🔊 사운드 ON</button>
-                        <button id="haptic-mode-btn" onclick="event.stopPropagation(); toggleHapticEnabled()">📳 햅틱 ON</button>
-                        <button id="impact-mode-btn" onclick="event.stopPropagation(); cycleImpactLevel()">💥 타격감 1x</button>
-                    </div>
-                    <div class="relative z-10 mt-3 grid grid-cols-[1fr_auto] gap-3 items-center">
-                        <input id="sensory-volume" class="sensory-slider" type="range" min="0" max="100" value="55" oninput="setSensoryVolume(this.value)">
-                        <button onclick="event.stopPropagation(); unlockSensoryEngine(false).then(() => { playSound('preview'); createImpactBurst('preview'); });" class="px-3 py-2 rounded-2xl bg-white/10 border border-white/10 text-xs font-black">테스트</button>
-                    </div>
+                    <div class="mt-3 mission-progress"><span id="mission-quick-fill"></span></div>
                 </div>
-            </div>
-
-            <div class="px-5 mt-3">
-                <div onclick="switchScreen('quests')" class="mission-panel premium-card premium-glass liquid-border rounded-[1.75rem] p-4 cursor-pointer">
-                    <div class="relative z-10 flex items-start justify-between gap-3">
-                        <div>
-                            <div class="text-[11px] text-cyan-100/70 font-bold tracking-wide">TODAY'S TIDE MISSIONS</div>
-                            <div class="font-black text-xl tracking-tight mt-0.5">오늘의 항해 보상</div>
-                            <div id="mission-quick-status" class="text-xs text-white/60 mt-1">출석과 데일리 미션을 확인하세요</div>
-                        </div>
-                        <div class="text-right shrink-0">
-                            <div id="mission-quick-count" class="tide-badge mission-chip rounded-2xl px-3 py-2 text-sm font-black">0/0</div>
-                            <button onclick="event.stopPropagation(); switchScreen('quests')" class="mt-2 px-3 py-1.5 bg-cyan-300/14 border border-cyan-200/20 rounded-xl text-[11px] font-extrabold">미션 보기</button>
-                        </div>
-                    </div>
-                    <div class="relative z-10 mt-3 mission-progress"><span id="mission-quick-fill"></span></div>
-                </div>
-            </div>
-
-
-
-            <div class="px-5 mt-3">
-                <div id="boss-quick-panel" onclick="switchScreen('equipment')" class="boss-panel premium-card premium-glass liquid-border rounded-[1.75rem] p-4 cursor-pointer">
-                    <div class="relative z-10 flex items-start justify-between gap-3">
+                <div id="boss-quick-panel" onclick="switchScreen('equipment')" class="boss-panel premium-card premium-glass rounded-[1.35rem] p-4 cursor-pointer">
+                    <div class="flex items-start justify-between gap-2">
                         <div class="min-w-0">
-                            <div class="text-[11px] text-rose-100/75 font-bold tracking-wide">BOSS SONAR RIFT</div>
-                            <div id="boss-quick-title" class="font-black text-xl tracking-tight mt-0.5">대어 신호 분석 중</div>
-                            <div id="boss-quick-status" class="text-xs text-white/60 mt-1">장비 점수가 높을수록 보스 조우가 안정됩니다</div>
+                            <div class="text-[10px] text-rose-100/75 font-black">보스 신호</div>
+                            <div id="boss-quick-title" class="text-xs text-white/70 mt-1 truncate">대어 분석 중</div>
                         </div>
-                        <div class="text-right shrink-0">
-                            <div id="boss-quick-count" class="boss-chip rounded-2xl px-3 py-2 text-sm font-black">0승</div>
-                            <div class="mt-2 text-[10px] text-rose-100/70 font-bold">BOSS MODE</div>
-                        </div>
+                        <div id="boss-quick-count" class="boss-chip rounded-xl px-2 py-1 text-xs font-black">0승</div>
                     </div>
-                    <div class="relative z-10 mt-3 boss-meter"><span id="boss-quick-fill"></span></div>
+                    <div id="boss-quick-status" class="hidden">장비 점수가 높을수록 보스 조우가 안정됩니다</div>
+                    <div class="mt-3 boss-meter"><span id="boss-quick-fill"></span></div>
                 </div>
+            </div>
+
+            <div class="px-5 mt-3">
+                <details class="utility-collapse">
+                    <summary><span>앱 · 사운드 · 품질 설정</span><span class="text-[10px] text-white/45 mr-2">필요할 때만 열기</span></summary>
+                    <div class="utility-body space-y-3">
+                        <div class="pwa-panel premium-glass rounded-[1.25rem] p-4">
+                            <div class="flex items-center justify-between gap-3">
+                                <div>
+                                    <div class="text-[10px] text-cyan-100/70 font-black">APP MODE</div>
+                                    <div id="pwa-status-text" class="font-black leading-tight">브라우저 모드</div>
+                                    <div id="network-status-text" class="text-[11px] text-white/55 mt-0.5 flex items-center gap-1.5"><span id="network-dot" class="network-dot"></span><span>온라인</span></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 shrink-0">
+                                    <button onclick="installAquaApp()" id="install-app-btn-card" class="hidden px-3 py-2 bg-emerald-400/18 border border-emerald-200/20 rounded-xl text-[11px] font-extrabold install-pulse">📲 설치</button>
+                                    <button onclick="enableMobileGameMode()" class="px-3 py-2 bg-violet-300/14 border border-violet-200/20 rounded-xl text-[11px] font-extrabold">🎮 게임</button>
+                                    <button onclick="openInExternalBrowser('default')" id="external-browser-card-btn" class="hidden px-3 py-2 bg-amber-300/14 border border-amber-200/20 rounded-xl text-[11px] font-extrabold">🌐 브라우저</button>
+                                    <button onclick="runPerformanceCheck()" class="px-3 py-2 bg-cyan-300/12 border border-cyan-200/20 rounded-xl text-[11px] font-extrabold">⚡ 점검</button>
+                                </div>
+                            </div>
+                            <div class="mt-3 flex justify-between text-[10px] text-white/55"><span>실행 환경</span><span id="launch-status-text">일반 브라우저</span></div>
+                            <div class="mt-2 flex justify-between text-[10px] text-white/55"><span id="perf-readout">성능 점검 대기</span><span id="sw-status-text">오프라인 준비 중</span></div>
+                            <div class="perf-bar mt-1"><span id="perf-fill"></span></div>
+                            <div id="actions-runtime-status" class="hidden">GitHub Desktop Push 시 Actions 자동 검사/배포</div>
+                        </div>
+                        <div id="sensory-panel" class="sensory-panel premium-glass rounded-[1.25rem] p-4 cursor-pointer" onclick="unlockSensoryEngine(true)">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="min-w-0">
+                                    <div class="text-[10px] text-fuchsia-100/75 font-black">SENSORY</div>
+                                    <div class="font-black tracking-tight">사운드 · 햅틱 · 타격감</div>
+                                    <div id="sensory-status" class="text-xs text-white/60 mt-1">첫 터치 후 오디오 엔진이 활성화됩니다</div>
+                                </div>
+                                <div class="shrink-0 text-right"><div class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div id="audio-unlock-badge" class="audio-unlocked-badge mt-2">대기</div></div>
+                            </div>
+                            <div class="mt-3 sensory-meter"><span id="sensory-meter-fill"></span></div>
+                            <div class="mt-3 sensory-toggle-grid">
+                                <button id="sound-mode-btn" onclick="event.stopPropagation(); toggleSoundEnabled()">🔊 사운드 ON</button>
+                                <button id="haptic-mode-btn" onclick="event.stopPropagation(); toggleHapticEnabled()">📳 햅틱 ON</button>
+                                <button id="impact-mode-btn" onclick="event.stopPropagation(); cycleImpactLevel()">💥 타격감 1x</button>
+                            </div>
+                            <div class="mt-3 grid grid-cols-[1fr_auto] gap-3 items-center">
+                                <input id="sensory-volume" class="sensory-slider" type="range" min="0" max="100" value="55" oninput="setSensoryVolume(this.value)">
+                                <button onclick="event.stopPropagation(); playSound('preview'); createImpactBurst('preview');" class="px-3 py-2 rounded-2xl bg-white/10 border border-white/10 text-xs font-black">테스트</button>
+                            </div>
+                        </div>
+                        <div id="onboarding-panel" onclick="switchScreen('captain')" class="mega-panel premium-glass rounded-[1.25rem] p-4 cursor-pointer"></div>
+                    </div>
+                </details>
             </div>
 
             <div class="px-5 mt-4 flex-1">
                 <div class="px-1 flex justify-between items-end mb-3">
                     <div class="font-extrabold text-2xl tracking-tight">낚시 지역</div>
                 </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div onclick="selectRegion('호수')" class="region-card premium-card premium-glass p-5 rounded-3xl cursor-pointer" data-region="호수"><div class="region-emoji text-4xl">🏞️</div><div class="font-extrabold text-xl mt-2">호수</div><div class="text-[11px] text-sky-100/70 mt-1">일반~영웅 · 입문</div></div>
-                    <div onclick="selectRegion('강')" class="region-card premium-card premium-glass p-5 rounded-3xl cursor-pointer" data-region="강"><div class="region-emoji text-4xl">🏞</div><div class="font-extrabold text-xl mt-2">강</div><div class="text-[11px] text-sky-100/70 mt-1">민물 대어 · 빠른 물살</div></div>
-                    <div onclick="selectRegion('항구')" class="region-card premium-card premium-glass p-5 rounded-3xl cursor-pointer" data-region="항구"><div class="region-emoji text-4xl">⚓</div><div class="font-extrabold text-xl mt-2">항구</div><div class="text-[11px] text-sky-100/70 mt-1">고급~전설 · 바다</div></div>
-                    <div onclick="selectRegion('심해')" class="region-card premium-card premium-glass p-5 rounded-3xl cursor-pointer" data-region="심해"><div class="region-emoji text-4xl">🌊</div><div class="font-extrabold text-xl mt-2">심해</div><div class="text-[11px] text-sky-100/70 mt-1">희귀~전설 · 깊은 물</div></div>
-                    <div onclick="selectRegion('용궁')" class="region-card premium-card premium-glass p-5 rounded-3xl cursor-pointer col-span-2" data-region="용궁"><div class="flex items-center justify-between"><div><div class="region-emoji text-4xl">🐉</div><div class="font-extrabold text-2xl mt-2">용궁</div><div class="text-[11px] text-sky-100/70 mt-1">영웅~신화 · 용의 기운</div></div><div class="text-right text-xs text-cyan-200/80">HIGH RISK<br><span class="text-rose-200">HIGH REWARD</span></div></div></div>
-                    <div onclick="selectRegion('차원의 바다')" class="region-card premium-card premium-glass p-5 rounded-3xl cursor-pointer col-span-2" data-region="차원의 바다"><div class="flex items-center justify-between"><div><div class="region-emoji text-4xl">🌀</div><div class="font-extrabold text-2xl mt-2">차원의 바다</div><div class="text-[11px] text-sky-100/70 mt-1">전설~신화 · 최종 어장</div></div><div class="text-right text-xs text-fuchsia-200/80">MYTHIC<br><span class="text-cyan-200">ZONE</span></div></div></div>
+                <div class="region-grid-clean">
+                    <div onclick="selectRegion('호수')" class="region-card clean premium-card premium-glass cursor-pointer" data-region="호수"><div class="region-emoji">🏞️</div><div class="region-title">호수</div><div class="region-desc">입문 · 안정적 수익</div></div>
+                    <div onclick="selectRegion('강')" class="region-card clean premium-card premium-glass cursor-pointer" data-region="강"><div class="region-emoji">🏞</div><div class="region-title">강</div><div class="region-desc">빠른 물살 · 민물 대어</div></div>
+                    <div onclick="selectRegion('항구')" class="region-card clean premium-card premium-glass cursor-pointer" data-region="항구"><div class="region-emoji">⚓</div><div class="region-title">항구</div><div class="region-desc">중급 성장 · 바다 어종</div></div>
+                    <div onclick="selectRegion('심해')" class="region-card clean premium-card premium-glass cursor-pointer" data-region="심해"><div class="region-emoji">🌊</div><div class="region-title">심해</div><div class="region-desc">희귀 · 장력 주의</div></div>
+                    <div onclick="selectRegion('용궁')" class="region-card clean premium-card premium-glass cursor-pointer" data-region="용궁"><div class="region-emoji">🐉</div><div class="region-title">용궁</div><div class="region-desc">고위험 · 고보상</div></div>
+                    <div onclick="selectRegion('차원의 바다')" class="region-card clean premium-card premium-glass cursor-pointer" data-region="차원의 바다"><div class="region-emoji">🌀</div><div class="region-title">차원의 바다</div><div class="region-desc">최종 어장 · 신화</div></div>
                 </div>
             </div>
             
-            <div class="px-5 pb-6 pt-4 grid grid-cols-7 gap-2 text-sm">
-                <button onclick="switchScreen('quests')" class="py-3 premium-glass rounded-2xl font-semibold">🗓️</button>
-                <button onclick="switchScreen('equipment')" class="py-3 premium-glass rounded-2xl font-semibold">🧰</button>
-                <button onclick="switchScreen('inventory')" class="py-3 premium-glass rounded-2xl font-semibold">🎒</button>
-                <button onclick="switchScreen('record')" class="py-3 premium-glass rounded-2xl font-semibold">📜</button>
-                <button onclick="switchScreen('competition')" class="py-3 premium-glass rounded-2xl font-semibold">🏆</button>
-                <button onclick="switchScreen('achievements')" class="py-3 premium-glass rounded-2xl font-semibold">🏅</button>
-                <button onclick="switchScreen('encyclopedia')" class="py-3 premium-glass rounded-2xl font-semibold">📖</button>
+            <div class="px-5 pb-6 pt-4 grid grid-cols-4 gap-2 text-sm">
+                <button onclick="switchScreen('record')" class="py-3 premium-glass rounded-2xl font-semibold">📜 기록</button>
+                <button onclick="switchScreen('competition')" class="py-3 premium-glass rounded-2xl font-semibold">🏆 경쟁</button>
+                <button onclick="switchScreen('achievements')" class="py-3 premium-glass rounded-2xl font-semibold">🏅 업적</button>
+                <button onclick="switchScreen('encyclopedia')" class="py-3 premium-glass rounded-2xl font-semibold">📖 도감</button>
             </div>
         </div>
 
@@ -950,6 +1060,18 @@
             <div id="season-mission-list" class="space-y-3 pb-10"></div>
         </div>
 
+        <!-- CAPTAIN COACH / MEGA HUB -->
+        <div id="screen-captain" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto screen-scroll">
+            <div class="flex justify-between items-center mb-5">
+                <button onclick="switchScreen('village')" class="text-sky-300">← 마을</button>
+                <div class="text-right">
+                    <h2 class="section-title text-3xl font-black">캡틴 코치</h2>
+                    <div class="text-[11px] text-cyan-200/75">온보딩 · 품질 감독관 · 모바일 최적화</div>
+                </div>
+            </div>
+            <div id="captain-hub-panel" class="space-y-4 pb-10"></div>
+        </div>
+
         <!-- ACHIEVEMENTS (NEW) -->
         <div id="screen-achievements" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto screen-scroll">
             <div class="font-extrabold text-3xl mb-6">업적</div>
@@ -965,15 +1087,16 @@
         
     </div>
     
-    <div class="bottom-nav grid grid-cols-6 text-center text-xs py-2.5 border-t border-white/10 bg-black/30 backdrop-blur-xl">
+    <div class="bottom-nav grid text-center text-xs py-2.5 border-t border-white/10 bg-black/30 backdrop-blur-xl">
         <div onclick="switchScreen('village')" class="cursor-pointer nav-tile">🏠<br>마을</div>
         <div onclick="goFishing()" class="cursor-pointer nav-tile">🎣<br>낚시</div>
         <div onclick="switchScreen('equipment')" class="cursor-pointer nav-tile">🧰<br>장비</div>
         <div onclick="switchScreen('inventory')" class="cursor-pointer nav-tile">🎒<br>가방</div>
         <div onclick="switchScreen('quests')" class="cursor-pointer nav-tile">🗓️<br>미션</div>
-        <div onclick="switchScreen('competition')" class="cursor-pointer nav-tile">🏆<br>경쟁</div>
+        <div onclick="switchScreen('competition')" class="cursor-pointer nav-tile optional-nav">🏆<br>경쟁</div>
     </div>
     <button id="immersive-btn" onclick="toggleImmersiveMode()" class="immersive-fab" title="몰입 모드">⛶</button>
+    <button id="onehand-fab" onclick="quickCoachAction()" class="onehand-fab" title="빠른 코치">🧭</button>
     <div id="toast-stack" class="toast-stack" aria-live="polite" aria-atomic="false"></div>
 
     <div id="fullscreen-ribbon" class="fullscreen-ribbon">
@@ -1093,10 +1216,10 @@ try {
 </script>
 
 <script>
-// ==================== v2.3 MOBILE LAUNCH VISUAL MAX PATCH / Firebase Ready ====================
+// ==================== v2.4 MEGA EXPANSION PATCH / Firebase Ready ====================
 let graphicsMode = localStorage.getItem('aqua_graphics_mode') || ((navigator.deviceMemory && navigator.deviceMemory <= 3) ? 'low' : 'high');
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '2.3.0';
+const APP_VERSION = '2.5.0';
 const GAME_CANONICAL_URL = 'https://junl-im.github.io/AquaFantasia/';
 let gameState = {
     gold: 1240, level: 12, exp: 870, expToNext: 1000,
@@ -1120,6 +1243,9 @@ let gameState = {
     weeklyRewards: { weekKey: '', claimed: {}, lastClaimAt: '', history: [] },
     visualLab: { lastFps: 0, lastMode: graphicsMode, tunedAt: '' },
     sensory: { sound: true, haptic: true, music: false, volume: 0.55, impact: 1, unlocked: false },
+    captain: { supplyClaimed: false, guideDismissed: false, completed: {}, lastTip: '', startedAt: '' },
+    quality: { preset: localStorage.getItem('aqua_quality_preset') || 'auto', longTasks: 0, lastFps: 0, directorMode: 'auto', lastTuneAt: '' },
+    ui: { compactHud: localStorage.getItem('aqua_compact_hud') === '1', oneHand: localStorage.getItem('aqua_one_hand_mode') === '1', coachHints: true },
     bossWindowActive: false,
     bossSurgeTick: 0
 };
@@ -1420,7 +1546,7 @@ function initVisualObserver() {
             if (!entry.isIntersecting && target.classList.contains('premium-card')) target.style.removeProperty('will-change');
         });
     }, { root: document.getElementById('app-shell'), threshold: .08 });
-    document.querySelectorAll('.premium-card, .rank-panel, .reward-vault, .visual-lab-card').forEach((el) => observer.observe(el));
+    document.querySelectorAll('.premium-card, .rank-panel, .reward-vault, .visual-lab-card, .mega-panel, .captain-panel, .quality-director').forEach((el) => observer.observe(el));
 }
 
 function getLocalLeaderboardFallback() {
@@ -1655,6 +1781,7 @@ async function runPerformanceCheck(silent = false) {
     } else if (!silent) {
         showToast(`성능 점검 완료: ${fps} FPS`, '⚡', 2600);
     }
+    afterMegaPerformanceSample(fps);
     return fps;
 }
 
@@ -1700,6 +1827,296 @@ function renderDeployActionsPanel() {
                 <div class="deploy-step"><strong>3. PAGES</strong><span>자동 배포</span></div>
             </div>
         </div>`;
+}
+
+
+// ==================== Mega Expansion v2.4: Captain Coach / Quality Director ====================
+const CAPTAIN_STEPS = [
+    { id:'checkin', icon:'🗓️', name:'출석 보상 받기', desc:'오늘의 항해에서 출석을 완료하세요', target:1, progress:() => gameState.daily?.checkedIn ? 1 : 0, action:() => switchScreen('quests') },
+    { id:'first_cast', icon:'🎣', name:'첫 캐스팅', desc:'낚시 지역을 골라 낚싯대를 던지세요', target:1, progress:() => gameState.daily?.stats?.casts || 0, action:() => selectRegion(gameState.currentRegion || '호수') },
+    { id:'first_catch', icon:'🐟', name:'첫 포획', desc:'입질이 오면 릴 감기로 물고기를 잡으세요', target:1, progress:() => gameState.totalCaught || 0, action:() => selectRegion(gameState.currentRegion || '호수') },
+    { id:'sell_fish', icon:'💰', name:'첫 판매', desc:'가방에서 물고기를 팔아 성장 자금을 마련하세요', target:1, progress:() => gameState.totalGoldEarned > 0 ? 1 : 0, action:() => switchScreen('inventory') },
+    { id:'gear_up', icon:'🧰', name:'장비 점검', desc:'장비 공방에서 낚싯대·미끼·강화를 확인하세요', target:1, progress:() => (gameState.ownedRods?.length > 1 || getRodEnhanceLevel() > 0 || Object.values(gameState.baitInventory || {}).some(v => Number(v) > 0 && v < 999999)) ? 1 : 0, action:() => switchScreen('equipment') },
+    { id:'mission_claim', icon:'🎁', name:'미션 보상 수령', desc:'데일리/시즌 미션 보상을 하나 이상 수령하세요', target:1, progress:() => Object.keys(gameState.daily?.claimedQuests || {}).length + Object.keys(gameState.season?.claimed || {}).length > 0 ? 1 : 0, action:() => switchScreen('quests') },
+    { id:'boss_ready', icon:'👑', name:'보스 도전 준비', desc:'장비 점수 1,500 이상 또는 보스 1회 조우', target:1, progress:() => (getEquipmentScore() >= 1500 || Number(gameState.bossStats?.encounters || 0) > 0) ? 1 : 0, action:() => switchScreen('equipment') }
+];
+
+function ensureMegaState() {
+    if (!gameState.captain || typeof gameState.captain !== 'object') gameState.captain = { supplyClaimed:false, guideDismissed:false, completed:{}, lastTip:'', startedAt:'' };
+    if (!gameState.captain.completed || typeof gameState.captain.completed !== 'object') gameState.captain.completed = {};
+    if (!gameState.captain.startedAt) gameState.captain.startedAt = new Date().toISOString();
+    if (!gameState.quality || typeof gameState.quality !== 'object') gameState.quality = { preset: localStorage.getItem('aqua_quality_preset') || 'auto', longTasks:0, lastFps:0, directorMode:'auto', lastTuneAt:'' };
+    gameState.quality.preset = gameState.quality.preset || localStorage.getItem('aqua_quality_preset') || 'auto';
+    gameState.quality.longTasks = Math.max(0, Number(gameState.quality.longTasks || 0));
+    gameState.quality.lastFps = Math.max(0, Number(gameState.quality.lastFps || gameState.visualLab?.lastFps || 0));
+    if (!gameState.ui || typeof gameState.ui !== 'object') gameState.ui = { compactHud:false, oneHand:false, coachHints:true };
+    gameState.ui.compactHud = gameState.ui.compactHud === true || localStorage.getItem('aqua_compact_hud') === '1';
+    gameState.ui.oneHand = gameState.ui.oneHand === true || localStorage.getItem('aqua_one_hand_mode') === '1';
+    gameState.ui.coachHints = gameState.ui.coachHints !== false;
+    return { captain: gameState.captain, quality: gameState.quality, ui: gameState.ui };
+}
+
+function getCaptainStepProgress(step) {
+    const value = Math.max(0, Number(step.progress?.() || 0));
+    return { value, done: value >= Number(step.target || 1) };
+}
+
+function getCaptainSummary() {
+    ensureMegaState();
+    const steps = CAPTAIN_STEPS.map((step) => ({ ...step, ...getCaptainStepProgress(step) }));
+    const done = steps.filter((step) => step.done).length;
+    const ratio = Math.floor((done / Math.max(1, steps.length)) * 100);
+    const next = steps.find((step) => !step.done) || steps[steps.length - 1];
+    return { steps, done, total: steps.length, ratio, next };
+}
+
+function renderOnboardingPanel() {
+    const panel = document.getElementById('onboarding-panel');
+    if (!panel) return;
+    const summary = getCaptainSummary();
+    const next = summary.next;
+    const gift = gameState.captain?.supplyClaimed ? '보급품 수령 완료' : '초보 선장 보급품 대기';
+    panel.innerHTML = `
+        <div class="relative z-10 flex items-start justify-between gap-3">
+            <div class="min-w-0">
+                <div class="text-[11px] text-cyan-100/75 font-black tracking-wide">CAPTAIN COACH</div>
+                <div class="font-black text-xl tracking-tight mt-0.5">첫 10분 항해 루프</div>
+                <div class="text-xs text-white/60 mt-1">다음 목표: ${escapeHTML(next.icon)} ${escapeHTML(next.name)} · ${escapeHTML(gift)}</div>
+            </div>
+            <div class="text-right shrink-0">
+                <div class="coach-chip">${summary.done}/${summary.total}</div>
+                <button onclick="event.stopPropagation(); switchScreen('captain')" class="mt-2 px-3 py-1.5 rounded-xl bg-cyan-300/14 border border-cyan-200/20 text-[11px] font-extrabold">코치 열기</button>
+            </div>
+        </div>
+        <div class="relative z-10 mt-3 coach-progress-track"><span style="width:${summary.ratio}%"></span></div>`;
+}
+
+function renderQualityDirectorMini() {
+    const label = document.getElementById('quality-mini-label');
+    if (label) label.textContent = getQualityLabel();
+}
+
+function getQualityLabel() {
+    ensureMegaState();
+    const preset = gameState.quality.preset || 'auto';
+    const fps = Math.round(Number(gameState.quality.lastFps || gameState.visualLab?.lastFps || 0));
+    const mode = graphicsMode === 'low' ? '절전' : (preset === 'ultra' ? '울트라' : '고급');
+    return `${preset.toUpperCase()} · ${mode}${fps ? ` · ${fps}FPS` : ''}`;
+}
+
+function renderCaptainHub() {
+    ensureMegaState();
+    const host = document.getElementById('captain-hub-panel');
+    if (!host) return;
+    const summary = getCaptainSummary();
+    const tier = getRankTier();
+    const rows = summary.steps.map((step) => `
+        <div class="coach-step ${step.done ? 'done' : ''}">
+            <div class="step-dot">${escapeHTML(step.done ? '✅' : step.icon)}</div>
+            <div class="min-w-0">
+                <div class="font-black text-sm">${escapeHTML(step.name)}</div>
+                <div class="text-[11px] text-white/55 leading-snug">${escapeHTML(step.desc)}</div>
+            </div>
+            <button onclick="runCaptainStep('${step.id}')" class="px-3 py-2 rounded-2xl ${step.done ? 'bg-emerald-400/15 text-emerald-100' : 'bg-cyan-400/15 text-cyan-100'} border border-white/10 text-[11px] font-black">${step.done ? '완료' : '이동'}</button>
+        </div>`).join('');
+    host.innerHTML = `
+        <div class="captain-hero premium-glass">
+            <div class="orbit" aria-hidden="true"></div>
+            <div class="relative z-10">
+                <div class="text-[11px] text-cyan-100/75 font-black tracking-wide">MEGA EXPANSION CONTROL</div>
+                <div class="text-2xl font-black tracking-tight mt-1">${escapeHTML(gameState.nickname)} 선장님, 다음 항로를 정리했습니다</div>
+                <div class="text-xs text-white/60 mt-2">랭크 ${escapeHTML(tier.emoji)} ${escapeHTML(tier.name)} · 장비 점수 ${getEquipmentScore().toLocaleString()} · 시즌 점수 ${getSeasonScore().toLocaleString()}</div>
+                <div class="mt-4 first-run-track"><span style="width:${summary.ratio}%"></span></div>
+            </div>
+        </div>
+        <div class="mega-stat-grid">
+            <div><div class="text-[10px] text-white/45">진행률</div><div class="text-lg font-black">${summary.ratio}%</div></div>
+            <div><div class="text-[10px] text-white/45">보스</div><div class="text-lg font-black">${Number(gameState.bossStats?.defeated || 0)}승</div></div>
+            <div><div class="text-[10px] text-white/45">도감</div><div class="text-lg font-black">${getDiscoveredSpeciesCount()}종</div></div>
+        </div>
+        <div class="mega-panel premium-glass liquid-border rounded-[2rem] p-4">
+            <div class="relative z-10 flex justify-between items-start gap-3 mb-3">
+                <div><div class="text-[11px] text-cyan-100/70 font-black tracking-wide">FIRST 10 MINUTES ROUTE</div><div class="font-black text-xl">초보자 항해 체크리스트</div></div>
+                <button onclick="claimCaptainSupply()" class="px-3 py-2 rounded-2xl bg-amber-300/15 border border-amber-200/20 text-[11px] font-black">🎁 보급품</button>
+            </div>
+            <div class="relative z-10 space-y-2">${rows}</div>
+        </div>
+        <div id="quality-director-panel" class="quality-director premium-glass liquid-border rounded-[2rem] p-4"></div>
+        <div class="mega-panel premium-glass rounded-[2rem] p-4">
+            <div class="relative z-10 flex items-start justify-between gap-3">
+                <div>
+                    <div class="text-[11px] text-fuchsia-100/70 font-black tracking-wide">MOBILE UX DIRECTOR</div>
+                    <div class="font-black text-xl">한 손 조작 · 컴팩트 HUD · 코치 힌트</div>
+                    <div class="text-xs text-white/55 mt-1">카카오/모바일/PWA 환경에서 화면 낭비를 줄이고 버튼 접근성을 높입니다.</div>
+                </div>
+            </div>
+            <div class="relative z-10 mt-4 grid grid-cols-3 gap-2">
+                <button onclick="toggleOneHandMode()" class="coach-chip">${gameState.ui.oneHand ? '✅' : '⬜'} 원핸드</button>
+                <button onclick="toggleCompactHud()" class="coach-chip">${gameState.ui.compactHud ? '✅' : '⬜'} 컴팩트</button>
+                <button onclick="toggleCoachHints()" class="coach-chip">${gameState.ui.coachHints ? '✅' : '⬜'} 힌트</button>
+            </div>
+        </div>`;
+    renderQualityDirectorPanel();
+}
+
+function renderQualityDirectorPanel() {
+    ensureMegaState();
+    const panel = document.getElementById('quality-director-panel') || document.getElementById('quality-director-mini');
+    if (!panel) return;
+    const fps = Math.round(Number(gameState.quality.lastFps || gameState.visualLab?.lastFps || 0));
+    const longTasks = Number(gameState.quality.longTasks || 0);
+    const score = clamp(fps ? (fps / 60) * 100 - Math.min(25, longTasks * 3) : (graphicsMode === 'low' ? 48 : 82), 8, 100);
+    const presets = ['auto','low','high','ultra'].map((preset) => `<button onclick="setQualityPreset('${preset}')" class="quality-chip ${gameState.quality.preset === preset ? 'active' : ''}">${preset.toUpperCase()}</button>`).join('');
+    panel.innerHTML = `
+        <div class="relative z-10">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <div class="text-[11px] text-cyan-100/70 font-black tracking-wide">ADAPTIVE QUALITY DIRECTOR</div>
+                    <div class="font-black text-xl tracking-tight">자동 품질 감독관</div>
+                    <div class="text-xs text-white/55 mt-1">${escapeHTML(getQualityLabel())} · Long Task ${longTasks}회</div>
+                </div>
+                <button onclick="runMegaQualityDirector()" class="px-3 py-2 rounded-2xl bg-cyan-300/14 border border-cyan-200/20 text-[11px] font-black">⚡ 점검</button>
+            </div>
+            <div class="mt-4 quality-track"><span style="width:${score}%"></span></div>
+            <div class="mt-3 grid grid-cols-4 gap-2">${presets}</div>
+        </div>`;
+}
+
+function runCaptainStep(id) {
+    const step = CAPTAIN_STEPS.find((item) => item.id === id);
+    if (!step) return;
+    playSound('select');
+    haptic(8);
+    step.action?.();
+}
+
+function claimCaptainSupply() {
+    ensureMegaState();
+    if (gameState.captain.supplyClaimed) {
+        showToast('이미 캡틴 보급품을 수령했습니다', '🎁');
+        return;
+    }
+    gameState.captain.supplyClaimed = true;
+    gameState.gold = Number(gameState.gold || 0) + 900;
+    gameState.exp = Number(gameState.exp || 0) + 140;
+    gameState.baitInventory = gameState.baitInventory || {};
+    gameState.baitInventory.glow_bait = Number(gameState.baitInventory.glow_bait || 0) + 5;
+    gameState.baitInventory.pearl_bait = Number(gameState.baitInventory.pearl_bait || 0) + 2;
+    addExp(0);
+    playSound('reward');
+    haptic([20, 35, 20]);
+    showToast('캡틴 보급품 지급: 900골드, 반짝 미끼 5개, 진주 미끼 2개', '🎁', 4200);
+    savePlayerData();
+    updateUI();
+    renderCaptainHub();
+}
+
+function setQualityPreset(preset = 'auto') {
+    ensureMegaState();
+    if (!['auto','low','high','ultra'].includes(preset)) preset = 'auto';
+    gameState.quality.preset = preset;
+    localStorage.setItem('aqua_quality_preset', preset);
+    if (preset === 'low') graphicsMode = 'low';
+    if (preset === 'high' || preset === 'ultra') graphicsMode = 'high';
+    if (preset === 'auto') {
+        const fps = Number(gameState.quality.lastFps || gameState.visualLab?.lastFps || 0);
+        const saveData = navigator.connection?.saveData === true;
+        const lowMemory = navigator.deviceMemory && navigator.deviceMemory <= 3;
+        graphicsMode = (saveData || lowMemory || (fps && fps < 40)) ? 'low' : 'high';
+    }
+    localStorage.setItem('aqua_graphics_mode', graphicsMode);
+    applyGraphicsMode();
+    renderQualityDirectorPanel();
+    renderQualityDirectorMini();
+    savePlayerData(false);
+    showToast(`품질 프리셋: ${preset.toUpperCase()}`, '⚙️');
+}
+
+function applyMegaQualityClasses() {
+    ensureMegaState();
+    document.body.classList.toggle('compact-hud', Boolean(gameState.ui.compactHud));
+    document.body.classList.toggle('one-hand-mode', Boolean(gameState.ui.oneHand));
+    document.body.classList.toggle('quality-ultra', gameState.quality.preset === 'ultra' && graphicsMode !== 'low' && !reduceMotion);
+    document.body.classList.toggle('quality-balanced', gameState.quality.preset === 'auto' || gameState.quality.preset === 'high');
+}
+
+async function runMegaQualityDirector() {
+    ensureMegaState();
+    const fps = await runPerformanceCheck(true);
+    afterMegaPerformanceSample(fps);
+    if (gameState.quality.preset === 'auto') {
+        if (fps < 38 || gameState.quality.longTasks >= 5) graphicsMode = 'low';
+        else graphicsMode = 'high';
+        localStorage.setItem('aqua_graphics_mode', graphicsMode);
+    }
+    gameState.quality.lastTuneAt = new Date().toISOString();
+    applyGraphicsMode();
+    renderQualityDirectorPanel();
+    showToast(`품질 감독관 점검 완료: ${Math.round(fps)} FPS`, '⚡', 3200);
+    savePlayerData(false);
+}
+
+function afterMegaPerformanceSample(fps) {
+    ensureMegaState();
+    gameState.quality.lastFps = Math.round(Number(fps || 0));
+    if (gameState.quality.preset === 'auto' && fps && fps < 35) {
+        graphicsMode = 'low';
+        localStorage.setItem('aqua_graphics_mode', graphicsMode);
+    }
+    renderQualityDirectorMini();
+}
+
+function initMegaPerformanceObserver() {
+    ensureMegaState();
+    try {
+        if (!('PerformanceObserver' in window) || !PerformanceObserver.supportedEntryTypes?.includes('longtask')) return;
+        const observer = new PerformanceObserver((list) => {
+            gameState.quality.longTasks += list.getEntries().length;
+            if (gameState.quality.preset === 'auto' && gameState.quality.longTasks >= 8 && graphicsMode !== 'low') {
+                graphicsMode = 'low';
+                localStorage.setItem('aqua_graphics_mode', graphicsMode);
+                applyGraphicsMode();
+                showToast('프레임 보호를 위해 그래픽 절전 전환', '🛡️', 3200);
+            }
+        });
+        observer.observe({ entryTypes:['longtask'] });
+    } catch (error) {
+        console.warn('Mega performance observer skipped:', error.message);
+    }
+}
+
+function toggleOneHandMode() {
+    ensureMegaState();
+    gameState.ui.oneHand = !gameState.ui.oneHand;
+    localStorage.setItem('aqua_one_hand_mode', gameState.ui.oneHand ? '1' : '0');
+    applyMegaQualityClasses();
+    renderCaptainHub();
+    savePlayerData(false);
+    showToast(gameState.ui.oneHand ? '원핸드 모드 활성화' : '원핸드 모드 해제', '🖐️');
+}
+
+function toggleCompactHud() {
+    ensureMegaState();
+    gameState.ui.compactHud = !gameState.ui.compactHud;
+    localStorage.setItem('aqua_compact_hud', gameState.ui.compactHud ? '1' : '0');
+    applyMegaQualityClasses();
+    renderCaptainHub();
+    savePlayerData(false);
+    showToast(gameState.ui.compactHud ? '컴팩트 HUD 활성화' : '컴팩트 HUD 해제', '📱');
+}
+
+function toggleCoachHints() {
+    ensureMegaState();
+    gameState.ui.coachHints = !gameState.ui.coachHints;
+    renderCaptainHub();
+    savePlayerData(false);
+    showToast(gameState.ui.coachHints ? '코치 힌트 표시' : '코치 힌트 숨김', '🧭');
+}
+
+function quickCoachAction() {
+    const summary = getCaptainSummary();
+    if (summary.next?.action) summary.next.action();
+    else switchScreen('captain');
 }
 
 
@@ -2125,6 +2542,66 @@ function renderMissionQuickSummary() {
     if (fill) fill.style.width = `${Math.floor((complete / total) * 100)}%`;
 }
 
+
+
+function getDailyCompletionSummary() {
+    const daily = ensureDailyState(true);
+    const total = DAILY_QUESTS.length + 1;
+    const completeQuests = DAILY_QUESTS.filter((q) => isQuestComplete(q) || daily.claimedQuests[q.id]).length;
+    const complete = completeQuests + (daily.checkedIn ? 1 : 0);
+    return { daily, total, complete, completeQuests };
+}
+
+function getFocusGoal() {
+    const { daily } = getDailyCompletionSummary();
+    const claimableQuest = DAILY_QUESTS.find((q) => isQuestComplete(q) && !daily.claimedQuests[q.id]);
+    const inventoryCount = Number(gameState.inventory?.length || 0);
+    const rod = getRod();
+    const enhance = getRodEnhanceLevel(rod.id);
+    const nextCost = getEnhanceCost(rod.id);
+    if (!daily.checkedIn) return { title:'오늘 출석 보상 받기', desc:'무료 골드와 경험치를 먼저 챙기면 초반 성장 속도가 좋아집니다.', label:'미션으로', action:() => switchScreen('quests') };
+    if (claimableQuest) return { title:`${claimableQuest.icon} 보상 수령 가능`, desc:`${claimableQuest.name} 완료. 미션 보상을 받아 장비 성장에 사용하세요.`, label:'수령', action:() => switchScreen('quests') };
+    if (inventoryCount >= 6) return { title:'가방 판매로 골드 확보', desc:`가방에 ${inventoryCount}마리가 있습니다. 판매 후 강화/미끼 구매를 추천합니다.`, label:'판매', action:() => switchScreen('inventory') };
+    if (Number(gameState.gold || 0) >= nextCost && enhance < 10) return { title:`${rod.name} +${enhance + 1} 강화 가능`, desc:`예상 비용 ${nextCost.toLocaleString()}골드. 릴 파워와 보스 안정성이 올라갑니다.`, label:'강화', action:() => switchScreen('equipment') };
+    if (Number(gameState.bossStats?.defeated || 0) === 0 && Number(gameState.level || 1) >= 4) return { title:'첫 보스 토벌 준비', desc:'장비를 점검하고 심해/용궁에서 보스 신호를 노려보세요.', label:'장비', action:() => switchScreen('equipment') };
+    return { title:`${gameState.currentRegion || '호수'}에서 낚시 시작`, desc:'현재 성장 단계에서는 포획 → 판매 → 강화 루프가 가장 효율적입니다.', label:'낚시', action:() => selectRegion(gameState.currentRegion || '호수') };
+}
+
+function renderFocusHud() {
+    const summary = getDailyCompletionSummary();
+    const goal = getFocusGoal();
+    window.__aquaFocusGoal = goal;
+    const title = document.getElementById('focus-goal-title');
+    const desc = document.getElementById('focus-goal-desc');
+    const btn = document.getElementById('focus-goal-btn');
+    const inv = document.getElementById('focus-inventory-count');
+    const mission = document.getElementById('focus-mission-count');
+    const boss = document.getElementById('focus-boss-count');
+    const rank = document.getElementById('focus-rank-label');
+    if (title) title.textContent = goal.title;
+    if (desc) desc.textContent = goal.desc;
+    if (btn) btn.textContent = goal.label || '바로가기';
+    if (inv) inv.textContent = Number(gameState.inventory?.length || 0);
+    if (mission) mission.textContent = `${summary.complete}/${summary.total}`;
+    if (boss) boss.textContent = Number(gameState.bossStats?.defeated || 0);
+    if (rank) {
+        const level = Number(gameState.level || 1);
+        rank.textContent = level >= 20 ? '심연 선장' : level >= 10 ? '숙련 낚시꾼' : level >= 5 ? '항해 견습' : '새내기';
+    }
+}
+
+function runFocusGoalAction() {
+    playSound('select');
+    if (window.__aquaFocusGoal?.action) return window.__aquaFocusGoal.action();
+    selectRegion(gameState.currentRegion || '호수');
+}
+
+function toggleQuickMenu() {
+    const panel = document.getElementById('quick-menu-panel');
+    if (!panel) return;
+    panel.classList.toggle('hidden');
+}
+
 function claimAttendance() {
     const daily = ensureDailyState(true);
     if (daily.checkedIn) return showToast('오늘 출석 보상은 이미 받았습니다', '🗓️');
@@ -2306,6 +2783,7 @@ function applyGraphicsMode() {
     document.body.classList.toggle('quality-low', low);
     const toggle = document.getElementById('graphics-toggle');
     if (toggle) toggle.textContent = low ? '그래픽 절전' : '그래픽 고급';
+    applyMegaQualityClasses();
 }
 
 function toggleGraphicsMode() {
@@ -2386,10 +2864,6 @@ async function unlockSensoryEngine(forceToast = false) {
             playSound('ui');
             haptic(8);
             showToast('감각 엔진 활성화: 사운드/햅틱 준비 완료', '🔊', 2800);
-        }
-        if (sensoryUnlocked) {
-            checkAchievements();
-            savePlayerData(false);
         }
         renderSensoryPanel();
         return sensoryUnlocked;
@@ -2588,9 +3062,13 @@ function updateUI() {
     ensureDailyState(true);
     renderMissionQuickSummary();
     renderBossQuickPanel();
+    renderFocusHud();
     updatePWAStatus();
     applyGraphicsMode();
     renderSensoryPanel();
+    renderOnboardingPanel();
+    renderQualityDirectorMini();
+    applyMegaQualityClasses();
 }
 
 function switchScreen(screen) {
@@ -2614,6 +3092,7 @@ function switchScreen(screen) {
             if (screen === 'inventory') renderInventory();
             if (screen === 'record') renderRecord();
             if (screen === 'competition') renderCompetition();
+            if (screen === 'captain') renderCaptainHub();
             if (screen === 'achievements') renderAchievements();
             if (screen === 'encyclopedia') renderEncyclopedia();
         };
@@ -3490,7 +3969,10 @@ const ACHIEVEMENTS = [
     { id: 'actions_ready', name: '자동 배포 선장', desc: 'v2.0 자동 배포 패치 접속', check: () => APP_VERSION >= '2.0.0' },
     { id: 'reward_vault_open', name: '보상함 관리자', desc: 'v2.1 주간 보상함 패치 접속', check: () => APP_VERSION >= '2.1.0' },
     { id: 'mobile_launch_master', name: '모바일 런처 마스터', desc: 'v2.2 카카오 브릿지와 게임 모드 패치 접속', check: () => APP_VERSION >= '2.2.0' },
-    { id: 'sensory_master', name: '감각 엔진 조율사', desc: 'v2.3 사운드/햅틱 엔진 활성화', check: (s) => s.sensory && s.sensory.unlocked === true },
+    { id: 'sensory_master', name: '감각 엔진 조율사', desc: 'v2.4 사운드/햅틱 엔진 활성화', check: (s) => s.sensory && s.sensory.unlocked === true },
+    { id: 'captain_coach', name: '캡틴 코치 입문', desc: 'v2.4 캡틴 코치 허브 열기', check: () => APP_VERSION >= '2.4.0' },
+    { id: 'focus_ui_clean', name: '깔끔한 항해자', desc: 'v2.5 Focus UI 정리 패치 접속', check: () => APP_VERSION >= '2.5.0' },
+    { id: 'quality_director', name: '품질 감독관', desc: '자동 품질 감독관 점검 기록', check: (s) => Number(s.quality?.lastFps || 0) > 0 },
     { id: 'boss_first_win', name: '대어 토벌자', desc: '보스 어종 1마리 포획', check: (s) => Number(s.bossStats?.defeated || 0) >= 1 },
     { id: 'boss_master', name: '균열의 정복자', desc: '보스 어종 3마리 포획', check: (s) => Number(s.bossStats?.defeated || 0) >= 3 }
 ];
@@ -3755,12 +4237,23 @@ function normalizeGameState(data) {
     next.bossStats.bestValue = Math.max(0, Number(next.bossStats.bestValue || 0));
     next.bossWindowActive = false;
     next.bossSurgeTick = 0;
+    if (!next.captain || typeof next.captain !== 'object') next.captain = { supplyClaimed:false, guideDismissed:false, completed:{}, lastTip:'', startedAt:'' };
+    if (!next.captain.completed || typeof next.captain.completed !== 'object') next.captain.completed = {};
+    if (!next.quality || typeof next.quality !== 'object') next.quality = { preset: localStorage.getItem('aqua_quality_preset') || 'auto', longTasks:0, lastFps:0, directorMode:'auto', lastTuneAt:'' };
+    next.quality.preset = next.quality.preset || localStorage.getItem('aqua_quality_preset') || 'auto';
+    next.quality.longTasks = Math.max(0, Number(next.quality.longTasks || 0));
+    next.quality.lastFps = Math.max(0, Number(next.quality.lastFps || next.visualLab?.lastFps || 0));
+    if (!next.ui || typeof next.ui !== 'object') next.ui = { compactHud:false, oneHand:false, coachHints:true };
+    next.ui.compactHud = next.ui.compactHud === true || localStorage.getItem('aqua_compact_hud') === '1';
+    next.ui.oneHand = next.ui.oneHand === true || localStorage.getItem('aqua_one_hand_mode') === '1';
+    next.ui.coachHints = next.ui.coachHints !== false;
     return next;
 }
 
 function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
+        localStorage.setItem('aqua_v2.5', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.3', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.1', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.0', JSON.stringify(plain));
@@ -3928,7 +4421,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) gameState = normalizeGameState(JSON.parse(saved));
         else gameState = normalizeGameState(gameState);
         
@@ -3938,6 +4431,7 @@ async function init() {
         if (!gameState.achievements) gameState.achievements = {};
         ensureDailyState(true);
         ensureWeeklyRewardState(true);
+        ensureMegaState();
         
         initMobileLaunchBridge();
         applyAdaptivePerformance();
@@ -3949,9 +4443,10 @@ async function init() {
         bindPremiumCardPointer();
         bindResponsiveTouchFX();
         scheduleAquaTask(initVisualObserver, 'background');
+        scheduleAquaTask(initMegaPerformanceObserver, 'background');
         startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v2.3] Mobile Launch Visual Max Patch Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v2.5] Focus UI Patch Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
         alert('게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.');
