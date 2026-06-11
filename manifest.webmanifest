@@ -1,15 +1,15 @@
 {
-  "name": "Aqua Fantasia v2.1",
-  "short_name": "Aqua v2.1",
-  "description": "Aqua Fantasia - 주간 보상함, 랭킹 보상, 자동 배포가 적용된 모바일 낚시 RPG",
+  "name": "Aqua Fantasia v2.2",
+  "short_name": "Aqua v2.2",
+  "description": "Aqua Fantasia - 카카오 브라우저 브릿지, 풀스크린 게임모드, 랭킹 보상이 적용된 모바일 낚시 RPG",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "./?app=aqua-fantasia",
-  "start_url": "./?source=pwa",
+  "id": "./?app=aqua-fantasia-v22",
+  "start_url": "./?source=pwa&fullscreen=1",
   "scope": "./",
-  "display": "standalone",
+  "display": "fullscreen",
   "display_override": [
-    "window-controls-overlay",
+    "fullscreen",
     "standalone",
     "minimal-ui"
   ],

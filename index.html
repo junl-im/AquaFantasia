@@ -11,10 +11,12 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Aqua Fantasia">
     <meta name="application-name" content="Aqua Fantasia">
+    <meta name="format-detection" content="telephone=no, address=no, email=no">
+    <meta name="supported-color-schemes" content="dark">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
-    <title>Aqua Fantasia • Dev v2.1 Reward Vault Visual Max</title>
+    <title>Aqua Fantasia • Dev v2.2 Mobile Launch Visual Max</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -477,6 +479,59 @@
 
         body.quality-low .fx-aurora, body.quality-low .depth-rays, body.quality-low .bubble-field, body.quality-low .fish-shadow:nth-child(n+5), body.quality-low .equipment-card::after { display:none; }
         body.quality-low .premium-glass { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 8px 24px rgba(0,0,0,.18); }
+
+        /* ==================== v2.2 Mobile Launch Visual Max ==================== */
+        :root { --vvh: 100svh; --launch-glow: rgba(45,212,191,.28); }
+        body.mobile-game-mode {
+            background:
+                radial-gradient(circle at 50% -8%, rgba(45,212,191,.22), transparent 30rem),
+                linear-gradient(180deg, #020617, #082f49 45%, #010713 100%);
+        }
+        body.mobile-game-mode #app-shell { min-height: var(--vvh); max-width: 480px; border-color: rgba(125,211,252,.20); }
+        body.mobile-game-mode .bottom-nav { background: rgba(2,6,23,.56); }
+        body.mobile-game-mode #main-content { overscroll-behavior: contain; }
+        .launch-bridge {
+            position: fixed; inset: 0; z-index: 120; display: grid; place-items: end center;
+            padding: calc(18px + var(--safe-top)) 14px calc(18px + var(--safe-bottom));
+            background: radial-gradient(circle at 50% 24%, rgba(6,182,212,.24), transparent 20rem), rgba(2,6,23,.54);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        }
+        .launch-bridge.hidden { display:none !important; }
+        .launch-bridge-card {
+            width: min(100%, 430px); position: relative; overflow: hidden;
+            border-radius: 2rem; padding: 1.15rem; border: 1px solid rgba(125,211,252,.24);
+            background: linear-gradient(145deg, rgba(8,47,73,.94), rgba(2,6,23,.92));
+            box-shadow: 0 26px 80px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12);
+        }
+        .launch-bridge-card::before {
+            content:''; position:absolute; inset:-35%; pointer-events:none;
+            background: conic-gradient(from 0deg, transparent, rgba(34,211,238,.22), rgba(16,185,129,.18), rgba(192,132,252,.15), transparent 70%);
+            animation: aurora-drift 14s linear infinite;
+        }
+        .launch-action-grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:.55rem; }
+        .launch-action-grid button, .game-mode-btn {
+            border-radius: 1.25rem; padding:.78rem .8rem; font-size:.78rem; font-weight: 900;
+            border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.08);
+        }
+        .launch-action-grid .primary { background: linear-gradient(135deg, rgba(34,211,238,.35), rgba(16,185,129,.28)); color:#ecfeff; }
+        .fullscreen-ribbon {
+            position: fixed; z-index: 70; left: 50%; bottom: calc(78px + var(--safe-bottom)); transform: translateX(-50%);
+            width: min(calc(100% - 22px), 430px); display:none; align-items:center; justify-content:space-between; gap:.75rem;
+            padding:.7rem .85rem; border:1px solid rgba(125,211,252,.22); border-radius:1.4rem;
+            background: rgba(2,6,23,.58); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 18px 50px rgba(0,0,0,.34);
+        }
+        .fullscreen-ribbon.show { display:flex; animation: toast-in .18s ease both; }
+        .mobile-hero-scan {
+            position:absolute; inset:0; pointer-events:none; opacity:.32;
+            background: linear-gradient(115deg, transparent 0%, rgba(125,211,252,.14) 42%, transparent 55%);
+            transform: translateX(-120%); animation: mobile-scan 4.6s ease-in-out infinite;
+        }
+        .launch-health-grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:.45rem; }
+        .launch-health-grid div { padding:.55rem .45rem; border-radius:1rem; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.10); text-align:center; }
+        .safe-viewport-guide { border:1px dashed rgba(125,211,252,.22); background: rgba(14,165,233,.08); }
+        @keyframes mobile-scan { 0%, 22% { transform: translateX(-130%); opacity:0; } 42% { opacity:.5; } 70%, 100% { transform: translateX(130%); opacity:0; } }
+
         @media (hover: hover) { .premium-card:hover { transform: translateY(-2px); border-color: rgba(125,211,252,.32); } }
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .001ms !important; }
@@ -494,7 +549,7 @@
             <div>
                 <span class="font-black text-3xl tracking-[-1.5px]">AQUA</span>
                 <span class="font-bold text-3xl tracking-[-1.5px] text-sky-400">FANTASIA</span>
-                <span class="ml-2 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20">v2.1</span>
+                <span class="ml-2 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20">v2.2</span>
             </div>
         </div>
         <div class="flex items-center gap-x-2 text-sm flex-wrap justify-end">
@@ -505,6 +560,7 @@
             <div id="cloud-save-status" class="px-3 py-1 text-[11px] rounded-full bg-white/10 text-white/70 hidden">로컬 저장</div>
             <button id="graphics-toggle" onclick="toggleGraphicsMode()" class="px-3 py-1 text-[11px] rounded-full bg-cyan-300/10 text-cyan-100 border border-cyan-200/20">그래픽 고급</button>
             <button id="install-app-btn" onclick="installAquaApp()" class="hidden px-3 py-1 text-[11px] rounded-full bg-emerald-400/15 text-emerald-100 border border-emerald-200/20 install-pulse">📲 설치</button>
+            <button onclick="enableMobileGameMode()" class="px-3 py-1 text-[11px] rounded-full bg-violet-400/15 text-violet-100 border border-violet-200/20">🎮 게임모드</button>
             <button id="logout-btn" onclick="logoutGame()" class="hidden px-3 py-1 text-[11px] rounded-full bg-white/10 hover:bg-white/20">로그아웃</button>
             <div class="flex items-center bg-white/10 px-3.5 py-1.5 rounded-2xl">
                 <span class="text-amber-400 mr-1.5">💰</span>
@@ -525,7 +581,7 @@
             <div class="text-center mb-10">
                 <div class="text-[5.5rem] mb-3">🎣</div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-300 mt-2">v2.1 Reward Vault Visual Max · 주간 보상함 & 랭킹 보상 그래픽 최고화</p>
+                <p class="text-sky-300 mt-2">v2.2 Mobile Launch Visual Max · 카카오 브릿지 & 풀스크린 모바일 최적화</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
@@ -540,6 +596,7 @@
                 </div>
                 <button onclick="loginWithGoogle()" class="w-full py-4 bg-white text-[#0a3d5c] font-extrabold rounded-3xl flex items-center justify-center gap-x-3 active:scale-[0.985]"><span class="font-black text-xl">G</span> Google로 계속하기</button>
                 <button id="install-app-btn-login" onclick="installAquaApp()" class="hidden w-full py-3 premium-glass rounded-3xl text-sm font-extrabold text-emerald-100 border border-emerald-200/20">📲 홈화면에 설치</button>
+                <button onclick="enableMobileGameMode()" class="w-full py-3 premium-glass rounded-3xl text-sm font-extrabold text-violet-100 border border-violet-200/20">🎮 전체화면 게임모드</button>
             </div>
         </div>
 
@@ -572,8 +629,13 @@
                         </div>
                         <div class="grid grid-cols-1 gap-2 shrink-0">
                             <button onclick="installAquaApp()" id="install-app-btn-card" class="hidden px-4 py-2 bg-emerald-400/18 border border-emerald-200/20 rounded-2xl text-xs font-extrabold install-pulse">📲 설치</button>
+                            <button onclick="enableMobileGameMode()" class="px-4 py-2 bg-violet-300/14 border border-violet-200/20 rounded-2xl text-xs font-extrabold">🎮 게임</button>
+                            <button onclick="openInExternalBrowser('default')" id="external-browser-card-btn" class="hidden px-4 py-2 bg-amber-300/14 border border-amber-200/20 rounded-2xl text-xs font-extrabold">🌐 브라우저</button>
                             <button onclick="runPerformanceCheck()" class="px-4 py-2 bg-cyan-300/12 border border-cyan-200/20 rounded-2xl text-xs font-extrabold">⚡ 점검</button>
                         </div>
+                    </div>
+                    <div class="mt-3 safe-viewport-guide rounded-2xl px-3 py-2">
+                        <div class="flex justify-between text-[10px] text-white/55"><span>실행 환경</span><span id="launch-status-text">일반 브라우저</span></div>
                     </div>
                     <div class="mt-3">
                         <div class="flex justify-between text-[10px] text-white/55 mb-1"><span id="perf-readout">성능 점검 대기</span><span id="sw-status-text">오프라인 준비 중</span></div>
@@ -844,6 +906,42 @@
     </div>
     <button id="immersive-btn" onclick="toggleImmersiveMode()" class="immersive-fab" title="몰입 모드">⛶</button>
     <div id="toast-stack" class="toast-stack" aria-live="polite" aria-atomic="false"></div>
+
+    <div id="fullscreen-ribbon" class="fullscreen-ribbon">
+        <div>
+            <div class="text-xs font-black text-cyan-100">모바일 게임 모드</div>
+            <div class="text-[10px] text-white/55">전체화면 · 화면 켜짐 유지 · 세로 최적화</div>
+        </div>
+        <button onclick="enableMobileGameMode()" class="px-4 py-2 rounded-2xl bg-cyan-400/20 border border-cyan-200/20 text-xs font-black">시작</button>
+    </div>
+    <div id="kakao-bridge" class="launch-bridge hidden" role="dialog" aria-modal="true" aria-labelledby="kakao-bridge-title">
+        <div class="launch-bridge-card">
+            <div class="mobile-hero-scan" aria-hidden="true"></div>
+            <div class="relative z-10">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <div class="text-[11px] text-amber-100/75 font-black tracking-wide">KAKAO IN-APP BROWSER DETECTED</div>
+                        <h2 id="kakao-bridge-title" class="text-2xl font-black tracking-tight mt-1">기본 브라우저에서 더 쾌적하게 시작</h2>
+                        <p class="text-xs text-white/60 mt-2 leading-relaxed">카카오 내부 브라우저에서는 전체화면, 설치, 일부 로그인 팝업이 제한될 수 있어요. 아래 버튼으로 기본 브라우저를 열고 게임모드를 켜면 모바일 웹게임처럼 플레이할 수 있습니다.</p>
+                    </div>
+                    <div class="text-4xl">🌐</div>
+                </div>
+                <div class="launch-health-grid mt-4 text-[10px] text-white/65">
+                    <div><b class="block text-cyan-100">PWA</b>설치 준비</div>
+                    <div><b class="block text-cyan-100">FULL</b>전체화면</div>
+                    <div><b class="block text-cyan-100">FPS</b>자동 보정</div>
+                </div>
+                <div class="launch-action-grid mt-4">
+                    <button class="primary" onclick="openInExternalBrowser('default')">🌐 기본 브라우저</button>
+                    <button onclick="openInExternalBrowser('chrome')">Chrome 열기</button>
+                    <button onclick="copyGameLink()">🔗 링크 복사</button>
+                    <button onclick="dismissKakaoBridge()">카카오에서 계속</button>
+                </div>
+                <button onclick="enableMobileGameMode()" class="game-mode-btn w-full mt-3 bg-violet-400/15 border-violet-200/20 text-violet-100">🎮 전체화면 게임모드 켜기</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script type="module">
@@ -926,7 +1024,11 @@ try {
 </script>
 
 <script>
-// ==================== v2.1 REWARD VAULT VISUAL MAX PATCH / Firebase Ready ====================
+// ==================== v2.2 MOBILE LAUNCH VISUAL MAX PATCH / Firebase Ready ====================
+let graphicsMode = localStorage.getItem('aqua_graphics_mode') || ((navigator.deviceMemory && navigator.deviceMemory <= 3) ? 'low' : 'high');
+let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const APP_VERSION = '2.2.0';
+const GAME_CANONICAL_URL = 'https://junl-im.github.io/AquaFantasia/';
 let gameState = {
     gold: 1240, level: 12, exp: 870, expToNext: 1000,
     inventory: [], discovered: new Set(),
@@ -959,9 +1061,6 @@ let leaderboardUnsubscribe = null;
 let bossLeaderboardUnsubscribe = null;
 let cloudSaveTimer = null;
 let fishingTimers = [];
-let graphicsMode = localStorage.getItem('aqua_graphics_mode') || ((navigator.deviceMemory && navigator.deviceMemory <= 3) ? 'low' : 'high');
-let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '2.1.0';
 let deferredInstallPrompt = null;
 let pwaReady = false;
 let lastPerfScore = null;
@@ -1267,6 +1366,127 @@ function getBossLeaderboardFallback() {
     ];
 }
 
+
+function getLaunchEnvironment() {
+    const ua = navigator.userAgent || '';
+    const isAndroid = /Android/i.test(ua);
+    const isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isKakao = /KAKAOTALK|KakaoTalk|KAKAOSTORY|KakaoStory/i.test(ua);
+    const standalone = window.matchMedia?.('(display-mode: standalone)')?.matches || window.matchMedia?.('(display-mode: fullscreen)')?.matches || window.navigator.standalone;
+    return { ua, isAndroid, isIOS, isKakao, standalone };
+}
+
+function getCleanGameUrl() {
+    const url = new URL(location.href || GAME_CANONICAL_URL, GAME_CANONICAL_URL);
+    url.searchParams.set('source', 'external');
+    url.searchParams.delete('kakao');
+    url.searchParams.delete('fbclid');
+    return url.href;
+}
+
+function updateViewportMetrics() {
+    const h = window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight || 720;
+    document.documentElement.style.setProperty('--vvh', `${Math.round(h)}px`);
+}
+
+function setLaunchBridgeVisible(visible) {
+    const bridge = document.getElementById('kakao-bridge');
+    if (bridge) bridge.classList.toggle('hidden', !visible);
+    const externalBtn = document.getElementById('external-browser-card-btn');
+    if (externalBtn) externalBtn.classList.toggle('hidden', !getLaunchEnvironment().isKakao);
+}
+
+function dismissKakaoBridge() {
+    sessionStorage.setItem('aqua_kakao_bridge_dismissed', '1');
+    setLaunchBridgeVisible(false);
+    showFullscreenRibbon();
+}
+
+async function copyGameLink() {
+    const link = getCleanGameUrl();
+    try {
+        await navigator.clipboard?.writeText(link);
+        showToast('게임 링크를 복사했습니다. 브라우저 주소창에 붙여넣어 주세요.', '🔗', 3600);
+    } catch (error) {
+        window.prompt('아래 링크를 복사해 기본 브라우저에서 열어주세요.', link);
+    }
+}
+
+function openInExternalBrowser(prefer = 'default') {
+    const env = getLaunchEnvironment();
+    const target = getCleanGameUrl();
+    if (env.isAndroid) {
+        const url = new URL(target);
+        const packageName = prefer === 'chrome' ? ';package=com.android.chrome' : (prefer === 'samsung' ? ';package=com.sec.android.app.sbrowser' : '');
+        const intentUrl = `intent://${url.host}${url.pathname}${url.search}${url.hash}#Intent;scheme=${url.protocol.replace(':','')}${packageName};S.browser_fallback_url=${encodeURIComponent(target)};end`;
+        location.href = intentUrl;
+        return;
+    }
+    if (env.isIOS) {
+        copyGameLink();
+        showToast('iPhone은 우측 상단/하단 메뉴에서 Safari로 열기를 선택해 주세요', '🌐', 5200);
+        return;
+    }
+    window.open(target, '_blank', 'noopener,noreferrer');
+}
+
+let aquaWakeLock = null;
+async function requestAquaWakeLock() {
+    if (!('wakeLock' in navigator) || document.hidden) return false;
+    try {
+        aquaWakeLock = await navigator.wakeLock.request('screen');
+        aquaWakeLock.addEventListener?.('release', () => { aquaWakeLock = null; });
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+async function enableMobileGameMode() {
+    document.body.classList.add('mobile-game-mode');
+    localStorage.setItem('aqua_mobile_game_mode', '1');
+    updateViewportMetrics();
+    let full = false;
+    try {
+        const env = getLaunchEnvironment();
+        if (!document.fullscreenElement && !env.standalone && document.documentElement.requestFullscreen) {
+            await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
+            full = true;
+        }
+    } catch (error) {}
+    try { await screen.orientation?.lock?.('portrait'); } catch (error) {}
+    const wake = await requestAquaWakeLock();
+    const ribbon = document.getElementById('fullscreen-ribbon');
+    if (ribbon) ribbon.classList.remove('show');
+    showToast(`게임모드 시작${full ? ' · 전체화면' : ''}${wake ? ' · 화면 켜짐 유지' : ''}`, '🎮', 3600);
+    updatePWAStatus();
+}
+
+function showFullscreenRibbon() {
+    const env = getLaunchEnvironment();
+    const ribbon = document.getElementById('fullscreen-ribbon');
+    if (!ribbon || env.standalone || localStorage.getItem('aqua_mobile_game_mode') === '1') return;
+    ribbon.classList.add('show');
+    setTimeout(() => ribbon.classList.remove('show'), 9000);
+}
+
+function initMobileLaunchBridge() {
+    updateViewportMetrics();
+    window.visualViewport?.addEventListener('resize', updateViewportMetrics);
+    window.visualViewport?.addEventListener('scroll', updateViewportMetrics);
+    window.addEventListener('resize', updateViewportMetrics);
+    const env = getLaunchEnvironment();
+    document.body.classList.toggle('kakao-runtime', env.isKakao);
+    document.body.classList.toggle('pwa-runtime', !!env.standalone);
+    if (localStorage.getItem('aqua_mobile_game_mode') === '1') document.body.classList.add('mobile-game-mode');
+    if (env.isKakao && sessionStorage.getItem('aqua_kakao_bridge_dismissed') !== '1') {
+        setLaunchBridgeVisible(true);
+    } else {
+        setLaunchBridgeVisible(false);
+        setTimeout(showFullscreenRibbon, 1400);
+    }
+}
+
 function updatePWAStatus() {
     const standalone = window.matchMedia?.('(display-mode: standalone)')?.matches || window.navigator.standalone;
     const pwa = document.getElementById('pwa-status-text');
@@ -1274,11 +1494,16 @@ function updatePWAStatus() {
     const dot = document.getElementById('network-dot');
     const sw = document.getElementById('sw-status-text');
     const actions = document.getElementById('actions-runtime-status');
+    const launch = document.getElementById('launch-status-text');
     if (pwa) pwa.textContent = standalone ? '설치 앱 모드' : '브라우저 모드';
     if (network) network.lastElementChild.textContent = navigator.onLine ? '온라인' : '오프라인';
     if (dot) dot.classList.toggle('offline', !navigator.onLine);
     if (sw) sw.textContent = pwaReady ? '오프라인 준비 완료' : '오프라인 준비 중';
     if (actions) actions.textContent = 'GitHub Desktop Push 시 Actions 자동 검사/배포';
+    if (launch) {
+        const env = getLaunchEnvironment();
+        launch.textContent = env.isKakao ? '카카오 인앱브라우저 · 외부 브라우저 권장' : (env.standalone ? '설치형 앱/풀스크린 모드' : '모바일 브라우저 · 게임모드 가능');
+    }
 }
 
 function setInstallButtonsVisible(visible) {
@@ -3002,7 +3227,8 @@ const ACHIEVEMENTS = [
     { id: 'dragon_loadout', name: '용의 장비', desc: '용린 낚싯대 장착', check: (s) => s.equipment && s.equipment.rod === 'dragon_rod' },
     { id: 'season_ranker', name: '시즌 랭커', desc: '시즌 점수 20,000점 이상 달성', check: () => getSeasonScore() >= 20000 },
     { id: 'actions_ready', name: '자동 배포 선장', desc: 'v2.0 자동 배포 패치 접속', check: () => APP_VERSION >= '2.0.0' },
-    { id: 'reward_vault_open', name: '보상함 관리자', desc: 'v2.1 주간 보상함 패치 접속', check: () => APP_VERSION === '2.1.0' },
+    { id: 'reward_vault_open', name: '보상함 관리자', desc: 'v2.1 주간 보상함 패치 접속', check: () => APP_VERSION >= '2.1.0' },
+    { id: 'mobile_launch_master', name: '모바일 런처 마스터', desc: 'v2.2 카카오 브릿지와 게임 모드 패치 접속', check: () => APP_VERSION === '2.2.0' },
     { id: 'boss_first_win', name: '대어 토벌자', desc: '보스 어종 1마리 포획', check: (s) => Number(s.bossStats?.defeated || 0) >= 1 },
     { id: 'boss_master', name: '균열의 정복자', desc: '보스 어종 3마리 포획', check: (s) => Number(s.bossStats?.defeated || 0) >= 3 }
 ];
@@ -3267,6 +3493,7 @@ function normalizeGameState(data) {
 function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
+        localStorage.setItem('aqua_v2.2', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.1', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.0', JSON.stringify(plain));
         localStorage.setItem('aqua_v1.9', JSON.stringify(plain));
@@ -3427,12 +3654,13 @@ function bindLoginEnterKey() {
 
 document.addEventListener('visibilitychange', () => {
     document.body.classList.toggle('fx-paused', document.hidden);
+    if (!document.hidden && localStorage.getItem('aqua_mobile_game_mode') === '1') requestAquaWakeLock();
 });
 
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) gameState = normalizeGameState(JSON.parse(saved));
         else gameState = normalizeGameState(gameState);
         
@@ -3443,6 +3671,7 @@ async function init() {
         ensureDailyState(true);
         ensureWeeklyRewardState(true);
         
+        initMobileLaunchBridge();
         applyAdaptivePerformance();
         applyGraphicsMode();
         await initPWA();
@@ -3453,7 +3682,7 @@ async function init() {
         scheduleAquaTask(initVisualObserver, 'background');
         startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v2.1] Reward Vault Visual Max Patch Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v2.2] Mobile Launch Visual Max Patch Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
         alert('게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.');
