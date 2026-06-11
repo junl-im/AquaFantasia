@@ -14,7 +14,7 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
-    <title>Aqua Fantasia • Dev v1.7 Quest Visual Max</title>
+    <title>Aqua Fantasia • Dev v1.8 Forge Visual Max</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -115,6 +115,51 @@
         .toast-stack { position:absolute; z-index:80; left:12px; right:12px; top:calc(12px + var(--safe-top)); display:flex; flex-direction:column; gap:8px; pointer-events:none; }
         .aqua-toast { transform: translateY(-8px); opacity:0; animation: toast-in .22s ease forwards, toast-out .25s ease forwards var(--life, 2400ms); }
         .bottom-nav { padding-bottom: calc(.625rem + var(--safe-bottom)); }
+
+
+        /* ==================== v1.8 Forge Visual Max ==================== */
+        @property --forge-angle {
+            syntax: '<angle>';
+            inherits: false;
+            initial-value: 0deg;
+        }
+        @property --forge-charge {
+            syntax: '<number>';
+            inherits: false;
+            initial-value: 0;
+        }
+        .forge-panel {
+            position:relative;
+            overflow:hidden;
+            background:
+                radial-gradient(circle at 16% 14%, rgba(251,191,36,.18), transparent 11rem),
+                radial-gradient(circle at 88% 22%, rgba(34,211,238,.18), transparent 13rem),
+                linear-gradient(135deg, rgba(255,255,255,.145), rgba(255,255,255,.055));
+        }
+        .forge-panel::before {
+            content:''; position:absolute; inset:-40%; pointer-events:none;
+            background: conic-gradient(from var(--forge-angle), transparent, rgba(251,191,36,.18), rgba(34,211,238,.16), rgba(192,132,252,.18), transparent 70%);
+            animation: forge-spin 9s linear infinite;
+            opacity:.72;
+        }
+        .forge-core {
+            width:72px; height:72px; border-radius:999px; display:grid; place-items:center;
+            background:radial-gradient(circle, rgba(253,224,71,.32), rgba(14,165,233,.12) 52%, rgba(255,255,255,.08));
+            box-shadow:0 0 34px rgba(251,191,36,.24), inset 0 0 0 1px rgba(255,255,255,.16);
+            animation: forge-breathe 2.2s ease-in-out infinite alternate;
+        }
+        .upgrade-level-pill {
+            background:linear-gradient(135deg, rgba(251,191,36,.18), rgba(34,211,238,.13));
+            border:1px solid rgba(253,224,71,.24);
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.12), 0 12px 30px rgba(251,191,36,.10);
+        }
+        .economy-meter { height:8px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.105); }
+        .economy-meter > span { display:block; height:100%; width:0%; border-radius:inherit; background:linear-gradient(90deg,#facc15,#22d3ee,#a78bfa); box-shadow:0 0 20px rgba(250,204,21,.24); transition:width .45s ease; }
+        .forge-spark { position:absolute; width:7px; height:7px; border-radius:999px; pointer-events:none; z-index:70; filter:drop-shadow(0 0 10px rgba(253,224,71,.85)); }
+        .enhance-chip { border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.08); box-shadow:inset 0 1px 0 rgba(255,255,255,.09); }
+        body.quality-low .forge-panel::before, body.quality-low .forge-core { animation:none; opacity:.45; }
+        @keyframes forge-spin { to { --forge-angle: 360deg; } }
+        @keyframes forge-breathe { from { transform:scale(.985); filter:saturate(1); } to { transform:scale(1.035); filter:saturate(1.25); } }
 
         /* ==================== v1.6 PWA Visual Max ==================== */
         html { scrollbar-gutter: stable; text-rendering: optimizeLegibility; }
@@ -266,7 +311,7 @@
             <div>
                 <span class="font-black text-3xl tracking-[-1.5px]">AQUA</span>
                 <span class="font-bold text-3xl tracking-[-1.5px] text-sky-400">FANTASIA</span>
-                <span class="ml-2 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20">v1.7</span>
+                <span class="ml-2 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20">v1.8</span>
             </div>
         </div>
         <div class="flex items-center gap-x-2 text-sm flex-wrap justify-end">
@@ -297,7 +342,7 @@
             <div class="text-center mb-10">
                 <div class="text-[5.5rem] mb-3">🎣</div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-300 mt-2">v1.7 Quest Visual Max · 데일리 미션 & 그래픽 최고화</p>
+                <p class="text-sky-300 mt-2">v1.8 Forge Visual Max · 상점 강화 & 그래픽 최고화</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
@@ -435,10 +480,12 @@
                     <div class="text-[11px] text-cyan-200/75">낚싯대 · 미끼 · 확률 보정</div>
                 </div>
             </div>
-            <div id="equipment-summary" class="equipment-card premium-glass rounded-[2rem] p-5 mb-5"></div>
-            <div class="grid grid-cols-2 gap-3 mb-5">
-                <button onclick="buyBestAffordableRod()" class="premium-card premium-glass rounded-2xl py-3 font-extrabold text-sm">✨ 추천 강화</button>
-                <button onclick="buyStarterBaitPack()" class="premium-card premium-glass rounded-2xl py-3 font-extrabold text-sm">🪱 추천 미끼</button>
+            <div id="equipment-summary" class="equipment-card premium-glass rounded-[2rem] p-5 mb-4"></div>
+            <div id="forge-panel" class="forge-panel premium-glass liquid-border rounded-[2rem] p-5 mb-5"></div>
+            <div class="grid grid-cols-3 gap-3 mb-5">
+                <button onclick="autoEnhanceEquippedRod()" class="premium-card premium-glass rounded-2xl py-3 font-extrabold text-xs">🔥 자동 강화</button>
+                <button onclick="buyBestAffordableRod()" class="premium-card premium-glass rounded-2xl py-3 font-extrabold text-xs">✨ 추천 낚싯대</button>
+                <button onclick="buyStarterBaitPack()" class="premium-card premium-glass rounded-2xl py-3 font-extrabold text-xs">🪱 추천 미끼</button>
             </div>
             <div class="mb-5">
                 <div class="flex justify-between items-end mb-2">
@@ -626,7 +673,7 @@ try {
 </script>
 
 <script>
-// ==================== v1.7 QUEST VISUAL MAX PATCH / Firebase Ready ====================
+// ==================== v1.8 FORGE VISUAL MAX PATCH / Firebase Ready ====================
 let gameState = {
     gold: 1240, level: 12, exp: 870, expToNext: 1000,
     inventory: [], discovered: new Set(),
@@ -637,8 +684,10 @@ let gameState = {
     todayBest: 0, leaderboard: [],
     achievements: {},
     ownedRods: ['starter_rod'],
+    rodEnhance: { starter_rod: 0 },
     baitInventory: { basic_bait: 999999 },
     equipment: { rod: 'starter_rod', bait: 'basic_bait' },
+    economy: { upgradeSpent: 0, enhancementAttempts: 0, enhancementSuccess: 0, lastUpgradeAt: '' },
     daily: { dateKey: '', checkedIn: false, streak: 0, lastCheckIn: '', claimedQuests: {}, stats: { casts: 0, caught: 0, rareCaught: 0, goldEarned: 0 } },
     season: { claimed: {} }
 };
@@ -651,7 +700,7 @@ let cloudSaveTimer = null;
 let fishingTimers = [];
 let graphicsMode = localStorage.getItem('aqua_graphics_mode') || ((navigator.deviceMemory && navigator.deviceMemory <= 3) ? 'low' : 'high');
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '1.7.0';
+const APP_VERSION = '1.8.0';
 let deferredInstallPrompt = null;
 let pwaReady = false;
 let lastPerfScore = null;
@@ -689,6 +738,58 @@ const BAITS = [
     { id:'pearl_bait', name:'진주 미끼', emoji:'🦪', tier:'PREMIUM', cost:1450, pack:5, biteSpeed:.13, rarityBoost:.055, valueBonus:.07, expBonus:.04, desc:'희귀 이상 어종을 노릴 때 좋은 균형형 미끼입니다.' },
     { id:'dragon_bait', name:'용궁 미끼', emoji:'🔥', tier:'RAID', cost:4200, pack:3, biteSpeed:.18, rarityBoost:.095, valueBonus:.12, expBonus:.08, desc:'전설과 신화 등급을 노리는 고위험 고보상 미끼입니다.' }
 ];
+
+// ==================== Forge Patch v1.8 ====================
+const ENHANCE_MAX_LEVEL = 10;
+const ENHANCE_SOFT_PITY = 3;
+
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, Number(value || 0)));
+}
+
+function getRodEnhanceLevel(id = gameState.equipment?.rod) {
+    return clamp(gameState.rodEnhance?.[id] || 0, 0, ENHANCE_MAX_LEVEL);
+}
+
+function getRodBaseEnhanceCost(rod) {
+    const base = Number(rod.cost || 0);
+    return Math.max(520, Math.floor(base * 0.18));
+}
+
+function getEnhanceCost(id = gameState.equipment?.rod) {
+    const rod = getRod(id);
+    const level = getRodEnhanceLevel(id);
+    if (level >= ENHANCE_MAX_LEVEL) return 0;
+    return Math.floor((getRodBaseEnhanceCost(rod) + 280) * Math.pow(level + 1, 1.42) + level * 165);
+}
+
+function getEnhanceSuccessRate(id = gameState.equipment?.rod) {
+    const level = getRodEnhanceLevel(id);
+    const pity = clamp(gameState.economy?.enhancePity || 0, 0, ENHANCE_SOFT_PITY);
+    return clamp(.92 - level * .052 + pity * .045, .42, .96);
+}
+
+function getEquipmentScore() {
+    const rod = getRod();
+    const bait = getBait();
+    const level = getRodEnhanceLevel(rod.id);
+    const rodIndex = Math.max(1, RODS.findIndex((r) => r.id === rod.id) + 1);
+    const baitIndex = Math.max(1, BAITS.findIndex((b) => b.id === bait.id) + 1);
+    return Math.floor(rodIndex * 420 + baitIndex * 130 + level * 165 + Number(gameState.level || 1) * 18);
+}
+
+function getEconomyHealthRatio() {
+    const earned = Math.max(1, Number(gameState.totalGoldEarned || 0));
+    const spent = Math.max(0, Number(gameState.economy?.upgradeSpent || 0));
+    return clamp((spent / Math.max(earned, 2000)) * 100, 0, 100);
+}
+
+function scheduleAquaTask(fn, priority = 'background') {
+    if (window.scheduler?.postTask) return window.scheduler.postTask(fn, { priority }).catch(() => setTimeout(fn, 0));
+    if ('requestIdleCallback' in window && priority !== 'user-blocking') return requestIdleCallback(fn, { timeout: 900 });
+    return setTimeout(fn, 0);
+}
+
 
 // ==================== Quest Patch v1.7 ====================
 const DAILY_QUESTS = [
@@ -825,14 +926,18 @@ function getBait(id = gameState.equipment?.bait) {
 function getEquipmentStats() {
     const rod = getRod();
     const bait = getBait();
+    const enhanceLevel = getRodEnhanceLevel(rod.id);
+    const forgeMult = enhanceLevel / ENHANCE_MAX_LEVEL;
     return {
-        powerBonus: Number(rod.powerBonus || 0),
-        tensionControl: Number(rod.tensionControl || 0),
-        tensionRelief: Number(rod.tensionRelief || 0),
-        rarityBoost: Number(rod.rarityBoost || 0) + Number(bait.rarityBoost || 0),
-        valueBonus: Number(rod.valueBonus || 0) + Number(bait.valueBonus || 0),
-        expBonus: Number(rod.expBonus || 0) + Number(bait.expBonus || 0),
-        biteSpeed: Number(bait.biteSpeed || 0)
+        enhanceLevel,
+        equipmentScore: getEquipmentScore(),
+        powerBonus: Number(rod.powerBonus || 0) + enhanceLevel * .025,
+        tensionControl: Number(rod.tensionControl || 0) + enhanceLevel * .008,
+        tensionRelief: Number(rod.tensionRelief || 0) + enhanceLevel * .45,
+        rarityBoost: Number(rod.rarityBoost || 0) + Number(bait.rarityBoost || 0) + forgeMult * .06,
+        valueBonus: Number(rod.valueBonus || 0) + Number(bait.valueBonus || 0) + enhanceLevel * .01,
+        expBonus: Number(rod.expBonus || 0) + Number(bait.expBonus || 0) + enhanceLevel * .006,
+        biteSpeed: Number(bait.biteSpeed || 0) + forgeMult * .015
     };
 }
 
@@ -1006,6 +1111,13 @@ function playSound(type) {
         oscillator.frequency.value = 180;
         gain.gain.value = 0.4;
         setTimeout(() => gain.gain.value = 0, 300);
+    } else if (type === 'upgrade') {
+        oscillator.type = 'triangle';
+        oscillator.frequency.value = 520;
+        gain.gain.value = 0.36;
+        setTimeout(() => { oscillator.frequency.value = 760; }, 90);
+        setTimeout(() => { oscillator.frequency.value = 1040; }, 190);
+        setTimeout(() => gain.gain.value = 0, 420);
     }
     
     oscillator.connect(filter);
@@ -1057,13 +1169,17 @@ function switchScreen(screen) {
                 el.classList.add('screen-enter');
             }
         }
-        if (screen === 'quests') renderQuests();
-        if (screen === 'equipment') renderEquipment();
-        if (screen === 'inventory') renderInventory();
-        if (screen === 'record') renderRecord();
-        if (screen === 'competition') renderCompetition();
-        if (screen === 'achievements') renderAchievements();
-        if (screen === 'encyclopedia') renderEncyclopedia();
+        const heavyRender = () => {
+            if (screen === 'quests') renderQuests();
+            if (screen === 'equipment') renderEquipment();
+            if (screen === 'inventory') renderInventory();
+            if (screen === 'record') renderRecord();
+            if (screen === 'competition') renderCompetition();
+            if (screen === 'achievements') renderAchievements();
+            if (screen === 'encyclopedia') renderEncyclopedia();
+        };
+        if (screen === 'fishing' || screen === 'village') heavyRender();
+        else scheduleAquaTask(heavyRender, 'user-visible');
     };
     if (document.startViewTransition && !reduceMotion) document.startViewTransition(apply);
     else apply();
@@ -1342,6 +1458,7 @@ function addExp(v){ gameState.exp += v; while(gameState.exp >= gameState.expToNe
 // ==================== 장비 공방 ====================
 function renderEquipment() {
     const summary = document.getElementById('equipment-summary');
+    const forgePanel = document.getElementById('forge-panel');
     const rodList = document.getElementById('rod-list');
     const baitList = document.getElementById('bait-list');
     if (!summary || !rodList || !baitList) return;
@@ -1353,8 +1470,8 @@ function renderEquipment() {
         <div class="flex items-start justify-between gap-4">
             <div>
                 <div class="text-[11px] text-cyan-100/70 font-bold">CURRENT LOADOUT</div>
-                <div class="text-2xl font-black tracking-tight mt-1">${escapeHTML(rod.emoji)} ${escapeHTML(rod.name)}</div>
-                <div class="text-sm text-white/70 mt-1">${escapeHTML(bait.emoji)} ${escapeHTML(bait.name)} 장착 중</div>
+                <div class="text-2xl font-black tracking-tight mt-1">${escapeHTML(rod.emoji)} ${escapeHTML(rod.name)} <span class="text-amber-300">+${getRodEnhanceLevel(rod.id)}</span></div>
+                <div class="text-sm text-white/70 mt-1">${escapeHTML(bait.emoji)} ${escapeHTML(bait.name)} 장착 중 · 전투력 ${Number(stats.equipmentScore || 0).toLocaleString()}</div>
             </div>
             <div class="text-right">
                 <div class="text-[11px] text-white/45">보유 골드</div>
@@ -1368,10 +1485,15 @@ function renderEquipment() {
             <div class="stat-pill rounded-2xl p-3"><div class="text-white/45">판매/경험</div><div class="font-black text-amber-200">+${formatPercent(stats.valueBonus)} / +${formatPercent(stats.expBonus)}</div></div>
         </div>`;
 
+    renderForgePanel(forgePanel);
+
     rodList.innerHTML = '';
     RODS.forEach((item) => {
         const owned = isRodOwned(item.id);
         const equipped = getRod().id === item.id;
+        const level = getRodEnhanceLevel(item.id);
+        const enhanceCost = getEnhanceCost(item.id);
+        const successRate = getEnhanceSuccessRate(item.id);
         const canBuy = Number(gameState.gold || 0) >= Number(item.cost || 0);
         const div = document.createElement('div');
         div.className = `premium-card premium-glass rounded-3xl p-4 ${equipped ? 'equipped-ring' : ''}`;
@@ -1380,15 +1502,18 @@ function renderEquipment() {
                 <div class="text-4xl">${escapeHTML(item.emoji)}</div>
                 <div class="flex-1 min-w-0">
                     <div class="flex justify-between gap-2">
-                        <div><div class="text-[10px] text-cyan-200/70 font-black">${escapeHTML(item.tier)}</div><div class="font-black text-lg truncate">${escapeHTML(item.name)}</div></div>
-                        <div class="text-right text-amber-300 font-mono font-black">${owned ? '보유' : Number(item.cost || 0).toLocaleString()}</div>
+                        <div><div class="text-[10px] text-cyan-200/70 font-black">${escapeHTML(item.tier)}</div><div class="font-black text-lg truncate">${escapeHTML(item.name)} <span class="text-amber-300">+${level}</span></div></div>
+                        <div class="text-right text-amber-300 font-mono font-black">${owned ? `강화 ${level}/${ENHANCE_MAX_LEVEL}` : Number(item.cost || 0).toLocaleString()}</div>
                     </div>
                     <div class="text-xs text-white/58 mt-1">${escapeHTML(item.desc)}</div>
                     <div class="grid grid-cols-2 gap-1.5 mt-3 text-[11px] text-white/75">
                         <div>릴 +${formatPercent(item.powerBonus)}</div><div>희귀 +${formatPercent(item.rarityBoost)}</div>
                         <div>장력 +${Number(item.tensionRelief || 0).toFixed(1)}</div><div>판매 +${formatPercent(item.valueBonus)}</div>
                     </div>
-                    <button onclick="${owned ? `equipRod('${item.id}')` : `buyRod('${item.id}')`}" class="mt-3 w-full py-2 rounded-2xl text-sm font-extrabold ${equipped ? 'bg-emerald-400/20 text-emerald-200' : canBuy || owned ? 'bg-sky-400/20 text-sky-100' : 'bg-white/10 text-white/40'}">${equipped ? '장착 중' : owned ? '장착하기' : '구매하기'}</button>
+                    <div class="grid ${owned ? 'grid-cols-2' : 'grid-cols-1'} gap-2 mt-3">
+                        <button onclick="${owned ? `equipRod('${item.id}')` : `buyRod('${item.id}')`}" class="py-2 rounded-2xl text-sm font-extrabold ${equipped ? 'bg-emerald-400/20 text-emerald-200' : canBuy || owned ? 'bg-sky-400/20 text-sky-100' : 'bg-white/10 text-white/40'}">${equipped ? '장착 중' : owned ? '장착하기' : '구매하기'}</button>
+                        ${owned ? `<button onclick="enhanceRod('${item.id}')" class="py-2 rounded-2xl text-sm font-extrabold ${level >= ENHANCE_MAX_LEVEL ? 'bg-amber-400/20 text-amber-100' : Number(gameState.gold || 0) >= enhanceCost ? 'bg-amber-400/20 text-amber-100' : 'bg-white/10 text-white/40'}">${level >= ENHANCE_MAX_LEVEL ? 'MAX' : `강화 ${enhanceCost.toLocaleString()} · ${Math.round(successRate*100)}%`}</button>` : ''}
+                    </div>
                 </div>
             </div>`;
         rodList.appendChild(div);
@@ -1425,6 +1550,127 @@ function renderEquipment() {
     updateUI();
 }
 
+
+function renderForgePanel(panel) {
+    if (!panel) return;
+    const rod = getRod();
+    const level = getRodEnhanceLevel(rod.id);
+    const cost = getEnhanceCost(rod.id);
+    const successRate = getEnhanceSuccessRate(rod.id);
+    const isMax = level >= ENHANCE_MAX_LEVEL;
+    const canPay = Number(gameState.gold || 0) >= cost;
+    const spentRatio = getEconomyHealthRatio();
+    panel.innerHTML = `
+        <div class="relative z-10 flex items-start gap-4">
+            <div class="forge-core text-4xl shrink-0">⚒️</div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <div class="text-[11px] text-amber-100/75 font-black tracking-wide">FORGE UPGRADE LAB</div>
+                        <div class="text-2xl font-black tracking-tight mt-0.5">${escapeHTML(rod.name)} <span class="text-amber-300">+${level}</span></div>
+                        <div class="text-xs text-white/60 mt-1">강화는 릴 파워·장력 제어·희귀 기운·판매가에 직접 반영됩니다.</div>
+                    </div>
+                    <div class="upgrade-level-pill rounded-2xl px-3 py-2 text-right shrink-0">
+                        <div class="text-[10px] text-white/55">성공률</div>
+                        <div class="font-mono font-black text-amber-200">${isMax ? 'MAX' : Math.round(successRate * 100) + '%'}</div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2 mt-4 text-[11px]">
+                    <div class="enhance-chip rounded-2xl p-3"><div class="text-white/45">다음 비용</div><div class="font-mono font-black text-amber-200">${isMax ? '완료' : cost.toLocaleString()}</div></div>
+                    <div class="enhance-chip rounded-2xl p-3"><div class="text-white/45">강화 투자</div><div class="font-mono font-black text-cyan-200">${Number(gameState.economy?.upgradeSpent || 0).toLocaleString()}</div></div>
+                    <div class="enhance-chip rounded-2xl p-3"><div class="text-white/45">성공/시도</div><div class="font-mono font-black text-emerald-200">${Number(gameState.economy?.enhancementSuccess || 0)}/${Number(gameState.economy?.enhancementAttempts || 0)}</div></div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between text-[10px] text-white/50 mb-1"><span>성장 투자율</span><span>${Math.round(spentRatio)}%</span></div>
+                    <div class="economy-meter"><span style="width:${spentRatio}%"></span></div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 mt-4">
+                    <button onclick="enhanceRod('${rod.id}')" class="py-3 rounded-2xl font-extrabold text-sm ${isMax ? 'bg-amber-400/20 text-amber-100' : canPay ? 'bg-amber-400/20 text-amber-100' : 'bg-white/10 text-white/40'}">${isMax ? '최대 강화 완료' : '현재 낚싯대 강화'}</button>
+                    <button onclick="rebalanceEconomyHint()" class="py-3 rounded-2xl font-extrabold text-sm bg-cyan-300/12 text-cyan-100 border border-cyan-200/15">성장 추천</button>
+                </div>
+            </div>
+        </div>`;
+}
+
+function createForgeBurst(success = true) {
+    const panel = document.getElementById('forge-panel');
+    if (!panel || reduceMotion) return;
+    const rect = panel.getBoundingClientRect();
+    const colors = success ? ['#fde047','#22d3ee','#a78bfa','#34d399'] : ['#94a3b8','#38bdf8','#ffffff'];
+    const count = graphicsMode === 'low' ? 10 : 28;
+    for (let i = 0; i < count; i++) {
+        const spark = document.createElement('div');
+        spark.className = 'forge-spark';
+        spark.style.left = (rect.width * (.18 + Math.random() * .58)) + 'px';
+        spark.style.top = (rect.height * (.16 + Math.random() * .36)) + 'px';
+        spark.style.background = colors[Math.floor(Math.random() * colors.length)];
+        panel.appendChild(spark);
+        const x = (Math.random() - .5) * (success ? 220 : 110);
+        const y = -(40 + Math.random() * (success ? 150 : 72));
+        spark.animate([
+            { transform:'translate(0,0) scale(1)', opacity:1 },
+            { transform:`translate(${x}px, ${y}px) scale(${success ? .22 : .12})`, opacity:0 }
+        ], { duration: success ? 980 + Math.random() * 520 : 520 + Math.random() * 260, easing:'cubic-bezier(.16,.9,.2,1)' }).onfinish = () => spark.remove();
+    }
+}
+
+function enhanceRod(id = gameState.equipment?.rod) {
+    const rod = getRod(id);
+    if (!isRodOwned(rod.id)) return buyRod(rod.id);
+    const level = getRodEnhanceLevel(rod.id);
+    if (level >= ENHANCE_MAX_LEVEL) {
+        showToast(`${rod.name}은 이미 최대 강화입니다`, '🏆');
+        return;
+    }
+    const cost = getEnhanceCost(rod.id);
+    if (Number(gameState.gold || 0) < cost) {
+        showToast(`강화 비용 ${cost.toLocaleString()}골드가 필요합니다`, '💰');
+        return;
+    }
+    gameState.gold -= cost;
+    gameState.economy = gameState.economy || {};
+    gameState.economy.upgradeSpent = Number(gameState.economy.upgradeSpent || 0) + cost;
+    gameState.economy.enhancementAttempts = Number(gameState.economy.enhancementAttempts || 0) + 1;
+    const successRate = getEnhanceSuccessRate(rod.id);
+    const success = Math.random() < successRate;
+    if (success) {
+        gameState.rodEnhance[rod.id] = level + 1;
+        gameState.economy.enhancementSuccess = Number(gameState.economy.enhancementSuccess || 0) + 1;
+        gameState.economy.enhancePity = 0;
+        gameState.economy.lastUpgradeAt = new Date().toISOString();
+        haptic([24, 35, 24]);
+        playSound('upgrade');
+        showToast(`${rod.emoji} ${rod.name} +${level + 1} 강화 성공!`, '🔥', 3200);
+    } else {
+        gameState.economy.enhancePity = clamp(Number(gameState.economy.enhancePity || 0) + 1, 0, ENHANCE_SOFT_PITY);
+        haptic(38);
+        playSound('fail');
+        showToast('강화 실패. 장비는 파괴되지 않고 다음 성공률이 보정됩니다', '💦', 3400);
+    }
+    updateUI();
+    renderEquipment();
+    createForgeBurst(success);
+    checkAchievements();
+    savePlayerData();
+}
+
+function autoEnhanceEquippedRod() {
+    const rod = getRod();
+    const level = getRodEnhanceLevel(rod.id);
+    if (level >= ENHANCE_MAX_LEVEL) return showToast('현재 낚싯대는 최대 강화입니다', '🏆');
+    const cost = getEnhanceCost(rod.id);
+    if (Number(gameState.gold || 0) < cost) return rebalanceEconomyHint();
+    enhanceRod(rod.id);
+}
+
+function rebalanceEconomyHint() {
+    const rod = getRod();
+    const cost = getEnhanceCost(rod.id);
+    const missing = Math.max(0, cost - Number(gameState.gold || 0));
+    if (missing > 0) showToast(`강화까지 ${missing.toLocaleString()}골드 부족. 데일리 미션과 전체 판매를 먼저 추천!`, '🗓️', 3600);
+    else showToast('지금은 현재 낚싯대를 강화하는 효율이 가장 좋습니다', '⚒️', 3000);
+}
+
 function buyRod(id) {
     const rod = getRod(id);
     if (isRodOwned(id)) return equipRod(id);
@@ -1433,7 +1679,10 @@ function buyRod(id) {
         return;
     }
     gameState.gold -= Number(rod.cost || 0);
+    gameState.economy = gameState.economy || {};
+    gameState.economy.upgradeSpent = Number(gameState.economy.upgradeSpent || 0) + Number(rod.cost || 0);
     gameState.ownedRods.push(id);
+    gameState.rodEnhance[id] = getRodEnhanceLevel(id);
     gameState.equipment.rod = id;
     showToast(`${rod.emoji} ${rod.name} 구매 및 장착!`, '🧰');
     checkAchievements();
@@ -1460,6 +1709,8 @@ function buyBait(id) {
         return;
     }
     gameState.gold -= Number(bait.cost || 0);
+    gameState.economy = gameState.economy || {};
+    gameState.economy.upgradeSpent = Number(gameState.economy.upgradeSpent || 0) + Number(bait.cost || 0);
     gameState.baitInventory[bait.id] = getBaitCount(bait.id) + Number(bait.pack || 1);
     gameState.equipment.bait = bait.id;
     showToast(`${bait.emoji} ${bait.name} ${bait.pack}개 구매`, '🪱');
@@ -1641,6 +1892,8 @@ const ACHIEVEMENTS = [
     { id: 'rich_fisher', name: '부유한 낚시꾼', desc: '총 5,000 골드 이상 벌기', check: (s) => (s.totalGoldEarned || 0) >= 5000 },
     { id: 'legend_catcher', name: '전설의 낚시꾼', desc: '최고 가치 3,000골드 이상 물고기 잡기', check: (s) => s.bestCatch && Number(s.bestCatch.soldValue || 0) >= 3000 },
     { id: 'gear_owner', name: '장비 수집 입문', desc: '낚싯대 2종 이상 보유', check: (s) => Array.isArray(s.ownedRods) && s.ownedRods.length >= 2 },
+    { id: 'forge_5', name: '공방의 불꽃', desc: '낚싯대 하나를 +5 이상 강화', check: (s) => s.rodEnhance && Object.values(s.rodEnhance).some(v => Number(v || 0) >= 5) },
+    { id: 'master_forge', name: '마스터 포지', desc: '낚싯대 하나를 +10까지 강화', check: (s) => s.rodEnhance && Object.values(s.rodEnhance).some(v => Number(v || 0) >= 10) },
     { id: 'dragon_loadout', name: '용의 장비', desc: '용린 낚싯대 장착', check: (s) => s.equipment && s.equipment.rod === 'dragon_rod' }
 ];
 
@@ -1860,6 +2113,13 @@ function normalizeGameState(data) {
     if (!Array.isArray(next.ownedRods)) next.ownedRods = ['starter_rod'];
     if (!next.ownedRods.includes('starter_rod')) next.ownedRods.unshift('starter_rod');
     next.ownedRods = next.ownedRods.filter((id, idx, arr) => RODS.some((rod) => rod.id === id) && arr.indexOf(id) === idx);
+    if (!next.rodEnhance || typeof next.rodEnhance !== 'object') next.rodEnhance = { starter_rod: 0 };
+    RODS.forEach((rod) => { next.rodEnhance[rod.id] = clamp(Number(next.rodEnhance[rod.id] || 0), 0, ENHANCE_MAX_LEVEL); });
+    if (!next.economy || typeof next.economy !== 'object') next.economy = { upgradeSpent: 0, enhancementAttempts: 0, enhancementSuccess: 0, lastUpgradeAt: '' };
+    next.economy.upgradeSpent = Math.max(0, Number(next.economy.upgradeSpent || 0));
+    next.economy.enhancementAttempts = Math.max(0, Number(next.economy.enhancementAttempts || 0));
+    next.economy.enhancementSuccess = Math.max(0, Number(next.economy.enhancementSuccess || 0));
+    next.economy.enhancePity = clamp(Number(next.economy.enhancePity || 0), 0, ENHANCE_SOFT_PITY);
     if (!next.baitInventory || typeof next.baitInventory !== 'object') next.baitInventory = { basic_bait: 999999 };
     next.baitInventory.basic_bait = 999999;
     BAITS.forEach((bait) => { next.baitInventory[bait.id] = Math.max(0, Number(next.baitInventory[bait.id] || 0)); });
@@ -1875,6 +2135,7 @@ function normalizeGameState(data) {
 function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
+        localStorage.setItem('aqua_v1.8', JSON.stringify(plain));
         localStorage.setItem('aqua_v1.7', JSON.stringify(plain));
         localStorage.setItem('aqua_v1.6', JSON.stringify(plain));
         localStorage.setItem('aqua_v1.5', JSON.stringify(plain));
@@ -2017,7 +2278,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) gameState = normalizeGameState(JSON.parse(saved));
         else gameState = normalizeGameState(gameState);
         
@@ -2041,7 +2302,7 @@ async function init() {
         bindPremiumCardPointer();
         startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v1.7] Quest Visual Max Patch Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v1.8] Forge Visual Max Patch Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
         alert('게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.');
