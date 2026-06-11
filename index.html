@@ -16,7 +16,7 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
-    <title>Aqua Fantasia • Dev v2.5 Focus UI</title>
+    <title>Aqua Fantasia • Dev v2.6 Balance Core</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -677,6 +677,24 @@
         .bottom-nav .optional-nav { display:none; }
         body.show-advanced-nav .bottom-nav { grid-template-columns: repeat(6,minmax(0,1fr)) !important; }
         body.show-advanced-nav .bottom-nav .optional-nav { display:block; }
+
+/* ==================== v2.6 Balance Core UI ==================== */
+.balance-card { position:relative; overflow:hidden; border:1px solid rgba(52,211,153,.22); background:linear-gradient(145deg, rgba(6,78,59,.30), rgba(14,116,144,.18), rgba(15,23,42,.46)); box-shadow:0 18px 46px rgba(2,6,23,.24); }
+.balance-card::before { content:""; position:absolute; inset:-50% -18% auto; height:120px; pointer-events:none; background:radial-gradient(circle, rgba(52,211,153,.20), transparent 62%); transform:rotate(-10deg); }
+.balance-chip { display:inline-flex; align-items:center; justify-content:center; gap:.25rem; min-height:1.8rem; border-radius:.95rem; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.075); padding:.35rem .6rem; font-size:.64rem; font-weight:950; white-space:nowrap; }
+.balance-bar { height:.48rem; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.10); }
+.balance-bar > span { display:block; height:100%; width:0%; border-radius:999px; background:linear-gradient(90deg,#34d399,#22d3ee,#a78bfa); transition:width .35s ease; }
+.region-card.clean { transition: transform .18s ease, opacity .18s ease, border-color .18s ease, background .18s ease; }
+.region-card.clean.safe { border-color:rgba(52,211,153,.30); background:linear-gradient(145deg, rgba(52,211,153,.11), rgba(255,255,255,.055)); }
+.region-card.clean.recommended { border-color:rgba(250,204,21,.42); box-shadow:0 12px 32px rgba(250,204,21,.12); }
+.region-card.clean.risky { opacity:.78; border-color:rgba(251,113,133,.20); background:linear-gradient(145deg, rgba(251,113,133,.08), rgba(255,255,255,.045)); }
+.region-readiness { margin-top:.55rem; display:flex; align-items:center; justify-content:space-between; gap:.35rem; font-size:.58rem; color:rgba(255,255,255,.58); font-weight:900; }
+.region-readiness .mini-meter { flex:1; height:.28rem; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.10); }
+.region-readiness .mini-meter span { display:block; height:100%; width:0%; background:linear-gradient(90deg,#22d3ee,#34d399,#fbbf24); }
+.balance-badge-strong { color:#bbf7d0; }
+.balance-badge-ok { color:#a5f3fc; }
+.balance-badge-warn { color:#fde68a; }
+.balance-badge-risk { color:#fecdd3; }
         @media (max-width: 420px) {
             .top-bar-focus .brand-title { font-size:1.02rem; }
             .hud-pill { padding:.38rem .55rem; font-size:.72rem; }
@@ -694,14 +712,14 @@
 <body class="bg-[#0a3d5c] text-white antialiased">
 <div id="app-shell" class="max-w-md mx-auto min-h-screen flex flex-col shadow-2xl border-x border-white/10 bg-[#0a3d5c]">
     
-    <!-- Top Bar / v2.5 Focus UI -->
+    <!-- Top Bar / v2.6 Balance Core UI -->
     <div class="top-bar-focus px-4 pt-3 pb-2 border-b border-white/10">
         <div class="flex items-center justify-between gap-3">
             <div class="flex items-center gap-3 min-w-0">
                 <div class="top-logo-mark">🌊</div>
                 <div class="min-w-0">
-                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v2.5</span></div>
-                    <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Focus UI · 플레이 중심 정리</div>
+                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-emerald-300/15 text-emerald-200 rounded-full border border-emerald-200/20 align-middle">v2.6</span></div>
+                    <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Balance Core · 실전 성장 밸런스</div>
                 </div>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
@@ -733,7 +751,7 @@
             <div class="text-center mb-10">
                 <div class="text-[5.5rem] mb-3">🎣</div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-300 mt-2">v2.5 Focus UI · 핵심 플레이 중심 정리</p>
+                <p class="text-sky-300 mt-2">v2.6 Balance Core · 실전 성장 밸런스</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
@@ -820,6 +838,10 @@
                     <div id="boss-quick-status" class="hidden">장비 점수가 높을수록 보스 조우가 안정됩니다</div>
                     <div class="mt-3 boss-meter"><span id="boss-quick-fill"></span></div>
                 </div>
+            </div>
+
+            <div class="px-5 mt-3">
+                <div id="balance-coach-panel" class="balance-card premium-card rounded-[1.35rem] p-4"></div>
             </div>
 
             <div class="px-5 mt-3">
@@ -1219,7 +1241,7 @@ try {
 // ==================== v2.4 MEGA EXPANSION PATCH / Firebase Ready ====================
 let graphicsMode = localStorage.getItem('aqua_graphics_mode') || ((navigator.deviceMemory && navigator.deviceMemory <= 3) ? 'low' : 'high');
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '2.5.0';
+const APP_VERSION = '2.6.0';
 const GAME_CANONICAL_URL = 'https://junl-im.github.io/AquaFantasia/';
 let gameState = {
     gold: 1240, level: 12, exp: 870, expToNext: 1000,
@@ -1245,6 +1267,7 @@ let gameState = {
     sensory: { sound: true, haptic: true, music: false, volume: 0.55, impact: 1, unlocked: false },
     captain: { supplyClaimed: false, guideDismissed: false, completed: {}, lastTip: '', startedAt: '' },
     quality: { preset: localStorage.getItem('aqua_quality_preset') || 'auto', longTasks: 0, lastFps: 0, directorMode: 'auto', lastTuneAt: '' },
+    balance: { assists: true, mode: 'standard', lastHintAt: 0, lastRegionWarning: '' },
     ui: { compactHud: localStorage.getItem('aqua_compact_hud') === '1', oneHand: localStorage.getItem('aqua_one_hand_mode') === '1', coachHints: true },
     bossWindowActive: false,
     bossSurgeTick: 0
@@ -1282,21 +1305,132 @@ const REGION_META = {
     '심해': { emoji: '🌊', desc: '희귀 어종이 숨어 있는 깊은 바다', minRarity: 3, maxRarity: 5, biteMin: 2100, biteMax: 3400 },
     '용궁': { emoji: '🐉', desc: '전설 어종과 용의 기운', minRarity: 4, maxRarity: 6, biteMin: 2300, biteMax: 3700 },
     '차원의 바다': { emoji: '🌀', desc: '신화 등급을 노리는 최종 어장', minRarity: 5, maxRarity: 6, biteMin: 2500, biteMax: 4200 }
+
 };
 
+// ==================== Balance Core Patch v2.6 ====================
+const REGION_ORDER = ['호수', '강', '항구', '심해', '용궁', '차원의 바다'];
+const REGION_BALANCE = {
+    '호수': { reqScore: 0, reqLevel: 1, risk: 1.00, reward: 1.00, hint: '초반 포획과 안정 수익에 최적입니다.' },
+    '강': { reqScore: 620, reqLevel: 3, risk: 1.05, reward: 1.08, hint: '기본 장비로도 도전 가능하지만 장력이 조금 빠릅니다.' },
+    '항구': { reqScore: 980, reqLevel: 6, risk: 1.12, reward: 1.18, hint: '카본 낚싯대나 반짝 미끼가 있으면 효율이 좋습니다.' },
+    '심해': { reqScore: 1480, reqLevel: 9, risk: 1.22, reward: 1.34, hint: '희귀 어종 수익이 좋아지지만 장력 관리가 필요합니다.' },
+    '용궁': { reqScore: 2200, reqLevel: 13, risk: 1.34, reward: 1.55, hint: '강화 낚싯대와 진주 이상 미끼를 추천합니다.' },
+    '차원의 바다': { reqScore: 3200, reqLevel: 18, risk: 1.52, reward: 1.86, hint: '최종 어장입니다. 보스와 신화 등급을 노리는 구간입니다.' }
+};
+
+function getRegionBalance(region = '호수') {
+    return REGION_BALANCE[region] || REGION_BALANCE['호수'];
+}
+
+function getRegionReadiness(region = gameState.currentRegion || '호수') {
+    const bal = getRegionBalance(region);
+    const score = getEquipmentScore();
+    const level = Number(gameState.level || 1);
+    const scoreRatio = bal.reqScore <= 0 ? 1.35 : score / bal.reqScore;
+    const levelRatio = level / Math.max(1, bal.reqLevel);
+    const ratio = clamp(Math.min(scoreRatio, levelRatio), 0, 1.65);
+    const ready = ratio >= 0.92;
+    let label = '추천';
+    let tone = 'strong';
+    if (ratio < .55) { label = '위험'; tone = 'risk'; }
+    else if (ratio < .82) { label = '준비중'; tone = 'warn'; }
+    else if (ratio < .92) { label = '도전권'; tone = 'ok'; }
+    return { region, ...bal, score, level, ratio, ready, label, tone, percent: clamp(Math.round(ratio * 100), 4, 100) };
+}
+
+function getRecommendedRegion() {
+    const candidates = REGION_ORDER.map(getRegionReadiness);
+    const ready = candidates.filter((item) => item.ready);
+    if (!ready.length) return '호수';
+    return ready[ready.length - 1].region;
+}
+
+function getCatchBalanceModifier(species = null, region = gameState.currentRegion || '호수') {
+    const readiness = getRegionReadiness(region);
+    const early = Number(gameState.totalCaught || 0) < 10;
+    const rarity = Number(species?.rarity || 1);
+    const under = Math.max(0, .92 - readiness.ratio);
+    const over = Math.max(0, readiness.ratio - 1.05);
+    return {
+        valueMult: clamp(readiness.reward * (early ? 1.10 : 1) * (rarity >= 4 ? 1.04 : 1), .85, 2.15),
+        expMult: clamp(1 + (early ? .18 : 0) + Math.min(.12, over * .08), 1, 1.35),
+        tensionMult: clamp(readiness.risk + under * .24 - Math.min(.08, over * .05), .92, 1.72),
+        pressureMult: clamp(1 + under * .18 - Math.min(.06, over * .04), .94, 1.32),
+        reelGainMult: clamp(1 + (early ? .08 : 0) + Math.min(.08, over * .04), .88, 1.18),
+        reliefMult: clamp(1 + (early ? .08 : 0) - under * .08, .84, 1.16),
+        startProgressBonus: early ? 4 : 0
+    };
+}
+
+function renderBalanceCoachPanel() {
+    const panel = document.getElementById('balance-coach-panel');
+    if (!panel) return;
+    const recommended = getRecommendedRegion();
+    const current = getRegionReadiness(gameState.currentRegion || recommended);
+    const nextRod = RODS.find((rod) => !isRodOwned(rod.id));
+    const rod = getRod();
+    const enhanceCost = getEnhanceCost(rod.id);
+    const inventoryCount = Number(gameState.inventory?.length || 0);
+    const step = inventoryCount >= 6
+        ? { icon:'💰', title:'판매 먼저', desc:`가방 ${inventoryCount}마리. 판매 후 강화하면 수익 루프가 빨라집니다.`, action:'switchScreen(\'inventory\')', label:'판매' }
+        : nextRod && Number(gameState.gold || 0) >= Number(nextRod.cost || 0)
+            ? { icon:'🎣', title:`${nextRod.name} 구매 가능`, desc:'새 낚싯대는 지역 확장과 장력 안정성에 가장 효율적입니다.', action:`buyRod('${nextRod.id}')`, label:'구매' }
+            : enhanceCost > 0 && Number(gameState.gold || 0) >= enhanceCost
+                ? { icon:'⚒️', title:`${rod.name} 강화 가능`, desc:`+${getRodEnhanceLevel(rod.id) + 1} 강화로 릴 파워와 장력 안정성을 올리세요.`, action:`enhanceRod('${rod.id}')`, label:'강화' }
+                : { icon:'🧭', title:`추천 지역: ${recommended}`, desc:getRegionBalance(recommended).hint, action:`selectRegion('${recommended}')`, label:'이동' };
+    panel.innerHTML = `
+        <div class="relative z-10 flex items-start justify-between gap-3">
+            <div class="min-w-0">
+                <div class="text-[10px] text-emerald-100/70 font-black tracking-wide">BALANCE COACH</div>
+                <div class="font-black text-lg mt-0.5">${step.icon} ${escapeHTML(step.title)}</div>
+                <div class="text-xs text-white/60 mt-1 leading-relaxed">${escapeHTML(step.desc)}</div>
+            </div>
+            <button onclick="${step.action}" class="px-4 py-3 rounded-2xl bg-emerald-400/16 border border-emerald-200/20 text-xs font-black shrink-0">${escapeHTML(step.label)}</button>
+        </div>
+        <div class="relative z-10 mt-3 grid grid-cols-3 gap-2">
+            <div class="balance-chip">🎯 ${escapeHTML(recommended)}</div>
+            <div class="balance-chip">⚔️ ${getEquipmentScore().toLocaleString()}</div>
+            <div class="balance-chip balance-badge-${current.tone}">${escapeHTML(current.label)} ${current.percent}%</div>
+        </div>
+        <div class="relative z-10 mt-3 balance-bar"><span style="width:${current.percent}%"></span></div>`;
+}
+
+function renderRegionReadiness() {
+    const recommended = getRecommendedRegion();
+    document.querySelectorAll('.region-card[data-region]').forEach((card) => {
+        const region = card.getAttribute('data-region');
+        const info = getRegionReadiness(region);
+        card.classList.toggle('safe', info.ready);
+        card.classList.toggle('risky', info.ratio < .82);
+        card.classList.toggle('recommended', region === recommended);
+        let readiness = card.querySelector('.region-readiness');
+        if (!readiness) {
+            readiness = document.createElement('div');
+            readiness.className = 'region-readiness';
+            readiness.innerHTML = '<span class="label"></span><div class="mini-meter"><span></span></div><span class="percent"></span>';
+            card.appendChild(readiness);
+        }
+        readiness.querySelector('.label').textContent = region === recommended ? '추천' : info.label;
+        readiness.querySelector('.percent').textContent = `${info.percent}%`;
+        readiness.querySelector('.mini-meter span').style.width = `${info.percent}%`;
+    });
+}
+
 // ==================== Equipment Patch v1.5 ====================
+
 const RODS = [
     { id:'starter_rod', name:'기본 낚싯대', emoji:'🎣', tier:'BASIC', cost:0, powerBonus:0, tensionControl:0, tensionRelief:0, rarityBoost:0, valueBonus:0, expBonus:0, desc:'처음부터 지급되는 안정적인 낚싯대입니다.' },
-    { id:'carbon_rod', name:'카본 낚싯대', emoji:'🪶', tier:'RARE', cost:2500, powerBonus:.10, tensionControl:.05, tensionRelief:1.5, rarityBoost:.035, valueBonus:.04, expBonus:.02, desc:'가볍고 탄성이 좋아 릴 감기와 입질이 부드러워집니다.' },
-    { id:'crystal_rod', name:'수정 낚싯대', emoji:'💎', tier:'EPIC', cost:8500, powerBonus:.22, tensionControl:.10, tensionRelief:3.2, rarityBoost:.075, valueBonus:.09, expBonus:.05, desc:'수정 진동으로 희귀한 기운을 더 잘 감지합니다.' },
-    { id:'dragon_rod', name:'용린 낚싯대', emoji:'🐉', tier:'MYTHIC', cost:24000, powerBonus:.38, tensionControl:.16, tensionRelief:5.4, rarityBoost:.13, valueBonus:.16, expBonus:.10, desc:'용의 비늘로 만든 최상급 장비. 신화 어종 도전에 유리합니다.' }
+    { id:'carbon_rod', name:'카본 낚싯대', emoji:'🪶', tier:'RARE', cost:2200, powerBonus:.10, tensionControl:.05, tensionRelief:1.5, rarityBoost:.035, valueBonus:.04, expBonus:.02, desc:'가볍고 탄성이 좋아 릴 감기와 입질이 부드러워집니다.' },
+    { id:'crystal_rod', name:'수정 낚싯대', emoji:'💎', tier:'EPIC', cost:7600, powerBonus:.22, tensionControl:.10, tensionRelief:3.2, rarityBoost:.075, valueBonus:.09, expBonus:.05, desc:'수정 진동으로 희귀한 기운을 더 잘 감지합니다.' },
+    { id:'dragon_rod', name:'용린 낚싯대', emoji:'🐉', tier:'MYTHIC', cost:20500, powerBonus:.38, tensionControl:.16, tensionRelief:5.4, rarityBoost:.13, valueBonus:.16, expBonus:.10, desc:'용의 비늘로 만든 최상급 장비. 신화 어종 도전에 유리합니다.' }
 ];
 
 const BAITS = [
     { id:'basic_bait', name:'기본 미끼', emoji:'🪱', tier:'FREE', cost:0, pack:0, biteSpeed:.00, rarityBoost:0, valueBonus:0, expBonus:0, desc:'무제한으로 제공되는 기본 미끼입니다.' },
-    { id:'glow_bait', name:'반짝 미끼', emoji:'✨', tier:'PLUS', cost:420, pack:5, biteSpeed:.08, rarityBoost:.025, valueBonus:.03, expBonus:.02, desc:'입질 대기 시간을 줄이고 고급 어종 확률을 살짝 올립니다.' },
-    { id:'pearl_bait', name:'진주 미끼', emoji:'🦪', tier:'PREMIUM', cost:1450, pack:5, biteSpeed:.13, rarityBoost:.055, valueBonus:.07, expBonus:.04, desc:'희귀 이상 어종을 노릴 때 좋은 균형형 미끼입니다.' },
-    { id:'dragon_bait', name:'용궁 미끼', emoji:'🔥', tier:'RAID', cost:4200, pack:3, biteSpeed:.18, rarityBoost:.095, valueBonus:.12, expBonus:.08, desc:'전설과 신화 등급을 노리는 고위험 고보상 미끼입니다.' }
+    { id:'glow_bait', name:'반짝 미끼', emoji:'✨', tier:'PLUS', cost:360, pack:6, biteSpeed:.08, rarityBoost:.025, valueBonus:.03, expBonus:.02, desc:'입질 대기 시간을 줄이고 고급 어종 확률을 살짝 올립니다.' },
+    { id:'pearl_bait', name:'진주 미끼', emoji:'🦪', tier:'PREMIUM', cost:1200, pack:6, biteSpeed:.13, rarityBoost:.055, valueBonus:.07, expBonus:.04, desc:'희귀 이상 어종을 노릴 때 좋은 균형형 미끼입니다.' },
+    { id:'dragon_bait', name:'용궁 미끼', emoji:'🔥', tier:'RAID', cost:3400, pack:4, biteSpeed:.18, rarityBoost:.095, valueBonus:.12, expBonus:.08, desc:'전설과 신화 등급을 노리는 고위험 고보상 미끼입니다.' }
 ];
 
 // ==================== Forge Patch v1.8 ====================
@@ -1320,13 +1454,13 @@ function getEnhanceCost(id = gameState.equipment?.rod) {
     const rod = getRod(id);
     const level = getRodEnhanceLevel(id);
     if (level >= ENHANCE_MAX_LEVEL) return 0;
-    return Math.floor((getRodBaseEnhanceCost(rod) + 280) * Math.pow(level + 1, 1.42) + level * 165);
+    return Math.floor((getRodBaseEnhanceCost(rod) + 220) * Math.pow(level + 1, 1.33) + level * 115);
 }
 
 function getEnhanceSuccessRate(id = gameState.equipment?.rod) {
     const level = getRodEnhanceLevel(id);
     const pity = clamp(gameState.economy?.enhancePity || 0, 0, ENHANCE_SOFT_PITY);
-    return clamp(.92 - level * .052 + pity * .045, .42, .96);
+    return clamp(.94 - level * .046 + pity * .052, .46, .97);
 }
 
 function getEquipmentScore() {
@@ -2564,7 +2698,8 @@ function getFocusGoal() {
     if (inventoryCount >= 6) return { title:'가방 판매로 골드 확보', desc:`가방에 ${inventoryCount}마리가 있습니다. 판매 후 강화/미끼 구매를 추천합니다.`, label:'판매', action:() => switchScreen('inventory') };
     if (Number(gameState.gold || 0) >= nextCost && enhance < 10) return { title:`${rod.name} +${enhance + 1} 강화 가능`, desc:`예상 비용 ${nextCost.toLocaleString()}골드. 릴 파워와 보스 안정성이 올라갑니다.`, label:'강화', action:() => switchScreen('equipment') };
     if (Number(gameState.bossStats?.defeated || 0) === 0 && Number(gameState.level || 1) >= 4) return { title:'첫 보스 토벌 준비', desc:'장비를 점검하고 심해/용궁에서 보스 신호를 노려보세요.', label:'장비', action:() => switchScreen('equipment') };
-    return { title:`${gameState.currentRegion || '호수'}에서 낚시 시작`, desc:'현재 성장 단계에서는 포획 → 판매 → 강화 루프가 가장 효율적입니다.', label:'낚시', action:() => selectRegion(gameState.currentRegion || '호수') };
+    const recommendedRegion = getRecommendedRegion();
+    return { title:`${recommendedRegion}에서 안정 수익`, desc:`${getRegionBalance(recommendedRegion).hint} 포획 → 판매 → 강화 루프를 유지하세요.`, label:'낚시', action:() => selectRegion(recommendedRegion) };
 }
 
 function renderFocusHud() {
@@ -3063,6 +3198,8 @@ function updateUI() {
     renderMissionQuickSummary();
     renderBossQuickPanel();
     renderFocusHud();
+    renderBalanceCoachPanel();
+    renderRegionReadiness();
     updatePWAStatus();
     applyGraphicsMode();
     renderSensoryPanel();
@@ -3107,6 +3244,10 @@ function switchScreen(screen) {
 function selectRegion(region) {
     playSound('select');
     haptic([6, 14]);
+    const readiness = getRegionReadiness(region);
+    if (readiness.ratio < .82 && gameState.balance?.assists !== false) {
+        showToast(`${region} 권장 전투력 부족: ${readiness.label} ${readiness.percent}%. 그래도 도전은 가능합니다.`, '⚠️', 3600);
+    }
     gameState.currentRegion = region;
     switchScreen('fishing');
     const meta = getRegionMeta(region);
@@ -3261,6 +3402,7 @@ function startReelGame() {
     const species = gameState.pendingFish || pickWeightedFish(gameState.currentRegion || '호수');
     const rarity = Number(species?.rarity || 1);
     const stats = getEquipmentStats();
+    const balance = getCatchBalanceModifier(species, gameState.currentRegion || species?.region);
     const bossMode = isBossFish(species);
     const bossPower = Number(species?.bossPower || 1);
 
@@ -3273,8 +3415,8 @@ function startReelGame() {
 
     gameState.bossWindowActive = false;
     gameState.bossSurgeTick = 0;
-    gameState.reelProgress = Math.max(bossMode ? 2 : 5, 12 - rarity + stats.powerBonus * 16 - (bossMode ? bossPower * 2.4 : 0));
-    gameState.tension = Math.max(bossMode ? 22 : 5, 18 + rarity * 4 - stats.tensionRelief + (bossMode ? bossPower * 7.8 : 0));
+    gameState.reelProgress = Math.max(bossMode ? 2 : 5, 12 - rarity + stats.powerBonus * 16 - (bossMode ? bossPower * 2.4 : 0) + balance.startProgressBonus);
+    gameState.tension = Math.max(bossMode ? 22 : 5, (18 + rarity * 4 - stats.tensionRelief + (bossMode ? bossPower * 7.8 : 0)) * balance.tensionMult);
     renderBossPhasePanel();
     updateReelUI();
 
@@ -3282,7 +3424,7 @@ function startReelGame() {
 
     gameState.reelInterval = setInterval(() => {
         const loopStats = getEquipmentStats();
-        const pressureMult = bossMode ? (1.12 + bossPower * .20) : 1;
+        const pressureMult = (bossMode ? (1.12 + bossPower * .20) : 1) * balance.pressureMult;
         gameState.tension += (1.0 + rarity * 0.24) * pressureMult * Math.max(.58, 1 - loopStats.tensionControl);
         if (bossMode) {
             gameState.bossSurgeTick = Number(gameState.bossSurgeTick || 0) + 1;
@@ -3314,9 +3456,10 @@ function reelAction() {
     const species = gameState.pendingFish;
     const rarity = Number(species?.rarity || 1);
     const stats = getEquipmentStats();
+    const balance = getCatchBalanceModifier(species, gameState.currentRegion || species?.region);
     const bossMode = isBossFish(species);
-    let gain = Math.max(5.2, 9.4 - rarity * 0.45) * (1 + stats.powerBonus);
-    let relief = Math.max(6, 11 - rarity * 0.45) + stats.tensionRelief;
+    let gain = Math.max(5.2, 9.4 - rarity * 0.45) * (1 + stats.powerBonus) * balance.reelGainMult;
+    let relief = (Math.max(6, 11 - rarity * 0.45) + stats.tensionRelief) * balance.reliefMult;
     if (bossMode) {
         gain *= .86;
         relief *= .88;
@@ -3353,8 +3496,9 @@ function endReelGame(success) {
         playSound('success');
         const rarity = getRarityConfig(species.rarity);
         const stats = getEquipmentStats();
+        const balance = getCatchBalanceModifier(species, species.region || gameState.currentRegion);
         const bossBonus = bossMode ? Number(species.bossValueBonus || (1.28 + Number(species.bossPower || 1) * .22)) : 1;
-        const value = Math.round(randomInt(species.minValue, species.maxValue) * (1 + stats.valueBonus) * bossBonus);
+        const value = Math.round(randomInt(species.minValue, species.maxValue) * (1 + stats.valueBonus) * bossBonus * balance.valueMult);
         const fish = {
             id: `${species.id}_${Date.now()}`,
             speciesId: species.id,
@@ -3385,7 +3529,7 @@ function endReelGame(success) {
         if (!gameState.bestCatch || value > Number(gameState.bestCatch.soldValue || 0)) gameState.bestCatch = fish;
 
         addGold(value);
-        addExp(Math.round(Number(species.exp || 50) * (1 + stats.expBonus) * (bossMode ? 1.18 : 1)));
+        addExp(Math.round(Number(species.exp || 50) * (1 + stats.expBonus) * (bossMode ? 1.18 : 1) * balance.expMult));
         checkAchievements();
 
         status.innerHTML = bossMode
@@ -3454,7 +3598,7 @@ function renderEquipment() {
             <div>
                 <div class="text-[11px] text-cyan-100/70 font-bold">CURRENT LOADOUT</div>
                 <div class="text-2xl font-black tracking-tight mt-1">${escapeHTML(rod.emoji)} ${escapeHTML(rod.name)} <span class="text-amber-300">+${getRodEnhanceLevel(rod.id)}</span></div>
-                <div class="text-sm text-white/70 mt-1">${escapeHTML(bait.emoji)} ${escapeHTML(bait.name)} 장착 중 · 전투력 ${Number(stats.equipmentScore || 0).toLocaleString()}</div>
+                <div class="text-sm text-white/70 mt-1">${escapeHTML(bait.emoji)} ${escapeHTML(bait.name)} 장착 중 · 전투력 ${Number(stats.equipmentScore || 0).toLocaleString()} · 추천 ${escapeHTML(getRecommendedRegion())}</div>
             </div>
             <div class="text-right">
                 <div class="text-[11px] text-white/45">보유 골드</div>
@@ -3972,6 +4116,7 @@ const ACHIEVEMENTS = [
     { id: 'sensory_master', name: '감각 엔진 조율사', desc: 'v2.4 사운드/햅틱 엔진 활성화', check: (s) => s.sensory && s.sensory.unlocked === true },
     { id: 'captain_coach', name: '캡틴 코치 입문', desc: 'v2.4 캡틴 코치 허브 열기', check: () => APP_VERSION >= '2.4.0' },
     { id: 'focus_ui_clean', name: '깔끔한 항해자', desc: 'v2.5 Focus UI 정리 패치 접속', check: () => APP_VERSION >= '2.5.0' },
+    { id: 'balance_core_ready', name: '균형 잡힌 선장', desc: 'v2.6 성장 밸런스 패치 접속', check: () => APP_VERSION >= '2.6.0' },
     { id: 'quality_director', name: '품질 감독관', desc: '자동 품질 감독관 점검 기록', check: (s) => Number(s.quality?.lastFps || 0) > 0 },
     { id: 'boss_first_win', name: '대어 토벌자', desc: '보스 어종 1마리 포획', check: (s) => Number(s.bossStats?.defeated || 0) >= 1 },
     { id: 'boss_master', name: '균열의 정복자', desc: '보스 어종 3마리 포획', check: (s) => Number(s.bossStats?.defeated || 0) >= 3 }
@@ -4243,6 +4388,9 @@ function normalizeGameState(data) {
     next.quality.preset = next.quality.preset || localStorage.getItem('aqua_quality_preset') || 'auto';
     next.quality.longTasks = Math.max(0, Number(next.quality.longTasks || 0));
     next.quality.lastFps = Math.max(0, Number(next.quality.lastFps || next.visualLab?.lastFps || 0));
+    if (!next.balance || typeof next.balance !== 'object') next.balance = { assists:true, mode:'standard', lastHintAt:0, lastRegionWarning:'' };
+    next.balance.assists = next.balance.assists !== false;
+    next.balance.mode = next.balance.mode || 'standard';
     if (!next.ui || typeof next.ui !== 'object') next.ui = { compactHud:false, oneHand:false, coachHints:true };
     next.ui.compactHud = next.ui.compactHud === true || localStorage.getItem('aqua_compact_hud') === '1';
     next.ui.oneHand = next.ui.oneHand === true || localStorage.getItem('aqua_one_hand_mode') === '1';
@@ -4253,6 +4401,7 @@ function normalizeGameState(data) {
 function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
+        localStorage.setItem('aqua_v2.6', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.5', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.3', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.1', JSON.stringify(plain));
@@ -4421,7 +4570,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) gameState = normalizeGameState(JSON.parse(saved));
         else gameState = normalizeGameState(gameState);
         
@@ -4446,7 +4595,7 @@ async function init() {
         scheduleAquaTask(initMegaPerformanceObserver, 'background');
         startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v2.5] Focus UI Patch Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v2.6] Balance Core Patch Ready', 'color:#34d399');
     } catch(e) {
         console.error('Init error:', e);
         alert('게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.');

@@ -1,11 +1,11 @@
 {
-  "name": "Aqua Fantasia v2.5",
-  "short_name": "Aqua v2.5",
-  "description": "Aqua Fantasia - 핵심 플레이 중심 Focus UI와 모바일 웹게임 최적화가 적용된 낚시 RPG",
+  "name": "Aqua Fantasia v2.6",
+  "short_name": "Aqua v2.6",
+  "description": "Aqua Fantasia - 실전 성장 밸런스와 Focus UI가 적용된 모바일 낚시 RPG",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "./?app=aqua-fantasia-v25",
-  "start_url": "./?source=pwa&fullscreen=1&focus=1",
+  "id": "./?app=aqua-fantasia-v26",
+  "start_url": "./?source=pwa&fullscreen=1&balance=1",
   "scope": "./",
   "display": "fullscreen",
   "display_override": [
