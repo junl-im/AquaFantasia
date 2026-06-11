@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'aqua-fantasia-v1.6.0';
+const CACHE_VERSION = 'aqua-fantasia-v1.7.0';
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const CORE_ASSETS = [
@@ -64,8 +64,8 @@ async function staleWhileRevalidate(request) {
   const freshPromise = fetch(request).then((response) => {
     if (response && (response.ok || response.type === 'opaque')) cache.put(request, response.clone()).catch(() => {});
     return response;
-  }).catch(() => cached);
-  return cached || freshPromise;
+  }).catch(() => cached || null);
+  return cached || freshPromise.then((response) => response || caches.match('./offline.html'));
 }
 
 self.addEventListener('fetch', (event) => {

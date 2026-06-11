@@ -14,7 +14,7 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
-    <title>Aqua Fantasia • Dev v1.6 PWA Visual Max</title>
+    <title>Aqua Fantasia • Dev v1.7 Quest Visual Max</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -176,6 +176,39 @@
         @keyframes install-pulse { 0%,100% { box-shadow:0 0 0 rgba(34,211,238,0); } 50% { box-shadow:0 0 28px rgba(34,211,238,.32); } }
 
 
+        /* ==================== v1.7 Quest Visual Max ==================== */
+        ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .22s; }
+        .mission-panel, .quest-card, .season-card { position:relative; overflow:hidden; contain:layout paint style; }
+        .mission-panel::before, .quest-card::before, .season-card::before {
+            content:''; position:absolute; inset:-1px; pointer-events:none;
+            background:radial-gradient(circle at var(--mx, 76%) var(--my, 22%), rgba(45,212,191,.20), transparent 11rem);
+            opacity:.9;
+        }
+        .mission-panel::after {
+            content:''; position:absolute; inset:auto -20% -38% auto; width:180px; height:180px; border-radius:999px;
+            background:conic-gradient(from 90deg, rgba(34,211,238,.0), rgba(34,211,238,.18), rgba(167,139,250,.16), rgba(34,211,238,.0));
+            filter:blur(4px); animation:mission-orbit 11s linear infinite; pointer-events:none;
+        }
+        .mission-chip { background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.12); box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
+        .mission-progress { height:9px; border-radius:999px; background:rgba(255,255,255,.11); overflow:hidden; }
+        .mission-progress > span { display:block; height:100%; width:0%; border-radius:inherit; background:linear-gradient(90deg,#22d3ee,#34d399,#fde047,#fb7185); box-shadow:0 0 20px rgba(34,211,238,.35); transition:width .45s cubic-bezier(.2,.8,.2,1); }
+        .quest-card.completed { border-color:rgba(52,211,153,.42); box-shadow:0 18px 44px rgba(0,0,0,.22), 0 0 28px rgba(52,211,153,.08); }
+        .quest-card.claimed { opacity:.68; filter:saturate(.78); }
+        .quest-ring { width:54px; height:54px; border-radius:999px; display:grid; place-items:center; background:conic-gradient(var(--ring, #22d3ee) var(--p, 0%), rgba(255,255,255,.12) 0); box-shadow:inset 0 0 0 1px rgba(255,255,255,.10); }
+        .quest-ring > span { width:42px; height:42px; border-radius:999px; display:grid; place-items:center; background:rgba(2,6,23,.62); font-weight:900; font-size:11px; }
+        .season-track { height:12px; border-radius:999px; background:rgba(255,255,255,.10); overflow:hidden; box-shadow:inset 0 1px 0 rgba(255,255,255,.06); }
+        .season-track > span { display:block; height:100%; width:0%; border-radius:inherit; background:linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6,#facc15); transition:width .5s ease; }
+        .reward-burst { animation:reward-burst .72s cubic-bezier(.2,.8,.2,1) both; }
+        .sonar-layer { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:28; }
+        .sonar-pulse { position:absolute; left:50%; bottom:28%; width:34px; height:34px; border-radius:999px; border:2px solid rgba(125,211,252,.62); transform:translate(-50%,50%) scale(.4); animation:sonar-expand 1s ease-out forwards; box-shadow:0 0 24px rgba(56,189,248,.32); }
+        .tide-badge { position:relative; overflow:hidden; }
+        .tide-badge::after { content:''; position:absolute; inset:-70% -45%; background:linear-gradient(110deg, transparent 42%, rgba(255,255,255,.18), transparent 58%); transform:translateX(-65%); animation:holo-sheen 6.8s ease-in-out infinite; }
+        body.quality-low .mission-panel::after, body.quality-low .sonar-pulse, body.quality-low .tide-badge::after { animation:none; opacity:.25; }
+        @keyframes mission-orbit { from{ transform:rotate(0deg) scale(1); } to{ transform:rotate(360deg) scale(1.06); } }
+        @keyframes reward-burst { 0%{ transform:scale(.98); filter:brightness(1); } 45%{ transform:scale(1.025); filter:brightness(1.22); } 100%{ transform:scale(1); filter:brightness(1); } }
+        @keyframes sonar-expand { to{ transform:translate(-50%,50%) scale(7); opacity:0; } }
+
+
         .nav-tile { transition: transform .16s ease, background .16s ease, color .16s ease; }
         .nav-tile:active { transform: scale(.94); }
         .equipment-card {
@@ -233,7 +266,7 @@
             <div>
                 <span class="font-black text-3xl tracking-[-1.5px]">AQUA</span>
                 <span class="font-bold text-3xl tracking-[-1.5px] text-sky-400">FANTASIA</span>
-                <span class="ml-2 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20">v1.6</span>
+                <span class="ml-2 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20">v1.7</span>
             </div>
         </div>
         <div class="flex items-center gap-x-2 text-sm flex-wrap justify-end">
@@ -264,7 +297,7 @@
             <div class="text-center mb-10">
                 <div class="text-[5.5rem] mb-3">🎣</div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-300 mt-2">v1.6 PWA Visual Max · 설치형 앱 & 그래픽 최고화</p>
+                <p class="text-sky-300 mt-2">v1.7 Quest Visual Max · 데일리 미션 & 그래픽 최고화</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
@@ -321,6 +354,23 @@
                 </div>
             </div>
 
+            <div class="px-5 mt-3">
+                <div onclick="switchScreen('quests')" class="mission-panel premium-card premium-glass liquid-border rounded-[1.75rem] p-4 cursor-pointer">
+                    <div class="relative z-10 flex items-start justify-between gap-3">
+                        <div>
+                            <div class="text-[11px] text-cyan-100/70 font-bold tracking-wide">TODAY'S TIDE MISSIONS</div>
+                            <div class="font-black text-xl tracking-tight mt-0.5">오늘의 항해 보상</div>
+                            <div id="mission-quick-status" class="text-xs text-white/60 mt-1">출석과 데일리 미션을 확인하세요</div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <div id="mission-quick-count" class="tide-badge mission-chip rounded-2xl px-3 py-2 text-sm font-black">0/0</div>
+                            <button onclick="event.stopPropagation(); switchScreen('quests')" class="mt-2 px-3 py-1.5 bg-cyan-300/14 border border-cyan-200/20 rounded-xl text-[11px] font-extrabold">미션 보기</button>
+                        </div>
+                    </div>
+                    <div class="relative z-10 mt-3 mission-progress"><span id="mission-quick-fill"></span></div>
+                </div>
+            </div>
+
             <div class="px-5 mt-4 flex-1">
                 <div class="px-1 flex justify-between items-end mb-3">
                     <div class="font-extrabold text-2xl tracking-tight">낚시 지역</div>
@@ -335,7 +385,8 @@
                 </div>
             </div>
             
-            <div class="px-5 pb-6 pt-4 grid grid-cols-6 gap-2 text-sm">
+            <div class="px-5 pb-6 pt-4 grid grid-cols-7 gap-2 text-sm">
+                <button onclick="switchScreen('quests')" class="py-3 premium-glass rounded-2xl font-semibold">🗓️</button>
                 <button onclick="switchScreen('equipment')" class="py-3 premium-glass rounded-2xl font-semibold">🧰</button>
                 <button onclick="switchScreen('inventory')" class="py-3 premium-glass rounded-2xl font-semibold">🎒</button>
                 <button onclick="switchScreen('record')" class="py-3 premium-glass rounded-2xl font-semibold">📜</button>
@@ -359,6 +410,7 @@
                 <div class="wave-layer wave-1" style="bottom:12%; height:110px; animation-duration:7s;"></div>
                 <div class="wave-layer wave-2" style="bottom:5%; height:95px; animation-duration:4.5s; animation-direction:reverse;"></div>
                 <div id="fish-shadow-container" class="absolute inset-0 pointer-events-none"></div>
+                <div id="sonar-layer" class="sonar-layer" aria-hidden="true"></div>
                 <div id="depth-meter" class="depth-meter" aria-hidden="true"></div>
                 <div id="cast-orb" class="cast-orb" aria-hidden="true"></div>
                 <div class="absolute bottom-8 right-9 z-30"><div id="rod" class="rod w-[7px] h-32 bg-gradient-to-t from-amber-900 to-amber-600 rounded-full shadow-xl" style="transform:rotate(-38deg);"></div></div>
@@ -444,6 +496,29 @@
             <div class="mt-3 text-center"><button onclick="submitToGlobalLeaderboard()" class="text-xs px-4 py-2 bg-sky-500/80 rounded-2xl">글로벌 리더보드에 제출 (Firebase)</button></div>
         </div>
 
+
+        <!-- QUESTS -->
+        <div id="screen-quests" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto screen-scroll">
+            <div class="flex justify-between items-center mb-5">
+                <button onclick="switchScreen('village')" class="text-sky-300">← 마을</button>
+                <div class="text-right">
+                    <h2 class="section-title text-3xl font-black">오늘의 항해</h2>
+                    <div id="quest-date-label" class="text-[11px] text-cyan-200/75">KST 기준 데일리 리셋</div>
+                </div>
+            </div>
+            <div id="attendance-card" class="mission-panel premium-glass liquid-border rounded-[2rem] p-5 mb-5"></div>
+            <div class="flex justify-between items-end mb-2 px-1">
+                <h3 class="font-black text-xl tracking-tight">데일리 미션</h3>
+                <div id="daily-progress-label" class="text-[11px] text-white/50">0/0 완료</div>
+            </div>
+            <div id="daily-quest-list" class="space-y-3 mb-6"></div>
+            <div class="flex justify-between items-end mb-2 px-1">
+                <h3 class="font-black text-xl tracking-tight">시즌 미션</h3>
+                <div class="text-[11px] text-white/50">v1 시즌 · 1회 보상</div>
+            </div>
+            <div id="season-mission-list" class="space-y-3 pb-10"></div>
+        </div>
+
         <!-- ACHIEVEMENTS (NEW) -->
         <div id="screen-achievements" class="hidden absolute inset-0 p-5 ocean-deep overflow-auto screen-scroll">
             <div class="font-extrabold text-3xl mb-6">업적</div>
@@ -459,11 +534,12 @@
         
     </div>
     
-    <div class="bottom-nav grid grid-cols-5 text-center text-xs py-2.5 border-t border-white/10 bg-black/30 backdrop-blur-xl">
+    <div class="bottom-nav grid grid-cols-6 text-center text-xs py-2.5 border-t border-white/10 bg-black/30 backdrop-blur-xl">
         <div onclick="switchScreen('village')" class="cursor-pointer nav-tile">🏠<br>마을</div>
         <div onclick="goFishing()" class="cursor-pointer nav-tile">🎣<br>낚시</div>
         <div onclick="switchScreen('equipment')" class="cursor-pointer nav-tile">🧰<br>장비</div>
         <div onclick="switchScreen('inventory')" class="cursor-pointer nav-tile">🎒<br>가방</div>
+        <div onclick="switchScreen('quests')" class="cursor-pointer nav-tile">🗓️<br>미션</div>
         <div onclick="switchScreen('competition')" class="cursor-pointer nav-tile">🏆<br>경쟁</div>
     </div>
     <button id="immersive-btn" onclick="toggleImmersiveMode()" class="immersive-fab" title="몰입 모드">⛶</button>
@@ -550,7 +626,7 @@ try {
 </script>
 
 <script>
-// ==================== v1.6 PWA VISUAL MAX PATCH / Firebase Ready ====================
+// ==================== v1.7 QUEST VISUAL MAX PATCH / Firebase Ready ====================
 let gameState = {
     gold: 1240, level: 12, exp: 870, expToNext: 1000,
     inventory: [], discovered: new Set(),
@@ -562,7 +638,9 @@ let gameState = {
     achievements: {},
     ownedRods: ['starter_rod'],
     baitInventory: { basic_bait: 999999 },
-    equipment: { rod: 'starter_rod', bait: 'basic_bait' }
+    equipment: { rod: 'starter_rod', bait: 'basic_bait' },
+    daily: { dateKey: '', checkedIn: false, streak: 0, lastCheckIn: '', claimedQuests: {}, stats: { casts: 0, caught: 0, rareCaught: 0, goldEarned: 0 } },
+    season: { claimed: {} }
 };
 
 let isFirebaseConnected = false;
@@ -573,7 +651,7 @@ let cloudSaveTimer = null;
 let fishingTimers = [];
 let graphicsMode = localStorage.getItem('aqua_graphics_mode') || ((navigator.deviceMemory && navigator.deviceMemory <= 3) ? 'low' : 'high');
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '1.6.0';
+const APP_VERSION = '1.7.0';
 let deferredInstallPrompt = null;
 let pwaReady = false;
 let lastPerfScore = null;
@@ -611,6 +689,23 @@ const BAITS = [
     { id:'pearl_bait', name:'진주 미끼', emoji:'🦪', tier:'PREMIUM', cost:1450, pack:5, biteSpeed:.13, rarityBoost:.055, valueBonus:.07, expBonus:.04, desc:'희귀 이상 어종을 노릴 때 좋은 균형형 미끼입니다.' },
     { id:'dragon_bait', name:'용궁 미끼', emoji:'🔥', tier:'RAID', cost:4200, pack:3, biteSpeed:.18, rarityBoost:.095, valueBonus:.12, expBonus:.08, desc:'전설과 신화 등급을 노리는 고위험 고보상 미끼입니다.' }
 ];
+
+// ==================== Quest Patch v1.7 ====================
+const DAILY_QUESTS = [
+    { id:'catch_3', icon:'🎣', name:'물결의 손맛', desc:'오늘 물고기 3마리 포획', target:3, rewardGold:420, rewardExp:90, progress:() => gameState.daily?.stats?.caught || 0 },
+    { id:'cast_5', icon:'🌊', name:'부지런한 캐스팅', desc:'낚싯대 5회 던지기', target:5, rewardGold:260, rewardExp:70, progress:() => gameState.daily?.stats?.casts || 0 },
+    { id:'earn_1200', icon:'💰', name:'황금 물살', desc:'오늘 낚시 수익 1,200골드 달성', target:1200, rewardGold:560, rewardExp:110, progress:() => gameState.daily?.stats?.goldEarned || 0 },
+    { id:'rare_1', icon:'🔵', name:'희귀한 파동', desc:'희귀 등급 이상 1마리 포획', target:1, rewardGold:760, rewardExp:145, progress:() => gameState.daily?.stats?.rareCaught || 0 }
+];
+
+const SEASON_MISSIONS = [
+    { id:'season_catch_20', icon:'🐟', name:'초보 선장의 출항', desc:'누적 20마리 포획', target:20, rewardGold:1800, rewardExp:320, progress:() => gameState.totalCaught || 0 },
+    { id:'season_discover_12', icon:'📖', name:'푸른 도감 연구', desc:'서로 다른 어종 12종 발견', target:12, rewardGold:2400, rewardExp:420, progress:() => getDiscoveredSpeciesCount() },
+    { id:'season_earn_15000', icon:'🏦', name:'바다 무역상', desc:'누적 낚시 수익 15,000골드 달성', target:15000, rewardGold:3600, rewardExp:580, progress:() => gameState.totalGoldEarned || 0 },
+    { id:'season_hero_5', icon:'🟣', name:'영웅의 파도', desc:'영웅 등급 이상 누적 5마리 포획', target:5, rewardGold:4400, rewardExp:720, progress:() => (gameState.catchHistory || []).filter(f => Number(f.rarity || 1) >= 4).length },
+    { id:'season_legendary', icon:'🟠', name:'전설의 첫 조우', desc:'전설 등급 이상 1마리 포획', target:1, rewardGold:6200, rewardExp:980, progress:() => (gameState.catchHistory || []).some(f => Number(f.rarity || 1) >= 5) ? 1 : 0 }
+];
+
 
 const FALLBACK_FISH_DATABASE = [
     { id:'lake_crucian_carp', region:'호수', name:'붕어', emoji:'🐟', rarity:1, minValue:45, maxValue:85, exp:24, weight:70, desc:'잔잔한 호수에서 가장 자주 만나는 기본 어종입니다.' },
@@ -943,29 +1038,35 @@ function updateUI() {
         const countText = bait.id === 'basic_bait' ? '∞' : getBaitCount(bait.id).toLocaleString();
         mini.textContent = `${rod.emoji} ${rod.name} · ${bait.emoji} ${bait.name} x${countText}`;
     }
+    ensureDailyState(true);
+    renderMissionQuickSummary();
     applyGraphicsMode();
 }
 
 function switchScreen(screen) {
-    document.querySelectorAll('#main-content > div').forEach(d => {
-        d.classList.add('hidden');
-        d.classList.remove('screen-enter');
-    });
-    const el = document.getElementById('screen-' + screen);
-    if (el) {
-        el.classList.remove('hidden');
-        if (!reduceMotion) {
-            void el.offsetWidth;
-            el.classList.add('screen-enter');
+    const apply = () => {
+        document.querySelectorAll('#main-content > div').forEach(d => {
+            d.classList.add('hidden');
+            d.classList.remove('screen-enter');
+        });
+        const el = document.getElementById('screen-' + screen);
+        if (el) {
+            el.classList.remove('hidden');
+            if (!reduceMotion) {
+                void el.offsetWidth;
+                el.classList.add('screen-enter');
+            }
         }
-    }
-    
-    if (screen === 'equipment') renderEquipment();
-    if (screen === 'inventory') renderInventory();
-    if (screen === 'record') renderRecord();
-    if (screen === 'competition') renderCompetition();
-    if (screen === 'achievements') renderAchievements();
-    if (screen === 'encyclopedia') renderEncyclopedia();
+        if (screen === 'quests') renderQuests();
+        if (screen === 'equipment') renderEquipment();
+        if (screen === 'inventory') renderInventory();
+        if (screen === 'record') renderRecord();
+        if (screen === 'competition') renderCompetition();
+        if (screen === 'achievements') renderAchievements();
+        if (screen === 'encyclopedia') renderEncyclopedia();
+    };
+    if (document.startViewTransition && !reduceMotion) document.startViewTransition(apply);
+    else apply();
 }
 
 // ==================== 지역 & 낚시 ====================
@@ -1012,6 +1113,19 @@ function animateCastOrb() {
     orb.classList.add('active');
 }
 
+function createSonarPulse(count = 1) {
+    if (graphicsMode === 'low' || reduceMotion) return;
+    const layer = document.getElementById('sonar-layer');
+    if (!layer) return;
+    for (let i = 0; i < count; i++) {
+        const pulse = document.createElement('div');
+        pulse.className = 'sonar-pulse';
+        pulse.style.animationDelay = `${i * 120}ms`;
+        layer.appendChild(pulse);
+        pulse.addEventListener('animationend', () => pulse.remove(), { once: true });
+    }
+}
+
 function castLine() {
     if (gameState.isFishing) return;
     if (!gameState.currentRegion) {
@@ -1023,6 +1137,7 @@ function castLine() {
     clearFishingTimers();
     ensureUsableBait();
     consumeEquippedBait();
+    recordDailyCast();
     updateUI();
     savePlayerData(false);
     gameState.isFishing = true;
@@ -1030,6 +1145,7 @@ function castLine() {
     haptic(10);
     playSound('cast');
     animateCastOrb();
+    createSonarPulse(2);
     const status = document.getElementById('fishing-status');
     const castBtn = document.getElementById('cast-btn');
     const rod = document.getElementById('rod');
@@ -1057,6 +1173,7 @@ function castLine() {
     runFishingTimer(() => {
         if (!gameState.isFishing || !gameState.pendingFish) return;
         createSplashEffect();
+        createSonarPulse(3);
         haptic([18, 30, 18]);
         playSound('bite');
         status.innerHTML = `<span class="text-rose-400 font-extrabold">🎣 물었다! 탭해서 낚아채세요</span>`;
@@ -1174,6 +1291,7 @@ function endReelGame(success) {
         gameState.catchHistory = gameState.catchHistory.slice(0, 50);
         gameState.totalCaught = (gameState.totalCaught || 0) + 1;
         gameState.totalGoldEarned = (gameState.totalGoldEarned || 0) + value;
+        recordDailyCatch(fish, value);
 
         if (!gameState.bestCatch || value > Number(gameState.bestCatch.soldValue || 0)) gameState.bestCatch = fish;
 
@@ -1748,12 +1866,16 @@ function normalizeGameState(data) {
     if (!next.equipment || typeof next.equipment !== 'object') next.equipment = { rod: 'starter_rod', bait: 'basic_bait' };
     if (!next.ownedRods.includes(next.equipment.rod)) next.equipment.rod = 'starter_rod';
     if (!BAITS.some((bait) => bait.id === next.equipment.bait) || (next.equipment.bait !== 'basic_bait' && Number(next.baitInventory[next.equipment.bait] || 0) <= 0)) next.equipment.bait = 'basic_bait';
+    if (!next.daily || typeof next.daily !== 'object') next.daily = { dateKey: '', checkedIn: false, streak: 0, lastCheckIn: '', claimedQuests: {}, stats: { casts: 0, caught: 0, rareCaught: 0, goldEarned: 0 } };
+    if (!next.season || typeof next.season !== 'object') next.season = { claimed: {} };
+    if (!next.season.claimed || typeof next.season.claimed !== 'object') next.season.claimed = {};
     return next;
 }
 
 function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
+        localStorage.setItem('aqua_v1.7', JSON.stringify(plain));
         localStorage.setItem('aqua_v1.6', JSON.stringify(plain));
         localStorage.setItem('aqua_v1.5', JSON.stringify(plain));
         localStorage.setItem('aqua_v1.4', JSON.stringify(plain));
@@ -1895,7 +2017,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) gameState = normalizeGameState(JSON.parse(saved));
         else gameState = normalizeGameState(gameState);
         
@@ -1908,6 +2030,7 @@ async function init() {
         }
         
         if (!gameState.achievements) gameState.achievements = {};
+        ensureDailyState(true);
         
         applyAdaptivePerformance();
         applyGraphicsMode();
@@ -1918,7 +2041,7 @@ async function init() {
         bindPremiumCardPointer();
         startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v1.6] PWA Visual Max Patch Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v1.7] Quest Visual Max Patch Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
         alert('게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.');

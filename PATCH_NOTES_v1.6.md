@@ -16,6 +16,7 @@ GitHub Pages 무료 배포 환경에서 모바일 웹게임을 더 앱처럼 보
 - 저장 호환: aqua_v1.1~aqua_v1.5 데이터를 유지하고 aqua_v1.6 키 추가
 
 ## 추가 파일
+- PWA_TEST_CHECKLIST_v1.6.md
 - manifest.webmanifest
 - sw.js
 - offline.html
