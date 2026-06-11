@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Aqua Fantasia - Core Navigator 3.6.2 성능 최적화, 모바일 랙 감소, 가벼운 아트 캐시 낚시 RPG">
+    <meta name="description" content="Aqua Fantasia - Painterly Performance 3.6.3 원화풍 UI, 모바일 렉 감소, 가벼운 아트 캐시 낚시 RPG">
     <meta name="theme-color" content="#082f49">
     <meta name="color-scheme" content="dark">
     <meta name="mobile-web-app-capable" content="yes">
@@ -17,8 +17,8 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
-    <link rel="preload" as="image" href="assets/art/v36_core_navigator.svg" type="image/svg+xml">
-    <link rel="preload" as="image" href="assets/art/v36_mobile_canvas.svg" type="image/svg+xml">
+    <link rel="preload" as="image" href="assets/art/v363_painterly_ocean.svg" type="image/svg+xml">
+    <link rel="preload" as="image" href="assets/art/v363_mobile_scene.svg" type="image/svg+xml">
     <title>Aqua Fantasia • v3.6.2 Performance Core Hotfix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
@@ -1503,6 +1503,120 @@
         body.perf-lite .aqua-toast { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
         body.perf-lite * { scroll-behavior: auto !important; }
 
+
+
+        /* ==================== v3.6.3 Painterly Performance Art Pass ==================== */
+        :root {
+            --paint-ink:#07111f;
+            --paint-deep:#0b1734;
+            --paint-sea:#0f6f8f;
+            --paint-aqua:#4fd1c5;
+            --paint-jade:#70d6a6;
+            --paint-gold:#f5c76b;
+            --paint-coral:#ff8a6b;
+            --paint-lavender:#b794f4;
+            --paint-pearl:#f8f4df;
+        }
+        body.art-v363 #app-shell {
+            background-image:
+                radial-gradient(circle at 17% 7%, rgba(255,138,107,.26), transparent 23rem),
+                radial-gradient(circle at 82% 12%, rgba(183,148,244,.25), transparent 24rem),
+                radial-gradient(circle at 42% 32%, rgba(79,209,197,.18), transparent 28rem),
+                radial-gradient(circle at 50% 110%, rgba(245,199,107,.18), transparent 27rem),
+                url('assets/art/v363_painterly_ocean.svg'),
+                linear-gradient(180deg, #07111f 0%, #0b1734 45%, #05111e 100%);
+            background-size: cover, cover, cover, cover, cover, auto;
+            background-position:center;
+        }
+        body.art-v363 .focus-hero {
+            background-image:
+                linear-gradient(135deg, rgba(7,17,31,.58), rgba(15,111,143,.20)),
+                url('assets/art/v363_mobile_scene.svg');
+            background-size:cover;
+            background-position:center;
+            box-shadow:0 28px 80px rgba(3,9,18,.45), inset 0 1px 0 rgba(255,255,255,.14);
+        }
+        body.art-v363 .top-bar-focus,
+        body.art-v363 .quick-menu-panel,
+        body.art-v363 .bottom-nav {
+            background:linear-gradient(180deg, rgba(9,21,38,.78), rgba(8,36,54,.52));
+            border-color:rgba(248,244,223,.12);
+            box-shadow:0 18px 48px rgba(3,9,18,.34), inset 0 1px 0 rgba(255,255,255,.10);
+        }
+        body.art-v363 .premium-card,
+        body.art-v363 .premium-glass,
+        body.art-v363 .mission-panel,
+        body.art-v363 .boss-panel,
+        body.art-v363 .world-route-mini,
+        body.art-v363 .bag-coach-card,
+        body.art-v363 .balance-coach-card {
+            background-image:
+                linear-gradient(145deg, rgba(248,244,223,.085), rgba(79,209,197,.045) 44%, rgba(183,148,244,.055)),
+                url('assets/art/v363_material_card.svg');
+            background-size:cover;
+            border-color:rgba(248,244,223,.13);
+        }
+        body.art-v363 .v36-core-navigator {
+            background:
+                linear-gradient(140deg, rgba(7,17,31,.50), rgba(15,111,143,.22) 38%, rgba(255,138,107,.12) 68%, rgba(183,148,244,.16)),
+                url('assets/art/v363_lux_frame.svg') center / cover no-repeat,
+                url('assets/art/v363_command_canvas.svg') center / cover no-repeat;
+            border-color:rgba(248,244,223,.20);
+            box-shadow:0 28px 86px rgba(0,0,0,.42), 0 0 0 1px rgba(245,199,107,.075), inset 0 1px 0 rgba(255,255,255,.16);
+        }
+        body.art-v363 .v36-core-navigator::before {
+            background:radial-gradient(circle at 22% 28%, rgba(245,199,107,.24), transparent 13rem), radial-gradient(circle at 80% 18%, rgba(255,138,107,.16), transparent 12rem), radial-gradient(circle at 60% 88%, rgba(79,209,197,.17), transparent 15rem);
+            animation:none;
+            opacity:.78;
+        }
+        body.art-v363 .v36-core-navigator::after {
+            background:linear-gradient(105deg, transparent 32%, rgba(248,244,223,.13), transparent 66%);
+            animation:v363-soft-sweep 14s ease-in-out infinite;
+            mix-blend-mode:screen;
+        }
+        @keyframes v363-soft-sweep { 0%,72%{transform:translateX(-118%)} 100%{transform:translateX(118%)} }
+        body.art-v363 .v36-title { color:var(--paint-pearl); text-shadow:0 12px 34px rgba(0,0,0,.48), 0 0 24px rgba(245,199,107,.13); }
+        body.art-v363 .v36-kicker { color:rgba(245,199,107,.86); }
+        body.art-v363 .v36-emblem { background-image:url('assets/art/v363_fish_showcase.svg'); border-color:rgba(245,199,107,.18); }
+        body.art-v363 .v36-metric {
+            background:linear-gradient(145deg, rgba(248,244,223,.10), rgba(15,111,143,.10));
+            border-color:rgba(248,244,223,.13);
+        }
+        body.art-v363 .v36-action-grid button,
+        body.art-v363 .v36-lane button {
+            background-image:linear-gradient(145deg, rgba(248,244,223,.11), rgba(15,111,143,.13), rgba(183,148,244,.07)), url('assets/art/v363_button_plate.svg');
+            background-size:cover;
+            border-color:rgba(248,244,223,.16);
+        }
+        body.art-v363 .v36-action-grid button.primary {
+            background-image:linear-gradient(145deg, rgba(245,199,107,.25), rgba(79,209,197,.18), rgba(255,138,107,.15)), url('assets/art/v363_button_plate.svg');
+            box-shadow:0 18px 42px rgba(245,199,107,.14), inset 0 1px 0 rgba(255,255,255,.14);
+        }
+        body.art-v363 .v36-fill { background:linear-gradient(90deg, #4fd1c5, #70d6a6, #f5c76b, #ff8a6b, #b794f4); box-shadow:0 0 18px rgba(245,199,107,.24); }
+        body.art-v363 #fishing-visual {
+            background-image:
+                linear-gradient(180deg, rgba(7,17,31,.10), rgba(5,13,26,.32)),
+                url('assets/art/v363_fishing_canvas.svg') !important;
+            background-size:cover;
+            background-position:center bottom;
+        }
+        body.art-v363 .region-card[data-region="호수"] { background-image:linear-gradient(135deg, rgba(7,17,31,.38), rgba(255,138,107,.11)), url('assets/art/v363_region_lake.svg') !important; }
+        body.art-v363 .region-card[data-region="강"] { background-image:linear-gradient(135deg, rgba(7,17,31,.38), rgba(112,214,166,.14)), url('assets/art/v363_region_river.svg') !important; }
+        body.art-v363 .region-card[data-region="항구"] { background-image:linear-gradient(135deg, rgba(7,17,31,.38), rgba(245,199,107,.13)), url('assets/art/v363_region_harbor.svg') !important; }
+        body.art-v363 .region-card[data-region="심해"] { background-image:linear-gradient(135deg, rgba(7,17,31,.44), rgba(183,148,244,.13)), url('assets/art/v363_region_deep.svg') !important; }
+        body.art-v363 .region-card[data-region="용궁"] { background-image:linear-gradient(135deg, rgba(7,17,31,.40), rgba(79,209,197,.15)), url('assets/art/v363_region_palace.svg') !important; }
+        body.art-v363 .region-card[data-region='차원의 바다'] { background-image:linear-gradient(135deg, rgba(7,17,31,.44), rgba(183,148,244,.16)), url('assets/art/v363_region_dimension.svg') !important; }
+        body.art-v363 .region-card { background-size:cover !important; background-position:center !important; box-shadow:0 18px 50px rgba(2,6,23,.32), inset 0 1px 0 rgba(255,255,255,.11); }
+        .director-archive:not([open]) .director-archive-body { content-visibility:auto; contain-intrinsic-size:1px 1px; }
+        body.perf-lite.art-v363 #app-shell { background-image:linear-gradient(180deg, #07111f, #0b1734 55%, #05111e); }
+        body.perf-lite.art-v363 .v36-core-navigator::after,
+        body.perf-lite.art-v363 .v36-core-navigator::before { animation:none !important; opacity:.22; }
+        body.perf-lite.art-v363 .premium-card,
+        body.perf-lite.art-v363 .premium-glass,
+        body.perf-lite.art-v363 .region-card,
+        body.perf-lite.art-v363 .v36-core-navigator { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
+        @media (prefers-reduced-motion:reduce) { body.art-v363 .v36-core-navigator::after { animation:none !important; } }
+
 </style>
 </head>
 <body class="bg-[#0a3d5c] text-white antialiased">
@@ -1623,7 +1737,7 @@
             </div>
 
             <div class="px-5 mt-3">
-                <details class="director-archive">
+                <details id="director-archive" class="director-archive">
                     <summary><span>세부 분석 카드</span><span>v35 · v34 · v33 · Director · Atlas</span></summary>
                     <div class="director-archive-body">
                         <div id="v35-tide-master" class="v35-tide-master"></div>
@@ -2143,7 +2257,7 @@ let graphicsMode = localStorage.getItem('aqua_graphics_mode') || (() => {
     return (mobileLike || saveData || lowMemory || lowCores) ? 'low' : 'high';
 })();
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '3.6.2';
+const APP_VERSION = '3.6.3';
 function versionAtLeast(minVersion) {
     const parse = (value) => String(value || '0').split('.').map((part) => Number(part) || 0);
     const current = parse(APP_VERSION);
@@ -4738,28 +4852,17 @@ function initV35Runtime() {
 
 // ==================== v3.6.2 Performance Core Hotfix ====================
 const V36_ASSETS = [
-    'assets/art/v36_core_navigator.svg',
-    'assets/art/v36_mobile_canvas.svg',
-    'assets/art/v36_fishing_stage.svg',
-    'assets/art/v36_fish_atlas.svg',
-    'assets/art/v36_region_lake.svg',
-    'assets/art/v36_region_river.svg',
-    'assets/art/v36_region_harbor.svg',
-    'assets/art/v36_region_deep.svg',
-    'assets/art/v36_region_palace.svg',
-    'assets/art/v36_region_dimension.svg',
-    'assets/art/v36_inventory_deck.svg',
-    'assets/art/v36_boss_crest.svg',
-    'assets/art/v36_route_orbit.svg',
-    'assets/art/v36_hud_frame.svg',
-    'assets/art/v36_button_runes.svg',
-    'assets/art/v36_reward_vault.svg',
-    'assets/art/v36_pwa_shell.svg',
-    'assets/art/v36_performance_radar.svg',
-    'assets/art/v36_world_console.svg',
-    'assets/art/v36_module_map.svg',
-    'assets/art/v36_encyclopedia_wall.svg',
-    'assets/art/v36_touch_overlay.svg'
+    'assets/art/v363_painterly_ocean.svg',
+    'assets/art/v363_mobile_scene.svg',
+    'assets/art/v363_command_canvas.svg',
+    'assets/art/v363_fishing_canvas.svg',
+    'assets/art/v363_fish_showcase.svg',
+    'assets/art/v363_region_lake.svg',
+    'assets/art/v363_region_river.svg',
+    'assets/art/v363_region_harbor.svg',
+    'assets/art/v363_region_deep.svg',
+    'assets/art/v363_region_palace.svg',
+    'assets/art/v363_region_dimension.svg'
 ];
 
 function ensureV36State() {
@@ -4800,9 +4903,9 @@ function getV36Snapshot() {
         return true;
     });
     const audits = [
-        { title:'구조 분리 준비', body:'src/core · src/ui · src/systems · src/integrations 스캐폴드 추가' },
-        { title:'첫 화면 단일화', body:'Tide Master는 세부 분석으로 이동 · Core Navigator를 최상단에 배치' },
-        { title:'아트 확장', body:'v36 모바일 캔버스/지역/보스/가방/도감 SVG 에셋 22종 추가' }
+        { title:'원화풍 팔레트', body:'투톤 중심에서 산호 · 금빛 · 비취 · 라벤더 색층으로 확장' },
+        { title:'렉 감소', body:'세부 분석 카드가 열릴 때만 과거 대형 패널을 렌더링' },
+        { title:'가벼운 에셋', body:'대용량 PNG 대신 모바일 친화 SVG 아트팩으로 분위기 강화' }
     ];
     return { ...base, route, inv, score, ready, pendingDaily, unsettledValue, inventoryCount, fishTotal, fishKnown, primary, actions:uniqueActions, moduleRisk, audits };
 }
@@ -4829,7 +4932,7 @@ function runV36Audit() {
     const state = ensureV36State();
     state.audits = Number(state.audits || 0) + 1;
     runMegaQualityDirector();
-    showToast('v3.6.2 성능/캐시/저장 최적화 완료 · Performance Core를 갱신했습니다', '🧭', 2500);
+    showToast('v3.6.3 원화풍/성능/캐시 최적화 완료 · 레거시 렌더링을 줄였습니다', '🧭', 2500);
     renderV36CoreNavigator();
 }
 
@@ -4847,9 +4950,9 @@ function renderV36CoreNavigator() {
         <div class="v36-inner">
             <div class="v36-head">
                 <div class="min-w-0">
-                    <div class="v36-kicker">CORE NAVIGATOR 3.6.2 · PERFORMANCE / LIGHT CACHE / MOBILE</div>
+                    <div class="v36-kicker">PAINTERLY PERFORMANCE 3.6.3 · PERFORMANCE / LIGHT CACHE / MOBILE</div>
                     <div class="v36-title">${escapeHTML(snap.primary.title)}</div>
-                    <div class="v36-copy">${escapeHTML(snap.primary.desc)} · 추천 항로 ${escapeHTML(snap.route?.region || '호수')} · 단일 파일 확장 위험을 줄이기 위한 구조 분리 준비를 포함했습니다.</div>
+                    <div class="v36-copy">${escapeHTML(snap.primary.desc)} · 추천 항로 ${escapeHTML(snap.route?.region || '호수')} · 투톤감을 줄인 원화풍 팔레트와 레거시 렌더링 감축을 적용했습니다.</div>
                 </div>
                 <div class="v36-emblem" aria-hidden="true"></div>
             </div>
@@ -4881,9 +4984,32 @@ function warmV36Assets() {
 }
 
 function initV36Runtime() {
-    document.body.classList.add('art-v36');
+    document.body.classList.add('art-v36', 'art-v363');
     ensureV36State();
     warmV36Assets();
+}
+
+
+function renderLegacyDirectorPanelsIfNeeded(force = false) {
+    const archive = document.getElementById('director-archive');
+    if (!archive) return;
+    if (!force && !archive.open) return;
+    if (!force && document.body.classList.contains('perf-lite')) return;
+    renderOceanDirectorPanel();
+    renderDirectorCutPanel();
+    renderVisualAtlasPanel();
+    renderV33CommandBridge();
+    renderV34CommandCanvas();
+    renderV35TideMaster();
+}
+
+function initDirectorArchivePerformanceGate() {
+    const archive = document.getElementById('director-archive');
+    if (!archive || archive.dataset.bound === '1') return;
+    archive.dataset.bound = '1';
+    archive.addEventListener('toggle', () => {
+        if (archive.open) scheduleAquaTask(() => renderLegacyDirectorPanelsIfNeeded(true), 'background');
+    });
 }
 
 // ==================== UI ====================
@@ -4919,12 +5045,7 @@ function updateUI() {
     renderSensoryPanel();
     renderOnboardingPanel();
     renderQualityDirectorMini();
-    renderOceanDirectorPanel();
-    renderDirectorCutPanel();
-    renderVisualAtlasPanel();
-    renderV33CommandBridge();
-    renderV34CommandCanvas();
-    renderV35TideMaster();
+    renderLegacyDirectorPanelsIfNeeded(false);
     renderV36CoreNavigator();
     renderSmartDock();
     applyMegaQualityClasses();
@@ -6550,7 +6671,7 @@ function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
         const json = JSON.stringify(plain);
-        ['aqua_v3.6.2', 'aqua_v3.6.1', 'aqua_latest_state'].forEach((key) => localStorage.setItem(key, json)); // 성능 보호: 과거 전체 버전 키 반복 저장 제거
+        ['aqua_v3.6.3', 'aqua_v3.6.2', 'aqua_latest_state'].forEach((key) => localStorage.setItem(key, json)); // 성능 보호: 과거 전체 버전 키 반복 저장 제거
         setCloudSaveStatus('ok', '로컬 저장됨');
 
         if (syncCloud && isFirebaseConnected && gameState.userId && window.AquaFirebase) {
@@ -6788,7 +6909,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v3.6.3') || localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) gameState = normalizeGameState(JSON.parse(saved));
         else gameState = normalizeGameState(gameState);
         
@@ -6815,6 +6936,7 @@ async function init() {
         initV34Runtime();
         initV35Runtime();
         initV36Runtime();
+        initDirectorArchivePerformanceGate();
         initMobileLaunchBridge();
         initBackExitGuard();
         exposeAquaHandlers();
@@ -6830,10 +6952,10 @@ async function init() {
         scheduleAquaTask(initMegaPerformanceObserver, 'background');
         startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v3.6.2] Performance Core Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v3.6.3] Painterly Performance Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
-        alert('게임 초기화 중 오류가 발생했습니다. v3.6.2 핫픽스가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
+        alert('게임 초기화 중 오류가 발생했습니다. v3.6.3 최적화 패치가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
     }
 }
 

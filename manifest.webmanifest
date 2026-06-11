@@ -1,11 +1,11 @@
 {
-  "name": "Aqua Fantasia v3.6.2",
-  "short_name": "Aqua v3.6.2",
-  "description": "Aqua Fantasia - Core Navigator 3.6 mega stabilization, modular scaffold, mobile art UI, 150 fish atlas",
+  "name": "Aqua Fantasia v3.6.3",
+  "short_name": "Aqua v3.6.3",
+  "description": "Aqua Fantasia - Painterly Performance 3.6.3, 원화풍 모바일 UI, 레거시 렌더링 감축, 150 fish atlas",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "./?app=aqua-fantasia-v36",
-  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=3.6",
+  "id": "./?app=aqua-fantasia-v363",
+  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=3.6.3",
   "scope": "./",
   "display": "fullscreen",
   "display_override": [
@@ -15,7 +15,7 @@
   ],
   "orientation": "portrait",
   "background_color": "#020617",
-  "theme_color": "#041525",
+  "theme_color": "#0b1734",
   "categories": [
     "games",
     "entertainment"
@@ -44,7 +44,7 @@
     {
       "name": "코어 내비게이터",
       "short_name": "코어",
-      "description": "v3.6.2 성능 최적화와 Core Navigator 열기",
+      "description": "v3.6.3 원화풍 최적화와 Core Navigator 열기",
       "url": "./?shortcut=core-navigator",
       "icons": [
         {

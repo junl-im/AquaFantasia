@@ -1,0 +1,7 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 520' preserveAspectRatio='none'>
+<defs><linearGradient id='edge' x1='0' y1='0' x2='1' y2='1'><stop stop-color='#f5c76b'/><stop offset='.5' stop-color='#4fd1c5'/><stop offset='1' stop-color='#b794f4'/></linearGradient></defs>
+<rect x='18' y='18' width='864' height='484' rx='58' fill='none' stroke='url(#edge)' stroke-opacity='.42' stroke-width='3'/>
+<rect x='34' y='34' width='832' height='452' rx='46' fill='none' stroke='#fff' stroke-opacity='.10' stroke-width='1'/>
+<path d='M70 82 C 220 30, 330 66, 430 46 S 700 18, 825 86' fill='none' stroke='#f5c76b' stroke-opacity='.24' stroke-width='10' stroke-linecap='round'/>
+<path d='M92 438 C 245 484, 358 440, 474 470 S 708 500, 812 428' fill='none' stroke='#4fd1c5' stroke-opacity='.20' stroke-width='12' stroke-linecap='round'/>
+</svg>

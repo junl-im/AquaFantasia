@@ -10,7 +10,7 @@ const bytes = (path) => statSync(join(root, path)).size;
 const refs = [...index.matchAll(/assets\/(?:art|icons|images)\/[^'"\)\s]+/g)].map((m) => m[0]);
 const missing = [...new Set(refs)].filter((ref) => { try { statSync(join(root, ref)); return false; } catch { return true; } });
 const report = {
-  version: '3.6.2',
+  version: '3.6.3',
   indexBytes: bytes('index.html'),
   indexLines: index.split('\n').length,
   fishCount: fish.length,
@@ -24,8 +24,10 @@ const report = {
     backExitGuard: index.includes('initBackExitGuard'),
     tideMaster: index.includes('renderV35TideMaster'),
     coreNavigator: index.includes('renderV36CoreNavigator'),
-    moduleScaffold: index.includes('v3.6.2 Core Navigator') || index.includes('CORE NAVIGATOR 3.6.2'),
+    moduleScaffold: index.includes('v3.6.3') || index.includes('PAINTERLY PERFORMANCE 3.6.3'),
     perfLite: index.includes('perf-lite') && index.includes('warmAssetsSafely'),
+    painterlyArt: index.includes('art-v363') && index.includes('v363_painterly_ocean.svg'),
+    legacyRenderGate: index.includes('renderLegacyDirectorPanelsIfNeeded'),
     lightServiceWorker: !readFileSync(join(root, 'sw.js'), 'utf8').includes('./assets/art/v31_director_stage.svg')
   }
 };
@@ -34,4 +36,4 @@ if (report.missingAssets.length) process.exit(1);
 if (report.duplicateFishIds) process.exit(1);
 if (report.fishCount < 150) process.exit(1);
 if (!report.mobileGuards.coreNavigator) process.exit(1);
-if (!report.mobileGuards.perfLite || !report.mobileGuards.lightServiceWorker) process.exit(1);
+if (!report.mobileGuards.perfLite || !report.mobileGuards.lightServiceWorker || !report.mobileGuards.painterlyArt || !report.mobileGuards.legacyRenderGate) process.exit(1);
