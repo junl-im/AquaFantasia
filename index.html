@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aqua Fantasia • Dev v1.1</title>
+    <title>Aqua Fantasia • Dev v1.3 Fish Data</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -29,14 +29,16 @@
             <div>
                 <span class="font-black text-3xl tracking-[-1.5px]">AQUA</span>
                 <span class="font-bold text-3xl tracking-[-1.5px] text-sky-400">FANTASIA</span>
-                <span class="ml-2 text-[10px] px-2 py-0.5 bg-white/10 rounded-full">v1.1</span>
+                <span class="ml-2 text-[10px] px-2 py-0.5 bg-white/10 rounded-full">v1.3</span>
             </div>
         </div>
-        <div class="flex items-center gap-x-2 text-sm">
+        <div class="flex items-center gap-x-2 text-sm flex-wrap justify-end">
             <div id="firebase-status" class="px-3 py-1 text-xs rounded-full bg-white/10 flex items-center gap-x-1.5">
                 <div class="w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse"></div>
                 <span class="font-medium">Firebase</span>
             </div>
+            <div id="cloud-save-status" class="px-3 py-1 text-[11px] rounded-full bg-white/10 text-white/70 hidden">로컬 저장</div>
+            <button id="logout-btn" onclick="logoutGame()" class="hidden px-3 py-1 text-[11px] rounded-full bg-white/10 hover:bg-white/20">로그아웃</button>
             <div class="flex items-center bg-white/10 px-3.5 py-1.5 rounded-2xl">
                 <span class="text-amber-400 mr-1.5">💰</span>
                 <span id="gold-display" class="font-mono font-extrabold tabular-nums text-lg">1,240</span>
@@ -55,7 +57,7 @@
             <div class="text-center mb-10">
                 <div class="text-[5.5rem] mb-3">🎣</div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-300 mt-2">v1.1 Dev</p>
+                <p class="text-sky-300 mt-2">v1.3 Fish Data Patch</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
@@ -111,7 +113,7 @@
         <div id="screen-fishing" class="hidden absolute inset-0 flex flex-col ocean-deep">
             <div class="px-5 pt-5 flex justify-between items-center">
                 <button onclick="exitFishing()" class="text-sky-300">← 마을</button>
-                <div id="fishing-region-name" class="font-extrabold text-3xl tracking-tighter"></div>
+                <div class="text-right"><div id="fishing-region-name" class="font-extrabold text-3xl tracking-tighter"></div><div id="fishing-region-info" class="text-[11px] text-sky-200/80 mt-0.5"></div></div>
             </div>
             <div id="fishing-visual" class="flex-1 mx-4 mt-3 mb-2 rounded-[2.5rem] overflow-hidden border border-white/10 relative">
                 <div class="absolute inset-0 bg-gradient-to-b from-[#0a3d5c] via-[#0f4c6b] to-[#0a3d5c]"></div>
@@ -275,12 +277,12 @@ try {
 </script>
 
 <script>
-// ==================== v1.1 EXPANSION VERSION / Firebase Ready ====================
+// ==================== v1.3 FISH DATA PATCH / Firebase Ready ====================
 let gameState = {
     gold: 1240, level: 12, exp: 870, expToNext: 1000,
     inventory: [], discovered: new Set(),
     currentRegion: null, isFishing: false,
-    reelProgress: 0, tension: 0, currentFish: null,
+    reelProgress: 0, tension: 0, currentFish: null, pendingFish: null,
     nickname: "여우", gender: "male", userId: null,
     catchHistory: [], bestCatch: null, totalCaught: 0, totalGoldEarned: 0,
     todayBest: 0, leaderboard: [],
@@ -293,11 +295,157 @@ let firebaseListenerStarted = false;
 let leaderboardUnsubscribe = null;
 let cloudSaveTimer = null;
 
+// ==================== Fish Data Patch v1.3 ====================
+const RARITY_CONFIG = {
+    1: { name: '일반', emoji: '⚪', color: '#d1d5db', weight: 72 },
+    2: { name: '고급', emoji: '🟢', color: '#34d399', weight: 45 },
+    3: { name: '희귀', emoji: '🔵', color: '#38bdf8', weight: 22 },
+    4: { name: '영웅', emoji: '🟣', color: '#c084fc', weight: 9 },
+    5: { name: '전설', emoji: '🟠', color: '#f59e0b', weight: 3 },
+    6: { name: '신화', emoji: '🔴', color: '#fb7185', weight: 1 }
+};
+
+const REGION_META = {
+    '호수': { emoji: '🏞️', desc: '초보자에게 좋은 잔잔한 물가', minRarity: 1, maxRarity: 4, biteMin: 1500, biteMax: 2600 },
+    '강': { emoji: '🏞', desc: '민물 대어와 빠른 물살', minRarity: 1, maxRarity: 4, biteMin: 1600, biteMax: 2800 },
+    '항구': { emoji: '⚓', desc: '바다와 도시가 만나는 어장', minRarity: 2, maxRarity: 5, biteMin: 1800, biteMax: 3100 },
+    '심해': { emoji: '🌊', desc: '희귀 어종이 숨어 있는 깊은 바다', minRarity: 3, maxRarity: 5, biteMin: 2100, biteMax: 3400 },
+    '용궁': { emoji: '🐉', desc: '전설 어종과 용의 기운', minRarity: 4, maxRarity: 6, biteMin: 2300, biteMax: 3700 },
+    '차원의 바다': { emoji: '🌀', desc: '신화 등급을 노리는 최종 어장', minRarity: 5, maxRarity: 6, biteMin: 2500, biteMax: 4200 }
+};
+
+const FALLBACK_FISH_DATABASE = [
+    { id:'lake_crucian_carp', region:'호수', name:'붕어', emoji:'🐟', rarity:1, minValue:45, maxValue:85, exp:24, weight:70, desc:'잔잔한 호수에서 가장 자주 만나는 기본 어종입니다.' },
+    { id:'lake_bluegill', region:'호수', name:'블루길', emoji:'🐠', rarity:1, minValue:50, maxValue:95, exp:25, weight:58, desc:'호기심이 많아 미끼에 잘 반응합니다.' },
+    { id:'lake_carp', region:'호수', name:'잉어', emoji:'🐟', rarity:2, minValue:95, maxValue:160, exp:40, weight:36, desc:'묵직한 손맛을 주는 호수의 대표 어종입니다.' },
+    { id:'lake_golden_carp', region:'호수', name:'황금 잉어', emoji:'🐡', rarity:3, minValue:210, maxValue:380, exp:70, weight:14, desc:'비늘이 햇빛처럼 반짝이는 행운의 물고기입니다.' },
+    { id:'lake_moon_koi', region:'호수', name:'달빛 비단잉어', emoji:'🌙', rarity:4, minValue:480, maxValue:760, exp:115, weight:4, desc:'밤하늘의 달빛을 품었다는 영웅 등급 어종입니다.' },
+    { id:'river_minnow', region:'강', name:'피라미', emoji:'🐟', rarity:1, minValue:42, maxValue:80, exp:22, weight:66, desc:'빠른 물살을 따라 무리 지어 이동합니다.' },
+    { id:'river_catfish', region:'강', name:'메기', emoji:'🐈', rarity:2, minValue:120, maxValue:210, exp:45, weight:35, desc:'힘이 강해 초반 장력 관리 연습에 좋습니다.' },
+    { id:'river_mandarin', region:'강', name:'쏘가리', emoji:'🐟', rarity:3, minValue:260, maxValue:430, exp:75, weight:16, desc:'맑은 강의 바위틈에 숨어 있는 고급 민물고기입니다.' },
+    { id:'river_salmon', region:'강', name:'은빛 연어', emoji:'🐟', rarity:3, minValue:300, maxValue:520, exp:86, weight:12, desc:'거센 물살을 거슬러 오르는 은빛 대어입니다.' },
+    { id:'river_dragon_perch', region:'강', name:'청룡 농어', emoji:'🐉', rarity:4, minValue:650, maxValue:950, exp:135, weight:4, desc:'강물에 스민 용의 기운을 품었다고 전해집니다.' },
+    { id:'harbor_mackerel', region:'항구', name:'고등어', emoji:'🐟', rarity:2, minValue:130, maxValue:220, exp:44, weight:48, desc:'항구 근처에서 흔히 잡히는 빠른 바닷물고기입니다.' },
+    { id:'harbor_sea_bream', region:'항구', name:'참돔', emoji:'🐠', rarity:3, minValue:280, maxValue:470, exp:78, weight:24, desc:'낚시꾼들이 좋아하는 붉은 바다의 보석입니다.' },
+    { id:'harbor_flounder', region:'항구', name:'광어', emoji:'🐟', rarity:3, minValue:320, maxValue:540, exp:85, weight:18, desc:'바닥에 숨어 있다가 강하게 미끼를 물어챕니다.' },
+    { id:'harbor_tuna', region:'항구', name:'참치', emoji:'🐟', rarity:4, minValue:700, maxValue:1100, exp:150, weight:7, desc:'항구 밖 깊은 물길에서 등장하는 대형 어종입니다.' },
+    { id:'harbor_golden_anchorfish', region:'항구', name:'황금 닻고기', emoji:'⚓', rarity:5, minValue:1450, maxValue:2200, exp:260, weight:2, desc:'오래된 난파선 주변에서 발견된다는 전설 어종입니다.' },
+    { id:'deep_lanternfish', region:'심해', name:'초롱아귀', emoji:'💡', rarity:3, minValue:360, maxValue:620, exp:95, weight:34, desc:'심해의 어둠 속에서 작은 빛으로 미끼를 유혹합니다.' },
+    { id:'deep_giant_squid', region:'심해', name:'대왕오징어', emoji:'🦑', rarity:4, minValue:900, maxValue:1450, exp:185, weight:13, desc:'강한 장력과 긴 싸움이 필요한 심해의 강자입니다.' },
+    { id:'deep_abyss_shark', region:'심해', name:'심연상어', emoji:'🦈', rarity:4, minValue:980, maxValue:1600, exp:205, weight:10, desc:'빛이 닿지 않는 곳에서 사냥하는 영웅 등급 어종입니다.' },
+    { id:'deep_crystal_whale', region:'심해', name:'수정 고래', emoji:'🐋', rarity:5, minValue:1900, maxValue:3100, exp:340, weight:3, desc:'몸에 수정처럼 빛나는 무늬가 있는 전설의 고래입니다.' },
+    { id:'deep_void_ray', region:'심해', name:'공허 가오리', emoji:'🪽', rarity:5, minValue:2200, maxValue:3600, exp:380, weight:2, desc:'심해의 균열을 타고 나타난다는 희귀한 전설 어종입니다.' },
+    { id:'palace_jade_carp', region:'용궁', name:'옥빛 잉어', emoji:'💎', rarity:4, minValue:850, maxValue:1350, exp:175, weight:30, desc:'용궁 정원 연못에서 자란다는 아름다운 어종입니다.' },
+    { id:'palace_dragon_seahorse', region:'용궁', name:'용마 해마', emoji:'🐉', rarity:4, minValue:1050, maxValue:1700, exp:210, weight:18, desc:'용의 갈기를 닮은 지느러미가 특징입니다.' },
+    { id:'palace_pearl_turtle', region:'용궁', name:'진주 거북', emoji:'🐢', rarity:5, minValue:2100, maxValue:3300, exp:360, weight:8, desc:'천년 진주를 등껍질에 품었다고 알려져 있습니다.' },
+    { id:'palace_blue_dragonfish', region:'용궁', name:'청룡어', emoji:'🐲', rarity:5, minValue:2600, maxValue:4200, exp:430, weight:5, desc:'용궁 수호신의 비늘을 닮은 전설 등급 어종입니다.' },
+    { id:'palace_sea_king', region:'용궁', name:'해왕룡', emoji:'🐉', rarity:6, minValue:5200, maxValue:8200, exp:800, weight:1, desc:'용궁의 깊은 문이 열릴 때만 모습을 드러내는 신화 어종입니다.' },
+    { id:'dimension_star_fish', region:'차원의 바다', name:'별무늬 차원어', emoji:'⭐', rarity:5, minValue:2400, maxValue:3900, exp:420, weight:28, desc:'별빛이 비늘에 갇힌 듯 반짝이는 차원의 어종입니다.' },
+    { id:'dimension_time_eel', region:'차원의 바다', name:'시간 장어', emoji:'⏳', rarity:5, minValue:3100, maxValue:5100, exp:520, weight:16, desc:'낚아 올리는 순간 주변 시간이 느려지는 듯한 기분이 듭니다.' },
+    { id:'dimension_nebula_whale', region:'차원의 바다', name:'성운 고래', emoji:'🌌', rarity:6, minValue:6500, maxValue:9800, exp:900, weight:5, desc:'성운을 헤엄치는 듯한 거대한 신화 등급 고래입니다.' },
+    { id:'dimension_void_dragon', region:'차원의 바다', name:'공허룡', emoji:'🐉', rarity:6, minValue:8200, maxValue:12500, exp:1150, weight:2, desc:'차원의 끝에서 나타나는 최종 목표급 신화 어종입니다.' },
+    { id:'dimension_aqua_fantasia', region:'차원의 바다', name:'아쿠아 판타지아', emoji:'👑', rarity:6, minValue:12000, maxValue:18000, exp:1600, weight:1, desc:'게임의 이름을 가진 꿈의 어종. 최고의 낚시꾼만 만날 수 있습니다.' }
+];
+
+let FISH_DATABASE = FALLBACK_FISH_DATABASE.slice();
+let fishDataLoaded = false;
+
+function getRarityConfig(rarity) {
+    return RARITY_CONFIG[Number(rarity) || 1] || RARITY_CONFIG[1];
+}
+
+function rarityBadge(rarity) {
+    const info = getRarityConfig(rarity);
+    return `<span style="color:${info.color};border:1px solid ${info.color}66;background:${info.color}18" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold">${info.emoji} ${info.name}</span>`;
+}
+
+function randomInt(min, max) {
+    return Math.floor(Number(min) + Math.random() * (Number(max) - Number(min) + 1));
+}
+
+async function loadFishDatabase() {
+    try {
+        const res = await fetch('data/fish.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('fish.json not found');
+        const data = await res.json();
+        if (!Array.isArray(data.fish) || data.fish.length === 0) throw new Error('fish.json format error');
+        FISH_DATABASE = data.fish.map((fish) => ({ ...fish, rarity: Number(fish.rarity || 1), weight: Number(fish.weight || 1) }));
+        fishDataLoaded = true;
+        console.log(`[AquaFantasia] Fish database loaded: ${FISH_DATABASE.length} species`);
+    } catch (e) {
+        fishDataLoaded = false;
+        FISH_DATABASE = FALLBACK_FISH_DATABASE.slice();
+        console.warn('[AquaFantasia] Using embedded fish database:', e.message);
+    }
+}
+
+function getFishListForRegion(region) {
+    const meta = REGION_META[region] || REGION_META['호수'];
+    const list = FISH_DATABASE.filter((fish) => fish.region === region && fish.rarity >= meta.minRarity && fish.rarity <= meta.maxRarity);
+    return list.length ? list : FISH_DATABASE.filter((fish) => fish.region === region);
+}
+
+function pickWeightedFish(region) {
+    const list = getFishListForRegion(region || '호수');
+    if (!list.length) return FALLBACK_FISH_DATABASE[0];
+    const totalWeight = list.reduce((sum, fish) => sum + Math.max(1, Number(fish.weight || getRarityConfig(fish.rarity).weight || 1)), 0);
+    let roll = Math.random() * totalWeight;
+    for (const fish of list) {
+        roll -= Math.max(1, Number(fish.weight || getRarityConfig(fish.rarity).weight || 1));
+        if (roll <= 0) return fish;
+    }
+    return list[list.length - 1];
+}
+
+function getRegionMeta(region) {
+    return REGION_META[region] || REGION_META['호수'];
+}
+
+function describeRegion(region) {
+    const meta = getRegionMeta(region);
+    return `${meta.desc} · ${getRarityConfig(meta.minRarity).name}~${getRarityConfig(meta.maxRarity).name}`;
+}
+
+function getDiscoveredSpeciesCount() {
+    if (!(gameState.discovered instanceof Set)) return 0;
+    const validIds = new Set(FISH_DATABASE.map((fish) => fish.id));
+    return Array.from(gameState.discovered).filter((id) => validIds.has(id)).length;
+}
+
+
 function setFirebaseStatus(mode, text) {
     const el = document.getElementById('firebase-status');
     if (!el) return;
     const color = mode === 'ok' ? '#22c55e' : mode === 'error' ? '#ef4444' : '#facc15';
-    el.innerHTML = `<div style="width:6px;height:6px;background:${color};border-radius:9999px"></div><span class="font-medium">${text}</span>`;
+    el.innerHTML = `<div style="width:6px;height:6px;background:${color};border-radius:9999px"></div><span class="font-medium">${escapeHTML(text)}</span>`;
+}
+
+function setCloudSaveStatus(mode, text) {
+    const el = document.getElementById('cloud-save-status');
+    if (!el) return;
+    const color = mode === 'ok' ? 'text-emerald-300' : mode === 'error' ? 'text-rose-300' : 'text-yellow-300';
+    el.className = `px-3 py-1 text-[11px] rounded-full bg-white/10 ${color}`;
+    el.textContent = text;
+}
+
+function escapeHTML(value) {
+    return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+}
+
+function sanitizeNickname(value) {
+    const nickname = String(value || '낚시꾼').replace(/\s+/g, ' ').trim().slice(0, 24);
+    return nickname || '낚시꾼';
+}
+
+function showLoginScreen() {
+    document.querySelectorAll('[id^="screen-"]').forEach(el => el.classList.add('hidden'));
+    document.getElementById('screen-login')?.classList.remove('hidden');
+    document.getElementById('logout-btn')?.classList.add('hidden');
 }
 
 function waitForFirebase(timeoutMs = 7000) {
@@ -358,9 +506,10 @@ function playSound(type) {
 
 // ==================== UI ====================
 function updateUI() {
-    document.getElementById('gold-display').textContent = gameState.gold.toLocaleString();
-    document.getElementById('level-display').textContent = gameState.level;
-    const lvl = document.getElementById('village-level'); if (lvl) lvl.textContent = gameState.level;
+    gameState.nickname = sanitizeNickname(gameState.nickname);
+    document.getElementById('gold-display').textContent = Number(gameState.gold || 0).toLocaleString();
+    document.getElementById('level-display').textContent = Number(gameState.level || 1);
+    const lvl = document.getElementById('village-level'); if (lvl) lvl.textContent = Number(gameState.level || 1);
     const nameEl = document.getElementById('player-name'); if (nameEl) nameEl.textContent = gameState.nickname;
     
     const avatarImg = document.getElementById('avatar-img');
@@ -383,61 +532,88 @@ function switchScreen(screen) {
 function selectRegion(region) {
     gameState.currentRegion = region;
     switchScreen('fishing');
-    document.getElementById('fishing-region-name').textContent = region;
+    const meta = getRegionMeta(region);
+    document.getElementById('fishing-region-name').textContent = `${meta.emoji} ${region}`;
+    const info = document.getElementById('fishing-region-info');
+    if (info) info.textContent = describeRegion(region);
     createFishShadows(region);
 }
 
 function createFishShadows(region) {
     const container = document.getElementById('fish-shadow-container');
+    if (!container) return;
     container.innerHTML = '';
-    const count = region.includes('용') || region.includes('차원') ? 5 : 3;
+    const meta = getRegionMeta(region);
+    const count = region.includes('용') || region.includes('차원') ? 7 : region.includes('심해') ? 5 : 4;
     for (let i = 0; i < count; i++) {
         const fish = document.createElement('div');
         fish.className = 'absolute text-4xl opacity-[0.08]';
         fish.style.left = Math.random()*75 + '%';
-        fish.style.top = (22 + Math.random()*45) + '%';
-        fish.innerHTML = region.includes('용') || region.includes('차원') ? '🐉' : '🐟';
+        fish.style.top = (18 + Math.random()*50) + '%';
+        fish.innerHTML = Math.random() < 0.25 ? meta.emoji : (region.includes('용') || region.includes('차원') ? '🐉' : '🐟');
         container.appendChild(fish);
     }
 }
 
 function castLine() {
+    if (gameState.isFishing) return;
+    if (!gameState.currentRegion) {
+        alert('먼저 낚시 지역을 선택해주세요!');
+        switchScreen('village');
+        return;
+    }
+
+    gameState.isFishing = true;
+    gameState.pendingFish = pickWeightedFish(gameState.currentRegion);
     playSound('cast');
     const status = document.getElementById('fishing-status');
     const castBtn = document.getElementById('cast-btn');
     const rod = document.getElementById('rod');
-    
+    const meta = getRegionMeta(gameState.currentRegion);
+    const biteDelay = randomInt(meta.biteMin, meta.biteMax);
+    const rarity = getRarityConfig(gameState.pendingFish.rarity);
+    const hintDelay = Math.max(700, biteDelay - 850);
+
     castBtn.style.display = 'none';
     status.textContent = '미끼를 기다리는 중...';
-    
+
     if (rod) {
         rod.style.transition = 'transform 0.55s cubic-bezier(0.34,1.56,0.64,1)';
         rod.style.transform = 'rotate(-92deg)';
         setTimeout(() => { if (rod) rod.style.transform = 'rotate(-32deg)'; }, 580);
     }
-    
+
     setTimeout(() => {
+        if (gameState.isFishing && gameState.pendingFish) {
+            status.innerHTML = `<span style="color:${rarity.color}" class="font-extrabold">${rarity.emoji} ${rarity.name} 기운이 느껴집니다...</span>`;
+        }
+    }, hintDelay);
+
+    setTimeout(() => {
+        if (!gameState.isFishing || !gameState.pendingFish) return;
         createSplashEffect();
         playSound('bite');
         status.innerHTML = `<span class="text-rose-400 font-extrabold">🎣 물었다! 탭해서 낚아채세요</span>`;
-        
+
         const visual = document.getElementById('fishing-visual');
-        gameState.currentFish = { hookedAt: Date.now() };
+        gameState.currentFish = { hookedAt: Date.now(), speciesId: gameState.pendingFish.id };
         visual.onclick = () => {
             visual.onclick = null;
             gameState.currentFish = null;
             startReelGame();
         };
-        
+
         setTimeout(() => {
             if (gameState.currentFish) {
                 gameState.currentFish = null;
+                gameState.pendingFish = null;
+                gameState.isFishing = false;
                 visual.onclick = null;
                 status.textContent = '아쉽게 놓쳤어요...';
                 setTimeout(() => { castBtn.style.display = 'flex'; status.textContent = '물고기를 기다리는 중...'; }, 1300);
             }
         }, 1550);
-    }, 2200);
+    }, biteDelay);
 }
 
 function createSplashEffect() {
@@ -461,14 +637,15 @@ function startReelGame() {
     castBtn.style.display = 'none';
     reel.classList.remove('hidden');
     
-    gameState.reelProgress = 8;
-    gameState.tension = 25;
+    const rarity = Number(gameState.pendingFish?.rarity || 1);
+    gameState.reelProgress = Math.max(4, 12 - rarity);
+    gameState.tension = 18 + rarity * 4;
     updateReelUI();
     
     if (gameState.reelInterval) clearInterval(gameState.reelInterval);
     
     gameState.reelInterval = setInterval(() => {
-        gameState.tension += 1.4;
+        gameState.tension += 1.0 + rarity * 0.24;
         if (gameState.tension >= 100) { clearInterval(gameState.reelInterval); endReelGame(false); }
         updateReelUI();
     }, 130);
@@ -482,50 +659,64 @@ function updateReelUI() {
 }
 
 function reelAction() {
-    gameState.reelProgress += 8.2;
-    gameState.tension = Math.max(5, gameState.tension - 10);
+    const rarity = Number(gameState.pendingFish?.rarity || 1);
+    gameState.reelProgress += Math.max(5.2, 9.4 - rarity * 0.45);
+    gameState.tension = Math.max(5, gameState.tension - Math.max(6, 11 - rarity * 0.45));
     updateReelUI();
     if (gameState.reelProgress >= 100) { clearInterval(gameState.reelInterval); endReelGame(true); }
 }
 
 function endReelGame(success) {
     gameState.currentFish = null;
+    gameState.isFishing = false;
     const reel = document.getElementById('reel-game');
     const status = document.getElementById('fishing-status');
     const castBtn = document.getElementById('cast-btn');
-    
+
     reel.classList.add('hidden');
-    
+
     if (success) {
         playSound('success');
-        const value = 75 + Math.floor(Math.random() * 55);
-        const fish = { 
-            id: Date.now(), name: gameState.currentRegion + "의 어종", region: gameState.currentRegion, 
-            rarity: 3, soldValue: value, caughtAt: new Date().toISOString() 
+        const species = gameState.pendingFish || pickWeightedFish(gameState.currentRegion || '호수');
+        const rarity = getRarityConfig(species.rarity);
+        const value = randomInt(species.minValue, species.maxValue);
+        const fish = {
+            id: `${species.id}_${Date.now()}`,
+            speciesId: species.id,
+            name: species.name,
+            emoji: species.emoji || '🐟',
+            region: species.region || gameState.currentRegion,
+            rarity: Number(species.rarity || 1),
+            rarityName: rarity.name,
+            soldValue: value,
+            caughtAt: new Date().toISOString()
         };
-        
+
         gameState.inventory.push(fish);
-        gameState.discovered.add(fish.id);
+        gameState.discovered.add(species.id);
         gameState.catchHistory.unshift(fish);
+        gameState.catchHistory = gameState.catchHistory.slice(0, 50);
         gameState.totalCaught = (gameState.totalCaught || 0) + 1;
         gameState.totalGoldEarned = (gameState.totalGoldEarned || 0) + value;
-        
-        if (!gameState.bestCatch || value > gameState.bestCatch.soldValue) gameState.bestCatch = fish;
-        
+
+        if (!gameState.bestCatch || value > Number(gameState.bestCatch.soldValue || 0)) gameState.bestCatch = fish;
+
         addGold(value);
-        addExp(50);
+        addExp(Number(species.exp || 50));
         checkAchievements();
-        
-        status.innerHTML = `<span class="text-emerald-400 font-extrabold">대성공!</span>`;
+
+        status.innerHTML = `<span style="color:${rarity.color}" class="font-extrabold">${fish.emoji} ${escapeHTML(fish.name)} 포획!</span>`;
         createBigConfetti();
-        
+
         setTimeout(() => {
-            alert(`${fish.name} 획득! +${value} 골드`);
+            alert(`${fish.emoji} ${fish.name} 획득!\n등급: ${rarity.name}\n가치: +${value.toLocaleString()} 골드`);
+            gameState.pendingFish = null;
             castBtn.style.display = 'flex';
             status.textContent = '물고기를 기다리는 중...';
         }, 850);
     } else {
         playSound('fail');
+        gameState.pendingFish = null;
         status.textContent = '줄이 끊어졌어요...';
         setTimeout(() => { castBtn.style.display = 'flex'; status.textContent = '물고기를 기다리는 중...'; }, 1400);
     }
@@ -556,49 +747,70 @@ function addExp(v){ gameState.exp += v; while(gameState.exp >= gameState.expToNe
 function renderInventory() {
     const grid = document.getElementById('inv-grid');
     grid.innerHTML = '';
+    if (!gameState.inventory.length) {
+        grid.innerHTML = `<div class="col-span-2 premium-glass p-5 rounded-2xl text-sm text-white/70">아직 가방에 물고기가 없습니다. 낚시터에서 첫 어종을 잡아보세요.</div>`;
+        return;
+    }
     gameState.inventory.slice().reverse().forEach((item, idx) => {
         const originalIdx = gameState.inventory.length - 1 - idx;
         const div = document.createElement('div');
         div.className = `premium-card premium-glass p-4 rounded-2xl`;
-        div.innerHTML = `<div class="font-extrabold">${item.name}</div><div class="text-xs text-white/50">${item.region}</div><div class="mt-3 flex justify-between items-center"><div class="text-amber-400 font-mono font-bold">${item.soldValue} 골드</div><button onclick="sellFish(${originalIdx}, this)" class="text-xs px-4 py-1 bg-white/10 rounded-xl">판매</button></div>`;
+        div.innerHTML = `
+            <div class="flex items-start justify-between gap-2">
+                <div class="text-3xl">${escapeHTML(item.emoji || '🐟')}</div>
+                ${rarityBadge(item.rarity || 1)}
+            </div>
+            <div class="font-extrabold mt-2">${escapeHTML(item.name)}</div>
+            <div class="text-xs text-white/50">${escapeHTML(item.region)}</div>
+            <div class="mt-3 flex justify-between items-center gap-2">
+                <div class="text-amber-400 font-mono font-bold text-sm">${Number(item.soldValue || 0).toLocaleString()} 골드</div>
+                <button onclick="sellFish(${originalIdx}, this)" class="text-xs px-4 py-1 bg-white/10 rounded-xl">판매</button>
+            </div>`;
         grid.appendChild(div);
     });
 }
 
 function sellFish(idx, el) {
     const fish = gameState.inventory[idx];
-    addGold(fish.soldValue);
+    if (!fish) return;
+    addGold(Number(fish.soldValue || 0));
     gameState.inventory.splice(idx, 1);
-    el.closest('.premium-card').remove();
+    el?.closest('.premium-card')?.remove();
+    renderInventory();
     savePlayerData();
 }
 
 function sellAll() {
+    if (!gameState.inventory.length) {
+        alert('판매할 물고기가 없습니다.');
+        return;
+    }
     let total = 0;
-    gameState.inventory.forEach(f => total += f.soldValue);
+    gameState.inventory.forEach(f => total += Number(f.soldValue || 0));
     addGold(total);
     gameState.inventory = [];
     renderInventory();
     savePlayerData();
+    alert(`${total.toLocaleString()} 골드를 획득했습니다!`);
 }
 
 // ==================== 기록 ====================
 function renderRecord() {
     document.getElementById('stat-total-catch').textContent = gameState.totalCaught || 0;
     document.getElementById('stat-total-gold').textContent = (gameState.totalGoldEarned || 0).toLocaleString() + ' 골드';
-    document.getElementById('stat-best-fish').textContent = gameState.bestCatch ? `${gameState.bestCatch.name} (${gameState.bestCatch.soldValue}골드)` : '-';
-    
+    document.getElementById('stat-best-fish').textContent = gameState.bestCatch ? `${gameState.bestCatch.emoji || '🐟'} ${gameState.bestCatch.name} (${Number(gameState.bestCatch.soldValue || 0).toLocaleString()}골드)` : '-';
+
     const list = document.getElementById('record-list');
     list.innerHTML = '';
     if (!gameState.catchHistory || gameState.catchHistory.length === 0) {
         list.innerHTML = `<div class="text-white/50 text-sm">아직 잡은 물고기가 없습니다.</div>`;
         return;
     }
-    gameState.catchHistory.slice(0, 8).forEach(fish => {
+    gameState.catchHistory.slice(0, 12).forEach(fish => {
         const div = document.createElement('div');
-        div.className = `flex justify-between items-center p-3 bg-white/5 rounded-2xl`;
+        div.className = `flex justify-between items-center p-3 bg-white/5 rounded-2xl gap-3`;
         const time = new Date(fish.caughtAt).toLocaleTimeString('ko-KR', {hour:'2-digit', minute:'2-digit'});
-        div.innerHTML = `<div><div class="font-bold">${fish.name}</div><div class="text-xs text-white/50">${fish.region} • ${time}</div></div><div class="text-right"><div class="font-mono text-amber-400 font-bold">${fish.soldValue} 골드</div></div>`;
+        div.innerHTML = `<div class="flex items-center gap-3 min-w-0"><div class="text-2xl">${escapeHTML(fish.emoji || '🐟')}</div><div class="min-w-0"><div class="font-bold truncate">${escapeHTML(fish.name)}</div><div class="text-xs text-white/50">${escapeHTML(fish.region)} • ${time}</div></div></div><div class="text-right shrink-0"><div>${rarityBadge(fish.rarity || 1)}</div><div class="font-mono text-amber-400 font-bold mt-1">${Number(fish.soldValue || 0).toLocaleString()} 골드</div></div>`;
         list.appendChild(div);
     });
 }
@@ -626,7 +838,7 @@ function renderCompetition() {
     gameState.leaderboard.slice(0, 6).forEach((entry, index) => {
         const div = document.createElement('div');
         div.className = `flex justify-between p-3 rounded-2xl ${entry.name === gameState.nickname ? 'bg-emerald-500/20' : 'bg-white/5'}`;
-        div.innerHTML = `<div class="flex items-center gap-x-3"><div class="w-6 text-center font-mono text-white/40">${index + 1}</div><div class="font-bold">${entry.name}</div></div><div class="font-mono font-bold text-amber-400">${entry.score.toLocaleString()} 골드</div>`;
+        div.innerHTML = `<div class="flex items-center gap-x-3"><div class="w-6 text-center font-mono text-white/40">${index + 1}</div><div class="font-bold">${escapeHTML(entry.name)}</div></div><div class="font-mono font-bold text-amber-400">${Number(entry.score || 0).toLocaleString()} 골드</div>`;
         board.appendChild(div);
     });
 }
@@ -655,7 +867,7 @@ async function submitToGlobalLeaderboard() {
         const score = Math.max(Number(gameState.todayBest || 0), Number(gameState.gold || 0));
         await fb.setDoc(fb.doc(fb.db, 'leaderboard', gameState.userId), {
             uid: gameState.userId,
-            name: String(gameState.nickname || '낚시꾼').slice(0, 24),
+            name: sanitizeNickname(gameState.nickname),
             score: score,
             level: Number(gameState.level || 1),
             updatedAt: fb.serverTimestamp()
@@ -671,8 +883,11 @@ async function submitToGlobalLeaderboard() {
 const ACHIEVEMENTS = [
     { id: 'first_catch', name: '첫 낚시 성공', desc: '첫 물고기를 잡으세요', check: (s) => s.totalCaught >= 1 },
     { id: 'ten_catches', name: '열 마리 사냥꾼', desc: '총 10마리 이상 잡기', check: (s) => s.totalCaught >= 10 },
+    { id: 'collector_10', name: '도감 수집가', desc: '서로 다른 어종 10종 발견', check: () => getDiscoveredSpeciesCount() >= 10 },
+    { id: 'hero_catcher', name: '영웅 어종 포획', desc: '영웅 등급 이상 어종 잡기', check: (s) => s.bestCatch && Number(s.bestCatch.rarity || 1) >= 4 },
+    { id: 'mythic_catcher', name: '신화의 낚시꾼', desc: '신화 등급 어종 잡기', check: (s) => Array.isArray(s.catchHistory) && s.catchHistory.some(f => Number(f.rarity || 1) >= 6) },
     { id: 'rich_fisher', name: '부유한 낚시꾼', desc: '총 5,000 골드 이상 벌기', check: (s) => (s.totalGoldEarned || 0) >= 5000 },
-    { id: 'legend_catcher', name: '전설의 낚시꾼', desc: '최고 가치 300골드 이상 물고기 잡기', check: (s) => s.bestCatch && s.bestCatch.soldValue >= 300 }
+    { id: 'legend_catcher', name: '전설의 낚시꾼', desc: '최고 가치 3,000골드 이상 물고기 잡기', check: (s) => s.bestCatch && Number(s.bestCatch.soldValue || 0) >= 3000 }
 ];
 
 function checkAchievements() {
@@ -710,22 +925,96 @@ function renderAchievements() {
 // ==================== 도감 ====================
 function renderEncyclopedia() {
     const list = document.getElementById('enc-list');
-    list.innerHTML = `<div class="premium-glass p-4 rounded-2xl text-sm">도감 시스템이 v1.1에서 더 강화되었습니다.</div>`;
+    const keyword = document.getElementById('search-box')?.value?.trim().toLowerCase() || '';
+    const discoveredCount = getDiscoveredSpeciesCount();
+    const filtered = FISH_DATABASE.filter((fish) => {
+        const text = `${fish.name} ${fish.region} ${getRarityConfig(fish.rarity).name}`.toLowerCase();
+        return !keyword || text.includes(keyword);
+    });
+
+    list.innerHTML = `
+        <div class="premium-glass p-4 rounded-2xl text-sm mb-3">
+            <div class="flex justify-between items-center">
+                <div class="font-extrabold">도감 진행도</div>
+                <div class="font-mono text-sky-300">${discoveredCount}/${FISH_DATABASE.length}</div>
+            </div>
+            <div class="text-xs text-white/50 mt-1">${fishDataLoaded ? 'data/fish.json 연결됨' : '내장 어종 데이터 사용 중'} · 지역별 확률 적용</div>
+        </div>`;
+
+    if (!filtered.length) {
+        list.innerHTML += `<div class="text-white/50 text-sm">검색 결과가 없습니다.</div>`;
+        return;
+    }
+
+    filtered.forEach((fish) => {
+        const unlocked = gameState.discovered instanceof Set && gameState.discovered.has(fish.id);
+        const div = document.createElement('div');
+        div.className = `premium-glass p-4 rounded-2xl flex items-center gap-3 ${unlocked ? '' : 'opacity-60'}`;
+        div.innerHTML = `
+            <div class="text-3xl shrink-0">${unlocked ? escapeHTML(fish.emoji || '🐟') : '❔'}</div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <div class="font-extrabold truncate">${unlocked ? escapeHTML(fish.name) : '미발견 어종'}</div>
+                    ${rarityBadge(fish.rarity)}
+                </div>
+                <div class="text-xs text-white/50 mt-1">${escapeHTML(fish.region)} · ${Number(fish.minValue || 0).toLocaleString()}~${Number(fish.maxValue || 0).toLocaleString()} 골드</div>
+                <div class="text-xs text-white/60 mt-1">${unlocked ? escapeHTML(fish.desc || '') : '해당 지역에서 낚시에 성공하면 도감이 열립니다.'}</div>
+            </div>`;
+        list.appendChild(div);
+    });
 }
 
 // ==================== 기타 ====================
 function goFishing() {
     if (!gameState.currentRegion) { switchScreen('village'); alert('지역을 선택해주세요!'); return; }
-    switchScreen('fishing');
+    selectRegion(gameState.currentRegion);
 }
-function exitFishing() { switchScreen('village'); }
+function exitFishing() {
+    const visual = document.getElementById('fishing-visual');
+    const castBtn = document.getElementById('cast-btn');
+    const reel = document.getElementById('reel-game');
+    if (gameState.reelInterval) clearInterval(gameState.reelInterval);
+    if (visual) visual.onclick = null;
+    if (castBtn) castBtn.style.display = 'flex';
+    if (reel) reel.classList.add('hidden');
+    gameState.isFishing = false;
+    gameState.currentFish = null;
+    gameState.pendingFish = null;
+    switchScreen('village');
+}
 
 function showCharacterModal() {
     const newName = prompt("닉네임 변경", gameState.nickname);
-    if (newName) { gameState.nickname = newName; updateUI(); savePlayerData(); }
+    if (newName) {
+        gameState.nickname = sanitizeNickname(newName);
+        updateUI();
+        savePlayerData();
+        alert(`닉네임이 ${gameState.nickname}(으)로 변경되었습니다.`);
+    }
 }
 
 // ==================== Firebase Auth + Firestore ====================
+async function logoutGame() {
+    try {
+        if (!confirm('로그아웃할까요? 현재 데이터는 로컬에 저장됩니다.')) return;
+        savePlayerData(false);
+        if (leaderboardUnsubscribe) {
+            leaderboardUnsubscribe();
+            leaderboardUnsubscribe = null;
+        }
+        const fb = await waitForFirebase();
+        await fb.signOut(fb.auth);
+        isFirebaseConnected = false;
+        gameState.userId = null;
+        setFirebaseStatus('wait', '로그인 필요');
+        setCloudSaveStatus('ok', '로컬 저장됨');
+        showLoginScreen();
+    } catch(e) {
+        console.error('Logout error:', e);
+        alert('로그아웃 중 오류가 발생했습니다: ' + e.message);
+    }
+}
+
 function getEmailPassword() {
     const email = document.getElementById('email')?.value?.trim();
     const password = document.getElementById('pw')?.value || '';
@@ -786,56 +1075,75 @@ async function loginWithGoogle() {
 
 function serializeGameState() {
     const plain = { ...gameState };
+    plain.nickname = sanitizeNickname(plain.nickname);
+    plain.gold = Number(plain.gold || 0);
+    plain.level = Number(plain.level || 1);
     plain.discovered = Array.from(gameState.discovered instanceof Set ? gameState.discovered : []);
     delete plain.reelInterval;
     delete plain.currentFish;
+    delete plain.pendingFish;
     delete plain.isFishing;
     return plain;
 }
 
 function normalizeGameState(data) {
     const next = { ...gameState, ...(data || {}) };
+    next.nickname = sanitizeNickname(next.nickname || '여우');
+    next.gold = Math.max(0, Number(next.gold || 0));
+    next.level = Math.max(1, Number(next.level || 1));
+    next.exp = Math.max(0, Number(next.exp || 0));
+    next.expToNext = Math.max(100, Number(next.expToNext || 1000));
     if (Array.isArray(next.discovered)) next.discovered = new Set(next.discovered);
     else if (!(next.discovered instanceof Set)) next.discovered = new Set();
     if (!Array.isArray(next.inventory)) next.inventory = [];
     if (!Array.isArray(next.catchHistory)) next.catchHistory = [];
+    next.isFishing = false;
+    next.currentFish = null;
+    next.pendingFish = null;
     if (!Array.isArray(next.leaderboard)) next.leaderboard = [];
     if (!next.achievements || typeof next.achievements !== 'object') next.achievements = {};
-    if (!next.nickname) next.nickname = '여우';
     return next;
 }
 
 function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
-        localStorage.setItem('aqua_v1.1', JSON.stringify(plain));
+        localStorage.setItem('aqua_v1.3', JSON.stringify(plain));
+        localStorage.setItem('aqua_v1.2', JSON.stringify(plain));
+        localStorage.setItem('aqua_v1.1', JSON.stringify(plain)); // 이전 버전과 호환 유지
+        setCloudSaveStatus('ok', '로컬 저장됨');
 
         if (syncCloud && isFirebaseConnected && gameState.userId && window.AquaFirebase) {
+            setCloudSaveStatus('wait', '클라우드 저장 중');
             clearTimeout(cloudSaveTimer);
             cloudSaveTimer = setTimeout(async () => {
                 try {
                     const fb = await waitForFirebase();
                     await fb.setDoc(fb.doc(fb.db, 'users', gameState.userId), {
                         uid: gameState.userId,
-                        nickname: String(gameState.nickname || '낚시꾼').slice(0, 24),
+                        nickname: sanitizeNickname(gameState.nickname),
                         gold: Number(gameState.gold || 0),
                         level: Number(gameState.level || 1),
                         state: serializeGameState(),
                         updatedAt: fb.serverTimestamp()
                     }, { merge: true });
+                    setCloudSaveStatus('ok', '클라우드 저장됨');
                 } catch (e) {
                     console.warn('Cloud save skipped:', e.message);
+                    setCloudSaveStatus('error', '클라우드 저장 실패');
                 }
             }, 600);
         }
     } catch(e) {
         console.error('Save error:', e);
+        setCloudSaveStatus('error', '저장 실패');
     }
 }
 
 async function loadPlayerDataFromCloud() {
     if (!isFirebaseConnected || !gameState.userId) return;
     try {
+        setCloudSaveStatus('wait', '클라우드 불러오는 중');
         const fb = await waitForFirebase();
         const ref = fb.doc(fb.db, 'users', gameState.userId);
         const snap = await fb.getDoc(ref);
@@ -845,21 +1153,24 @@ async function loadPlayerDataFromCloud() {
                 const localUserId = gameState.userId;
                 gameState = normalizeGameState({ ...cloud.state, userId: localUserId });
                 updateUI();
+                setCloudSaveStatus('ok', '클라우드 불러옴');
                 savePlayerData(false);
             }
         } else {
             await fb.setDoc(ref, {
                 uid: gameState.userId,
-                nickname: String(gameState.nickname || '낚시꾼').slice(0, 24),
+                nickname: sanitizeNickname(gameState.nickname),
                 gold: Number(gameState.gold || 0),
                 level: Number(gameState.level || 1),
                 state: serializeGameState(),
                 createdAt: fb.serverTimestamp(),
                 updatedAt: fb.serverTimestamp()
             }, { merge: true });
+            setCloudSaveStatus('ok', '클라우드 저장 준비');
         }
     } catch(e) {
         console.warn('Cloud load skipped:', e.message);
+        setCloudSaveStatus('error', '클라우드 불러오기 실패');
     }
 }
 
@@ -898,6 +1209,7 @@ async function startFirebaseAuthListener() {
                 isFirebaseConnected = true;
                 gameState.userId = user.uid;
                 setFirebaseStatus('ok', user.isAnonymous ? '익명 접속' : '로그인됨');
+                document.getElementById('logout-btn')?.classList.remove('hidden');
                 await loadPlayerDataFromCloud();
                 await subscribeGlobalLeaderboard();
                 document.getElementById('screen-login').classList.add('hidden');
@@ -908,6 +1220,8 @@ async function startFirebaseAuthListener() {
                 isFirebaseConnected = false;
                 gameState.userId = null;
                 setFirebaseStatus('wait', '로그인 필요');
+                setCloudSaveStatus('ok', '로컬 저장 가능');
+                showLoginScreen();
             }
         });
     } catch(e) {
@@ -916,9 +1230,18 @@ async function startFirebaseAuthListener() {
     }
 }
 
-function init() {
+function bindLoginEnterKey() {
+    ['email', 'pw'].forEach(id => {
+        document.getElementById(id)?.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') loginWithEmail();
+        });
+    });
+}
+
+async function init() {
     try {
-        const saved = localStorage.getItem('aqua_v1.1');
+        await loadFishDatabase();
+        const saved = localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) gameState = normalizeGameState(JSON.parse(saved));
         else gameState = normalizeGameState(gameState);
         
@@ -934,15 +1257,17 @@ function init() {
         
         updateUI();
         initAudio();
+        bindLoginEnterKey();
         startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v1.1] GitHub Pages + Firebase Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v1.3] Fish Data Patch Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
         alert('게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.');
     }
 }
 
+window.addEventListener('beforeunload', () => savePlayerData(false));
 window.onload = init;
 </script>
 </body>
