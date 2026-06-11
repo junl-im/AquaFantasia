@@ -1,7 +1,7 @@
 {
-  "name": "Aqua Fantasia v2.0",
-  "short_name": "Aqua v2.0",
-  "description": "Aqua Fantasia - 자동 배포, 시즌 랭킹, 보스 토벌이 적용된 모바일 낚시 RPG",
+  "name": "Aqua Fantasia v2.1",
+  "short_name": "Aqua v2.1",
+  "description": "Aqua Fantasia - 주간 보상함, 랭킹 보상, 자동 배포가 적용된 모바일 낚시 RPG",
   "lang": "ko-KR",
   "dir": "ltr",
   "id": "./?app=aqua-fantasia",

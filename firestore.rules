@@ -89,6 +89,13 @@ service cloud.firestore {
     }
 
     // 명시하지 않은 모든 컬렉션 차단
+
+    // Optional: future server-validated weekly reward claims. Current v2.1 reward vault is local-only.
+    match /rewardClaims/{uid} {
+      allow read, create, update: if signedIn() && isOwner(uid);
+      allow delete: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

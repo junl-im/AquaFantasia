@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'aqua-fantasia-v2.0.0';
+const CACHE_VERSION = 'aqua-fantasia-v2.1.0';
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const CORE_ASSETS = [

@@ -28,9 +28,10 @@ for (const file of requiredFiles) {
 
 const index = readFileSync(join(root, 'index.html'), 'utf8');
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!index.includes("const APP_VERSION = '2.0.0'")) fail('APP_VERSION must be 2.0.0 for this patch.');
+if (!index.includes("const APP_VERSION = '2.1.0'")) fail('APP_VERSION must be 2.1.0 for this patch.');
 if (!index.includes('serviceWorker.register')) fail('PWA service worker registration is missing.');
 if (!index.includes('season-ranking-panel')) fail('Season ranking UI is missing.');
+if (!index.includes('weekly-reward-vault')) fail('Weekly reward vault UI is missing.');
 
 const manifest = JSON.parse(readFileSync(join(root, 'manifest.webmanifest'), 'utf8'));
 if (manifest.display !== 'standalone') fail('manifest.webmanifest must use display: standalone.');
@@ -46,7 +47,7 @@ for (const item of fish.fish) {
 }
 
 const sw = readFileSync(join(root, 'sw.js'), 'utf8');
-if (!sw.includes('aqua-fantasia-v2.0.0')) fail('Service worker cache version was not updated.');
+if (!sw.includes('aqua-fantasia-v2.1.0')) fail('Service worker cache version was not updated.');
 
 const scripts = [...index.matchAll(/<script(?:\s+[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map((m) => m[1].trim())

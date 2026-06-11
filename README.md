@@ -84,3 +84,11 @@ manifest.webmanifest PWA 앱 설정
 2. 보스 재료/장비 각성
 3. 강화 재료/제련석 추가
 4. 거래소와 길드는 Cloud Functions 또는 서버 검증 로직 설계 후 오픈
+
+
+## Patch v2.1 Reward Vault Visual Max
+
+- 주간 랭킹 보상함 추가
+- 시즌/보스 랭킹 예상 보상 수령 시스템 추가
+- Visual Lab FPS 표시 및 IntersectionObserver 기반 화면 최적화 추가
+- GitHub Actions 정적 검증 기준 v2.1로 갱신

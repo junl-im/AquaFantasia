@@ -14,7 +14,7 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
-    <title>Aqua Fantasia • Dev v2.0 Actions Rank Visual Max</title>
+    <title>Aqua Fantasia • Dev v2.1 Reward Vault Visual Max</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -418,6 +418,57 @@
             background:rgba(34,197,94,.12); border:1px solid rgba(74,222,128,.22); color:#bbf7d0;
             font-size:.68rem; font-weight:900;
         }
+
+
+        /* ==================== v2.1 Reward Vault Visual Max ==================== */
+        @property --vault-angle {
+            syntax: '<angle>';
+            inherits: false;
+            initial-value: 0deg;
+        }
+        .reward-vault {
+            position:relative;
+            overflow:hidden;
+            contain:layout paint;
+            background:
+                radial-gradient(circle at 18% 10%, rgba(250,204,21,.22), transparent 11rem),
+                radial-gradient(circle at 90% 24%, rgba(34,211,238,.19), transparent 14rem),
+                linear-gradient(135deg, rgba(255,255,255,.145), rgba(255,255,255,.055));
+        }
+        .reward-vault::before {
+            content:''; position:absolute; inset:-46%; pointer-events:none;
+            background:conic-gradient(from var(--vault-angle), transparent, rgba(253,224,71,.18), rgba(34,211,238,.20), rgba(168,85,247,.18), transparent 70%);
+            animation:vault-spin 12s linear infinite;
+            opacity:.72;
+        }
+        .reward-vault::after {
+            content:''; position:absolute; inset:0; pointer-events:none;
+            background:linear-gradient(120deg, transparent 0 38%, rgba(255,255,255,.13) 46%, transparent 56% 100%);
+            transform:translateX(-70%);
+            animation:vault-scan 7.5s ease-in-out infinite;
+        }
+        .vault-chest {
+            width:72px; height:72px; border-radius:26px; display:grid; place-items:center;
+            background:radial-gradient(circle at 35% 20%, rgba(254,243,199,.48), rgba(250,204,21,.20) 48%, rgba(34,211,238,.11));
+            box-shadow:0 0 38px rgba(250,204,21,.19), inset 0 1px 0 rgba(255,255,255,.18);
+            animation:vault-float 3s ease-in-out infinite alternate;
+        }
+        .vault-tier {
+            border:1px solid rgba(255,255,255,.12);
+            background:rgba(255,255,255,.075);
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.10);
+        }
+        .vault-tier.claimed { opacity:.58; filter:saturate(.8); }
+        .vault-tier.ready { border-color:rgba(250,204,21,.48); box-shadow:0 14px 36px rgba(250,204,21,.11), inset 0 1px 0 rgba(255,255,255,.16); }
+        .reward-particle { position:fixed; z-index:100; pointer-events:none; font-size:1rem; filter:drop-shadow(0 8px 18px rgba(0,0,0,.35)); animation:reward-pop 820ms cubic-bezier(.2,.8,.2,1) forwards; }
+        .visual-lab-card { position:relative; overflow:hidden; }
+        .visual-lab-card::before { content:''; position:absolute; inset:-30%; background:radial-gradient(circle, rgba(34,211,238,.13), transparent 42%); animation:lab-breathe 4.8s ease-in-out infinite alternate; pointer-events:none; }
+        @keyframes vault-spin { to { --vault-angle: 360deg; } }
+        @keyframes vault-scan { 0%, 62% { transform:translateX(-70%); } 100% { transform:translateX(70%); } }
+        @keyframes vault-float { from { transform:translateY(0) rotate(-1deg); } to { transform:translateY(-6px) rotate(2deg); } }
+        @keyframes reward-pop { 0% { opacity:0; transform:translate3d(0, 12px, 0) scale(.75); } 18% { opacity:1; } 100% { opacity:0; transform:translate3d(var(--rx, 0px), -84px, 0) scale(1.35); } }
+        @keyframes lab-breathe { from { transform:scale(.95) rotate(0deg); opacity:.42; } to { transform:scale(1.08) rotate(10deg); opacity:.82; } }
+        body.quality-low .reward-vault::before, body.quality-low .reward-vault::after, body.quality-low .vault-chest, body.quality-low .visual-lab-card::before { animation:none; opacity:.45; }
         body.quality-low .rank-panel::before, body.quality-low .rank-panel::after, body.quality-low .deploy-panel::before, body.quality-low .fps-orbit::before, body.quality-low .rank-trophy { animation:none; opacity:.42; }
         @keyframes rank-spin { to { --rank-angle: 360deg; } }
         @keyframes rank-scan { 0%, 55% { transform:translateX(-58%); } 100% { transform:translateX(58%); } }
@@ -443,7 +494,7 @@
             <div>
                 <span class="font-black text-3xl tracking-[-1.5px]">AQUA</span>
                 <span class="font-bold text-3xl tracking-[-1.5px] text-sky-400">FANTASIA</span>
-                <span class="ml-2 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20">v2.0</span>
+                <span class="ml-2 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20">v2.1</span>
             </div>
         </div>
         <div class="flex items-center gap-x-2 text-sm flex-wrap justify-end">
@@ -474,7 +525,7 @@
             <div class="text-center mb-10">
                 <div class="text-[5.5rem] mb-3">🎣</div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-300 mt-2">v2.0 Actions Rank Visual Max · 자동 배포 & 시즌 랭킹 그래픽 최고화</p>
+                <p class="text-sky-300 mt-2">v2.1 Reward Vault Visual Max · 주간 보상함 & 랭킹 보상 그래픽 최고화</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="loginAnonymous()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">👤 익명으로 시작하기</button>
@@ -723,6 +774,8 @@
                 </div>
             </div>
             <div id="deploy-actions-panel" class="deploy-panel premium-glass liquid-border rounded-[1.75rem] p-4 mb-4"></div>
+            <div id="weekly-reward-vault" class="reward-vault premium-glass liquid-border rounded-[1.75rem] p-4 mb-4"></div>
+            <div id="visual-lab-panel" class="visual-lab-card premium-glass rounded-3xl p-4 mb-4"></div>
             <div class="premium-glass p-5 rounded-3xl mb-4">
                 <div class="flex items-end justify-between mb-3">
                     <div><div class="text-sm text-white/60">시즌 골드 리더보드</div><div class="text-[11px] text-white/45">Firebase 연결 시 글로벌 데이터 자동 동기화</div></div>
@@ -873,7 +926,7 @@ try {
 </script>
 
 <script>
-// ==================== v2.0 ACTIONS RANK VISUAL MAX PATCH / Firebase Ready ====================
+// ==================== v2.1 REWARD VAULT VISUAL MAX PATCH / Firebase Ready ====================
 let gameState = {
     gold: 1240, level: 12, exp: 870, expToNext: 1000,
     inventory: [], discovered: new Set(),
@@ -893,6 +946,8 @@ let gameState = {
     bossStats: { encounters: 0, defeated: 0, escaped: 0, bestValue: 0 },
     bossLeaderboard: [],
     seasonRank: { seasonKey: '', bestScore: 0, submittedAt: '' },
+    weeklyRewards: { weekKey: '', claimed: {}, lastClaimAt: '', history: [] },
+    visualLab: { lastFps: 0, lastMode: graphicsMode, tunedAt: '' },
     bossWindowActive: false,
     bossSurgeTick: 0
 };
@@ -906,7 +961,7 @@ let cloudSaveTimer = null;
 let fishingTimers = [];
 let graphicsMode = localStorage.getItem('aqua_graphics_mode') || ((navigator.deviceMemory && navigator.deviceMemory <= 3) ? 'low' : 'high');
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '2.0.0';
+const APP_VERSION = '2.1.0';
 let deferredInstallPrompt = null;
 let pwaReady = false;
 let lastPerfScore = null;
@@ -1025,6 +1080,176 @@ function getRankTier(score = getSeasonScore()) {
     return { name:'RISING FISHER', emoji:'🎣', color:'text-emerald-200' };
 }
 
+
+function getRewardWeekKey(date = new Date()) {
+    return getSeasonKey(date);
+}
+
+function ensureWeeklyRewardState(resetIfNewWeek = true) {
+    const weekKey = getRewardWeekKey();
+    if (!gameState.weeklyRewards || typeof gameState.weeklyRewards !== 'object') {
+        gameState.weeklyRewards = { weekKey, claimed: {}, lastClaimAt: '', history: [] };
+    }
+    if (!gameState.weeklyRewards.claimed || typeof gameState.weeklyRewards.claimed !== 'object') gameState.weeklyRewards.claimed = {};
+    if (!Array.isArray(gameState.weeklyRewards.history)) gameState.weeklyRewards.history = [];
+    if (resetIfNewWeek && gameState.weeklyRewards.weekKey !== weekKey) {
+        gameState.weeklyRewards.weekKey = weekKey;
+        gameState.weeklyRewards.claimed = {};
+    }
+    return gameState.weeklyRewards;
+}
+
+function getMySeasonRankIndex() {
+    const score = getSeasonScore();
+    const list = Array.isArray(gameState.leaderboard) && gameState.leaderboard.length ? [...gameState.leaderboard] : getLocalLeaderboardFallback();
+    const name = sanitizeNickname(gameState.nickname);
+    const existing = list.find((entry) => entry.name === name);
+    if (existing) existing.score = Math.max(Number(existing.score || 0), score);
+    else list.push({ name, score, level: Number(gameState.level || 1) });
+    list.sort((a, b) => Number(b.score || 0) - Number(a.score || 0));
+    return Math.max(0, list.findIndex((entry) => entry.name === name));
+}
+
+function getMyBossRankIndex() {
+    const list = Array.isArray(gameState.bossLeaderboard) && gameState.bossLeaderboard.length ? [...gameState.bossLeaderboard] : getBossLeaderboardFallback();
+    const name = sanitizeNickname(gameState.nickname);
+    const defeated = Number(gameState.bossStats?.defeated || 0);
+    const bestValue = Number(gameState.bossStats?.bestValue || 0);
+    const existing = list.find((entry) => entry.name === name);
+    if (existing) {
+        existing.bossDefeated = Math.max(Number(existing.bossDefeated || 0), defeated);
+        existing.bossBestValue = Math.max(Number(existing.bossBestValue || 0), bestValue);
+    } else {
+        list.push({ name, bossDefeated: defeated, bossBestValue: bestValue, level: Number(gameState.level || 1) });
+    }
+    list.sort((a, b) => (Number(b.bossDefeated || 0) - Number(a.bossDefeated || 0)) || (Number(b.bossBestValue || 0) - Number(a.bossBestValue || 0)));
+    return Math.max(0, list.findIndex((entry) => entry.name === name));
+}
+
+function getWeeklyRewardPackage(type = 'season') {
+    const rankIndex = type === 'boss' ? getMyBossRankIndex() : getMySeasonRankIndex();
+    const rank = rankIndex + 1;
+    const scoreFactor = type === 'boss' ? Math.max(1, Number(gameState.bossStats?.defeated || 0)) : Math.max(1, Math.floor(getSeasonScore() / 12000));
+    if (rank <= 1) return { key:type, rank, tier:'챔피언', emoji:'👑', gold:5200 + scoreFactor * 560, bait:'dragon_bait', baitAmount:type === 'boss' ? 3 : 2, exp:420 + scoreFactor * 32 };
+    if (rank <= 3) return { key:type, rank, tier:'마스터', emoji:'🏆', gold:3600 + scoreFactor * 420, bait:'pearl_bait', baitAmount:4, exp:320 + scoreFactor * 26 };
+    if (rank <= 10) return { key:type, rank, tier:'항해자', emoji:'💎', gold:2200 + scoreFactor * 260, bait:'glow_bait', baitAmount:6, exp:220 + scoreFactor * 18 };
+    return { key:type, rank, tier:'도전자', emoji:'🎁', gold:1200 + scoreFactor * 140, bait:'glow_bait', baitAmount:3, exp:140 + scoreFactor * 12 };
+}
+
+function renderRewardTierCard(pkg, claimed) {
+    const bait = getBait(pkg.bait);
+    return `<div class="vault-tier ${claimed ? 'claimed' : 'ready'} rounded-2xl p-3">
+        <div class="flex items-center justify-between gap-2">
+            <div><div class="text-[11px] text-white/50">${pkg.key === 'boss' ? '보스 랭킹' : '시즌 랭킹'}</div><div class="font-black">${escapeHTML(pkg.emoji)} ${escapeHTML(pkg.tier)}</div></div>
+            <div class="text-right"><div class="text-[11px] text-white/45">예상 ${pkg.rank}위</div><div class="font-mono font-black text-amber-300">${pkg.gold.toLocaleString()}G</div></div>
+        </div>
+        <div class="text-[11px] text-cyan-100/75 mt-2">EXP ${pkg.exp.toLocaleString()} · ${escapeHTML(bait.emoji)} ${escapeHTML(bait.name)} x${pkg.baitAmount}</div>
+    </div>`;
+}
+
+function renderRewardVaultPanel() {
+    ensureWeeklyRewardState(true);
+    const panel = document.getElementById('weekly-reward-vault');
+    if (!panel) return;
+    const seasonPkg = getWeeklyRewardPackage('season');
+    const bossPkg = getWeeklyRewardPackage('boss');
+    const claimedSeason = Boolean(gameState.weeklyRewards.claimed.season);
+    const claimedBoss = Boolean(gameState.weeklyRewards.claimed.boss);
+    panel.innerHTML = `
+        <div class="relative z-10">
+            <div class="flex items-start gap-4 mb-4">
+                <div class="vault-chest text-4xl">🎁</div>
+                <div class="flex-1 min-w-0">
+                    <div class="text-[11px] text-amber-100/75 font-black tracking-wide">${escapeHTML(gameState.weeklyRewards.weekKey)} WEEKLY VAULT</div>
+                    <div class="font-black text-2xl tracking-tight">랭킹 보상함</div>
+                    <div class="text-xs text-white/55 mt-1">이번 주 예상 순위 기준 보상입니다. 클라이언트 게임이라 무료 플랜에 맞춰 로컬 보상함으로 안전하게 운영합니다.</div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 gap-2 mb-3">
+                ${renderRewardTierCard(seasonPkg, claimedSeason)}
+                ${renderRewardTierCard(bossPkg, claimedBoss)}
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="claimWeeklyReward('season')" class="premium-card rounded-2xl py-3 text-xs font-black ${claimedSeason ? 'bg-white/10 text-white/40' : 'bg-amber-400/85 text-slate-950'}">${claimedSeason ? '시즌 수령완료' : '시즌 보상 수령'}</button>
+                <button onclick="claimWeeklyReward('boss')" class="premium-card rounded-2xl py-3 text-xs font-black ${claimedBoss ? 'bg-white/10 text-white/40' : 'bg-rose-400/85 text-slate-950'}">${claimedBoss ? '보스 수령완료' : '보스 보상 수령'}</button>
+            </div>
+        </div>`;
+}
+
+function renderVisualLabPanel() {
+    const panel = document.getElementById('visual-lab-panel');
+    if (!panel) return;
+    const fps = Number(gameState.visualLab?.lastFps || lastPerfScore || 0);
+    const modeLabel = graphicsMode === 'low' ? '절전' : '고급';
+    panel.innerHTML = `
+        <div class="relative z-10 flex items-center justify-between gap-3">
+            <div>
+                <div class="text-[11px] text-cyan-100/70 font-black tracking-wide">VISUAL LAB</div>
+                <div class="font-black text-lg">그래픽 자동 보정 엔진</div>
+                <div class="text-xs text-white/55 mt-1">보이는 카드만 고급 효과를 유지하고, 저성능 환경에서는 연출을 자동으로 줄입니다.</div>
+            </div>
+            <div class="text-right shrink-0">
+                <div class="text-2xl font-black text-cyan-200">${fps ? `${fps}` : '--'}</div>
+                <div class="text-[10px] text-white/45">FPS · ${modeLabel}</div>
+            </div>
+        </div>`;
+}
+
+function createRewardParticles(centerX = window.innerWidth / 2, centerY = window.innerHeight / 2, count = 12) {
+    if (reduceMotion) return;
+    const max = graphicsMode === 'low' ? Math.min(count, 6) : count;
+    const icons = ['💰','✨','🐚','💎','🎁'];
+    for (let i = 0; i < max; i++) {
+        const p = document.createElement('span');
+        p.className = 'reward-particle';
+        p.textContent = icons[i % icons.length];
+        p.style.left = `${centerX + (Math.random() - .5) * 44}px`;
+        p.style.top = `${centerY + (Math.random() - .5) * 22}px`;
+        p.style.setProperty('--rx', `${(Math.random() - .5) * 140}px`);
+        document.body.appendChild(p);
+        p.addEventListener('animationend', () => p.remove(), { once:true });
+    }
+}
+
+function claimWeeklyReward(type = 'season') {
+    ensureWeeklyRewardState(true);
+    if (gameState.weeklyRewards.claimed[type]) {
+        showToast('이미 이번 주 보상을 수령했습니다', '🎁', 2600);
+        return;
+    }
+    const pkg = getWeeklyRewardPackage(type);
+    const bait = getBait(pkg.bait);
+    gameState.gold = Number(gameState.gold || 0) + Number(pkg.gold || 0);
+    gameState.exp = Number(gameState.exp || 0) + Number(pkg.exp || 0);
+    gameState.baitInventory[pkg.bait] = Number(gameState.baitInventory[pkg.bait] || 0) + Number(pkg.baitAmount || 0);
+    gameState.weeklyRewards.claimed[type] = { at: new Date().toISOString(), package: pkg };
+    gameState.weeklyRewards.lastClaimAt = new Date().toISOString();
+    gameState.weeklyRewards.history.unshift({ type, weekKey: gameState.weeklyRewards.weekKey, package: pkg, at: gameState.weeklyRewards.lastClaimAt });
+    gameState.weeklyRewards.history = gameState.weeklyRewards.history.slice(0, 12);
+    while (gameState.exp >= gameState.expToNext) {
+        gameState.exp -= gameState.expToNext;
+        gameState.level++;
+        gameState.expToNext = Math.floor(gameState.expToNext * 1.18 + 120);
+    }
+    createRewardParticles(window.innerWidth / 2, window.innerHeight * .42, 16);
+    renderRewardVaultPanel();
+    updateUI();
+    savePlayerData();
+    showToast(`${pkg.tier} 보상: ${pkg.gold.toLocaleString()}G · ${bait.name} x${pkg.baitAmount}`, pkg.emoji, 3800);
+}
+
+function initVisualObserver() {
+    if (!('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            const target = entry.target;
+            target.classList.toggle('is-visible', entry.isIntersecting);
+            if (!entry.isIntersecting && target.classList.contains('premium-card')) target.style.removeProperty('will-change');
+        });
+    }, { root: document.getElementById('app-shell'), threshold: .08 });
+    document.querySelectorAll('.premium-card, .rank-panel, .reward-vault, .visual-lab-card').forEach((el) => observer.observe(el));
+}
+
 function getLocalLeaderboardFallback() {
     return [
         { name:'차원항해자', score: 86200, level: 36 },
@@ -1121,6 +1346,8 @@ async function runPerformanceCheck(silent = false) {
     const readout = document.getElementById('perf-readout');
     if (fill) fill.style.width = `${clamp((fps / 60) * 100, 8, 100)}%`;
     if (readout) readout.textContent = `${fps} FPS · ${fps >= 52 ? '고급 그래픽 권장' : fps >= 38 ? '균형 모드' : '절전 모드 권장'}`;
+    gameState.visualLab = { lastFps: fps, lastMode: graphicsMode, tunedAt: new Date().toISOString() };
+    renderVisualLabPanel();
     if (fps < 38 && graphicsMode !== 'low') {
         graphicsMode = 'low';
         localStorage.setItem('aqua_graphics_mode', graphicsMode);
@@ -2653,6 +2880,8 @@ function renderCompetition() {
     if (bossCount) bossCount.textContent = Number(gameState.bossStats?.defeated || 0).toLocaleString();
     renderSeasonRankingPanel();
     renderDeployActionsPanel();
+    renderRewardVaultPanel();
+    renderVisualLabPanel();
 
     const board = document.getElementById('leaderboard');
     if (board) {
@@ -2772,7 +3001,8 @@ const ACHIEVEMENTS = [
     { id: 'master_forge', name: '마스터 포지', desc: '낚싯대 하나를 +10까지 강화', check: (s) => s.rodEnhance && Object.values(s.rodEnhance).some(v => Number(v || 0) >= 10) },
     { id: 'dragon_loadout', name: '용의 장비', desc: '용린 낚싯대 장착', check: (s) => s.equipment && s.equipment.rod === 'dragon_rod' },
     { id: 'season_ranker', name: '시즌 랭커', desc: '시즌 점수 20,000점 이상 달성', check: () => getSeasonScore() >= 20000 },
-    { id: 'actions_ready', name: '자동 배포 선장', desc: 'v2.0 자동 배포 패치 접속', check: () => APP_VERSION === '2.0.0' },
+    { id: 'actions_ready', name: '자동 배포 선장', desc: 'v2.0 자동 배포 패치 접속', check: () => APP_VERSION >= '2.0.0' },
+    { id: 'reward_vault_open', name: '보상함 관리자', desc: 'v2.1 주간 보상함 패치 접속', check: () => APP_VERSION === '2.1.0' },
     { id: 'boss_first_win', name: '대어 토벌자', desc: '보스 어종 1마리 포획', check: (s) => Number(s.bossStats?.defeated || 0) >= 1 },
     { id: 'boss_master', name: '균열의 정복자', desc: '보스 어종 3마리 포획', check: (s) => Number(s.bossStats?.defeated || 0) >= 3 }
 ];
@@ -3020,6 +3250,11 @@ function normalizeGameState(data) {
     if (!next.seasonRank || typeof next.seasonRank !== 'object') next.seasonRank = { seasonKey: getSeasonKey(), bestScore: 0, submittedAt: '' };
     next.seasonRank.seasonKey = String(next.seasonRank.seasonKey || getSeasonKey());
     next.seasonRank.bestScore = Math.max(0, Number(next.seasonRank.bestScore || 0));
+    if (!next.weeklyRewards || typeof next.weeklyRewards !== 'object') next.weeklyRewards = { weekKey: getRewardWeekKey(), claimed: {}, lastClaimAt: '', history: [] };
+    if (!next.weeklyRewards.claimed || typeof next.weeklyRewards.claimed !== 'object') next.weeklyRewards.claimed = {};
+    if (!Array.isArray(next.weeklyRewards.history)) next.weeklyRewards.history = [];
+    if (!next.visualLab || typeof next.visualLab !== 'object') next.visualLab = { lastFps: 0, lastMode: graphicsMode, tunedAt: '' };
+    next.visualLab.lastFps = Math.max(0, Number(next.visualLab.lastFps || 0));
     next.bossStats.encounters = Math.max(0, Number(next.bossStats.encounters || 0));
     next.bossStats.defeated = Math.max(0, Number(next.bossStats.defeated || 0));
     next.bossStats.escaped = Math.max(0, Number(next.bossStats.escaped || 0));
@@ -3032,6 +3267,7 @@ function normalizeGameState(data) {
 function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
+        localStorage.setItem('aqua_v2.1', JSON.stringify(plain));
         localStorage.setItem('aqua_v2.0', JSON.stringify(plain));
         localStorage.setItem('aqua_v1.9', JSON.stringify(plain));
         localStorage.setItem('aqua_v1.8', JSON.stringify(plain));
@@ -3196,7 +3432,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) gameState = normalizeGameState(JSON.parse(saved));
         else gameState = normalizeGameState(gameState);
         
@@ -3205,6 +3441,7 @@ async function init() {
         
         if (!gameState.achievements) gameState.achievements = {};
         ensureDailyState(true);
+        ensureWeeklyRewardState(true);
         
         applyAdaptivePerformance();
         applyGraphicsMode();
@@ -3213,9 +3450,10 @@ async function init() {
         initAudio();
         bindLoginEnterKey();
         bindPremiumCardPointer();
+        scheduleAquaTask(initVisualObserver, 'background');
         startFirebaseAuthListener();
         
-        console.log('%c[AquaFantasia v2.0] Actions Rank Visual Max Patch Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v2.1] Reward Vault Visual Max Patch Ready', 'color:#67e8f9');
     } catch(e) {
         console.error('Init error:', e);
         alert('게임 초기화 중 오류가 발생했습니다. 페이지를 새로고침 해주세요.');
