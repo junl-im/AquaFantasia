@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07111f"/><stop offset=".45" stop-color="#1d4ed8" stop-opacity=".82"/><stop offset="1" stop-color="#020617"/></linearGradient>
+    <radialGradient id="r1" cx="22%" cy="18%" r="55%"><stop stop-color="#f5c76b" stop-opacity=".34"/><stop offset="1" stop-color="#f5c76b" stop-opacity="0"/></radialGradient>
+    <radialGradient id="r2" cx="78%" cy="22%" r="48%"><stop stop-color="#ff8a6b" stop-opacity=".26"/><stop offset="1" stop-color="#ff8a6b" stop-opacity="0"/></radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="9"/></filter>
+    <pattern id="grain" width="42" height="42" patternUnits="userSpaceOnUse"><circle cx="7" cy="9" r="1.3" fill="#fff" opacity=".08"/><circle cx="26" cy="30" r="1" fill="#fff" opacity=".06"/><path d="M0 31Q10 22 22 31T42 31" fill="none" stroke="#fff" stroke-opacity=".045" stroke-width="1"/></pattern>
+  </defs>
+  <rect width="1200" height="800" fill="url(#g)"/>
+  <rect width="1200" height="800" fill="url(#r1)"/>
+  <rect width="1200" height="800" fill="url(#r2)"/>
+  <path d="M-80 560 C 170 470 310 650 560 540 S 980 450 1290 560 V860 H-80Z" fill="#1d4ed8" opacity=".18"/>
+  <path d="M-80 642 C 240 545 390 720 650 620 S 1010 540 1290 650 V860 H-80Z" fill="#f5c76b" opacity=".13"/>
+  <g opacity=".42" filter="url(#soft)">
+    <circle cx="210" cy="210" r="118" fill="#f5c76b" opacity=".28"/>
+    <circle cx="910" cy="180" r="150" fill="#ff8a6b" opacity=".22"/>
+    <circle cx="650" cy="620" r="210" fill="#1d4ed8" opacity=".20"/>
+  </g>
+  <g fill="none" stroke="#fff" stroke-opacity=".13" stroke-width="3">
+    <path d="M110 180 C 260 120 360 265 505 205 S 755 90 950 190"/>
+    <path d="M70 348 C 240 278 392 438 570 348 S 830 250 1110 356" opacity=".55"/>
+    <path d="M150 710 C 345 625 492 755 710 665 S 930 590 1160 690" opacity=".42"/>
+  </g>
+  <g opacity=".64">
+    <path d="M450 410 q90 -70 190 0 q-90 78 -190 0Z" fill="#020617" opacity=".26"/>
+    <circle cx="610" cy="398" r="8" fill="#f5c76b" opacity=".7"/>
+    <path d="M445 410 l-72 -48 q20 48 0 96Z" fill="#020617" opacity=".22"/>
+  </g>
+  <rect width="1200" height="800" fill="url(#grain)"/>
+  <text x="64" y="96" font-family="Arial, sans-serif" font-size="34" font-weight="900" fill="#fff" opacity=".13">REEL PANEL</text>
+</svg>

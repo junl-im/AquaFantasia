@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'aqua-fantasia-v3.6.4';
+const CACHE_VERSION = 'aqua-fantasia-v3.9.0';
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const CORE_ASSETS = [
@@ -12,9 +12,11 @@ const CORE_ASSETS = [
   "./assets/icons/maskable-512.png",
   "./assets/icons/apple-touch-icon.png",
   "./assets/art/aqua_logo_mark.svg",
-  "./assets/art/v363_painterly_ocean.svg",
-  "./assets/art/v363_mobile_scene.svg",
-  "./assets/art/v363_fishing_canvas.svg"
+  "./assets/art/v39_fishing_grand_stage.svg",
+  "./assets/art/v39_fishing_director.svg",
+  "./assets/art/v39_reel_lane.svg",
+  "./assets/ui-kit/fishing_minigame/bobber_large.png",
+  "./assets/ui-kit/icons/reel_progress.png"
 ];
 
 self.addEventListener('install', (event) => {

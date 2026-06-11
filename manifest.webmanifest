@@ -1,11 +1,11 @@
 {
-  "name": "Aqua Fantasia v3.6.4",
-  "short_name": "Aqua v3.6.4",
-  "description": "Aqua Fantasia - v3.6.4 start flow, auto immersive shell, first-run guide, performance hotfix",
+  "name": "Aqua Fantasia v3.9 Grand Action Fishing",
+  "short_name": "Aqua v3.9",
+  "description": "Aqua Fantasia v3.9 - UI kit integrated grand action fishing, mobile performance tuning.",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "./?app=aqua-fantasia-v364",
-  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=3.6.4",
+  "id": "./?app=aqua-fantasia-v38",
+  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=3.8.0",
   "scope": "./",
   "display": "fullscreen",
   "display_override": [
@@ -15,7 +15,7 @@
   ],
   "orientation": "portrait",
   "background_color": "#020617",
-  "theme_color": "#0b1734",
+  "theme_color": "#06101d",
   "categories": [
     "games",
     "entertainment"
@@ -42,9 +42,9 @@
   ],
   "shortcuts": [
     {
-      "name": "코어 내비게이터",
-      "short_name": "코어",
-      "description": "v3.6.4 원화풍 최적화와 Core Navigator 열기",
+      "name": "마스터피스 UI",
+      "short_name": "v3.8",
+      "description": "v3.8 액션 낚시 UI 바로 열기",
       "url": "./?shortcut=core-navigator",
       "icons": [
         {

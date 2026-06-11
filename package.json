@@ -1,6 +1,6 @@
 {
   "name": "aqua-fantasia-static",
-  "version": "3.6.4",
+  "version": "3.9.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,5 +8,5 @@
     "audit": "node tools/audit-bundle.mjs",
     "audit:bundle": "node tools/audit-bundle.mjs"
   },
-  "description": "Aqua Fantasia static mobile web game - v3.6.4 Start Flow Immersive Hotfix"
+  "description": "Aqua Fantasia static mobile web game - v3.9 Grand Action Fishing Patch"
 }

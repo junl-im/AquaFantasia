@@ -139,7 +139,45 @@ const requiredFiles = [
   'assets/art/v363_region_harbor.svg',
   'assets/art/v363_region_deep.svg',
   'assets/art/v363_region_palace.svg',
-  'assets/art/v363_region_dimension.svg'
+  'assets/art/v363_region_dimension.svg',
+  'assets/art/v37_masterpiece_ocean.svg',
+  'assets/art/v37_mobile_poster.svg',
+  'assets/art/v37_command_panel.svg',
+  'assets/art/v37_fishing_theater.svg',
+  'assets/art/v37_fish_showcase.svg',
+  'assets/art/v37_region_lake.svg',
+  'assets/art/v37_region_river.svg',
+  'assets/art/v37_region_harbor.svg',
+  'assets/art/v37_region_deep.svg',
+  'assets/art/v37_region_palace.svg',
+  'assets/art/v37_region_dimension.svg',
+  'assets/art/v38_action_ocean.svg',
+  'assets/art/v38_fishing_arena.svg',
+  'assets/art/v38_action_hud.svg',
+  'assets/art/v38_reel_panel.svg',
+  'assets/art/v38_touch_target.svg',
+  'assets/art/v38_button_plate.svg',
+  'assets/art/v38_hud_prompt.svg',
+  'assets/art/v38_water_impact.svg',
+  'assets/art/v38_line_tension.svg',
+  'assets/art/v38_combo_flash.svg',
+  'assets/art/v38_ui_cleanup_frame.svg',
+  'assets/art/v38_cast_arc.svg'
+,
+  'assets/art/v39_fishing_grand_stage.svg',
+  'assets/art/v39_fishing_director.svg',
+  'assets/art/v39_reel_lane.svg',
+  'assets/art/v39_bite_radar.svg',
+  'assets/art/v39_input_coach.svg',
+  'assets/art/v39_button_plate.svg',
+  'assets/art/v39_perf_tuner.svg',
+  'assets/ui-kit/fishing_minigame/bobber_large.png',
+  'assets/ui-kit/fishing_minigame/reel_bar_220px.png',
+  'assets/ui-kit/fishing_minigame/tension_meter_120px.png',
+  'assets/ui-kit/icons/reel_progress.png',
+  'assets/ui-kit/icons/tension_gauge.png',
+  'assets/ui-kit/icons/bobber.png'
+
 ];
 
 function fail(message) {
@@ -155,7 +193,7 @@ for (const file of requiredFiles) {
 const index = readFileSync(join(root, 'index.html'), 'utf8');
 const sw = readFileSync(join(root, 'sw.js'), 'utf8');
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!index.includes("const APP_VERSION = '3.6.4'")) fail('APP_VERSION must be 3.6.4 for this patch.');
+if (!index.includes("const APP_VERSION = '3.9.0'")) fail('APP_VERSION must be 3.9.0 for this patch.');
 if (!index.includes('serviceWorker.register')) fail('PWA service worker registration is missing.');
 if (!index.includes('season-ranking-panel')) fail('Season ranking UI is missing.');
 if (!index.includes('weekly-reward-vault')) fail('Weekly reward vault UI is missing.');
@@ -204,13 +242,30 @@ if (!index.includes('renderV36CoreNavigator')) fail('v3.6 Core Navigator rendere
 if (!index.includes('runV36Action')) fail('v3.6 Core Navigator action handler is missing.');
 if (!index.includes('art-v36')) fail('v3.6 art runtime class is missing.');
 if (!index.includes('art-v363')) fail('v3.6.4 painterly art runtime class is missing.');
+if (!index.includes('v37-art-director')) fail('v3.7 Art Director panel is missing.');
+if (!index.includes('renderV37ArtDirector')) fail('v3.7 Art Director renderer is missing.');
+if (!index.includes('runV37Action')) fail('v3.7 action handler is missing.');
+if (!index.includes('art-v37')) fail('v3.7 art runtime class is missing.');
+if (!index.includes('v38-action-director')) fail('v3.8 action director UI is missing.');
+if (!index.includes('v39-fishing-director')) fail('v3.9 fishing director UI is missing.');
+if (!index.includes('renderV39FishingDirector')) fail('v3.9 fishing director renderer is missing.');
+if (!index.includes('v39-action-lane')) fail('v3.9 reel skill lane is missing.');
+if (!index.includes('cycleFishingDetail')) fail('v3.9 fishing detail controls are missing.');
+if (!index.includes('assets/ui-kit/fishing_minigame/bobber_large.png')) fail('v3.9 uploaded UI kit bobber asset is missing.');
+if (!index.includes('renderV38ActionDirector')) fail('v3.8 action director renderer is missing.');
+if (!index.includes('runV38Action')) fail('v3.8 action handler is missing.');
+if (!index.includes('art-v38')) fail('v3.8 art runtime class is missing.');
+if (!index.includes('bite-target')) fail('v3.8 bite target touch UI is missing.');
+if (!index.includes('hookFishFromTarget')) fail('v3.8 hook target handler is missing.');
+if (!index.includes('action-reel-panel')) fail('v3.8 reel action panel is missing.');
+if (!index.includes('setFishingPhase')) fail('v3.8 fishing phase guide is missing.');
 if (!index.includes('renderLegacyDirectorPanelsIfNeeded')) fail('v3.6.3 legacy render gate is missing.');
 if (!index.includes('v363_painterly_ocean.svg')) fail('v3.6.4 painterly ocean asset reference is missing.');
 if (!index.includes('src/core/state.js')) fail('v3.6 modular scaffold reference is missing.');
 if (!index.includes('perf-lite')) fail('v3.6.2 performance-lite CSS/runtime is missing.');
 if (!index.includes('warmAssetsSafely')) fail('v3.6.2 safe asset warmer is missing.');
 if (!index.includes('aqua_latest_state')) fail('v3.6.2 optimized save key is missing.');
-if (!sw.includes('./assets/art/v363_fishing_canvas.svg')) fail('v3.6.3 critical cache list is missing active painterly fishing stage.');
+if (!sw.includes('./assets/art/v39_fishing_grand_stage.svg')) fail('v3.9 critical cache list is missing active fishing grand stage.');
 if (sw.includes('./assets/art/v31_director_stage.svg')) fail('legacy bulk SVG precache found in service worker.');
 if (/\bFISH_DB\b/.test(index)) fail('legacy FISH_DB reference found. Use FISH_DATABASE.');
 if (/\bgetCurrentWeekKey\b/.test(index)) fail('legacy getCurrentWeekKey reference found. Use getRewardWeekKey/weeklyRewards.claimed.');
@@ -228,7 +283,7 @@ if (manifest.display !== 'fullscreen') fail('manifest.webmanifest must use displ
 if (!Array.isArray(manifest.icons) || manifest.icons.length < 3) fail('manifest icons are incomplete.');
 
 const fish = JSON.parse(readFileSync(join(root, 'data/fish.json'), 'utf8'));
-if (!Array.isArray(fish.fish) || fish.fish.length < 150) fail('data/fish.json must include at least 150 fish entries.');
+if (!Array.isArray(fish.fish) || fish.fish.length < 170) fail('data/fish.json must include at least 170 fish entries.');
 const fishIds = new Set();
 for (const item of fish.fish) {
   if (!item.id || fishIds.has(item.id)) fail(`Invalid or duplicate fish id: ${item.id}`);
@@ -236,7 +291,7 @@ for (const item of fish.fish) {
   if (!item.region || !item.name || !item.rarity) fail(`Fish entry is incomplete: ${item.id}`);
 }
 
-if (!sw.includes('aqua-fantasia-v3.6.4')) fail('Service worker cache version was not updated.');
+if (!sw.includes('aqua-fantasia-v3.9.0')) fail('Service worker cache version was not updated.');
 
 const scripts = [...index.matchAll(/<script(?:\s+[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map((m) => m[1].trim())

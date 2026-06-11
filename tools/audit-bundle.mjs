@@ -10,7 +10,7 @@ const bytes = (path) => statSync(join(root, path)).size;
 const refs = [...index.matchAll(/assets\/(?:art|icons|images)\/[^'"\)\s]+/g)].map((m) => m[0]);
 const missing = [...new Set(refs)].filter((ref) => { try { statSync(join(root, ref)); return false; } catch { return true; } });
 const report = {
-  version: '3.6.4',
+  version: '3.9.0',
   indexBytes: bytes('index.html'),
   indexLines: index.split('\n').length,
   fishCount: fish.length,
@@ -24,6 +24,9 @@ const report = {
     backExitGuard: index.includes('initBackExitGuard'),
     tideMaster: index.includes('renderV35TideMaster'),
     coreNavigator: index.includes('renderV36CoreNavigator'),
+    artDirector37: index.includes('renderV37ArtDirector') && index.includes('art-v37'),
+    actionFishing38: index.includes('renderV38ActionDirector') && index.includes('bite-target') && index.includes('hookFishFromTarget') && index.includes('action-reel-panel'),
+    grandActionFishing39: index.includes('renderV39FishingDirector') && index.includes('v39-action-lane') && index.includes('cycleFishingDetail') && index.includes('assets/ui-kit/fishing_minigame/bobber_large.png'),
     moduleScaffold: index.includes('v3.6.4') || index.includes('Start Flow'),
     perfLite: index.includes('perf-lite') && index.includes('warmAssetsSafely'),
     painterlyArt: index.includes('art-v363') && index.includes('v363_painterly_ocean.svg'),
@@ -36,6 +39,7 @@ const report = {
 console.log(JSON.stringify(report, null, 2));
 if (report.missingAssets.length) process.exit(1);
 if (report.duplicateFishIds) process.exit(1);
-if (report.fishCount < 150) process.exit(1);
+if (report.fishCount < 170) process.exit(1);
+if (!report.mobileGuards.artDirector37 || !report.mobileGuards.actionFishing38 || !report.mobileGuards.grandActionFishing39) process.exit(1);
 if (!report.mobileGuards.coreNavigator) process.exit(1);
 if (!report.mobileGuards.perfLite || !report.mobileGuards.lightServiceWorker || !report.mobileGuards.painterlyArt || !report.mobileGuards.legacyRenderGate || !report.mobileGuards.startFlow || !report.mobileGuards.autoImmersive) process.exit(1);
