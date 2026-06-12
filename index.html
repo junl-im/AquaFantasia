@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Aqua Fantasia - v4.9 Pixi Runtime Connect - 모바일 낚시 렌더러·UI 다이어트·캐시 최적화">
+    <meta name="description" content="Aqua Fantasia - v5.0 Performance Focus - 모바일 낚시 렌더러·UI 다이어트·캐시 최적화">
     <meta name="theme-color" content="#082f49">
     <meta name="color-scheme" content="dark">
     <meta name="mobile-web-app-capable" content="yes">
@@ -25,8 +25,11 @@
     <link rel="preload" as="image" href="assets/art/v46_engine_console.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/art/v46_pixi_stage.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/art/v49_pixi_runtime_stage.svg" type="image/svg+xml">
+    <link rel="preload" as="image" href="assets/art/v50_fishing_focus_stage.svg" type="image/svg+xml">
+    <link rel="preload" as="image" href="assets/art/v50_runtime_console.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/atlas/aqua_fishing_v49.webp" type="image/webp">
     <script type="module" src="./src/runtime/v49-pixi-runtime.js"></script>
+    <script type="module" src="./src/runtime/v50-performance-runtime.js"></script>
 
     <script>
     /* v4.3 Early Fullscreen Primer: attaches before app boot, then upgrades to the full game shell after the first real gesture. */
@@ -60,7 +63,7 @@
       document.addEventListener('keydown', attempt, { once:true, capture:true });
     })();
     </script>
-    <title>Aqua Fantasia • v4.9 Pixi Runtime Connect</title>
+    <title>Aqua Fantasia • v5.0 Performance Focus</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -2243,7 +2246,7 @@ body.ui-v45.perf-lite .v45-line-glow, body.ui-v45.perf-lite .v45-splash, body.ui
 @media (prefers-reduced-motion: reduce) { .v45-line-glow,.v45-rod-tip,.v45-splash,body.ui-v45 .v39-bobber-sprite{animation:none!important} }
 
 
-/* ==================== v4.9 Pixi Runtime Connect / Runtime Diet + Renderer ==================== */
+/* ==================== v5.0 Performance Focus / Runtime Diet + Renderer ==================== */
 body.ui-v46 {
     --v46-ink:#03111f; --v46-navy:#071b34; --v46-sea:#0f5f7f; --v46-aqua:#67e8f9; --v46-gold:#f7d071; --v46-coral:#ff9c82; --v46-violet:#b79cff;
 }
@@ -2310,6 +2313,29 @@ body.v47-renderer-off #v47-renderer-layer { display:none; }
 body.v47-renderer-off .v47-renderer-overlay { display:none; }
 @media (max-width:430px){ .v47-renderer-panel{border-radius:1.35rem;padding:.82rem}.v47-renderer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.v47-renderer-actions{grid-template-columns:1fr}.v47-renderer-overlay{font-size:.52rem;bottom:.55rem;left:.55rem;right:.55rem} }
 
+
+
+/* ==================== v5.0 Performance Focus / UI Diet + Fishing Runtime ==================== */
+body.ui-v50 { --v50-navy:#03111f; --v50-cyan:#67e8f9; --v50-gold:#f7d071; --v50-coral:#fb7185; --v50-emerald:#34d399; }
+body.ui-v50 .v46-engine-panel, body.ui-v50 .v47-renderer-panel, body.ui-v50 .v48-runtime-panel, body.ui-v50 .v49-runtime-panel { display:none !important; }
+.v50-performance-panel { position:relative; overflow:hidden; border-radius:1.55rem; padding:1rem; background-image:linear-gradient(140deg,rgba(3,17,31,.92),rgba(14,165,233,.22),rgba(247,208,113,.13)), url('assets/art/v50_runtime_console.svg'); background-size:cover; border:1px solid rgba(255,247,221,.16); box-shadow:0 20px 50px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.14); }
+.v50-performance-panel::before { content:""; position:absolute; inset:0; pointer-events:none; background:url('assets/art/v50_perf_meter.svg') center/cover no-repeat; opacity:.23; mix-blend-mode:screen; }
+.v50-badge { display:inline-flex; padding:.28rem .58rem; border-radius:999px; background:rgba(103,232,249,.12); border:1px solid rgba(103,232,249,.20); color:#cffafe; font-size:.62rem; font-weight:1000; }
+.v50-grid { position:relative; z-index:1; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.48rem; margin-top:.8rem; }
+.v50-grid>div { border-radius:1rem; padding:.58rem .5rem; min-height:2.85rem; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.10); }
+.v50-grid b { display:block; color:#fff7dd; font-size:.69rem; font-weight:1000; line-height:1.05; }
+.v50-grid span { display:block; color:rgba(236,254,255,.62); font-size:.55rem; font-weight:850; margin-top:.18rem; }
+.v50-actions { position:relative; z-index:1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.48rem; margin-top:.75rem; }
+.v50-actions button { border-radius:1rem; padding:.68rem .48rem; font-size:.66rem; font-weight:1000; background:linear-gradient(135deg,rgba(255,247,221,.96),rgba(247,208,113,.86)); color:#061526; box-shadow:0 11px 28px rgba(247,208,113,.15); }
+body.ui-v50 #screen-fishing { background:radial-gradient(circle at 10% 0%,rgba(247,208,113,.10),transparent 24rem),radial-gradient(circle at 90% 0%,rgba(103,232,249,.12),transparent 22rem),linear-gradient(180deg,#041225,#062f46 52%,#020617); }
+body.ui-v50 #fishing-visual { background-image:linear-gradient(180deg,rgba(4,14,28,.02),rgba(2,8,23,.30)), url('assets/art/v50_fishing_focus_stage.svg'), url('assets/art/v45_fishing_stage_lux.svg') !important; background-size:cover,cover,cover; }
+#v50-focus-canvas { position:absolute; inset:0; width:100%; height:100%; z-index:12; pointer-events:none; display:none; }
+body.ui-v50 .fishing-stage-guide { border-color:rgba(247,208,113,.22); box-shadow:0 10px 28px rgba(0,0,0,.26), inset 0 0 0 1px rgba(255,255,255,.05); }
+body.ui-v50 #bite-target { background-image:linear-gradient(135deg,rgba(255,247,221,.95),rgba(247,208,113,.92)); color:#061526; box-shadow:0 0 0 .42rem rgba(247,208,113,.16), 0 0 38px rgba(247,208,113,.35); }
+body.ui-v50.perf-lite .fx-aurora, body.ui-v50.perf-lite .depth-rays, body.ui-v50.perf-lite .bubble-field, body.ui-v50.perf-lite .v31-stage-polish { opacity:.24 !important; animation:none !important; filter:none !important; }
+@media (max-width:430px){ .v50-performance-panel{border-radius:1.25rem;padding:.82rem}.v50-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.v50-actions{grid-template-columns:1fr} }
+@media (prefers-reduced-motion:reduce){ #v50-focus-canvas{opacity:.55}.v50-performance-panel::before{display:none} }
+
 </style>
 </head>
 <body class="bg-[#0a3d5c] text-white antialiased">
@@ -2323,8 +2349,8 @@ body.v47-renderer-off .v47-renderer-overlay { display:none; }
             <div class="flex items-center gap-3 min-w-0">
                 <div class="top-logo-mark">🌊</div>
                 <div class="min-w-0">
-                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v4.5</span></div>
-                    <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Result Flow Polish · 단계형 완료 · 렉 감소</div>
+                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v5.0</span></div>
+                    <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Performance Focus · 낚시 프레임 · UI 정리</div>
                 </div>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
@@ -2355,7 +2381,7 @@ body.v47-renderer-off .v47-renderer-overlay { display:none; }
             <div class="text-center mb-10">
                 <div class="v37-login-emblem" aria-hidden="true"></div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-100/80 mt-2 font-bold">v4.5 Tackle Visual Premium · 찌/릴/장력 그래픽 고급화</p>
+                <p class="text-sky-100/80 mt-2 font-bold">v5.0 Performance Focus · 모바일 최적화 · 낚시 프레임 강화</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="startLocalGuestGame()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">🎣 로컬 게스트로 바로 시작</button>
@@ -2558,6 +2584,10 @@ body.v47-renderer-off .v47-renderer-overlay { display:none; }
                 <div id="v49-runtime-panel" class="v49-runtime-panel"></div>
             </div>
 
+            <div class="px-5 mt-4">
+                <div id="v50-performance-panel" class="v50-performance-panel"></div>
+            </div>
+
             <div class="px-5 mt-4 flex-1">
                 <div class="px-1 flex justify-between items-end mb-3">
                     <div class="font-extrabold text-2xl tracking-tight">낚시 지역</div>
@@ -2616,6 +2646,7 @@ body.v47-renderer-off .v47-renderer-overlay { display:none; }
                 <div class="absolute inset-0 bg-gradient-to-b from-[#0a3d5c] via-[#0f4c6b] to-[#0a3d5c]"></div>
                 <div id="v47-renderer-layer" aria-hidden="true"><canvas id="v47-fishing-canvas"></canvas><div class="v47-renderer-overlay"><span><b id="v47-renderer-status">Pixi Bridge</b> · <span id="v47-renderer-fps">Auto FPS</span></span><span id="v47-renderer-load">Atlas 대기</span></div></div>
                 <canvas id="v49-pixi-runtime-canvas" aria-hidden="true"></canvas>
+                <canvas id="v50-focus-canvas" aria-hidden="true"></canvas>
                 <div class="fx-aurora" aria-hidden="true"></div>
                 <div class="depth-rays" aria-hidden="true"></div>
                 <div class="v31-stage-polish" aria-hidden="true"></div>
@@ -3060,7 +3091,7 @@ let graphicsMode = localStorage.getItem('aqua_graphics_mode') || (() => {
     return (mobileLike || saveData || lowMemory || lowCores) ? 'low' : 'high';
 })();
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '4.9.0';
+const APP_VERSION = '5.0.0';
 function versionAtLeast(minVersion) {
     const parse = (value) => String(value || '0').split('.').map((part) => Number(part) || 0);
     const current = parse(APP_VERSION);
@@ -7371,7 +7402,7 @@ window.cycleV48RuntimeMode = cycleV48RuntimeMode;
 window.trimV48Caches = trimV48Caches;
 
 
-// ==================== v4.9 Pixi Runtime Connect / UI Diet ====================
+// ==================== v5.0 Performance Focus / UI Diet ====================
 const V49_RUNTIME_ASSETS = [
     'assets/art/v49_pixi_runtime_stage.svg',
     'assets/art/v49_runtime_panel.svg',
@@ -7460,7 +7491,7 @@ async function trimV49Caches() {
     try {
         if (!('caches' in window)) return showToast('캐시 정리 미지원 브라우저입니다', 'ℹ️');
         const keys = await caches.keys();
-        const keep = ['aqua-fantasia-v4.9.0'];
+        const keep = ['aqua-fantasia-v5.0.0'];
         const old = keys.filter((key) => key.includes('aqua-fantasia') && !keep.some((k) => key.startsWith(k)));
         await Promise.all(old.map((key) => caches.delete(key)));
         showToast(`이전 캐시 ${old.length}개 정리`, '🧹', 1500);
@@ -7479,6 +7510,109 @@ window.cycleV49RuntimeMode = cycleV49RuntimeMode;
 window.warmV49RuntimeAssets = warmV49RuntimeAssets;
 window.trimV49Caches = trimV49Caches;
 
+
+
+
+
+// ==================== v5.0 Performance Focus / Runtime Diet ====================
+const V50_RUNTIME_ASSETS = [
+    'assets/art/v50_runtime_console.svg',
+    'assets/art/v50_fishing_focus_stage.svg',
+    'assets/art/v50_ui_trim_panel.svg',
+    'assets/art/v50_perf_meter.svg',
+    'assets/art/v50_bite_hint.svg',
+    'assets/atlas/aqua_fishing_v50.webp',
+    'assets/atlas/aqua_fishing_v50.atlas.json'
+];
+function ensureV50RuntimeState() {
+    if (!gameState.runtime50) gameState.runtime50 = {
+        mode: localStorage.getItem('aqua_v50_runtime_mode') || 'auto',
+        focus: 'fishing-first',
+        warmed: false,
+        lastSweep: localStorage.getItem('aqua_v50_last_sweep') || '대기'
+    };
+    return gameState.runtime50;
+}
+function getV50RuntimeBudget() {
+    const s = ensureV50RuntimeState();
+    const mobile = /Android|iPhone|iPad|iPod|Mobile|KAKAOTALK|wv/i.test(navigator.userAgent || '');
+    const low = document.body.classList.contains('perf-lite') || navigator.connection?.saveData || Number(navigator.deviceMemory || 4) <= 3 || Number(navigator.hardwareConcurrency || 4) <= 4 || reduceMotion;
+    const lite = s.mode === 'lite' || (s.mode === 'auto' && (mobile || low));
+    const quality = s.mode === 'quality' && !mobile && !low;
+    return { mode:s.mode, mobile, lite, quality, dpr:lite ? 1 : mobile ? 1.15 : quality ? 1.5 : 1.25, fps:lite ? 30 : quality ? 60 : 45, cache:'v5 core', legacy:'숨김' };
+}
+function applyV50RuntimeBudget(reason = 'auto') {
+    const budget = getV50RuntimeBudget();
+    document.body.classList.add('ui-v50');
+    document.body.classList.toggle('perf-lite', budget.lite || document.body.classList.contains('perf-lite'));
+    try { window.AquaV50Runtime?.setMode?.(budget.lite ? 'lite' : budget.quality ? 'quality' : 'balanced'); } catch {}
+    try { window.AquaV49Runtime?.setMode?.(budget.lite ? 'lite' : budget.quality ? 'quality' : 'balanced'); } catch {}
+    ensureV50RuntimeState().budget = `${budget.fps}fps/${budget.dpr}x/${reason}`;
+}
+function getV50Snapshot() {
+    const budget = getV50RuntimeBudget();
+    const stats = window.AquaV50Runtime?.getStats?.() || window.AquaV49Runtime?.getStats?.() || {};
+    let bytes = 0;
+    ['aqua_v5.0','aqua_v4.9','aqua_latest_state'].forEach((key) => { try { bytes += (localStorage.getItem(key) || '').length; } catch {} });
+    return {
+        fps: stats.fps ? `${Math.round(stats.fps)}FPS` : `${budget.fps}FPS 목표`,
+        dpr: `${budget.dpr}x`,
+        mode: budget.mode.toUpperCase(),
+        save: bytes ? `${Math.round(bytes/1024)}KB` : '대기',
+        cache: budget.cache,
+        legacy: budget.legacy,
+        renderer: window.AquaV50Runtime?.isRunning?.() ? 'Canvas Live' : 'Ready',
+        focus: ensureV50RuntimeState().focus
+    };
+}
+function renderV50PerformancePanel() {
+    const host = document.getElementById('v50-performance-panel');
+    if (!host) return;
+    const snap = getV50Snapshot();
+    host.innerHTML = `<div class="relative z-10 flex items-start justify-between gap-3"><div class="min-w-0"><span class="v50-badge">🚀 PERFORMANCE 5.0</span><h3 class="mt-2 text-xl font-black tracking-tight">낚시 프레임 · UI 정리 · 캐시 경량화</h3><p class="mt-1 text-xs text-white/64 leading-relaxed">이전 런타임 패널은 숨기고, 낚시 화면의 찌·물결·낚싯줄을 경량 Canvas Focus 레이어로 유지합니다.</p></div><div class="text-right text-[10px] text-cyan-100/80 font-black shrink-0">${escapeHTML(snap.renderer)}</div></div><div class="v50-grid"><div><b>${escapeHTML(snap.fps)}</b><span>프레임</span></div><div><b>${escapeHTML(snap.dpr)}</b><span>DPR</span></div><div><b>${escapeHTML(snap.mode)}</b><span>모드</span></div><div><b>${escapeHTML(snap.save)}</b><span>저장</span></div><div><b>${escapeHTML(snap.cache)}</b><span>캐시</span></div><div><b>${escapeHTML(snap.legacy)}</b><span>구 패널</span></div><div><b>v50</b><span>런타임</span></div><div><b>${escapeHTML(snap.focus)}</b><span>우선순위</span></div></div><div class="v50-actions"><button onclick="cycleV50RuntimeMode()">성능 모드</button><button onclick="trimV50Caches()">캐시 정리</button><button onclick="switchScreen('fishing')">낚시 테스트</button></div>`;
+}
+function cycleV50RuntimeMode() {
+    const s = ensureV50RuntimeState();
+    const order = ['auto','lite','balanced','quality'];
+    s.mode = order[(order.indexOf(s.mode) + 1) % order.length];
+    localStorage.setItem('aqua_v50_runtime_mode', s.mode);
+    applyV50RuntimeBudget('mode-change');
+    renderV50PerformancePanel();
+    showToast(`v5.0 성능 모드: ${s.mode.toUpperCase()}`, '🚀', 1300);
+    savePlayerData(false);
+}
+async function trimV50Caches() {
+    try {
+        if (!('caches' in window)) return showToast('캐시 정리 미지원 브라우저입니다', 'ℹ️');
+        const keys = await caches.keys();
+        const keep = ['aqua-fantasia-v5.0.0'];
+        const old = keys.filter((key) => key.includes('aqua-fantasia') && !keep.some((k) => key.startsWith(k)));
+        await Promise.all(old.map((key) => caches.delete(key)));
+        const text = `trimmed:${old.length}`;
+        localStorage.setItem('aqua_v50_last_sweep', text);
+        ensureV50RuntimeState().lastSweep = text;
+        try { window.AquaV50Runtime?.sweep?.(); } catch {}
+        showToast(`이전 캐시 ${old.length}개 정리`, '🧹', 1400);
+        renderV50PerformancePanel();
+    } catch { showToast('캐시 정리 실패', '⚠️'); }
+}
+function warmV50RuntimeAssets() {
+    const s = ensureV50RuntimeState();
+    if (s.warmed && shouldSkipAssetWarm()) return;
+    s.warmed = true;
+    warmAssetsSafely(V50_RUNTIME_ASSETS, getV50RuntimeBudget().lite ? 2 : 4);
+}
+function initV50Runtime() {
+    ensureV50RuntimeState();
+    applyV50RuntimeBudget('init');
+    if (!shouldSkipAssetWarm()) scheduleAquaTask(() => warmV50RuntimeAssets(), 'background');
+    renderV50PerformancePanel();
+}
+window.initV50Runtime = initV50Runtime;
+window.renderV50PerformancePanel = renderV50PerformancePanel;
+window.cycleV50RuntimeMode = cycleV50RuntimeMode;
+window.trimV50Caches = trimV50Caches;
+window.warmV50RuntimeAssets = warmV50RuntimeAssets;
 
 
 // ==================== UI ====================
@@ -7523,6 +7657,7 @@ function updateUI() {
     renderV39FishingTuning();
     renderV46EnginePanel();
     renderV48RuntimePanel();
+    renderV50PerformancePanel();
     installV46FishingBridgeLayer();
     renderSmartDock();
     applyMegaQualityClasses();
@@ -7563,6 +7698,7 @@ function switchScreen(screen) {
                 renderFirstPlayGuide();
                 renderV38ActionDirector();
                 renderV46EnginePanel();
+                renderV50PerformancePanel();
             }
             renderSmartDock();
         };
@@ -9449,7 +9585,7 @@ function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
         const json = JSON.stringify(plain);
-        ['aqua_v4.9', 'aqua_v4.8', 'aqua_latest_state'].forEach((key) => localStorage.setItem(key, json)); // 성능 보호: 과거 전체 버전 키 반복 저장 제거
+        ['aqua_v5.0', 'aqua_v4.9', 'aqua_latest_state'].forEach((key) => localStorage.setItem(key, json)); // 성능 보호: 과거 전체 버전 키 반복 저장 제거
         setCloudSaveStatus('ok', '로컬 저장됨');
 
         if (syncCloud && isFirebaseConnected && gameState.userId && window.AquaFirebase) {
@@ -9696,7 +9832,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v4.9') || localStorage.getItem('aqua_v4.8') || localStorage.getItem('aqua_v4.7') || localStorage.getItem('aqua_v4.6') || localStorage.getItem('aqua_v4.5') || localStorage.getItem('aqua_v4.4') || localStorage.getItem('aqua_v4.3') || localStorage.getItem('aqua_v4.2') || localStorage.getItem('aqua_v4.1') || localStorage.getItem('aqua_v4.0') || localStorage.getItem('aqua_v3.9') || localStorage.getItem('aqua_v3.8') || localStorage.getItem('aqua_v3.7') || localStorage.getItem('aqua_v3.6.4') || localStorage.getItem('aqua_v3.6.3') || localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v5.0') || localStorage.getItem('aqua_v4.9') || localStorage.getItem('aqua_v4.8') || localStorage.getItem('aqua_v4.7') || localStorage.getItem('aqua_v4.6') || localStorage.getItem('aqua_v4.5') || localStorage.getItem('aqua_v4.4') || localStorage.getItem('aqua_v4.3') || localStorage.getItem('aqua_v4.2') || localStorage.getItem('aqua_v4.1') || localStorage.getItem('aqua_v4.0') || localStorage.getItem('aqua_v3.9') || localStorage.getItem('aqua_v3.8') || localStorage.getItem('aqua_v3.7') || localStorage.getItem('aqua_v3.6.4') || localStorage.getItem('aqua_v3.6.3') || localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) {
             const parsed = JSON.parse(saved);
             if (isDemoSeedState(parsed)) {
@@ -9741,6 +9877,7 @@ async function init() {
         initV47RendererRuntime();
         initV48Runtime();
         initV49Runtime();
+        initV50Runtime();
         initDirectorArchivePerformanceGate();
         initMobileLaunchBridge();
         initAutoImmersiveShell();
@@ -9761,10 +9898,10 @@ async function init() {
         if (shouldEnterGame) switchScreen('village');
         else showLoginScreen();
         
-        console.log('%c[AquaFantasia v4.9] Pixi Runtime Connect Ready', 'color:#f7d071');
+        console.log('%c[AquaFantasia v5.0] Performance Focus Ready', 'color:#f7d071');
     } catch(e) {
         console.error('Init error:', e);
-        alert('게임 초기화 중 오류가 발생했습니다. v4.9 Pixi Runtime Connect 패치가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
+        alert('게임 초기화 중 오류가 발생했습니다. v5.0 Performance Focus 패치가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
     }
 }
 

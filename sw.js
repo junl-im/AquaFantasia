@@ -1,4 +1,5 @@
-const CACHE_VERSION = 'aqua-fantasia-v4.9.0';
+const CACHE_VERSION = 'aqua-fantasia-v5.0.0';
+// aqua-fantasia-v4.9.0 legacy marker for migration audit
 // aqua-fantasia-v4.8.0 legacy marker for migration audit
 // aqua-fantasia-v4.7.0 legacy marker for migration audit
 // aqua-fantasia-v4.6.0 legacy marker for migration audit
@@ -32,7 +33,12 @@ const CORE_ASSETS = [
   "./assets/art/v49_pixi_runtime_stage.svg",
   "./assets/art/v49_runtime_panel.svg",
   "./assets/atlas/aqua_fishing_v49.webp",
-  "./assets/atlas/aqua_fishing_v49.atlas.json"
+  "./assets/atlas/aqua_fishing_v49.atlas.json",
+  "./assets/art/v50_runtime_console.svg",
+  "./assets/art/v50_fishing_focus_stage.svg",
+  "./assets/art/v50_perf_meter.svg",
+  "./assets/atlas/aqua_fishing_v50.webp",
+  "./assets/atlas/aqua_fishing_v50.atlas.json"
 ];
 
 self.addEventListener('install', (event) => {

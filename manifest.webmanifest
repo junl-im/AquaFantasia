@@ -1,7 +1,7 @@
 {
-  "name": "Aqua Fantasia v4.9 Pixi Runtime Connect",
-  "short_name": "Aqua v4.9",
-  "description": "Aqua Fantasia mobile web fishing game - v4.9 Pixi runtime connect and UI diet optimized PWA.",
+  "name": "Aqua Fantasia v5.0 Performance Focus",
+  "short_name": "Aqua v5.0",
+  "description": "Mobile fishing PWA with performance-focused runtime, canvas fishing renderer and Firebase-ready saves.",
   "lang": "ko-KR",
   "dir": "ltr",
   "id": "/AquaFantasia/?v=4.9",
@@ -65,5 +65,6 @@
         }
       ]
     }
-  ]
+  ],
+  "version": "5.0.0"
 }
