@@ -1,4 +1,6 @@
-const CACHE_VERSION = 'aqua-fantasia-v5.5.0-mobile-feel-20260612';
+const CACHE_VERSION = 'aqua-fantasia-v5.5.2-runtime-ci-hotfix-20260612';
+// aqua-fantasia-v5.5.1-hotfix-20260612 legacy marker for migration audit
+// aqua-fantasia-v5.5.0-mobile-feel-20260612 legacy marker for migration audit
 // aqua-fantasia-v5.4.0 legacy marker for migration audit
 // aqua-fantasia-v5.3.0 legacy marker for migration audit
 // aqua-fantasia-v5.2.0 legacy marker for migration audit
@@ -68,6 +70,8 @@ const CORE_ASSETS = [
   "./src/core/state.js",
   "./src/runtime/v54-result-shop-polish.js",
   "./src/runtime/v55-mobile-feel-runtime.js",
+  "./src/runtime/v551-hotfix-runtime.js",
+  "./src/runtime/v552-ci-runtime-guard.js",
   "./src/runtime/v49-action-mobile-patch.js",
   "./src/systems/shop.js",
   "./src/runtime/v53-casual-ux-polish.js",

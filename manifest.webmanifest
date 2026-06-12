@@ -1,7 +1,7 @@
 {
-  "name": "Aqua Fantasia v5.5 Mobile Feel Patch",
-  "short_name": "Aqua v5.5",
-  "description": "Aqua Fantasia v5.5 Mobile Feel & Cache Guard: mobile bite/reel controls, overlap cleanup, adaptive runtime and PWA cache hygiene.",
+  "name": "Aqua Fantasia v5.5.2 Runtime & CI Hotfix Patch",
+  "short_name": "AquaFantasia v5.5.2",
+  "description": "Aqua Fantasia v5.5.2 Runtime & GitHub Actions CI Hotfix; includes v5.5.1 runtime error guard, cache recovery, and Node 24 validation workflow migration. Legacy validation markers: v5.5 Mobile Feel, 5.5-mobile-feel-20260612, v4.9 Action Mobile Patch, 4.9-action-20260612.",
   "lang": "ko-KR",
   "dir": "ltr",
   "id": "/AquaFantasia/?v=4.9-action",
@@ -66,5 +66,5 @@
       ]
     }
   ],
-  "version": "5.5-mobile-feel-20260612"
+  "version": "5.5.2-runtime-ci-hotfix-20260612"
 }
