@@ -1,0 +1,12 @@
+Aqua Fantasia v5.5.5 deletion note
+
+ZIP overwrite cannot delete files that already exist in your Git repository.
+
+For one automatic GitHub Actions run only, keep:
+  .github/workflows/pages.yml
+
+Optional deletion:
+  .github/workflows/aqua-static-validate.yml
+
+In this patch, aqua-static-validate.yml is manual-only and will not run on push.
+If you also want the Actions sidebar to show only one workflow, delete that file manually in GitHub Desktop or your file explorer, then commit the deletion.

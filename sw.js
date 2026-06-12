@@ -1,4 +1,5 @@
-const CACHE_VERSION = 'aqua-fantasia-v5.5.2-runtime-ci-hotfix-20260612';
+const CACHE_VERSION = 'aqua-fantasia-v5.5.5-auto-cache-sweep-20260612';
+// aqua-fantasia-v5.5.2-runtime-ci-hotfix-20260612 legacy marker for migration audit
 // aqua-fantasia-v5.5.1-hotfix-20260612 legacy marker for migration audit
 // aqua-fantasia-v5.5.0-mobile-feel-20260612 legacy marker for migration audit
 // aqua-fantasia-v5.4.0 legacy marker for migration audit
@@ -73,6 +74,7 @@ const CORE_ASSETS = [
   "./src/runtime/v551-hotfix-runtime.js",
   "./src/runtime/v552-ci-runtime-guard.js",
   "./src/runtime/v554-stack-guard.js",
+  "./src/runtime/v555-auto-cache-sweep.js",
   "./src/runtime/v49-action-mobile-patch.js",
   "./src/systems/shop.js",
   "./src/runtime/v53-casual-ux-polish.js",
@@ -100,12 +102,12 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('message', (event) => {
   const type = event?.data?.type;
   if (type === 'SKIP_WAITING') self.skipWaiting();
-  if (type === 'AQUA_CLEAR_RUNTIME_CACHE') {
+  if (type === 'AQUA_CLEAR_RUNTIME_CACHE' || type === 'AQUA_FORCE_CACHE_SWEEP') {
     event.waitUntil((async () => {
       const keepPrefix = event?.data?.keepPrefix || CACHE_VERSION;
       const keys = await caches.keys();
       await Promise.all(keys
-        .filter((key) => (key.includes('runtime') || key.includes('aqua-fantasia')) && !key.startsWith(keepPrefix))
+        .filter((key) => (key.includes('runtime') || key.includes('aqua-fantasia') || key.includes('workbox') || key.includes('precache')) && !key.startsWith(keepPrefix))
         .map((key) => caches.delete(key)));
     })());
   }

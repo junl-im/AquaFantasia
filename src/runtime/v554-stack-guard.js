@@ -8,7 +8,7 @@
 //    복구 버튼을 제공합니다.
 
 const VERSION = '5.5.4-stack-guard';
-const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.5.2-runtime-ci-hotfix-20260612';
+const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.5.5-auto-cache-sweep-20260612';
 const state = {
   booted: false,
   stages: [],
@@ -52,12 +52,18 @@ function ensureRecoveryCard() {
 }
 
 function showRecovery(error, stage = '') {
+  if (window.AquaV555AutoCache?.handleLegacyRecovery) {
+    window.AquaV555AutoCache.handleLegacyRecovery(`${stage || state.activeStage || 'runtime'}: ${messageOf(error)}`, { reload: true, silent: true });
+    return;
+  }
   ensureStyle();
   const root = ensureRecoveryCard();
   const span = root.querySelector('span');
   if (span) span.textContent = `감지 위치: ${stage || state.activeStage || 'runtime'} · ${messageOf(error).slice(0, 160)}. 캐시 정리 후 새로고침하면 최신 스크립트만 다시 로드합니다.`;
   root.classList.add('open');
+  setTimeout(() => root.classList.remove('open'), 2200);
 }
+
 
 async function clearCaches(forceReload = false) {
   try { localStorage.setItem('aqua_v5.5.4_stack_guard_boot', VERSION); } catch (_) {}

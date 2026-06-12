@@ -6,7 +6,7 @@
 // 3) GitHub Actions Node 24 마이그레이션 패치가 적용된 빌드임을 런타임/검증 도구가 확인할 수 있게 합니다.
 
 const VERSION = '5.5.2-runtime-ci-hotfix';
-const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.5.2-runtime-ci-hotfix-20260612';
+const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.5.5-auto-cache-sweep-20260612';
 const BOOT_KEY = 'aqua_v5.5.2_runtime_ci_hotfix_boot';
 const state = {
   booted: false,
@@ -56,6 +56,10 @@ function ensureErrorCard() {
 }
 
 function showErrorCard(message = '') {
+  if (window.AquaV555AutoCache?.handleLegacyRecovery) {
+    window.AquaV555AutoCache.handleLegacyRecovery(message || 'v5.5.2 runtime guard', { reload: /maximum call stack|too much recursion|recursion|module|import|service worker|cache/i.test(String(message)), silent: true });
+    return;
+  }
   const t = now();
   if (t - state.lastBannerAt < 1200) return;
   state.lastBannerAt = t;
@@ -63,7 +67,9 @@ function showErrorCard(message = '') {
   const span = root.querySelector('span');
   if (span && message) span.textContent = `감지된 오류: ${message.slice(0, 180)}. 캐시를 비우고 새 런타임으로 재시작하세요.`;
   root.classList.add('open');
+  setTimeout(() => root.classList.remove('open'), 2200);
 }
+
 
 async function clearCaches(forceReload = false) {
   try { localStorage.setItem(BOOT_KEY, VERSION); } catch (_) {}
@@ -98,7 +104,7 @@ function verifyHotfixStack() {
   document.body.classList.toggle('aqua-v552-v55-ready', v55Ready);
   if (!v551Ready) {
     setTimeout(() => {
-      if (!window.AquaFantasiaV551?.guardedCast) showErrorCard('v5.5.1 hotfix runtime not detected');
+      if (!window.AquaFantasiaV551?.guardedCast) console.warn('[Aqua v5.5.2] v5.5.1 hotfix runtime not detected yet');
     }, 3500);
   }
 }
@@ -112,7 +118,7 @@ function boot() {
   window.addEventListener('error', captureRuntimeError);
   window.addEventListener('unhandledrejection', captureRuntimeError);
   window.addEventListener('aqua-firebase-error', (event) => captureRuntimeError(event?.detail || 'Firebase init error'));
-  clearCaches(false);
+  if (!window.AquaV555AutoCache) clearCaches(false);
   verifyHotfixStack();
   setInterval(verifyHotfixStack, 1600);
   window.AquaFantasiaV552 = { version: VERSION, cacheKeepPrefix: CACHE_KEEP_PREFIX, clearCaches, state };

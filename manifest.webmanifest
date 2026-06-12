@@ -1,11 +1,11 @@
 {
-  "name": "Aqua Fantasia v5.5.2 Runtime & CI Hotfix Patch",
-  "short_name": "AquaFantasia v5.5.2",
-  "description": "Aqua Fantasia v5.5.2 Runtime & GitHub Actions CI Hotfix; includes v5.5.1 runtime error guard, cache recovery, and Node 24 validation workflow migration. Legacy validation markers: v5.5 Mobile Feel, 5.5-mobile-feel-20260612, v4.9 Action Mobile Patch, 4.9-action-20260612.",
+  "name": "Aqua Fantasia v5.5.5 Auto Cache Sweep Patch",
+  "short_name": "AquaFantasia v5.5.5",
+  "description": "Aqua Fantasia v5.5.5 Auto Cache Sweep; automatically clears stale PWA caches, keeps save data, and preserves v5.5 Mobile Feel runtime guards. Legacy validation markers: v5.5 Mobile Feel, 5.5-mobile-feel-20260612, v4.9 Action Mobile Patch, 4.9-action-20260612.",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "/AquaFantasia/?v=4.9-action",
-  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=4.9-action",
+  "id": "/AquaFantasia/?v=5.5.5-auto-cache",
+  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=5.5.5-auto-cache",
   "scope": "./",
   "display": "fullscreen",
   "display_override": [
@@ -45,7 +45,7 @@
       "name": "v4.9 낚시 런타임",
       "short_name": "v4.9 낚시",
       "description": "v4.9 Canvas/Pixi 낚시 런타임 테스트",
-      "url": "./?shortcut=fishing&fullscreen=1&v=4.9-action",
+      "url": "./?shortcut=fishing&fullscreen=1&v=5.5.5-auto-cache",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",
@@ -57,7 +57,7 @@
       "name": "장비 공방",
       "short_name": "장비",
       "description": "낚싯대와 미끼 관리",
-      "url": "./?shortcut=equipment&v=4.9-action",
+      "url": "./?shortcut=equipment&v=5.5.5-auto-cache",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",
@@ -66,5 +66,5 @@
       ]
     }
   ],
-  "version": "5.5.2-runtime-ci-hotfix-20260612"
+  "version": "5.5.5-auto-cache-sweep-20260612"
 }

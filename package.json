@@ -1,6 +1,6 @@
 {
   "name": "aqua-fantasia-engine",
-  "version": "5.5.2",
+  "version": "5.5.5",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,8 +12,8 @@
     "audit": "node tools/audit-bundle.mjs",
     "audit:bundle": "node tools/audit-bundle.mjs",
     "atlas:check": "node tools/generate-webp-atlas.mjs",
-    "renderer:check": "node tools/check-v47-renderer.mjs && node tools/check-v49-runtime.mjs && node tools/check-v50-runtime.mjs && node tools/check-v51-runtime.mjs && node tools/check-v49-action-mobile.mjs && node tools/check-v55-mobile-feel.mjs && node tools/check-v551-hotfix.mjs && node tools/check-v552-ci-hotfix.mjs",
-    "runtime:check": "node tools/check-v48-runtime.mjs && node tools/check-v50-runtime.mjs && node tools/check-v51-runtime.mjs && node tools/check-v52-casual-refactor.mjs && node tools/check-v53-casual-ux-polish.mjs && node tools/check-v54-result-shop-polish.mjs && node tools/check-v49-action-mobile.mjs && node tools/check-v55-mobile-feel.mjs && node tools/check-v551-hotfix.mjs && node tools/check-v552-ci-hotfix.mjs",
+    "renderer:check": "node tools/check-v47-renderer.mjs && node tools/check-v49-runtime.mjs && node tools/check-v50-runtime.mjs && node tools/check-v51-runtime.mjs && node tools/check-v49-action-mobile.mjs && node tools/check-v55-mobile-feel.mjs && node tools/check-v551-hotfix.mjs && node tools/check-v552-ci-hotfix.mjs && node tools/check-v555-auto-cache.mjs",
+    "runtime:check": "node tools/check-v48-runtime.mjs && node tools/check-v50-runtime.mjs && node tools/check-v51-runtime.mjs && node tools/check-v52-casual-refactor.mjs && node tools/check-v53-casual-ux-polish.mjs && node tools/check-v54-result-shop-polish.mjs && node tools/check-v49-action-mobile.mjs && node tools/check-v55-mobile-feel.mjs && node tools/check-v551-hotfix.mjs && node tools/check-v552-ci-hotfix.mjs && node tools/check-v555-auto-cache.mjs",
     "clean:report": "node tools/clean-bundle-report.mjs",
     "runtime49:check": "node tools/check-v49-runtime.mjs",
     "runtime50:check": "node tools/check-v50-runtime.mjs",
@@ -24,7 +24,8 @@
     "runtime49:action": "node tools/check-v49-action-mobile.mjs",
     "runtime55:check": "node tools/check-v55-mobile-feel.mjs",
     "runtime551:check": "node tools/check-v551-hotfix.mjs",
-    "runtime552:check": "node tools/check-v552-ci-hotfix.mjs"
+    "runtime552:check": "node tools/check-v552-ci-hotfix.mjs",
+    "runtime555:check": "node tools/check-v555-auto-cache.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-basic-ssl": "latest",
@@ -36,5 +37,5 @@
   "devDependencies": {
     "typescript": "latest"
   },
-  "description": "Aqua Fantasia v5.5.4 Stack Guard: single automatic Actions flow plus runtime recursion guard overlay."
+  "description": "Aqua Fantasia v5.5.5 Auto Cache Sweep: automatic PWA cache cleanup, runtime stack recovery, and single automatic Actions flow."
 }

@@ -35,7 +35,7 @@ const fishJson = JSON.parse(read('data/fish.json'));
 const fish = fishJson.fish || [];
 
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!(index.includes("const APP_VERSION = '5.5.0'") || index.includes("const APP_VERSION = '5.5.1'") || index.includes("const APP_VERSION = '5.5.2'"))) fail('APP_VERSION must be v5.5.x.');
+if (!/const APP_VERSION = '5\.5\.(?:0|1|2|3|4|5)'/.test(index)) fail('APP_VERSION must be v5.5.x.');
 if (!index.includes('v5.4 Casual Result & Shop Polish') && !index.includes('CASUAL RESULT SHOP 5.4')) fail('v5.3 casual UX marker is missing.');
 if (!index.includes('v5.1 Stability Assist') && !index.includes('STABILITY 5.1')) fail('v5.1 stability assist marker is missing.');
 if (!index.includes('initV51Runtime') || !index.includes('renderV51StabilityPanel') || !index.includes('v51-stability-panel')) fail('v5.1 stability runtime/panel is missing.');
@@ -54,7 +54,7 @@ if (/\bFISH_DB\b/.test(index)) fail('legacy FISH_DB reference found.');
 if (/\bgetCurrentWeekKey\b/.test(index)) fail('legacy getCurrentWeekKey reference found.');
 if ((index.match(/data-region=\"차원의 바다\"/g) || []).length > 1) fail('Duplicate Dimension Sea village card found.');
 
-if (!(sw.includes('aqua-fantasia-v5.5.0-mobile-feel-20260612') || sw.includes('aqua-fantasia-v5.5.1-hotfix-20260612') || sw.includes('aqua-fantasia-v5.5.2-runtime-ci-hotfix-20260612'))) fail('Service worker cache version must be v5.5.x.');
+if (!(sw.includes('aqua-fantasia-v5.5.5-auto-cache-sweep-20260612') || sw.includes('aqua-fantasia-v5.5.2-runtime-ci-hotfix-20260612') || sw.includes('aqua-fantasia-v5.5.1-hotfix-20260612') || sw.includes('aqua-fantasia-v5.5.0-mobile-feel-20260612'))) fail('Service worker cache version must be v5.5.x.');
 if (!sw.includes('./assets/atlas/aqua_fishing_v49.webp') || !sw.includes('./assets/art/v49_runtime_panel.svg')) fail('v4.9 cache entries are missing.');
 if (!sw.includes('./assets/atlas/aqua_fishing_v50.webp') || !sw.includes('./assets/art/v50_runtime_console.svg')) fail('v5.0 cache entries are missing.');
 if (!sw.includes('./assets/atlas/aqua_fishing_v51.webp') || !sw.includes('./assets/art/v51_stability_console.svg')) fail('v5.1 cache entries are missing.');
@@ -63,6 +63,7 @@ if (!sw.includes('./src/runtime/v54-result-shop-polish.js') || !sw.includes('./s
 if (!index.includes('v55-mobile-feel-runtime.js') || !index.includes('MOBILE FEEL 5.5')) fail('v5.5 mobile feel runtime/panel is missing.');
 if (!sw.includes('./src/runtime/v55-mobile-feel-runtime.js') || !sw.includes('./assets/art/v55_mobile_feel_panel.svg') || !sw.includes('keepPrefix')) fail('v5.5 cache entries are missing.');
 if (!sw.includes('./src/runtime/v551-hotfix-runtime.js') || !sw.includes('./src/runtime/v552-ci-runtime-guard.js')) fail('v5.5.1/v5.5.2 hotfix cache entries are missing.');
+if (!index.includes('v555-auto-cache-sweep.js') || !sw.includes('./src/runtime/v555-auto-cache-sweep.js')) fail('v5.5.5 auto cache sweep runtime/cache entry is missing.');
 if (sw.includes('./assets/art/v31_director_stage.svg')) fail('legacy bulk SVG precache found in service worker.');
 if (!manifest.display || manifest.display !== 'fullscreen') fail('manifest display must be fullscreen.');
 if (!Array.isArray(manifest.icons) || manifest.icons.length < 3) fail('manifest icons are incomplete.');
@@ -94,4 +95,4 @@ scripts.forEach((script, idx) => {
   }
 });
 
-console.log('[validate-static] AquaFantasia v5.5.2 static bundle OK.');
+console.log('[validate-static] AquaFantasia v5.5.5 static bundle OK.');
