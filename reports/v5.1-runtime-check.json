@@ -1,0 +1,10 @@
+
+> aqua-fantasia-engine@5.1.0 runtime51:check
+> node tools/check-v51-runtime.mjs
+
+{
+  "ok": true,
+  "version": "5.1.0",
+  "runtime": "stability",
+  "atlasBytes": 4998
+}

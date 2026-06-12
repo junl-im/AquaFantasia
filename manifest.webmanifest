@@ -1,11 +1,11 @@
 {
-  "name": "Aqua Fantasia v5.0 Performance Focus",
-  "short_name": "Aqua v5.0",
-  "description": "Mobile fishing PWA with performance-focused runtime, canvas fishing renderer and Firebase-ready saves.",
+  "name": "Aqua Fantasia v5.1 Stability Assist",
+  "short_name": "Aqua v5.1",
+  "description": "Mobile fishing PWA with stability assist, input-latency governor, canvas fishing renderer and Firebase-ready saves.",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "/AquaFantasia/?v=4.9",
-  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=4.9.0",
+  "id": "/AquaFantasia/?v=5.1",
+  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=5.1.0",
   "scope": "./",
   "display": "fullscreen",
   "display_override": [
@@ -45,7 +45,7 @@
       "name": "v4.9 낚시 런타임",
       "short_name": "v4.9 낚시",
       "description": "v4.9 Canvas/Pixi 낚시 런타임 테스트",
-      "url": "./?shortcut=fishing&fullscreen=1&v=4.9.0",
+      "url": "./?shortcut=fishing&fullscreen=1&v=5.1.0",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",
@@ -57,7 +57,7 @@
       "name": "장비 공방",
       "short_name": "장비",
       "description": "낚싯대와 미끼 관리",
-      "url": "./?shortcut=equipment&v=4.9.0",
+      "url": "./?shortcut=equipment&v=5.1.0",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",
@@ -66,5 +66,5 @@
       ]
     }
   ],
-  "version": "5.0.0"
+  "version": "5.1.0"
 }

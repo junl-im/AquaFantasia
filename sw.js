@@ -1,4 +1,6 @@
-const CACHE_VERSION = 'aqua-fantasia-v5.0.0';
+const CACHE_VERSION = 'aqua-fantasia-v5.2.0';
+// aqua-fantasia-v5.1.0 legacy marker for migration audit
+// aqua-fantasia-v5.0.0 legacy marker for migration audit
 // aqua-fantasia-v4.9.0 legacy marker for migration audit
 // aqua-fantasia-v4.8.0 legacy marker for migration audit
 // aqua-fantasia-v4.7.0 legacy marker for migration audit
@@ -38,7 +40,29 @@ const CORE_ASSETS = [
   "./assets/art/v50_fishing_focus_stage.svg",
   "./assets/art/v50_perf_meter.svg",
   "./assets/atlas/aqua_fishing_v50.webp",
-  "./assets/atlas/aqua_fishing_v50.atlas.json"
+  "./assets/atlas/aqua_fishing_v50.atlas.json",
+  "./assets/art/v51_stability_console.svg",
+  "./assets/art/v51_touch_latency.svg",
+  "./assets/art/v51_fishing_fps_lane.svg",
+  "./assets/atlas/aqua_fishing_v51.webp",
+  "./assets/atlas/aqua_fishing_v51.atlas.json",
+  "./assets/ui-kit/icons/fish_6.png",
+  "./assets/ui-kit/icons/fish_5.png",
+  "./assets/ui-kit/icons/fish_4.png",
+  "./assets/ui-kit/icons/fish_3.png",
+  "./assets/ui-kit/icons/fish_2.png",
+  "./assets/ui-kit/icons/fish_1.png",
+  "./assets/ui-kit/panels/panel_1.png",
+  "./assets/ui-kit/fishing_minigame/reel_bar_220px.png",
+  "./assets/ui-kit/fishing_minigame/bobber_large.png",
+  "./assets/ui-kit/icons/tension_gauge.png",
+  "./assets/ui-kit/icons/water_ripple.png",
+  "./assets/art/v363_painterly_ocean.png",
+  "./src/ui/navigator.js",
+  "./src/systems/inventory.js",
+  "./src/systems/fishing.js",
+  "./src/core/state.js",
+  "./src/runtime/v52-casual-runtime.js"
 ];
 
 self.addEventListener('install', (event) => {

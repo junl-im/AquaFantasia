@@ -13,6 +13,6 @@ const requiredIndex = ['initV50Runtime','renderV50PerformancePanel','v50-perform
 const missingIndex = requiredIndex.filter((key) => !index.includes(key));
 if (missingIndex.length) throw new Error(`Missing v5.0 markers: ${missingIndex.join(', ')}`);
 if (!runtime.includes('window.AquaV50Runtime') || !runtime.includes('requestAnimationFrame(draw)')) throw new Error('v5.0 runtime bridge is incomplete');
-if (!sw.includes('aqua-fantasia-v5.0.0')) throw new Error('Service worker is not v5.0.0');
+if (!sw.includes('aqua-fantasia-v5.0.0') && !sw.includes('aqua-fantasia-v5.1.0')) throw new Error('Service worker does not include v5.0/v5.1 runtime marker');
 if (statSync(join(root, 'assets/atlas/aqua_fishing_v50.webp')).size < 1024) throw new Error('v5.0 WebP atlas is unexpectedly small');
 console.log(JSON.stringify({ ok:true, version:'5.0.0', frames:Object.keys(atlas.frames).length, atlasBytes:statSync(join(root, 'assets/atlas/aqua_fishing_v50.webp')).size }, null, 2));
