@@ -20,6 +20,10 @@ const state = {
   lastHookAt: 0,
   lastReelAt: 0,
   guardTimer: 0,
+  inCastProxy: false,
+  inHookProxy: false,
+  inReelProxy: false,
+  originals: { cast: null, hook: null, reel: null },
 };
 
 function ready(fn) {
@@ -109,7 +113,11 @@ function guardedCast(event) {
     safeCall('v53 cast', () => api.fishing.startCast());
     return;
   }
-  safeCall('legacy cast fallback', () => window.castLine?.());
+  const original = state.originals.cast;
+  if (typeof original === 'function' && original !== window.castLine && !state.inCastProxy) {
+    return safeCall('legacy cast fallback', () => original.call(window, event));
+  }
+  console.warn('[Aqua v5.5.1] recursive cast fallback blocked');
 }
 
 function guardedHook(event) {
@@ -123,7 +131,11 @@ function guardedHook(event) {
     safeCall('v53 hook', () => api.fishing.hook());
     return;
   }
-  safeCall('legacy hook fallback', () => window.hookFishFromTarget?.(event));
+  const original = state.originals.hook;
+  if (typeof original === 'function' && original !== window.hookFishFromTarget && !state.inHookProxy) {
+    return safeCall('legacy hook fallback', () => original.call(window, event));
+  }
+  console.warn('[Aqua v5.5.1] recursive hook fallback blocked');
 }
 
 function guardedReel(event, down = true) {
@@ -137,7 +149,13 @@ function guardedReel(event, down = true) {
     safeCall('v53 reel setDown', () => api.fishing.setDown(Boolean(down)));
     return;
   }
-  if (down) safeCall('legacy reel fallback', () => window.reelAction?.());
+  if (down) {
+    const original = state.originals.reel;
+    if (typeof original === 'function' && original !== window.reelAction && !state.inReelProxy) {
+      return safeCall('legacy reel fallback', () => original.call(window, event));
+    }
+    console.warn('[Aqua v5.5.1] recursive reel fallback blocked');
+  }
 }
 
 function bindHotfixControls() {
@@ -168,23 +186,41 @@ function bindHotfixControls() {
 function patchGlobalsForSafety() {
   if (window.__aquaV551GlobalsPatched) return;
   window.__aquaV551GlobalsPatched = true;
-  const originalCast = window.castLine;
-  const originalHook = window.hookFishFromTarget;
-  const originalReel = window.reelAction;
+  const originalCast = typeof window.castLine === 'function' && window.castLine.__aquaV551Proxy !== true ? window.castLine : null;
+  const originalHook = typeof window.hookFishFromTarget === 'function' && window.hookFishFromTarget.__aquaV551Proxy !== true ? window.hookFishFromTarget : null;
+  const originalReel = typeof window.reelAction === 'function' && window.reelAction.__aquaV551Proxy !== true ? window.reelAction : null;
+  state.originals.cast = originalCast || state.originals.cast;
+  state.originals.hook = originalHook || state.originals.hook;
+  state.originals.reel = originalReel || state.originals.reel;
 
   window.castLine = function aquaV551CastProxy(...args) {
-    if (v53()?.fishing?.startCast) return guardedCast(args[0]);
-    return originalCast?.apply(this, args);
+    if (state.inCastProxy) return undefined;
+    state.inCastProxy = true;
+    try {
+      if (v53()?.fishing?.startCast) return guardedCast(args[0]);
+      return state.originals.cast?.apply(this, args);
+    } finally { state.inCastProxy = false; }
   };
+  window.castLine.__aquaV551Proxy = true;
   window.hookFishFromTarget = function aquaV551HookProxy(...args) {
-    if (v53()?.fishing?.hook) return guardedHook(args[0]);
-    return originalHook?.apply(this, args);
+    if (state.inHookProxy) return undefined;
+    state.inHookProxy = true;
+    try {
+      if (v53()?.fishing?.hook) return guardedHook(args[0]);
+      return state.originals.hook?.apply(this, args);
+    } finally { state.inHookProxy = false; }
   };
+  window.hookFishFromTarget.__aquaV551Proxy = true;
   window.reelAction = function aquaV551ReelProxy(...args) {
-    const current = String(phase()).toUpperCase();
-    if (v53()?.fishing?.setDown && current === 'REELING') return guardedReel(args[0], true);
-    return originalReel?.apply(this, args);
+    if (state.inReelProxy) return undefined;
+    state.inReelProxy = true;
+    try {
+      const current = String(phase()).toUpperCase();
+      if (v53()?.fishing?.setDown && current === 'REELING') return guardedReel(args[0], true);
+      return state.originals.reel?.apply(this, args);
+    } finally { state.inReelProxy = false; }
   };
+  window.reelAction.__aquaV551Proxy = true;
 }
 
 async function clearOldCaches(forceReload = false) {

@@ -239,14 +239,19 @@ function bindExistingControls() {
 }
 
 function patchGlobals() {
-  if (state.patched || !window.reelAction) return;
+  if (state.patched || !window.reelAction || window.reelAction.__aquaV49ActionProxy === true) return;
   state.patched = true;
   const originalReel = window.reelAction;
   window.reelAction = function patchedReelAction(...args) {
-    const result = originalReel.apply(this, args);
-    spawnTouchFx(50 + (Math.random() - 0.5) * 16, 56 + (Math.random() - 0.5) * 10);
-    return result;
+    if (state.inReelProxy) return undefined;
+    state.inReelProxy = true;
+    try {
+      const result = originalReel.apply(this, args);
+      spawnTouchFx(50 + (Math.random() - 0.5) * 16, 56 + (Math.random() - 0.5) * 10);
+      return result;
+    } finally { state.inReelProxy = false; }
   };
+  window.reelAction.__aquaV49ActionProxy = true;
   window.AquaV49ActionMobile = {
     version: VERSION,
     isLowEnd: () => state.lowEnd,

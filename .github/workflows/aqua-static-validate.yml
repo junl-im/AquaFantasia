@@ -1,9 +1,6 @@
-name: Aqua Fantasia Static Validation
+name: Aqua Fantasia Static Validation Manual Only
 
 on:
-  push:
-    branches: [ main, master ]
-  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -40,3 +37,6 @@ jobs:
         run: npm run audit
       - name: Atlas check
         run: npm run atlas:check
+      - name: Duplicate automatic workflow disabled
+        run: |
+          echo "This workflow is manual-only. Push validation and deploy run in .github/workflows/pages.yml."

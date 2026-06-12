@@ -6,7 +6,6 @@ const exists = (file) => { try { statSync(join(root, file)); return true; } catc
 function fail(message) { console.error(`[check-v552] ${message}`); process.exit(1); }
 
 const required = [
-  '.github/workflows/aqua-static-validate.yml',
   'src/runtime/v552-ci-runtime-guard.js',
   'tools/check-v552-ci-hotfix.mjs',
   'PATCH_NOTES_v5.5.2.md',
@@ -14,8 +13,12 @@ const required = [
   'reports/v5.5.2-runtime-ci-hotfix-audit.md',
 ];
 required.forEach((file) => { if (!exists(file)) fail(`missing ${file}`); });
+if (!exists('.github/workflows/pages.yml') && !exists('.github/workflows/aqua-static-validate.yml')) fail('missing GitHub Actions validation workflow');
 
-const workflow = read('.github/workflows/aqua-static-validate.yml');
+const workflow = [
+  exists('.github/workflows/pages.yml') ? read('.github/workflows/pages.yml') : '',
+  exists('.github/workflows/aqua-static-validate.yml') ? read('.github/workflows/aqua-static-validate.yml') : '',
+].join('\n');
 const index = read('index.html');
 const sw = read('sw.js');
 const runtime = read('src/runtime/v552-ci-runtime-guard.js');

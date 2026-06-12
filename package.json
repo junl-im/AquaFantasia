@@ -36,5 +36,5 @@
   "devDependencies": {
     "typescript": "latest"
   },
-  "description": "Aqua Fantasia v5.5.2 Runtime & GitHub Actions CI Hotfix: keeps v5.5.1 runtime guards, cache-busts modules, and migrates validation workflow to Node 24 actions."
+  "description": "Aqua Fantasia v5.5.4 Stack Guard: single automatic Actions flow plus runtime recursion guard overlay."
 }

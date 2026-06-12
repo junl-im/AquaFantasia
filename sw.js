@@ -72,6 +72,7 @@ const CORE_ASSETS = [
   "./src/runtime/v55-mobile-feel-runtime.js",
   "./src/runtime/v551-hotfix-runtime.js",
   "./src/runtime/v552-ci-runtime-guard.js",
+  "./src/runtime/v554-stack-guard.js",
   "./src/runtime/v49-action-mobile-patch.js",
   "./src/systems/shop.js",
   "./src/runtime/v53-casual-ux-polish.js",
