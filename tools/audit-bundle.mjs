@@ -11,7 +11,7 @@ const refs = [...index.matchAll(/assets\/(?:art|icons|images|atlas|ui-kit)\/[^'"
 const missing = [...new Set(refs)].filter((ref) => { try { statSync(join(root, ref)); return false; } catch { return true; } });
 const duplicateFishIds = fish.length - new Set(fish.map((item) => item.id)).size;
 const report = {
-  version: '5.6.0',
+  version: '5.7.0',
   indexBytes: bytes('index.html'),
   indexLines: index.split('\n').length,
   serviceWorkerBytes: bytes('sw.js'),
@@ -31,6 +31,8 @@ const report = {
     mobileFeel55: index.includes('v55-mobile-feel-runtime.js') && index.includes('MOBILE FEEL 5.5') && (sw.includes('aqua-fantasia-v5.5.0-mobile-feel-20260612') || sw.includes('aqua-fantasia-v5.5.1-hotfix-20260612') || sw.includes('aqua-fantasia-v5.5.2-runtime-ci-hotfix-20260612') || sw.includes('aqua-fantasia-v5.5.5-auto-cache-sweep-20260612') || sw.includes('aqua-fantasia-v5.6.0-background-art-20260612')),
     autoCache555: index.includes('v555-auto-cache-sweep.js') && sw.includes('./src/runtime/v555-auto-cache-sweep.js') && sw.includes('AQUA_FORCE_CACHE_SWEEP'),
     backgroundArt56: index.includes('v56-background-art-pass.js') && sw.includes('./src/runtime/v56-background-art-pass.js') && sw.includes('v56_fishing_bg_lake.webp'),
+    uiStateCleanup561: index.includes('v561-ui-state-cleanup.js') && sw.includes('./src/runtime/v561-ui-state-cleanup.js') && index.includes('v5.6.1 UI State Cleanup'),
+    waterArt57: index.includes('v57-water-art-direction.js') && sw.includes('./src/runtime/v57-water-art-direction.js') && sw.includes('v57_fishing_bg_lake_master.webp'),
     runtimeHotfix551: index.includes('v551-hotfix-runtime.js') && sw.includes('./src/runtime/v551-hotfix-runtime.js'),
     ciHotfix552: index.includes('v552-ci-runtime-guard.js') && sw.includes('./src/runtime/v552-ci-runtime-guard.js'),
     renderer47: index.includes('initV47RendererRuntime') && index.includes('v47-fishing-canvas'),
@@ -43,4 +45,4 @@ const report = {
   }
 };
 console.log(JSON.stringify(report, null, 2));
-if (missing.length || duplicateFishIds || fish.length < 174 || !report.runtime.runtimeDiet48 || !report.runtime.runtimeConnect49 || !report.runtime.performanceFocus50 || !report.runtime.stabilityAssist51 || !report.runtime.casualUX53 || !report.runtime.resultShop54 || !report.runtime.mobileFeel55 || !report.runtime.runtimeHotfix551 || !report.runtime.ciHotfix552 || !report.runtime.autoCache555 || !report.runtime.backgroundArt56 || !report.runtime.renderer47 || !report.runtime.lightServiceWorker || !report.runtime.mobileGuards) process.exit(1);
+if (missing.length || duplicateFishIds || fish.length < 174 || !report.runtime.runtimeDiet48 || !report.runtime.runtimeConnect49 || !report.runtime.performanceFocus50 || !report.runtime.stabilityAssist51 || !report.runtime.casualUX53 || !report.runtime.resultShop54 || !report.runtime.mobileFeel55 || !report.runtime.runtimeHotfix551 || !report.runtime.ciHotfix552 || !report.runtime.autoCache555 || !report.runtime.backgroundArt56 || !report.runtime.uiStateCleanup561 || !report.runtime.waterArt57 || !report.runtime.renderer47 || !report.runtime.lightServiceWorker || !report.runtime.mobileGuards) process.exit(1);

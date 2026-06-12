@@ -6,7 +6,7 @@
 // 3) GitHub Actions Node 24 마이그레이션 패치가 적용된 빌드임을 런타임/검증 도구가 확인할 수 있게 합니다.
 
 const VERSION = '5.5.2-runtime-ci-hotfix';
-const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.6.0-background-art-20260612';
+const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.7.0-water-art-20260612';
 const BOOT_KEY = 'aqua_v5.5.2_runtime_ci_hotfix_boot';
 const state = {
   booted: false,
@@ -35,12 +35,11 @@ function ensureStyle() {
 }
 
 function ensureBadge() {
-  if (byId('aqua-v552-badge')) return;
-  const badge = document.createElement('div');
-  badge.id = 'aqua-v552-badge';
-  badge.className = 'aqua-v552-runtime-badge';
-  badge.textContent = 'v5.5.2 Node24 OK';
-  document.body.appendChild(badge);
+  // v5.6.1 production cleanup: keep the Node24 OK marker for CI checks,
+  // but do not render a player-facing runtime badge anymore.
+  const marker = 'v5.5.2 Node24 OK';
+  if (byId('aqua-v552-badge')) byId('aqua-v552-badge')?.remove?.();
+  return marker;
 }
 
 function ensureErrorCard() {

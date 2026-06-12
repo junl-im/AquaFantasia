@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Aqua Fantasia - v5.7.0 Water Art Direction - high quality regional backgrounds, animated water, auto cache sweep">
+    <meta name="description" content="Aqua Fantasia - v5.6.1 UI State Cleanup - player-facing HUD cleanup, background art, auto cache sweep">
     <meta name="theme-color" content="#082f49">
-    <meta name="aqua-patch" content="v5.7.0 Water Art Direction + Auto Cache Sweep / overwrite-safe / 2026-06-12">
+    <meta name="aqua-patch" content="v5.6.1 UI State Cleanup + Auto Cache Sweep / overwrite-safe / 2026-06-12">
     <!-- v5.5 Mobile Feel legacy marker for validation; runtime hotfixed by v5.5.1 and CI hotfixed by v5.5.2 -->
-    <!-- v5.5.2 Runtime & CI Hotfix legacy marker retained under v5.7.0 -->
     <meta name="color-scheme" content="dark">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,36 +32,33 @@
     <link rel="preload" as="image" href="assets/art/v55_mobile_feel_panel.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/atlas/aqua_fishing_v49.webp" type="image/webp">
     
-    <link rel="preload" as="image" href="assets/art/v57_fishing_bg_lake_master.webp" type="image/webp">
-    <link rel="preload" as="image" href="assets/art/v57_fishing_bg_river_master.webp" type="image/webp">
-    <link rel="preload" as="image" href="assets/art/v57_fishing_bg_harbor_master.webp" type="image/webp">
-    <link rel="preload" as="image" href="assets/art/v57_water_ripple_overlay.webp" type="image/webp">
+    <link rel="preload" as="image" href="assets/art/v56_fishing_bg_lake.webp" type="image/webp">
+    <link rel="preload" as="image" href="assets/art/v56_fishing_bg_harbor.webp" type="image/webp">
+    <link rel="preload" as="image" href="assets/art/v56_fishing_bg_deep.webp" type="image/webp">
     <link rel="preload" as="image" href="assets/art/v363_painterly_ocean.png" type="image/png">
     <link rel="preload" as="image" href="assets/ui-kit/fishing_minigame/bobber_large.png" type="image/png">
     <link rel="preload" as="image" href="assets/ui-kit/icons/water_ripple.png" type="image/png">
     <!-- v5.5.5 Auto Cache Sweep: 모든 런타임보다 먼저 오래된 PWA 캐시를 자동 정리 -->
-    <script src="./src/runtime/v555-auto-cache-sweep.js?v=5.7.0"></script>
+    <script src="./src/runtime/v555-auto-cache-sweep.js?v=5.6.1"></script>
     <!-- v5.6.0 Background Art Pass: 텍스트가 박힌 임시 배경을 지역별 WebP 원화풍 배경으로 교체 -->
-    <script type="module" src="./src/runtime/v56-background-art-pass.js?v=5.7.0"></script>
-    <!-- v5.7.0 Water Art Direction: painterly regional water backgrounds + animated water layers -->
-    <script src="./src/runtime/v57-water-art-direction.js?v=5.7.0"></script>
-    <script type="module" src="./src/runtime/v49-pixi-runtime.js?v=5.7.0"></script>
-    <script type="module" src="./src/runtime/v50-performance-runtime.js?v=5.7.0"></script>
-    <script type="module" src="./src/runtime/v51-stability-runtime.js?v=5.7.0"></script>
-    <script type="module" src="./src/runtime/v53-casual-ux-polish.js?v=5.7.0"></script>
-    <script type="module" src="./src/runtime/v54-result-shop-polish.js?v=5.7.0"></script>
+    <script type="module" src="./src/runtime/v56-background-art-pass.js?v=5.6.1"></script>
+    <script type="module" src="./src/runtime/v49-pixi-runtime.js?v=5.6.1"></script>
+    <script type="module" src="./src/runtime/v50-performance-runtime.js?v=5.6.1"></script>
+    <script type="module" src="./src/runtime/v51-stability-runtime.js?v=5.6.1"></script>
+    <script type="module" src="./src/runtime/v53-casual-ux-polish.js?v=5.6.1"></script>
+    <script type="module" src="./src/runtime/v54-result-shop-polish.js?v=5.6.1"></script>
     <!-- v4.9 Action Mobile Patch legacy marker: runtime remains loaded under v5.5 -->
-    <script type="module" src="./src/runtime/v49-action-mobile-patch.js?v=5.7.0"></script>
+    <script type="module" src="./src/runtime/v49-action-mobile-patch.js?v=5.6.1"></script>
     <!-- MOBILE FEEL 5.5: touch-wide bite, press/release reel, cache guard -->
-    <script type="module" src="./src/runtime/v55-mobile-feel-runtime.js?v=5.7.0"></script>
+    <script type="module" src="./src/runtime/v55-mobile-feel-runtime.js?v=5.6.1"></script>
     <!-- HOTFIX 5.5.1: prevent legacy inline fishing loop from running beside v5.3 runtime -->
-    <script type="module" src="./src/runtime/v551-hotfix-runtime.js?v=5.7.0"></script>
+    <script type="module" src="./src/runtime/v551-hotfix-runtime.js?v=5.6.1"></script>
     <!-- HOTFIX 5.5.2: GitHub Actions Node 24 marker and runtime recovery guard -->
-    <script type="module" src="./src/runtime/v552-ci-runtime-guard.js?v=5.7.0"></script>
+    <script type="module" src="./src/runtime/v552-ci-runtime-guard.js?v=5.6.1"></script>
     <!-- v5.5.4 Stack Guard: 누적 런타임 재귀 호출 차단 및 초기화 단계 격리 -->
-    <script type="module" src="./src/runtime/v554-stack-guard.js?v=5.7.0"></script>
+    <script type="module" src="./src/runtime/v554-stack-guard.js?v=5.6.1"></script>
     <!-- v5.6.1 UI State Cleanup: hide debug badges, quick action leftovers, and off-screen fishing HUD -->
-    <script src="./src/runtime/v561-ui-state-cleanup.js?v=5.7.0"></script>
+    <script src="./src/runtime/v561-ui-state-cleanup.js?v=5.6.1"></script>
 
     <script>
     /* v4.3 Early Fullscreen Primer: attaches before app boot, then upgrades to the full game shell after the first real gesture. */
@@ -96,7 +92,7 @@
       document.addEventListener('keydown', attempt, { once:true, capture:true });
     })();
     </script>
-    <title>Aqua Fantasia • v5.7.0 Water Art Direction</title>
+    <title>Aqua Fantasia • v5.5.2 Runtime & CI Hotfix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -2388,9 +2384,8 @@ body.ui-v51 .v46-engine-panel, body.ui-v51 .v47-renderer-panel, body.ui-v51 .v48
 
 </style>
     <!-- CASUAL RESULT SHOP 5.4 runtime marker -->
-    <!-- v5.7.0 Water Art Direction Pass: regional painterly water backgrounds + animated surface overlays -->
 </head>
-<body class="bg-[#0a3d5c] text-white antialiased aqua-v56-bg-art aqua-v57-water-art">
+<body class="bg-[#0a3d5c] text-white antialiased aqua-v56-bg-art">
 <div id="app-shell" class="max-w-md mx-auto min-h-screen flex flex-col shadow-2xl border-x border-white/10 bg-[#0a3d5c]">
     <div class="v30-atmosphere" aria-hidden="true"></div>
     <div id="v30-smart-dock" class="v30-smart-dock hidden" aria-label="빠른 게임 액션"></div>
@@ -3144,7 +3139,7 @@ let graphicsMode = localStorage.getItem('aqua_graphics_mode') || (() => {
     return (mobileLike || saveData || lowMemory || lowCores) ? 'low' : 'high';
 })();
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '5.7.0';
+const APP_VERSION = '5.6.1';
 function versionAtLeast(minVersion) {
     const parse = (value) => String(value || '0').split('.').map((part) => Number(part) || 0);
     const current = parse(APP_VERSION);

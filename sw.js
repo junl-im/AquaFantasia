@@ -1,4 +1,6 @@
-const CACHE_VERSION = 'aqua-fantasia-v5.6.0-background-art-20260612';
+const CACHE_VERSION = 'aqua-fantasia-v5.7.0-water-art-20260612';
+// aqua-fantasia-v5.6.1-ui-cleanup-20260612 legacy marker for migration audit
+// aqua-fantasia-v5.6.0-background-art-20260612 legacy marker for migration audit
 // aqua-fantasia-v5.5.5-auto-cache-sweep-20260612 legacy marker for migration audit
 // aqua-fantasia-v5.5.2-runtime-ci-hotfix-20260612 legacy marker for migration audit
 // aqua-fantasia-v5.5.1-hotfix-20260612 legacy marker for migration audit
@@ -71,6 +73,14 @@ const CORE_ASSETS = [
   "./assets/art/v56_fishing_bg_deep.webp",
   "./assets/art/v56_fishing_bg_palace.webp",
   "./assets/art/v56_fishing_bg_dimension.webp",
+  "./assets/art/v57_fishing_bg_lake_master.webp",
+  "./assets/art/v57_fishing_bg_river_master.webp",
+  "./assets/art/v57_fishing_bg_harbor_master.webp",
+  "./assets/art/v57_fishing_bg_deep_master.webp",
+  "./assets/art/v57_fishing_bg_palace_master.webp",
+  "./assets/art/v57_fishing_bg_dimension_master.webp",
+  "./assets/art/v57_water_ripple_overlay.webp",
+  "./assets/art/v57_water_caustics_overlay.webp",
   "./assets/art/v363_painterly_ocean.png",
   "./src/ui/navigator.js",
   "./src/systems/inventory.js",
@@ -83,6 +93,8 @@ const CORE_ASSETS = [
   "./src/runtime/v554-stack-guard.js",
   "./src/runtime/v555-auto-cache-sweep.js",
   "./src/runtime/v56-background-art-pass.js",
+  "./src/runtime/v57-water-art-direction.js",
+  "./src/runtime/v561-ui-state-cleanup.js",
   "./src/runtime/v49-action-mobile-patch.js",
   "./src/systems/shop.js",
   "./src/runtime/v53-casual-ux-polish.js",
