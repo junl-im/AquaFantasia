@@ -1,44 +1,41 @@
-# AquaFantasia v4.9 Pixi Runtime Connect
+# AquaFantasia v4.9 Action Mobile Patch
 
-# Aqua Fantasia v4.7 Pixi Fishing Renderer
+모바일 웹 낚시 게임 **Aqua Fantasia**의 GitHub Pages / Firebase Spark / PWA 기준 덮어쓰기 패치입니다.
 
-모바일 웹 낚시 게임 최적화 엔진 전환 패치입니다. 기존 정적 PWA를 유지하면서 낚시 화면을 Canvas/PixiJS 브릿지로 점진 이전합니다.
+업로드된 ZIP은 설명상 v4.8 통파일이었지만 실제 파일에는 v4.9~v5.4 누적 런타임과 문서가 포함되어 있었습니다. 이번 패치는 기존 v5.4 검증 스크립트를 깨지 않도록 유지하면서, 요청 우선순위인 v4.9 모바일 액션 낚시와 성능·UI·PWA 캐시 안정성을 오버레이 방식으로 보강합니다.
 
-# AquaFantasia
+## 핵심 실행 파일
 
-GitHub Pages 무료 배포용 모바일 웹 낚시 RPG입니다. 현재 패치: **v4.3 Fullscreen Performance Boost
+- `index.html` - GitHub Pages용 메인 통파일
+- `sw.js` - PWA Service Worker
+- `manifest.webmanifest` - PWA 매니페스트
+- `src/runtime/v49-action-mobile-patch.js` - v4.9 모바일 액션 런타임 패치
+- `AquaFantasia_v4.9_CLEAN_UNIFIED.html` - 정리된 통파일 사본
+- `AquaFantasia_v4.9_standalone_phaser.html` - Phaser.js 단일 HTML 프로토타입
 
-- 실행: `index.html`
-- 데이터: `data/fish.json`
-- PWA: `manifest.webmanifest`, `sw.js`
-- 자동 검증: `npm run validate`, `npm run audit`
-- 모듈 분리 준비: `src/`, `docs/ARCHITECTURE_v3.6.md`
-
-
-## v3.7 Masterpiece Art & Performance
-원화풍 SVG 아트팩, v3.7 Art Director, 모바일 렉 저감 캐시 정책이 적용되었습니다.
-
-## v3.8 Action Fishing UI
-실전 낚시 화면의 터치 위치, 릴 감기 액션, UI 겹침 정리, 모바일 성능 보호 패치가 적용되었습니다.
-
-
-## v4.6 Engine Atlas Optimization
-
-이번 패치는 기존 정적 PWA를 깨지 않으면서 Vite, TypeScript, PixiJS 8, Howler.js, Firebase modular SDK, WebP Atlas 기반 엔진 전환을 준비합니다.
-
-현재 GitHub Pages 배포는 계속 `index.html` 중심으로 안정 실행됩니다. `src/` 폴더와 `vite.config.ts`는 다음 단계에서 낚시 렌더러와 오디오/상태 로직을 실제 모듈로 분리하기 위한 스캐폴드입니다.
-
-검증:
+## 검증
 
 ```bash
 npm run validate
 npm run audit
-npm run atlas:check
+npm run runtime:check
+npm run runtime49:action
 ```
 
-개발 모드:
+GitHub Actions는 기존 `.github/workflows/pages.yml` 경로를 유지합니다.
 
-```bash
-npm install
-npm run dev
-```
+## 배포
+
+1. ZIP 내용을 기존 프로젝트 루트에 덮어씁니다.
+2. GitHub Desktop에서 변경 파일을 확인합니다.
+3. 커밋 후 `main` 브랜치에 푸시합니다.
+4. GitHub Pages Actions가 자동으로 정적 검증 후 배포합니다.
+
+## v4.9 패치 포인트
+
+- CAST 버튼 squash/stretch 체감 보강
+- 찌 포물선/둥실/입질 말풍선/터치 링 런타임 오버레이
+- 릴 단계 “꾹 눌러 릴 감기” 모바일 조작 연결
+- 낚시 화면 UI 겹침 제거
+- 저사양/Save-Data/Reduce Motion 자동 라이트 모드
+- Service Worker 캐시 버전 갱신 및 캐시 클리어 메시지 지원

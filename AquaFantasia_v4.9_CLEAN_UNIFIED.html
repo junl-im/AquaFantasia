@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Aqua Fantasia - v5.5.2 Runtime & CI Hotfix - 실행 오류·캐시·Node 24 검증 수정">
+    <meta name="description" content="Aqua Fantasia - v4.9 Action Mobile Patch over v5.4 Clean Bundle - 모바일 액션 낚시·UI 겹침·캐시 최적화">
     <meta name="theme-color" content="#082f49">
-    <meta name="aqua-patch" content="v5.5.2 Runtime & CI Hotfix / overwrite-safe / 2026-06-12">
-    <!-- v5.5 Mobile Feel legacy marker for validation; runtime hotfixed by v5.5.1 and CI hotfixed by v5.5.2 -->
+    <meta name="aqua-patch" content="v4.9 Action Mobile Runtime Patch / overwrite-safe / 2026-06-12">
     <meta name="color-scheme" content="dark">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,25 +28,17 @@
     <link rel="preload" as="image" href="assets/art/v49_pixi_runtime_stage.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/art/v50_fishing_focus_stage.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/art/v50_runtime_console.svg" type="image/svg+xml">
-    <link rel="preload" as="image" href="assets/art/v55_mobile_feel_panel.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/atlas/aqua_fishing_v49.webp" type="image/webp">
     
     <link rel="preload" as="image" href="assets/art/v363_painterly_ocean.png" type="image/png">
     <link rel="preload" as="image" href="assets/ui-kit/fishing_minigame/bobber_large.png" type="image/png">
     <link rel="preload" as="image" href="assets/ui-kit/icons/water_ripple.png" type="image/png">
-    <script type="module" src="./src/runtime/v49-pixi-runtime.js?v=5.5.2"></script>
-    <script type="module" src="./src/runtime/v50-performance-runtime.js?v=5.5.2"></script>
-    <script type="module" src="./src/runtime/v51-stability-runtime.js?v=5.5.2"></script>
-    <script type="module" src="./src/runtime/v53-casual-ux-polish.js?v=5.5.2"></script>
-    <script type="module" src="./src/runtime/v54-result-shop-polish.js?v=5.5.2"></script>
-    <!-- v4.9 Action Mobile Patch legacy marker: runtime remains loaded under v5.5 -->
-    <script type="module" src="./src/runtime/v49-action-mobile-patch.js?v=5.5.2"></script>
-    <!-- MOBILE FEEL 5.5: touch-wide bite, press/release reel, cache guard -->
-    <script type="module" src="./src/runtime/v55-mobile-feel-runtime.js?v=5.5.2"></script>
-    <!-- HOTFIX 5.5.1: prevent legacy inline fishing loop from running beside v5.3 runtime -->
-    <script type="module" src="./src/runtime/v551-hotfix-runtime.js?v=5.5.2"></script>
-    <!-- HOTFIX 5.5.2: GitHub Actions Node 24 marker and runtime recovery guard -->
-    <script type="module" src="./src/runtime/v552-ci-runtime-guard.js?v=5.5.2"></script>
+    <script type="module" src="./src/runtime/v49-pixi-runtime.js"></script>
+    <script type="module" src="./src/runtime/v50-performance-runtime.js"></script>
+    <script type="module" src="./src/runtime/v51-stability-runtime.js"></script>
+    <script type="module" src="./src/runtime/v53-casual-ux-polish.js"></script>
+    <script type="module" src="./src/runtime/v54-result-shop-polish.js"></script>
+    <script type="module" src="./src/runtime/v49-action-mobile-patch.js"></script>
 
     <script>
     /* v4.3 Early Fullscreen Primer: attaches before app boot, then upgrades to the full game shell after the first real gesture. */
@@ -81,7 +72,7 @@
       document.addEventListener('keydown', attempt, { once:true, capture:true });
     })();
     </script>
-    <title>Aqua Fantasia • v5.5.2 Runtime & CI Hotfix</title>
+    <title>Aqua Fantasia • v4.9 Action Mobile Patch</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -3128,7 +3119,7 @@ let graphicsMode = localStorage.getItem('aqua_graphics_mode') || (() => {
     return (mobileLike || saveData || lowMemory || lowCores) ? 'low' : 'high';
 })();
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '5.5.2';
+const APP_VERSION = '5.4.0';
 function versionAtLeast(minVersion) {
     const parse = (value) => String(value || '0').split('.').map((part) => Number(part) || 0);
     const current = parse(APP_VERSION);
@@ -3723,8 +3714,7 @@ async function initPWA() {
     window.addEventListener('offline', updatePWAStatus);
     if ('serviceWorker' in navigator) {
         try {
-            const reg = await navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' });
-            reg.update?.().catch?.(() => {});
+            const reg = await navigator.serviceWorker.register('./sw.js');
             pwaReady = Boolean(reg.active || reg.waiting || reg.installing);
             navigator.serviceWorker.addEventListener('controllerchange', () => { pwaReady = true; updatePWAStatus(); });
         } catch (error) {
