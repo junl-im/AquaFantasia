@@ -1,4 +1,4 @@
-// Aqua Fantasia v5.5.5 Auto Cache Sweep - 전역 게임 상태 관리
+// Aqua Fantasia v5.6.0 Background Art Pass - 전역 게임 상태 관리
 // ------------------------------------------------------------
 // 역할:
 // 1) 낚시 Runtime, Fishing System, Inventory UI, Navigator가 같은 이벤트를 구독합니다.
@@ -16,7 +16,7 @@ export const GAME_PHASE = Object.freeze({
 });
 
 export const ASSETS = Object.freeze({
-  background: 'assets/art/v363_painterly_ocean.png',
+  background: 'assets/art/v56_fishing_bg_lake.webp',
   ripple: 'assets/ui-kit/icons/water_ripple.png',
   bobber: 'assets/ui-kit/fishing_minigame/bobber_large.png',
   reelBar: 'assets/ui-kit/fishing_minigame/reel_bar_220px.png',
@@ -33,8 +33,8 @@ export const ASSETS = Object.freeze({
   ],
 });
 
-export const APP_VERSION = '5.5.5';
-export const SAVE_KEYS = ['aqua_v5.5.5', 'aqua_v5.5.2', 'aqua_v5.5.1', 'aqua_v5.5', 'aqua_v5.4', 'aqua_v5.3', 'aqua_v5.2', 'aqua_v5.1', 'aqua_v5.0', 'aqua_v4.9', 'aqua_latest_state'];
+export const APP_VERSION = '5.6.0';
+export const SAVE_KEYS = ['aqua_v5.6.0', 'aqua_v5.5.5', 'aqua_v5.5.2', 'aqua_v5.5.1', 'aqua_v5.5', 'aqua_v5.4', 'aqua_v5.3', 'aqua_v5.2', 'aqua_v5.1', 'aqua_v5.0', 'aqua_v4.9', 'aqua_latest_state'];
 
 export function clamp(value, min, max) {
   return Math.max(min, Math.min(max, Number(value) || 0));

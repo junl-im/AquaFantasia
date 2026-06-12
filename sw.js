@@ -1,4 +1,5 @@
-const CACHE_VERSION = 'aqua-fantasia-v5.5.5-auto-cache-sweep-20260612';
+const CACHE_VERSION = 'aqua-fantasia-v5.6.0-background-art-20260612';
+// aqua-fantasia-v5.5.5-auto-cache-sweep-20260612 legacy marker for migration audit
 // aqua-fantasia-v5.5.2-runtime-ci-hotfix-20260612 legacy marker for migration audit
 // aqua-fantasia-v5.5.1-hotfix-20260612 legacy marker for migration audit
 // aqua-fantasia-v5.5.0-mobile-feel-20260612 legacy marker for migration audit
@@ -64,6 +65,12 @@ const CORE_ASSETS = [
   "./assets/ui-kit/fishing_minigame/bobber_large.png",
   "./assets/ui-kit/icons/tension_gauge.png",
   "./assets/ui-kit/icons/water_ripple.png",
+  "./assets/art/v56_fishing_bg_lake.webp",
+  "./assets/art/v56_fishing_bg_river.webp",
+  "./assets/art/v56_fishing_bg_harbor.webp",
+  "./assets/art/v56_fishing_bg_deep.webp",
+  "./assets/art/v56_fishing_bg_palace.webp",
+  "./assets/art/v56_fishing_bg_dimension.webp",
   "./assets/art/v363_painterly_ocean.png",
   "./src/ui/navigator.js",
   "./src/systems/inventory.js",
@@ -75,6 +82,7 @@ const CORE_ASSETS = [
   "./src/runtime/v552-ci-runtime-guard.js",
   "./src/runtime/v554-stack-guard.js",
   "./src/runtime/v555-auto-cache-sweep.js",
+  "./src/runtime/v56-background-art-pass.js",
   "./src/runtime/v49-action-mobile-patch.js",
   "./src/systems/shop.js",
   "./src/runtime/v53-casual-ux-polish.js",

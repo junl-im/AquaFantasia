@@ -24,7 +24,7 @@ export interface FishingRuntimeFrame {
 }
 
 const ASSET = {
-  background: 'assets/art/v363_painterly_ocean.png',
+  background: 'assets/art/v56_fishing_bg_lake.webp',
   ripple: 'assets/ui-kit/icons/water_ripple.png',
   bobber: 'assets/ui-kit/fishing_minigame/bobber_large.png',
   reelBar: 'assets/ui-kit/fishing_minigame/reel_bar_220px.png',

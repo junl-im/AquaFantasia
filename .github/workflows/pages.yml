@@ -1,8 +1,8 @@
-name: Aqua Fantasia Validate & Deploy Pages
+name: Aqua Fantasia Pages Validate
 
 on:
   push:
-    branches: ["main", "master"]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -10,67 +10,37 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
-concurrency:
-  group: aqua-fantasia-pages-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  validate-and-deploy:
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version: '24'
           package-manager-cache: false
-
-      - name: Runtime versions
-        run: |
-          node --version
-          npm --version
-
-      - name: Install dependencies
+      - name: Install
         run: npm install
-
-      - name: Static validation
+      - name: Static validate
         run: npm run validate
-
-      - name: TypeScript check
+      - name: Typecheck
         run: npm run typecheck
-
       - name: Runtime checks
         run: npm run runtime:check
-
       - name: Renderer checks
         run: npm run renderer:check
-
       - name: Bundle audit
         run: npm run audit
-
       - name: Atlas check
         run: npm run atlas:check
-
-      - name: Clean bundle report
+      - name: Clean report
         run: npm run clean:report
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4

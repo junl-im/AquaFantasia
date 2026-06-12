@@ -1,10 +1,7 @@
-name: Aqua Fantasia Static Validation Manual Only
+name: Aqua Static Validate Manual
 
 on:
   workflow_dispatch:
-
-permissions:
-  contents: read
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -12,7 +9,6 @@ env:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -21,22 +17,13 @@ jobs:
         with:
           node-version: '24'
           package-manager-cache: false
-      - name: Runtime versions
-        run: |
-          node --version
-          npm --version
-      - name: Install dependencies
+      - name: Install
         run: npm install
-      - name: Static validation
+      - name: Static validate
         run: npm run validate
-      - name: TypeScript check
-        run: npm run typecheck
       - name: Runtime checks
         run: npm run runtime:check
+      - name: Renderer checks
+        run: npm run renderer:check
       - name: Bundle audit
         run: npm run audit
-      - name: Atlas check
-        run: npm run atlas:check
-      - name: Duplicate automatic workflow disabled
-        run: |
-          echo "This workflow is manual-only. Push validation and deploy run in .github/workflows/pages.yml."

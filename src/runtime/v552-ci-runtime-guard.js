@@ -6,7 +6,7 @@
 // 3) GitHub Actions Node 24 마이그레이션 패치가 적용된 빌드임을 런타임/검증 도구가 확인할 수 있게 합니다.
 
 const VERSION = '5.5.2-runtime-ci-hotfix';
-const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.5.5-auto-cache-sweep-20260612';
+const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.6.0-background-art-20260612';
 const BOOT_KEY = 'aqua_v5.5.2_runtime_ci_hotfix_boot';
 const state = {
   booted: false,

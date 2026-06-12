@@ -8,7 +8,7 @@
 //    복구 버튼을 제공합니다.
 
 const VERSION = '5.5.4-stack-guard';
-const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.5.5-auto-cache-sweep-20260612';
+const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.6.0-background-art-20260612';
 const state = {
   booted: false,
   stages: [],

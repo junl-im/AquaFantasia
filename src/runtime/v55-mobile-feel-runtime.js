@@ -9,7 +9,7 @@
 import { GAME_PHASE, aquaStore, clamp, now } from '../core/state.js';
 
 const VERSION = '5.5.0-mobile-feel';
-const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.5.0-mobile-feel-20260612';
+const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.6.0-background-art-20260612';
 const SAVE_MARK = 'aqua_v5.5_mobile_feel_boot';
 const SELECTOR = {
   fishingVisual: '#fishing-visual',

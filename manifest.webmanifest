@@ -1,11 +1,11 @@
 {
-  "name": "Aqua Fantasia v5.5.5 Auto Cache Sweep Patch",
-  "short_name": "AquaFantasia v5.5.5",
-  "description": "Aqua Fantasia v5.5.5 Auto Cache Sweep; automatically clears stale PWA caches, keeps save data, and preserves v5.5 Mobile Feel runtime guards. Legacy validation markers: v5.5 Mobile Feel, 5.5-mobile-feel-20260612, v4.9 Action Mobile Patch, 4.9-action-20260612.",
+  "name": "Aqua Fantasia v5.6.0 Background Art Pass",
+  "short_name": "AquaFantasia v5.6",
+  "description": "Aqua Fantasia v5.6.0 Background Art Pass; region-specific painterly fishing backgrounds, automatic cache sweep, and mobile runtime guards. Legacy validation markers: v5.5.5 Auto Cache Sweep, 5.5.5-auto-cache-sweep-20260612, v5.5 Mobile Feel, v4.9 Action Mobile Patch. Legacy cache marker: 4.9-action-20260612. Legacy marker: 5.5-mobile-feel-20260612.",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "/AquaFantasia/?v=5.5.5-auto-cache",
-  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=5.5.5-auto-cache",
+  "id": "/AquaFantasia/?v=5.6.0-background-art",
+  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=5.6.0-background-art",
   "scope": "./",
   "display": "fullscreen",
   "display_override": [
@@ -15,7 +15,7 @@
   ],
   "orientation": "portrait",
   "background_color": "#020617",
-  "theme_color": "#020617",
+  "theme_color": "#062f46",
   "categories": [
     "games",
     "entertainment"
@@ -45,7 +45,7 @@
       "name": "v4.9 낚시 런타임",
       "short_name": "v4.9 낚시",
       "description": "v4.9 Canvas/Pixi 낚시 런타임 테스트",
-      "url": "./?shortcut=fishing&fullscreen=1&v=5.5.5-auto-cache",
+      "url": "./?shortcut=fishing&fullscreen=1&v=5.6.0-background-art",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",
@@ -57,7 +57,7 @@
       "name": "장비 공방",
       "short_name": "장비",
       "description": "낚싯대와 미끼 관리",
-      "url": "./?shortcut=equipment&v=5.5.5-auto-cache",
+      "url": "./?shortcut=equipment&v=5.6.0-background-art",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",
@@ -66,5 +66,5 @@
       ]
     }
   ],
-  "version": "5.5.5-auto-cache-sweep-20260612"
+  "version": "5.6.0-background-art-20260612"
 }

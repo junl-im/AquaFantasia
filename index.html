@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Aqua Fantasia - v5.5.5 Auto Cache Sweep + Stack Guard - 자동 PWA 캐시 정리·실행 오류 복구·모바일 런타임 안정화">
+    <meta name="description" content="Aqua Fantasia - v5.6.0 Background Art Pass - 지역별 원화풍 낚시 배경·자동 캐시 정리·모바일 안정화">
     <meta name="theme-color" content="#082f49">
-    <meta name="aqua-patch" content="v5.5.5 Auto Cache Sweep + Stack Guard / overwrite-safe / 2026-06-12">
+    <meta name="aqua-patch" content="v5.6.0 Background Art Pass + Auto Cache Sweep / overwrite-safe / 2026-06-12">
     <!-- v5.5 Mobile Feel legacy marker for validation; runtime hotfixed by v5.5.1 and CI hotfixed by v5.5.2 -->
     <meta name="color-scheme" content="dark">
     <meta name="mobile-web-app-capable" content="yes">
@@ -32,11 +32,16 @@
     <link rel="preload" as="image" href="assets/art/v55_mobile_feel_panel.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/atlas/aqua_fishing_v49.webp" type="image/webp">
     
+    <link rel="preload" as="image" href="assets/art/v56_fishing_bg_lake.webp" type="image/webp">
+    <link rel="preload" as="image" href="assets/art/v56_fishing_bg_harbor.webp" type="image/webp">
+    <link rel="preload" as="image" href="assets/art/v56_fishing_bg_deep.webp" type="image/webp">
     <link rel="preload" as="image" href="assets/art/v363_painterly_ocean.png" type="image/png">
     <link rel="preload" as="image" href="assets/ui-kit/fishing_minigame/bobber_large.png" type="image/png">
     <link rel="preload" as="image" href="assets/ui-kit/icons/water_ripple.png" type="image/png">
     <!-- v5.5.5 Auto Cache Sweep: 모든 런타임보다 먼저 오래된 PWA 캐시를 자동 정리 -->
     <script src="./src/runtime/v555-auto-cache-sweep.js?v=5.5.5"></script>
+    <!-- v5.6.0 Background Art Pass: 텍스트가 박힌 임시 배경을 지역별 WebP 원화풍 배경으로 교체 -->
+    <script type="module" src="./src/runtime/v56-background-art-pass.js?v=5.6.0"></script>
     <script type="module" src="./src/runtime/v49-pixi-runtime.js?v=5.5.5"></script>
     <script type="module" src="./src/runtime/v50-performance-runtime.js?v=5.5.5"></script>
     <script type="module" src="./src/runtime/v51-stability-runtime.js?v=5.5.5"></script>
@@ -2378,7 +2383,7 @@ body.ui-v51 .v46-engine-panel, body.ui-v51 .v47-renderer-panel, body.ui-v51 .v48
 </style>
     <!-- CASUAL RESULT SHOP 5.4 runtime marker -->
 </head>
-<body class="bg-[#0a3d5c] text-white antialiased">
+<body class="bg-[#0a3d5c] text-white antialiased aqua-v56-bg-art">
 <div id="app-shell" class="max-w-md mx-auto min-h-screen flex flex-col shadow-2xl border-x border-white/10 bg-[#0a3d5c]">
     <div class="v30-atmosphere" aria-hidden="true"></div>
     <div id="v30-smart-dock" class="v30-smart-dock hidden" aria-label="빠른 게임 액션"></div>
@@ -3132,7 +3137,7 @@ let graphicsMode = localStorage.getItem('aqua_graphics_mode') || (() => {
     return (mobileLike || saveData || lowMemory || lowCores) ? 'low' : 'high';
 })();
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '5.5.5';
+const APP_VERSION = '5.6.0';
 function versionAtLeast(minVersion) {
     const parse = (value) => String(value || '0').split('.').map((part) => Number(part) || 0);
     const current = parse(APP_VERSION);
@@ -8014,6 +8019,7 @@ function selectRegion(region) {
     playSound('select');
     haptic([6, 14]);
     gameState.currentRegion = region;
+    window.AquaV56BackgroundArt?.setBackground?.(region);
     switchScreen('fishing');
     const meta = getRegionMeta(region);
     document.getElementById('fishing-region-name').textContent = `${meta.emoji} ${region}`;

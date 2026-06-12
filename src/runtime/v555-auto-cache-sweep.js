@@ -6,8 +6,8 @@
 // 3) 스택 오류/구버전 캐시 충돌이 감지되면 1회 자동 새로고침으로 복구합니다. Maximum call stack recovery marker.
 
 (function aquaV555AutoCacheSweep() {
-  const VERSION = '5.5.5-auto-cache-sweep';
-  const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.5.5-auto-cache-sweep-20260612';
+  const VERSION = '5.6.0-background-art';
+  const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.6.0-background-art-20260612';
   const BUILD_KEY = 'aqua_runtime_build_version';
   const RELOAD_KEY = 'aqua_v555_reload_once';
   const CLEANED_KEY = 'aqua_v555_last_cleaned';
