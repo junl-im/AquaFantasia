@@ -10,7 +10,7 @@ function exists(file) { try { statSync(join(root, file)); return true; } catch {
 const required = [
   'index.html','sw.js','manifest.webmanifest','offline.html','data/fish.json','package.json',
   'firebase.json','firestore.rules','storage.rules','vite.config.ts','tsconfig.json',
-  'src/main.ts','src/engine/pixiStage.ts','src/engine/fishingRenderer.ts','src/engine/performanceGovernor.ts',
+  'src/main.ts','src/types/vendor-shims.d.ts','src/engine/pixiStage.ts','src/engine/fishingRenderer.ts','src/engine/performanceGovernor.ts',
   'assets/atlas/aqua_fishing_v47.webp','assets/atlas/aqua_fishing_v47.atlas.json',
   'assets/atlas/aqua_fishing_v48.webp','assets/atlas/aqua_fishing_v48.atlas.json',
   'assets/atlas/aqua_fishing_v49.webp','assets/atlas/aqua_fishing_v49.atlas.json',
@@ -21,6 +21,7 @@ const required = [
   'PATCH_NOTES_v4.9.md','V4_9_RUNTIME_CONNECT_CHECKLIST.md','PATCH_NOTES_v5.0.md','V5_0_PERFORMANCE_FOCUS_CHECKLIST.md','PATCH_NOTES_v5.1.md','V5_1_STABILITY_ASSIST_CHECKLIST.md',
   'tools/audit-bundle.mjs','tools/check-v47-renderer.mjs','tools/check-v48-runtime.mjs','tools/check-v49-runtime.mjs','tools/check-v50-runtime.mjs','tools/check-v51-runtime.mjs','tools/clean-bundle-report.mjs',
   'src/runtime/v52-casual-runtime.js','tools/check-v52-casual-refactor.mjs','src/runtime/v53-casual-ux-polish.js','tools/check-v53-casual-ux-polish.mjs','src/runtime/v54-result-shop-polish.js','src/systems/shop.js','tools/check-v54-result-shop-polish.mjs',
+  'src/runtime/v55-mobile-feel-runtime.js','assets/art/v55_mobile_feel_panel.svg','tools/check-v55-mobile-feel.mjs','.github/workflows/aqua-static-validate.yml',
   'assets/art/v363_painterly_ocean.png','assets/ui-kit/icons/water_ripple.png','assets/ui-kit/icons/tension_gauge.png',
   'assets/ui-kit/fishing_minigame/bobber_large.png','assets/ui-kit/fishing_minigame/reel_bar_220px.png','assets/ui-kit/panels/panel_1.png',
   'assets/ui-kit/icons/fish_1.png','assets/ui-kit/icons/fish_2.png','assets/ui-kit/icons/fish_3.png','assets/ui-kit/icons/fish_4.png','assets/ui-kit/icons/fish_5.png','assets/ui-kit/icons/fish_6.png',
@@ -34,7 +35,7 @@ const fishJson = JSON.parse(read('data/fish.json'));
 const fish = fishJson.fish || [];
 
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!index.includes("const APP_VERSION = '5.4.0'")) fail('APP_VERSION must be 5.3.0.');
+if (!index.includes("const APP_VERSION = '5.5.0'")) fail('APP_VERSION must be 5.5.0.');
 if (!index.includes('v5.4 Casual Result & Shop Polish') && !index.includes('CASUAL RESULT SHOP 5.4')) fail('v5.3 casual UX marker is missing.');
 if (!index.includes('v5.1 Stability Assist') && !index.includes('STABILITY 5.1')) fail('v5.1 stability assist marker is missing.');
 if (!index.includes('initV51Runtime') || !index.includes('renderV51StabilityPanel') || !index.includes('v51-stability-panel')) fail('v5.1 stability runtime/panel is missing.');
@@ -53,12 +54,14 @@ if (/\bFISH_DB\b/.test(index)) fail('legacy FISH_DB reference found.');
 if (/\bgetCurrentWeekKey\b/.test(index)) fail('legacy getCurrentWeekKey reference found.');
 if ((index.match(/data-region=\"차원의 바다\"/g) || []).length > 1) fail('Duplicate Dimension Sea village card found.');
 
-if (!sw.includes('aqua-fantasia-v5.4.0')) fail('Service worker cache version must be v5.4.0.');
+if (!sw.includes('aqua-fantasia-v5.5.0-mobile-feel-20260612')) fail('Service worker cache version must be v5.5.0 mobile feel.');
 if (!sw.includes('./assets/atlas/aqua_fishing_v49.webp') || !sw.includes('./assets/art/v49_runtime_panel.svg')) fail('v4.9 cache entries are missing.');
 if (!sw.includes('./assets/atlas/aqua_fishing_v50.webp') || !sw.includes('./assets/art/v50_runtime_console.svg')) fail('v5.0 cache entries are missing.');
 if (!sw.includes('./assets/atlas/aqua_fishing_v51.webp') || !sw.includes('./assets/art/v51_stability_console.svg')) fail('v5.1 cache entries are missing.');
 if (!sw.includes('./src/runtime/v53-casual-ux-polish.js') || !sw.includes('./assets/ui-kit/icons/water_ripple.png')) fail('v5.3 cache entries are missing.');
 if (!sw.includes('./src/runtime/v54-result-shop-polish.js') || !sw.includes('./src/systems/shop.js')) fail('v5.4 cache entries are missing.');
+if (!index.includes('v55-mobile-feel-runtime.js') || !index.includes('MOBILE FEEL 5.5')) fail('v5.5 mobile feel runtime/panel is missing.');
+if (!sw.includes('./src/runtime/v55-mobile-feel-runtime.js') || !sw.includes('./assets/art/v55_mobile_feel_panel.svg') || !sw.includes('keepPrefix')) fail('v5.5 cache entries are missing.');
 if (sw.includes('./assets/art/v31_director_stage.svg')) fail('legacy bulk SVG precache found in service worker.');
 if (!manifest.display || manifest.display !== 'fullscreen') fail('manifest display must be fullscreen.');
 if (!Array.isArray(manifest.icons) || manifest.icons.length < 3) fail('manifest icons are incomplete.');
@@ -90,4 +93,4 @@ scripts.forEach((script, idx) => {
   }
 });
 
-console.log('[validate-static] AquaFantasia v5.4 static bundle OK.');
+console.log('[validate-static] AquaFantasia v5.5 static bundle OK.');

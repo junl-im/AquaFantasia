@@ -11,7 +11,7 @@ const refs = [...index.matchAll(/assets\/(?:art|icons|images|atlas|ui-kit)\/[^'"
 const missing = [...new Set(refs)].filter((ref) => { try { statSync(join(root, ref)); return false; } catch { return true; } });
 const duplicateFishIds = fish.length - new Set(fish.map((item) => item.id)).size;
 const report = {
-  version: '5.4.0',
+  version: '5.5.0',
   indexBytes: bytes('index.html'),
   indexLines: index.split('\n').length,
   serviceWorkerBytes: bytes('sw.js'),
@@ -28,6 +28,7 @@ const report = {
     casualRefactor52: index.includes('v52-casual-runtime.js') || read('package.json').includes('runtime52'),
     casualUX53: index.includes('v53-casual-ux-polish.js') && sw.includes('aqua-fantasia-v5.3.0'),
     resultShop54: index.includes('v54-result-shop-polish.js') && index.includes('CASUAL RESULT SHOP 5.4') && sw.includes('aqua-fantasia-v5.4.0'),
+    mobileFeel55: index.includes('v55-mobile-feel-runtime.js') && index.includes('MOBILE FEEL 5.5') && sw.includes('aqua-fantasia-v5.5.0-mobile-feel-20260612'),
     renderer47: index.includes('initV47RendererRuntime') && index.includes('v47-fishing-canvas'),
     engine46: index.includes('initV46EngineRuntime') && index.includes('aqua_fishing_v46.webp'),
     lightServiceWorker: !sw.includes('./assets/art/v31_director_stage.svg'),
@@ -38,4 +39,4 @@ const report = {
   }
 };
 console.log(JSON.stringify(report, null, 2));
-if (missing.length || duplicateFishIds || fish.length < 174 || !report.runtime.runtimeDiet48 || !report.runtime.runtimeConnect49 || !report.runtime.performanceFocus50 || !report.runtime.stabilityAssist51 || !report.runtime.casualUX53 || !report.runtime.resultShop54 || !report.runtime.renderer47 || !report.runtime.lightServiceWorker || !report.runtime.mobileGuards) process.exit(1);
+if (missing.length || duplicateFishIds || fish.length < 174 || !report.runtime.runtimeDiet48 || !report.runtime.runtimeConnect49 || !report.runtime.performanceFocus50 || !report.runtime.stabilityAssist51 || !report.runtime.casualUX53 || !report.runtime.resultShop54 || !report.runtime.mobileFeel55 || !report.runtime.renderer47 || !report.runtime.lightServiceWorker || !report.runtime.mobileGuards) process.exit(1);

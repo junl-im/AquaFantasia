@@ -1,4 +1,4 @@
-import { Application, Assets, Container, Graphics } from 'pixi.js';
+import { Application, Assets, Container, Graphics, Ticker } from 'pixi.js';
 import type { AquaEngineConfig } from './types';
 
 export type FishingPhase = 'ready' | 'casting' | 'bite' | 'reel' | 'success' | 'fail';
@@ -18,7 +18,7 @@ export class AquaFishingRenderer {
     this.app.stage.addChild(this.stage);
     await Assets.load(config.atlasUrl).catch(() => undefined);
     this.stage.addChild(this.fish, this.bobber);
-    this.app.ticker.add((ticker) => this.tick(ticker.deltaMS));
+    this.app.ticker.add((ticker: Ticker) => this.tick(ticker.deltaMS));
     return this;
   }
 

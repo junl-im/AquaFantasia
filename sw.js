@@ -1,4 +1,5 @@
-const CACHE_VERSION = 'aqua-fantasia-v5.4.0';
+const CACHE_VERSION = 'aqua-fantasia-v5.5.0-mobile-feel-20260612';
+// aqua-fantasia-v5.4.0 legacy marker for migration audit
 // aqua-fantasia-v5.3.0 legacy marker for migration audit
 // aqua-fantasia-v5.2.0 legacy marker for migration audit
 // aqua-fantasia-v5.1.0 legacy marker for migration audit
@@ -46,6 +47,7 @@ const CORE_ASSETS = [
   "./assets/art/v51_stability_console.svg",
   "./assets/art/v51_touch_latency.svg",
   "./assets/art/v51_fishing_fps_lane.svg",
+  "./assets/art/v55_mobile_feel_panel.svg",
   "./assets/atlas/aqua_fishing_v51.webp",
   "./assets/atlas/aqua_fishing_v51.atlas.json",
   "./assets/ui-kit/icons/fish_6.png",
@@ -65,6 +67,8 @@ const CORE_ASSETS = [
   "./src/systems/fishing.js",
   "./src/core/state.js",
   "./src/runtime/v54-result-shop-polish.js",
+  "./src/runtime/v55-mobile-feel-runtime.js",
+  "./src/runtime/v49-action-mobile-patch.js",
   "./src/systems/shop.js",
   "./src/runtime/v53-casual-ux-polish.js",
   "./src/runtime/v52-casual-runtime.js"
@@ -73,7 +77,7 @@ const CORE_ASSETS = [
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CORE_CACHE);
-    await Promise.allSettled(CORE_ASSETS.map((asset) => cache.add(asset)));
+    await Promise.allSettled(CORE_ASSETS.map((asset) => cache.add(new Request(asset, { cache: 'reload' }))));
     self.skipWaiting();
   })());
 });
@@ -85,6 +89,21 @@ self.addEventListener('activate', (event) => {
     if (self.registration.navigationPreload) await self.registration.navigationPreload.enable();
     await self.clients.claim();
   })());
+});
+
+
+self.addEventListener('message', (event) => {
+  const type = event?.data?.type;
+  if (type === 'SKIP_WAITING') self.skipWaiting();
+  if (type === 'AQUA_CLEAR_RUNTIME_CACHE') {
+    event.waitUntil((async () => {
+      const keepPrefix = event?.data?.keepPrefix || CACHE_VERSION;
+      const keys = await caches.keys();
+      await Promise.all(keys
+        .filter((key) => (key.includes('runtime') || key.includes('aqua-fantasia')) && !key.startsWith(keepPrefix))
+        .map((key) => caches.delete(key)));
+    })());
+  }
 });
 
 async function networkFirst(request, preloadResponsePromise) {

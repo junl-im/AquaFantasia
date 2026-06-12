@@ -1,0 +1,30 @@
+name: Aqua Fantasia Static Validation
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install
+      - name: Static validation
+        run: npm run validate
+      - name: TypeScript check
+        run: npm run typecheck
+      - name: Runtime checks
+        run: npm run runtime:check
+      - name: Bundle audit
+        run: npm run audit
+      - name: Atlas check
+        run: npm run atlas:check
