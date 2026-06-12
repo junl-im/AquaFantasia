@@ -13,9 +13,11 @@ const required = [
   'src/main.ts','src/engine/pixiStage.ts','src/engine/fishingRenderer.ts','src/engine/performanceGovernor.ts',
   'assets/atlas/aqua_fishing_v47.webp','assets/atlas/aqua_fishing_v47.atlas.json',
   'assets/atlas/aqua_fishing_v48.webp','assets/atlas/aqua_fishing_v48.atlas.json',
+  'assets/atlas/aqua_fishing_v49.webp','assets/atlas/aqua_fishing_v49.atlas.json',
   'assets/art/v48_runtime_diet_panel.svg','assets/art/v48_runtime_backdrop.svg','assets/art/v48_fishing_renderer_lite.svg',
-  'PATCH_NOTES_v4.8.md','V4_8_CLEAN_RUNTIME_CHECKLIST.md','docs/CLEAN_BUNDLE_v4.8.md',
-  'tools/audit-bundle.mjs','tools/check-v47-renderer.mjs','tools/check-v48-runtime.mjs','tools/clean-bundle-report.mjs'
+  'assets/art/v49_pixi_runtime_stage.svg','assets/art/v49_runtime_panel.svg','src/runtime/v49-pixi-runtime.js',
+  'PATCH_NOTES_v4.9.md','V4_9_RUNTIME_CONNECT_CHECKLIST.md',
+  'tools/audit-bundle.mjs','tools/check-v47-renderer.mjs','tools/check-v48-runtime.mjs','tools/check-v49-runtime.mjs','tools/clean-bundle-report.mjs'
 ];
 required.forEach((file) => { if (!exists(file)) fail(`Missing required file: ${file}`); });
 
@@ -26,9 +28,10 @@ const fishJson = JSON.parse(read('data/fish.json'));
 const fish = fishJson.fish || [];
 
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!index.includes("const APP_VERSION = '4.8.0'")) fail('APP_VERSION must be 4.8.0.');
-if (!index.includes('v4.8 Runtime Diet Clean Build')) fail('v4.8 runtime diet marker is missing.');
+if (!index.includes("const APP_VERSION = '4.9.0'")) fail('APP_VERSION must be 4.9.0.');
+if (!index.includes('v4.9 Pixi Runtime Connect') && !index.includes('PIXI RUNTIME 4.9')) fail('v4.9 runtime connect marker is missing.');
 if (!index.includes('initV48Runtime') || !index.includes('renderV48RuntimePanel') || !index.includes('v48-runtime-panel')) fail('v4.8 runtime panel/runtime is missing.');
+if (!index.includes('initV49Runtime') || !index.includes('renderV49RuntimePanel') || !index.includes('v49-runtime-panel') || !index.includes('v49-pixi-runtime-canvas')) fail('v4.9 runtime panel/canvas is missing.');
 if (!index.includes('v48-production-mode') || !index.includes('v48-low-visual')) fail('v4.8 production CSS classes are missing.');
 if (!index.includes('aqua_v4.8') || !index.includes('aqua_latest_state')) fail('v4.8 save keys are missing.');
 if (!index.includes('v47-fishing-canvas') || !index.includes('initV47RendererRuntime')) fail('v4.7 fishing renderer bridge is missing.');
@@ -39,8 +42,8 @@ if (/\bFISH_DB\b/.test(index)) fail('legacy FISH_DB reference found.');
 if (/\bgetCurrentWeekKey\b/.test(index)) fail('legacy getCurrentWeekKey reference found.');
 if ((index.match(/data-region=\"차원의 바다\"/g) || []).length > 1) fail('Duplicate Dimension Sea village card found.');
 
-if (!sw.includes('aqua-fantasia-v4.8.0')) fail('Service worker cache version must be v4.8.0.');
-if (!sw.includes('./assets/atlas/aqua_fishing_v48.webp') || !sw.includes('./assets/art/v48_runtime_diet_panel.svg')) fail('v4.8 cache entries are missing.');
+if (!sw.includes('aqua-fantasia-v4.9.0')) fail('Service worker cache version must be v4.9.0.');
+if (!sw.includes('./assets/atlas/aqua_fishing_v49.webp') || !sw.includes('./assets/art/v49_runtime_panel.svg')) fail('v4.9 cache entries are missing.');
 if (sw.includes('./assets/art/v31_director_stage.svg')) fail('legacy bulk SVG precache found in service worker.');
 if (!manifest.display || manifest.display !== 'fullscreen') fail('manifest display must be fullscreen.');
 if (!Array.isArray(manifest.icons) || manifest.icons.length < 3) fail('manifest icons are incomplete.');
@@ -72,4 +75,4 @@ scripts.forEach((script, idx) => {
   }
 });
 
-console.log('[validate-static] AquaFantasia v4.8 static bundle OK.');
+console.log('[validate-static] AquaFantasia v4.9 static bundle OK.');

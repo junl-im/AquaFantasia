@@ -1,3 +1,5 @@
+# AquaFantasia v4.9 Pixi Runtime Connect
+
 # Aqua Fantasia v4.7 Pixi Fishing Renderer
 
 모바일 웹 낚시 게임 최적화 엔진 전환 패치입니다. 기존 정적 PWA를 유지하면서 낚시 화면을 Canvas/PixiJS 브릿지로 점진 이전합니다.

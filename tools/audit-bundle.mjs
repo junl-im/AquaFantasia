@@ -11,7 +11,7 @@ const refs = [...index.matchAll(/assets\/(?:art|icons|images|atlas|ui-kit)\/[^'"
 const missing = [...new Set(refs)].filter((ref) => { try { statSync(join(root, ref)); return false; } catch { return true; } });
 const duplicateFishIds = fish.length - new Set(fish.map((item) => item.id)).size;
 const report = {
-  version: '4.8.0',
+  version: '4.9.0',
   indexBytes: bytes('index.html'),
   indexLines: index.split('\n').length,
   serviceWorkerBytes: bytes('sw.js'),
@@ -21,15 +21,16 @@ const report = {
   missingAssets: missing,
   duplicateFishIds,
   runtime: {
-    runtimeDiet48: index.includes('initV48Runtime') && index.includes('v48-runtime-panel') && sw.includes('aqua-fantasia-v4.8.0'),
+    runtimeDiet48: index.includes('initV48Runtime') && index.includes('v48-runtime-panel'),
+    runtimeConnect49: index.includes('initV49Runtime') && index.includes('v49-runtime-panel') && sw.includes('aqua-fantasia-v4.9.0') && index.includes('v49-pixi-runtime-canvas'),
     renderer47: index.includes('initV47RendererRuntime') && index.includes('v47-fishing-canvas'),
     engine46: index.includes('initV46EngineRuntime') && index.includes('aqua_fishing_v46.webp'),
     lightServiceWorker: !sw.includes('./assets/art/v31_director_stage.svg'),
-    optimizedSave: index.includes('aqua_v4.8') && index.includes('aqua_latest_state'),
+    optimizedSave: index.includes('aqua_v4.9') && index.includes('aqua_latest_state'),
     mobileGuards: index.includes('kakao-autopilot') && index.includes('initBackExitGuard') && index.includes('requestV43FullscreenNow'),
     legacyRenderGate: index.includes('renderLegacyDirectorPanelsIfNeeded'),
     cleanBundleReady: index.includes('Clean Ready') && read('package.json').includes('clean:report')
   }
 };
 console.log(JSON.stringify(report, null, 2));
-if (missing.length || duplicateFishIds || fish.length < 174 || !report.runtime.runtimeDiet48 || !report.runtime.renderer47 || !report.runtime.lightServiceWorker || !report.runtime.mobileGuards) process.exit(1);
+if (missing.length || duplicateFishIds || fish.length < 174 || !report.runtime.runtimeDiet48 || !report.runtime.runtimeConnect49 || !report.runtime.renderer47 || !report.runtime.lightServiceWorker || !report.runtime.mobileGuards) process.exit(1);

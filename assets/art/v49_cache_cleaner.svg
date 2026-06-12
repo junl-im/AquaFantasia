@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-label="v4.9 cache cleaner">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0f172a"/><stop offset="0.52" stop-color="#334155"/><stop offset="1" stop-color="#020617"/></linearGradient>
+    <radialGradient id="r" cx=".28" cy=".22" r=".75"><stop stop-color="#38bdf8" stop-opacity=".72"/><stop offset=".38" stop-color="#38bdf8" stop-opacity=".18"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="16"/></filter>
+  </defs>
+  <rect width="1200" height="720" fill="url(#g)"/>
+  <rect width="1200" height="720" fill="url(#r)"/>
+  <g opacity=".36" fill="none" stroke="#fff7dd" stroke-width="3">
+    <path d="M-40 510 C180 430 310 610 520 520 S900 400 1250 520"/>
+    <path d="M-40 590 C160 515 345 650 570 585 S920 500 1260 610" opacity=".55"/>
+  </g>
+  <g opacity=".44">
+    <circle cx="180" cy="170" r="110" fill="#38bdf8" filter="url(#blur)"/>
+    <circle cx="930" cy="260" r="170" fill="#67e8f9" opacity=".25" filter="url(#blur)"/>
+    <circle cx="720" cy="540" r="230" fill="#f0abfc" opacity=".14" filter="url(#blur)"/>
+  </g>
+  <g transform="translate(840 455)" opacity=".82">
+    <ellipse cx="0" cy="0" rx="118" ry="38" fill="#0f172a" opacity=".28"/>
+    <path d="M-92 0 C-28-58 52-55 108-4 C42 30-28 42-92 0Z" fill="#38bdf8" opacity=".58"/>
+    <path d="M-20-6 C-44-27-58-36-86-40 C-76-16-76 12-86 40 C-57 32-42 20-20-6Z" fill="#fff7dd" opacity=".32"/>
+  </g>
+</svg>

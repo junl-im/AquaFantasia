@@ -1,11 +1,11 @@
 {
-  "name": "Aqua Fantasia v4.8 Runtime Diet",
-  "short_name": "Aqua v4.8",
-  "description": "Aqua Fantasia mobile web fishing game - v4.8 runtime diet and clean bundle optimized PWA.",
+  "name": "Aqua Fantasia v4.9 Pixi Runtime Connect",
+  "short_name": "Aqua v4.9",
+  "description": "Aqua Fantasia mobile web fishing game - v4.9 Pixi runtime connect and UI diet optimized PWA.",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "/AquaFantasia/?v=4.8",
-  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=4.6.0",
+  "id": "/AquaFantasia/?v=4.9",
+  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=4.9.0",
   "scope": "./",
   "display": "fullscreen",
   "display_override": [
@@ -42,58 +42,10 @@
   ],
   "shortcuts": [
     {
-      "name": "엔진 최적화 낚시",
-      "short_name": "v4.6",
-      "description": "v4.6 엔진 아틀라스 최적화 낚시 모드",
-      "url": "./?shortcut=fishing&fullscreen=1&v=4.6.0",
-      "icons": [
-        {
-          "src": "assets/icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "타이드 마스터",
-      "short_name": "타이드",
-      "description": "v3.5 핵심 추천과 모바일 아트 패널 열기",
-      "url": "./?shortcut=tide-master",
-      "icons": [
-        {
-          "src": "assets/icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "어비스 캔버스",
-      "short_name": "캔버스",
-      "description": "v3.4 핵심 추천과 비주얼 캔버스 열기",
-      "url": "./?shortcut=abyss-canvas",
-      "icons": [
-        {
-          "src": "assets/icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "넥서스 포지",
-      "short_name": "넥서스",
-      "description": "추천 행동과 대형 UI 요약 확인",
-      "url": "./?shortcut=nexus",
-      "icons": [
-        {
-          "src": "assets/icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "낚시 시작",
-      "short_name": "낚시",
-      "description": "최근 지역에서 바로 낚시",
-      "url": "./?shortcut=fishing",
+      "name": "v4.9 낚시 런타임",
+      "short_name": "v4.9 낚시",
+      "description": "v4.9 Canvas/Pixi 낚시 런타임 테스트",
+      "url": "./?shortcut=fishing&fullscreen=1&v=4.9.0",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",
@@ -105,7 +57,7 @@
       "name": "장비 공방",
       "short_name": "장비",
       "description": "낚싯대와 미끼 관리",
-      "url": "./?shortcut=equipment",
+      "url": "./?shortcut=equipment&v=4.9.0",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",
