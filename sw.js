@@ -1,4 +1,5 @@
-const CACHE_VERSION = 'aqua-fantasia-v4.7.0';
+const CACHE_VERSION = 'aqua-fantasia-v4.8.0';
+// aqua-fantasia-v4.7.0 legacy marker for migration audit
 // aqua-fantasia-v4.6.0 legacy marker for migration audit
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
@@ -14,43 +15,19 @@ const CORE_ASSETS = [
   "./assets/icons/apple-touch-icon.png",
   "./assets/art/aqua_logo_mark.svg",
   "./assets/art/v39_fishing_grand_stage.svg",
-  "./assets/art/v39_fishing_director.svg",
-  "./assets/art/v41_action_button.svg",
   "./assets/art/v41_precision_ring.svg",
-  "./assets/art/v41_hud_panel.svg",
-  "./assets/art/v41_flow_fishing_stage.svg",
   "./assets/art/v42_result_scroll.svg",
-  "./assets/art/v43_perf_fishing_shell.svg",
-  "./assets/art/v43_fullscreen_shell.svg",
-  "./assets/art/v43_perf_meter.svg",
-  "./assets/art/v44_animation_fishing_stage.svg",
-  "./assets/art/v44_line_arc.svg",
-  "./assets/art/v44_hook_prompt.svg",
-  "./assets/art/v44_action_overlay.svg",
-  "./assets/art/v44_rhythm_lane.svg",
   "./assets/art/v45_bobber_master.svg",
   "./assets/art/v45_reel_console_premium.svg",
-  "./assets/art/v45_tension_gauge_deluxe.svg",
-  "./assets/art/v45_fishing_stage_lux.svg",
-  "./assets/atlas/aqua_fishing_v46.webp",
   "./assets/atlas/aqua_fishing_v47.webp",
-  "./assets/atlas/aqua_fishing_v46.atlas.json",
   "./assets/atlas/aqua_fishing_v47.atlas.json",
-  "./assets/art/v46_engine_console.svg",
-  "./assets/art/v46_pixi_stage.svg",
-  "./assets/art/v46_atlas_glow.svg",
-  "./assets/art/v46_audio_mixer.svg",
-  "./assets/art/v46_perf_matrix.svg",
-  "./assets/art/v46_webp_cards.svg",
   "./assets/art/v47_fishing_pixi_stage.svg",
   "./assets/art/v47_renderer_console.svg",
-  "./assets/art/v47_renderer_glow.svg",
-  "./assets/art/v47_water_ribbon.svg",
-  "./assets/art/v47_bobber_glow.svg",
-  "./assets/art/v47_line_arc.svg",
-  "./assets/art/v39_reel_lane.svg",
-  "./assets/ui-kit/fishing_minigame/bobber_large.png",
-  "./assets/ui-kit/icons/reel_progress.png"
+  "./assets/art/v48_runtime_diet_panel.svg",
+  "./assets/art/v48_runtime_backdrop.svg",
+  "./assets/art/v48_fishing_renderer_lite.svg",
+  "./assets/atlas/aqua_fishing_v48.webp",
+  "./assets/atlas/aqua_fishing_v48.atlas.json"
 ];
 
 self.addEventListener('install', (event) => {

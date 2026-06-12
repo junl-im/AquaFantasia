@@ -1,401 +1,65 @@
-import { readFileSync, writeFileSync, rmSync } from 'node:fs';
-import { spawnSync } from 'node:child_process';
+import { readFileSync, writeFileSync, rmSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { spawnSync } from 'node:child_process';
 
 const root = process.cwd();
-const requiredFiles = [
-  'index.html',
-  'manifest.webmanifest',
-  'sw.js',
-  'offline.html',
-  'data/fish.json',
-  '.nojekyll',
-  'assets/icons/icon-192.png',
-  'assets/icons/icon-512.png',
-  'assets/icons/maskable-512.png',
-  'assets/icons/apple-touch-icon.png',
-  'assets/art/aqua_ocean_scene.svg',
-  'assets/art/card_lux_frame.svg',
-  'assets/art/fishing_stage.svg',
-  'assets/art/aqua_logo_mark.svg',
-  'assets/art/v30_ocean_masterpiece.svg',
-  'assets/art/v30_water_caustics.svg',
-  'assets/art/v30_hud_panel.svg',
-  'assets/art/v30_director_card.svg',
-  'assets/art/v30_card_texture.svg',
-  'assets/art/v30_fishing_stage.svg',
-  'assets/art/v30_fish_silhouette_sheet.svg',
-  'assets/art/v30_boss_crest.svg',
-  'assets/art/v30_route_atlas.svg',
-  'assets/art/v31_director_stage.svg',
-  'assets/art/v31_mobile_shell.svg',
-  'assets/art/v31_action_deck.svg',
-  'assets/art/v31_hud_frame.svg',
-  'assets/art/v31_region_card.svg',
-  'assets/art/v31_fishing_theater.svg',
-  'assets/art/v31_stage_fx.svg',
-  'assets/art/v31_region_atlas.svg',
-  'assets/art/region_lake_v31.svg',
-  'assets/art/region_river_v31.svg',
-  'assets/art/region_harbor_v31.svg',
-  'assets/art/region_deep_v31.svg',
-  'assets/art/region_palace_v31.svg',
-  'assets/art/region_dimension_v31.svg',
+const read = (file) => readFileSync(join(root, file), 'utf8');
+function fail(message) { console.error(`\n[validate-static] ${message}`); process.exit(1); }
+function exists(file) { try { statSync(join(root, file)); return true; } catch { return false; } }
 
-  'assets/art/v32_command_center.svg',
-  'assets/art/v32_mobile_hero.svg',
-  'assets/art/v32_fish_gallery.svg',
-  'assets/art/v32_region_showcase.svg',
-  'assets/art/v32_fishing_cinematic.svg',
-  'assets/art/v32_boss_emblem.svg',
-  'assets/art/v32_inventory_card.svg',
-  'assets/art/v32_button_glyphs.svg',
-  'assets/art/v32_route_panorama_lake.svg',
-  'assets/art/v32_route_panorama_river.svg',
-  'assets/art/v32_route_panorama_harbor.svg',
-  'assets/art/v32_route_panorama_deep.svg',
-  'assets/art/v32_route_panorama_palace.svg',
-  'assets/art/v32_route_panorama_dimension.svg',
-  'assets/art/v33_nexus_bridge.svg',
-  'assets/art/v33_mobile_stage.svg',
-  'assets/art/v33_fishing_theater.svg',
-  'assets/art/v33_inventory_shelf.svg',
-  'assets/art/v33_fish_constellation.svg',
-  'assets/art/v33_route_hologram.svg',
-  'assets/art/v33_boss_tide.svg',
-  'assets/art/v33_button_set.svg',
-  'assets/art/v33_region_lake.svg',
-  'assets/art/v33_region_river.svg',
-  'assets/art/v33_region_harbor.svg',
-  'assets/art/v33_region_deep.svg',
-  'assets/art/v33_region_palace.svg',
-  'assets/art/v33_region_dimension.svg',
-  'assets/art/v34_abyss_canvas.svg',
-  'assets/art/v34_mobile_poster.svg',
-  'assets/art/v34_fishing_stage.svg',
-  'assets/art/v34_fish_showcase.svg',
-  'assets/art/v34_region_panorama.svg',
-  'assets/art/v34_inventory_showcase.svg',
-  'assets/art/v34_boss_gate.svg',
-  'assets/art/v34_ui_frame.svg',
-  'assets/art/v34_button_glyphs.svg',
-  'assets/art/v34_route_compass.svg',
-  'assets/art/v34_region_lake.svg',
-  'assets/art/v34_region_river.svg',
-  'assets/art/v34_region_harbor.svg',
-  'assets/art/v34_region_deep.svg',
-  'assets/art/v34_region_palace.svg',
-  'assets/art/v34_region_dimension.svg',
-  'assets/art/v35_tide_master.svg',
-  'assets/art/v35_mobile_stage.svg',
-  'assets/art/v35_fishing_stage.svg',
-  'assets/art/v35_fish_cabinet.svg',
-  'assets/art/v35_boss_gate.svg',
-  'assets/art/v35_inventory_wall.svg',
-  'assets/art/v35_ui_frame.svg',
-  'assets/art/v35_tide_radar.svg',
-  'assets/art/v35_button_glyphs.svg',
-  'assets/art/v35_route_map.svg',
-  'assets/art/v35_reward_chest.svg',
-  'assets/art/v35_encyclopedia_plate.svg',
-  'assets/art/v35_region_lake.svg',
-  'assets/art/v35_region_river.svg',
-  'assets/art/v35_region_harbor.svg',
-  'assets/art/v35_region_deep.svg',
-  'assets/art/v35_region_palace.svg',
-  'assets/art/v35_region_dimension.svg',
-  'assets/art/v36_core_navigator.svg',
-  'assets/art/v36_mobile_canvas.svg',
-  'assets/art/v36_fishing_stage.svg',
-  'assets/art/v36_fish_atlas.svg',
-  'assets/art/v36_region_lake.svg',
-  'assets/art/v36_region_river.svg',
-  'assets/art/v36_region_harbor.svg',
-  'assets/art/v36_region_deep.svg',
-  'assets/art/v36_region_palace.svg',
-  'assets/art/v36_region_dimension.svg',
-  'assets/art/v36_inventory_deck.svg',
-  'assets/art/v36_boss_crest.svg',
-  'assets/art/v36_route_orbit.svg',
-  'assets/art/v36_hud_frame.svg',
-  'assets/art/v36_button_runes.svg',
-  'assets/art/v36_reward_vault.svg',
-  'assets/art/v36_pwa_shell.svg',
-  'assets/art/v36_performance_radar.svg',
-  'assets/art/v36_world_console.svg',
-  'assets/art/v36_module_map.svg',
-  'assets/art/v36_encyclopedia_wall.svg',
-  'assets/art/v36_touch_overlay.svg',
-  'assets/art/v363_painterly_ocean.svg',
-  'assets/art/v363_mobile_scene.svg',
-  'assets/art/v363_command_canvas.svg',
-  'assets/art/v363_fishing_canvas.svg',
-  'assets/art/v363_lux_frame.svg',
-  'assets/art/v363_material_card.svg',
-  'assets/art/v363_button_plate.svg',
-  'assets/art/v363_fish_showcase.svg',
-  'assets/art/v363_region_lake.svg',
-  'assets/art/v363_region_river.svg',
-  'assets/art/v363_region_harbor.svg',
-  'assets/art/v363_region_deep.svg',
-  'assets/art/v363_region_palace.svg',
-  'assets/art/v363_region_dimension.svg',
-  'assets/art/v37_masterpiece_ocean.svg',
-  'assets/art/v37_mobile_poster.svg',
-  'assets/art/v37_command_panel.svg',
-  'assets/art/v37_fishing_theater.svg',
-  'assets/art/v37_fish_showcase.svg',
-  'assets/art/v37_region_lake.svg',
-  'assets/art/v37_region_river.svg',
-  'assets/art/v37_region_harbor.svg',
-  'assets/art/v37_region_deep.svg',
-  'assets/art/v37_region_palace.svg',
-  'assets/art/v37_region_dimension.svg',
-  'assets/art/v38_action_ocean.svg',
-  'assets/art/v38_fishing_arena.svg',
-  'assets/art/v38_action_hud.svg',
-  'assets/art/v38_reel_panel.svg',
-  'assets/art/v38_touch_target.svg',
-  'assets/art/v38_button_plate.svg',
-  'assets/art/v38_hud_prompt.svg',
-  'assets/art/v38_water_impact.svg',
-  'assets/art/v38_line_tension.svg',
-  'assets/art/v38_combo_flash.svg',
-  'assets/art/v38_ui_cleanup_frame.svg',
-  'assets/art/v38_cast_arc.svg'
-,
-  'assets/art/v39_fishing_grand_stage.svg',
-  'assets/art/v39_fishing_director.svg',
-  'assets/art/v39_reel_lane.svg',
-  'assets/art/v39_bite_radar.svg',
-  'assets/art/v39_input_coach.svg',
-  'assets/art/v39_button_plate.svg',
-  'assets/art/v39_perf_tuner.svg',
-  'assets/art/v40_boss_ocean_theater.svg',
-  'assets/art/v40_boss_command.svg',
-  'assets/art/v40_action_button.svg',
-  'assets/art/v40_fish_track.svg',
-  'assets/ui-kit/fishing_minigame/bobber_large.png',
-  'assets/ui-kit/fishing_minigame/reel_bar_220px.png',
-  'assets/ui-kit/fishing_minigame/tension_meter_120px.png',
-  'assets/ui-kit/icons/reel_progress.png',
-  'assets/ui-kit/icons/tension_gauge.png',
-  'assets/ui-kit/icons/bobber.png',
-  'assets/art/v42_result_scroll.svg',
-  'assets/art/v43_perf_fishing_shell.svg',
-  'assets/art/v43_fullscreen_shell.svg',
-  'assets/art/v43_perf_meter.svg',
-  'assets/art/v44_animation_fishing_stage.svg',
-  'assets/art/v44_line_arc.svg',
-  'assets/art/v44_hook_prompt.svg',
-  'assets/art/v44_tap_arrow.svg',
-  'assets/art/v44_fish_swim_sheet.svg',
-  'assets/art/v44_action_overlay.svg',
-  'assets/art/v44_rhythm_lane.svg',
-  'assets/art/v44_reel_button.svg',
-  'assets/art/v44_status_scroll.svg',
-  'assets/art/v44_performance_governor.svg',
-  'assets/art/v44_low_mode_texture.svg',
-  'assets/art/v45_bobber_master.svg',
-  'assets/art/v45_reel_console_premium.svg',
-  'assets/art/v45_tension_gauge_deluxe.svg',
-  'assets/art/v45_line_glow.svg',
-  'assets/art/v45_touch_ring_deluxe.svg',
-  'assets/art/v45_rod_tip_master.svg',
-  'assets/art/v45_water_surface_detail.svg',
-  'assets/art/v45_cast_splash.svg',
-  'assets/art/v45_tackle_hud.svg',
-  'assets/art/v45_reel_spool.svg',
-  'assets/art/v45_fishing_stage_lux.svg',
-
-  'assets/atlas/aqua_fishing_v46.webp',
-  'assets/atlas/aqua_fishing_v46.atlas.json',
-  'assets/art/v46_engine_console.svg',
-  'assets/art/v46_pixi_stage.svg',
-  'assets/art/v46_atlas_glow.svg',
-  'assets/art/v46_audio_mixer.svg',
-  'assets/art/v46_perf_matrix.svg',
-  'assets/art/v46_webp_cards.svg',
-  'vite.config.ts',
-  'tsconfig.json',
-  'src/main.ts',
-  'src/engine/pixiStage.ts',
-  'src/engine/webpAtlas.ts',
-  'src/engine/audioBus.ts',
-  'src/engine/performanceGovernor.ts',
-  'src/integrations/firebaseClient.ts',
-  'tools/generate-webp-atlas.mjs',
-  'docs/ENGINE_MIGRATION_v4.6.md',
-  'PATCH_NOTES_v4.6.md',
-  'V4_6_ENGINE_OPTIMIZATION_CHECKLIST.md',
-
-  'assets/atlas/aqua_fishing_v47.webp',
-  'assets/atlas/aqua_fishing_v47.atlas.json',
-  'assets/art/v47_master_ocean_backdrop.svg',
-  'assets/art/v47_renderer_console.svg',
-  'assets/art/v47_renderer_glow.svg',
-  'assets/art/v47_fishing_pixi_stage.svg',
-  'assets/art/v47_water_ribbon.svg',
-  'assets/art/v47_bobber_glow.svg',
-  'assets/art/v47_line_arc.svg',
-  'assets/art/v47_fish_trail.svg',
-  'assets/art/v47_target_zone.svg',
-  'assets/art/v47_tension_wave.svg',
-  'src/engine/fishingRenderer.ts',
-  'tools/check-v47-renderer.mjs',
-  'PATCH_NOTES_v4.7.md',
-  'V4_7_RENDERER_TEST_CHECKLIST.md',
+const required = [
+  'index.html','sw.js','manifest.webmanifest','offline.html','data/fish.json','package.json',
+  'firebase.json','firestore.rules','storage.rules','vite.config.ts','tsconfig.json',
+  'src/main.ts','src/engine/pixiStage.ts','src/engine/fishingRenderer.ts','src/engine/performanceGovernor.ts',
+  'assets/atlas/aqua_fishing_v47.webp','assets/atlas/aqua_fishing_v47.atlas.json',
+  'assets/atlas/aqua_fishing_v48.webp','assets/atlas/aqua_fishing_v48.atlas.json',
+  'assets/art/v48_runtime_diet_panel.svg','assets/art/v48_runtime_backdrop.svg','assets/art/v48_fishing_renderer_lite.svg',
+  'PATCH_NOTES_v4.8.md','V4_8_CLEAN_RUNTIME_CHECKLIST.md','docs/CLEAN_BUNDLE_v4.8.md',
+  'tools/audit-bundle.mjs','tools/check-v47-renderer.mjs','tools/check-v48-runtime.mjs','tools/clean-bundle-report.mjs'
 ];
+required.forEach((file) => { if (!exists(file)) fail(`Missing required file: ${file}`); });
 
-function fail(message) {
-  console.error(`\n[validate-static] ${message}`);
-  process.exit(1);
-}
+const index = read('index.html');
+const sw = read('sw.js');
+const manifest = JSON.parse(read('manifest.webmanifest'));
+const fishJson = JSON.parse(read('data/fish.json'));
+const fish = fishJson.fish || [];
 
-for (const file of requiredFiles) {
-  try { readFileSync(join(root, file)); }
-  catch { fail(`Missing required file: ${file}`); }
-}
-
-const index = readFileSync(join(root, 'index.html'), 'utf8');
-const sw = readFileSync(join(root, 'sw.js'), 'utf8');
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!index.includes("const APP_VERSION = '4.7.0'")) fail('APP_VERSION must be 4.7.0 for this patch.');
-if (!index.includes('serviceWorker.register')) fail('PWA service worker registration is missing.');
-if (!index.includes('v4.3 Early Fullscreen Primer')) fail('v4.3 early fullscreen primer is missing.');
-if (!index.includes('v4.4 Animation Performance Suite')) fail('v4.4 animation performance suite is missing.');
-if (!index.includes('initV44Runtime')) fail('v4.4 runtime init is missing.');
-if (!index.includes('v44-objective-strip')) fail('v4.4 objective strip is missing.');
-if (!index.includes('installV44FrameGovernor')) fail('v4.4 frame governor is missing.');
-if (!index.includes('v4.5 Tackle Visual Premium')) fail('v4.5 tackle visual premium is missing.');
-if (!index.includes('initV45Runtime')) fail('v4.5 runtime init is missing.');
-if (!index.includes('v45-tackle-layer')) fail('v4.5 tackle layer is missing.');
-if (!index.includes('v45_reel_console_premium.svg')) fail('v4.5 premium reel console is missing.');
-if (!index.includes('requestV43FullscreenNow')) fail('v4.3 fullscreen request runtime is missing.');
-if (!index.includes('initV43PerformanceRuntime')) fail('v4.3 performance runtime is missing.');
-if (!index.includes('v43-perf-boost')) fail('v4.3 perf boost CSS/runtime is missing.');
-if (!index.includes('season-ranking-panel')) fail('Season ranking UI is missing.');
-if (!index.includes('weekly-reward-vault')) fail('Weekly reward vault UI is missing.');
-if (!index.includes('kakao-autopilot')) fail('v2.9 Kakao autopilot runtime is missing.');
-if (!index.includes('enableMobileGameMode')) fail('Mobile game mode function is missing.');
-if (!index.includes('sensory-panel')) fail('Sensory panel UI is missing.');
-if (!index.includes('unlockSensoryEngine')) fail('Sensory engine function is missing.');
-if (!index.includes('createImpactBurst')) fail('Impact feedback function is missing.');
-if (!index.includes('captain-hub-panel')) fail('Captain coach hub UI is missing.');
-if (!index.includes('runMegaQualityDirector')) fail('Mega quality director function is missing.');
-if (!index.includes('toggleOneHandMode')) fail('One-hand mobile UX function is missing.');
-if (!index.includes('focus-goal-title')) fail('v2.5 focus HUD is missing.');
-if (!index.includes('toggleQuickMenu')) fail('v2.5 quick menu is missing.');
-if (!index.includes('REGION_ROUTE')) fail('v2.7 route map data is missing.');
-if (!index.includes('world-route-mini')) fail('v2.7 route mini UI is missing.');
-if (!index.includes('screen-worldmap')) fail('v2.7 world map screen is missing.');
-if (!index.includes('INVENTORY CORE 3.2')) fail('v3.2 inventory summary UI is missing.');
-if (!index.includes('sellRecommendedFish')) fail('v2.8 recommended sale function is missing.');
-if (!index.includes('settled: false')) fail('v2.8 post-catch settlement flag is missing.');
-if (!index.includes('exit-confirm-modal')) fail('v2.9 mobile back exit modal is missing.');
-if (!index.includes('initBackExitGuard')) fail('v2.9 back button guard is missing.');
-if (!index.includes('art-status-strip')) fail('v2.9 art UI status strip is missing.');
-if (!index.includes('v30-director-panel')) fail('v3.0 Ocean Director panel is missing.');
-if (!index.includes('renderOceanDirectorPanel')) fail('v3.0 Ocean Director renderer is missing.');
-if (!index.includes('runOceanDirectorAction')) fail('v3.0 Ocean Director action is missing.');
-if (!index.includes('v30-smart-dock')) fail('v3.0 smart dock is missing.');
-if (!index.includes('exposeAquaHandlers')) fail('v2.9 inline handler exposure is missing.');
+if (!index.includes("const APP_VERSION = '4.8.0'")) fail('APP_VERSION must be 4.8.0.');
+if (!index.includes('v4.8 Runtime Diet Clean Build')) fail('v4.8 runtime diet marker is missing.');
+if (!index.includes('initV48Runtime') || !index.includes('renderV48RuntimePanel') || !index.includes('v48-runtime-panel')) fail('v4.8 runtime panel/runtime is missing.');
+if (!index.includes('v48-production-mode') || !index.includes('v48-low-visual')) fail('v4.8 production CSS classes are missing.');
+if (!index.includes('aqua_v4.8') || !index.includes('aqua_latest_state')) fail('v4.8 save keys are missing.');
+if (!index.includes('v47-fishing-canvas') || !index.includes('initV47RendererRuntime')) fail('v4.7 fishing renderer bridge is missing.');
+if (!index.includes('v45_bobber_master.svg') || !index.includes('v41-flow-hud') || !index.includes('catch-result-overlay')) fail('active fishing UX assets/flows are missing.');
+if (!index.includes('kakao-autopilot') || !index.includes('initBackExitGuard') || !index.includes('requestV43FullscreenNow')) fail('mobile launch/back/fullscreen guards are missing.');
+if (!index.includes('renderLegacyDirectorPanelsIfNeeded')) fail('legacy render gate is missing.');
+if (/\bFISH_DB\b/.test(index)) fail('legacy FISH_DB reference found.');
+if (/\bgetCurrentWeekKey\b/.test(index)) fail('legacy getCurrentWeekKey reference found.');
+if ((index.match(/data-region=\"차원의 바다\"/g) || []).length > 1) fail('Duplicate Dimension Sea village card found.');
 
-if (!index.includes('v31-action-deck')) fail('v3.1 Director Cut action deck is missing.');
-if (!index.includes('getInventoryPlan')) fail('v3.1 inventory plan runtime fix is missing.');
-if (!index.includes('renderDirectorCutPanel')) fail('v3.1 Director Cut renderer is missing.');
-if (!index.includes('runDirectorCutAction')) fail('v3.1 Director Cut action handler is missing.');
-if (!index.includes('art-v31')) fail('v3.1 art runtime class is missing.');
-if (!index.includes('v32-command-center')) fail('v3.2 Visual Atlas command center is missing.');
-if (!index.includes('renderVisualAtlasPanel')) fail('v3.2 Visual Atlas renderer is missing.');
-if (!index.includes('runVisualAtlasAction')) fail('v3.2 Visual Atlas action handler is missing.');
-if (!index.includes('art-v32')) fail('v3.2 art runtime class is missing.');
-if (!index.includes('v33-command-bridge')) fail('v3.3 Nexus Forge command bridge is missing.');
-if (!index.includes('v34-command-canvas')) fail('v3.4 Abyss Canvas command canvas is missing.');
-if (!index.includes('v35-tide-master')) fail('v3.5 Tide Master panel is missing.');
-if (!index.includes('renderV35TideMaster')) fail('v3.5 Tide Master renderer is missing.');
-if (!index.includes('runV35Action')) fail('v3.5 Tide Master action handler is missing.');
-if (!index.includes('art-v35')) fail('v3.5 art runtime class is missing.');
-if (!index.includes('v36-core-navigator')) fail('v3.6 Core Navigator panel is missing.');
-if (!index.includes('renderV36CoreNavigator')) fail('v3.6 Core Navigator renderer is missing.');
-if (!index.includes('runV36Action')) fail('v3.6 Core Navigator action handler is missing.');
-if (!index.includes('art-v36')) fail('v3.6 art runtime class is missing.');
-if (!index.includes('art-v363')) fail('v3.6.4 painterly art runtime class is missing.');
-if (!index.includes('v37-art-director')) fail('v3.7 Art Director panel is missing.');
-if (!index.includes('renderV37ArtDirector')) fail('v3.7 Art Director renderer is missing.');
-if (!index.includes('runV37Action')) fail('v3.7 action handler is missing.');
-if (!index.includes('art-v37')) fail('v3.7 art runtime class is missing.');
-if (!index.includes('v38-action-director')) fail('v3.8 action director UI is missing.');
-if (!index.includes('v39-fishing-director')) fail('v3.9 fishing director UI is missing.');
-if (!index.includes('renderV39FishingDirector')) fail('v3.9 fishing director renderer is missing.');
-if (!index.includes('v39-action-lane')) fail('v3.9 reel skill lane is missing.');
-if (!index.includes('cycleFishingDetail')) fail('v3.9 fishing detail controls are missing.');
-if (!index.includes('assets/ui-kit/fishing_minigame/bobber_large.png')) fail('v3.9 uploaded UI kit bobber asset is missing.');
-if (!index.includes('renderV38ActionDirector')) fail('v3.8 action director renderer is missing.');
-if (!index.includes('runV38Action')) fail('v3.8 action handler is missing.');
-if (!index.includes('art-v38')) fail('v3.8 art runtime class is missing.');
-if (!index.includes('bite-target')) fail('v3.8 bite target touch UI is missing.');
-if (!index.includes('hookFishFromTarget')) fail('v3.8 hook target handler is missing.');
-if (!index.includes('action-reel-panel')) fail('v3.8 reel action panel is missing.');
-if (!index.includes('setFishingPhase')) fail('v3.8 fishing phase guide is missing.');
-if (!index.includes('catch-result-overlay') || !index.includes('showCatchResultFlow') || !index.includes('closeCatchResultFlow')) fail('v4.2 staged catch result flow is missing.');
-if (!index.includes('renderLegacyDirectorPanelsIfNeeded')) fail('v3.6.3 legacy render gate is missing.');
-if (!index.includes('v363_painterly_ocean.svg')) fail('v3.6.4 painterly ocean asset reference is missing.');
-if (!index.includes('src/core/state.js')) fail('v3.6 modular scaffold reference is missing.');
-if (!index.includes('perf-lite')) fail('v3.6.2 performance-lite CSS/runtime is missing.');
-if (!index.includes('warmAssetsSafely')) fail('v3.6.2 safe asset warmer is missing.');
-if (!index.includes('aqua_latest_state')) fail('v3.6.2 optimized save key is missing.');
-if (!sw.includes('./assets/art/v39_fishing_grand_stage.svg')) fail('v3.9 critical cache list is missing active fishing grand stage.');
+if (!sw.includes('aqua-fantasia-v4.8.0')) fail('Service worker cache version must be v4.8.0.');
+if (!sw.includes('./assets/atlas/aqua_fishing_v48.webp') || !sw.includes('./assets/art/v48_runtime_diet_panel.svg')) fail('v4.8 cache entries are missing.');
 if (sw.includes('./assets/art/v31_director_stage.svg')) fail('legacy bulk SVG precache found in service worker.');
-if (/\bFISH_DB\b/.test(index)) fail('legacy FISH_DB reference found. Use FISH_DATABASE.');
-if (/\bgetCurrentWeekKey\b/.test(index)) fail('legacy getCurrentWeekKey reference found. Use getRewardWeekKey/weeklyRewards.claimed.');
-if (!index.includes('renderV34CommandCanvas')) fail('v3.4 Abyss Canvas renderer is missing.');
-if (!index.includes('runV34Action')) fail('v3.4 Abyss Canvas action handler is missing.');
-if (!index.includes('art-v34')) fail('v3.4 art runtime class is missing.');
-if (!index.includes('renderV33CommandBridge')) fail('v3.3 Nexus Forge renderer is missing.');
-if (!index.includes('runV33Action')) fail('v3.3 Nexus Forge action handler is missing.');
-if (!index.includes('versionAtLeast')) fail('v3.3 semantic version helper is missing.');
-if ((index.match(/data-region=\"차원의 바다\"/g) || []).length > 1) fail('Duplicate Dimension Sea village card returned.');
-
-
-if (!index.includes('v4.7 Pixi Fishing Renderer')) fail('v4.7 renderer metadata is missing.');
-if (!index.includes('v4.6 Engine Atlas Optimization')) fail('v4.6 engine atlas metadata is missing.');
-if (!index.includes('renderV46EnginePanel')) fail('v4.6 engine panel renderer is missing.');
-if (!index.includes('initV46EngineRuntime')) fail('v4.6 engine runtime init is missing.');
-if (!index.includes('aqua_fishing_v46.webp')) fail('v4.6 WebP atlas reference is missing.');
-if (!index.includes('cycleV46EngineMode')) fail('v4.6 engine mode control is missing.');
-if (!sw.includes('./assets/atlas/aqua_fishing_v46.webp')) fail('v4.6 WebP atlas cache entry is missing.');
-if (!sw.includes('./assets/art/v46_engine_console.svg')) fail('v4.6 engine console cache entry is missing.');
-
-const manifest = JSON.parse(readFileSync(join(root, 'manifest.webmanifest'), 'utf8'));
-if (manifest.display !== 'fullscreen') fail('manifest.webmanifest must use display: fullscreen for mobile game mode.');
+if (!manifest.display || manifest.display !== 'fullscreen') fail('manifest display must be fullscreen.');
 if (!Array.isArray(manifest.icons) || manifest.icons.length < 3) fail('manifest icons are incomplete.');
 
-const fish = JSON.parse(readFileSync(join(root, 'data/fish.json'), 'utf8'));
-if (!Array.isArray(fish.fish) || fish.fish.length < 174) fail('data/fish.json must include at least 170 fish entries.');
-const fishIds = new Set();
-for (const item of fish.fish) {
-  if (!item.id || fishIds.has(item.id)) fail(`Invalid or duplicate fish id: ${item.id}`);
-  fishIds.add(item.id);
+if (!Array.isArray(fish) || fish.length < 174) fail('fish database must include at least 174 fish.');
+const ids = new Set();
+for (const item of fish) {
+  if (!item.id || ids.has(item.id)) fail(`Invalid or duplicate fish id: ${item.id}`);
+  ids.add(item.id);
   if (!item.region || !item.name || !item.rarity) fail(`Fish entry is incomplete: ${item.id}`);
 }
 
-if (!sw.includes('aqua-fantasia-v4.7.0')) fail('Service worker cache version was not updated to v4.7.');
-if (!sw.includes('./assets/art/v43_perf_fishing_shell.svg')) fail('v4.3 performance fishing shell cache entry is missing.');
-if (!sw.includes('./assets/art/v44_animation_fishing_stage.svg')) fail('v4.4 animation stage cache entry is missing.');
-if (!sw.includes('./assets/art/v45_bobber_master.svg')) fail('v4.5 bobber cache entry is missing.');
-if (!sw.includes('./assets/atlas/aqua_fishing_v46.atlas.json')) fail('v4.6 atlas json cache entry is missing.');
-if (!index.includes('initV47RendererRuntime')) fail('v4.7 renderer runtime init is missing.');
-if (!index.includes('v47-fishing-canvas')) fail('v4.7 fishing canvas layer is missing.');
-if (!index.includes('renderV47RendererPanel')) fail('v4.7 renderer panel renderer is missing.');
-if (!index.includes('aqua_fishing_v47.webp')) fail('v4.7 WebP atlas reference is missing.');
-if (!sw.includes('./assets/atlas/aqua_fishing_v47.webp')) fail('v4.7 WebP atlas cache entry is missing.');
-if (!sw.includes('./assets/art/v47_fishing_pixi_stage.svg')) fail('v4.7 fishing stage cache entry is missing.');
+const refs = [...index.matchAll(/assets\/(?:art|icons|images|atlas|ui-kit)\/[^'"\)\s]+/g), ...sw.matchAll(/\.\/assets\/(?:art|icons|images|atlas|ui-kit)\/[^'"\)\s]+/g)]
+  .map((m) => m[0].replace(/^\.\//, ''));
+for (const ref of new Set(refs)) if (!exists(ref)) fail(`Missing referenced asset: ${ref}`);
 
 const scripts = [...index.matchAll(/<script(?:\s+[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map((m) => m[1].trim())
   .filter(Boolean);
-
 scripts.forEach((script, idx) => {
   const temp = join(root, `.validate-script-${idx}.mjs`);
   writeFileSync(temp, script, 'utf8');
@@ -408,4 +72,4 @@ scripts.forEach((script, idx) => {
   }
 });
 
-console.log('[validate-static] AquaFantasia static bundle OK.');
+console.log('[validate-static] AquaFantasia v4.8 static bundle OK.');

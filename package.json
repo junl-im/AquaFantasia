@@ -1,6 +1,6 @@
 {
   "name": "aqua-fantasia-engine",
-  "version": "4.7.0",
+  "version": "4.8.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,7 +12,9 @@
     "audit": "node tools/audit-bundle.mjs",
     "audit:bundle": "node tools/audit-bundle.mjs",
     "atlas:check": "node tools/generate-webp-atlas.mjs",
-    "renderer:check": "node tools/check-v47-renderer.mjs"
+    "renderer:check": "node tools/check-v47-renderer.mjs",
+    "runtime:check": "node tools/check-v48-runtime.mjs",
+    "clean:report": "node tools/clean-bundle-report.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-basic-ssl": "latest",
@@ -24,5 +26,5 @@
   "devDependencies": {
     "typescript": "latest"
   },
-  "description": "Aqua Fantasia v4.7 - PixiJS fishing renderer bridge, WebP Atlas v47, Canvas fallback, mobile performance governor and PWA optimized engine scaffold"
+  "description": "Aqua Fantasia v4.8 - runtime diet, clean bundle, Pixi fishing renderer budget, mobile cache optimization and lean PWA package."
 }

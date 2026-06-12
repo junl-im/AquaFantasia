@@ -32,6 +32,8 @@ jobs:
           npm run validate
           npm run audit
           npm run atlas:check
+          npm run runtime:check
+          npm run clean:report
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

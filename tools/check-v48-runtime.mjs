@@ -1,0 +1,15 @@
+import { readFileSync, statSync } from 'node:fs';
+import { join } from 'node:path';
+const root = process.cwd();
+const index = readFileSync(join(root, 'index.html'), 'utf8');
+const sw = readFileSync(join(root, 'sw.js'), 'utf8');
+const atlas = JSON.parse(readFileSync(join(root, 'assets/atlas/aqua_fishing_v48.atlas.json'), 'utf8'));
+const requiredFrames = ['bobber','line','ripple','spark','fish','meter','button','cache'];
+const missingFrames = requiredFrames.filter((key) => !atlas.frames?.[key]);
+if (missingFrames.length) throw new Error(`Missing v4.8 atlas frames: ${missingFrames.join(', ')}`);
+const requiredIndex = ['initV48Runtime','renderV48RuntimePanel','v48-runtime-panel','v48-production-mode','trimV48Caches'];
+const missingIndex = requiredIndex.filter((key) => !index.includes(key));
+if (missingIndex.length) throw new Error(`Missing v4.8 runtime markers: ${missingIndex.join(', ')}`);
+if (!sw.includes('aqua-fantasia-v4.8.0')) throw new Error('Service worker is not v4.8.0');
+if (statSync(join(root, 'assets/atlas/aqua_fishing_v48.webp')).size < 1024) throw new Error('v4.8 WebP atlas is unexpectedly small');
+console.log(JSON.stringify({ ok:true, version:'4.8.0', frames:Object.keys(atlas.frames).length, atlasBytes:statSync(join(root, 'assets/atlas/aqua_fishing_v48.webp')).size }, null, 2));
