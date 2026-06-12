@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#062b46" />
+  <title>Aqua Fantasia v4.9 Standalone Phaser Prototype</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #062b46;
+      color: white;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #game {
+      width: 100vw;
+      height: 100dvh;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 50% 0%, rgba(125, 211, 252, .26), transparent 32%), #062b46;
+    }
+  </style>
+</head>
+<body>
+  <div id="game"></div>
+
+  <!-- Phaser 3 단일 HTML 테스트용 CDN. 실제 배포에서는 npm/Vite 번들로 교체해도 됩니다. -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+  <script>
+    // ============================================================
+    // Aqua Fantasia v4.9 Standalone Phaser Prototype
+    // ------------------------------------------------------------
+    // 목적:
+    // - 실제 에셋 파일이 없어도 브라우저에서 즉시 낚시 핵심 루프를 테스트합니다.
+    // - 모든 이미지는 placehold.co 임시 경로를 사용합니다.
+    // - 실제 DALL-E 산출물 파일이 준비되면 아래 ASSETS 경로만 교체하면 됩니다.
+    // ============================================================
+
+    const ASSETS = {
+      bg: 'https://placehold.co/720x1280/74d8ff/073047.png?text=bg_ocean.png',
+      boat: 'https://placehold.co/360x260/facc15/431407.png?text=player_boat.png',
+      float: 'https://placehold.co/160x220/ffffff/e11d48.png?text=fishing_float.png',
+      fish: 'https://placehold.co/260x180/f97316/ffffff.png?text=fish_clown.png',
+      gauge: 'https://placehold.co/640x140/92400e/fff7ad.png?text=gauge_frame.png',
+      slot: 'https://placehold.co/160x160/7dd3fc/075985.png?text=fish_slot.png'
+    };
+
+    const GAME_W = 390;
+    const GAME_H = 740;
+    const SAFE_MIN = 35;
+    const SAFE_MAX = 65;
+    const NEED_SAFE_SECONDS = 3;
+
+    class FishingScene extends Phaser.Scene {
+      constructor() {
+        super('FishingScene');
+        this.phase = 'ready';
+        this.tension = 50;
+        this.safeSeconds = 0;
+        this.isHolding = false;
+        this.inventoryOpen = false;
+        this.biteTimer = null;
+      }
+
+      preload() {
+        // placehold.co 이미지를 외부에서 불러오므로 CORS 설정을 안전하게 켭니다.
+        this.load.setCORS('anonymous');
+        this.load.image('bg', ASSETS.bg);
+        this.load.image('boat', ASSETS.boat);
+        this.load.image('float', ASSETS.float);
+        this.load.image('fish', ASSETS.fish);
+        this.load.image('gauge', ASSETS.gauge);
+        this.load.image('slot', ASSETS.slot);
+      }
+
+      create() {
+        this.cameras.main.setBackgroundColor('#062b46');
+        this.createBackground();
+        this.createPlayer();
+        this.createBobber();
+        this.createHud();
+        this.createInventory();
+        this.bindInput();
+        this.setGuide('STEP 1 · 낚싯대 던지기', '아래 CAST 버튼을 누르면 찌를 던집니다.');
+      }
+
+      createBackground() {
+        // 메인 배경 이미지는 화면 전체를 채우되, 하늘 2 : 바다 8 느낌이 나도록 배치합니다.
+        const bg = this.add.image(GAME_W / 2, GAME_H / 2, 'bg');
+        bg.setDisplaySize(GAME_W, GAME_H);
+
+        // 얕은 수면 경계와 심해 느낌을 위한 반투명 그래픽 레이어입니다.
+        const waterLine = this.add.rectangle(GAME_W / 2, 154, GAME_W, 6, 0xffffff, 0.42);
+        waterLine.setBlendMode(Phaser.BlendModes.SCREEN);
+
+        this.bubbles = this.add.group();
+        for (let i = 0; i < 18; i++) {
+          const bubble = this.add.circle(
+            Phaser.Math.Between(18, GAME_W - 18),
+            Phaser.Math.Between(190, GAME_H - 40),
+            Phaser.Math.Between(2, 7),
+            0xffffff,
+            Phaser.Math.FloatBetween(0.12, 0.32)
+          );
+          this.bubbles.add(bubble);
+          this.tweens.add({
+            targets: bubble,
+            y: bubble.y - Phaser.Math.Between(40, 100),
+            alpha: 0,
+            duration: Phaser.Math.Between(2800, 5200),
+            repeat: -1,
+            delay: Phaser.Math.Between(0, 2200),
+            ease: 'Sine.easeInOut'
+          });
+        }
+      }
+
+      createPlayer() {
+        // 플레이어와 배는 실제 이미지 기반 에셋의 위치를 가정합니다.
+        this.boat = this.add.image(92, 142, 'boat');
+        this.boat.setDisplaySize(136, 98);
+        this.boat.setDepth(8);
+        this.tweens.add({
+          targets: this.boat,
+          y: 148,
+          angle: 2,
+          duration: 1400,
+          yoyo: true,
+          repeat: -1,
+          ease: 'Sine.easeInOut'
+        });
+
+        // 낚싯대는 프로토타입용 최소 그래픽입니다. 실제 버전에서는 rod 이미지 에셋으로 교체합니다.
+        this.rod = this.add.rectangle(157, 166, 6, 122, 0x7c2d12, 1);
+        this.rod.setOrigin(0.5, 1);
+        this.rod.setAngle(-52);
+        this.rod.setDepth(9);
+      }
+
+      createBobber() {
+        this.line = this.add.graphics();
+        this.line.setDepth(7);
+
+        this.float = this.add.image(292, 348, 'float');
+        this.float.setDisplaySize(44, 60);
+        this.float.setDepth(10);
+        this.float.setAlpha(0);
+
+        this.ripple = this.add.ellipse(292, 374, 20, 8, 0x9beafe, 0.35);
+        this.ripple.setStrokeStyle(2, 0xffffff, 0.55);
+        this.ripple.setDepth(6);
+        this.ripple.setAlpha(0);
+
+        this.biteBubble = this.add.text(292, 286, '!', {
+          fontFamily: 'Arial Black, system-ui',
+          fontSize: '42px',
+          color: '#431407',
+          backgroundColor: '#fff7ad',
+          padding: { left: 18, right: 18, top: 4, bottom: 4 }
+        });
+        this.biteBubble.setOrigin(0.5);
+        this.biteBubble.setDepth(30);
+        this.biteBubble.setAlpha(0);
+      }
+
+      createHud() {
+        this.guidePanel = this.add.rectangle(GAME_W / 2, 46, GAME_W - 28, 70, 0x031827, 0.76);
+        this.guidePanel.setStrokeStyle(1, 0xffffff, 0.16);
+        this.guidePanel.setDepth(40);
+
+        this.guideTitle = this.add.text(28, 22, '', {
+          fontFamily: 'system-ui, sans-serif',
+          fontSize: '15px',
+          fontStyle: '900',
+          color: '#fff7ad'
+        });
+        this.guideTitle.setDepth(41);
+
+        this.guideDesc = this.add.text(28, 46, '', {
+          fontFamily: 'system-ui, sans-serif',
+          fontSize: '12px',
+          color: '#dff8ff'
+        });
+        this.guideDesc.setDepth(41);
+
+        this.bagButton = this.add.text(GAME_W - 50, 94, '🎒', {
+          fontFamily: 'system-ui, sans-serif',
+          fontSize: '28px',
+          backgroundColor: '#0e7490',
+          padding: { left: 12, right: 12, top: 8, bottom: 8 }
+        });
+        this.bagButton.setOrigin(0.5);
+        this.bagButton.setDepth(42);
+        this.bagButton.setInteractive({ useHandCursor: true });
+        this.bagButton.on('pointerdown', () => this.toggleInventory());
+
+        this.castButton = this.add.text(GAME_W / 2, GAME_H - 58, '🎣  CAST', {
+          fontFamily: 'Arial Black, system-ui',
+          fontSize: '28px',
+          color: '#073047',
+          backgroundColor: '#67e8f9',
+          padding: { left: 44, right: 44, top: 14, bottom: 14 }
+        });
+        this.castButton.setOrigin(0.5);
+        this.castButton.setDepth(50);
+        this.castButton.setInteractive({ useHandCursor: true });
+        this.castButton.on('pointerdown', () => this.castLine());
+
+        this.createGauge();
+      }
+
+      createGauge() {
+        this.gaugeGroup = this.add.container(GAME_W / 2, GAME_H - 142);
+        this.gaugeGroup.setDepth(48);
+        this.gaugeGroup.setAlpha(0);
+
+        const frame = this.add.image(0, 0, 'gauge');
+        frame.setDisplaySize(330, 72);
+        this.gaugeGroup.add(frame);
+
+        const dangerLeft = this.add.rectangle(-102, 0, 74, 24, 0xef4444, 0.9);
+        const safe = this.add.rectangle(0, 0, 112, 24, 0x22c55e, 0.9);
+        const dangerRight = this.add.rectangle(102, 0, 74, 24, 0xef4444, 0.9);
+        const cursor = this.add.rectangle(0, 0, 12, 42, 0xffffff, 1);
+        cursor.setStrokeStyle(2, 0x0f172a, 0.5);
+        this.gaugeCursor = cursor;
+        this.gaugeGroup.add([dangerLeft, safe, dangerRight, cursor]);
+
+        this.safeText = this.add.text(0, 45, '안전지대 3초 유지', {
+          fontFamily: 'system-ui, sans-serif',
+          fontSize: '13px',
+          color: '#fff7ad'
+        });
+        this.safeText.setOrigin(0.5);
+        this.gaugeGroup.add(this.safeText);
+      }
+
+      createInventory() {
+        // 도감 창은 기본적으로 화면 아래에 숨어 있고, 가방 버튼을 누르면 튀어 오릅니다.
+        this.inventoryPanel = this.add.container(GAME_W / 2, GAME_H + 280);
+        this.inventoryPanel.setDepth(80);
+
+        const panelBg = this.add.rectangle(0, 0, GAME_W - 34, 430, 0x082f49, 0.96);
+        panelBg.setStrokeStyle(2, 0x7dd3fc, 0.45);
+        this.inventoryPanel.add(panelBg);
+
+        const title = this.add.text(0, -180, '🐠 도감 가방', {
+          fontFamily: 'Arial Black, system-ui',
+          fontSize: '24px',
+          color: '#fff7ad'
+        });
+        title.setOrigin(0.5);
+        this.inventoryPanel.add(title);
+
+        const close = this.add.text(145, -184, '닫기', {
+          fontFamily: 'system-ui, sans-serif',
+          fontSize: '14px',
+          color: '#dff8ff',
+          backgroundColor: '#0f172a',
+          padding: { left: 12, right: 12, top: 6, bottom: 6 }
+        });
+        close.setOrigin(0.5);
+        close.setInteractive({ useHandCursor: true });
+        close.on('pointerdown', () => this.toggleInventory(false));
+        this.inventoryPanel.add(close);
+
+        let idx = 0;
+        for (let row = 0; row < 3; row++) {
+          for (let col = 0; col < 4; col++) {
+            const x = -126 + col * 84;
+            const y = -105 + row * 88;
+            const slot = this.add.image(x, y, 'slot');
+            slot.setDisplaySize(66, 66);
+            this.inventoryPanel.add(slot);
+            if (idx === 0) {
+              const fish = this.add.image(x, y, 'fish');
+              fish.setDisplaySize(52, 36);
+              fish.setAlpha(0.92);
+              this.inventoryPanel.add(fish);
+            }
+            idx++;
+          }
+        }
+      }
+
+      bindInput() {
+        this.input.on('pointerdown', (pointer) => {
+          if (this.phase === 'bite') this.startReelMode();
+          if (this.phase === 'reel') this.isHolding = true;
+        });
+        this.input.on('pointerup', () => { this.isHolding = false; });
+        this.input.on('pointercancel', () => { this.isHolding = false; });
+      }
+
+      setGuide(title, desc) {
+        this.guideTitle.setText(title);
+        this.guideDesc.setText(desc);
+      }
+
+      castLine() {
+        if (this.phase !== 'ready' && this.phase !== 'fail' && this.phase !== 'success') return;
+        this.phase = 'casting';
+        this.safeSeconds = 0;
+        this.tension = 50;
+        this.isHolding = false;
+        this.setGuide('STEP 2 · 찌 던지는 중', '포물선으로 날아간 뒤 2~4초 안에 입질이 옵니다.');
+        this.biteBubble.setAlpha(0);
+        this.gaugeGroup.setAlpha(0);
+        this.line.clear();
+
+        // CAST 버튼 squash/stretch 후 사라지는 연출입니다.
+        this.tweens.add({
+          targets: this.castButton,
+          scaleX: 1.12,
+          scaleY: 0.84,
+          duration: 110,
+          yoyo: true,
+          ease: 'Sine.easeOut',
+          onComplete: () => this.castButton.setVisible(false)
+        });
+
+        this.tweens.add({
+          targets: this.rod,
+          angle: -92,
+          duration: 220,
+          yoyo: true,
+          ease: 'Back.easeOut'
+        });
+
+        this.float.setAlpha(1);
+        this.float.setPosition(122, 150);
+        this.float.setScale(0.7);
+        this.ripple.setAlpha(0);
+
+        // Phaser의 타임라인으로 찌 포물선 궤적을 구현합니다.
+        const path = new Phaser.Curves.QuadraticBezier(
+          new Phaser.Math.Vector2(122, 150),
+          new Phaser.Math.Vector2(220, 72),
+          new Phaser.Math.Vector2(292, 350)
+        );
+        const follower = { t: 0 };
+        this.tweens.add({
+          targets: follower,
+          t: 1,
+          duration: 820,
+          ease: 'Cubic.easeOut',
+          onUpdate: () => {
+            const p = path.getPoint(follower.t);
+            this.float.setPosition(p.x, p.y);
+            this.float.setAngle(-18 + follower.t * 28);
+            this.float.setScale(0.7 + follower.t * 0.22);
+            this.drawLine();
+          },
+          onComplete: () => this.splashAndWait()
+        });
+      }
+
+      splashAndWait() {
+        this.phase = 'waiting';
+        this.setGuide('STEP 2 · 입질 대기', '수면을 보다가 ! 말풍선이 뜨면 화면을 터치하세요.');
+
+        this.ripple.setPosition(this.float.x, this.float.y + 24);
+        this.ripple.setAlpha(0.9);
+        this.ripple.setScale(0.2);
+        this.tweens.add({
+          targets: this.ripple,
+          scaleX: 2.4,
+          scaleY: 1.1,
+          alpha: 0,
+          duration: 680,
+          ease: 'Cubic.easeOut'
+        });
+
+        // 찌가 수면에서 위아래로 둥실둥실 흔들립니다.
+        this.floatBobTween = this.tweens.add({
+          targets: this.float,
+          y: this.float.y + 10,
+          angle: 5,
+          duration: 760,
+          yoyo: true,
+          repeat: -1,
+          ease: 'Sine.easeInOut',
+          onUpdate: () => this.drawLine()
+        });
+
+        const delay = Phaser.Math.Between(2000, 4000);
+        this.biteTimer = this.time.delayedCall(delay, () => this.showBite());
+      }
+
+      showBite() {
+        if (this.phase !== 'waiting') return;
+        this.phase = 'bite';
+        this.setGuide('STEP 3 · 물었다!', '! 말풍선이 떠 있을 때 화면을 터치해 챔질하세요.');
+        this.cameras.main.shake(240, 0.012);
+        this.biteBubble.setPosition(this.float.x, this.float.y - 76);
+        this.biteBubble.setAlpha(1);
+
+        this.tweens.add({
+          targets: this.float,
+          y: this.float.y + 30,
+          scaleX: 1.08,
+          scaleY: 0.86,
+          duration: 180,
+          yoyo: true,
+          repeat: 5,
+          ease: 'Sine.easeInOut',
+          onUpdate: () => this.drawLine()
+        });
+
+        this.tweens.add({
+          targets: this.biteBubble,
+          y: this.biteBubble.y - 18,
+          scale: 1.12,
+          duration: 320,
+          yoyo: true,
+          repeat: -1,
+          ease: 'Sine.easeInOut'
+        });
+
+        this.time.delayedCall(1600, () => {
+          if (this.phase === 'bite') this.failCatch('타이밍을 놓쳤어요. 다시 CAST!');
+        });
+      }
+
+      startReelMode() {
+        if (this.phase !== 'bite') return;
+        this.phase = 'reel';
+        this.biteBubble.setAlpha(0);
+        this.tweens.killTweensOf(this.biteBubble);
+        this.gaugeGroup.setAlpha(1);
+        this.setGuide('STEP 4 · 밀당 모드', '꾹 누르면 장력 상승, 떼면 하강. 초록 안전지대 3초 유지!');
+        this.cameras.main.flash(120, 255, 247, 173, false);
+      }
+
+      update(time, delta) {
+        if (this.phase === 'casting' || this.phase === 'waiting' || this.phase === 'bite' || this.phase === 'reel') {
+          this.drawLine();
+        }
+
+        if (this.phase !== 'reel') return;
+        const dt = delta / 1000;
+        const drift = Math.sin(time / 170) * 2.4 * dt;
+        this.tension += (this.isHolding ? 44 : -30) * dt + drift;
+        this.tension = Phaser.Math.Clamp(this.tension, 0, 100);
+        this.updateGauge();
+
+        const safe = this.tension >= SAFE_MIN && this.tension <= SAFE_MAX;
+        if (safe) this.safeSeconds += dt;
+        else this.safeSeconds = Math.max(0, this.safeSeconds - dt * 0.75);
+
+        if (safe) {
+          this.safeText.setText(`좋아요! ${this.safeSeconds.toFixed(1)} / ${NEED_SAFE_SECONDS}초`);
+        } else if (this.tension < SAFE_MIN) {
+          this.safeText.setText('낮아요! 꾹 눌러 감기');
+        } else {
+          this.safeText.setText('높아요! 손을 떼고 줄 풀기');
+        }
+
+        if (this.safeSeconds >= NEED_SAFE_SECONDS) this.catchSuccess();
+        if (this.tension <= 0 || this.tension >= 100) this.failCatch('줄이 끊어졌어요. 장력을 30~70에 유지하세요.');
+      }
+
+      updateGauge() {
+        const x = Phaser.Math.Linear(-132, 132, this.tension / 100);
+        this.gaugeCursor.x = x;
+        this.float.x = 292 + Math.sin(this.time.now / 150) * (this.isHolding ? 18 : 8);
+        this.float.y = 350 + Math.cos(this.time.now / 170) * (this.isHolding ? 10 : 5);
+      }
+
+      drawLine() {
+        this.line.clear();
+        if (this.float.alpha <= 0.01) return;
+        this.line.lineStyle(3, 0xfff7ad, 0.78);
+        this.line.beginPath();
+        this.line.moveTo(156, 112);
+        this.line.quadraticCurveTo(220, 170, this.float.x, this.float.y);
+        this.line.strokePath();
+      }
+
+      catchSuccess() {
+        if (this.phase !== 'reel') return;
+        this.phase = 'success';
+        this.isHolding = false;
+        this.setGuide('포획 성공!', '흰동가리 스타일 물고기가 도감에 저장되었습니다.');
+        this.gaugeGroup.setAlpha(0);
+        this.cameras.main.flash(200, 255, 247, 173, false);
+
+        const fish = this.add.image(GAME_W / 2, GAME_H / 2 - 10, 'fish');
+        fish.setDisplaySize(40, 28);
+        fish.setDepth(90);
+        this.tweens.add({
+          targets: fish,
+          scaleX: 4.2,
+          scaleY: 4.2,
+          angle: 360,
+          duration: 880,
+          ease: 'Bounce.easeOut',
+          onComplete: () => {
+            this.time.delayedCall(650, () => fish.destroy());
+          }
+        });
+
+        this.float.setAlpha(0);
+        this.line.clear();
+        this.time.delayedCall(1150, () => this.resetReady());
+      }
+
+      failCatch(message) {
+        if (this.phase === 'fail' || this.phase === 'ready') return;
+        this.phase = 'fail';
+        this.isHolding = false;
+        this.gaugeGroup.setAlpha(0);
+        this.setGuide('아쉬워요!', message);
+        this.cameras.main.shake(260, 0.015);
+        this.float.setTint(0xff6b6b);
+        this.time.delayedCall(900, () => {
+          this.float.clearTint();
+          this.resetReady();
+        });
+      }
+
+      resetReady() {
+        this.phase = 'ready';
+        this.safeSeconds = 0;
+        this.tension = 50;
+        this.isHolding = false;
+        this.float.setAlpha(0);
+        this.biteBubble.setAlpha(0);
+        this.gaugeGroup.setAlpha(0);
+        this.castButton.setVisible(true);
+        this.castButton.setScale(1);
+        this.line.clear();
+        if (this.floatBobTween) this.floatBobTween.stop();
+        this.setGuide('STEP 1 · 다시 던지기', 'CAST 버튼을 눌러 다음 물고기를 노려보세요.');
+      }
+
+      toggleInventory(force) {
+        const open = typeof force === 'boolean' ? force : !this.inventoryOpen;
+        this.inventoryOpen = open;
+        this.tweens.add({
+          targets: this.inventoryPanel,
+          y: open ? GAME_H - 236 : GAME_H + 280,
+          duration: 420,
+          ease: open ? 'Back.easeOut' : 'Cubic.easeIn'
+        });
+      }
+    }
+
+    const config = {
+      type: Phaser.AUTO,
+      parent: 'game',
+      width: GAME_W,
+      height: GAME_H,
+      backgroundColor: '#062b46',
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: GAME_W,
+        height: GAME_H
+      },
+      render: {
+        antialias: true,
+        pixelArt: false,
+        powerPreference: 'high-performance'
+      },
+      scene: [FishingScene]
+    };
+
+    window.addEventListener('load', () => {
+      new Phaser.Game(config);
+    });
+  </script>
+</body>
+</html>
