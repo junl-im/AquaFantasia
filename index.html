@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Aqua Fantasia - v4.3 Fullscreen Performance Boost - 단계형 포획 결과, 보상 연출 정리, 낚시 몰입 유지">
+    <meta name="description" content="Aqua Fantasia - v4.7 Pixi Fishing Renderer - Vite·PixiJS 8·TypeScript·WebP Atlas·Howler 기반 모바일 엔진 준비">
     <meta name="theme-color" content="#082f49">
     <meta name="color-scheme" content="dark">
     <meta name="mobile-web-app-capable" content="yes">
@@ -20,6 +20,10 @@
     <link rel="preload" as="image" href="assets/art/v38_action_ocean.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/art/v38_fishing_arena.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/art/v38_action_hud.svg" type="image/svg+xml">
+    <link rel="preload" as="image" href="assets/atlas/aqua_fishing_v47.webp" type="image/webp">
+    <link rel="preload" as="image" href="assets/art/v47_fishing_pixi_stage.svg" type="image/svg+xml">
+    <link rel="preload" as="image" href="assets/art/v46_engine_console.svg" type="image/svg+xml">
+    <link rel="preload" as="image" href="assets/art/v46_pixi_stage.svg" type="image/svg+xml">
 
     <script>
     /* v4.3 Early Fullscreen Primer: attaches before app boot, then upgrades to the full game shell after the first real gesture. */
@@ -53,7 +57,7 @@
       document.addEventListener('keydown', attempt, { once:true, capture:true });
     })();
     </script>
-    <title>Aqua Fantasia • v4.3 Fullscreen Performance Boost</title>
+    <title>Aqua Fantasia • v4.7 Pixi Fishing Renderer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase는 아래 type="module" 스크립트에서 초기화합니다. GitHub Pages 정적 배포에 맞춘 CDN 방식입니다. -->
     <style>
@@ -2138,6 +2142,171 @@
         body.v43-perf-boost * { scroll-behavior:auto !important; }
         body.v43-perf-boost .fish-shadow:nth-child(n+4) { display:none !important; }
 
+
+
+/* ==================== v4.4 Animation Performance Suite ==================== */
+body.ui-v44 { --v44-gold:#f7d071; --v44-coral:#ff8f7b; --v44-teal:#43d6c9; --v44-deep:#061526; --v44-violet:#a78bfa; }
+body.ui-v44 #screen-fishing { background:
+    radial-gradient(circle at 20% 0%, rgba(247,208,113,.14), transparent 30%),
+    radial-gradient(circle at 85% 18%, rgba(167,139,250,.15), transparent 34%),
+    linear-gradient(180deg,#061526 0%,#08243a 46%,#020817 100%); }
+body.ui-v44 #fishing-visual { isolation:isolate; background-image:linear-gradient(180deg,rgba(5,22,42,.15),rgba(2,8,23,.44)), url('assets/art/v44_animation_fishing_stage.svg'); background-size:cover; background-position:center; box-shadow:0 22px 70px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.13); }
+body.ui-v44 #fishing-visual::after { content:""; position:absolute; inset:0; z-index:3; pointer-events:none; background:url('assets/art/v44_low_mode_texture.svg') center/cover no-repeat; opacity:.20; mix-blend-mode:screen; }
+.v44-motion-layer { position:absolute; inset:0; z-index:34; pointer-events:none; overflow:hidden; }
+.v44-motion-layer.hidden { display:none !important; }
+.v44-cast-arc { position:absolute; left:13%; right:14%; top:11%; height:48%; opacity:0; transform:translateY(8px) scale(.96); background:url('assets/art/v44_line_arc.svg') center/contain no-repeat; filter:drop-shadow(0 16px 26px rgba(67,214,201,.28)); }
+#fishing-visual.phase-casting .v44-cast-arc { opacity:.95; animation:v44-cast-arc 780ms cubic-bezier(.18,.9,.22,1) both; }
+@keyframes v44-cast-arc { 0%{opacity:0; transform:translate3d(-24px,28px,0) scale(.82) rotate(-5deg)} 55%{opacity:1; transform:translate3d(7px,-10px,0) scale(1.03) rotate(2deg)} 100%{opacity:.54; transform:translate3d(0,0,0) scale(1)} }
+.v44-water-ring { position:absolute; width:9rem; height:9rem; border-radius:50%; left:50%; top:54%; transform:translate(-50%,-50%) scale(.4); opacity:0; background:url('assets/art/v44_hook_prompt.svg') center/cover no-repeat; filter:drop-shadow(0 0 24px rgba(247,208,113,.35)); }
+#fishing-visual.phase-bite .v44-water-ring { opacity:1; animation:v44-water-ring 760ms ease-in-out infinite alternate; }
+@keyframes v44-water-ring { from{ transform:translate(-50%,-50%) scale(.86); filter:drop-shadow(0 0 15px rgba(247,208,113,.25)) } to{ transform:translate(-50%,-50%) scale(1.08); filter:drop-shadow(0 0 36px rgba(67,214,201,.45)) } }
+.v44-fish-trail { position:absolute; width:7rem; height:3.2rem; left:48%; top:58%; opacity:0; transform:translate(-50%,-50%); background:url('assets/art/v44_fish_swim_sheet.svg') center/contain no-repeat; filter:drop-shadow(0 10px 22px rgba(0,0,0,.38)); }
+#fishing-visual.phase-reel .v44-fish-trail { opacity:.84; animation:v44-fish-swim 1.4s ease-in-out infinite alternate; }
+@keyframes v44-fish-swim { from{ transform:translate(calc(-50% - 34px),calc(-50% + 8px)) rotate(-6deg) } to{ transform:translate(calc(-50% + 36px),calc(-50% - 12px)) rotate(7deg) } }
+.v44-hook-arrow { position:absolute; left:50%; top:42%; transform:translate(-50%,-50%); opacity:0; width:8.5rem; height:4rem; background:url('assets/art/v44_tap_arrow.svg') center/contain no-repeat; filter:drop-shadow(0 8px 20px rgba(0,0,0,.5)); }
+#fishing-visual.phase-bite .v44-hook-arrow { opacity:1; animation:v44-arrow-bob .62s ease-in-out infinite alternate; }
+@keyframes v44-arrow-bob { from{ transform:translate(-50%,-58%) } to{ transform:translate(-50%,-42%) } }
+.v44-objective-strip { position:absolute; left:.85rem; right:.85rem; top:.75rem; z-index:57; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:.7rem; padding:.72rem .82rem; border-radius:1.25rem; background-image:linear-gradient(135deg,rgba(5,15,31,.82),rgba(12,74,110,.42)), url('assets/art/v44_action_overlay.svg'); background-size:cover; border:1px solid rgba(255,247,221,.15); box-shadow:0 18px 38px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.12); pointer-events:none; }
+.v44-objective-strip .badge { width:2.3rem; height:2.3rem; border-radius:.9rem; display:grid; place-items:center; background:linear-gradient(135deg,rgba(247,208,113,.95),rgba(255,143,123,.88)); color:#061526; font-weight:1000; box-shadow:0 0 20px rgba(247,208,113,.22); }
+.v44-objective-strip b { display:block; color:#fff7dd; font-weight:1000; font-size:.82rem; line-height:1.1; }
+.v44-objective-strip span { display:block; color:rgba(236,254,255,.68); font-size:.65rem; line-height:1.24; font-weight:800; margin-top:.08rem; }
+.v44-objective-strip em { font-style:normal; padding:.28rem .45rem; border-radius:999px; color:#cffafe; background:rgba(67,214,201,.12); border:1px solid rgba(67,214,201,.18); font-size:.55rem; font-weight:1000; }
+.v44-rhythm-console { margin-top:.55rem; display:grid; gap:.42rem; }
+.v44-rhythm-lane { position:relative; height:.7rem; border-radius:999px; overflow:hidden; background-image:linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.05)), url('assets/art/v44_rhythm_lane.svg'); background-size:cover; border:1px solid rgba(255,255,255,.08); }
+.v44-rhythm-lane i { position:absolute; top:0; bottom:0; left:40%; width:20%; border-radius:inherit; background:linear-gradient(90deg,rgba(67,214,201,.18),rgba(247,208,113,.38),rgba(67,214,201,.18)); box-shadow:0 0 18px rgba(247,208,113,.28); }
+.v44-rhythm-lane em { position:absolute; top:-.22rem; bottom:-.22rem; width:.18rem; left:var(--cursor,0%); border-radius:999px; background:#fff7dd; box-shadow:0 0 16px rgba(255,247,221,.9); transform:translateX(-50%); }
+.v44-tuning-strip { position:relative; z-index:58; margin:.45rem 1rem 0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.35rem; }
+.v44-tuning-strip button { min-height:2.35rem; border-radius:1rem; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.1); color:rgba(255,255,255,.86); font-size:.64rem; font-weight:950; }
+.v44-frame-chip { position:absolute; right:.85rem; top:4.25rem; z-index:58; padding:.34rem .5rem; border-radius:999px; background:rgba(2,8,23,.62); border:1px solid rgba(255,255,255,.12); font-size:.55rem; font-weight:1000; color:#a7f3d0; pointer-events:none; }
+body.v44-auto-lite .v44-frame-chip { color:#fcd34d; }
+body.ui-v44 .reel-action-button { background-image:linear-gradient(135deg,#fff7dd,#f7d071 48%,#ff8f7b), url('assets/art/v44_reel_button.svg'); background-size:cover; color:#061526; }
+body.ui-v44 .reel-action-button.v44-perfect-pop { animation:v44-perfect-pop 220ms ease-out; }
+@keyframes v44-perfect-pop { 0%{transform:scale(1)} 45%{transform:scale(1.035); filter:saturate(1.38) brightness(1.08)} 100%{transform:scale(1)} }
+body.ui-v44 #fishing-status { bottom:7.1rem; max-width:calc(100% - 2rem); text-align:center; background:rgba(2,8,23,.62); border-color:rgba(255,247,221,.12); }
+body.ui-v44 #fishing-stage-guide { bottom:9.95rem; background-image:linear-gradient(135deg,rgba(2,8,23,.70),rgba(22,78,99,.30)), url('assets/art/v44_status_scroll.svg'); background-size:cover; }
+body.ui-v44 .v41-flow-hud { opacity:.94; }
+body.ui-v44 .action-float-text { text-shadow:0 4px 18px rgba(0,0,0,.55); }
+body.v44-auto-lite .fx-aurora, body.v44-auto-lite .depth-rays, body.v44-auto-lite .bubble-field, body.v44-auto-lite .v31-stage-polish { animation:none !important; opacity:.28 !important; }
+body.v44-auto-lite .v44-cast-arc, body.v44-auto-lite .v44-water-ring, body.v44-auto-lite .v44-fish-trail, body.v44-auto-lite .v44-hook-arrow { animation-duration:1.25s !important; filter:none !important; }
+body.v44-auto-lite .v44-objective-strip { box-shadow:0 10px 22px rgba(0,0,0,.24); backdrop-filter:none; }
+@media (max-width:430px) { .v44-objective-strip { top:.55rem; left:.6rem; right:.6rem; padding:.62rem .68rem; gap:.55rem; } .v44-objective-strip .badge{width:2rem;height:2rem;border-radius:.78rem}.v44-objective-strip b{font-size:.76rem}.v44-objective-strip span{font-size:.60rem}.v44-tuning-strip{margin:.35rem .8rem 0}.v44-frame-chip{top:3.85rem;right:.65rem} body.ui-v44 #fishing-status{bottom:6.75rem} }
+@media (prefers-reduced-motion: reduce) { .v44-cast-arc,.v44-water-ring,.v44-fish-trail,.v44-hook-arrow,.reel-action-button.v44-perfect-pop { animation:none !important; } }
+
+
+/* ==================== v4.5 Tackle Visual Premium / Bobber + Reel Upgrade ==================== */
+body.ui-v45 { --v45-cream:#fff7dd; --v45-gold:#f7d071; --v45-coral:#ff8f7b; --v45-aqua:#67e8f9; --v45-deep:#061526; }
+body.ui-v45 #screen-fishing { background:radial-gradient(circle at 18% 0%, rgba(247,208,113,.14), transparent 34%), radial-gradient(circle at 85% 12%, rgba(255,143,123,.12), transparent 34%), linear-gradient(180deg,#061526 0%,#08263f 54%,#020617 100%); }
+body.ui-v45 #fishing-visual { background-image:linear-gradient(180deg,rgba(4,14,28,.08),rgba(2,8,23,.42)), url('assets/art/v45_fishing_stage_lux.svg'); background-size:cover; background-position:center; box-shadow:0 22px 72px rgba(0,0,0,.44), inset 0 1px 0 rgba(255,247,221,.16); }
+body.ui-v45 #fishing-visual::before { content:""; position:absolute; inset:0; z-index:2; pointer-events:none; background:url('assets/art/v45_water_surface_detail.svg') center/cover no-repeat; opacity:.38; mix-blend-mode:screen; }
+.v45-tackle-layer { position:absolute; inset:0; z-index:42; pointer-events:none; overflow:hidden; }
+.v45-line-glow { position:absolute; inset:0; background:url('assets/art/v45_line_glow.svg') center/cover no-repeat; opacity:0; transition:opacity .18s ease; filter:drop-shadow(0 0 18px rgba(103,232,249,.25)); }
+#fishing-visual.phase-casting .v45-line-glow, #fishing-visual.phase-bite .v45-line-glow, #fishing-visual.phase-reel .v45-line-glow { opacity:.95; animation:v45-line-swing 1.18s ease-in-out infinite alternate; }
+@keyframes v45-line-swing { from{transform:translate3d(-3px,2px,0) scale(1)} to{transform:translate3d(4px,-2px,0) scale(1.01)} }
+.v45-rod-tip { position:absolute; right:1.1rem; bottom:1rem; width:5.9rem; height:18.5rem; background:url('assets/art/v45_rod_tip_master.svg') center/contain no-repeat; transform:rotate(-22deg); transform-origin:bottom right; opacity:.96; filter:drop-shadow(0 18px 28px rgba(0,0,0,.48)); }
+#fishing-visual.phase-reel .v45-rod-tip { animation:v45-rod-bend .38s ease-in-out infinite alternate; }
+@keyframes v45-rod-bend { from{ transform:rotate(-22deg) skewX(0deg)} to{ transform:rotate(-28deg) skewX(-3deg)} }
+.v45-splash { position:absolute; left:50%; top:57%; width:14rem; height:8.5rem; transform:translate(-50%,-50%) scale(.85); background:url('assets/art/v45_cast_splash.svg') center/contain no-repeat; opacity:0; transition:opacity .14s ease, transform .24s ease; }
+#fishing-visual.phase-casting .v45-splash, #fishing-visual.phase-bite .v45-splash { opacity:.82; transform:translate(-50%,-50%) scale(1); animation:v45-splash-breathe .84s ease-in-out infinite alternate; }
+@keyframes v45-splash-breathe { from{filter:brightness(.95); transform:translate(-50%,-50%) scale(.94)} to{filter:brightness(1.18); transform:translate(-50%,-50%) scale(1.04)} }
+body.ui-v45 .v39-bobber-sprite { width:5.2rem; height:5.2rem; filter:drop-shadow(0 18px 26px rgba(0,0,0,.42)) drop-shadow(0 0 22px rgba(247,208,113,.22)); }
+body.ui-v45 #fishing-visual.phase-casting .v39-bobber-sprite, body.ui-v45 #fishing-visual.phase-bite .v39-bobber-sprite { animation:v45-bobber-float 1.05s ease-in-out infinite alternate; }
+@keyframes v45-bobber-float { from{ transform:translate(-50%,-50%) translateY(2px) rotate(-2deg) scale(1)} to{ transform:translate(-50%,-50%) translateY(-12px) rotate(3deg) scale(1.06)} }
+body.ui-v45 .bite-target { width:9.6rem; height:9.6rem; background-image:radial-gradient(circle,rgba(255,247,221,.18),rgba(247,208,113,.17) 33%,rgba(103,232,249,.10) 56%,transparent 62%), url('assets/art/v45_touch_ring_deluxe.svg'); background-size:cover; border:0; box-shadow:0 0 0 10px rgba(247,208,113,.06), 0 0 44px rgba(103,232,249,.20), inset 0 0 24px rgba(255,247,221,.14); }
+body.ui-v45 .bite-target span { color:#fff7dd; text-shadow:0 3px 14px rgba(0,0,0,.7); font-size:.98rem; }
+body.ui-v45 .bite-target small { color:#f7d071; text-shadow:0 2px 10px rgba(0,0,0,.75); }
+.v45-tackle-hud { position:absolute; left:.75rem; right:.75rem; bottom:.72rem; z-index:58; display:grid; grid-template-columns:1fr auto; gap:.55rem; align-items:center; padding:.58rem .7rem; border-radius:1.2rem; background-image:linear-gradient(135deg,rgba(3,10,22,.72),rgba(12,74,110,.24)), url('assets/art/v45_tackle_hud.svg'); background-size:cover; border:1px solid rgba(255,247,221,.13); box-shadow:0 14px 34px rgba(0,0,0,.28); backdrop-filter:blur(10px); }
+.v45-tackle-hud b { display:block; color:#fff7dd; font-size:.72rem; font-weight:1000; line-height:1.12; }
+.v45-tackle-hud span { display:block; margin-top:.1rem; color:rgba(236,254,255,.65); font-size:.58rem; font-weight:850; }
+.v45-mini-gauge { width:5.2rem; height:2.65rem; border-radius:1rem; background:url('assets/art/v45_tension_gauge_deluxe.svg') center/cover no-repeat; position:relative; overflow:hidden; }
+.v45-mini-gauge::after { content:""; position:absolute; top:.4rem; bottom:.4rem; left:calc(var(--v45-tension,0%) - 1px); width:3px; border-radius:999px; background:#fff7dd; box-shadow:0 0 12px rgba(255,247,221,.8); }
+body.ui-v45 .action-reel-panel { background-image:linear-gradient(135deg,rgba(3,10,22,.70),rgba(8,47,73,.24)), url('assets/art/v45_reel_console_premium.svg'); background-size:cover; border:1px solid rgba(255,247,221,.18); box-shadow:0 20px 56px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,247,221,.13); }
+body.ui-v45 .reel-track { height:.96rem; background:rgba(2,8,23,.52); border-color:rgba(255,247,221,.10); box-shadow:inset 0 2px 8px rgba(0,0,0,.28); }
+body.ui-v45 .reel-fill { background:linear-gradient(90deg,#67e8f9,#70d6a6,#f7d071); box-shadow:0 0 22px rgba(103,232,249,.26); }
+body.ui-v45 .tension-fill { background:linear-gradient(90deg,#22c55e,#facc15,#fb923c,#ef4444); box-shadow:0 0 22px rgba(239,68,68,.24); }
+body.ui-v45 .reel-timing-strip { background:rgba(2,8,23,.30); border-radius:1rem; padding:.25rem; }
+body.ui-v45 .reel-timing-strip span { background:rgba(255,247,221,.075); color:rgba(255,247,221,.72); }
+.v45-reel-spool { width:2.15rem; height:2.15rem; display:inline-block; background:url('assets/art/v45_reel_spool.svg') center/contain no-repeat; filter:drop-shadow(0 5px 9px rgba(0,0,0,.28)); }
+body.ui-v45 .reel-action-button { min-height:4.65rem; background-image:linear-gradient(135deg,rgba(255,247,221,.94),rgba(247,208,113,.95) 50%,rgba(255,143,123,.9)), url('assets/art/v45_button_press_flash.svg'); background-size:cover; color:#061526; border:1px solid rgba(255,247,221,.34); box-shadow:0 18px 46px rgba(247,208,113,.26), inset 0 1px 0 rgba(255,255,255,.56); }
+body.ui-v45 .reel-action-button:active { transform:scale(.972); filter:saturate(1.24) brightness(1.05); }
+body.ui-v45 .reel-action-button.v44-perfect-pop, body.ui-v45 .reel-action-button.v45-spin { animation:v45-reel-pop 260ms ease-out; }
+@keyframes v45-reel-pop { 0%{transform:scale(1)} 42%{transform:scale(1.045); filter:saturate(1.4) brightness(1.12)} 100%{transform:scale(1)} }
+body.ui-v45 .v44-rhythm-lane { height:.9rem; background-image:linear-gradient(90deg,rgba(103,232,249,.12),rgba(247,208,113,.12),rgba(255,143,123,.13)), url('assets/art/v44_rhythm_lane.svg'); border-color:rgba(255,247,221,.12); }
+body.ui-v45 .v44-rhythm-lane i { left:38%; width:24%; background:linear-gradient(90deg,rgba(103,232,249,.15),rgba(247,208,113,.48),rgba(103,232,249,.15)); }
+body.ui-v45 .v44-rhythm-lane em { width:.26rem; top:-.3rem; bottom:-.3rem; background:#fff7dd; }
+body.ui-v45 #rod { opacity:0; }
+body.ui-v45 #fishing-stage-guide { border-color:rgba(255,247,221,.13); box-shadow:0 14px 34px rgba(0,0,0,.26); }
+body.ui-v45.perf-lite .v45-line-glow, body.ui-v45.perf-lite .v45-splash, body.ui-v45.perf-lite .v45-rod-tip { animation:none !important; filter:none !important; opacity:.58; }
+@media (max-width:430px) { body.ui-v45 .v39-bobber-sprite{width:4.7rem;height:4.7rem}.v45-tackle-hud{left:.55rem;right:.55rem;bottom:.58rem;padding:.5rem .58rem}.v45-mini-gauge{width:4.6rem;height:2.35rem} body.ui-v45 .reel-action-button{min-height:4.2rem} }
+@media (prefers-reduced-motion: reduce) { .v45-line-glow,.v45-rod-tip,.v45-splash,body.ui-v45 .v39-bobber-sprite{animation:none!important} }
+
+
+/* ==================== v4.7 Pixi Fishing Renderer / Vite + PixiJS Ready ==================== */
+body.ui-v46 {
+    --v46-ink:#03111f; --v46-navy:#071b34; --v46-sea:#0f5f7f; --v46-aqua:#67e8f9; --v46-gold:#f7d071; --v46-coral:#ff9c82; --v46-violet:#b79cff;
+}
+body.ui-v46 #app-shell::after {
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(circle at 18% 4%, rgba(247,208,113,.13), transparent 25rem),
+      radial-gradient(circle at 88% 18%, rgba(183,156,255,.12), transparent 23rem),
+      radial-gradient(circle at 50% 110%, rgba(103,232,249,.10), transparent 31rem);
+    opacity:.88;
+}
+body.ui-v46 .premium-card,
+body.ui-v46 .premium-glass { border-color:rgba(255,247,221,.15); }
+.v46-engine-panel {
+    position:relative; overflow:hidden; border-radius:2rem; padding:1rem;
+    background-image:linear-gradient(135deg,rgba(3,17,31,.86),rgba(15,95,127,.42)), url('assets/art/v46_engine_console.svg');
+    background-size:cover; background-position:center;
+    border:1px solid rgba(255,247,221,.16);
+    box-shadow:0 24px 64px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.16);
+}
+.v46-engine-panel::before{content:""; position:absolute; inset:0; pointer-events:none; background:url('assets/art/v46_atlas_glow.svg') center/cover no-repeat; opacity:.36; mix-blend-mode:screen;}
+.v46-engine-panel .v46-grid{position:relative; z-index:1; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.5rem; margin-top:.75rem;}
+.v46-engine-panel .v46-tile{border-radius:1rem; padding:.64rem .55rem; background:rgba(255,255,255,.075); border:1px solid rgba(255,255,255,.10); min-height:3.25rem;}
+.v46-engine-panel .v46-tile b{display:block; font-size:.72rem; color:#fff7dd; font-weight:1000; line-height:1.05;}
+.v46-engine-panel .v46-tile span{display:block; margin-top:.22rem; font-size:.58rem; color:rgba(236,254,255,.66); font-weight:800;}
+.v46-engine-panel .v46-actions{position:relative; z-index:1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.5rem; margin-top:.75rem;}
+.v46-engine-panel button{border-radius:1rem; padding:.72rem .5rem; font-size:.72rem; font-weight:1000; background:linear-gradient(135deg,rgba(255,247,221,.92),rgba(247,208,113,.88)); color:#061526; box-shadow:0 13px 32px rgba(247,208,113,.16);}
+body.ui-v46 #fishing-visual{background-image:linear-gradient(180deg,rgba(4,14,28,.05),rgba(2,8,23,.40)), url('assets/art/v46_pixi_stage.svg'), url('assets/art/v45_fishing_stage_lux.svg'); background-size:cover, cover, cover;}
+.v46-pixi-bridge-layer{position:absolute; inset:0; z-index:44; pointer-events:none; overflow:hidden;}
+.v46-pixi-bridge-layer::before{content:""; position:absolute; inset:0; background:url('assets/atlas/aqua_fishing_v46.webp') center/cover no-repeat; opacity:.105; mix-blend-mode:screen; filter:saturate(1.12);}
+.v46-pixi-trace{position:absolute; left:7%; right:7%; top:18%; height:54%; border-radius:999px; border:1px solid rgba(103,232,249,.16); opacity:.42; transform:rotate(-8deg); box-shadow:inset 0 0 32px rgba(103,232,249,.10),0 0 26px rgba(103,232,249,.08);}
+#fishing-visual.phase-reel .v46-pixi-trace{animation:v46-fish-trace 1.45s ease-in-out infinite alternate; opacity:.72;}
+@keyframes v46-fish-trace{from{transform:translate3d(-8px,6px,0) rotate(-10deg) scale(.98)}to{transform:translate3d(10px,-6px,0) rotate(7deg) scale(1.02)}}
+.v46-engine-badge{display:inline-flex;align-items:center;gap:.35rem;padding:.25rem .5rem;border-radius:999px;background:rgba(103,232,249,.12);border:1px solid rgba(103,232,249,.18);font-size:.62rem;font-weight:1000;color:#cffafe;}
+body.ui-v46.perf-lite .v46-pixi-bridge-layer::before, body.ui-v46.perf-lite .v46-pixi-trace{animation:none!important;opacity:.20!important;filter:none!important;}
+body.ui-v46.v46-battery-save .v46-engine-panel::before{opacity:.16;}
+@media (max-width:430px){.v46-engine-panel{border-radius:1.45rem;padding:.82rem}.v46-engine-panel .v46-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.v46-engine-panel .v46-actions{grid-template-columns:1fr}.v46-engine-panel .v46-tile{min-height:2.85rem}}
+@media (prefers-reduced-motion:reduce){.v46-pixi-trace{animation:none!important}}
+
+    
+
+/* ==================== v4.7 Pixi Fishing Renderer ==================== */
+body.ui-v47 { --v47-gold:#f7d071; --v47-cyan:#48d7ff; --v47-coral:#ff8a7a; --v47-violet:#a78bfa; --v47-emerald:#45e6b5; }
+body.ui-v47 #app-shell::before { background-image:radial-gradient(circle at 12% 6%, rgba(247,208,113,.16), transparent 18rem), radial-gradient(circle at 88% 10%, rgba(167,139,250,.12), transparent 20rem), radial-gradient(circle at 45% 88%, rgba(69,230,181,.10), transparent 22rem), url('assets/art/v47_master_ocean_backdrop.svg'); background-size:cover; opacity:.48; }
+.v47-renderer-panel { position:relative; overflow:hidden; border-radius:1.65rem; padding:1rem; background-image:linear-gradient(140deg,rgba(3,11,24,.86),rgba(18,92,122,.36) 46%,rgba(247,208,113,.14)), url('assets/art/v47_renderer_console.svg'); background-size:cover; border:1px solid rgba(255,247,221,.15); box-shadow:0 22px 62px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.12); }
+.v47-renderer-panel::before { content:""; position:absolute; inset:0; pointer-events:none; background:url('assets/art/v47_renderer_glow.svg') center/cover no-repeat; mix-blend-mode:screen; opacity:.36; }
+.v47-renderer-badge { display:inline-flex; align-items:center; gap:.32rem; border-radius:999px; padding:.34rem .58rem; background:rgba(247,208,113,.15); border:1px solid rgba(247,208,113,.22); font-size:.62rem; font-weight:1000; color:#fff7dd; }
+.v47-renderer-grid { position:relative; z-index:1; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.5rem; margin-top:.8rem; }
+.v47-renderer-grid > div { min-height:3.05rem; border-radius:1rem; padding:.6rem .55rem; background:rgba(255,255,255,.075); border:1px solid rgba(255,255,255,.10); }
+.v47-renderer-grid b { display:block; color:#fff7dd; font-size:.7rem; font-weight:1000; line-height:1.04; }
+.v47-renderer-grid span { display:block; margin-top:.22rem; color:rgba(236,254,255,.62); font-size:.56rem; font-weight:850; }
+.v47-renderer-actions { position:relative; z-index:1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.5rem; margin-top:.8rem; }
+.v47-renderer-actions button { border-radius:1rem; padding:.72rem .52rem; font-size:.68rem; font-weight:1000; background:linear-gradient(135deg,rgba(255,247,221,.94),rgba(247,208,113,.88)); color:#061526; box-shadow:0 13px 32px rgba(247,208,113,.16); }
+body.ui-v47 #screen-fishing { background:radial-gradient(circle at 15% 0%, rgba(247,208,113,.12), transparent 30%), radial-gradient(circle at 88% 6%, rgba(167,139,250,.12), transparent 28%), linear-gradient(180deg,#041225 0%,#062b43 50%,#020617 100%); }
+body.ui-v47 #fishing-visual { background-image:linear-gradient(180deg,rgba(3,14,28,.02),rgba(2,8,23,.32)), url('assets/art/v47_fishing_pixi_stage.svg'), url('assets/art/v45_fishing_stage_lux.svg') !important; background-size:cover,cover,cover; background-position:center bottom; }
+#v47-renderer-layer { position:absolute; inset:0; z-index:8; pointer-events:none; opacity:1; }
+#v47-renderer-layer canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.v47-renderer-overlay { position:absolute; left:.7rem; right:.7rem; bottom:.7rem; z-index:46; display:flex; justify-content:space-between; align-items:center; gap:.55rem; padding:.48rem .58rem; border-radius:1rem; background:rgba(2,8,23,.38); border:1px solid rgba(255,255,255,.08); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); color:rgba(236,254,255,.72); font-size:.58rem; font-weight:950; pointer-events:none; }
+.v47-renderer-overlay b { color:#fff7dd; }
+#fishing-visual.phase-casting #v47-renderer-layer, #fishing-visual.phase-bite #v47-renderer-layer, #fishing-visual.phase-reel #v47-renderer-layer { opacity:1; }
+body.perf-lite .v47-renderer-overlay { backdrop-filter:none; -webkit-backdrop-filter:none; opacity:.76; }
+body.perf-lite #v47-renderer-layer { opacity:.74; }
+body.v47-renderer-off #v47-renderer-layer { display:none; }
+body.v47-renderer-off .v47-renderer-overlay { display:none; }
+@media (max-width:430px){ .v47-renderer-panel{border-radius:1.35rem;padding:.82rem}.v47-renderer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.v47-renderer-actions{grid-template-columns:1fr}.v47-renderer-overlay{font-size:.52rem;bottom:.55rem;left:.55rem;right:.55rem} }
+
 </style>
 </head>
 <body class="bg-[#0a3d5c] text-white antialiased">
@@ -2151,7 +2320,7 @@
             <div class="flex items-center gap-3 min-w-0">
                 <div class="top-logo-mark">🌊</div>
                 <div class="min-w-0">
-                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v4.2</span></div>
+                    <div class="brand-title font-black tracking-[-0.8px] leading-none truncate">AQUA FANTASIA <span class="ml-1 text-[10px] px-2 py-0.5 bg-cyan-300/15 text-cyan-200 rounded-full border border-cyan-200/20 align-middle">v4.5</span></div>
                     <div class="text-[10px] text-cyan-100/60 mt-1 truncate">Result Flow Polish · 단계형 완료 · 렉 감소</div>
                 </div>
             </div>
@@ -2183,7 +2352,7 @@
             <div class="text-center mb-10">
                 <div class="v37-login-emblem" aria-hidden="true"></div>
                 <h1 class="text-6xl font-black tracking-[-3px]">AQUA<br>FANTASIA</h1>
-                <p class="text-sky-100/80 mt-2 font-bold">v4.3 Fullscreen Performance Boost · 포획 결과 단계 표시 · 연출 정리</p>
+                <p class="text-sky-100/80 mt-2 font-bold">v4.5 Tackle Visual Premium · 찌/릴/장력 그래픽 고급화</p>
             </div>
             <div class="w-full max-w-xs space-y-4">
                 <button onclick="startLocalGuestGame()" class="w-full py-4 premium-glass rounded-3xl font-extrabold text-lg flex items-center justify-center gap-x-3 active:scale-[0.985]">🎣 로컬 게스트로 바로 시작</button>
@@ -2370,6 +2539,14 @@
                 </div>
             </div>
 
+            <div class="px-5 mt-4">
+                <div id="v46-engine-panel" class="v46-engine-panel"></div>
+            </div>
+
+            <div class="px-5 mt-4">
+                <div id="v47-renderer-panel" class="v47-renderer-panel"></div>
+            </div>
+
             <div class="px-5 mt-4 flex-1">
                 <div class="px-1 flex justify-between items-end mb-3">
                     <div class="font-extrabold text-2xl tracking-tight">낚시 지역</div>
@@ -2426,6 +2603,7 @@
             </div>
             <div id="fishing-visual" class="flex-1 mx-4 mt-3 mb-2 rounded-[2.5rem] overflow-hidden border border-white/10 relative">
                 <div class="absolute inset-0 bg-gradient-to-b from-[#0a3d5c] via-[#0f4c6b] to-[#0a3d5c]"></div>
+                <div id="v47-renderer-layer" aria-hidden="true"><canvas id="v47-fishing-canvas"></canvas><div class="v47-renderer-overlay"><span><b id="v47-renderer-status">Pixi Bridge</b> · <span id="v47-renderer-fps">Auto FPS</span></span><span id="v47-renderer-load">Atlas 대기</span></div></div>
                 <div class="fx-aurora" aria-hidden="true"></div>
                 <div class="depth-rays" aria-hidden="true"></div>
                 <div class="v31-stage-polish" aria-hidden="true"></div>
@@ -2440,7 +2618,7 @@
                     <b>STEP 1 · 낚싯대 던지기</b><span>아래 큰 버튼을 누르면 시작됩니다.</span>
                 </div>
                 <div id="fish-action-shadow" class="fish-action-shadow" aria-hidden="true"></div>
-                <img id="v39-bobber-sprite" class="v39-bobber-sprite" src="assets/ui-kit/fishing_minigame/bobber_large.png" alt="" aria-hidden="true">
+                <img id="v39-bobber-sprite" class="v39-bobber-sprite" src="assets/art/v45_bobber_master.svg" alt="" aria-hidden="true">
                 <div id="v39-fish-path" class="v39-fish-path hidden" aria-hidden="true"><span></span><span></span><span></span></div>
                 <div id="v39-touch-radar" class="v39-touch-radar hidden" aria-hidden="true"></div>
                 <button id="bite-target" type="button" class="bite-target hidden" onclick="hookFishFromTarget(event)" aria-label="입질 지점 터치">
@@ -2499,7 +2677,7 @@
                         <div><div class="flex justify-between text-xs mb-1.5 px-1"><span>줄 장력</span><span id="tension-text">0%</span></div><div class="reel-track danger"><div id="tension-bar" class="tension-fill" style="width:0%"></div></div></div>
                     </div>
                     <div id="reel-timing-strip" class="reel-timing-strip"><span>SAFE</span><span>GOOD</span><span>DANGER</span></div>
-                    <button id="reel-action-btn" onclick="reelAction()" class="reel-action-button"><span><img src="assets/ui-kit/icons/reel_progress.png" alt="" aria-hidden="true"> 릴 감기</span><small>커서가 GOOD/PERFECT 구간일 때 누르면 강력합니다</small></button>
+                    <button id="reel-action-btn" onclick="reelAction()" class="reel-action-button"><span><i class="v45-reel-spool" aria-hidden="true"></i> 릴 감기</span><small>커서가 GOOD/PERFECT 구간일 때 누르면 강력합니다</small></button>
                     <div id="v40-reel-actions" class="v40-reel-actions hidden">
                         <button class="release" onclick="releaseLineAction()">🟢 줄 풀기<br><small>장력 감소</small></button>
                         <button class="charge" onclick="chargeReelAction()">🟡 차지 릴<br><small>게이지 폭발</small></button>
@@ -2870,7 +3048,7 @@ let graphicsMode = localStorage.getItem('aqua_graphics_mode') || (() => {
     return (mobileLike || saveData || lowMemory || lowCores) ? 'low' : 'high';
 })();
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const APP_VERSION = '4.3.0';
+const APP_VERSION = '4.7.0';
 function versionAtLeast(minVersion) {
     const parse = (value) => String(value || '0').split('.').map((part) => Number(part) || 0);
     const current = parse(APP_VERSION);
@@ -6372,6 +6550,342 @@ function initV42Runtime() {
 window.closeCatchResultFlow = closeCatchResultFlow;
 
 
+
+
+// ==================== v4.4 Animation Performance Suite / Fishing Motion + Governor ====================
+const V44_ASSETS = [
+    'assets/art/v44_animation_fishing_stage.svg',
+    'assets/art/v44_line_arc.svg',
+    'assets/art/v44_hook_prompt.svg',
+    'assets/art/v44_tap_arrow.svg',
+    'assets/art/v44_fish_swim_sheet.svg',
+    'assets/art/v44_action_overlay.svg',
+    'assets/art/v44_rhythm_lane.svg',
+    'assets/art/v44_reel_button.svg',
+    'assets/art/v44_status_scroll.svg',
+    'assets/art/v44_performance_governor.svg'
+];
+let v44FrameState = { raf:0, last:0, samples:[], avg:16.7, quality:'auto', lowStreak:0 };
+function ensureV44FishingState() {
+    if (!gameState.v44Fishing) gameState.v44Fishing = {
+        detail: localStorage.getItem('aqua_v44_detail') || 'balanced',
+        assist: localStorage.getItem('aqua_v44_assist') || 'standard',
+        perf: localStorage.getItem('aqua_v44_perf') || 'auto',
+        avgFrame: 16.7,
+        autoLite: false,
+        lastHint: 'ready'
+    };
+    return gameState.v44Fishing;
+}
+function getV44DetailLabel() {
+    const mode = ensureV44FishingState().detail;
+    return mode === 'cinema' ? '연출' : mode === 'lite' ? '가벼움' : '균형';
+}
+function getV44AssistLabel() {
+    const mode = ensureV44FishingState().assist;
+    return mode === 'expert' ? '전문' : mode === 'simple' ? '간단' : '표준';
+}
+function getV44PerfLabel() {
+    const mode = ensureV44FishingState().perf;
+    return mode === 'forceLite' ? '절전' : mode === 'cinema' ? '고정' : '자동';
+}
+function ensureV44FishingLayer() {
+    const visual = document.getElementById('fishing-visual');
+    if (!visual) return;
+    if (!document.getElementById('v44-motion-layer')) {
+        const layer = document.createElement('div');
+        layer.id = 'v44-motion-layer';
+        layer.className = 'v44-motion-layer';
+        layer.innerHTML = `
+            <div id="v44-cast-arc" class="v44-cast-arc"></div>
+            <div id="v44-water-ring" class="v44-water-ring"></div>
+            <div id="v44-fish-trail" class="v44-fish-trail"></div>
+            <div id="v44-hook-arrow" class="v44-hook-arrow"></div>`;
+        visual.appendChild(layer);
+    }
+    if (!document.getElementById('v44-objective-strip')) {
+        const strip = document.createElement('div');
+        strip.id = 'v44-objective-strip';
+        strip.className = 'v44-objective-strip';
+        strip.innerHTML = `<div class="badge" id="v44-objective-icon">🎣</div><div><b id="v44-objective-title">낚싯대 던지기</b><span id="v44-objective-desc">아래 큰 버튼을 눌러 시작하세요.</span></div><em id="v44-objective-mode">AUTO</em>`;
+        visual.appendChild(strip);
+    }
+    if (!document.getElementById('v44-frame-chip')) {
+        const chip = document.createElement('div');
+        chip.id = 'v44-frame-chip';
+        chip.className = 'v44-frame-chip';
+        chip.textContent = 'AUTO 60';
+        visual.appendChild(chip);
+    }
+    const reelPanel = document.getElementById('reel-game');
+    if (reelPanel && !document.getElementById('v44-rhythm-console')) {
+        const console = document.createElement('div');
+        console.id = 'v44-rhythm-console';
+        console.className = 'v44-rhythm-console';
+        console.innerHTML = `<div class="v44-rhythm-lane"><i></i><em id="v44-rhythm-cursor" style="--cursor:0%"></em></div>`;
+        const strip = document.getElementById('reel-timing-strip');
+        strip?.insertAdjacentElement('afterend', console);
+    }
+    const screen = document.getElementById('screen-fishing');
+    if (screen && !document.getElementById('v44-tuning-strip')) {
+        const controls = document.createElement('div');
+        controls.id = 'v44-tuning-strip';
+        controls.className = 'v44-tuning-strip';
+        controls.innerHTML = `<button onclick="cycleV44DetailMode()">연출 <span id="v44-detail-label">${getV44DetailLabel()}</span></button><button onclick="cycleV44AssistMode()">안내 <span id="v44-assist-label">${getV44AssistLabel()}</span></button><button onclick="cycleV44PerfMode()">성능 <span id="v44-perf-label">${getV44PerfLabel()}</span></button>`;
+        document.getElementById('v40-settings-bar')?.insertAdjacentElement('afterend', controls);
+    }
+    renderV44TuningLabels();
+}
+function renderV44TuningLabels() {
+    const state = ensureV44FishingState();
+    const detail = document.getElementById('v44-detail-label');
+    const assist = document.getElementById('v44-assist-label');
+    const perf = document.getElementById('v44-perf-label');
+    if (detail) detail.textContent = getV44DetailLabel();
+    if (assist) assist.textContent = getV44AssistLabel();
+    if (perf) perf.textContent = getV44PerfLabel();
+    document.body.classList.toggle('v44-auto-lite', state.autoLite || state.detail === 'lite' || state.perf === 'forceLite');
+}
+function cycleV44DetailMode() {
+    const s = ensureV44FishingState();
+    const order = ['balanced', 'cinema', 'lite'];
+    s.detail = order[(order.indexOf(s.detail) + 1 + order.length) % order.length];
+    localStorage.setItem('aqua_v44_detail', s.detail);
+    renderV44TuningLabels();
+    showToast(`낚시 연출: ${getV44DetailLabel()}`, '🎬', 1600);
+    savePlayerData(false);
+}
+function cycleV44AssistMode() {
+    const s = ensureV44FishingState();
+    const order = ['standard', 'simple', 'expert'];
+    s.assist = order[(order.indexOf(s.assist) + 1 + order.length) % order.length];
+    localStorage.setItem('aqua_v44_assist', s.assist);
+    renderV44TuningLabels();
+    setV44Objective(gameState.currentFish ? 'bite' : (gameState.isFishing ? 'reel' : 'ready'));
+    showToast(`조작 안내: ${getV44AssistLabel()}`, '🧭', 1600);
+    savePlayerData(false);
+}
+function cycleV44PerfMode() {
+    const s = ensureV44FishingState();
+    const order = ['auto', 'forceLite', 'cinema'];
+    s.perf = order[(order.indexOf(s.perf) + 1 + order.length) % order.length];
+    localStorage.setItem('aqua_v44_perf', s.perf);
+    s.autoLite = s.perf === 'forceLite' ? true : s.perf === 'cinema' ? false : s.autoLite;
+    renderV44TuningLabels();
+    showToast(`낚시 성능: ${getV44PerfLabel()}`, '⚡', 1600);
+    savePlayerData(false);
+}
+function setV44Objective(phase = 'ready', detail = '') {
+    ensureV44FishingLayer();
+    const s = ensureV44FishingState();
+    const simple = s.assist === 'simple';
+    const expert = s.assist === 'expert';
+    const copy = {
+        ready: ['🎣', '낚싯대 던지기', simple ? '큰 버튼을 누르세요.' : '아래 큰 버튼으로 캐스팅합니다. 입질 원이 뜨면 그 위치를 터치하세요.'],
+        casting: ['👀', '수면 관찰', simple ? '큰 원을 기다리세요.' : '찌와 수면 파동을 보세요. 원이 번쩍이면 바로 터치합니다.'],
+        bite: ['👆', '여기 터치!', simple ? '빛나는 원 터치!' : '빛나는 원 안을 터치하면 챔질합니다. 빠를수록 보너스가 큽니다.'],
+        reel: ['⚙️', 'GOOD 구간 릴', simple ? '릴 버튼 연타!' : '커서가 중앙 GOOD/PERFECT 구간일 때 릴. 장력 80% 이상은 줄 풀기.'],
+        boss: ['👑', '보스 패턴 대응', simple ? '경고에 맞춰 버튼!' : '붉은 돌진=회피, 장력 폭주=줄 풀기, 노란 창=차지 릴.'],
+        danger: ['⚠️', '장력 위험', simple ? '줄 풀기!' : '장력이 높습니다. 릴 속도를 줄이고 줄 풀기로 안정화하세요.'],
+        success: ['🏆', '포획 성공', simple ? '결과 확인!' : '물고기는 가방에 보관됩니다. 판매는 가방에서 진행합니다.'],
+        fail: ['💧', '다시 도전', simple ? '다시 던지기.' : '줄 장력이나 타이밍을 조절해 다시 도전하세요.']
+    }[phase] || ['🎣','낚시 준비','시작 버튼을 누르세요.'];
+    const [icon, title, desc] = copy;
+    const iconEl = document.getElementById('v44-objective-icon');
+    const titleEl = document.getElementById('v44-objective-title');
+    const descEl = document.getElementById('v44-objective-desc');
+    const modeEl = document.getElementById('v44-objective-mode');
+    if (iconEl) iconEl.textContent = icon;
+    if (titleEl) titleEl.textContent = title;
+    if (descEl) descEl.textContent = expert ? (detail || title) : (detail || desc);
+    if (modeEl) modeEl.textContent = s.autoLite || document.body.classList.contains('perf-lite') ? 'LITE' : 'LIVE';
+    s.lastHint = phase;
+}
+function animateV44CastStart() {
+    ensureV44FishingLayer();
+    setV44Objective('casting');
+    const arc = document.getElementById('v44-cast-arc');
+    const ring = document.getElementById('v44-water-ring');
+    if (arc) { arc.style.animation = 'none'; arc.offsetHeight; arc.style.animation = ''; }
+    if (ring) { ring.style.left = '54%'; ring.style.top = '55%'; }
+}
+function animateV44BiteTarget(left, top, species) {
+    ensureV44FishingLayer();
+    const ring = document.getElementById('v44-water-ring');
+    const arrow = document.getElementById('v44-hook-arrow');
+    if (ring) { ring.style.left = `${left}%`; ring.style.top = `${top}%`; }
+    if (arrow) { arrow.style.left = `${left}%`; arrow.style.top = `${Math.max(15, top - 16)}%`; }
+    setV44Objective('bite', isBossFish(species) ? '보스 입질! 빛나는 원을 즉시 터치하세요.' : '빛나는 원 안을 터치해 챔질하세요.');
+}
+function showV44HookFeedback(grade) {
+    const text = grade === 'PERFECT HOOK' ? 'PERFECT HOOK' : grade === 'GOOD HOOK' ? 'GOOD HOOK' : 'LATE HOOK';
+    createActionFloat(text, grade === 'LATE HOOK' ? 'danger' : 'combo');
+    setV44Objective('reel', grade === 'PERFECT HOOK' ? '퍼펙트 챔질! GOOD 구간에서 릴을 감으세요.' : '챔질 성공. 릴 타이밍에 집중하세요.');
+}
+let v44FishRaf = 0;
+function startV44ReelMotion(species) {
+    ensureV44FishingLayer();
+    setV44Objective(isBossFish(species) ? 'boss' : 'reel');
+    stopV44ReelMotion(false);
+    const trail = document.getElementById('v44-fish-trail');
+    if (trail) trail.style.opacity = isBossFish(species) ? '.95' : '.78';
+    const loop = (now) => {
+        const fish = document.getElementById('v44-fish-trail');
+        const cursor = document.getElementById('v44-rhythm-cursor');
+        if (!gameState.isFishing || !gameState.pendingFish) { v44FishRaf = 0; return; }
+        const t = now / (isBossFish(gameState.pendingFish) ? 720 : 980);
+        const x = 50 + Math.sin(t) * (isBossFish(gameState.pendingFish) ? 20 : 14);
+        const y = 57 + Math.cos(t * .82) * 8;
+        if (fish) { fish.style.left = `${x}%`; fish.style.top = `${y}%`; }
+        const lanePos = ((Math.sin(now / 520) + 1) / 2) * 100;
+        if (cursor) cursor.style.setProperty('--cursor', `${lanePos.toFixed(1)}%`);
+        v44FishRaf = requestAnimationFrame(loop);
+    };
+    v44FishRaf = requestAnimationFrame(loop);
+}
+function stopV44ReelMotion(success = false) {
+    if (v44FishRaf) cancelAnimationFrame(v44FishRaf);
+    v44FishRaf = 0;
+    const trail = document.getElementById('v44-fish-trail');
+    if (trail) trail.style.opacity = success ? '.25' : '0';
+}
+function resetV44FishingUI() {
+    stopV44ReelMotion(false);
+    setV44Objective('ready');
+    const ring = document.getElementById('v44-water-ring');
+    const arrow = document.getElementById('v44-hook-arrow');
+    if (ring) { ring.style.left = '50%'; ring.style.top = '54%'; }
+    if (arrow) { arrow.style.left = '50%'; arrow.style.top = '42%'; }
+}
+function updateV44RealtimeHUD() {
+    ensureV44FishingState();
+    const tension = Number(gameState.tension || 0);
+    const boss = isBossFish(gameState.pendingFish);
+    if (gameState.currentFish) setV44Objective('bite');
+    else if (gameState.isFishing && gameState.pendingFish) setV44Objective(tension >= 78 ? 'danger' : boss ? 'boss' : 'reel');
+    const chip = document.getElementById('v44-frame-chip');
+    if (chip) chip.textContent = `${document.body.classList.contains('v44-auto-lite') ? 'LITE' : 'AUTO'} ${Math.max(1, Math.round(1000 / Math.max(12, v44FrameState.avg || 16.7)))}`;
+}
+function v44PulseReel(timing = {}, trackBonus = {}) {
+    const btn = document.getElementById('reel-action-btn');
+    if (!btn) return;
+    btn.classList.remove('v44-perfect-pop');
+    if (timing.grade === 'PERFECT' || trackBonus.grade === 'TRACK PERFECT' || gameState.bossWindowActive) {
+        btn.offsetHeight;
+        btn.classList.add('v44-perfect-pop');
+        pulseV45ReelGraphics();
+    }
+}
+function installV44FrameGovernor() {
+    if (installV44FrameGovernor.bound) return;
+    installV44FrameGovernor.bound = true;
+    const s = ensureV44FishingState();
+    const sample = (now) => {
+        if (v44FrameState.last) {
+            const delta = now - v44FrameState.last;
+            v44FrameState.samples.push(delta);
+            if (v44FrameState.samples.length > 90) v44FrameState.samples.shift();
+            const avg = v44FrameState.samples.reduce((a,b)=>a+b,0) / v44FrameState.samples.length;
+            v44FrameState.avg = avg;
+            s.avgFrame = avg;
+            const under = avg > 24 || (navigator.deviceMemory && navigator.deviceMemory <= 4) || document.body.classList.contains('perf-lite');
+            if (s.perf === 'forceLite') s.autoLite = true;
+            else if (s.perf === 'cinema') s.autoLite = false;
+            else {
+                v44FrameState.lowStreak = under ? v44FrameState.lowStreak + 1 : Math.max(0, v44FrameState.lowStreak - 1);
+                s.autoLite = v44FrameState.lowStreak >= 20;
+            }
+            document.body.classList.toggle('v44-auto-lite', !!s.autoLite);
+            const chip = document.getElementById('v44-frame-chip');
+            if (chip) chip.textContent = `${s.autoLite ? 'LITE' : 'AUTO'} ${Math.max(1, Math.round(1000 / Math.max(12, avg)))}`;
+        }
+        v44FrameState.last = now;
+        v44FrameState.raf = requestAnimationFrame(sample);
+    };
+    v44FrameState.raf = requestAnimationFrame(sample);
+}
+function initV44Runtime() {
+    document.body.classList.add('ui-v44');
+    ensureV44FishingState();
+    ensureV44FishingLayer();
+    installV44FrameGovernor();
+    renderV44TuningLabels();
+    if (!shouldSkipAssetWarm()) warmAssetsSafely(V44_ASSETS, document.body.classList.contains('perf-lite') ? 2 : 4);
+}
+window.cycleV44DetailMode = cycleV44DetailMode;
+window.cycleV44AssistMode = cycleV44AssistMode;
+window.cycleV44PerfMode = cycleV44PerfMode;
+
+
+// ==================== v4.5 Tackle Visual Premium / Bobber + Reel Graphics ====================
+const V45_ASSETS = [
+    'assets/art/v45_bobber_master.svg',
+    'assets/art/v45_reel_console_premium.svg',
+    'assets/art/v45_tension_gauge_deluxe.svg',
+    'assets/art/v45_line_glow.svg',
+    'assets/art/v45_touch_ring_deluxe.svg',
+    'assets/art/v45_rod_tip_master.svg',
+    'assets/art/v45_water_surface_detail.svg',
+    'assets/art/v45_cast_splash.svg',
+    'assets/art/v45_tackle_hud.svg',
+    'assets/art/v45_reel_spool.svg',
+    'assets/art/v45_fishing_stage_lux.svg'
+];
+let v45TackleRaf = 0;
+function ensureV45TackleLayer() {
+    const visual = document.getElementById('fishing-visual');
+    if (!visual) return;
+    if (!document.getElementById('v45-tackle-layer')) {
+        const layer = document.createElement('div');
+        layer.id = 'v45-tackle-layer';
+        layer.className = 'v45-tackle-layer';
+        layer.innerHTML = `
+            <div id="v45-line-glow" class="v45-line-glow"></div>
+            <div id="v45-splash" class="v45-splash"></div>
+            <div id="v45-rod-tip" class="v45-rod-tip"></div>
+            <div id="v45-tackle-hud" class="v45-tackle-hud"><div><b id="v45-tackle-title">찌와 수면을 보세요</b><span id="v45-tackle-desc">입질 원이 빛나면 바로 터치</span></div><div id="v45-mini-gauge" class="v45-mini-gauge" style="--v45-tension:0%"></div></div>`;
+        visual.appendChild(layer);
+    }
+}
+function updateV45TackleHUD() {
+    const gauge = document.getElementById('v45-mini-gauge');
+    if (gauge) gauge.style.setProperty('--v45-tension', `${clamp(Number(gameState.tension || 0), 0, 100)}%`);
+    const title = document.getElementById('v45-tackle-title');
+    const desc = document.getElementById('v45-tackle-desc');
+    if (!title || !desc) return;
+    if (gameState.currentFish) { title.textContent = '찌가 잠겼습니다'; desc.textContent = '빛나는 원을 터치해서 챔질'; }
+    else if (gameState.isFishing && gameState.pendingFish) {
+        const tension = Number(gameState.tension || 0);
+        title.textContent = tension >= 78 ? '줄 장력 위험' : '릴 감기 집중';
+        desc.textContent = tension >= 78 ? '줄 풀기 후 GOOD 구간 릴' : '스풀 타이밍과 장력 게이지 확인';
+    }
+    else if (gameState.isFishing) { title.textContent = '찌와 수면을 보세요'; desc.textContent = '파동이 커지면 입질 준비'; }
+    else { title.textContent = '낚시 준비 완료'; desc.textContent = '던지기 후 찌 움직임을 관찰'; }
+}
+function startV45TackleLoop() {
+    if (v45TackleRaf) return;
+    const loop = () => {
+        if (!document.body.classList.contains('ui-v45')) { v45TackleRaf = 0; return; }
+        const visual = document.getElementById('fishing-visual');
+        if (visual && !document.getElementById('screen-fishing')?.classList.contains('hidden')) updateV45TackleHUD();
+        v45TackleRaf = requestAnimationFrame(loop);
+    };
+    v45TackleRaf = requestAnimationFrame(loop);
+}
+function pulseV45ReelGraphics() {
+    const btn = document.getElementById('reel-action-btn');
+    if (!btn) return;
+    btn.classList.remove('v45-spin');
+    btn.offsetHeight;
+    btn.classList.add('v45-spin');
+}
+function initV45Runtime() {
+    document.body.classList.add('ui-v45');
+    ensureV45TackleLayer();
+    startV45TackleLoop();
+    if (!shouldSkipAssetWarm()) warmAssetsSafely(V45_ASSETS, document.body.classList.contains('perf-lite') ? 2 : 4);
+}
+
 // ==================== v4.1 Flow Combat Polish / UX + Performance ====================
 const V41_ASSETS = [
     'assets/art/v41_flow_fishing_stage.svg',
@@ -6456,6 +6970,283 @@ function updateV41AfterPattern() {
 }
 window.initV41Runtime = initV41Runtime;
 
+
+
+// v4.6 Engine Atlas Optimization legacy bridge retained for migration checks
+// ==================== v4.7 Pixi Fishing Renderer / PixiJS-Vite-TS Bridge ====================
+const V46_ENGINE_ASSETS = [
+    'assets/atlas/aqua_fishing_v46.webp',
+    'assets/atlas/aqua_fishing_v46.atlas.json',
+    'assets/art/v46_engine_console.svg',
+    'assets/art/v46_pixi_stage.svg',
+    'assets/art/v46_atlas_glow.svg',
+    'assets/art/v46_audio_mixer.svg',
+    'assets/art/v46_perf_matrix.svg',
+    'assets/art/v46_webp_cards.svg'
+];
+function ensureV46EngineState() {
+    if (!gameState.engine46) gameState.engine46 = {
+        mode: localStorage.getItem('aqua_v46_mode') || 'auto',
+        renderer: 'dom-optimized',
+        pixiReady: false,
+        atlasReady: false,
+        howlerReady: false,
+        lastFps: 0,
+        atlas: 'aqua_fishing_v46.webp'
+    };
+    return gameState.engine46;
+}
+function getV46RuntimeMode() {
+    const s = ensureV46EngineState();
+    const mobile = /Android|iPhone|iPad|iPod|Mobile|KAKAOTALK|wv/i.test(navigator.userAgent || '');
+    const low = document.body.classList.contains('perf-lite') || graphicsMode === 'low' || navigator.connection?.saveData || Number(navigator.deviceMemory || 4) <= 3;
+    if (s.mode === 'lite' || low) return 'lite';
+    if (s.mode === 'quality') return mobile ? 'balanced' : 'quality';
+    return mobile ? 'balanced' : 'quality';
+}
+function getV46EngineSnapshot() {
+    const s = ensureV46EngineState();
+    const mode = getV46RuntimeMode();
+    const atlasOk = !!document.querySelector('link[href="assets/atlas/aqua_fishing_v46.webp"]') || s.atlasReady;
+    return {
+        mode,
+        renderer: s.pixiReady ? 'PixiJS 8 준비됨' : 'DOM/PWA 안정 런타임',
+        atlas: atlasOk ? 'WebP Atlas READY' : 'Atlas 대기',
+        audio: s.howlerReady ? 'Howler Ready' : 'WebAudio/Howler Bridge',
+        fps: s.lastFps ? `${Math.round(s.lastFps)} FPS` : (document.body.classList.contains('perf-lite') ? 'Lite' : 'Auto'),
+        firebase: isFirebaseConnected ? 'Firebase Online' : 'Local First'
+    };
+}
+function renderV46EnginePanel() {
+    const host = document.getElementById('v46-engine-panel');
+    if (!host) return;
+    const snap = getV46EngineSnapshot();
+    host.innerHTML = `
+        <div class="relative z-10 flex items-start justify-between gap-3">
+            <div class="min-w-0">
+                <span class="v46-engine-badge">⚙️ ENGINE 4.6</span>
+                <h3 class="mt-2 text-xl font-black tracking-tight">모바일 엔진 최적화</h3>
+                <p class="mt-1 text-xs text-white/62 leading-relaxed">Vite · TypeScript · PixiJS 8 · WebP Atlas · Howler.js · Firebase · PWA로 갈아타기 위한 실제 엔진 브릿지입니다.</p>
+            </div>
+            <div class="text-right text-[10px] text-cyan-100/70 font-black shrink-0">${escapeHTML(snap.fps)}</div>
+        </div>
+        <div class="v46-grid">
+            <div class="v46-tile"><b>${escapeHTML(snap.renderer)}</b><span>렌더러</span></div>
+            <div class="v46-tile"><b>${escapeHTML(snap.atlas)}</b><span>텍스처 아틀라스</span></div>
+            <div class="v46-tile"><b>${escapeHTML(snap.audio)}</b><span>오디오 버스</span></div>
+            <div class="v46-tile"><b>${escapeHTML(snap.firebase)}</b><span>세이브/랭킹</span></div>
+        </div>
+        <div class="v46-actions">
+            <button onclick="cycleV46EngineMode()">성능 모드: ${snap.mode.toUpperCase()}</button>
+            <button onclick="warmV46EngineAssets()">엔진 에셋 예열</button>
+            <button onclick="switchScreen('fishing')">액션 낚시 테스트</button>
+        </div>`;
+}
+function cycleV46EngineMode() {
+    const s = ensureV46EngineState();
+    const order = ['auto','lite','balanced','quality'];
+    s.mode = order[(order.indexOf(s.mode) + 1) % order.length];
+    localStorage.setItem('aqua_v46_mode', s.mode);
+    document.body.classList.toggle('perf-lite', s.mode === 'lite');
+    document.body.classList.toggle('v46-battery-save', s.mode === 'lite');
+    renderV46EnginePanel();
+    showToast(`엔진 모드: ${s.mode.toUpperCase()}`, '⚙️', 1800);
+    savePlayerData(false);
+}
+function warmV46EngineAssets() {
+    const mode = getV46RuntimeMode();
+    const limit = mode === 'lite' ? 1 : mode === 'balanced' ? 3 : 5;
+    warmAssetsSafely(V46_ENGINE_ASSETS, limit);
+    ensureV46EngineState().atlasReady = true;
+    renderV46EnginePanel();
+    showToast('v4.6 엔진 에셋 예열 시작', '🧊', 1600);
+}
+function installV46FishingBridgeLayer() {
+    const visual = document.getElementById('fishing-visual');
+    if (!visual || document.getElementById('v46-pixi-bridge-layer')) return;
+    const layer = document.createElement('div');
+    layer.id = 'v46-pixi-bridge-layer';
+    layer.className = 'v46-pixi-bridge-layer';
+    layer.innerHTML = '<div class="v46-pixi-trace"></div>';
+    visual.appendChild(layer);
+}
+function installV46FrameSampler() {
+    if (installV46FrameSampler.bound) return;
+    installV46FrameSampler.bound = true;
+    let last = performance.now();
+    let frames = 0;
+    let acc = 0;
+    const loop = (now) => {
+        const delta = now - last;
+        last = now;
+        frames += 1;
+        acc += delta;
+        if (acc >= 1000) {
+            const fps = Math.max(1, Math.round(frames * 1000 / acc));
+            ensureV46EngineState().lastFps = fps;
+            if (fps < 42 && /Android|iPhone|iPad|iPod|Mobile|KAKAOTALK|wv/i.test(navigator.userAgent || '')) {
+                document.body.classList.add('perf-lite','v46-battery-save');
+            }
+            if (aquaCurrentScreen === 'village') renderV46EnginePanel();
+            frames = 0; acc = 0;
+        }
+        requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+}
+function initV46EngineRuntime() {
+    document.body.classList.add('ui-v46');
+    ensureV46EngineState();
+    installV46FishingBridgeLayer();
+    installV46FrameSampler();
+    if (!shouldSkipAssetWarm()) scheduleAquaTask(() => warmAssetsSafely(['assets/atlas/aqua_fishing_v46.webp','assets/art/v46_engine_console.svg','assets/art/v46_pixi_stage.svg'], document.body.classList.contains('perf-lite') ? 1 : 3), 'background');
+}
+window.renderV46EnginePanel = renderV46EnginePanel;
+window.cycleV46EngineMode = cycleV46EngineMode;
+window.warmV46EngineAssets = warmV46EngineAssets;
+
+
+
+// ==================== v4.7 PIXI FISHING RENDERER ====================
+const V47_RENDERER_ASSETS = [
+    'assets/atlas/aqua_fishing_v47.webp',
+    'assets/atlas/aqua_fishing_v47.atlas.json',
+    'assets/art/v47_fishing_pixi_stage.svg',
+    'assets/art/v47_renderer_console.svg',
+    'assets/art/v47_water_ribbon.svg',
+    'assets/art/v47_bobber_glow.svg',
+    'assets/art/v47_line_arc.svg',
+    'assets/art/v47_fish_trail.svg'
+];
+function ensureV47RendererState() {
+    if (!gameState.renderer47) gameState.renderer47 = { mode: localStorage.getItem('aqua_v47_renderer_mode') || 'auto', fps: 0, frames: 0, dpr: 1, atlasReady: false, renderer: 'Canvas fallback', particles: 0, lastPhase: 'ready' };
+    return gameState.renderer47;
+}
+function getV47RendererMode() {
+    const s = ensureV47RendererState();
+    const mobile = /Android|iPhone|iPad|iPod|Mobile|KAKAOTALK|wv/i.test(navigator.userAgent || '');
+    const constrained = document.body.classList.contains('perf-lite') || navigator.connection?.saveData || Number(navigator.deviceMemory || 4) <= 3;
+    if (s.mode === 'off') return 'off';
+    if (s.mode === 'lite' || constrained) return 'lite';
+    if (s.mode === 'quality') return mobile ? 'balanced' : 'quality';
+    return mobile ? 'balanced' : 'quality';
+}
+function getV47Snapshot() {
+    const s = ensureV47RendererState();
+    const mode = getV47RendererMode();
+    const canvas = document.getElementById('v47-fishing-canvas');
+    return { mode, renderer: window.PIXI ? 'PixiJS 8 사용 가능' : 'Canvas fallback active', atlas: s.atlasReady ? 'WebP Atlas 4.7 Ready' : 'Runtime Cache', fps: s.fps ? `${Math.round(s.fps)} FPS` : (mode === 'lite' ? 'Lite' : 'Auto'), dpr: canvas ? `${Number(s.dpr || 1).toFixed(2)}x` : '대기' };
+}
+function renderV47RendererPanel() {
+    const host = document.getElementById('v47-renderer-panel');
+    if (!host) return;
+    const snap = getV47Snapshot();
+    host.innerHTML = `<div class="relative z-10 flex items-start justify-between gap-3"><div class="min-w-0"><span class="v47-renderer-badge">🎮 RENDERER 4.7</span><h3 class="mt-2 text-xl font-black tracking-tight">낚시 전용 렌더러</h3><p class="mt-1 text-xs text-white/62 leading-relaxed">찌 · 낚싯줄 · 물결 · 물고기 궤적을 별도 캔버스 레이어에서 그려 DOM 부담을 줄입니다.</p></div><div class="text-right text-[10px] text-cyan-100/70 font-black shrink-0">${escapeHTML(snap.fps)}</div></div><div class="v47-renderer-grid"><div><b>${escapeHTML(snap.renderer)}</b><span>렌더러</span></div><div><b>${escapeHTML(snap.atlas)}</b><span>텍스처</span></div><div><b>${escapeHTML(snap.mode.toUpperCase())}</b><span>성능 모드</span></div><div><b>${escapeHTML(snap.dpr)}</b><span>DPR 캡</span></div></div><div class="v47-renderer-actions"><button onclick="cycleV47RendererMode()">렌더러: ${snap.mode.toUpperCase()}</button><button onclick="warmV47RendererAssets()">렌더 에셋 예열</button><button onclick="switchScreen('fishing')">낚시 렌더 테스트</button></div>`;
+}
+function cycleV47RendererMode() {
+    const s = ensureV47RendererState();
+    const order = ['auto','lite','balanced','quality','off'];
+    s.mode = order[(order.indexOf(s.mode) + 1) % order.length];
+    localStorage.setItem('aqua_v47_renderer_mode', s.mode);
+    document.body.classList.toggle('v47-renderer-off', s.mode === 'off');
+    document.body.classList.toggle('perf-lite', s.mode === 'lite');
+    resizeV47FishingRenderer(true);
+    renderV47RendererPanel();
+    showToast(`렌더러 모드: ${s.mode.toUpperCase()}`, '🎮', 1600);
+    savePlayerData(false);
+}
+function warmV47RendererAssets() {
+    warmAssetsSafely(V47_RENDERER_ASSETS, getV47RendererMode() === 'lite' ? 2 : 6);
+    ensureV47RendererState().atlasReady = true;
+    renderV47RendererPanel();
+    showToast('v4.7 렌더 에셋 예열 시작', '🌊', 1500);
+}
+const v47Renderer = { canvas:null, ctx:null, raf:0, last:0, fpsAcc:0, fpsFrames:0, pulse:0, particles:[], width:0, height:0, biteX:.55, biteY:.55, fishX:.35, fishY:.62, fishDir:1 };
+function installV47FishingRenderer() {
+    const canvas = document.getElementById('v47-fishing-canvas');
+    if (!canvas || v47Renderer.canvas) return;
+    v47Renderer.canvas = canvas;
+    v47Renderer.ctx = canvas.getContext('2d', { alpha:true, desynchronized:true });
+    resizeV47FishingRenderer(true);
+    window.addEventListener('resize', () => resizeV47FishingRenderer(false), { passive:true });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) resizeV47FishingRenderer(false); });
+    startV47FishingRendererLoop();
+}
+function resizeV47FishingRenderer(force=false) {
+    const canvas = v47Renderer.canvas || document.getElementById('v47-fishing-canvas');
+    const visual = document.getElementById('fishing-visual');
+    if (!canvas || !visual) return;
+    const rect = visual.getBoundingClientRect();
+    if (!force && Math.abs(rect.width - v47Renderer.width) < 2 && Math.abs(rect.height - v47Renderer.height) < 2) return;
+    const mode = getV47RendererMode();
+    const dprCap = mode === 'lite' ? 1.05 : mode === 'balanced' ? 1.35 : 1.65;
+    const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, dprCap));
+    canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+    canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `${rect.height}px`;
+    v47Renderer.width = rect.width;
+    v47Renderer.height = rect.height;
+    ensureV47RendererState().dpr = dpr;
+}
+function setV47RendererPhase(phase) {
+    const s = ensureV47RendererState();
+    s.lastPhase = phase;
+    if (phase === 'bite') { v47Renderer.biteX = .38 + Math.random() * .28; v47Renderer.biteY = .38 + Math.random() * .24; v47Renderer.pulse = 1; }
+    if (phase === 'casting') { v47Renderer.particles.length = 0; for (let i=0;i<(getV47RendererMode()==='lite'?8:18);i++) v47Renderer.particles.push({x:.44+Math.random()*.18,y:.48+Math.random()*.12,vx:(Math.random()-.5)*.005,vy:-Math.random()*.006,life:.8+Math.random()*.45}); }
+}
+function startV47FishingRendererLoop() {
+    if (v47Renderer.raf) return;
+    const loop = (now) => {
+        v47Renderer.raf = requestAnimationFrame(loop);
+        const mode = getV47RendererMode();
+        if (mode === 'off' || document.hidden) return;
+        const active = document.body.dataset.screen === 'fishing';
+        const minDelta = mode === 'lite' ? 1000/24 : mode === 'balanced' ? 1000/38 : 1000/52;
+        if (!active && now - v47Renderer.last < 600) return;
+        if (active && now - v47Renderer.last < minDelta) return;
+        const dt = Math.min(50, now - (v47Renderer.last || now));
+        v47Renderer.last = now;
+        drawV47FishingFrame(now, dt, active);
+        const s = ensureV47RendererState();
+        v47Renderer.fpsAcc += dt; v47Renderer.fpsFrames += 1;
+        if (v47Renderer.fpsAcc >= 1000) { s.fps = Math.round(v47Renderer.fpsFrames * 1000 / v47Renderer.fpsAcc); v47Renderer.fpsAcc = 0; v47Renderer.fpsFrames = 0; if (s.fps && s.fps < 34 && /Android|iPhone|iPad|iPod|Mobile|KAKAOTALK|wv/i.test(navigator.userAgent || '')) document.body.classList.add('perf-lite'); updateV47Overlay(); if (aquaCurrentScreen === 'village') renderV47RendererPanel(); }
+    };
+    v47Renderer.raf = requestAnimationFrame(loop);
+}
+function drawV47FishingFrame(now, dt, active) {
+    const canvas = v47Renderer.canvas, ctx = v47Renderer.ctx;
+    if (!canvas || !ctx) return;
+    resizeV47FishingRenderer(false);
+    const s = ensureV47RendererState();
+    const dpr = Number(s.dpr || 1);
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+    if (!active) return;
+    const phase = document.getElementById('fishing-visual')?.dataset?.fishingPhase || s.lastPhase || 'ready';
+    const t = now / 1000;
+    const mode = getV47RendererMode();
+    const low = mode === 'lite' || document.body.classList.contains('perf-lite') || reduceMotion;
+    ctx.save(); ctx.scale(dpr,dpr);
+    const W=w/dpr, H=h/dpr;
+    const waves = low ? 2 : 4;
+    for (let i=0;i<waves;i++) { ctx.beginPath(); const y = H*(.58 + i*.08) + Math.sin(t*1.2+i)*5; ctx.moveTo(0,y); for (let x=0;x<=W;x+=18) ctx.lineTo(x, y + Math.sin((x*.018)+t*(1.4+i*.2)+i)* (4+i*1.6)); ctx.strokeStyle = `rgba(${i%2?72:247},${i%2?215:208},${i%2?255:113},${low?.14:.20})`; ctx.lineWidth = 1.2 + i*.3; ctx.stroke(); }
+    const rodX = W*.82, rodY = H*.32;
+    const bobX = W*(phase==='bite'?v47Renderer.biteX:.52 + Math.sin(t*.85)*.035);
+    const bobY = H*(phase==='bite'?v47Renderer.biteY:.55 + Math.sin(t*1.35)*.018);
+    if (phase === 'casting' || phase === 'bite' || phase === 'reel') { ctx.beginPath(); ctx.moveTo(rodX, rodY); ctx.quadraticCurveTo(W*.62, H*.16 + Math.sin(t*1.6)*8, bobX, bobY); ctx.strokeStyle = phase === 'reel' ? 'rgba(255,247,221,.68)' : 'rgba(125,211,252,.62)'; ctx.lineWidth = low ? 1.6 : 2.4; ctx.shadowColor = 'rgba(72,215,255,.45)'; ctx.shadowBlur = low ? 0 : 10; ctx.stroke(); ctx.shadowBlur = 0; }
+    if (v47Renderer.particles.length) { for (const p of v47Renderer.particles) { p.x += p.vx*dt; p.y += p.vy*dt; p.life -= dt/1000; if (p.life <= 0) continue; ctx.globalAlpha = Math.max(0,p.life); ctx.fillStyle = 'rgba(255,247,221,.72)'; ctx.beginPath(); ctx.arc(p.x*W, p.y*H, (low?1.5:2.4) + p.life*2, 0, Math.PI*2); ctx.fill(); } v47Renderer.particles = v47Renderer.particles.filter(p=>p.life>0); ctx.globalAlpha = 1; }
+    if (phase === 'casting' || phase === 'bite' || phase === 'reel') { const bob = 8 + Math.sin(t*4)*1.5; ctx.save(); ctx.translate(bobX,bobY+bob); ctx.rotate(Math.sin(t*2.2)*.12); const g = ctx.createLinearGradient(-10,-18,14,18); g.addColorStop(0,'#fff7dd'); g.addColorStop(.42,'#ff6b6b'); g.addColorStop(1,'#0ea5e9'); ctx.fillStyle = g; ctx.shadowColor = 'rgba(255,247,221,.50)'; ctx.shadowBlur = low?4:16; ctx.beginPath(); ctx.ellipse(0,0,9,18,0,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0; ctx.strokeStyle='rgba(2,8,23,.42)'; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); const ring = 20 + Math.sin(t*3)*4 + (phase==='bite'?14*Math.max(0,v47Renderer.pulse):0); ctx.strokeStyle = phase==='bite' ? 'rgba(247,208,113,.92)' : 'rgba(125,211,252,.42)'; ctx.lineWidth = low?1.4:2.4; ctx.beginPath(); ctx.ellipse(bobX,bobY+8,ring,ring*.36,0,0,Math.PI*2); ctx.stroke(); }
+    if (phase === 'reel') { v47Renderer.fishX += (0.00012*dt) * v47Renderer.fishDir * (low?.7:1); if (v47Renderer.fishX > .72 || v47Renderer.fishX < .22) v47Renderer.fishDir *= -1; const fishY = .68 + Math.sin(t*1.7)*.04; const fx = W*v47Renderer.fishX, fy=H*fishY; ctx.fillStyle='rgba(72,215,255,.18)'; ctx.beginPath(); ctx.ellipse(W*.50, H*.68, W*.18, H*.045,0,0,Math.PI*2); ctx.fill(); ctx.fillStyle='rgba(255,247,221,.86)'; ctx.shadowColor='rgba(72,215,255,.65)'; ctx.shadowBlur=low?4:18; ctx.beginPath(); ctx.ellipse(fx, fy, low?16:22, low?7:10, Math.sin(t*2)*.08, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.moveTo(fx-18*v47Renderer.fishDir,fy); ctx.lineTo(fx-32*v47Renderer.fishDir,fy-9); ctx.lineTo(fx-32*v47Renderer.fishDir,fy+9); ctx.closePath(); ctx.fill(); ctx.shadowBlur=0; const progress = clamp(Number(gameState.reelProgress||0),0,100); const tension = clamp(Number(gameState.tension||0),0,100); ctx.fillStyle='rgba(2,8,23,.45)'; ctx.fillRect(W*.18,H*.86,W*.64,6); ctx.fillStyle='rgba(69,230,181,.78)'; ctx.fillRect(W*.18,H*.86,W*.64*progress/100,6); ctx.fillStyle=tension>78?'rgba(255,89,104,.82)':'rgba(247,208,113,.74)'; ctx.fillRect(W*.18,H*.89,W*.64*tension/100,5); }
+    if (phase === 'bite' && v47Renderer.pulse > 0) v47Renderer.pulse = Math.max(0, v47Renderer.pulse - dt/620);
+    ctx.restore();
+}
+function updateV47Overlay() { const s = ensureV47RendererState(); const status = document.getElementById('v47-renderer-status'); const fps = document.getElementById('v47-renderer-fps'); const load = document.getElementById('v47-renderer-load'); if (status) status.textContent = window.PIXI ? 'PixiJS Ready' : 'Canvas Bridge'; if (fps) fps.textContent = s.fps ? `${Math.round(s.fps)} FPS` : getV47RendererMode().toUpperCase(); if (load) load.textContent = s.atlasReady ? 'Atlas Ready' : 'Runtime Cache'; }
+function initV47RendererRuntime() { document.body.classList.add('ui-v47'); ensureV47RendererState(); installV47FishingRenderer(); if (!shouldSkipAssetWarm()) scheduleAquaTask(() => warmAssetsSafely(['assets/atlas/aqua_fishing_v47.webp','assets/art/v47_fishing_pixi_stage.svg','assets/art/v47_renderer_console.svg'], document.body.classList.contains('perf-lite') ? 1 : 3), 'background'); renderV47RendererPanel(); }
+window.renderV47RendererPanel = renderV47RendererPanel;
+window.cycleV47RendererMode = cycleV47RendererMode;
+window.warmV47RendererAssets = warmV47RendererAssets;
+
 // ==================== UI ====================
 function updateUI() {
     ensureV40CombatOptions();
@@ -6496,6 +7287,8 @@ function updateUI() {
     renderV38ActionDirector();
     renderFishingCoach();
     renderV39FishingTuning();
+    renderV46EnginePanel();
+    installV46FishingBridgeLayer();
     renderSmartDock();
     applyMegaQualityClasses();
     applyOceanDirectorRuntime();
@@ -6530,10 +7323,11 @@ function switchScreen(screen) {
             if (screen === 'worldmap') renderWorldMap();
             if (screen === 'achievements') renderAchievements();
             if (screen === 'encyclopedia') renderEncyclopedia();
-            if (screen === 'fishing') renderFishingCoach();
+            if (screen === 'fishing') { renderFishingCoach(); installV46FishingBridgeLayer(); }
             if (screen === 'village') {
                 renderFirstPlayGuide();
                 renderV38ActionDirector();
+                renderV46EnginePanel();
             }
             renderSmartDock();
         };
@@ -6786,7 +7580,10 @@ function setFishingPhase(phase, detail = '') {
     const status = document.getElementById('fishing-status');
     if (status && phase === 'ready') status.textContent = '낚싯대를 던질 준비 완료';
     if (typeof setV41FishingObjective === 'function') setV41FishingObjective(phase, detail || '');
+    if (typeof setV44Objective === 'function') setV44Objective(phase, detail || '');
+    if (typeof setV47RendererPhase === 'function') setV47RendererPhase(phase);
 }
+
 
 function resetFishingActionUI() {
     resetV40CombatUI();
@@ -6802,7 +7599,10 @@ function resetFishingActionUI() {
     gameState.reelCombo = 0;
     updateReelCoachUI();
     if (typeof setV41FishingObjective === 'function') setV41FishingObjective('ready');
+    if (typeof resetV44FishingUI === 'function') resetV44FishingUI();
+    if (typeof setV47RendererPhase === 'function') setV47RendererPhase('ready');
 }
+
 function showBiteTarget(species) {
     const target = document.getElementById('bite-target');
     const visual = document.getElementById('fishing-visual');
@@ -6811,6 +7611,7 @@ function showBiteTarget(species) {
     const top = 32 + Math.random() * 34;
     target.style.left = `${left}%`;
     target.style.top = `${top}%`;
+    if (typeof animateV44BiteTarget === 'function') animateV44BiteTarget(left, top, species);
     target.querySelector('small').textContent = isBossFish(species) ? 'BOSS' : getRarityConfig(species?.rarity || 1).name;
     target.classList.toggle('moving', Number(species?.rarity || 1) >= 3 || isBossFish(species));
     target.classList.remove('hidden');
@@ -6839,6 +7640,7 @@ function hookFishFromTarget(event) {
     playSound('counter');
     createActionFloat(hookGrade === 'PERFECT HOOK' ? '퍼펙트 챔질!' : '챔질 성공!', 'hook');
     createImpactBurst('counter');
+    if (typeof showV44HookFeedback === 'function') showV44HookFeedback(hookGrade);
     startReelGame();
 }
 function createActionFloat(text, type = 'info') {
@@ -6899,6 +7701,7 @@ function castLine() {
     status.textContent = `${getBait().emoji} ${getBait().name} 투척! 입질을 기다리는 중...`;
     setFishingPhase('casting', `${Math.max(1, Math.round(biteDelay / 1000))}초 안에 입질 신호가 옵니다. 빛나는 원이 뜨면 터치하세요.`);
     createActionFloat('캐스팅!', 'cast');
+    if (typeof animateV44CastStart === 'function') animateV44CastStart();
 
     if (rod) {
         rod.style.transition = 'transform 0.55s cubic-bezier(0.34,1.56,0.64,1)';
@@ -6985,6 +7788,7 @@ function startReelGame() {
     renderBossPhasePanel();
     showV40CombatUI(bossMode);
     initReelTimingLane(species);
+    if (typeof startV44ReelMotion === 'function') startV44ReelMotion(species);
     updateReelUI();
 
     if (gameState.reelInterval) clearInterval(gameState.reelInterval);
@@ -7019,7 +7823,10 @@ function updateReelUI() {
     renderBossPhasePanel();
     if (typeof updateV41FishingMeters === 'function') updateV41FishingMeters();
     if (typeof setV41FishingObjective === 'function' && document.body.dataset.screen === 'fishing') setV41FishingObjective(gameState.currentFish ? 'bite' : (gameState.isFishing && gameState.pendingFish ? 'reel' : 'ready'));
+    if (typeof updateV44RealtimeHUD === 'function') updateV44RealtimeHUD();
+    if (typeof updateV47Overlay === 'function') updateV47Overlay();
 }
+
 
 
 function reelAction() {
@@ -7040,6 +7847,7 @@ function reelAction() {
     updateReelTimingLaneUI(timing.grade);
     if (trackBonus.grade === 'TRACK PERFECT') createActionFloat('궤적 PERFECT!', 'combo');
     else if (trackBonus.grade === 'OUT OF LINE') createActionFloat('라인 이탈!', 'danger');
+    if (typeof v44PulseReel === 'function') v44PulseReel(timing, trackBonus);
     if (timing.grade === 'PERFECT') { createActionFloat('PERFECT!', 'combo'); createImpactBurst('counter'); haptic([8,10,8]); }
     else if (timing.grade === 'GOOD') createActionFloat('GOOD!', 'combo');
     else if (timing.grade === 'DANGER') createActionFloat('위험 릴!', 'danger');
@@ -7075,6 +7883,7 @@ function endReelGame(success) {
     const visual = document.getElementById('fishing-visual');
     if (visual) visual.onclick = null;
     hideV39FishingOverlays();
+    if (typeof stopV44ReelMotion === 'function') stopV44ReelMotion(success);
 
     reel.classList.add('hidden');
 
@@ -8405,7 +9214,7 @@ function savePlayerData(syncCloud = true) {
     try {
         const plain = serializeGameState();
         const json = JSON.stringify(plain);
-        ['aqua_v4.3', 'aqua_v4.2', 'aqua_latest_state'].forEach((key) => localStorage.setItem(key, json)); // 성능 보호: 과거 전체 버전 키 반복 저장 제거
+        ['aqua_v4.7', 'aqua_v4.6', 'aqua_latest_state'].forEach((key) => localStorage.setItem(key, json)); // 성능 보호: 과거 전체 버전 키 반복 저장 제거
         setCloudSaveStatus('ok', '로컬 저장됨');
 
         if (syncCloud && isFirebaseConnected && gameState.userId && window.AquaFirebase) {
@@ -8639,7 +9448,7 @@ function exposeAquaHandlers() {
         setQualityPreset, showCharacterModal, submitBossLeaderboard, submitToGlobalLeaderboard,
         switchScreen, runDirectorCutAction, runVisualAtlasAction, runV33Action, runV33SmartLaunch, runV34Action, runV34SmartLaunch, runV35Action, runV35SmartLaunch, runV35Audit, runV36Action, runV37Action, runV38Action, runV39Action, cycleFishingDetail, cycleFishingAssist, cycleFishingPerfLock, runV36SmartLaunch, runV36Audit, toggleCoachHints, toggleCompactHud, toggleGraphicsMode, toggleHapticEnabled,
         toggleImmersiveMode, toggleOneHandMode, toggleQuickMenu, toggleSoundEnabled, runOceanDirectorAction,
-        unlockSensoryEngine, updateTodayBest, closeExitConfirm, confirmExitGame, renderV38ActionDirector
+        unlockSensoryEngine, updateTodayBest, closeExitConfirm, confirmExitGame, renderV38ActionDirector, cycleV44DetailMode, cycleV44AssistMode, cycleV44PerfMode, cycleV46EngineMode, warmV46EngineAssets, renderV46EnginePanel, cycleV47RendererMode, warmV47RendererAssets, renderV47RendererPanel
     });
 }
 
@@ -8652,7 +9461,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
     try {
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v4.3') || localStorage.getItem('aqua_v4.2') || localStorage.getItem('aqua_v4.1') || localStorage.getItem('aqua_v4.0') || localStorage.getItem('aqua_v3.9') || localStorage.getItem('aqua_v3.8') || localStorage.getItem('aqua_v3.7') || localStorage.getItem('aqua_v3.6.4') || localStorage.getItem('aqua_v3.6.3') || localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v4.7') || localStorage.getItem('aqua_v4.6') || localStorage.getItem('aqua_v4.5') || localStorage.getItem('aqua_v4.4') || localStorage.getItem('aqua_v4.3') || localStorage.getItem('aqua_v4.2') || localStorage.getItem('aqua_v4.1') || localStorage.getItem('aqua_v4.0') || localStorage.getItem('aqua_v3.9') || localStorage.getItem('aqua_v3.8') || localStorage.getItem('aqua_v3.7') || localStorage.getItem('aqua_v3.6.4') || localStorage.getItem('aqua_v3.6.3') || localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) {
             const parsed = JSON.parse(saved);
             if (isDemoSeedState(parsed)) {
@@ -8691,6 +9500,10 @@ async function init() {
         initV41Runtime();
     initV42Runtime();
         initV43PerformanceRuntime();
+        initV44Runtime();
+        initV45Runtime();
+        initV46EngineRuntime();
+        initV47RendererRuntime();
         initDirectorArchivePerformanceGate();
         initMobileLaunchBridge();
         initAutoImmersiveShell();
@@ -8711,10 +9524,10 @@ async function init() {
         if (shouldEnterGame) switchScreen('village');
         else showLoginScreen();
         
-        console.log('%c[AquaFantasia v4.3] Fullscreen Performance Boost Ready', 'color:#67e8f9');
+        console.log('%c[AquaFantasia v4.7] Pixi Fishing Renderer Ready', 'color:#f7d071');
     } catch(e) {
         console.error('Init error:', e);
-        alert('게임 초기화 중 오류가 발생했습니다. v4.3 전체화면/성능 부스트 패치가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
+        alert('게임 초기화 중 오류가 발생했습니다. v4.7 Pixi Fishing Renderer 패치가 적용되지 않았다면 최신 ZIP으로 덮어써 주세요.\n\n오류: ' + (e?.message || e));
     }
 }
 

@@ -15,43 +15,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate:
-    name: Validate static game bundle
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Validate HTML, JSON, Service Worker, and game scripts
-        run: node tools/validate-static.mjs
-
-      - name: Audit bundle size, assets, and mobile guards
-        run: node tools/audit-bundle.mjs
-
   deploy:
-    name: Deploy to GitHub Pages
-    needs: validate
-    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Configure GitHub Pages
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Static validation
+        run: |
+          npm run validate
+          npm run audit
+          npm run atlas:check
+      - name: Configure Pages
         uses: actions/configure-pages@v5
-
-      - name: Upload static site artifact
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
-
+          path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

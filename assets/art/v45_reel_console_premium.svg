@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" preserveAspectRatio="none">
+<defs>
+<linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071426"/><stop offset=".38" stop-color="#0d3a4a"/><stop offset=".68" stop-color="#42233c"/><stop offset="1" stop-color="#09111f"/></linearGradient>
+<radialGradient id="gold" cx="50%" cy="45%" r="60%"><stop stop-color="#fff7dd"/><stop offset=".38" stop-color="#f7d071"/><stop offset="1" stop-color="#b45309"/></radialGradient>
+<filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="900" height="360" rx="56" fill="url(#panel)"/>
+<rect x="18" y="18" width="864" height="324" rx="46" fill="none" stroke="#fff7dd" stroke-opacity=".18" stroke-width="4"/>
+<path d="M80 70c165-42 335-38 500 10 76 22 145 30 235 3" fill="none" stroke="#67e8f9" stroke-opacity=".16" stroke-width="20"/>
+<path d="M70 278c165-30 350-28 520 3 83 16 157 8 236-38" fill="none" stroke="#f7d071" stroke-opacity=".14" stroke-width="17"/>
+<g opacity=".9" filter="url(#glow)">
+<circle cx="150" cy="182" r="64" fill="#020617" stroke="url(#gold)" stroke-width="10"/>
+<circle cx="150" cy="182" r="37" fill="none" stroke="#67e8f9" stroke-opacity=".48" stroke-width="9"/>
+<path d="M150 118v128M86 182h128M105 137l91 91M196 137l-91 91" stroke="#fff7dd" stroke-opacity=".22" stroke-width="7" stroke-linecap="round"/>
+</g>
+<g transform="translate(720 178)">
+<circle r="54" fill="#020617" stroke="#f7d071" stroke-width="8" opacity=".9"/>
+<circle r="22" fill="#67e8f9" opacity=".22"/>
+<path d="M0-66v132M-66 0H66" stroke="#fff7dd" stroke-opacity=".18" stroke-width="6"/>
+</g>
+<path d="M260 120h320" stroke="#fff7dd" stroke-opacity=".08" stroke-width="16" stroke-linecap="round"/>
+<path d="M260 164h390" stroke="#67e8f9" stroke-opacity=".12" stroke-width="12" stroke-linecap="round"/>
+<path d="M260 210h280" stroke="#f7d071" stroke-opacity=".14" stroke-width="12" stroke-linecap="round"/>
+</svg>

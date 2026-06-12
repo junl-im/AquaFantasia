@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" preserveAspectRatio="none">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#071426"/><stop offset=".35" stop-color="#0d3b52"/><stop offset=".68" stop-color="#0b2541"/><stop offset="1" stop-color="#020617"/></linearGradient><radialGradient id="sun" cx="28%" cy="12%" r="48%"><stop stop-color="#f7d071" stop-opacity=".36"/><stop offset=".42" stop-color="#f7d071" stop-opacity=".1"/><stop offset="1" stop-color="#f7d071" stop-opacity="0"/></radialGradient><radialGradient id="reef" cx="78%" cy="78%" r="54%"><stop stop-color="#ff8f7b" stop-opacity=".28"/><stop offset=".55" stop-color="#a78bfa" stop-opacity=".11"/><stop offset="1" stop-color="#a78bfa" stop-opacity="0"/></radialGradient></defs>
+<rect width="900" height="1200" fill="url(#bg)"/>
+<rect width="900" height="1200" fill="url(#sun)"/>
+<rect width="900" height="1200" fill="url(#reef)"/>
+<g stroke="#fff7dd" stroke-opacity=".08" stroke-width="5" fill="none"><path d="M-50 225c140-60 280 36 420-16s285-34 530 22"/><path d="M-80 405c180-48 290 26 450-14 170-42 320 36 560 5"/><path d="M-60 835c210-70 410 44 620-20 150-46 280 10 410 28"/></g>
+<g opacity=".28"><path d="M118 780c70-10 86 68 42 122-44 56-126 35-128-26-1-43 36-88 86-96Z" fill="#67e8f9" opacity=".15"/><path d="M820 760c-68-11-99 48-70 102 27 52 108 61 140 9 28-44-4-100-70-111Z" fill="#ff8f7b" opacity=".17"/></g>
+</svg>

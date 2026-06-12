@@ -1,0 +1,11 @@
+import { readFileSync, statSync } from 'node:fs';
+import { join } from 'node:path';
+const root = process.cwd();
+const index = readFileSync(join(root, 'index.html'), 'utf8');
+const atlas = JSON.parse(readFileSync(join(root, 'assets/atlas/aqua_fishing_v47.atlas.json'), 'utf8'));
+const required = ['bobber','line_arc','water_ribbon','fish_trail','target_zone','tension_wave'];
+const missing = required.filter((key) => !atlas.frames?.[key]);
+if (missing.length) throw new Error(`Missing v4.7 atlas frames: ${missing.join(', ')}`);
+if (!index.includes('v47-fishing-canvas') || !index.includes('initV47RendererRuntime')) throw new Error('v4.7 renderer runtime missing from index.html');
+if (statSync(join(root, 'assets/atlas/aqua_fishing_v47.webp')).size < 1024) throw new Error('v4.7 WebP atlas is unexpectedly small');
+console.log(JSON.stringify({ ok:true, version:'4.7.0', frames:Object.keys(atlas.frames).length, bytes:statSync(join(root, 'assets/atlas/aqua_fishing_v47.webp')).size }, null, 2));

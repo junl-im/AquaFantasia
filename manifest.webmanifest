@@ -1,11 +1,11 @@
 {
-  "name": "Aqua Fantasia v4.3 Fullscreen Performance Boost",
-  "short_name": "Aqua v4.3",
-  "description": "Aqua Fantasia v4.3 - 첫 터치 전체화면 시도, 모바일 몰입 셸, 낚시 성능 최적화",
+  "name": "Aqua Fantasia v4.7",
+  "short_name": "Aqua v4.7",
+  "description": "Aqua Fantasia v4.7 Pixi Fishing Renderer mobile web game",
   "lang": "ko-KR",
   "dir": "ltr",
-  "id": "./?app=aqua-fantasia-v43",
-  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=4.3.0",
+  "id": "./?app=aqua-fantasia-v46",
+  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=4.6.0",
   "scope": "./",
   "display": "fullscreen",
   "display_override": [
@@ -42,10 +42,10 @@
   ],
   "shortcuts": [
     {
-      "name": "성능 낚시 모드",
-      "short_name": "v4.3",
-      "description": "v4.3 전체화면/성능 낚시 모드",
-      "url": "./?shortcut=fishing&fullscreen=1&v=4.3.0",
+      "name": "엔진 최적화 낚시",
+      "short_name": "v4.6",
+      "description": "v4.6 엔진 아틀라스 최적화 낚시 모드",
+      "url": "./?shortcut=fishing&fullscreen=1&v=4.6.0",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",

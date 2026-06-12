@@ -1,12 +1,28 @@
 {
-  "name": "aqua-fantasia-static",
-  "version": "4.3.0",
+  "name": "aqua-fantasia-engine",
+  "version": "4.7.0",
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "typecheck": "tsc --noEmit",
     "validate": "node tools/validate-static.mjs",
     "audit": "node tools/audit-bundle.mjs",
-    "audit:bundle": "node tools/audit-bundle.mjs"
+    "audit:bundle": "node tools/audit-bundle.mjs",
+    "atlas:check": "node tools/generate-webp-atlas.mjs",
+    "renderer:check": "node tools/check-v47-renderer.mjs"
   },
-  "description": "Aqua Fantasia static mobile web game - v4.3 Fullscreen Performance Boost Patch"
+  "dependencies": {
+    "@vitejs/plugin-basic-ssl": "latest",
+    "firebase": "latest",
+    "howler": "latest",
+    "pixi.js": "^8.11.0",
+    "vite": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest"
+  },
+  "description": "Aqua Fantasia v4.7 - PixiJS fishing renderer bridge, WebP Atlas v47, Canvas fallback, mobile performance governor and PWA optimized engine scaffold"
 }

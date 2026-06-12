@@ -1,0 +1,11 @@
+import { readFileSync, statSync } from 'node:fs';
+import { join } from 'node:path';
+const root = process.cwd();
+const webp = join(root, 'assets/atlas/aqua_fishing_v47.webp');
+const json = join(root, 'assets/atlas/aqua_fishing_v47.atlas.json');
+const atlas = JSON.parse(readFileSync(json, 'utf8'));
+const required = ['bobber', 'line_arc', 'water_ribbon', 'fish_trail', 'target_zone', 'tension_wave'];
+const missing = required.filter((key) => !atlas.frames?.[key]);
+if (missing.length) throw new Error(`Missing atlas frames: ${missing.join(', ')}`);
+if (statSync(webp).size < 1024) throw new Error('WebP atlas is unexpectedly small');
+console.log(JSON.stringify({ ok: true, image: 'aqua_fishing_v47.webp', bytes: statSync(webp).size, frames: Object.keys(atlas.frames).length }, null, 2));
