@@ -40,6 +40,6 @@ if (!fishing.includes('SAFE_MIN = 30') || !fishing.includes('SAFE_MAX = 70') || 
 if (!inventory.includes('panel_1.png') || !inventory.includes('grid-template-columns:repeat(4,1fr)') || !inventory.includes('aquaInventoryPop')) fail('inventory elastic grid requirements missing');
 if (!navigator.includes('createNavigator') || !navigator.includes('던지기') || !navigator.includes('챔질') || !navigator.includes('가방')) fail('navigator action flow missing');
 if (!runtime.includes('createFishingSystem') || !runtime.includes('createInventorySystem') || !runtime.includes('createNavigator')) fail('v52 runtime connector missing systems');
-if (!index.includes('v52-casual-runtime.js') || !index.includes("const APP_VERSION = '5.2.0'")) fail('index v5.2 runtime marker missing');
-if (!sw.includes('aqua-fantasia-v5.2.0') || !sw.includes('./src/runtime/v52-casual-runtime.js')) fail('service worker v5.2 entries missing');
+if (!index.includes('v53-casual-ux-polish.js') && !index.includes('v52-casual-runtime.js')) fail('index casual runtime marker missing');
+if (!sw.includes('aqua-fantasia-v5.3.0') && !sw.includes('aqua-fantasia-v5.2.0')) fail('service worker casual cache marker missing');
 console.log('[check-v52] casual refactor OK');

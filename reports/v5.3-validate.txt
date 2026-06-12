@@ -1,0 +1,5 @@
+
+> aqua-fantasia-engine@5.3.0 validate
+> node tools/validate-static.mjs
+
+[validate-static] AquaFantasia v5.3 static bundle OK.

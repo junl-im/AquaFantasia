@@ -1,0 +1,30 @@
+
+> aqua-fantasia-engine@5.3.0 audit
+> node tools/audit-bundle.mjs
+
+{
+  "version": "5.3.0",
+  "indexBytes": 670787,
+  "indexLines": 10041,
+  "serviceWorkerBytes": 5768,
+  "fishCount": 174,
+  "artSvgCount": 224,
+  "referencedAssetCount": 246,
+  "missingAssets": [],
+  "duplicateFishIds": 0,
+  "runtime": {
+    "runtimeDiet48": true,
+    "runtimeConnect49": true,
+    "performanceFocus50": true,
+    "stabilityAssist51": true,
+    "casualRefactor52": true,
+    "casualUX53": true,
+    "renderer47": true,
+    "engine46": true,
+    "lightServiceWorker": true,
+    "optimizedSave": true,
+    "mobileGuards": true,
+    "legacyRenderGate": true,
+    "cleanBundleReady": true
+  }
+}

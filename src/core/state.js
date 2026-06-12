@@ -1,9 +1,9 @@
-// Aqua Fantasia v5.2 Casual Refactor - 전역 상태 관리
-// ------------------------------------------------------
-// 목적:
-// 1) Runtime(Pixi 렌더러), System(낚시/인벤토리), UI가 같은 상태 이벤트를 구독하도록 통합합니다.
-// 2) 낚시 진행 상태를 READY → CASTING → WAITING → BITE → REELING → CATCH/FAIL 로 세분화합니다.
-// 3) 기존 index.html 단일 런타임과도 충돌하지 않도록 작은 이벤트 스토어 형태로 설계했습니다.
+// Aqua Fantasia v5.4 Casual Result & Shop Polish - 전역 게임 상태 관리
+// ------------------------------------------------------------
+// 역할:
+// 1) 낚시 Runtime, Fishing System, Inventory UI, Navigator가 같은 이벤트를 구독합니다.
+// 2) READY → CASTING → WAITING → BITE → REELING → CATCH/FAIL 흐름을 명확히 유지합니다.
+// 3) v5.2 이하 저장 데이터를 읽되, 새 저장은 v5.3과 latest 중심으로만 가볍게 남깁니다.
 
 export const GAME_PHASE = Object.freeze({
   READY: 'READY',
@@ -22,6 +22,7 @@ export const ASSETS = Object.freeze({
   reelBar: 'assets/ui-kit/fishing_minigame/reel_bar_220px.png',
   tensionGauge: 'assets/ui-kit/icons/tension_gauge.png',
   panel: 'assets/ui-kit/panels/panel_1.png',
+  mobileShell: 'src/ui/mobile-shell.js',
   fishIcons: [
     'assets/ui-kit/icons/fish_1.png',
     'assets/ui-kit/icons/fish_2.png',
@@ -32,7 +33,8 @@ export const ASSETS = Object.freeze({
   ],
 });
 
-export const SAVE_KEYS = ['aqua_v5.2', 'aqua_v5.1', 'aqua_v5.0', 'aqua_v4.9', 'aqua_latest_state'];
+export const APP_VERSION = '5.4.0';
+export const SAVE_KEYS = ['aqua_v5.4', 'aqua_v5.3', 'aqua_v5.2', 'aqua_v5.1', 'aqua_v5.0', 'aqua_v4.9', 'aqua_latest_state'];
 
 export function clamp(value, min, max) {
   return Math.max(min, Math.min(max, Number(value) || 0));
@@ -44,6 +46,11 @@ export function lerp(from, to, amount) {
 
 export function now() {
   return typeof performance !== 'undefined' ? performance.now() : Date.now();
+}
+
+export function pickFishIcon(seed = Math.random()) {
+  const index = Math.abs(Math.floor(Number(seed) * 1000)) % ASSETS.fishIcons.length;
+  return ASSETS.fishIcons[index];
 }
 
 function createEmitter() {
@@ -84,10 +91,22 @@ function loadSavedState() {
   return null;
 }
 
+function normalizeInventory(saved) {
+  const raw = Array.isArray(saved?.inventory) ? saved.inventory : [];
+  return raw.slice(0, 120).map((item, index) => ({
+    id: item?.id || `legacy-${index}-${Date.now()}`,
+    name: item?.name || '작은 물고기',
+    icon: item?.icon || ASSETS.fishIcons[index % ASSETS.fishIcons.length],
+    rarity: Number(item?.rarity || 1),
+    value: Number(item?.value || 80),
+    caughtAt: Number(item?.caughtAt || Date.now()),
+  }));
+}
+
 function createDefaultState() {
   const saved = loadSavedState() || {};
   return {
-    version: '5.2.0',
+    version: APP_VERSION,
     phase: GAME_PHASE.READY,
     phaseStartedAt: now(),
     player: {
@@ -102,18 +121,26 @@ function createDefaultState() {
       safeSeconds: 0,
       isDown: false,
       combo: 0,
-      lastResult: null,
+      lastResult: saved?.fishing?.lastResult || null,
       bitePosition: { x: 0.5, y: 0.48 },
       message: '낚싯대 던지기',
-      difficulty: 'normal',
+      subMessage: '찌가 물에 닿으면 입질을 기다려요.',
+      difficulty: saved?.fishing?.difficulty || 'normal',
+      lastJudge: '',
+      guideLevel: saved?.settings?.guide || 'standard',
     },
-    inventory: Array.isArray(saved.inventory) ? saved.inventory : [],
-    caught: Array.isArray(saved.caught) ? saved.caught : [],
+    inventory: normalizeInventory(saved),
+    caught: Array.isArray(saved?.caught) ? saved.caught.slice(0, 300) : [],
     settings: {
       motion: saved?.settings?.motion || 'balanced',
       performance: saved?.settings?.performance || 'auto',
       haptic: saved?.settings?.haptic !== false,
       guide: saved?.settings?.guide || 'standard',
+    },
+    shop: {
+      owned: Array.isArray(saved?.shop?.owned) ? saved.shop.owned.slice(0, 60) : [],
+      selectedSkin: saved?.shop?.selectedSkin || 'bubble',
+      lastPurchase: saved?.shop?.lastPurchase || null,
     },
   };
 }
@@ -123,7 +150,8 @@ export const aquaStore = (() => {
   let state = createDefaultState();
 
   function snapshot() {
-    return structuredClone ? structuredClone(state) : JSON.parse(JSON.stringify(state));
+    if (typeof structuredClone === 'function') return structuredClone(state);
+    return JSON.parse(JSON.stringify(state));
   }
 
   function emitChange(reason, extra = {}) {
@@ -131,7 +159,7 @@ export const aquaStore = (() => {
   }
 
   function setState(patch, reason = 'setState') {
-    state = { ...state, ...patch };
+    state = { ...state, ...patch, version: APP_VERSION };
     emitChange(reason);
   }
 
@@ -139,9 +167,10 @@ export const aquaStore = (() => {
     if (!Object.values(GAME_PHASE).includes(phase)) throw new Error(`알 수 없는 게임 상태: ${phase}`);
     state = {
       ...state,
+      version: APP_VERSION,
       phase,
       phaseStartedAt: now(),
-      fishing: { ...state.fishing, ...payload.fishing },
+      fishing: { ...state.fishing, ...(payload.fishing || {}) },
     };
     emitter.emit('phase', { phase, state: snapshot(), ...payload });
     emitChange(`phase:${phase}`, payload);
@@ -153,13 +182,14 @@ export const aquaStore = (() => {
     emitChange(reason);
   }
 
-  function addFish(fish) {
+  function addFish(fish = {}) {
+    const iconSeed = Math.random();
     const item = {
-      id: fish?.id || `fish-${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      name: fish?.name || '환상의 물고기',
-      icon: fish?.icon || ASSETS.fishIcons[Math.floor(Math.random() * ASSETS.fishIcons.length)],
-      rarity: Number(fish?.rarity || 1),
-      value: Number(fish?.value || 100),
+      id: fish.id || `fish-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      name: fish.name || '통통 물고기',
+      icon: fish.icon || pickFishIcon(iconSeed),
+      rarity: Number(fish.rarity || 1),
+      value: Number(fish.value || Math.round(60 + iconSeed * 180)),
       caughtAt: Date.now(),
     };
     state = {
@@ -174,13 +204,58 @@ export const aquaStore = (() => {
   }
 
   function clearResult() {
-    updateFishing({ lastResult: null, progress: 0, safeSeconds: 0, tension: 50, combo: 0 }, 'result:clear');
+    updateFishing({ lastResult: null, progress: 0, safeSeconds: 0, tension: 50, combo: 0, lastJudge: '' }, 'result:clear');
+  }
+
+  function addGold(amount = 0, reason = 'gold:add') {
+    const gold = Math.max(0, Number(state.player.gold || 0) + Math.round(Number(amount || 0)));
+    state = { ...state, player: { ...state.player, gold } };
+    emitter.emit('wallet', { amount: Math.round(Number(amount || 0)), gold, state: snapshot(), reason });
+    emitChange(reason, { gold });
+    return gold;
+  }
+
+  function removeFishById(id) {
+    const before = state.inventory.length;
+    state = { ...state, inventory: state.inventory.filter((item) => item.id !== id) };
+    if (state.inventory.length !== before) emitChange('inventory:remove', { id });
+    return before !== state.inventory.length;
+  }
+
+  function sellFish(id) {
+    const item = state.inventory.find((fish) => fish.id === id);
+    if (!item) return null;
+    removeFishById(id);
+    const earned = Math.max(1, Math.round(Number(item.value || 80)));
+    addGold(earned, 'shop:sellFish');
+    emitter.emit('shop:sell', { item, earned, state: snapshot() });
+    save();
+    return { item, earned };
+  }
+
+  function buyShopItem(item = {}) {
+    const price = Math.max(0, Math.round(Number(item.price || 0)));
+    if (Number(state.player.gold || 0) < price) {
+      emitter.emit('shop:denied', { item, state: snapshot(), reason: 'not-enough-gold' });
+      return false;
+    }
+    const owned = new Set(state.shop.owned || []);
+    owned.add(item.id || item.name || `shop-${Date.now()}`);
+    state = {
+      ...state,
+      player: { ...state.player, gold: Math.max(0, Number(state.player.gold || 0) - price) },
+      shop: { ...state.shop, owned: [...owned], lastPurchase: { ...item, boughtAt: Date.now() } },
+    };
+    emitter.emit('shop:buy', { item, state: snapshot() });
+    emitChange('shop:buy', { item });
+    save();
+    return true;
   }
 
   function save() {
     if (typeof localStorage === 'undefined') return;
     const data = snapshot();
-    for (const key of ['aqua_v5.2', 'aqua_latest_state']) {
+    for (const key of ['aqua_v5.4', 'aqua_v5.3', 'aqua_latest_state']) {
       try { localStorage.setItem(key, JSON.stringify(data)); } catch (error) { console.warn('[AquaState] 저장 실패', key, error); }
     }
   }
@@ -195,11 +270,14 @@ export const aquaStore = (() => {
     updateFishing,
     addFish,
     clearResult,
+    addGold,
+    removeFishById,
+    sellFish,
+    buyShopItem,
     save,
   };
 })();
 
-// 기존 함수명과의 느슨한 호환용 별칭입니다.
 export const gameStore = aquaStore;
 export function subscribe(type, listener) { return aquaStore.on(type, listener); }
 export function setPhase(phase, payload) { return aquaStore.setPhase(phase, payload); }

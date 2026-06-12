@@ -1,6 +1,6 @@
 {
   "name": "aqua-fantasia-engine",
-  "version": "5.2.0",
+  "version": "5.4.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,12 +13,14 @@
     "audit:bundle": "node tools/audit-bundle.mjs",
     "atlas:check": "node tools/generate-webp-atlas.mjs",
     "renderer:check": "node tools/check-v47-renderer.mjs && node tools/check-v49-runtime.mjs && node tools/check-v50-runtime.mjs && node tools/check-v51-runtime.mjs",
-    "runtime:check": "node tools/check-v48-runtime.mjs && node tools/check-v50-runtime.mjs && node tools/check-v51-runtime.mjs && node tools/check-v52-casual-refactor.mjs",
+    "runtime:check": "node tools/check-v48-runtime.mjs && node tools/check-v50-runtime.mjs && node tools/check-v51-runtime.mjs && node tools/check-v52-casual-refactor.mjs && node tools/check-v53-casual-ux-polish.mjs && node tools/check-v54-result-shop-polish.mjs",
     "clean:report": "node tools/clean-bundle-report.mjs",
     "runtime49:check": "node tools/check-v49-runtime.mjs",
     "runtime50:check": "node tools/check-v50-runtime.mjs",
     "runtime51:check": "node tools/check-v51-runtime.mjs",
-    "runtime52:check": "node tools/check-v52-casual-refactor.mjs"
+    "runtime52:check": "node tools/check-v52-casual-refactor.mjs",
+    "runtime53:check": "node tools/check-v53-casual-ux-polish.mjs",
+    "runtime54:check": "node tools/check-v54-result-shop-polish.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-basic-ssl": "latest",
@@ -30,5 +32,5 @@
   "devDependencies": {
     "typescript": "latest"
   },
-  "description": "Aqua Fantasia v5.2 - casual Pixi refactor, sprite fishing minigame, elastic inventory UX and event-driven state."
+  "description": "Aqua Fantasia v5.4 - casual result flow and shop polish with compact catch popup and panel-based shop."
 }

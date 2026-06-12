@@ -1,4 +1,6 @@
-const CACHE_VERSION = 'aqua-fantasia-v5.2.0';
+const CACHE_VERSION = 'aqua-fantasia-v5.4.0';
+// aqua-fantasia-v5.3.0 legacy marker for migration audit
+// aqua-fantasia-v5.2.0 legacy marker for migration audit
 // aqua-fantasia-v5.1.0 legacy marker for migration audit
 // aqua-fantasia-v5.0.0 legacy marker for migration audit
 // aqua-fantasia-v4.9.0 legacy marker for migration audit
@@ -62,6 +64,9 @@ const CORE_ASSETS = [
   "./src/systems/inventory.js",
   "./src/systems/fishing.js",
   "./src/core/state.js",
+  "./src/runtime/v54-result-shop-polish.js",
+  "./src/systems/shop.js",
+  "./src/runtime/v53-casual-ux-polish.js",
   "./src/runtime/v52-casual-runtime.js"
 ];
 
