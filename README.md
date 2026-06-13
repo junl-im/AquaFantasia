@@ -1,40 +1,26 @@
-# Aqua Fantasia
+# Aqua Fantasia v7.4.0
 
-세로 전용 모바일 캐주얼 낚시 웹게임 프로토타입입니다.
+세로 전용 2.5D 모바일 캐주얼 낚시 게임 프로토타입입니다.
 
-## 현재 버전
-v7.2.0 Start Cleanup + Back Guard + Bite Guide
+## v7.4.0 핵심
 
-## 핵심 구조
-- Vite
-- TypeScript
-- PixiJS 8
-- Howler.js
-- Firebase 익명 서버연동 준비 구조
-- PWA / Service Worker
-- GitHub Actions / GitHub Pages
+- 업로드한 `낚시.zip` 에셋을 기준 아트팩으로 통합
+- UI 프레임, 버튼, 배경, 물고기 도감 이미지를 v740 톤으로 교체
+- 물고기 도감은 배경 없는 투명 PNG 기반으로 재구성
+- 시작 화면 로그인 유지 토글 겹침 완화
+- 낚시 화면, 마을, 장비, 도감, 상점, 미션, 팝업 UI 톤 정리
+- 카카오톡 인앱 브라우저 세로 프레임 대응 유지
+- Vite + TypeScript + PixiJS 8 + Howler.js + Firebase 준비 구조 유지
 
-## v6.9.0 핵심
-- 시작 화면에서 공지사항/고객센터/설정 제거
-- 시작 화면 하단 메뉴 제거
-- 로그인 유지 체크 상태 시각 보정
-- 입질 시 `화면을 눌러 당기세요` 안내 카드 추가
-- 모바일 뒤로가기 버튼을 게임 흐름으로 제어
-- 카카오톡 인앱 브라우저 세로 대응 유지
+## 개발 명령
 
-## 개발
 ```bash
 npm install
-npm run dev
 npm run validate
 npm run typecheck
 npm run build
 ```
 
+## 적용 권장
 
-## v7.1.0 UI/UX Dex Polish
-시작 화면 체크 상태, 낚시 화면 마을 이동, 콤보 표시, 도감 이미지 힌트, 줄무늬 제거 UI 패스가 적용되었습니다.
-
-
-## v7.2.0
-Total UI/UX polish with transparent-background 2.5D fish dex assets.
+기존 누적 파일이 섞이지 않도록 `.git` 폴더만 남기고 전체 교체 ZIP을 압축 해제하는 방식을 권장합니다.

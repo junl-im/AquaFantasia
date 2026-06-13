@@ -1,15 +1,15 @@
 {
   "name": "aqua-fantasia",
   "private": true,
-  "version": "7.2.0",
+  "version": "7.4.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build --base=./",
     "preview": "vite preview --host 0.0.0.0",
-    "validate": "node tools/validate-clean.mjs && node tools/check-v720-ui-transparent-dex.mjs && node tools/check-v710-ui-dex-polish.mjs && node tools/check-v700-ui-polish.mjs && node tools/check-v690-start-back-bite.mjs && node tools/check-v671-kakao-orientation-safe.mjs",
-    "runtime:check": "node tools/check-v720-ui-transparent-dex.mjs --runtime && node tools/check-v710-ui-dex-polish.mjs --runtime && node tools/check-v700-ui-polish.mjs --runtime && node tools/check-v690-start-back-bite.mjs --runtime && node tools/check-v671-kakao-orientation-safe.mjs --runtime",
-    "audit": "node tools/check-v720-ui-transparent-dex.mjs --audit && node tools/check-v710-ui-dex-polish.mjs --audit && node tools/check-v700-ui-polish.mjs --audit && node tools/check-v690-start-back-bite.mjs --audit && node tools/check-v671-kakao-orientation-safe.mjs --audit",
+    "validate": "node tools/validate-clean.mjs && node tools/check-v740-user-assets.mjs",
+    "runtime:check": "node tools/check-v740-user-assets.mjs --runtime",
+    "audit": "node tools/check-v740-user-assets.mjs --audit",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

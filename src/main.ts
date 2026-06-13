@@ -8,7 +8,7 @@ import { ToastManager } from './toast';
 import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPortraitLock } from './core/PortraitGuard';
 
 const ASSET = {
-  loginBg: './assets/screens/start_screen_clean_v720.webp',
+  loginBg: './assets/screens/start_screen_clean_v740.webp',
   player: './assets/art/player_boat.png',
   float: './assets/art/fishing_float.png',
   fish: './assets/art/fish_clown.png',
@@ -131,7 +131,7 @@ class AquaFantasiaGame {
       <button class="start-hotspot hit-depart" data-action="guest" aria-label="낚시터로 출항"></button>
       <button class="start-hotspot hit-new" data-action="new" aria-label="처음부터 새 게임"></button>
       <button class="start-hotspot hit-server" data-action="server" aria-label="익명 서버연동"></button>
-      <button class="start-hotspot hit-keep v720-keep-toggle" data-action="keep" aria-label="이 기기에서 로그인 유지" aria-pressed="false"><span class="keep-indicator" aria-hidden="true"></span><span class="keep-text">이 기기에서 로그인 유지</span></button>
+      <button class="start-hotspot hit-keep v720-keep-toggle v730-keep-toggle v740-keep-toggle" data-action="keep" aria-label="이 기기에서 로그인 유지" aria-pressed="false"><span class="keep-indicator" aria-hidden="true"></span><span class="keep-text">이 기기에서 로그인 유지</span></button>
       <div class="login-touch-shine" aria-hidden="true"></div>`;
     dom.app.appendChild(shell);
     const keepEnabled = window.localStorage.getItem('aqua-login-keep') === 'true';
@@ -220,7 +220,7 @@ class AquaFantasiaGame {
     root.style.setProperty('--region-glow', region.color);
     root.innerHTML += `
       <div class="fishing-top glass-card">
-        <div><strong>${region.name}</strong><span id="fishingHint">찌 던지기 버튼을 눌러 시작하세요</span></div>
+        <div><strong>${region.name}</strong><span id="fishingHint">찌 던지기로 출항을 시작하세요</span></div>
         <div class="weather-pill">${region.tide}</div>
         <button class="round-btn home-btn" data-go="village">마을</button>
       </div>
@@ -731,8 +731,11 @@ class AquaFantasiaGame {
   private renderDex(): void {
     this.clear();
     const root = this.baseGameShell('dex');
+    const caughtCount = this.totalCaught();
+    const discovered = fishDex.filter((fish) => fish.id !== 'unknown' && ((this.save.caught[fish.id] ?? 0) > 0 || fish.rarity === 'COMMON')).length;
     root.innerHTML += `
-      <section class="page-head glass-card"><div><span class="eyebrow">물고기 도감</span><h2>물고기 도감</h2><p>배경 없는 투명 2.5D 물고기 캐릭터를 수집합니다.</p></div></section>
+      <section class="page-head glass-card"><div><span class="eyebrow">물고기 도감</span><h2>물고기 도감</h2><p>투명 배경의 귀여운 2.5D 물고기 캐릭터를 수집합니다.</p></div></section>
+      <section class="dex-summary glass-card"><strong>수집 ${caughtCount}마리</strong><span>발견 ${discovered}/${fishDex.length - 1}종 · 업로드 에셋 기반 투명 PNG 물고기 사용</span></section>
       <section class="dex-grid">
       ${fishDex.filter((fish) => fish.id !== 'unknown').map((fish) => {
         const unlocked = (this.save.caught[fish.id] ?? 0) > 0 || fish.rarity === 'COMMON';
