@@ -1,5 +1,0 @@
-
-> aqua-fantasia-engine@5.3.0 runtime53:check
-> node tools/check-v53-casual-ux-polish.mjs
-
-[check-v53] casual UX polish OK

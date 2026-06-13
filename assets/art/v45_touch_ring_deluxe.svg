@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320">
-<defs><radialGradient id="r" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff7dd" stop-opacity=".12"/><stop offset=".35" stop-color="#f7d071" stop-opacity=".22"/><stop offset=".62" stop-color="#67e8f9" stop-opacity=".16"/><stop offset="1" stop-color="#67e8f9" stop-opacity="0"/></radialGradient><filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-<circle cx="160" cy="160" r="148" fill="url(#r)"/>
-<circle cx="160" cy="160" r="122" fill="none" stroke="#67e8f9" stroke-opacity=".42" stroke-width="5"/>
-<circle cx="160" cy="160" r="88" fill="none" stroke="#fff7dd" stroke-opacity=".72" stroke-width="7" filter="url(#glow)"/>
-<circle cx="160" cy="160" r="48" fill="none" stroke="#f97365" stroke-opacity=".62" stroke-width="6"/>
-<path d="M160 20v44M160 256v44M20 160h44M256 160h44" stroke="#fff7dd" stroke-linecap="round" stroke-width="8" opacity=".82"/>
-<path d="M108 108l104 104M212 108L108 212" stroke="#67e8f9" stroke-linecap="round" stroke-width="4" opacity=".34"/>
-</svg>

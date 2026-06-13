@@ -1,70 +1,15 @@
 {
-  "name": "Aqua Fantasia v6.0.0 Interaction Balance",
+  "name": "Aqua Fantasia",
   "short_name": "AquaFantasia",
-  "description": "Aqua Fantasia v6.0.0 Interaction Balance; dismissible and swipeable notifications, quest routing, tuned fishing difficulty, water background polish, automatic cache sweep. Legacy markers: v5.8.0 2.5D Art Reboot, 5.8.0-2-5d-art-20260612, v5.7.0 Water Art Direction, 5.7.0-water-art-20260612, v5.6.1 UI State Cleanup, 5.6.1-ui-cleanup-20260612, v5.5 Mobile Feel, 5.5-mobile-feel-20260612, v5.5.5 Auto Cache Sweep, 5.5.5-auto-cache-sweep-20260612, v4.9 Action Mobile Patch.",
-  "lang": "ko-KR",
-  "dir": "ltr",
-  "id": "/AquaFantasia/?v=6.0.0-interaction-balance",
-  "start_url": "./?source=pwa&fullscreen=1&art=1&mobile=1&v=6.0.0-interaction-balance",
+  "description": "2.5D mobile casual fishing web game",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "fullscreen",
-  "display_override": [
-    "fullscreen",
-    "standalone",
-    "minimal-ui"
-  ],
   "orientation": "portrait",
-  "background_color": "#020617",
-  "theme_color": "#07344f",
-  "categories": [
-    "games",
-    "entertainment"
-  ],
+  "background_color": "#06283f",
+  "theme_color": "#06283f",
   "icons": [
-    {
-      "src": "assets/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "assets/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "assets/icons/maskable-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "v4.9 낚시 런타임",
-      "short_name": "v4.9 낚시",
-      "description": "v4.9 Canvas/Pixi 낚시 런타임 테스트",
-      "url": "./?shortcut=fishing&fullscreen=1&v=6.0.0-interaction-balance",
-      "icons": [
-        {
-          "src": "assets/icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "장비 공방",
-      "short_name": "장비",
-      "description": "낚싯대와 미끼 관리",
-      "url": "./?shortcut=equipment&v=6.0.0-interaction-balance",
-      "icons": [
-        {
-          "src": "assets/icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    }
-  ],
-  "version": "6.0.0-interaction-balance-20260612"
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
 }

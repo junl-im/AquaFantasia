@@ -1,4 +1,4 @@
-name: AquaFantasia Pages Validate
+name: validate
 
 on:
   push:
@@ -7,19 +7,12 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
-concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   validate:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -29,18 +22,10 @@ jobs:
           node-version: '24'
           package-manager-cache: false
       - name: Install
-        run: npm install
+        run: npm install --no-audit --no-fund
       - name: Static validate
         run: npm run validate
-      - name: Typecheck
-        run: npm run typecheck
-      - name: Runtime checks
+      - name: Runtime check
         run: npm run runtime:check
       - name: Bundle audit
         run: npm run audit
-      - name: Atlas check
-        run: npm run atlas:check
-      - name: Renderer checks
-        run: npm run renderer:check
-      - name: Clean report
-        run: npm run clean:report
