@@ -750,3 +750,127 @@ html.is-hostile-inapp .glass-card { backdrop-filter:none !important; }
   .fishing-top { grid-template-columns: 1fr auto !important; }
   .weather-pill { display:none !important; }
 }
+
+
+/* v7.2.0 TOTAL UI/UX + TRANSPARENT FISH DEX PASS
+   Goal: keep the loved reference start screen, fix login keep overlap, and remove fish-card background artifacts. */
+.start-art-screen .start-art-image { content: url('/assets/screens/start_screen_clean_v720.webp') !important; }
+.hit-keep.v720-keep-toggle {
+  left: 26.5% !important;
+  top: 74.6% !important;
+  width: 47.5% !important;
+  height: 5.2% !important;
+  padding: 0 18px !important;
+  justify-content:center !important;
+  background: url('/assets/ui/v720_toggle_off.png') center/100% 100% no-repeat !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  gap: 10px !important;
+}
+.hit-keep.v720-keep-toggle.checked { background-image: url('/assets/ui/v720_toggle_on.png') !important; }
+.hit-keep.v720-keep-toggle .keep-indicator {
+  width: 30px !important;
+  height: 30px !important;
+  flex-basis: 30px !important;
+  border-radius: 10px !important;
+  background: rgba(255,255,255,.34) !important;
+  border: 3px solid rgba(255,255,255,.92) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.7), 0 4px 8px rgba(0,37,75,.28) !important;
+}
+.hit-keep.v720-keep-toggle.checked .keep-indicator { background: linear-gradient(145deg,#fffbc0,#58eaff) !important; border-color:#fff9b8 !important; }
+.hit-keep.v720-keep-toggle .keep-text { color:#ffffff !important; font-size: clamp(12px, 3.2vw, 16px) !important; letter-spacing:-.04em; }
+
+.game-screen:not(.login-screen) .glass-card,
+.game-screen:not(.login-screen) .page-head,
+.game-screen:not(.login-screen) .hero-card,
+.game-screen:not(.login-screen) .quick-card,
+.game-screen:not(.login-screen) .gear-card,
+.game-screen:not(.login-screen) .shop-card,
+.game-screen:not(.login-screen) .mission-card,
+.game-screen:not(.login-screen) .dex-card {
+  background: linear-gradient(180deg, rgba(95,220,255,.92) 0%, rgba(37,156,220,.92) 49%, rgba(5,84,145,.96) 100%) !important;
+  border: 2px solid rgba(255,255,255,.36) !important;
+  box-shadow: inset 0 4px 0 rgba(255,255,255,.24), inset 0 -18px 28px rgba(0,47,94,.25), 0 15px 28px rgba(0,39,80,.26) !important;
+}
+.game-screen:not(.login-screen) .page-head::after,
+.game-screen:not(.login-screen) .hero-card::after,
+.game-screen:not(.login-screen) .dex-card::before,
+.game-screen:not(.login-screen) .region-card::before { opacity: .08 !important; }
+.image-btn,
+.dialog-btn,
+.cast-button,
+.hold-pad,
+.round-btn,
+.catch-result-card button,
+.mission-card .image-btn {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.image-btn.primary,
+.cast-button,
+.dialog-btn.ok,
+.catch-result-card button:first-child { background-image:url('/assets/ui/v720_button_gold_clean.png') !important; }
+.image-btn.soft,
+.dialog-btn.cancel,
+.round-btn,
+.weather-pill,
+.hold-pad,
+.catch-result-card button:last-child { background-image:url('/assets/ui/v720_button_aqua_clean.png') !important; }
+.bite-callout { background-image:url('/assets/ui/v720_button_gold_clean.png') !important; }
+.reel-panel { background: url('/assets/ui/v720_panel_clean.png') center/100% 100% no-repeat, linear-gradient(180deg,#47d9ff,#0962a5) !important; }
+
+.dex-grid { gap: 14px !important; }
+.dex-card {
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 30px !important;
+  min-height: 252px !important;
+  padding: 18px 10px 16px !important;
+}
+.dex-card::before {
+  content:'';
+  position:absolute;
+  inset:18px 18px 78px;
+  border-radius:50%;
+  background: radial-gradient(circle at 50% 42%, rgba(255,255,255,.34), rgba(120,235,255,.12) 48%, rgba(0,99,170,0) 70%);
+  z-index:0;
+  pointer-events:none;
+}
+.dex-card img {
+  position:relative;
+  z-index:1;
+  height: 138px !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  background: transparent !important;
+  border: 0 !important;
+  mix-blend-mode: normal !important;
+  filter: drop-shadow(0 18px 16px rgba(0, 30, 70, .28)) !important;
+}
+.dex-card strong, .dex-card span, .dex-card em { position:relative; z-index:2; }
+.dex-card strong { font-size: 18px !important; color:#fff !important; }
+.dex-card span { color:#eaffff !important; }
+.dex-card em { top: 11px !important; right: 11px !important; }
+.dex-card.locked img { opacity:.52 !important; filter: grayscale(.35) brightness(.70) drop-shadow(0 14px 14px rgba(0,30,70,.2)) !important; }
+.dex-card.locked::after { background: rgba(2, 51, 93, .70) !important; }
+.dex-fish-orb { position:absolute; inset:auto; }
+.combo-badge { transform: scale(.88); transform-origin:left bottom; }
+@media (max-width:430px){
+  .hit-keep.v720-keep-toggle { left:25.2% !important; top:74.2% !important; width:50.4% !important; height:5.4% !important; padding:0 12px !important; }
+  .hit-keep.v720-keep-toggle .keep-indicator { width:27px !important; height:27px !important; flex-basis:27px !important; }
+  .dex-card { min-height: 226px !important; }
+  .dex-card img { height: 122px !important; }
+}
+
+/* v7.2.0 start toggle final overlay: cover the baked checkbox/text cleanly without damaging the reference art. */
+.hit-keep.v720-keep-toggle {
+  left: 24.5% !important;
+  top: 72.9% !important;
+  width: 51.0% !important;
+  height: 6.3% !important;
+  padding: 0 20px !important;
+  background-image: url('/assets/ui/v720_toggle_off.png') !important;
+  background-size: 100% 100% !important;
+}
+.hit-keep.v720-keep-toggle.checked { background-image: url('/assets/ui/v720_toggle_on.png') !important; }
+@media (max-width:430px){ .hit-keep.v720-keep-toggle { left:22.8% !important; top:72.7% !important; width:54.5% !important; height:6.6% !important; } }
