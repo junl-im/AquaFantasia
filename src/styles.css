@@ -509,3 +509,78 @@ html.is-hostile-inapp .game-logo { font-size: clamp(44px, 12vw, 78px); }
 
 html.is-hostile-inapp .game-dialog-backdrop { backdrop-filter:none; }
 @media (max-width:430px){ .keep-indicator{ width:34px; height:34px; border-radius:9px; } .keep-indicator::after{ left:8px; top:5px; width:10px; height:17px; border-width:0 4px 4px 0; } }
+
+
+/* v7.0.0 PREMIUM 2.5D UI POLISH PASS
+   Shared visual language: reference start-screen style, image-first glossy panels, no utility-looking cards. */
+:root { --ui-blue-deep:#05365f; --ui-blue:#21b6ef; --ui-sky:#8af5ff; --ui-gold:#ffd35b; --ui-orange:#ff9b2f; --ui-purple:#8c60ff; }
+body:not([data-screen="login"]) .game-screen { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+body[data-screen="fishing"] .game-screen { padding-bottom: 0; }
+.glass-card { background: url('/assets/ui/v700_panel_soft.png') center/100% 100% no-repeat, linear-gradient(145deg, rgba(44, 172, 220, .74), rgba(5, 44, 84, .88)) !important; border: 0 !important; box-shadow: 0 18px 40px rgba(0, 28, 56, .30), inset 0 2px 0 rgba(255,255,255,.18) !important; backdrop-filter: none; }
+.player-hud { grid-template-columns: 1.16fr .78fr .84fr .72fr; padding: 12px 12px; border-radius: 32px; background: url('/assets/ui/v700_nav_shell.png') center/100% 100% no-repeat, linear-gradient(145deg,#1596d4,#073968) !important; }
+.player-hud strong { color:#fff6a8; text-shadow:0 3px 0 rgba(0,53,89,.55); }
+.eyebrow { color:#fff2a2; letter-spacing:.02em; font-size:13px; text-shadow:0 2px 0 rgba(0,53,89,.38); }
+.hud-pill { background: url('/assets/ui/button_blue_blank.png') center/100% 100% no-repeat, linear-gradient(145deg,#e8ffff,#67e9ff) !important; min-height: 48px; border-radius: 999px; color:#073553; text-shadow:0 2px 0 rgba(255,255,255,.55); }
+.system-strip { background: rgba(5,40,73,.58) !important; border-radius: 22px; box-shadow: none !important; }
+.system-strip span { background: rgba(255,255,255,.16); color:#eafcff; border:1px solid rgba(255,255,255,.12); }
+.hero-card, .page-head { background: url('/assets/ui/v700_panel_soft.png') center/100% 100% no-repeat, linear-gradient(145deg,#32c8ec,#07538f) !important; border-radius: 36px; padding: 20px 18px; overflow: hidden; }
+.hero-card::before, .page-head::before { content:""; position:absolute; left:16px; right:16px; top:10px; height:34%; border-radius:28px; background:rgba(255,255,255,.13); pointer-events:none; }
+.hero-card h2, .page-head h2 { color:#fff; text-shadow:0 4px 0 rgba(0,63,105,.48), 0 12px 24px rgba(0,20,44,.25); }
+.hero-card p, .page-head p { color:#e8fbff; text-shadow:0 2px 0 rgba(0,55,88,.22); }
+.hero-card .image-btn, .mission-card .image-btn, .gear-card .image-btn { background: url('/assets/ui/button_depart_blank.png') center/100% 100% no-repeat, linear-gradient(145deg,#fff4a8,#ff9e3e) !important; color:#5d2b00 !important; text-shadow:0 2px 0 rgba(255,255,255,.62); }
+.image-btn.soft { background: url('/assets/ui/button_blue_blank.png') center/100% 100% no-repeat, linear-gradient(145deg,#72f0ff,#489eff) !important; color:#073553 !important; }
+.quick-grid { gap: 12px; }
+.quick-card, .gear-card, .shop-card, .mission-card, .dex-card { background: url('/assets/ui/v700_card_slot.png') center/100% 100% no-repeat, linear-gradient(145deg, rgba(74, 205, 244, .74), rgba(10, 72, 130, .90)) !important; border: 0 !important; box-shadow: 0 16px 28px rgba(0,34,65,.26), inset 0 2px 0 rgba(255,255,255,.18) !important; }
+.quick-card { min-height: 138px; transform: translateZ(0); }
+.quick-card:active, .shop-card:active, .gear-card button:active, .region-card:active { transform: translateY(3px) scale(.985); }
+.quick-card strong, .shop-card strong, .gear-card strong, .mission-card strong, .dex-card strong { color:#fff; text-shadow:0 3px 0 rgba(0,54,90,.48); }
+.quick-card span, .shop-card span, .gear-card span, .mission-card span, .dex-card span { color:#eafcff; }
+.region-card { border-radius: 30px; border: 3px solid rgba(255,255,255,.55); box-shadow: 0 15px 28px rgba(0,31,58,.28), inset 0 0 0 3px rgba(255,255,255,.11); }
+.region-card.active { outline: 0; border-color:#fff39a; box-shadow:0 0 0 5px rgba(255,226,90,.28),0 20px 32px rgba(0,30,58,.34); }
+.region-card strong { color:#fff7aa; font-size:19px; }
+.region-card.locked::before { content:"🔒"; font-size:18px; width:40px; height:40px; display:grid; place-items:center; padding:0; border-radius:50%; }
+.bottom-nav { height: 84px; padding: 8px 10px; border-radius: 32px; background: url('/assets/ui/v700_nav_shell.png') center/100% 100% no-repeat, linear-gradient(180deg,#136eae,#052c55) !important; box-shadow: 0 -12px 28px rgba(0,24,55,.28), inset 0 2px 0 rgba(255,255,255,.20) !important; }
+.bottom-nav button { border-radius: 25px; color:#d8f7ff; text-shadow:0 2px 0 rgba(0,33,68,.45); }
+.bottom-nav img { width: 36px; height: 36px; }
+.bottom-nav span { font-size: 12px; font-weight: 1000; }
+.bottom-nav button.active { background: radial-gradient(circle at 50% 18%, rgba(255,255,255,.38), rgba(91,229,255,.18) 44%, rgba(0,67,120,.20)); color:#fff6a6; box-shadow: inset 0 2px 0 rgba(255,255,255,.24), 0 9px 18px rgba(0,20,52,.18); }
+.fishing-top { min-height: 90px; padding: 12px 14px !important; background: url('/assets/ui/v700_nav_shell.png') center/100% 100% no-repeat, linear-gradient(145deg,#1686c6,#06365f) !important; border-radius: 31px; }
+.fishing-top strong { font-size: 20px; }
+.fishing-top span { display:block; margin-top:2px; font-weight:950; }
+.weather-pill, .round-btn { min-height:60px; border-radius: 999px; text-shadow:0 2px 0 rgba(255,255,255,.55); }
+.cast-button { bottom:calc(24px + env(safe-area-inset-bottom)); width:min(342px,78vw); min-height:82px; background:url('/assets/ui/button_depart_blank.png') center/100% 100% no-repeat, linear-gradient(145deg,#fff39e,#ff9f31) !important; }
+.cast-button strong { font-size:clamp(25px,7.4vw,34px); }
+.cast-button .cast-icon { width: 52px; height:52px; background-image:url('/assets/ui/nav_fishing_25d.png'); }
+.bite-callout { background: url('/assets/ui/v700_bite_banner.png') center/100% 100% no-repeat, linear-gradient(145deg,#fff1a1,#ff765e) !important; color:#fff; min-width:min(355px,86vw); padding:22px 24px 24px; }
+.bite-callout strong { color:#fff; font-size:clamp(34px,9vw,48px); text-shadow:0 4px 0 rgba(163,67,0,.62),0 0 18px rgba(255,255,255,.62); }
+.bite-callout span { color:#fffce1; }
+.bite-callout::before { right:20px; top:-26px; background: #fff; color:#ff4e32; border:4px solid #ffd863; }
+.reel-panel { background: url('/assets/ui/v700_reel_panel.png') center/100% 100% no-repeat, linear-gradient(145deg,#1ea8d4,#073c71) !important; box-shadow: 0 20px 42px rgba(0,20,48,.38) !important; }
+.tension-track { height:26px; border:3px solid rgba(255,255,255,.28); }
+.safe-zone { background: linear-gradient(90deg,rgba(115,255,189,.55),rgba(255,242,104,.55)); }
+.tension-fill.perfect { background:linear-gradient(90deg,#fff277,#71ffbd,#60f2ff); box-shadow:0 0 18px rgba(255,245,110,.72); }
+.hold-pad { min-height:76px; font-size:24px; border-radius:32px; }
+.catch-result-card { background: url('/assets/ui/v700_modal_shell.png') center/100% 100% no-repeat, linear-gradient(145deg,#efffff,#59cff7) !important; border:0; color:#06324d; }
+.catch-result-card strong { color:#06436d; text-shadow:0 2px 0 rgba(255,255,255,.8); }
+.catch-result-card span { color:#26637f; }
+.catch-result-card button:first-child { background:url('/assets/ui/button_depart_blank.png') center/100% 100% no-repeat,linear-gradient(145deg,#fff2a6,#ff9f3d); color:#5d2b00; }
+.catch-result-card button:last-child { background:url('/assets/ui/button_blue_blank.png') center/100% 100% no-repeat,linear-gradient(145deg,#7ff3ff,#4c9eff); color:#06324d; }
+.dex-grid, .gear-grid, .shop-list, .mission-list { padding-bottom: calc(118px + env(safe-area-inset-bottom)); }
+.dex-card { min-height: 226px; }
+.dex-card img { filter: drop-shadow(0 14px 16px rgba(0, 36, 74, .28)); animation: dexFloat 2.8s ease-in-out infinite; }
+.dex-card em { background:url('/assets/ui/button_purple_blank.png') center/100% 100% no-repeat,linear-gradient(145deg,#a98cff,#5c7dff); border:0; color:#fff; padding:8px 14px; }
+.gear-card, .shop-card { border-radius: 34px; min-height: 122px; }
+.gear-card img, .shop-card img { width:72px; height:72px; }
+.mission-card { border-radius: 32px; }
+.mission-card progress { height:18px; border-radius:999px; overflow:hidden; border:2px solid rgba(255,255,255,.32); background:#0a4a7a; }
+.mission-card progress::-webkit-progress-bar { background:#0a4a7a; }
+.mission-card progress::-webkit-progress-value { background:linear-gradient(90deg,#74f2ff,#fff07a,#ffb14b); }
+.game-dialog-card { background:url('/assets/ui/v700_modal_shell.png') center/100% 100% no-repeat,linear-gradient(145deg,#efffff,#5ad5f8) !important; }
+.dialog-btn.ok { background:url('/assets/ui/button_depart_blank.png') center/100% 100% no-repeat,linear-gradient(145deg,#fff4a6,#ff9f37); }
+.dialog-btn.cancel { background:url('/assets/ui/button_blue_blank.png') center/100% 100% no-repeat,linear-gradient(145deg,#76efff,#4da2ff); }
+.toast-item { border-radius: 26px !important; background:url('/assets/ui/v700_card_slot.png') center/100% 100% no-repeat,linear-gradient(145deg,#dfffff,#4acbf2) !important; color:#07334e !important; box-shadow:0 16px 28px rgba(0,30,62,.28) !important; }
+.toast-item strong { color:#063b62 !important; }
+.toast-item span { color:#23556e !important; }
+@keyframes dexFloat { 0%,100%{transform:translateY(0) rotate(-1deg);} 50%{transform:translateY(-7px) rotate(1deg);} }
+@media (max-width:430px){ .player-hud { grid-template-columns: 1fr 1fr; } .quick-grid { grid-template-columns: repeat(2,1fr); } .hero-card { align-items: stretch; flex-direction: column; } .hero-card .image-btn { width:100%; } .bottom-nav { height:78px; } .bottom-nav img { width:32px; height:32px; } .bottom-nav span { font-size:11px; } }
+html.is-hostile-inapp .glass-card { backdrop-filter:none !important; }

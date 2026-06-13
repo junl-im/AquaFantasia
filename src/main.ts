@@ -162,7 +162,7 @@ class AquaFantasiaGame {
     const root = this.baseGameShell('village');
     root.insertAdjacentHTML('beforeend', `
       <section class="player-hud glass-card">
-        <div><span class="eyebrow">CAPTAIN</span><strong>낚시꾼</strong></div>
+        <div><span class="eyebrow">선장</span><strong>낚시꾼</strong></div>
         <div class="hud-pill"><img src="./assets/ui/panel_badge_gold_25d.png" alt="" />${this.save.coins}</div>
         <div class="hud-pill">장비 Lv.${this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel - 2}</div>
         <div class="hud-pill">도감 ${totalCaught}</div>
@@ -170,7 +170,7 @@ class AquaFantasiaGame {
       <section class="system-strip glass-card"><span>오늘의 조류 · ${region.tide}</span><span>도감 ${totalCaught}종 수집</span><span>장비 안정도 Lv.${this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel}</span></section>
       <section class="hero-card glass-card">
         <div>
-          <span class="eyebrow">출항 준비</span>
+          <span class="eyebrow">오늘의 출항</span>
           <h2>${region.name}</h2>
           <p>${region.subtitle}</p>
         </div>
@@ -274,7 +274,8 @@ class AquaFantasiaGame {
 
   private mountBottomNav(root: HTMLElement, active: Screen): void {
     const nav = document.createElement('nav');
-    nav.className = 'bottom-nav glass-card';
+    nav.className = 'bottom-nav glass-card premium-bottom-nav';
+    nav.setAttribute('aria-label', '하단 메뉴');
     nav.innerHTML = navItems.map(({ screen, icon, label }) => `<button class="${screen === active ? 'active' : ''}" data-screen="${screen}"><img src="${icon}" alt="" /><span>${label}</span></button>`).join('');
     root.appendChild(nav);
     nav.querySelectorAll<HTMLButtonElement>('[data-screen]').forEach((btn) => btn.addEventListener('click', () => void this.go(btn.dataset.screen as Screen)));
@@ -365,7 +366,7 @@ class AquaFantasiaGame {
 
   private scheduleBite(): void {
     this.state = 'waiting';
-    this.setHint('입질을 기다리세요. 찌가 잠기면 화면을 터치!');
+    this.setHint('입질을 기다리세요 · 물었다!가 뜨면 화면을 눌러 당기세요');
     const delay = 2200 + Math.random() * 1900 - this.save.gear.reelLevel * 60 - Math.min(420, this.save.gear.lureStock * 12);
     window.clearTimeout(this.biteTimeout);
     this.biteTimeout = window.setTimeout(() => this.triggerBite(), Math.max(1300, delay));
@@ -397,7 +398,7 @@ class AquaFantasiaGame {
     if (this.biteText) this.biteText.visible = false;
     this.hideBiteCallout();
     this.reelPanel?.classList.remove('hidden');
-    this.setHint('릴 감기 시작! 장력을 안전지대에 유지하세요');
+    this.setHint('릴 감기! 안전지대에 장력을 3초 유지하세요');
     this.updateTensionUI();
   }
 
@@ -462,7 +463,7 @@ class AquaFantasiaGame {
   private showResultCard(reward: number): void {
     const card = document.createElement('div');
     card.className = `catch-result-card rarity-${this.activeFish.rarity.toLowerCase()}`;
-    card.innerHTML = `<img src="${this.activeFish.img}" alt="" /><strong>${this.activeFish.name}</strong><span>${this.activeFish.rarity} · ${reward}G · COMBO x${Math.max(1, this.save.currentStreak)}</span><div><button data-next="fishing">계속 낚시</button><button data-next="dex">도감 보기</button></div>`;
+    card.innerHTML = `<img src="${this.activeFish.img}" alt="" /><strong>${this.activeFish.name}</strong><span>${this.activeFish.rarity} · ${reward}G · 연속 성공 x${Math.max(1, this.save.currentStreak)}</span><div><button data-next="fishing">계속 낚시</button><button data-next="dex">도감 보기</button></div>`;
     this.stageHost?.appendChild(card);
     card.querySelectorAll<HTMLButtonElement>('[data-next]').forEach((btn) => btn.addEventListener('click', () => {
       const next = btn.dataset.next as Screen;
@@ -489,7 +490,7 @@ class AquaFantasiaGame {
     this.state = 'idle';
     this.castBtn?.classList.remove('hidden', 'pop-out');
     this.resizePixi();
-    this.setHint('찌 던지기 버튼을 눌러 다시 시작하세요');
+    this.setHint('좋아요! 찌 던지기로 다음 물고기를 노려보세요');
     if (this.comboNode) { this.comboNode.textContent = `콤보 x${Math.max(1, this.save.currentStreak + 1)}`; this.comboNode.classList.toggle('hidden', this.save.currentStreak <= 0); }
   }
 
@@ -693,7 +694,7 @@ class AquaFantasiaGame {
     this.clear();
     const root = this.baseGameShell('gear');
     root.innerHTML += `
-      <section class="page-head glass-card"><div><span class="eyebrow">TACKLE</span><h2>장비 강화</h2><p>장비와 수역 숙련도가 올라갈수록 장력 흔들림이 줄고 고급 어종 성공률이 올라갑니다.</p></div></section>
+      <section class="page-head glass-card"><div><span class="eyebrow">장비 관리</span><h2>장비 강화</h2><p>장비와 수역 숙련도가 올라갈수록 장력 흔들림이 줄고 고급 어종 성공률이 올라갑니다.</p></div></section>
       <section class="gear-grid">
         ${this.gearCard('rod', '낚싯대', './assets/ui/gear_rod_25d.png', this.save.gear.rodLevel, 120, '장력 상승 완화')}
         ${this.gearCard('reel', '릴', './assets/ui/gear_reel_25d.png', this.save.gear.reelLevel, 140, '릴링 반응 개선')}
@@ -731,7 +732,7 @@ class AquaFantasiaGame {
     this.clear();
     const root = this.baseGameShell('dex');
     root.innerHTML += `
-      <section class="page-head glass-card"><div><span class="eyebrow">COLLECTION</span><h2>물고기 도감</h2><p>지역별 원화풍 2.5D 카드가 둥실 움직입니다.</p></div></section>
+      <section class="page-head glass-card"><div><span class="eyebrow">물고기 도감</span><h2>물고기 도감</h2><p>지역별 원화풍 2.5D 카드가 둥실 움직입니다.</p></div></section>
       <section class="dex-grid">
       ${fishDex.filter((fish) => fish.id !== 'unknown').map((fish) => {
         const unlocked = (this.save.caught[fish.id] ?? 0) > 0 || fish.rarity === 'COMMON';
@@ -753,7 +754,7 @@ class AquaFantasiaGame {
       { name: '비상 구조 키트', desc: '실패 후 복구 보상', cost: 260, icon: './assets/ui/badge_rescue_25d.png' },
     ];
     root.innerHTML += `
-      <section class="page-head glass-card"><div><span class="eyebrow">SHOP</span><h2>상점</h2><p>골드 ${this.save.coins} · 미끼와 강화 재료를 구매합니다.</p></div></section>
+      <section class="page-head glass-card"><div><span class="eyebrow">바다 상점</span><h2>상점</h2><p>골드 ${this.save.coins} · 미끼와 강화 재료를 구매합니다.</p></div></section>
       <section class="shop-list">
         ${goods.map((item, i) => `<button class="shop-card glass-card" data-buy="${i}"><img src="${item.icon}" alt="" /><strong>${item.name}</strong><span>${item.desc}<br />${item.cost} 골드</span></button>`).join('')}
       </section>`;
@@ -789,7 +790,7 @@ class AquaFantasiaGame {
       { id: 'bossHunter', title: '보스급 물고기 발견', max: 1, value: Object.entries(this.save.caught).some(([id, count]) => count > 0 && fishDex.find((fish) => fish.id === id)?.rarity === 'BOSS') ? 1 : 0, reward: 500 },
     ];
     root.innerHTML += `
-      <section class="page-head glass-card"><div><span class="eyebrow">MISSION</span><h2>오늘의 미션</h2><p>보상은 장비 강화와 신규 수역 해금에 연결됩니다.</p></div></section>
+      <section class="page-head glass-card"><div><span class="eyebrow">오늘의 목표</span><h2>오늘의 미션</h2><p>보상은 장비 강화와 신규 수역 해금에 연결됩니다.</p></div></section>
       <section class="mission-list">
         ${goals.map((goal) => `<article class="mission-card glass-card"><strong>${goal.title}</strong><progress max="${goal.max}" value="${goal.value}"></progress><span>${this.save.missions[goal.id] ? '완료' : `${goal.value}/${goal.max}`} · 보상 ${goal.reward}G</span><button class="image-btn soft" data-claim="${goal.id}" ${goal.value < goal.max || this.save.missions[goal.id] ? 'disabled' : ''}>보상 받기</button></article>`).join('')}
       </section>`;

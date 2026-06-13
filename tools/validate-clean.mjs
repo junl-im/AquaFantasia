@@ -47,10 +47,10 @@ const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 if (!index.includes('/src/main.ts')) fail('index.html is not using the Vite TypeScript entry');
 if (!index.includes('아쿠아 판타지아')) fail('Korean title is missing');
 const data = fs.readFileSync(path.join(root, 'src/data.ts'), 'utf8');
-if (!data.includes("APP_VERSION = '6.9.0'")) fail('APP_VERSION is not 6.9.0');
+if (!data.includes("APP_VERSION = '7.0.0'")) fail('APP_VERSION is not 7.0.0');
 for (const token of ['glacier', 'storm', 'mangrove', 'lunar', 'reefFestival', 'fish_thunder_25d', 'fish_crystal_25d']) if (!data.includes(token)) fail(`missing v6.5 data token ${token}`);
 const sw = fs.readFileSync(path.join(root, 'public/sw.js'), 'utf8');
-if (!sw.includes('aqua-fantasia-v6.9.0-start-back-bite-polish')) fail('service worker cache version mismatch');
+if (!sw.includes('aqua-fantasia-v7.0.0-premium-ui-polish')) fail('service worker cache version mismatch');
 const manifest = fs.readFileSync(path.join(root, 'public/manifest.webmanifest'), 'utf8');
 if (!manifest.includes('"orientation": "portrait-primary"')) fail('manifest must force portrait-primary orientation');
 const atlas = JSON.parse(fs.readFileSync(path.join(root, 'public/assets/atlas/aqua_fishing_atlas.json'), 'utf8'));
@@ -58,7 +58,7 @@ for (const name of ['player_boat.png','fishing_float.png','fish_clown.png','gaug
   if (!atlas.frames?.[name]) fail(`atlas missing ${name}`);
 }
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-if (pkg.version !== '6.9.0') fail('package version mismatch');
+if (pkg.version !== '7.0.0') fail('package version mismatch');
 for (const dep of ['pixi.js','howler','firebase']) if (!pkg.dependencies?.[dep]) fail(`missing dependency ${dep}`);
 if (!pkg.devDependencies?.vite || !pkg.devDependencies?.typescript) fail('missing Vite/TypeScript dev dependencies');
 const main = fs.readFileSync(path.join(root, 'src/main.ts'), 'utf8');
@@ -68,5 +68,5 @@ for (const token of ['requestFullscreen', 'portrait-primary', 'isKakaoInAppBrows
 if (main.includes('v5.5.2') || main.includes('낚시 준비')) fail('legacy HUD text leaked into main runtime');
 
 if (!ok) process.exit(1);
-console.log('[validate-clean] Aqua Fantasia v6.9.0 start cleanup, back guard and bite guide OK');
-console.log(JSON.stringify({ ok: true, version: '6.9.0', files: files.length, atlasFrames: Object.keys(atlas.frames).length }, null, 2));
+console.log('[validate-clean] Aqua Fantasia v7.0.0 start cleanup, back guard and bite guide OK');
+console.log(JSON.stringify({ ok: true, version: '7.0.0', files: files.length, atlasFrames: Object.keys(atlas.frames).length }, null, 2));
