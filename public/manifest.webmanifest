@@ -1,7 +1,7 @@
 {
   "name": "아쿠아 판타지아",
   "short_name": "아쿠아판타지아",
-  "description": "아쿠아 판타지아 - 프리미엄 2.5D UI 다듬기 v7.0.0",
+  "description": "세로 전용 2.5D 모바일 캐주얼 낚시 게임",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",

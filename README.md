@@ -3,7 +3,7 @@
 세로 전용 모바일 캐주얼 낚시 웹게임 프로토타입입니다.
 
 ## 현재 버전
-v6.9.0 Start Cleanup + Back Guard + Bite Guide
+v7.1.0 Start Cleanup + Back Guard + Bite Guide
 
 ## 핵심 구조
 - Vite
@@ -30,3 +30,7 @@ npm run validate
 npm run typecheck
 npm run build
 ```
+
+
+## v7.1.0 UI/UX Dex Polish
+시작 화면 체크 상태, 낚시 화면 마을 이동, 콤보 표시, 도감 이미지 힌트, 줄무늬 제거 UI 패스가 적용되었습니다.

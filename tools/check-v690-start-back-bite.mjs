@@ -13,7 +13,7 @@ for (const token of ['start_screen_clean_v690.webp','hit-depart','hit-new','hit-
 for (const forbidden of ['hit-notice" data-action','hit-support" data-action','hit-settings" data-action','hit-bag" data-action','hit-shop" data-action']) if (main.includes(forbidden)) fail(`forbidden start hotspot remains: ${forbidden}`);
 for (const token of ['installBackNavigationGuard','handleHardwareBack','showGameConfirm','마을로 돌아갈까요?','게임을 종료할까요?','releaseBrowserBack']) if (!main.includes(token)) fail(`missing back navigation token ${token}`);
 for (const token of ['showBiteCallout','화면을 눌러 당기세요','bite-callout']) if (!main.includes(token) && !css.includes(token)) fail(`missing bite guide token ${token}`);
-if (!data.includes('7.0.0') || !data.includes('aqua-fantasia-v7.0.0-premium-ui-polish')) fail('v7 data/cache missing');
+if (!data.includes('7.1.0') || !data.includes('aqua-fantasia-v7.1.0-ui-dex-polish')) fail('v7 data/cache missing');
 if (!sw.includes('start_screen_clean_v690.webp')) fail('clean start screen is not precached');
-if (pkg.version !== '7.0.0') fail('package version must be 7.0.0');
+if (pkg.version !== '7.1.0') fail('package version must be 7.1.0');
 console.log('[check-v690] Start screen cleanup + back navigation guard + bite guide OK');

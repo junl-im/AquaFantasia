@@ -8,7 +8,7 @@ import { ToastManager } from './toast';
 import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPortraitLock } from './core/PortraitGuard';
 
 const ASSET = {
-  loginBg: './assets/screens/start_screen_clean_v690.webp',
+  loginBg: './assets/screens/start_screen_clean_v710.webp',
   player: './assets/art/player_boat.png',
   float: './assets/art/fishing_float.png',
   fish: './assets/art/fish_clown.png',
@@ -131,7 +131,7 @@ class AquaFantasiaGame {
       <button class="start-hotspot hit-depart" data-action="guest" aria-label="낚시터로 출항"></button>
       <button class="start-hotspot hit-new" data-action="new" aria-label="처음부터 새 게임"></button>
       <button class="start-hotspot hit-server" data-action="server" aria-label="익명 서버연동"></button>
-      <button class="start-hotspot hit-keep" data-action="keep" aria-label="이 기기에서 로그인 유지" aria-pressed="false"><span class="keep-indicator" aria-hidden="true"></span></button>
+      <button class="start-hotspot hit-keep" data-action="keep" aria-label="이 기기에서 로그인 유지" aria-pressed="false"><span class="keep-indicator" aria-hidden="true"></span><span class="keep-text">이 기기에서 로그인 유지</span></button>
       <div class="login-touch-shine" aria-hidden="true"></div>`;
     dom.app.appendChild(shell);
     const keepEnabled = window.localStorage.getItem('aqua-login-keep') === 'true';
@@ -222,7 +222,7 @@ class AquaFantasiaGame {
       <div class="fishing-top glass-card">
         <div><strong>${region.name}</strong><span id="fishingHint">찌 던지기 버튼을 눌러 시작하세요</span></div>
         <div class="weather-pill">${region.tide}</div>
-        <button class="round-btn" data-go="dex">가방</button>
+        <button class="round-btn home-btn" data-go="village">마을</button>
       </div>
       <div class="fishing-stage" id="fishingStage">
         <div class="pixi-layer"></div>
@@ -230,17 +230,17 @@ class AquaFantasiaGame {
         <div class="caustic-overlay"></div>
         <div class="stage-ui"></div>
       </div>
-      <div class="combo-badge ${this.save.currentStreak > 0 ? '' : 'hidden'}" id="comboBadge">콤보 x${Math.max(1, this.save.currentStreak + 1)}</div>
+      <div class="combo-badge ${this.save.currentStreak > 1 ? '' : 'hidden'}" id="comboBadge">연속 성공 x${Math.max(2, this.save.currentStreak)}</div>
       <div class="reel-panel glass-card hidden" id="reelPanel">
         <img src="${ASSET.gauge}" alt="장력 게이지" />
         <div class="tension-track"><span class="safe-zone"></span><span class="tension-fill"></span></div>
         <div class="safe-progress"><span></span></div>
         <div class="surge-meter"><span></span></div>
         <button class="hold-pad">꾹 눌러 릴 감기</button>
-        <p>녹색 안전지대를 3초 유지하세요. 누르면 장력 상승, 떼면 장력 하락.</p>
+        <p>화면을 누르고 떼며 장력을 조절하세요. 녹색 안전지대 3초 유지!</p>
       </div>`;
     dom.app.appendChild(root);
-    root.querySelector('[data-go="dex"]')?.addEventListener('click', () => void this.go('dex'));
+    root.querySelector('[data-go="village"]')?.addEventListener('click', () => void this.go('village'));
     this.stageHost = root.querySelector<HTMLDivElement>('#fishingStage')!;
     this.pixiLayer = root.querySelector<HTMLDivElement>('.pixi-layer')!;
     this.uiLayer = root.querySelector<HTMLDivElement>('.stage-ui')!;
@@ -420,7 +420,7 @@ class AquaFantasiaGame {
       this.save.bestStreak = Math.max(this.save.bestStreak, this.save.currentStreak);
       this.updateUnlocks();
       saveGame(this.save);
-      if (this.comboNode) { this.comboNode.textContent = `콤보 x${Math.max(1, this.save.currentStreak)}`; this.comboNode.classList.remove('hidden'); }
+      if (this.comboNode) { this.comboNode.textContent = `연속 성공 x${Math.max(2, this.save.currentStreak)}`; this.comboNode.classList.toggle('hidden', this.save.currentStreak < 2); }
       this.showCatchPopup(reward);
       this.toast.show({ type: 'dex', title: `${this.activeFish.name} 획득!`, message: `도감 카드와 보상 ${reward}G가 추가되었습니다.`, actionScreen: 'dex' });
     } else {
@@ -491,7 +491,7 @@ class AquaFantasiaGame {
     this.castBtn?.classList.remove('hidden', 'pop-out');
     this.resizePixi();
     this.setHint('좋아요! 찌 던지기로 다음 물고기를 노려보세요');
-    if (this.comboNode) { this.comboNode.textContent = `콤보 x${Math.max(1, this.save.currentStreak + 1)}`; this.comboNode.classList.toggle('hidden', this.save.currentStreak <= 0); }
+    if (this.comboNode) { this.comboNode.textContent = `연속 성공 x${Math.max(2, this.save.currentStreak)}`; this.comboNode.classList.toggle('hidden', this.save.currentStreak < 2); }
   }
 
   private tick(): void {
@@ -736,9 +736,9 @@ class AquaFantasiaGame {
       <section class="dex-grid">
       ${fishDex.filter((fish) => fish.id !== 'unknown').map((fish) => {
         const unlocked = (this.save.caught[fish.id] ?? 0) > 0 || fish.rarity === 'COMMON';
-        const img = unlocked ? fish.img : './assets/dex/fish_unknown_25d.png';
+        const img = fish.img;
         const count = this.save.caught[fish.id] ?? 0;
-        return `<article class="dex-card ${unlocked ? 'unlocked' : 'locked'} rarity-${fish.rarity.toLowerCase()}"><img src="${img}" alt="${unlocked ? fish.name : '미발견'}" loading="lazy" /><strong>${unlocked ? fish.name : '???'}</strong><span>${unlocked ? fish.region : '낚시로 발견'} · ${count}마리</span><em>${fish.rarity}</em></article>`;
+        return `<article class="dex-card ${unlocked ? 'unlocked' : 'locked'} rarity-${fish.rarity.toLowerCase()}"><img src="${img}" alt="${unlocked ? fish.name : '미발견'}" loading="lazy" /><strong>${unlocked ? fish.name : '미발견'}</strong><span>${fish.region} · ${unlocked ? `${count}마리` : '힌트 공개'}</span><em>${fish.rarity}</em></article>`;
       }).join('')}</section>`;
     dom.app.appendChild(root);
     this.mountBottomNav(root, 'dex');
