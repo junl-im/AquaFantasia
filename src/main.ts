@@ -5,6 +5,7 @@ import type { FishInfo, FishingState, RegionKey, SaveData, Screen } from './type
 import { loadSave, saveGame, tryAnonymousServerLink } from './storage';
 import { initAudio, playSound } from './audio';
 import { ToastManager } from './toast';
+import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPortraitLock } from './core/PortraitGuard';
 
 const ASSET = {
   loginBg: './assets/art/login_ocean_fishing_25d.webp',
@@ -65,7 +66,9 @@ class AquaFantasiaGame {
     this.compact = window.matchMedia('(max-width: 420px), (prefers-reduced-motion: reduce)').matches || (navigator.hardwareConcurrency ?? 8) <= 4;
     document.documentElement.classList.toggle('perf-lite', this.compact);
     document.documentElement.dataset.initialOrientation = 'portrait';
-    document.documentElement.dataset.orientationPolicy = 'portrait-lock';
+    document.documentElement.dataset.orientationPolicy = 'hard-portrait';
+    document.documentElement.classList.add('portrait-only-game');
+    installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
@@ -773,41 +776,13 @@ class AquaFantasiaGame {
   }
 
   private async enterImmersiveMode(): Promise<void> {
-    try {
-      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-        await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
-      }
-    } catch {
-      // Browser policy may restrict fullscreen outside installed PWA mode.
-    }
-    try {
-      // TypeScript DOM 타입 환경마다 ScreenOrientation.lock() 전용 타입명이 다를 수 있어
-      // GitHub Actions의 tsc 검증을 안정화하기 위해 좁은 런타임 타입으로만 사용합니다.
-      const orientation = globalThis.screen.orientation as unknown as { lock?: (orientation: 'portrait-primary' | 'portrait') => Promise<void> };
-      if (orientation.lock) {
-        try {
-          await orientation.lock(this.lockedOrientation);
-        } catch {
-          await orientation.lock('portrait');
-        }
-      }
-    } catch {
-      // Keep silent by design: no rotation/fullscreen warning popup.
-    }
+    await requestHardPortraitLock();
   }
 
   private bindViewportGuard(): void {
-    const sync = () => {
-      const h = window.visualViewport?.height ?? window.innerHeight;
-      const w = window.visualViewport?.width ?? window.innerWidth;
-      document.documentElement.style.setProperty('--app-height', `${h}px`);
-      document.documentElement.style.setProperty('--app-width', `${w}px`);
-      document.documentElement.dataset.currentOrientation = 'portrait';
-      document.documentElement.classList.toggle('is-physical-landscape', w > h);
-    };
-    sync();
-    window.visualViewport?.addEventListener('resize', sync, { passive: true });
-    window.addEventListener('resize', sync, { passive: true });
+    applyPortraitViewportMetrics();
+    window.setTimeout(() => applyPortraitViewportMetrics(), 80);
+    window.setTimeout(() => applyPortraitViewportMetrics(), 360);
   }
 
   private vibrate(pattern: VibratePattern): void {
