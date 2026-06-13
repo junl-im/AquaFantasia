@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v6.5.1-portrait-lock-hotfix';
+const CACHE_NAME = 'aqua-fantasia-v6.6.0-reference-art-remaster';
 const PRECACHE = [
   './', './index.html', './manifest.webmanifest', './offline.html',
   './assets/art/login_ocean_fishing_25d.webp', './assets/art/bg_ocean.webp', './assets/art/bg_lake.webp', './assets/art/bg_river.webp', './assets/art/bg_harbor.webp', './assets/art/bg_deep.webp', './assets/art/bg_palace.webp', './assets/art/bg_dimension.webp', './assets/art/bg_glacier.webp', './assets/art/bg_storm.webp',
@@ -7,6 +7,7 @@ const PRECACHE = [
   './assets/ui/fx_surge_25d.png', './assets/ui/fx_guard_25d.png', './assets/ui/fx_boss_warning_25d.png', './assets/ui/badge_mastery_25d.png', './assets/ui/badge_rescue_25d.png',
   './assets/atlas/aqua_fishing_atlas_v650.webp', './assets/atlas/aqua_fishing_atlas_v650.json',
   './assets/art/player_boat.png', './assets/art/fishing_float.png', './assets/art/fish_clown.png', './assets/art/gauge_frame.png', './assets/art/fish_slot.png', './assets/art/water_ripple_overlay.webp', './assets/art/caustic_sparkle_overlay.webp',
+  './assets/ui/button_primary.png', './assets/ui/button_soft.png', './assets/ui/button_cast.png', './assets/ui/dex_panel_reference_25d.png',
   './assets/ui/nav_village_25d.png', './assets/ui/nav_fishing_25d.png', './assets/ui/nav_gear_25d.png', './assets/ui/nav_dex_25d.png', './assets/ui/nav_shop_25d.png', './assets/ui/nav_mission_25d.png',
   './assets/ui/gear_rod_25d.png', './assets/ui/gear_reel_25d.png', './assets/ui/gear_lure_25d.png', './assets/ui/gear_line_25d.png', './assets/ui/button_cast.png', './assets/ui/fx_touch_ring_25d.png',
   './assets/atlas/aqua_fishing_atlas.webp', './assets/atlas/aqua_fishing_atlas.json'

@@ -1,15 +1,17 @@
-# 아쿠아 판타지아 v6.5.0
+# 아쿠아 판타지아 v6.6.0
 
-2.5D 이미지 에셋 기반 모바일 캐주얼 낚시 웹게임 클린 런타임입니다.
+세로 전용 2.5D 모바일 캐주얼 낚시 웹게임 프로토타입입니다.
 
-## 핵심
+## v6.6.0 핵심
 
-- 시작 방향 보존: 세로로 열면 세로, 가로로 열면 가로 레이아웃을 유지합니다.
-- 첫 터치 이후 전체화면 요청 및 PWA fullscreen manifest 적용.
-- 로그인 화면의 개발/패치 문구 제거, 한글 로고 `아쿠아 판타지아` 적용.
-- 시작 전 낚시 HUD, 상점 FAB, 버전 배지 미노출.
-- 마을 진입 후 하단 메뉴, 장비, 도감, 상점, 미션 시스템 연결.
-- PixiJS 8 낚시 액션, Howler 효과음, Firebase 익명 서버연동 준비 구조 유지.
+- 사용자가 제공한 레퍼런스 이미지 스타일을 기준으로 핵심 자산 재제작/크롭 반영
+- `START` 글씨가 박힌 버튼 제거, 텍스트 없는 2.5D 버튼 베이스로 교체
+- `낚시터로 출항` 문구와 버튼 이미지 텍스트 겹침 제거
+- 로그인/낚시/도감 핵심 이미지 자산 품질 보강
+- 세로 전용 고정 유지: `portrait-primary`
+- PixiJS 8 실패 시 HTML fallback 낚시 루프 유지
+- Vite / TypeScript / PixiJS 8 / Howler.js / Firebase 준비 구조 유지
+- GitHub Actions Node 24 검증/빌드/Pages 배포 유지
 
 ## 실행
 
@@ -22,13 +24,12 @@ npm run dev
 
 ```bash
 npm run validate
+npm run runtime:check
+npm run audit
 npm run typecheck
 npm run build
 ```
 
-## v6.5.0 추가
+## 적용 권장
 
-- WebGL/PixiJS 실패 시 HTML 대체 낚시 렌더링.
-- 신규 수역 3종과 신규 2.5D 물고기 8종.
-- 장력 서지, PERFECT GUARD, 수역 숙련도, 비상 구조 키트.
-- GitHub Actions 검증 유지.
+기존 누적 파일이 섞이지 않도록 `.git` 폴더만 남기고 전체 교체 ZIP을 푸는 방식을 권장합니다.

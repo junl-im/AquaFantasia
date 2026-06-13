@@ -153,10 +153,10 @@ class AquaFantasiaGame {
         <div class="hud-pill">장비 Lv.${this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel - 2}</div>
         <div class="hud-pill">도감 ${totalCaught}</div>
       </section>
-      <section class="system-strip glass-card"><span>2.5D 자산 ${fishDex.length - 1}종</span><span>${this.hasWebGL() ? 'PixiJS 가속' : 'HTML 대체 렌더'}</span><span>PWA 캐시 보호</span></section>
+      <section class="system-strip glass-card"><span>오늘의 조류 · ${region.tide}</span><span>도감 ${totalCaught}종 수집</span><span>장비 안정도 Lv.${this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel}</span></section>
       <section class="hero-card glass-card">
         <div>
-          <span class="eyebrow">READY TO SAIL</span>
+          <span class="eyebrow">출항 준비</span>
           <h2>${region.name}</h2>
           <p>${region.subtitle}</p>
         </div>
