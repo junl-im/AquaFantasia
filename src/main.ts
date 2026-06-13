@@ -8,7 +8,7 @@ import { ToastManager } from './toast';
 import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPortraitLock } from './core/PortraitGuard';
 
 const ASSET = {
-  loginBg: './assets/art/login_ocean_fishing_25d.webp',
+  loginBg: './assets/screens/start_screen_reference.webp',
   player: './assets/art/player_boat.png',
   float: './assets/art/fishing_float.png',
   fish: './assets/art/fish_clown.png',
@@ -16,7 +16,7 @@ const ASSET = {
   slot: './assets/art/fish_slot.png',
   ripple: './assets/art/water_ripple_overlay.webp',
   caustics: './assets/art/caustic_sparkle_overlay.webp',
-  castButton: './assets/ui/button_cast.png',
+  castButton: './assets/ui/button_cast_clean.png',
   perfect: './assets/ui/fx_perfect_25d.png',
   touchRing: './assets/ui/fx_touch_ring_25d.png',
 };
@@ -119,28 +119,47 @@ class AquaFantasiaGame {
   private renderLogin(): void {
     this.clear();
     const shell = document.createElement('main');
-    shell.className = 'login-screen';
+    shell.className = 'login-screen start-art-screen';
     shell.innerHTML = `
-      <div class="login-bg" aria-hidden="true"></div>
-      <div class="login-water water-ripple" aria-hidden="true"></div>
-      <div class="login-sparkles" aria-hidden="true"></div>
-      <section class="login-card glass-card">
-        <h1 class="game-logo ko-logo" aria-label="아쿠아 판타지아">아쿠아<br />판타지아</h1>
-        <div class="login-actions">
-          <button class="image-btn primary" data-action="guest">낚시터로 출항</button>
-          <button class="image-btn soft" data-action="new">처음부터 새 게임</button>
-          <button class="image-btn soft" data-action="server">익명 서버연동</button>
-        </div>
-        <label class="keep-login"><input type="checkbox" checked /> 이 기기에서 로그인 유지</label>
-      </section>`;
+      <img class="start-art-image" src="${ASSET.loginBg}" alt="아쿠아 판타지아 시작 화면" />
+      <h1 class="sr-only">아쿠아 판타지아</h1>
+      <button class="start-hotspot hit-notice" data-action="notice" aria-label="공지사항"></button>
+      <button class="start-hotspot hit-support" data-action="support" aria-label="고객센터"></button>
+      <button class="start-hotspot hit-settings" data-action="settings" aria-label="설정"></button>
+      <button class="start-hotspot hit-depart" data-action="guest" aria-label="낚시터로 출항"></button>
+      <button class="start-hotspot hit-new" data-action="new" aria-label="처음부터 새 게임"></button>
+      <button class="start-hotspot hit-server" data-action="server" aria-label="익명 서버연동"></button>
+      <button class="start-hotspot hit-keep" data-action="keep" aria-label="이 기기에서 로그인 유지"></button>
+      <button class="start-hotspot hit-bag" data-action="bag" aria-label="가방"></button>
+      <button class="start-hotspot hit-dex" data-action="dex" aria-label="도감"></button>
+      <button class="start-hotspot hit-achievement" data-action="achievement" aria-label="업적"></button>
+      <button class="start-hotspot hit-event" data-action="event" aria-label="이벤트"></button>
+      <button class="start-hotspot hit-shop" data-action="shop" aria-label="상점"></button>
+      <div class="login-touch-shine" aria-hidden="true"></div>`;
     dom.app.appendChild(shell);
+    const quickStart = (screen: Screen) => {
+      void this.startGame(false).then(() => this.go(screen));
+    };
     shell.querySelector<HTMLButtonElement>('[data-action="guest"]')?.addEventListener('click', () => this.startGame(false));
     shell.querySelector<HTMLButtonElement>('[data-action="server"]')?.addEventListener('click', () => this.startGame(true));
     shell.querySelector<HTMLButtonElement>('[data-action="new"]')?.addEventListener('click', () => {
       const fresh = loadSave();
-      this.save = { ...fresh, coins: 500, caught: {}, missions: {}, region: 'lake', gear: { rodLevel: 1, reelLevel: 1, lureStock: 8, lineLevel: 1 }, bestStreak: 0, currentStreak: 0, totalCasts: 0, totalSuccess: 0, totalFail: 0, unlockedRegions: ['lake', 'river', 'harbor'] };
+      this.save = { ...fresh, coins: 500, caught: {}, missions: {}, region: 'lake', gear: { rodLevel: 1, reelLevel: 1, lureStock: 8, lineLevel: 1 }, unlockedRegions: ['lake', 'river', 'harbor'], mastery: {}, bestStreak: 0, currentStreak: 0 };
       saveGame(this.save);
-      void this.startGame(false);
+      this.startGame(false);
+    });
+    shell.querySelector<HTMLButtonElement>('[data-action="bag"]')?.addEventListener('click', () => quickStart('dex'));
+    shell.querySelector<HTMLButtonElement>('[data-action="dex"]')?.addEventListener('click', () => quickStart('dex'));
+    shell.querySelector<HTMLButtonElement>('[data-action="achievement"]')?.addEventListener('click', () => quickStart('mission'));
+    shell.querySelector<HTMLButtonElement>('[data-action="event"]')?.addEventListener('click', () => quickStart('mission'));
+    shell.querySelector<HTMLButtonElement>('[data-action="shop"]')?.addEventListener('click', () => quickStart('shop'));
+    shell.querySelector<HTMLButtonElement>('[data-action="notice"]')?.addEventListener('click', () => this.toast.show({ type: 'normal', title: '공지사항', message: '아쿠아 판타지아 오픈 준비 중입니다.' }));
+    shell.querySelector<HTMLButtonElement>('[data-action="support"]')?.addEventListener('click', () => this.toast.show({ type: 'normal', title: '고객센터', message: '문의 기능은 다음 패치에서 연결됩니다.' }));
+    shell.querySelector<HTMLButtonElement>('[data-action="settings"]')?.addEventListener('click', () => this.toast.show({ type: 'normal', title: '설정', message: '사운드와 진동 옵션을 준비 중입니다.' }));
+    shell.querySelector<HTMLButtonElement>('[data-action="keep"]')?.addEventListener('click', (ev) => {
+      const target = ev.currentTarget as HTMLButtonElement;
+      target.classList.toggle('checked');
+      this.toast.show({ type: 'normal', title: '로그인 유지', message: target.classList.contains('checked') ? '이 기기에 저장합니다.' : '이번 접속만 사용합니다.' });
     });
   }
 
@@ -209,7 +228,7 @@ class AquaFantasiaGame {
     root.style.setProperty('--region-glow', region.color);
     root.innerHTML += `
       <div class="fishing-top glass-card">
-        <div><strong>${region.name}</strong><span id="fishingHint">CAST를 눌러 찌를 던지세요</span></div>
+        <div><strong>${region.name}</strong><span id="fishingHint">찌 던지기 버튼을 눌러 시작하세요</span></div>
         <div class="weather-pill">${region.tide}</div>
         <button class="round-btn" data-go="dex">가방</button>
       </div>
@@ -219,7 +238,7 @@ class AquaFantasiaGame {
         <div class="caustic-overlay"></div>
         <div class="stage-ui"></div>
       </div>
-      <div class="combo-badge glass-card" id="comboBadge">COMBO x${Math.max(1, this.save.currentStreak + 1)}</div>
+      <div class="combo-badge ${this.save.currentStreak > 0 ? '' : 'hidden'}" id="comboBadge">콤보 x${Math.max(1, this.save.currentStreak + 1)}</div>
       <div class="reel-panel glass-card hidden" id="reelPanel">
         <img src="${ASSET.gauge}" alt="장력 게이지" />
         <div class="tension-track"><span class="safe-zone"></span><span class="tension-fill"></span></div>
@@ -331,7 +350,7 @@ class AquaFantasiaGame {
 
   private createCastButton(): void {
     if (!this.uiLayer) return;
-    this.uiLayer.innerHTML = `<button class="cast-button" type="button"><img src="${ASSET.castButton}" alt="CAST" /></button>`;
+    this.uiLayer.innerHTML = `<button class="cast-button" type="button" aria-label="찌 던지기"><span class="cast-icon" aria-hidden="true"></span><strong>찌 던지기</strong></button>`;
     this.castBtn = this.uiLayer.querySelector<HTMLButtonElement>('.cast-button')!;
     this.castBtn.addEventListener('click', () => this.castLine());
   }
@@ -405,6 +424,7 @@ class AquaFantasiaGame {
       this.save.bestStreak = Math.max(this.save.bestStreak, this.save.currentStreak);
       this.updateUnlocks();
       saveGame(this.save);
+      if (this.comboNode) { this.comboNode.textContent = `콤보 x${Math.max(1, this.save.currentStreak)}`; this.comboNode.classList.remove('hidden'); }
       this.showCatchPopup(reward);
       this.toast.show({ type: 'dex', title: `${this.activeFish.name} 획득!`, message: `도감 카드와 보상 ${reward}G가 추가되었습니다.`, actionScreen: 'dex' });
     } else {
@@ -473,8 +493,8 @@ class AquaFantasiaGame {
     this.state = 'idle';
     this.castBtn?.classList.remove('hidden', 'pop-out');
     this.resizePixi();
-    this.setHint('CAST를 눌러 다시 던지세요');
-    if (this.comboNode) this.comboNode.textContent = `COMBO x${Math.max(1, this.save.currentStreak + 1)}`;
+    this.setHint('찌 던지기 버튼을 눌러 다시 시작하세요');
+    if (this.comboNode) { this.comboNode.textContent = `콤보 x${Math.max(1, this.save.currentStreak + 1)}`; this.comboNode.classList.toggle('hidden', this.save.currentStreak <= 0); }
   }
 
   private tick(): void {

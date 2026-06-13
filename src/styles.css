@@ -366,3 +366,52 @@ html.portrait-only-game body[data-screen="login"] .shop-fab { display: none !imp
 html.is-hostile-inapp .system-strip { display: none !important; }
 html.is-hostile-inapp .login-card { margin-top: clamp(18px, 8svh, 70px); }
 html.is-hostile-inapp .game-logo { font-size: clamp(44px, 12vw, 78px); }
+
+
+/* v6.8.0 REFERENCE START SCREEN + FISHING UI CLEANUP
+   The provided reference artwork is treated as the visible title screen. DOM buttons are transparent hitboxes only. */
+.sr-only { position:absolute !important; width:1px !important; height:1px !important; padding:0 !important; margin:-1px !important; overflow:hidden !important; clip:rect(0,0,0,0) !important; white-space:nowrap !important; border:0 !important; }
+.start-art-screen { padding:0 !important; background:#0499e8; display:block; overflow:hidden; }
+.start-art-screen .start-art-image { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center top; max-width:none; user-select:none; pointer-events:none; }
+.start-art-screen .login-card,
+.start-art-screen .login-bg,
+.start-art-screen .login-water,
+.start-art-screen .login-sparkles { display:none !important; }
+.start-hotspot { position:absolute; z-index:4; display:block; background:rgba(255,255,255,0); border:0; border-radius:999px; outline:0; padding:0; touch-action:manipulation; }
+.start-hotspot:active { background:rgba(255,255,255,.08); transform:scale(.98); }
+.hit-notice { left:3.1%; top:2.1%; width:12.5%; height:8.4%; }
+.hit-support { left:73.2%; top:2.1%; width:12.4%; height:8.4%; }
+.hit-settings { left:86.4%; top:2.1%; width:11.2%; height:8.4%; }
+.hit-depart { left:20.8%; top:49.7%; width:58.5%; height:6.9%; }
+.hit-new { left:20.8%; top:59.1%; width:58.5%; height:6.9%; }
+.hit-server { left:20.8%; top:68.0%; width:58.5%; height:7.2%; }
+.hit-keep { left:35.8%; top:76.5%; width:31.0%; height:4.1%; }
+.hit-bag { left:7.1%; top:88.2%; width:12.2%; height:9.0%; }
+.hit-dex { left:25.3%; top:88.2%; width:12.2%; height:9.0%; }
+.hit-achievement { left:43.5%; top:88.2%; width:12.2%; height:9.0%; }
+.hit-event { left:61.7%; top:88.2%; width:12.2%; height:9.0%; }
+.hit-shop { left:79.9%; top:88.2%; width:12.2%; height:9.0%; }
+.login-touch-shine { position:absolute; left:50%; top:54%; width:60%; height:12%; transform:translate(-50%,-50%); pointer-events:none; border-radius:999px; background:radial-gradient(ellipse at center,rgba(255,255,255,.18),transparent 65%); opacity:.35; animation: referencePulse 2.4s ease-in-out infinite; }
+@keyframes referencePulse { 0%,100%{opacity:.2; transform:translate(-50%,-50%) scale(.98);} 50%{opacity:.44; transform:translate(-50%,-50%) scale(1.03);} }
+
+/* Fishing scene fix: no cropped CAST image, no loose boat fragment, combo stays contextual. */
+.fishing-shell { padding:0 !important; background:#02345a; }
+.fishing-top { left:10px !important; right:10px !important; top:calc(10px + env(safe-area-inset-top)) !important; min-height:84px; grid-template-columns:1fr auto auto; border-radius:26px; background:linear-gradient(145deg,rgba(10,80,121,.88),rgba(5,34,66,.94)) !important; box-shadow:inset 0 2px 0 rgba(255,255,255,.20),0 16px 32px rgba(0,24,44,.34) !important; }
+.fishing-top strong { color:#fff28e; text-shadow:0 3px 0 rgba(0,53,86,.55); }
+.fishing-top span { color:rgba(240,250,255,.90); }
+.weather-pill { background:linear-gradient(135deg,#fff7b7,#68f3ff) !important; min-width:72px; }
+.round-btn { background:linear-gradient(135deg,#dffff3,#6aeaff) !important; min-width:68px; }
+.fishing-stage { inset:0 !important; background:#0268a8; }
+.stage-ui { z-index:13; }
+.cast-button { left:50%; bottom:calc(20px + env(safe-area-inset-bottom)); width:min(300px,72vw); min-height:74px; border-radius:36px; background:url('/assets/ui/button_cast_yellow_clean.png') center/100% 100% no-repeat; display:flex; align-items:center; justify-content:center; gap:12px; color:#5a2d00; font-weight:1000; font-size:clamp(23px,7vw,31px); text-shadow:0 2px 0 rgba(255,255,255,.62),0 4px 8px rgba(113,60,0,.22); filter:drop-shadow(0 16px 20px rgba(0,31,55,.38)); }
+.cast-button::after { content:''; position:absolute; inset:-14px; border-radius:999px; background:radial-gradient(ellipse at center,rgba(255,237,122,.22),transparent 70%); z-index:-1; }
+.cast-button .cast-icon { width:48px; height:48px; background:url('/assets/art/fishing_float.png') center/contain no-repeat; filter:drop-shadow(0 6px 8px rgba(0,0,0,.25)); }
+.cast-button img { display:none !important; }
+.combo-badge { left:16px; bottom:calc(104px + env(safe-area-inset-bottom)); background:url('/assets/ui/badge_combo_clean.png') center/100% 100% no-repeat !important; border:0; box-shadow:none; min-width:130px; min-height:44px; display:flex; align-items:center; justify-content:center; padding:0 18px; color:#fff6a5; text-shadow:0 3px 0 rgba(0,41,69,.50); }
+.reel-panel { bottom:calc(12px + env(safe-area-inset-bottom)); border-radius:28px; background:linear-gradient(145deg,rgba(13,89,129,.93),rgba(5,33,62,.96)) !important; }
+.reel-panel > img { width:min(500px,94vw); }
+.hold-pad { background:url('/assets/ui/button_blue_blank.png') center/100% 100% no-repeat,linear-gradient(135deg,#74ebff,#4b71ec) !important; color:#052840; }
+.fallback-player { left:10%; bottom:23%; width:min(245px,40vw); }
+.fallback-bobber { left:68%; top:56%; width:min(70px,13vw); }
+.fallback-scene { background-position:center top; }
+@media (max-width:430px){ .cast-button{ width:min(280px,74vw); min-height:70px; } .fishing-top{ min-height:78px; } .combo-badge{ bottom:calc(98px + env(safe-area-inset-bottom)); } }

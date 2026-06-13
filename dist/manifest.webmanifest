@@ -1,7 +1,7 @@
 {
   "name": "아쿠아 판타지아",
   "short_name": "아쿠아판타지아",
-  "description": "아쿠아 판타지아 - 세로 전용 2.5D 모바일 캐주얼 낚시 웹게임 v6.7.0",
+  "description": "아쿠아 판타지아 - 레퍼런스 시작화면과 낚시 UI 정리 v6.8.0",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",
