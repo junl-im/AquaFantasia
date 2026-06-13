@@ -1,25 +1,37 @@
-import { APP_VERSION } from './data';
+import { APP_VERSION, defaultSave } from './data';
 import type { SaveData } from './types';
-import { defaultSave } from './data';
 
-const KEY = 'aqua-fantasia-save-v630';
-const LEGACY_KEYS = ['aqua-fantasia-save-v620'];
+const KEY = 'aqua-fantasia-save-v640';
+const LEGACY_KEYS = ['aqua-fantasia-save-v630', 'aqua-fantasia-save-v620'];
+
+function normalizeSave(parsed: Partial<SaveData>): SaveData {
+  const base = defaultSave();
+  const gear = { ...base.gear, ...(parsed.gear ?? {}) };
+  const unlocked = Array.isArray(parsed.unlockedRegions) && parsed.unlockedRegions.length > 0 ? parsed.unlockedRegions : base.unlockedRegions;
+  return {
+    ...base,
+    ...parsed,
+    version: APP_VERSION,
+    screen: parsed.screen === 'login' ? 'login' : (parsed.screen ?? base.screen),
+    region: parsed.region ?? base.region,
+    coins: Number.isFinite(parsed.coins) ? Number(parsed.coins) : base.coins,
+    caught: parsed.caught ?? {},
+    missions: parsed.missions ?? {},
+    gear,
+    bestStreak: Number.isFinite(parsed.bestStreak) ? Number(parsed.bestStreak) : base.bestStreak,
+    currentStreak: Number.isFinite(parsed.currentStreak) ? Number(parsed.currentStreak) : 0,
+    totalCasts: Number.isFinite(parsed.totalCasts) ? Number(parsed.totalCasts) : 0,
+    totalSuccess: Number.isFinite(parsed.totalSuccess) ? Number(parsed.totalSuccess) : 0,
+    totalFail: Number.isFinite(parsed.totalFail) ? Number(parsed.totalFail) : 0,
+    unlockedRegions: unlocked,
+  };
+}
 
 export function loadSave(): SaveData {
   try {
     const raw = localStorage.getItem(KEY) ?? LEGACY_KEYS.map((k) => localStorage.getItem(k)).find(Boolean);
     if (!raw) return defaultSave();
-    const parsed = JSON.parse(raw) as Partial<SaveData>;
-    const base = defaultSave();
-    return {
-      ...base,
-      ...parsed,
-      version: APP_VERSION,
-      screen: parsed.screen === 'login' ? 'login' : (parsed.screen ?? base.screen),
-      gear: { ...base.gear, ...(parsed.gear ?? {}) },
-      caught: parsed.caught ?? {},
-      missions: parsed.missions ?? {},
-    };
+    return normalizeSave(JSON.parse(raw) as Partial<SaveData>);
   } catch {
     return defaultSave();
   }

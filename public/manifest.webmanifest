@@ -1,16 +1,28 @@
 {
   "name": "아쿠아 판타지아",
   "short_name": "아쿠아판타지아",
-  "description": "2.5D mobile fishing casual web game",
+  "description": "아쿠아 판타지아 - 2.5D 모바일 캐주얼 낚시 웹게임 v6.4",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",
-  "display_override": ["fullscreen", "standalone", "minimal-ui"],
+  "display_override": [
+    "fullscreen",
+    "standalone",
+    "minimal-ui"
+  ],
   "orientation": "any",
   "background_color": "#061827",
-  "theme_color": "#071b2c",
+  "theme_color": "#061827",
   "icons": [
-    { "src": "./assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "./assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "./assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }
