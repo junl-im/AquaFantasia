@@ -1,13 +1,32 @@
-# Aqua Fantasia v6.8.0
+# Aqua Fantasia
 
-Reference-art title screen and cleaned fishing UI pass.
+세로 전용 모바일 캐주얼 낚시 웹게임 프로토타입입니다.
 
-## Stack
-- Vite + TypeScript
+## 현재 버전
+v6.9.0 Start Cleanup + Back Guard + Bite Guide
+
+## 핵심 구조
+- Vite
+- TypeScript
 - PixiJS 8
 - Howler.js
-- Firebase-ready storage layer
-- PWA + GitHub Pages Actions
+- Firebase 익명 서버연동 준비 구조
+- PWA / Service Worker
+- GitHub Actions / GitHub Pages
 
-## Notes
-KakaoTalk in-app browser orientation safe mode is preserved. The title screen is based on the provided high-quality reference artwork and uses transparent touch hitboxes.
+## v6.9.0 핵심
+- 시작 화면에서 공지사항/고객센터/설정 제거
+- 시작 화면 하단 메뉴 제거
+- 로그인 유지 체크 상태 시각 보정
+- 입질 시 `화면을 눌러 당기세요` 안내 카드 추가
+- 모바일 뒤로가기 버튼을 게임 흐름으로 제어
+- 카카오톡 인앱 브라우저 세로 대응 유지
+
+## 개발
+```bash
+npm install
+npm run dev
+npm run validate
+npm run typecheck
+npm run build
+```

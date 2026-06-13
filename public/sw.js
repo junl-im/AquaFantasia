@@ -1,7 +1,7 @@
-const CACHE_NAME = 'aqua-fantasia-v6.8.0-reference-start-fishing-cleanup';
+const CACHE_NAME = 'aqua-fantasia-v6.9.0-start-back-bite-polish';
 const PRECACHE = [
   './', './index.html', './manifest.webmanifest', './offline.html',
-  './assets/art/login_ocean_fishing_25d.webp', './assets/screens/start_screen_reference.webp', './assets/screens/start_screen_reference.png', './assets/art/bg_ocean.webp', './assets/art/bg_lake.webp', './assets/art/bg_river.webp', './assets/art/bg_harbor.webp', './assets/art/bg_deep.webp', './assets/art/bg_palace.webp', './assets/art/bg_dimension.webp', './assets/art/bg_glacier.webp', './assets/art/bg_storm.webp',
+  './assets/art/login_ocean_fishing_25d.webp', './assets/screens/start_screen_reference.webp', './assets/screens/start_screen_reference.png', './assets/screens/start_screen_clean_v690.webp', './assets/screens/start_screen_clean_v690.png', './assets/art/bg_ocean.webp', './assets/art/bg_lake.webp', './assets/art/bg_river.webp', './assets/art/bg_harbor.webp', './assets/art/bg_deep.webp', './assets/art/bg_palace.webp', './assets/art/bg_dimension.webp', './assets/art/bg_glacier.webp', './assets/art/bg_storm.webp',
    './assets/art/bg_mangrove.webp', './assets/art/bg_lunar.webp', './assets/art/bg_reef_festival.webp',
   './assets/dex/fish_mangrove_25d.png', './assets/dex/fish_firefly_25d.png', './assets/dex/fish_lunar_25d.png', './assets/dex/fish_manta_25d.png', './assets/dex/fish_turtle_guardian_25d.png', './assets/dex/fish_orca_boss_25d.png', './assets/dex/fish_reef_star_25d.png', './assets/dex/fish_prism_25d.png',
   './assets/ui/fx_surge_25d.png', './assets/ui/fx_guard_25d.png', './assets/ui/fx_boss_warning_25d.png', './assets/ui/badge_mastery_25d.png', './assets/ui/badge_rescue_25d.png',

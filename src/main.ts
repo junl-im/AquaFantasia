@@ -8,7 +8,7 @@ import { ToastManager } from './toast';
 import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPortraitLock } from './core/PortraitGuard';
 
 const ASSET = {
-  loginBg: './assets/screens/start_screen_reference.webp',
+  loginBg: './assets/screens/start_screen_clean_v690.webp',
   player: './assets/art/player_boat.png',
   float: './assets/art/fishing_float.png',
   fish: './assets/art/fish_clown.png',
@@ -51,6 +51,10 @@ class AquaFantasiaGame {
   private surgeTimer = 0;
   private perfectChain = 0;
   private routeGuardActive = false;
+  private backGuardInstalled = false;
+  private allowBrowserLeave = false;
+  private modalOpen = false;
+  private exitPromptOpen = false;
   private state: FishingState = 'idle';
   private tension = 42;
   private safeTimer = 0;
@@ -74,6 +78,7 @@ class AquaFantasiaGame {
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
+    this.installBackNavigationGuard();
     initAudio();
     this.sweepCaches();
     this.screen = 'login';
@@ -123,23 +128,16 @@ class AquaFantasiaGame {
     shell.innerHTML = `
       <img class="start-art-image" src="${ASSET.loginBg}" alt="아쿠아 판타지아 시작 화면" />
       <h1 class="sr-only">아쿠아 판타지아</h1>
-      <button class="start-hotspot hit-notice" data-action="notice" aria-label="공지사항"></button>
-      <button class="start-hotspot hit-support" data-action="support" aria-label="고객센터"></button>
-      <button class="start-hotspot hit-settings" data-action="settings" aria-label="설정"></button>
       <button class="start-hotspot hit-depart" data-action="guest" aria-label="낚시터로 출항"></button>
       <button class="start-hotspot hit-new" data-action="new" aria-label="처음부터 새 게임"></button>
       <button class="start-hotspot hit-server" data-action="server" aria-label="익명 서버연동"></button>
-      <button class="start-hotspot hit-keep" data-action="keep" aria-label="이 기기에서 로그인 유지"></button>
-      <button class="start-hotspot hit-bag" data-action="bag" aria-label="가방"></button>
-      <button class="start-hotspot hit-dex" data-action="dex" aria-label="도감"></button>
-      <button class="start-hotspot hit-achievement" data-action="achievement" aria-label="업적"></button>
-      <button class="start-hotspot hit-event" data-action="event" aria-label="이벤트"></button>
-      <button class="start-hotspot hit-shop" data-action="shop" aria-label="상점"></button>
+      <button class="start-hotspot hit-keep" data-action="keep" aria-label="이 기기에서 로그인 유지" aria-pressed="false"><span class="keep-indicator" aria-hidden="true"></span></button>
       <div class="login-touch-shine" aria-hidden="true"></div>`;
     dom.app.appendChild(shell);
-    const quickStart = (screen: Screen) => {
-      void this.startGame(false).then(() => this.go(screen));
-    };
+    const keepEnabled = window.localStorage.getItem('aqua-login-keep') === 'true';
+    const keepButton = shell.querySelector<HTMLButtonElement>('[data-action="keep"]');
+    keepButton?.classList.toggle('checked', keepEnabled);
+    keepButton?.setAttribute('aria-pressed', String(keepEnabled));
     shell.querySelector<HTMLButtonElement>('[data-action="guest"]')?.addEventListener('click', () => this.startGame(false));
     shell.querySelector<HTMLButtonElement>('[data-action="server"]')?.addEventListener('click', () => this.startGame(true));
     shell.querySelector<HTMLButtonElement>('[data-action="new"]')?.addEventListener('click', () => {
@@ -148,18 +146,12 @@ class AquaFantasiaGame {
       saveGame(this.save);
       this.startGame(false);
     });
-    shell.querySelector<HTMLButtonElement>('[data-action="bag"]')?.addEventListener('click', () => quickStart('dex'));
-    shell.querySelector<HTMLButtonElement>('[data-action="dex"]')?.addEventListener('click', () => quickStart('dex'));
-    shell.querySelector<HTMLButtonElement>('[data-action="achievement"]')?.addEventListener('click', () => quickStart('mission'));
-    shell.querySelector<HTMLButtonElement>('[data-action="event"]')?.addEventListener('click', () => quickStart('mission'));
-    shell.querySelector<HTMLButtonElement>('[data-action="shop"]')?.addEventListener('click', () => quickStart('shop'));
-    shell.querySelector<HTMLButtonElement>('[data-action="notice"]')?.addEventListener('click', () => this.toast.show({ type: 'normal', title: '공지사항', message: '아쿠아 판타지아 오픈 준비 중입니다.' }));
-    shell.querySelector<HTMLButtonElement>('[data-action="support"]')?.addEventListener('click', () => this.toast.show({ type: 'normal', title: '고객센터', message: '문의 기능은 다음 패치에서 연결됩니다.' }));
-    shell.querySelector<HTMLButtonElement>('[data-action="settings"]')?.addEventListener('click', () => this.toast.show({ type: 'normal', title: '설정', message: '사운드와 진동 옵션을 준비 중입니다.' }));
-    shell.querySelector<HTMLButtonElement>('[data-action="keep"]')?.addEventListener('click', (ev) => {
-      const target = ev.currentTarget as HTMLButtonElement;
-      target.classList.toggle('checked');
-      this.toast.show({ type: 'normal', title: '로그인 유지', message: target.classList.contains('checked') ? '이 기기에 저장합니다.' : '이번 접속만 사용합니다.' });
+    keepButton?.addEventListener('click', () => {
+      const next = keepButton.getAttribute('aria-pressed') !== 'true';
+      keepButton.classList.toggle('checked', next);
+      keepButton.setAttribute('aria-pressed', String(next));
+      window.localStorage.setItem('aqua-login-keep', String(next));
+      this.toast.show({ type: 'normal', title: '로그인 유지', message: next ? '이 기기에 저장합니다.' : '이번 접속만 사용합니다.' });
     });
   }
 
@@ -387,7 +379,8 @@ class AquaFantasiaGame {
     if (this.biteText) this.biteText.visible = true;
     this.stageHost?.classList.add('camera-shake');
     this.stageHost?.classList.add('bite-flash');
-    this.setHint(`${this.activeFish.rarity === 'BOSS' ? '보스 입질!' : '물었다!'} 화면 아무 곳이나 터치해서 챔질하세요`);
+    this.setHint(`${this.activeFish.rarity === 'BOSS' ? '보스 입질!' : '물었다!'} 화면을 눌러 당기세요`);
+    this.showBiteCallout(this.activeFish.rarity === 'BOSS' ? '보스가 물었다!' : '물었다!');
     window.setTimeout(() => this.stageHost?.classList.remove('camera-shake', 'bite-flash'), 520);
   }
 
@@ -402,6 +395,7 @@ class AquaFantasiaGame {
     this.routeGuardActive = false;
     this.holding = false;
     if (this.biteText) this.biteText.visible = false;
+    this.hideBiteCallout();
     this.reelPanel?.classList.remove('hidden');
     this.setHint('릴 감기 시작! 장력을 안전지대에 유지하세요');
     this.updateTensionUI();
@@ -411,6 +405,7 @@ class AquaFantasiaGame {
     if (this.state === 'success' || this.state === 'fail') return;
     this.state = success ? 'success' : 'fail';
     this.holding = false;
+    this.hideBiteCallout();
     this.reelPanel?.classList.add('hidden');
     if (success) {
       playSound('success');
@@ -487,6 +482,7 @@ class AquaFantasiaGame {
     if (this.bobber) this.bobber.visible = true;
     if (this.catchSprite) this.catchSprite.visible = false;
     if (this.biteText) this.biteText.visible = false;
+    this.hideBiteCallout();
     this.reelPanel?.classList.add('hidden');
     this.stageHost?.classList.remove('catch-bloom', 'fallback-casting', 'surge-alert', 'guard-active');
     this.stageHost?.querySelector('.catch-result-card')?.remove();
@@ -586,6 +582,111 @@ class AquaFantasiaGame {
   private setHint(text: string): void {
     const node = document.querySelector('#fishingHint');
     if (node) node.textContent = text;
+  }
+
+  private showBiteCallout(title: string): void {
+    this.hideBiteCallout();
+    const callout = document.createElement('div');
+    callout.className = 'bite-callout';
+    callout.innerHTML = `<strong>${title}</strong><span>화면을 눌러 당기세요!</span>`;
+    this.stageHost?.appendChild(callout);
+  }
+
+  private hideBiteCallout(): void {
+    this.stageHost?.querySelector('.bite-callout')?.remove();
+  }
+
+
+  private installBackNavigationGuard(): void {
+    if (this.backGuardInstalled) return;
+    this.backGuardInstalled = true;
+    const arm = () => {
+      try {
+        history.pushState({ aquaFantasia: true, screen: this.screen, t: Date.now() }, '', location.href);
+      } catch {
+        // Some WebViews can reject state changes; game still works without browser guard.
+      }
+    };
+    try {
+      history.replaceState({ aquaFantasia: true, screen: this.screen, t: Date.now() }, '', location.href);
+      arm();
+    } catch {
+      // Silent fallback.
+    }
+    window.addEventListener('popstate', () => {
+      if (this.allowBrowserLeave) return;
+      arm();
+      void this.handleHardwareBack();
+    });
+  }
+
+  private async handleHardwareBack(): Promise<void> {
+    if (this.modalOpen) {
+      if (this.exitPromptOpen) this.releaseBrowserBack();
+      return;
+    }
+    if (this.screen === 'fishing') {
+      const leave = await this.showGameConfirm({
+        title: '마을로 돌아갈까요?',
+        message: '진행 중인 낚시는 종료되고 마을 화면으로 이동합니다.',
+        okText: '마을로 가기',
+        cancelText: '계속 낚시',
+      });
+      if (leave) void this.go('village');
+      return;
+    }
+    if (this.screen === 'village' || this.screen === 'login') {
+      this.exitPromptOpen = true;
+      const exit = await this.showGameConfirm({
+        title: '게임을 종료할까요?',
+        message: '뒤로가기를 한 번 더 누르거나 종료를 선택하면 이전 페이지로 이동합니다.',
+        okText: '종료',
+        cancelText: '취소',
+      });
+      this.exitPromptOpen = false;
+      if (exit) this.releaseBrowserBack();
+      return;
+    }
+    void this.go('village');
+  }
+
+  private releaseBrowserBack(): void {
+    this.allowBrowserLeave = true;
+    try {
+      history.back();
+      window.setTimeout(() => window.close(), 80);
+    } catch {
+      window.close();
+    }
+  }
+
+  private showGameConfirm(options: { title: string; message: string; okText: string; cancelText: string }): Promise<boolean> {
+    this.modalOpen = true;
+    return new Promise((resolve) => {
+      const backdrop = document.createElement('div');
+      backdrop.className = 'game-dialog-backdrop';
+      backdrop.innerHTML = `
+        <section class="game-dialog-card" role="dialog" aria-modal="true" aria-label="${options.title}">
+          <strong>${options.title}</strong>
+          <p>${options.message}</p>
+          <div>
+            <button class="dialog-btn cancel" data-dialog="cancel">${options.cancelText}</button>
+            <button class="dialog-btn ok" data-dialog="ok">${options.okText}</button>
+          </div>
+        </section>`;
+      const done = (value: boolean) => {
+        this.modalOpen = false;
+        backdrop.classList.add('dialog-out');
+        window.setTimeout(() => backdrop.remove(), 140);
+        resolve(value);
+      };
+      backdrop.querySelector<HTMLButtonElement>('[data-dialog="cancel"]')?.addEventListener('click', () => done(false));
+      backdrop.querySelector<HTMLButtonElement>('[data-dialog="ok"]')?.addEventListener('click', () => done(true));
+      backdrop.addEventListener('pointerdown', (ev) => {
+        if (ev.target === backdrop) done(false);
+      });
+      dom.app.appendChild(backdrop);
+    });
   }
 
   private renderGear(): void {

@@ -415,3 +415,97 @@ html.is-hostile-inapp .game-logo { font-size: clamp(44px, 12vw, 78px); }
 .fallback-bobber { left:68%; top:56%; width:min(70px,13vw); }
 .fallback-scene { background-position:center top; }
 @media (max-width:430px){ .cast-button{ width:min(280px,74vw); min-height:70px; } .fishing-top{ min-height:78px; } .combo-badge{ bottom:calc(98px + env(safe-area-inset-bottom)); } }
+
+/* v6.9.0 START CLEANUP + BACK GUARD + BITE GUIDE
+   Reference start art keeps only the three main buttons and login keep toggle. Top utility icons and bottom menu are removed from the art. */
+.start-art-screen .start-art-image { content: url('/assets/screens/start_screen_clean_v690.webp'); }
+.hit-depart { left:20.8%; top:49.7%; width:58.5%; height:6.9%; }
+.hit-new { left:20.8%; top:59.1%; width:58.5%; height:6.9%; }
+.hit-server { left:20.8%; top:68.0%; width:58.5%; height:7.2%; }
+.hit-keep { left:34.7%; top:75.1%; width:34.5%; height:5.3%; border-radius:18px; }
+.keep-indicator {
+  position:absolute;
+  left:4px;
+  top:50%;
+  width:40px;
+  height:40px;
+  transform:translateY(-50%);
+  border-radius:11px;
+  background:linear-gradient(145deg,#dffaff,#61dfff);
+  border:3px solid rgba(255,255,255,.86);
+  box-shadow:0 7px 14px rgba(0,40,78,.36), inset 0 2px 0 rgba(255,255,255,.85), inset 0 -4px 8px rgba(0,95,160,.22);
+}
+.keep-indicator::after {
+  content:"";
+  position:absolute;
+  left:10px;
+  top:6px;
+  width:12px;
+  height:20px;
+  border:solid #075f9c;
+  border-width:0 5px 5px 0;
+  transform:rotate(45deg) scale(0);
+  transform-origin:center;
+  transition:transform .16s ease;
+  filter:drop-shadow(0 2px 0 rgba(255,255,255,.5));
+}
+.hit-keep.checked .keep-indicator { background:linear-gradient(145deg,#aaf6ff,#37c4ff); }
+.hit-keep.checked .keep-indicator::after { transform:rotate(45deg) scale(1); }
+.hit-notice,.hit-support,.hit-settings,.hit-bag,.hit-dex,.hit-achievement,.hit-event,.hit-shop { display:none !important; pointer-events:none !important; }
+
+.bite-callout {
+  position:absolute;
+  left:50%;
+  top:39%;
+  z-index:30;
+  transform:translate(-50%,-50%);
+  min-width:min(330px,82vw);
+  padding:18px 22px 20px;
+  text-align:center;
+  pointer-events:none;
+  border-radius:30px;
+  background:url('/assets/ui/button_purple_blank.png') center/100% 100% no-repeat, linear-gradient(145deg,rgba(150,112,255,.96),rgba(44,131,245,.94));
+  color:white;
+  filter:drop-shadow(0 22px 28px rgba(0,22,46,.42));
+  animation:biteCalloutPop .66s cubic-bezier(.2,1.35,.22,1) both, biteCalloutPulse 1.05s ease-in-out .68s infinite;
+}
+.bite-callout strong { display:block; font-size:clamp(30px,8vw,44px); line-height:1; text-shadow:0 4px 0 rgba(23,54,112,.55), 0 0 18px rgba(255,255,255,.5); }
+.bite-callout span { display:block; margin-top:9px; font-size:clamp(18px,5.2vw,24px); font-weight:1000; color:#fff9b7; text-shadow:0 3px 0 rgba(0,59,95,.45); }
+.bite-callout::before { content:"!"; position:absolute; right:18px; top:-30px; width:62px; height:62px; display:grid; place-items:center; border-radius:50%; background:white; color:#ff5a36; font-weight:1000; font-size:38px; box-shadow:0 12px 18px rgba(0,40,70,.25); }
+@keyframes biteCalloutPop { from{opacity:0; transform:translate(-50%,-50%) scale(.58) rotate(-3deg);} to{opacity:1; transform:translate(-50%,-50%) scale(1) rotate(0);} }
+@keyframes biteCalloutPulse { 0%,100%{transform:translate(-50%,-50%) scale(1);} 50%{transform:translate(-50%,-50%) scale(1.035);} }
+
+.game-dialog-backdrop {
+  position:absolute;
+  inset:0;
+  z-index:120;
+  display:grid;
+  place-items:center;
+  padding:22px;
+  background:rgba(0,18,38,.54);
+  backdrop-filter:blur(8px);
+  animation:dialogFade .16s ease both;
+}
+.game-dialog-card {
+  width:min(390px,92vw);
+  padding:24px 20px 20px;
+  border-radius:34px;
+  text-align:center;
+  background:url('/assets/ui/dex_panel_reference_25d.png') center/100% 100% no-repeat, linear-gradient(145deg,rgba(223,251,255,.94),rgba(82,194,231,.92));
+  color:#07324c;
+  filter:drop-shadow(0 24px 34px rgba(0,20,43,.42));
+  animation:dialogPop .22s cubic-bezier(.2,1.15,.2,1) both;
+}
+.game-dialog-card strong { display:block; font-size:clamp(24px,6.4vw,34px); color:#053e69; text-shadow:0 2px 0 rgba(255,255,255,.7); }
+.game-dialog-card p { margin:12px auto 18px; color:#24536d; font-weight:850; line-height:1.45; }
+.game-dialog-card div { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.dialog-btn { min-height:58px; border:0; border-radius:999px; font-size:18px; font-weight:1000; color:#08324c; text-shadow:0 2px 0 rgba(255,255,255,.6); }
+.dialog-btn.cancel { background:url('/assets/ui/button_blue_blank.png') center/100% 100% no-repeat, linear-gradient(135deg,#70ecff,#4d9ff5); }
+.dialog-btn.ok { background:url('/assets/ui/button_depart_blank.png') center/100% 100% no-repeat, linear-gradient(135deg,#ffe57b,#ff9d35); color:#5b2b00; }
+.dialog-out { animation:dialogFadeOut .14s ease both; }
+@keyframes dialogFade { from{opacity:0;} to{opacity:1;} }
+@keyframes dialogFadeOut { from{opacity:1;} to{opacity:0;} }
+@keyframes dialogPop { from{opacity:0; transform:translateY(12px) scale(.94);} to{opacity:1; transform:translateY(0) scale(1);} }
+
+html.is-hostile-inapp .game-dialog-backdrop { backdrop-filter:none; }
+@media (max-width:430px){ .keep-indicator{ width:34px; height:34px; border-radius:9px; } .keep-indicator::after{ left:8px; top:5px; width:10px; height:17px; border-width:0 4px 4px 0; } }
