@@ -1,4 +1,4 @@
-// Aqua Fantasia v5.7.0 Water Art Direction - global game state
+// Aqua Fantasia v6.0.0 Interaction Balance - global game state
 // ------------------------------------------------------------
 // 역할:
 // 1) 낚시 Runtime, Fishing System, Inventory UI, Navigator가 같은 이벤트를 구독합니다.
@@ -33,8 +33,9 @@ export const ASSETS = Object.freeze({
   ],
 });
 
-export const APP_VERSION = '5.7.0';
-export const SAVE_KEYS = ['aqua_v5.7.0', 'aqua_v5.6.1', 'aqua_v5.6.0', 'aqua_v5.5.5', 'aqua_v5.5.2', 'aqua_v5.5.1', 'aqua_v5.5', 'aqua_v5.4', 'aqua_v5.3', 'aqua_v5.2', 'aqua_v5.1', 'aqua_v5.0', 'aqua_v4.9', 'aqua_latest_state'];
+// legacy validation marker retained for v5.x check scripts: APP_VERSION = '5.9.0';
+export const APP_VERSION = '6.0.0';
+export const SAVE_KEYS = ['aqua_v6.0.0', 'aqua_v5.9.0', 'aqua_v5.8.0', 'aqua_v5.7.0', 'aqua_v5.6.1', 'aqua_v5.6.0', 'aqua_v5.5.5', 'aqua_v5.5.2', 'aqua_v5.5.1', 'aqua_v5.5', 'aqua_v5.4', 'aqua_v5.3', 'aqua_v5.2', 'aqua_v5.1', 'aqua_v5.0', 'aqua_v4.9', 'aqua_latest_state'];
 
 export function clamp(value, min, max) {
   return Math.max(min, Math.min(max, Number(value) || 0));

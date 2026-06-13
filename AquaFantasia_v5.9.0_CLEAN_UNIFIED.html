@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Aqua Fantasia - v6.0.0 Interaction Balance - dismissible notifications, quest routing, tuned fishing, polished water backgrounds">
+    <meta name="description" content="Aqua Fantasia - v5.9.0 UI State Router & 2.5D Fish Dex Rework - stable screen UI and animated fish collection">
     <meta name="theme-color" content="#082f49">
-    <meta name="aqua-patch" content="v6.0.0 Interaction Balance + Water Polish / overwrite-safe / 2026-06-12">
+    <meta name="aqua-patch" content="v5.9.0 UI State Router + 2.5D Fish Dex Rework / overwrite-safe / 2026-06-12">
     <!-- v5.5 Mobile Feel legacy marker for validation; runtime hotfixed by v5.5.1 and CI hotfixed by v5.5.2 -->
-    <!-- v5.5.2 Runtime & CI Hotfix legacy marker retained under v6.0.0 -->
+    <!-- v5.5.2 Runtime & CI Hotfix legacy marker retained under v5.8.0 -->
     <meta name="color-scheme" content="dark">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -37,8 +37,6 @@
     <link rel="preload" as="image" href="assets/art/v57_fishing_bg_river_master.webp" type="image/webp">
     <link rel="preload" as="image" href="assets/art/v57_fishing_bg_harbor_master.webp" type="image/webp">
     <link rel="preload" as="image" href="assets/art/v57_water_ripple_overlay.webp" type="image/webp">
-    <link rel="preload" as="image" href="assets/art/v60_water_depth_overlay.webp" type="image/webp">
-    <link rel="preload" as="image" href="assets/art/v60_caustic_sparkle_overlay.webp" type="image/webp">
     <link rel="preload" as="image" href="assets/art/v363_painterly_ocean.png" type="image/png">
     <link rel="preload" as="image" href="assets/ui-kit/fishing_minigame/bobber_large.png" type="image/png">
     <link rel="preload" as="image" href="assets/ui-kit/icons/water_ripple.png" type="image/png">
@@ -69,8 +67,6 @@
     <script src="./src/runtime/v58-ui-art-reboot.js?v=5.9.0"></script>
     <!-- v5.9.0 UI State Router + 2.5D Fish Dex Rework: screen-safe HUD and animated painterly fish collection -->
     <script src="./src/runtime/v59-ui-state-dex-rework.js?v=5.9.0"></script>
-    <!-- v6.0.0 Interaction Balance: dismissible/swipe notifications, quest routing, tuned fishing difficulty, and water polish -->
-    <script src="./src/runtime/v60-interaction-balance.js?v=6.0.0"></script>
 
     <script>
     /* v4.3 Early Fullscreen Primer: attaches before app boot, then upgrades to the full game shell after the first real gesture. */
@@ -2398,7 +2394,7 @@ body.ui-v51 .v46-engine-panel, body.ui-v51 .v47-renderer-panel, body.ui-v51 .v48
     <!-- CASUAL RESULT SHOP 5.4 runtime marker -->
     <!-- v5.8.0 2.5D Art Reboot + v5.7.0 Water Art Direction Pass: regional painterly backgrounds, water overlays, unified UI depth -->
 </head>
-<body class="bg-[#0a3d5c] text-white antialiased aqua-v56-bg-art aqua-v57-water-art aqua-v58-art-reboot aqua-v60-interaction aqua-v60-water-grade">
+<body class="bg-[#0a3d5c] text-white antialiased aqua-v56-bg-art aqua-v57-water-art aqua-v58-art-reboot">
 <div id="app-shell" class="max-w-md mx-auto min-h-screen flex flex-col shadow-2xl border-x border-white/10 bg-[#0a3d5c]">
     <div class="v30-atmosphere" aria-hidden="true"></div>
     <div id="v30-smart-dock" class="v30-smart-dock hidden" aria-label="빠른 게임 액션"></div>
@@ -3152,8 +3148,7 @@ let graphicsMode = localStorage.getItem('aqua_graphics_mode') || (() => {
     return (mobileLike || saveData || lowMemory || lowCores) ? 'low' : 'high';
 })();
 let reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-// legacy validation marker retained for v5.x check scripts: const APP_VERSION = '5.9.0';
-const APP_VERSION = '6.0.0';
+const APP_VERSION = '5.9.0';
 function versionAtLeast(minVersion) {
     const parse = (value) => String(value || '0').split('.').map((part) => Number(part) || 0);
     const current = parse(APP_VERSION);
@@ -6175,17 +6170,16 @@ function getBiteWindowDuration(species) {
     ensureV39State();
     const assist = gameState.fishingOptions.assist;
     const rarity = Number(species?.rarity || 1);
-    const base = assist === 'simple' ? 1950 : assist === 'expert' ? 1240 : 1550;
-    // v6.0.0: 입질 타이밍을 살짝 짧게 조정해 초반 이후 난이도를 한 단계 올립니다.
-    return Math.max(820, Math.round(base - rarity * 64 + Math.min(230, getRodEnhanceLevel(getRod().id) * 16)));
+    const base = assist === 'simple' ? 2050 : assist === 'expert' ? 1300 : 1650;
+    return Math.max(900, Math.round(base - rarity * 55 + Math.min(260, getRodEnhanceLevel(getRod().id) * 18)));
 }
 function initReelTimingLane(species) {
     const rarity = Number(species?.rarity || 1);
     const boss = isBossFish(species);
     const assist = gameState.fishingOptions?.assist || 'normal';
-    const width = Math.max(boss ? 9 : 11, (assist === 'simple' ? 25 : assist === 'expert' ? 12 : 18) - rarity * 1.55);
+    const width = Math.max(boss ? 10 : 12, (assist === 'simple' ? 28 : assist === 'expert' ? 14 : 20) - rarity * 1.4);
     const start = 50 - width / 2 + (Math.random() - .5) * 8;
-    gameState.reelTiming = { cursor: Math.random() * 100, dir: Math.random() > .5 ? 1 : -1, speed: (boss ? 4.7 : 3.35) + rarity * .32, zoneStart: clamp(start, 8, 86), zoneWidth: width };
+    gameState.reelTiming = { cursor: Math.random() * 100, dir: Math.random() > .5 ? 1 : -1, speed: (boss ? 4.4 : 3.1) + rarity * .28, zoneStart: clamp(start, 8, 86), zoneWidth: width };
     const lane = document.getElementById('v39-action-lane');
     const intent = document.getElementById('v39-fish-intent');
     if (lane) lane.classList.remove('hidden');
@@ -8336,8 +8330,8 @@ function startReelGame() {
         tickReelTimingLane();
         tickV40BossActionLoop(bossMode);
         const loopStats = getEquipmentStats();
-        const pressureMult = bossMode ? (1.16 + bossPower * .22) : 1.04;
-        gameState.tension += (1.08 + rarity * 0.27) * pressureMult * Math.max(.60, 1 - loopStats.tensionControl);
+        const pressureMult = bossMode ? (1.12 + bossPower * .20) : 1;
+        gameState.tension += (1.0 + rarity * 0.24) * pressureMult * Math.max(.58, 1 - loopStats.tensionControl);
         if (bossMode) {
             gameState.bossSurgeTick = Number(gameState.bossSurgeTick || 0) + 1;
             const surgeEvery = Math.max(9, Math.floor(24 - bossPower * 5 - Math.min(4, loopStats.enhanceLevel * .25)));
@@ -8379,8 +8373,8 @@ function reelAction() {
     const bossMode = isBossFish(species);
     const timing = getReelTimingRating();
     const trackBonus = getV40TrackBonus();
-    let gain = Math.max(4.9, 9.0 - rarity * 0.49) * (1 + stats.powerBonus) * timing.gain * trackBonus.gain;
-    let relief = (Math.max(5.6, 10.4 - rarity * 0.50) + stats.tensionRelief) * timing.relief * trackBonus.relief;
+    let gain = Math.max(5.2, 9.4 - rarity * 0.45) * (1 + stats.powerBonus) * timing.gain * trackBonus.gain;
+    let relief = (Math.max(6, 11 - rarity * 0.45) + stats.tensionRelief) * timing.relief * trackBonus.relief;
     if (trackBonus.tensionPenalty) gameState.tension += trackBonus.tensionPenalty;
     if (timing.tensionPenalty) gameState.tension += timing.tensionPenalty;
     updateReelTimingLaneUI(timing.grade);
@@ -8391,8 +8385,8 @@ function reelAction() {
     else if (timing.grade === 'GOOD') createActionFloat('GOOD!', 'combo');
     else if (timing.grade === 'DANGER') createActionFloat('위험 릴!', 'danger');
     if (bossMode) {
-        gain *= .84;
-        relief *= .86;
+        gain *= .86;
+        relief *= .88;
         if (gameState.bossWindowActive) {
             gain *= 1.9;
             relief += 9 + stats.enhanceLevel * .65;
@@ -9975,7 +9969,6 @@ function confirmExitGame() {
 
 function exposeAquaHandlers() {
     Object.assign(window, {
-        gameState, updateReelUI, getBiteWindowDuration,
         autoEnhanceEquippedRod, buyBait, buyBestAffordableRod, buyRod, buyStarterBaitPack,
         castLine, claimAttendance, claimCaptainSupply, claimWeeklyReward, copyGameLink,
         createImpactBurst, cycleImpactLevel, dismissKakaoBridge, enableMobileGameMode, requestV43FullscreenNow,
@@ -10021,7 +10014,7 @@ async function init() {
     try {
         if (window.AquaV555AutoCache?.ready) await window.AquaV555AutoCache.ready;
         await loadFishDatabase();
-        const saved = localStorage.getItem('aqua_v6.0.0') || localStorage.getItem('aqua_v5.9.0') || localStorage.getItem('aqua_v5.1') || localStorage.getItem('aqua_v5.0') || localStorage.getItem('aqua_v4.9') || localStorage.getItem('aqua_v4.8') || localStorage.getItem('aqua_v4.7') || localStorage.getItem('aqua_v4.6') || localStorage.getItem('aqua_v4.5') || localStorage.getItem('aqua_v4.4') || localStorage.getItem('aqua_v4.3') || localStorage.getItem('aqua_v4.2') || localStorage.getItem('aqua_v4.1') || localStorage.getItem('aqua_v4.0') || localStorage.getItem('aqua_v3.9') || localStorage.getItem('aqua_v3.8') || localStorage.getItem('aqua_v3.7') || localStorage.getItem('aqua_v3.6.4') || localStorage.getItem('aqua_v3.6.3') || localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
+        const saved = localStorage.getItem('aqua_v5.1') || localStorage.getItem('aqua_v5.0') || localStorage.getItem('aqua_v4.9') || localStorage.getItem('aqua_v4.8') || localStorage.getItem('aqua_v4.7') || localStorage.getItem('aqua_v4.6') || localStorage.getItem('aqua_v4.5') || localStorage.getItem('aqua_v4.4') || localStorage.getItem('aqua_v4.3') || localStorage.getItem('aqua_v4.2') || localStorage.getItem('aqua_v4.1') || localStorage.getItem('aqua_v4.0') || localStorage.getItem('aqua_v3.9') || localStorage.getItem('aqua_v3.8') || localStorage.getItem('aqua_v3.7') || localStorage.getItem('aqua_v3.6.4') || localStorage.getItem('aqua_v3.6.3') || localStorage.getItem('aqua_v3.6.2') || localStorage.getItem('aqua_latest_state') || localStorage.getItem('aqua_v3.6.1') || localStorage.getItem('aqua_v3.6') || localStorage.getItem('aqua_v3.5') || localStorage.getItem('aqua_v3.4') || localStorage.getItem('aqua_v3.3') || localStorage.getItem('aqua_v3.2') || localStorage.getItem('aqua_v3.1') || localStorage.getItem('aqua_v3.0') || localStorage.getItem('aqua_v2.9') || localStorage.getItem('aqua_v2.8') || localStorage.getItem('aqua_v2.7') || localStorage.getItem('aqua_v2.6') || localStorage.getItem('aqua_v2.5') || localStorage.getItem('aqua_v2.4') || localStorage.getItem('aqua_v2.3') || localStorage.getItem('aqua_v2.2') || localStorage.getItem('aqua_v2.1') || localStorage.getItem('aqua_v2.0') || localStorage.getItem('aqua_v1.9') || localStorage.getItem('aqua_v1.8') || localStorage.getItem('aqua_v1.7') || localStorage.getItem('aqua_v1.6') || localStorage.getItem('aqua_v1.5') || localStorage.getItem('aqua_v1.4') || localStorage.getItem('aqua_v1.3') || localStorage.getItem('aqua_v1.2') || localStorage.getItem('aqua_v1.1');
         if (saved) {
             const parsed = JSON.parse(saved);
             if (isDemoSeedState(parsed)) {
@@ -10088,7 +10081,7 @@ async function init() {
         if (shouldEnterGame) switchScreen('village');
         else showLoginScreen();
         
-        console.log('%c[AquaFantasia v6.0] Interaction Balance Ready', 'color:#f7d071');
+        console.log('%c[AquaFantasia v5.1] Stability Assist Ready', 'color:#f7d071');
     } catch(e) {
         console.error('Init error:', e);
         const initMessage = String(e?.message || e || 'unknown');

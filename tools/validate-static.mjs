@@ -21,10 +21,15 @@ const required = [
   'PATCH_NOTES_v4.9.md','V4_9_RUNTIME_CONNECT_CHECKLIST.md','PATCH_NOTES_v5.0.md','V5_0_PERFORMANCE_FOCUS_CHECKLIST.md','PATCH_NOTES_v5.1.md','V5_1_STABILITY_ASSIST_CHECKLIST.md',
   'tools/audit-bundle.mjs','tools/check-v47-renderer.mjs','tools/check-v48-runtime.mjs','tools/check-v49-runtime.mjs','tools/check-v50-runtime.mjs','tools/check-v51-runtime.mjs','tools/clean-bundle-report.mjs',
   'src/runtime/v52-casual-runtime.js','tools/check-v52-casual-refactor.mjs','src/runtime/v53-casual-ux-polish.js','tools/check-v53-casual-ux-polish.mjs','src/runtime/v54-result-shop-polish.js','src/systems/shop.js','tools/check-v54-result-shop-polish.mjs',
-  'src/runtime/v55-mobile-feel-runtime.js','assets/art/v55_mobile_feel_panel.svg','tools/check-v55-mobile-feel.mjs','.github/workflows/aqua-static-validate.yml',
+  'src/runtime/v55-mobile-feel-runtime.js','assets/art/v55_mobile_feel_panel.svg','tools/check-v55-mobile-feel.mjs','.github/workflows/pages.yml',
   'src/runtime/v56-background-art-pass.js','tools/check-v56-background-art.mjs','PATCH_NOTES_v5.6.0.md','V5_6_0_BACKGROUND_ART_CHECKLIST.md','reports/v5.6.0-background-art-audit.md',
   'src/runtime/v561-ui-state-cleanup.js','tools/check-v561-ui-state-cleanup.mjs','PATCH_NOTES_v5.6.1.md','V5_6_1_UI_STATE_CLEANUP_CHECKLIST.md','reports/v5.6.1-ui-state-cleanup-audit.md',
   'src/runtime/v57-water-art-direction.js','tools/check-v57-water-art.mjs','PATCH_NOTES_v5.7.0.md','V5_7_0_WATER_ART_DIRECTION_CHECKLIST.md','reports/v5.7.0-water-art-direction-audit.md',
+  'src/runtime/v58-ui-art-reboot.js','tools/check-v58-ui-art-reboot.mjs','PATCH_NOTES_v5.8.0.md','V5_8_0_2_5D_ART_REBOOT_CHECKLIST.md','reports/v5.8.0-2-5d-art-reboot-audit.md',
+  'assets/art/v58_panel_25d.svg','assets/art/v58_button_primary_25d.svg','assets/art/v58_nav_shell_25d.svg','assets/art/v58_icon_fish_25d.svg','assets/art/v58_icon_lake_25d.svg',
+  'src/runtime/v59-ui-state-dex-rework.js','tools/check-v59-ui-state-dex.mjs','PATCH_NOTES_v5.9.0.md','V5_9_0_UI_STATE_DEX_REWORK_CHECKLIST.md','reports/v5.9.0-ui-state-dex-rework-audit.md',
+  'assets/art/v59_dex_card_25d.svg','assets/art/v59_dex_locked_25d.svg','assets/art/v59_fish_lake_25d.webp','assets/art/v59_fish_river_25d.webp','assets/art/v59_fish_harbor_25d.webp','assets/art/v59_fish_deep_25d.webp','assets/art/v59_fish_palace_25d.webp','assets/art/v59_fish_dimension_25d.webp','assets/art/v59_fish_unknown_25d.webp',
+  'src/runtime/v60-interaction-balance.js','tools/check-v60-interaction-balance.mjs','PATCH_NOTES_v6.0.0.md','V6_0_0_INTERACTION_BALANCE_CHECKLIST.md','reports/v6.0.0-interaction-balance-audit.md','assets/art/v60_water_depth_overlay.webp','assets/art/v60_caustic_sparkle_overlay.webp',
   'assets/art/v363_painterly_ocean.png','assets/art/v56_fishing_bg_lake.webp','assets/art/v56_fishing_bg_river.webp','assets/art/v56_fishing_bg_harbor.webp','assets/art/v56_fishing_bg_deep.webp','assets/art/v56_fishing_bg_palace.webp','assets/art/v56_fishing_bg_dimension.webp','assets/art/v57_fishing_bg_lake_master.webp','assets/art/v57_fishing_bg_river_master.webp','assets/art/v57_fishing_bg_harbor_master.webp','assets/art/v57_fishing_bg_deep_master.webp','assets/art/v57_fishing_bg_palace_master.webp','assets/art/v57_fishing_bg_dimension_master.webp','assets/art/v57_water_ripple_overlay.webp','assets/art/v57_water_caustics_overlay.webp','assets/ui-kit/icons/water_ripple.png','assets/ui-kit/icons/tension_gauge.png',
   'assets/ui-kit/fishing_minigame/bobber_large.png','assets/ui-kit/fishing_minigame/reel_bar_220px.png','assets/ui-kit/panels/panel_1.png',
   'assets/ui-kit/icons/fish_1.png','assets/ui-kit/icons/fish_2.png','assets/ui-kit/icons/fish_3.png','assets/ui-kit/icons/fish_4.png','assets/ui-kit/icons/fish_5.png','assets/ui-kit/icons/fish_6.png',
@@ -38,7 +43,7 @@ const fishJson = JSON.parse(read('data/fish.json'));
 const fish = fishJson.fish || [];
 
 if (!index.includes('Aqua Fantasia')) fail('index.html does not look like the game entry file.');
-if (!/const APP_VERSION = '(?:5\.5\.(?:0|1|2|3|4|5)|5\.6\.(?:0|1)|5\.7\.0)'/.test(index)) fail('APP_VERSION must be v5.5.x, v5.6.x, or v5.7.0.');
+if (!/const APP_VERSION = '(?:5\.5\.(?:0|1|2|3|4|5)|5\.6\.(?:0|1)|5\.7\.0|5\.8\.0|5\.9\.0|6\.0\.0)'/.test(index)) fail('APP_VERSION must be v5.5.x through v6.0.0.');
 if (!index.includes('v5.4 Casual Result & Shop Polish') && !index.includes('CASUAL RESULT SHOP 5.4')) fail('v5.3 casual UX marker is missing.');
 if (!index.includes('v5.1 Stability Assist') && !index.includes('STABILITY 5.1')) fail('v5.1 stability assist marker is missing.');
 if (!index.includes('initV51Runtime') || !index.includes('renderV51StabilityPanel') || !index.includes('v51-stability-panel')) fail('v5.1 stability runtime/panel is missing.');
@@ -57,7 +62,7 @@ if (/\bFISH_DB\b/.test(index)) fail('legacy FISH_DB reference found.');
 if (/\bgetCurrentWeekKey\b/.test(index)) fail('legacy getCurrentWeekKey reference found.');
 if ((index.match(/data-region=\"차원의 바다\"/g) || []).length > 1) fail('Duplicate Dimension Sea village card found.');
 
-if (!(sw.includes('aqua-fantasia-v5.7.0-water-art-20260612') || sw.includes('aqua-fantasia-v5.6.1-ui-cleanup-20260612') || sw.includes('aqua-fantasia-v5.6.0-background-art-20260612') || sw.includes('aqua-fantasia-v5.5.5-auto-cache-sweep-20260612') || sw.includes('aqua-fantasia-v5.5.2-runtime-ci-hotfix-20260612') || sw.includes('aqua-fantasia-v5.5.1-hotfix-20260612') || sw.includes('aqua-fantasia-v5.5.0-mobile-feel-20260612'))) fail('Service worker cache version must be v5.5.x, v5.6.x, or v5.7.x.');
+if (!(sw.includes('aqua-fantasia-v6.0.0-interaction-balance-20260612') || sw.includes('aqua-fantasia-v5.9.0-state-dex-20260612') || sw.includes('aqua-fantasia-v5.8.0-2-5d-art-20260612') || sw.includes('aqua-fantasia-v5.7.0-water-art-20260612') || sw.includes('aqua-fantasia-v5.6.1-ui-cleanup-20260612') || sw.includes('aqua-fantasia-v5.6.0-background-art-20260612') || sw.includes('aqua-fantasia-v5.5.5-auto-cache-sweep-20260612') || sw.includes('aqua-fantasia-v5.5.2-runtime-ci-hotfix-20260612') || sw.includes('aqua-fantasia-v5.5.1-hotfix-20260612') || sw.includes('aqua-fantasia-v5.5.0-mobile-feel-20260612'))) fail('Service worker cache version must be v5.5.x through v6.0.x.');
 if (!sw.includes('./assets/atlas/aqua_fishing_v49.webp') || !sw.includes('./assets/art/v49_runtime_panel.svg')) fail('v4.9 cache entries are missing.');
 if (!sw.includes('./assets/atlas/aqua_fishing_v50.webp') || !sw.includes('./assets/art/v50_runtime_console.svg')) fail('v5.0 cache entries are missing.');
 if (!sw.includes('./assets/atlas/aqua_fishing_v51.webp') || !sw.includes('./assets/art/v51_stability_console.svg')) fail('v5.1 cache entries are missing.');
@@ -70,6 +75,9 @@ if (!index.includes('v555-auto-cache-sweep.js') || !sw.includes('./src/runtime/v
 if (!index.includes('v56-background-art-pass.js') || !sw.includes('./src/runtime/v56-background-art-pass.js') || !sw.includes('./assets/art/v56_fishing_bg_lake.webp')) fail('v5.6 background art runtime/cache entry is missing.');
 if (!index.includes('v561-ui-state-cleanup.js') || !sw.includes('./src/runtime/v561-ui-state-cleanup.js')) fail('v5.6.1 UI state cleanup runtime/cache entry is missing.');
 if (!index.includes('v57-water-art-direction.js') || !sw.includes('./src/runtime/v57-water-art-direction.js') || !sw.includes('./assets/art/v57_fishing_bg_lake_master.webp') || !sw.includes('./assets/art/v57_water_caustics_overlay.webp')) fail('v5.7 water art runtime/cache entry is missing.');
+if (!index.includes('v58-ui-art-reboot.js') || !sw.includes('./src/runtime/v58-ui-art-reboot.js') || !sw.includes('./assets/art/v58_panel_25d.svg') || !sw.includes('./assets/art/v58_nav_shell_25d.svg')) fail('v5.8 2.5D UI art runtime/cache entry is missing.');
+if (!index.includes('v59-ui-state-dex-rework.js') || !sw.includes('./src/runtime/v59-ui-state-dex-rework.js') || !sw.includes('./assets/art/v59_fish_lake_25d.webp') || !sw.includes('./assets/art/v59_dex_card_25d.svg')) fail('v5.9 UI state/dex runtime/cache entry is missing.');
+if (!index.includes('v60-interaction-balance.js') || !sw.includes('./src/runtime/v60-interaction-balance.js') || !sw.includes('./assets/art/v60_water_depth_overlay.webp') || !sw.includes('./assets/art/v60_caustic_sparkle_overlay.webp')) fail('v6.0 interaction/balance runtime/cache entry is missing.');
 if (sw.includes('./assets/art/v31_director_stage.svg')) fail('legacy bulk SVG precache found in service worker.');
 if (!manifest.display || manifest.display !== 'fullscreen') fail('manifest display must be fullscreen.');
 if (!Array.isArray(manifest.icons) || manifest.icons.length < 3) fail('manifest icons are incomplete.');
@@ -101,4 +109,4 @@ scripts.forEach((script, idx) => {
   }
 });
 
-console.log('[validate-static] AquaFantasia v5.7.0 static bundle OK.');
+console.log('[validate-static] AquaFantasia v6.0.0 static bundle OK.');

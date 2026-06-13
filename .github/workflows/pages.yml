@@ -1,8 +1,8 @@
-name: Aqua Fantasia Pages Validate
+name: AquaFantasia Pages Validate
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   workflow_dispatch:
 
 permissions:
@@ -10,12 +10,12 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 concurrency:
   group: pages-${{ github.ref }}
   cancel-in-progress: true
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   validate:
@@ -27,6 +27,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: '24'
+          cache: 'npm'
           package-manager-cache: false
       - name: Install
         run: npm install
@@ -36,11 +37,11 @@ jobs:
         run: npm run typecheck
       - name: Runtime checks
         run: npm run runtime:check
-      - name: Renderer checks
-        run: npm run renderer:check
       - name: Bundle audit
         run: npm run audit
       - name: Atlas check
         run: npm run atlas:check
+      - name: Renderer checks
+        run: npm run renderer:check
       - name: Clean report
         run: npm run clean:report

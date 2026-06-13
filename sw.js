@@ -1,4 +1,7 @@
-const CACHE_VERSION = 'aqua-fantasia-v5.7.0-water-art-20260612';
+const CACHE_VERSION = 'aqua-fantasia-v6.0.0-interaction-balance-20260612';
+// aqua-fantasia-v5.9.0-state-dex-20260612 legacy marker for migration audit
+// aqua-fantasia-v5.9.0-2-5d-art-20260612 legacy marker for migration audit
+// aqua-fantasia-v5.7.0-water-art-20260612 legacy marker for migration audit
 // aqua-fantasia-v5.6.1-ui-cleanup-20260612 legacy marker for migration audit
 // aqua-fantasia-v5.6.0-background-art-20260612 legacy marker for migration audit
 // aqua-fantasia-v5.5.5-auto-cache-sweep-20260612 legacy marker for migration audit
@@ -81,6 +84,22 @@ const CORE_ASSETS = [
   "./assets/art/v57_fishing_bg_dimension_master.webp",
   "./assets/art/v57_water_ripple_overlay.webp",
   "./assets/art/v57_water_caustics_overlay.webp",
+  "./assets/art/v58_panel_25d.svg",
+  "./assets/art/v58_button_primary_25d.svg",
+  "./assets/art/v58_nav_shell_25d.svg",
+  "./assets/art/v58_icon_fish_25d.svg",
+  "./assets/art/v58_icon_lake_25d.svg",
+  "./assets/art/v59_dex_card_25d.svg",
+  "./assets/art/v59_dex_locked_25d.svg",
+  "./assets/art/v59_fish_lake_25d.webp",
+  "./assets/art/v59_fish_river_25d.webp",
+  "./assets/art/v59_fish_harbor_25d.webp",
+  "./assets/art/v59_fish_deep_25d.webp",
+  "./assets/art/v59_fish_palace_25d.webp",
+  "./assets/art/v59_fish_dimension_25d.webp",
+  "./assets/art/v59_fish_unknown_25d.webp",
+  "./assets/art/v60_water_depth_overlay.webp",
+  "./assets/art/v60_caustic_sparkle_overlay.webp",
   "./assets/art/v363_painterly_ocean.png",
   "./src/ui/navigator.js",
   "./src/systems/inventory.js",
@@ -95,6 +114,9 @@ const CORE_ASSETS = [
   "./src/runtime/v56-background-art-pass.js",
   "./src/runtime/v57-water-art-direction.js",
   "./src/runtime/v561-ui-state-cleanup.js",
+  "./src/runtime/v58-ui-art-reboot.js",
+  "./src/runtime/v59-ui-state-dex-rework.js",
+  "./src/runtime/v60-interaction-balance.js",
   "./src/runtime/v49-action-mobile-patch.js",
   "./src/systems/shop.js",
   "./src/runtime/v53-casual-ux-polish.js",

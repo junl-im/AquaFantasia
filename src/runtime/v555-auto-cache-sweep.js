@@ -1,4 +1,4 @@
-// Aqua Fantasia v5.5.5 Auto Cache Sweep + Silent Recovery (v5.7.0 cache target)
+// Aqua Fantasia v5.5.5 Auto Cache Sweep + Silent Recovery (v6.0.0 cache target)
 // ------------------------------------------------------------
 // 목적:
 // 1) 배포 버전이 바뀌면 사용자가 버튼을 누르지 않아도 오래된 PWA/Service Worker 캐시를 정리합니다.
@@ -6,8 +6,8 @@
 // 3) 스택 오류/구버전 캐시 충돌이 감지되면 1회 자동 새로고침으로 복구합니다. Maximum call stack recovery marker.
 
 (function aquaV555AutoCacheSweep() {
-  const VERSION = '5.7.0-water-art';
-  const CACHE_KEEP_PREFIX = 'aqua-fantasia-v5.7.0-water-art-20260612';
+  const VERSION = '6.0.0-interaction-balance';
+  const CACHE_KEEP_PREFIX = 'aqua-fantasia-v6.0.0-interaction-balance-20260612';
   const BUILD_KEY = 'aqua_runtime_build_version';
   const RELOAD_KEY = 'aqua_v555_reload_once';
   const CLEANED_KEY = 'aqua_v555_last_cleaned';

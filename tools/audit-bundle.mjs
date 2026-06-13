@@ -11,7 +11,7 @@ const refs = [...index.matchAll(/assets\/(?:art|icons|images|atlas|ui-kit)\/[^'"
 const missing = [...new Set(refs)].filter((ref) => { try { statSync(join(root, ref)); return false; } catch { return true; } });
 const duplicateFishIds = fish.length - new Set(fish.map((item) => item.id)).size;
 const report = {
-  version: '5.7.0',
+  version: '6.0.0',
   indexBytes: bytes('index.html'),
   indexLines: index.split('\n').length,
   serviceWorkerBytes: bytes('sw.js'),
@@ -33,6 +33,9 @@ const report = {
     backgroundArt56: index.includes('v56-background-art-pass.js') && sw.includes('./src/runtime/v56-background-art-pass.js') && sw.includes('v56_fishing_bg_lake.webp'),
     uiStateCleanup561: index.includes('v561-ui-state-cleanup.js') && sw.includes('./src/runtime/v561-ui-state-cleanup.js') && index.includes('v5.6.1 UI State Cleanup'),
     waterArt57: index.includes('v57-water-art-direction.js') && sw.includes('./src/runtime/v57-water-art-direction.js') && sw.includes('v57_fishing_bg_lake_master.webp'),
+    uiArt58: index.includes('v58-ui-art-reboot.js') && sw.includes('./src/runtime/v58-ui-art-reboot.js') && sw.includes('v58_panel_25d.svg'),
+    uiStateDex59: index.includes('v59-ui-state-dex-rework.js') && sw.includes('./src/runtime/v59-ui-state-dex-rework.js') && sw.includes('v59_fish_lake_25d.webp'),
+    interactionBalance60: index.includes('v60-interaction-balance.js') && sw.includes('./src/runtime/v60-interaction-balance.js') && sw.includes('v60_water_depth_overlay.webp'),
     runtimeHotfix551: index.includes('v551-hotfix-runtime.js') && sw.includes('./src/runtime/v551-hotfix-runtime.js'),
     ciHotfix552: index.includes('v552-ci-runtime-guard.js') && sw.includes('./src/runtime/v552-ci-runtime-guard.js'),
     renderer47: index.includes('initV47RendererRuntime') && index.includes('v47-fishing-canvas'),
@@ -45,4 +48,4 @@ const report = {
   }
 };
 console.log(JSON.stringify(report, null, 2));
-if (missing.length || duplicateFishIds || fish.length < 174 || !report.runtime.runtimeDiet48 || !report.runtime.runtimeConnect49 || !report.runtime.performanceFocus50 || !report.runtime.stabilityAssist51 || !report.runtime.casualUX53 || !report.runtime.resultShop54 || !report.runtime.mobileFeel55 || !report.runtime.runtimeHotfix551 || !report.runtime.ciHotfix552 || !report.runtime.autoCache555 || !report.runtime.backgroundArt56 || !report.runtime.uiStateCleanup561 || !report.runtime.waterArt57 || !report.runtime.renderer47 || !report.runtime.lightServiceWorker || !report.runtime.mobileGuards) process.exit(1);
+if (missing.length || duplicateFishIds || fish.length < 174 || !report.runtime.runtimeDiet48 || !report.runtime.runtimeConnect49 || !report.runtime.performanceFocus50 || !report.runtime.stabilityAssist51 || !report.runtime.casualUX53 || !report.runtime.resultShop54 || !report.runtime.mobileFeel55 || !report.runtime.runtimeHotfix551 || !report.runtime.ciHotfix552 || !report.runtime.autoCache555 || !report.runtime.backgroundArt56 || !report.runtime.uiStateCleanup561 || !report.runtime.waterArt57 || !report.runtime.uiArt58 || !report.runtime.uiStateDex59 || !report.runtime.interactionBalance60 || !report.runtime.renderer47 || !report.runtime.lightServiceWorker || !report.runtime.mobileGuards) process.exit(1);

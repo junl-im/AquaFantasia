@@ -1,0 +1,5 @@
+Delete these old files from the repository if they still exist, because ZIP overwrite cannot remove them:
+
+.github/workflows/aqua-static-validate.yml
+
+Keeping that workflow file will make GitHub Actions appear as two workflows. v5.9.0 uses .github/workflows/pages.yml as the single push/manual workflow.
