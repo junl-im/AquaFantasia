@@ -1,4 +1,4 @@
-export type Screen = 'login' | 'village' | 'fishing' | 'dex' | 'shop' | 'mission';
+export type Screen = 'login' | 'village' | 'fishing' | 'gear' | 'dex' | 'shop' | 'mission';
 export type FishingState = 'idle' | 'casting' | 'waiting' | 'bite' | 'reeling' | 'success' | 'fail';
 export type RegionKey = 'lake' | 'river' | 'harbor' | 'deep' | 'palace' | 'dimension';
 
@@ -10,6 +10,12 @@ export interface RegionInfo {
   difficulty: number;
 }
 
+export interface GearState {
+  rodLevel: number;
+  reelLevel: number;
+  lureStock: number;
+}
+
 export interface SaveData {
   version: string;
   screen: Screen;
@@ -18,6 +24,8 @@ export interface SaveData {
   caught: Record<string, number>;
   missions: Record<string, boolean>;
   serverLinked: boolean;
+  gear: GearState;
+  bestStreak: number;
 }
 
 export interface ToastOptions {

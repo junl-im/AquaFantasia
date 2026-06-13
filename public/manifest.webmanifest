@@ -1,11 +1,12 @@
 {
-  "name": "Aqua Fantasia",
-  "short_name": "AquaFantasia",
+  "name": "아쿠아 판타지아",
+  "short_name": "아쿠아판타지아",
   "description": "2.5D mobile fishing casual web game",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",
-  "orientation": "portrait",
+  "display_override": ["fullscreen", "standalone", "minimal-ui"],
+  "orientation": "any",
   "background_color": "#061827",
   "theme_color": "#071b2c",
   "icons": [

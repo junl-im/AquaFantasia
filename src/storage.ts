@@ -2,14 +2,24 @@ import { APP_VERSION } from './data';
 import type { SaveData } from './types';
 import { defaultSave } from './data';
 
-const KEY = 'aqua-fantasia-save-v620';
+const KEY = 'aqua-fantasia-save-v630';
+const LEGACY_KEYS = ['aqua-fantasia-save-v620'];
 
 export function loadSave(): SaveData {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = localStorage.getItem(KEY) ?? LEGACY_KEYS.map((k) => localStorage.getItem(k)).find(Boolean);
     if (!raw) return defaultSave();
     const parsed = JSON.parse(raw) as Partial<SaveData>;
-    return { ...defaultSave(), ...parsed, version: APP_VERSION };
+    const base = defaultSave();
+    return {
+      ...base,
+      ...parsed,
+      version: APP_VERSION,
+      screen: parsed.screen === 'login' ? 'login' : (parsed.screen ?? base.screen),
+      gear: { ...base.gear, ...(parsed.gear ?? {}) },
+      caught: parsed.caught ?? {},
+      missions: parsed.missions ?? {},
+    };
   } catch {
     return defaultSave();
   }

@@ -1,8 +1,10 @@
-const CACHE_NAME = 'aqua-fantasia-v6.2.0-asset-runtime';
+const CACHE_NAME = 'aqua-fantasia-v6.3.0-immersive-asset-runtime';
 const PRECACHE = [
   './', './index.html', './manifest.webmanifest', './offline.html',
   './assets/art/login_ocean_fishing_25d.webp', './assets/art/bg_ocean.webp', './assets/art/bg_lake.webp', './assets/art/bg_river.webp', './assets/art/bg_harbor.webp', './assets/art/bg_deep.webp', './assets/art/bg_palace.webp', './assets/art/bg_dimension.webp',
   './assets/art/player_boat.png', './assets/art/fishing_float.png', './assets/art/fish_clown.png', './assets/art/gauge_frame.png', './assets/art/fish_slot.png',
+  './assets/ui/nav_village_25d.png', './assets/ui/nav_fishing_25d.png', './assets/ui/nav_gear_25d.png', './assets/ui/nav_dex_25d.png', './assets/ui/nav_shop_25d.png', './assets/ui/nav_mission_25d.png',
+  './assets/ui/gear_rod_25d.png', './assets/ui/gear_reel_25d.png', './assets/ui/gear_lure_25d.png',
   './assets/atlas/aqua_fishing_atlas.webp', './assets/atlas/aqua_fishing_atlas.json'
 ];
 
