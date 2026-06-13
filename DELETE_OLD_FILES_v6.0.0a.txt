@@ -1,0 +1,6 @@
+No mandatory deletions for this hotfix.
+
+Optional cleanup if you want only one workflow in the GitHub Actions left sidebar:
+- .github/workflows/aqua-static-validate.yml
+
+The patch overwrites that file as manual-only and no-cache, so it is safe to leave it in place.

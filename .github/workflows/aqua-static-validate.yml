@@ -1,10 +1,17 @@
-name: Aqua Static Validate Manual
+name: AquaFantasia Manual Static Validate
 
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: manual-validate-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate:
@@ -21,9 +28,15 @@ jobs:
         run: npm install
       - name: Static validate
         run: npm run validate
+      - name: Typecheck
+        run: npm run typecheck
       - name: Runtime checks
         run: npm run runtime:check
-      - name: Renderer checks
-        run: npm run renderer:check
       - name: Bundle audit
         run: npm run audit
+      - name: Atlas check
+        run: npm run atlas:check
+      - name: Renderer checks
+        run: npm run renderer:check
+      - name: Clean report
+        run: npm run clean:report
