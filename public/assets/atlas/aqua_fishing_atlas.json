@@ -1,0 +1,103 @@
+{
+  "frames": {
+    "player_boat.png": {
+      "frame": {
+        "x": 12,
+        "y": 12,
+        "w": 512,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 512
+      }
+    },
+    "fishing_float.png": {
+      "frame": {
+        "x": 12,
+        "y": 536,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      }
+    },
+    "fish_clown.png": {
+      "frame": {
+        "x": 12,
+        "y": 804,
+        "w": 384,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 384,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 384,
+        "h": 256
+      }
+    },
+    "gauge_frame.png": {
+      "frame": {
+        "x": 12,
+        "y": 1072,
+        "w": 640,
+        "h": 200
+      },
+      "sourceSize": {
+        "w": 640,
+        "h": 200
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 640,
+        "h": 200
+      }
+    },
+    "fish_slot.png": {
+      "frame": {
+        "x": 12,
+        "y": 1284,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      }
+    }
+  },
+  "meta": {
+    "image": "aqua_fishing_atlas.webp",
+    "format": "RGBA8888",
+    "size": {
+      "w": 664,
+      "h": 1552
+    },
+    "scale": "1"
+  }
+}

@@ -1,0 +1,8 @@
+Delete all old files except .git before applying this clean replacement.
+Remove legacy files such as:
+AquaFantasia_v*.html
+PATCH_NOTES_v*.md
+V*_CHECKLIST*.md
+reports/
+src/runtime/
+.github/workflows/aqua-static-validate.yml

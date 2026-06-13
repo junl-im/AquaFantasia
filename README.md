@@ -1,16 +1,33 @@
-# Aqua Fantasia Clean Replace v6.1.0
+# Aqua Fantasia v6.2.0
 
-이 버전은 누적 패치 파일을 걷어낸 클린 교체본입니다. 시작 파일은 `index.html` 하나이며, 오래된 통파일 HTML과 디버그 HUD가 포함되지 않습니다.
+2.5D 그래픽 우선주의 모바일 캐주얼 낚시 웹게임 클린 런타임입니다.
 
-## 핵심 정리
+## 실행
 
-- 로그인 화면에서는 낚시 HUD, 상점 버튼, 하단 메뉴, 버전 배지가 보이지 않습니다.
-- `Firebase 익명 연동` 표기를 사용자 화면에서 `익명 서버연동`으로 변경했습니다.
-- 로고 아래 버전/패치 내역 문구를 제거했습니다.
-- 첫 로그인 화면에 2.5D 만화풍 바다 낚시 배경을 연결했습니다.
-- 알림은 탭 또는 좌우 스와이프로 닫히고, 미션/도감/상점 알림은 해당 화면으로 이동합니다.
-- Service Worker는 새 캐시만 남기고 이전 캐시를 자동 정리합니다.
+```bash
+npm install
+npm run dev
+```
 
-## 적용 권장 방식
+## 검증
 
-기존 저장소 루트에서 `.git` 폴더만 남기고 나머지 파일을 지운 뒤, 이 ZIP의 내용을 그대로 풀어 넣으세요. 덮어쓰기만 하면 예전 HTML과 문서가 계속 남을 수 있습니다.
+```bash
+npm run validate
+npm run runtime:check
+npm run audit
+npm run typecheck
+npm run build
+```
+
+## 구조
+
+- `index.html`: Vite 진입점
+- `src/`: TypeScript 런타임
+- `public/assets/art/`: 낚시 핵심 이미지 에셋
+- `public/assets/atlas/`: WebP Atlas
+- `public/sw.js`: PWA Service Worker
+- `.github/workflows/pages.yml`: GitHub Pages 검증/배포
+
+## Firebase 무료 구조
+
+`window.AQUA_FIREBASE_CONFIG`를 배포 환경에서 주입하면 익명 서버연동이 활성화됩니다. 설정 전에는 로컬 저장으로 안전하게 동작합니다.

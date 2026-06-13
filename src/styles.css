@@ -1,0 +1,119 @@
+:root {
+  --bg: #061827;
+  --panel: rgba(12, 47, 71, 0.62);
+  --panel-strong: rgba(17, 77, 105, 0.78);
+  --line: rgba(224, 253, 255, 0.28);
+  --text: #f5fcff;
+  --muted: rgba(230, 246, 255, 0.74);
+  --aqua: #4de5ff;
+  --blue: #586bff;
+  --gold: #ffe27c;
+  --danger: #ff5d5d;
+  font-family: Inter, ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body, #app { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--bg); color: var(--text); }
+button { font: inherit; color: inherit; border: 0; cursor: pointer; touch-action: manipulation; }
+img { max-width: 100%; display: block; }
+.hidden { display: none !important; }
+body { user-select: none; }
+body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 0%, rgba(91, 226, 255, .18), transparent 42%), #041523; z-index: -3; }
+
+.login-screen, .game-screen { position: relative; width: 100%; height: 100%; overflow: hidden; padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom)); }
+.login-bg { position: absolute; inset: 0; background: url('/assets/art/login_ocean_fishing_25d.webp') center/cover no-repeat; transform: scale(1.03); filter: saturate(1.05) contrast(1.02); z-index: 0; }
+.login-bg::after, .ambient-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 16, 33, .05), rgba(0, 13, 31, .52)); }
+.login-water, .water-overlay { position: absolute; inset: 42% 0 0; background-image: url('/assets/art/water_ripple_overlay.webp'), url('/assets/art/caustic_sparkle_overlay.webp'); background-size: 720px 360px, 900px 450px; opacity: .58; mix-blend-mode: screen; animation: waterDrift 16s linear infinite; pointer-events: none; z-index: 1; }
+.login-card { position: relative; z-index: 2; margin: 9vh auto 0; width: min(92vw, 560px); padding: 28px 22px 24px; text-align: center; animation: floatIn .58s cubic-bezier(.2, 1.2, .22, 1) both; }
+.game-logo { margin: 0; font-size: clamp(44px, 12vw, 86px); line-height: .92; letter-spacing: -0.06em; color: white; text-shadow: 0 8px 0 rgba(17, 96, 159, .48), 0 16px 32px rgba(0,0,0,.28), 0 0 22px rgba(99,231,255,.55); }
+.login-copy { color: var(--muted); font-weight: 800; margin: 20px auto; line-height: 1.45; }
+.login-actions { display: grid; gap: 12px; }
+.keep-login { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-weight: 800; margin-top: 16px; }
+.keep-login input { width: 22px; height: 22px; accent-color: #63edff; }
+.small-note { margin: 12px 0 0; color: rgba(255,255,255,.66); font-size: 13px; }
+
+.glass-card { border: 1px solid var(--line); background: linear-gradient(145deg, rgba(32, 104, 139, .58), rgba(8, 34, 61, .78)); box-shadow: inset 0 2px 0 rgba(255,255,255,.18), inset 0 -10px 28px rgba(0,0,0,.18), 0 18px 46px rgba(0,0,0,.28); backdrop-filter: blur(16px); border-radius: 30px; }
+.image-btn { position: relative; min-height: 74px; border-radius: 28px; padding: 0 22px; display: grid; place-items: center; font-weight: 1000; font-size: clamp(18px, 4.8vw, 26px); text-shadow: 0 3px 0 rgba(0,0,0,.2); background: linear-gradient(135deg, #38d6ff, #6570ff); box-shadow: inset 0 3px 0 rgba(255,255,255,.36), inset 0 -8px 16px rgba(0,0,0,.2), 0 12px 0 rgba(0, 37, 72, .38), 0 18px 30px rgba(0,0,0,.22); transition: transform .16s ease, filter .16s ease; }
+.image-btn.soft { background: linear-gradient(135deg, rgba(107, 225, 244, .68), rgba(61, 107, 182, .72)); min-height: 62px; }
+.image-btn:active, .round-btn:active, .bottom-nav button:active, .cast-button:active { transform: scale(.94, 1.06); filter: brightness(1.08); }
+
+.ambient-bg { position: absolute; inset: 0; background: url('/assets/art/bg_ocean.webp') center/cover no-repeat; opacity: .92; z-index: 0; }
+.game-screen > *:not(.ambient-bg) { position: relative; z-index: 1; }
+.hero-card, .page-head { margin: 0 auto 16px; width: min(920px, 100%); padding: 22px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.hero-card h2, .page-head h2 { margin: 4px 0 6px; font-size: clamp(30px, 8vw, 58px); letter-spacing: -0.05em; }
+.hero-card p, .page-head p { margin: 0; color: var(--muted); font-weight: 800; line-height: 1.45; }
+.eyebrow { color: var(--gold); font-size: 12px; font-weight: 1000; letter-spacing: .2em; }
+.region-grid { width: min(980px, 100%); margin: 0 auto 100px; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; overflow-y: auto; max-height: calc(100vh - 250px); padding-bottom: 18px; }
+.region-card { position: relative; overflow: hidden; border-radius: 24px; min-height: 172px; padding: 14px; text-align: left; border: 1px solid rgba(255,255,255,.2); box-shadow: 0 14px 34px rgba(0,0,0,.22); background: #0d4565; }
+.region-card.active { outline: 3px solid #88f5ff; }
+.region-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(1.08); }
+.region-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.1), rgba(0,15,31,.72)); }
+.region-card strong, .region-card span { position: relative; z-index: 1; display: block; text-shadow: 0 2px 10px rgba(0,0,0,.55); }
+.region-card strong { margin-top: 78px; font-size: 20px; font-weight: 1000; }
+.region-card span { font-size: 13px; color: rgba(255,255,255,.78); font-weight: 800; }
+
+.bottom-nav { position: fixed; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom)); height: 78px; border-radius: 26px; display: grid; grid-template-columns: repeat(5,1fr); gap: 4px; padding: 8px; z-index: 20; }
+.bottom-nav button { border-radius: 20px; background: transparent; color: rgba(236, 250, 255, .72); font-weight: 900; display: grid; place-items: center; gap: 2px; }
+.bottom-nav b { font-size: 22px; line-height: 1; }
+.bottom-nav span { font-size: 12px; }
+.bottom-nav button.active { background: rgba(92, 229, 255, .18); color: #fff; box-shadow: inset 0 2px 0 rgba(255,255,255,.16); }
+
+.fishing-shell { padding: max(12px, env(safe-area-inset-top)) 10px 10px; }
+.fishing-top { position: absolute !important; left: 14px; right: 14px; top: max(12px, env(safe-area-inset-top)); z-index: 12 !important; display: flex; align-items: center; justify-content: space-between; padding: 12px 12px 12px 18px; border-radius: 28px; }
+.fishing-top strong { display: block; color: #fff7a7; font-size: 20px; font-weight: 1000; }
+.fishing-top span { display: block; color: var(--muted); font-size: 13px; font-weight: 900; }
+.round-btn { min-width: 72px; min-height: 60px; border-radius: 24px; font-weight: 1000; background: linear-gradient(135deg, #dffff3, #5adfff); color: #09324a; box-shadow: inset 0 3px 0 rgba(255,255,255,.6), 0 9px 20px rgba(0,0,0,.25); }
+.fishing-stage { position: absolute; inset: 0; overflow: hidden; background: #06324f; }
+.pixi-layer, .pixi-layer canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.water-overlay { inset: 42% 0 0; opacity: .42; z-index: 4; }
+.stage-ui { position: absolute; inset: 0; pointer-events: none; z-index: 8; }
+.cast-button { position: absolute; left: 50%; bottom: calc(26px + env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(330px, 58vw); background: transparent; pointer-events: auto; animation: pulseCast 1.5s ease-in-out infinite; filter: drop-shadow(0 18px 25px rgba(0,0,0,.34)); }
+.cast-button img { width: 100%; }
+.cast-button.pop-out { animation: squashOut .25s ease both; }
+.reel-panel { position: absolute !important; left: 14px; right: 14px; bottom: calc(20px + env(safe-area-inset-bottom)); z-index: 14 !important; padding: 14px 16px 16px; text-align: center; }
+.reel-panel > img { width: min(520px, 92vw); margin: 0 auto -12px; filter: drop-shadow(0 10px 16px rgba(0,0,0,.24)); }
+.tension-track { position: relative; height: 20px; width: min(470px, 78vw); margin: 0 auto 12px; border-radius: 999px; background: rgba(0,0,0,.42); overflow: hidden; box-shadow: inset 0 2px 8px rgba(0,0,0,.5); }
+.safe-zone { position: absolute; top: 0; bottom: 0; background: rgba(80, 255, 142, .46); box-shadow: 0 0 16px rgba(80,255,142,.7); }
+.tension-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 45%; background: linear-gradient(90deg,#44dfff,#62ff9d,#ffe067); transition: width .08s linear; }
+.tension-fill.danger { background: linear-gradient(90deg,#ff6969,#ffb052); }
+.hold-pad { min-height: 72px; width: min(460px, 88vw); border-radius: 26px; background: linear-gradient(135deg,#77f2ff,#6174ff); font-size: 22px; font-weight: 1000; box-shadow: inset 0 3px 0 rgba(255,255,255,.35), 0 10px 0 rgba(0,38,80,.34); }
+.reel-panel p { margin: 12px 0 0; color: var(--muted); font-weight: 800; font-size: 13px; }
+.camera-shake { animation: shake .42s ease; }
+.splash-ring { position: absolute; left: 67%; top: 60%; width: 28px; height: 28px; border: 4px solid rgba(224,250,255,.85); border-radius: 999px; transform: translate(-50%, -50%); animation: splash .72s ease-out forwards; z-index: 6; pointer-events: none; }
+
+.dex-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; max-height: calc(100vh - 210px); overflow: auto; padding: 0 0 110px; width: min(980px,100%); margin: 0 auto; }
+.dex-card { position: relative; min-height: 210px; border-radius: 30px; padding: 18px 12px 12px; text-align: center; background: linear-gradient(145deg, rgba(60, 151, 194, .62), rgba(13, 54, 89, .84)); border: 1px solid rgba(255,255,255,.24); box-shadow: inset 0 2px 0 rgba(255,255,255,.18), inset 0 -14px 30px rgba(0,0,0,.22), 0 16px 34px rgba(0,0,0,.24); overflow: hidden; }
+.dex-card::before { content:""; position:absolute; inset:12px; border-radius:24px; background:url('/assets/art/fish_slot.png') center/80% no-repeat; opacity:.26; }
+.dex-card img { position: relative; z-index:1; height: 112px; margin: 0 auto 8px; object-fit: contain; animation: fishFloat 2.6s ease-in-out infinite; filter: drop-shadow(0 16px 18px rgba(0,0,0,.28)); }
+.dex-card strong, .dex-card span, .dex-card em { position:relative; z-index:1; display:block; }
+.dex-card strong { font-size: 18px; font-weight: 1000; }
+.dex-card span { font-size: 12px; color: var(--muted); font-weight: 800; }
+.dex-card em { position: absolute; right: 12px; top: 12px; font-style: normal; font-size: 10px; color: #092e47; background: var(--gold); border-radius: 999px; padding: 5px 8px; font-weight: 1000; }
+.dex-card.locked { filter: saturate(.5); opacity: .74; }
+.shop-list, .mission-list { display: grid; gap: 12px; width: min(760px,100%); margin: 0 auto 110px; }
+.shop-card, .mission-card { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-radius: 26px; font-weight: 1000; }
+.mission-card { flex-direction: column; align-items: stretch; gap: 10px; }
+progress { width: 100%; height: 18px; accent-color: #5fffb1; }
+
+#toast-root { position: fixed; top: calc(12px + env(safe-area-inset-top)); left: 12px; right: 12px; z-index: 90; display: grid; gap: 10px; pointer-events: none; }
+.toast { pointer-events: auto; border-radius: 22px; padding: 14px 16px; text-align: left; color: white; background: linear-gradient(135deg, rgba(20,108,148,.94), rgba(20,35,78,.94)); border: 1px solid rgba(255,255,255,.22); box-shadow: 0 14px 34px rgba(0,0,0,.28); animation: toastIn .22s ease both; touch-action: pan-y; }
+.toast strong { display:block; font-size: 16px; font-weight: 1000; }
+.toast span { display:block; margin-top: 4px; font-size: 13px; color: rgba(255,255,255,.78); font-weight: 800; }
+.toast-out { animation: toastOut .18s ease forwards; }
+.toast-mission, .toast-reward { background: linear-gradient(135deg, rgba(85,143,255,.96), rgba(44,211,194,.92)); }
+.toast-shop { background: linear-gradient(135deg, rgba(240,151,60,.96), rgba(118,65,201,.92)); }
+.toast-dex { background: linear-gradient(135deg, rgba(59,217,255,.96), rgba(44,87,210,.92)); }
+
+@keyframes waterDrift { from { background-position: 0 0, 0 0; } to { background-position: 720px 0, -900px 0; } }
+@keyframes floatIn { from { transform: translateY(28px) scale(.96); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+@keyframes pulseCast { 0%,100% { transform: translateX(-50%) scale(1); } 45% { transform: translateX(-50%) scale(1.06,.94); } }
+@keyframes squashOut { 0% { transform: translateX(-50%) scale(1); opacity: 1; } 60% { transform: translateX(-50%) scale(1.22,.72); opacity: .95; } 100% { transform: translateX(-50%) scale(.2,1.4); opacity: 0; } }
+@keyframes shake { 0%,100% { transform: translate(0); } 20% { transform: translate(-8px, 4px); } 40% { transform: translate(7px, -3px); } 60% { transform: translate(-5px, -2px); } 80% { transform: translate(4px, 2px); } }
+@keyframes splash { to { width: 170px; height: 64px; opacity: 0; } }
+@keyframes fishFloat { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-8px) rotate(2deg); } }
+@keyframes toastIn { from { transform: translateY(-12px) scale(.96); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+@keyframes toastOut { to { transform: translateX(110%); opacity: 0; } }
+
+@media (min-width: 760px) { .region-grid, .dex-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } .login-card { margin-top: 12vh; } }
+@media (max-width: 430px) { .hero-card, .page-head { display:block; padding:18px; } .hero-card .image-btn { margin-top: 14px; width:100%; } .region-card { min-height: 146px; } .dex-card { min-height: 188px; } .fishing-top { padding:10px 10px 10px 14px; } .round-btn { min-width:64px; } }
+.perf-lite .login-water, .perf-lite .water-overlay, .perf-lite .dex-card img { animation-duration: 32s; }
+.perf-lite .glass-card { backdrop-filter: blur(6px); }
