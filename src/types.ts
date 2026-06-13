@@ -1,6 +1,6 @@
 export type Screen = 'login' | 'village' | 'fishing' | 'gear' | 'dex' | 'shop' | 'mission';
 export type FishingState = 'idle' | 'casting' | 'waiting' | 'bite' | 'reeling' | 'success' | 'fail';
-export type RegionKey = 'lake' | 'river' | 'harbor' | 'deep' | 'palace' | 'dimension' | 'glacier' | 'storm';
+export type RegionKey = 'lake' | 'river' | 'harbor' | 'deep' | 'palace' | 'dimension' | 'glacier' | 'storm' | 'mangrove' | 'lunar' | 'reefFestival';
 export type Rarity = 'COMMON' | 'RARE' | 'EPIC' | 'BOSS';
 
 export interface RegionInfo {
@@ -11,6 +11,8 @@ export interface RegionInfo {
   difficulty: number;
   waterSpeed: number;
   color: string;
+  tide: string;
+  unlockHint: string;
 }
 
 export interface FishInfo {
@@ -46,6 +48,8 @@ export interface SaveData {
   totalSuccess: number;
   totalFail: number;
   unlockedRegions: RegionKey[];
+  mastery: Record<string, number>;
+  lastRescueAt: number;
 }
 
 export interface ToastOptions {

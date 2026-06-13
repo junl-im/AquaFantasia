@@ -1,6 +1,6 @@
 import { Application, Assets, Container, Sprite, Text } from 'pixi.js';
 import './styles.css';
-import { APP_VERSION, regions, fishDex, navItems } from './data';
+import { APP_VERSION, CACHE_NAME, regions, fishDex, navItems } from './data';
 import type { FishInfo, FishingState, RegionKey, SaveData, Screen } from './types';
 import { loadSave, saveGame, tryAnonymousServerLink } from './storage';
 import { initAudio, playSound } from './audio';
@@ -46,6 +46,10 @@ class AquaFantasiaGame {
   private holdPad?: HTMLButtonElement;
   private comboNode?: HTMLDivElement;
   private progressNode?: HTMLDivElement;
+  private fallbackMode = false;
+  private surgeTimer = 0;
+  private perfectChain = 0;
+  private routeGuardActive = false;
   private state: FishingState = 'idle';
   private tension = 42;
   private safeTimer = 0;
@@ -55,13 +59,16 @@ class AquaFantasiaGame {
   private lastTick = performance.now();
   private compact = false;
   private activeFish: FishInfo = fishDex[0];
-  private initialOrientation: 'portrait' | 'landscape' = window.innerWidth >= window.innerHeight ? 'landscape' : 'portrait';
+  private readonly lockedOrientation: 'portrait-primary' = 'portrait-primary';
 
   async boot(): Promise<void> {
     this.compact = window.matchMedia('(max-width: 420px), (prefers-reduced-motion: reduce)').matches || (navigator.hardwareConcurrency ?? 8) <= 4;
     document.documentElement.classList.toggle('perf-lite', this.compact);
-    document.documentElement.dataset.initialOrientation = this.initialOrientation;
+    document.documentElement.dataset.initialOrientation = 'portrait';
+    document.documentElement.dataset.orientationPolicy = 'portrait-lock';
     document.documentElement.dataset.version = APP_VERSION;
+    document.documentElement.dataset.cacheName = CACHE_NAME;
+    if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
     initAudio();
@@ -146,6 +153,7 @@ class AquaFantasiaGame {
         <div class="hud-pill">장비 Lv.${this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel - 2}</div>
         <div class="hud-pill">도감 ${totalCaught}</div>
       </section>
+      <section class="system-strip glass-card"><span>2.5D 자산 ${fishDex.length - 1}종</span><span>${this.hasWebGL() ? 'PixiJS 가속' : 'HTML 대체 렌더'}</span><span>PWA 캐시 보호</span></section>
       <section class="hero-card glass-card">
         <div>
           <span class="eyebrow">READY TO SAIL</span>
@@ -186,7 +194,7 @@ class AquaFantasiaGame {
     const locked = !this.isRegionUnlocked(key);
     return `<button class="region-card ${r.key === this.save.region ? 'active' : ''} ${locked ? 'locked' : ''}" data-region="${r.key}">
       <img src="${r.bg}" alt="" loading="lazy" />
-      <strong>${locked ? '잠긴 수역' : r.name}</strong><span>${locked ? '미션 보상으로 해금' : r.subtitle}</span>
+      <strong>${locked ? '잠긴 수역' : r.name}</strong><span>${locked ? r.unlockHint : `${r.subtitle} · ${r.tide}`}</span>
     </button>`;
   }
 
@@ -199,6 +207,7 @@ class AquaFantasiaGame {
     root.innerHTML += `
       <div class="fishing-top glass-card">
         <div><strong>${region.name}</strong><span id="fishingHint">CAST를 눌러 찌를 던지세요</span></div>
+        <div class="weather-pill">${region.tide}</div>
         <button class="round-btn" data-go="dex">가방</button>
       </div>
       <div class="fishing-stage" id="fishingStage">
@@ -212,6 +221,7 @@ class AquaFantasiaGame {
         <img src="${ASSET.gauge}" alt="장력 게이지" />
         <div class="tension-track"><span class="safe-zone"></span><span class="tension-fill"></span></div>
         <div class="safe-progress"><span></span></div>
+        <div class="surge-meter"><span></span></div>
         <button class="hold-pad">꾹 눌러 릴 감기</button>
         <p>녹색 안전지대를 3초 유지하세요. 누르면 장력 상승, 떼면 장력 하락.</p>
       </div>`;
@@ -233,7 +243,12 @@ class AquaFantasiaGame {
     this.holdPad.addEventListener('pointerdown', startHold);
     this.holdPad.addEventListener('pointerup', stopHold);
     this.holdPad.addEventListener('pointercancel', stopHold);
-    await this.initPixiStage();
+    try {
+      await this.initPixiStage();
+    } catch (error) {
+      console.warn('[AquaFantasia] Pixi stage fallback activated', error);
+      this.initFallbackFishingStage();
+    }
   }
 
   private baseGameShell(name: string): HTMLElement {
@@ -252,7 +267,8 @@ class AquaFantasiaGame {
   }
 
   private async initPixiStage(): Promise<void> {
-    if (!this.pixiLayer || !this.stageHost) return;
+    this.fallbackMode = false;
+    if (!this.pixiLayer || !this.stageHost || !this.hasWebGL()) throw new Error('WebGL unavailable');
     const app = new Application();
     await app.init({ resizeTo: this.stageHost, backgroundAlpha: 0, antialias: !this.compact, resolution: Math.min(window.devicePixelRatio || 1, this.compact ? 1.35 : 2), autoDensity: true, powerPreference: 'high-performance' });
     this.pixi = app;
@@ -302,7 +318,7 @@ class AquaFantasiaGame {
     this.bgSprite.position.set((w - this.bgSprite.texture.width * bgScale) / 2, (h - this.bgSprite.texture.height * bgScale) / 2);
     const base = Math.min(w, h);
     this.player.scale.set(base / 780);
-    this.player.position.set(w * (this.initialOrientation === 'landscape' ? 0.22 : 0.27), h * 0.72);
+    this.player.position.set(w * 0.27, h * 0.72);
     this.bobber.scale.set(base / 1100);
     this.bobber.position.set(w * 0.68, h * 0.60);
     this.catchSprite.scale.set(base / 780);
@@ -318,6 +334,7 @@ class AquaFantasiaGame {
   }
 
   private castLine(): void {
+    if (this.fallbackMode) { this.castLineFallback(); return; }
     if (this.state !== 'idle' || !this.castBtn || !this.pixi || !this.bobber) return;
     playSound('cast');
     this.vibrate(12);
@@ -358,6 +375,9 @@ class AquaFantasiaGame {
     this.state = 'reeling';
     this.tension = 46 + this.getRegion().difficulty * 5;
     this.safeTimer = 0;
+    this.surgeTimer = 0;
+    this.perfectChain = 0;
+    this.routeGuardActive = false;
     this.holding = false;
     if (this.biteText) this.biteText.visible = false;
     this.reelPanel?.classList.remove('hidden');
@@ -375,6 +395,7 @@ class AquaFantasiaGame {
       this.vibrate([20, 35, 55]);
       const reward = this.calculateReward(this.activeFish);
       this.save.caught[this.activeFish.id] = (this.save.caught[this.activeFish.id] ?? 0) + 1;
+      this.save.mastery[this.activeFish.regionKey] = (this.save.mastery[this.activeFish.regionKey] ?? 0) + 1;
       this.save.coins += reward;
       this.save.totalSuccess += 1;
       this.save.currentStreak += 1;
@@ -394,7 +415,11 @@ class AquaFantasiaGame {
   }
 
   private showCatchPopup(reward: number): void {
-    if (!this.catchSprite) return;
+    if (this.fallbackMode || !this.pixi || !this.catchSprite) {
+      this.stageHost?.classList.add('catch-bloom');
+      window.setTimeout(() => this.showResultCard(reward), 520);
+      return;
+    }
     this.catchSprite.visible = true;
     this.catchSprite.scale.set(0.02);
     this.catchSprite.rotation = 0;
@@ -440,7 +465,7 @@ class AquaFantasiaGame {
     if (this.catchSprite) this.catchSprite.visible = false;
     if (this.biteText) this.biteText.visible = false;
     this.reelPanel?.classList.add('hidden');
-    this.stageHost?.classList.remove('catch-bloom');
+    this.stageHost?.classList.remove('catch-bloom', 'fallback-casting', 'surge-alert', 'guard-active');
     this.stageHost?.querySelector('.catch-result-card')?.remove();
     this.state = 'idle';
     this.castBtn?.classList.remove('hidden', 'pop-out');
@@ -474,13 +499,24 @@ class AquaFantasiaGame {
       if (this.state === 'bite') this.bobber.y += 0.22 * dt;
     } else if (this.state === 'reeling') {
       const regionMod = this.getRegion().difficulty;
-      const gearRelief = 1 + this.save.gear.rodLevel * 0.06 + this.save.gear.reelLevel * 0.05 + this.save.gear.lineLevel * 0.04;
-      const bossMod = this.activeFish.rarity === 'BOSS' ? 1.22 : this.activeFish.rarity === 'EPIC' ? 1.12 : 1;
-      const drift = Math.sin(now / 230) * 0.29 * regionMod * bossMod + Math.sin(now / 910) * 0.08;
-      this.tension += ((this.holding ? 0.73 + regionMod * 0.13 : -0.48) / gearRelief) * dt + drift;
+      const gearRelief = 1 + this.save.gear.rodLevel * 0.06 + this.save.gear.reelLevel * 0.05 + this.save.gear.lineLevel * 0.05;
+      const bossMod = this.activeFish.rarity === 'BOSS' ? 1.28 : this.activeFish.rarity === 'EPIC' ? 1.13 : 1;
+      this.surgeTimer += dt / 60;
+      const surgeActive = this.surgeTimer > 1.25 && Math.sin(now / 520) > 0.82;
+      const drift = Math.sin(now / 215) * 0.31 * regionMod * bossMod + Math.sin(now / 770) * 0.10 + (surgeActive ? Math.sin(now / 80) * 0.38 : 0);
+      this.tension += ((this.holding ? 0.75 + regionMod * 0.14 : -0.50) / gearRelief) * dt + drift;
       const zone = this.safeZone();
       const safe = this.tension >= zone.left && this.tension <= zone.right;
-      this.safeTimer = safe ? this.safeTimer + dt / 60 : Math.max(0, this.safeTimer - dt / 75);
+      const center = (zone.left + zone.right) / 2;
+      const perfect = Math.abs(this.tension - center) < Math.max(3.2, (zone.right - zone.left) * 0.18);
+      this.perfectChain = perfect ? this.perfectChain + dt / 60 : Math.max(0, this.perfectChain - dt / 45);
+      if (this.perfectChain > 1.0 && !this.routeGuardActive) {
+        this.routeGuardActive = true;
+        this.stageHost?.classList.add('guard-active');
+        this.vibrate(10);
+      }
+      this.safeTimer = safe ? this.safeTimer + dt / 60 * (perfect ? 1.16 : 1) : Math.max(0, this.safeTimer - dt / 70);
+      this.stageHost?.classList.toggle('surge-alert', surgeActive);
       this.updateTensionUI();
       if (this.tension <= 2 || this.tension >= 98) this.finishCatch(false);
       if (this.safeTimer >= 3) this.finishCatch(true);
@@ -513,11 +549,14 @@ class AquaFantasiaGame {
     this.safeFill.style.left = `${zone.left}%`;
     this.safeFill.style.width = `${zone.right - zone.left}%`;
     if (this.progressNode) this.progressNode.style.width = `${Math.min(100, (this.safeTimer / 3) * 100)}%`;
+    const surgeNode = this.reelPanel?.querySelector<HTMLSpanElement>('.surge-meter span');
+    if (surgeNode) surgeNode.style.width = `${Math.min(100, this.perfectChain * 72)}%`;
   }
 
   private safeZone(): { left: number; right: number } {
-    const width = Math.max(17, 28 - this.getRegion().difficulty * 4 + this.save.gear.lineLevel * 1.6);
-    const center = 55 + Math.sin(performance.now() / 1600) * (this.activeFish.rarity === 'BOSS' ? 3 : 1.5);
+    const masteryBonus = Math.min(4, (this.save.mastery[this.save.region] ?? 0) * 0.08);
+    const width = Math.max(16, 28 - this.getRegion().difficulty * 4 + this.save.gear.lineLevel * 1.6 + masteryBonus);
+    const center = 55 + Math.sin(performance.now() / 1500) * (this.activeFish.rarity === 'BOSS' ? 3.4 : 1.7);
     return { left: center - width / 2, right: center + width / 2 };
   }
 
@@ -530,7 +569,7 @@ class AquaFantasiaGame {
     this.clear();
     const root = this.baseGameShell('gear');
     root.innerHTML += `
-      <section class="page-head glass-card"><div><span class="eyebrow">TACKLE</span><h2>장비 강화</h2><p>장비가 좋아질수록 장력 흔들림이 줄고 고급 어종 성공률이 올라갑니다.</p></div></section>
+      <section class="page-head glass-card"><div><span class="eyebrow">TACKLE</span><h2>장비 강화</h2><p>장비와 수역 숙련도가 올라갈수록 장력 흔들림이 줄고 고급 어종 성공률이 올라갑니다.</p></div></section>
       <section class="gear-grid">
         ${this.gearCard('rod', '낚싯대', './assets/ui/gear_rod_25d.png', this.save.gear.rodLevel, 120, '장력 상승 완화')}
         ${this.gearCard('reel', '릴', './assets/ui/gear_reel_25d.png', this.save.gear.reelLevel, 140, '릴링 반응 개선')}
@@ -587,6 +626,7 @@ class AquaFantasiaGame {
       { name: '산호 미끼 묶음', desc: '미끼 +5', cost: 120, icon: './assets/ui/shop_bait_25d.png' },
       { name: '릴 윤활 오일', desc: '릴 강화 보조', cost: 180, icon: './assets/ui/shop_oil_25d.png' },
       { name: '물결 안정 부적', desc: '낚싯줄 강화 보조', cost: 210, icon: './assets/ui/shop_charm_25d.png' },
+      { name: '비상 구조 키트', desc: '실패 후 복구 보상', cost: 260, icon: './assets/ui/badge_rescue_25d.png' },
     ];
     root.innerHTML += `
       <section class="page-head glass-card"><div><span class="eyebrow">SHOP</span><h2>상점</h2><p>골드 ${this.save.coins} · 미끼와 강화 재료를 구매합니다.</p></div></section>
@@ -605,6 +645,7 @@ class AquaFantasiaGame {
       if (item.name.includes('미끼')) this.save.gear.lureStock += 5;
       if (item.name.includes('릴')) this.save.gear.reelLevel += 1;
       if (item.name.includes('부적')) this.save.gear.lineLevel += 1;
+      if (item.name.includes('구조')) { this.save.lastRescueAt = Date.now(); this.save.gear.lureStock += 2; }
       saveGame(this.save);
       this.toast.show({ type: 'shop', title: '구매 완료', message: '장비와 미끼 상태가 갱신되었습니다.', actionScreen: 'gear' });
       this.renderShop();
@@ -620,6 +661,8 @@ class AquaFantasiaGame {
       { id: 'fiveCatch', title: '도감 5마리 수집', max: 5, value: Math.min(5, caught), reward: 240 },
       { id: 'gearUp', title: '장비 3회 강화', max: 3, value: Math.min(3, this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel - 3), reward: 180 },
       { id: 'stormUnlock', title: '고급 수역 해금', max: 12, value: Math.min(12, this.save.totalSuccess), reward: 320 },
+      { id: 'masteryRoute', title: '수역 숙련도 10 달성', max: 10, value: Math.min(10, Math.max(...Object.values(this.save.mastery), 0)), reward: 360 },
+      { id: 'bossHunter', title: '보스급 물고기 발견', max: 1, value: Object.entries(this.save.caught).some(([id, count]) => count > 0 && fishDex.find((fish) => fish.id === id)?.rarity === 'BOSS') ? 1 : 0, reward: 500 },
     ];
     root.innerHTML += `
       <section class="page-head glass-card"><div><span class="eyebrow">MISSION</span><h2>오늘의 미션</h2><p>보상은 장비 강화와 신규 수역 해금에 연결됩니다.</p></div></section>
@@ -633,7 +676,7 @@ class AquaFantasiaGame {
 
   private claimMission(id: string): void {
     if (this.save.missions[id]) return;
-    const reward = id === 'stormUnlock' ? 320 : id === 'fiveCatch' ? 240 : id === 'gearUp' ? 180 : 100;
+    const reward = id === 'bossHunter' ? 500 : id === 'masteryRoute' ? 360 : id === 'stormUnlock' ? 320 : id === 'fiveCatch' ? 240 : id === 'gearUp' ? 180 : 100;
     this.save.missions[id] = true;
     this.save.coins += reward;
     this.updateUnlocks();
@@ -668,6 +711,9 @@ class AquaFantasiaGame {
     if (this.save.totalSuccess >= 8 || this.save.missions.stormUnlock) unlocked.add('glacier');
     if (this.save.totalSuccess >= 12 || this.save.missions.stormUnlock) unlocked.add('storm');
     if (this.save.bestStreak >= 4 || this.totalCaught() >= 10) unlocked.add('dimension');
+    if (this.totalCaught() >= 14 || (this.save.mastery.river ?? 0) >= 6) unlocked.add('mangrove');
+    if (this.save.bestStreak >= 6 || (this.save.mastery.dimension ?? 0) >= 4) unlocked.add('lunar');
+    if (Object.values(this.save.missions).filter(Boolean).length >= 2 || this.save.totalSuccess >= 5) unlocked.add('reefFestival');
     this.save.unlockedRegions = Array.from(unlocked);
   }
 
@@ -683,6 +729,49 @@ class AquaFantasiaGame {
     return regions.find((r) => r.key === this.save.region) ?? regions[0];
   }
 
+
+  private initFallbackFishingStage(): void {
+    if (!this.stageHost || !this.pixiLayer) return;
+    this.fallbackMode = true;
+    const region = this.getRegion();
+    this.activeFish = this.pickFish();
+    this.pixiLayer.innerHTML = `<div class="fallback-scene" style="background-image:url('${region.bg}')"><img class="fallback-player" src="${ASSET.player}" alt="" /><img class="fallback-bobber" src="${ASSET.float}" alt="" /><div class="fallback-bite">!</div></div>`;
+    this.createCastButton();
+    this.stageHost.addEventListener('pointerdown', (ev) => {
+      if (this.state === 'bite') this.startReeling();
+      else if (this.state === 'reeling') { this.holding = true; this.spawnTouchRing(ev.clientX, ev.clientY); }
+    });
+    this.stageHost.addEventListener('pointerup', () => { if (this.state === 'reeling') this.holding = false; });
+    window.setInterval(() => { if (this.fallbackMode) this.tick(); }, 1000 / 30);
+    this.state = 'idle';
+    this.setHint('HTML 대체 렌더로 안정 실행 중입니다');
+  }
+
+  private castLineFallback(): void {
+    if (this.state !== 'idle' || !this.castBtn) return;
+    playSound('cast');
+    this.vibrate(12);
+    this.save.totalCasts += 1;
+    if (this.save.gear.lureStock > 0) this.save.gear.lureStock -= 1;
+    saveGame(this.save);
+    this.activeFish = this.pickFish();
+    this.state = 'casting';
+    this.castBtn.classList.add('pop-out');
+    this.stageHost?.classList.add('fallback-casting');
+    this.setHint('찌가 수면으로 날아갑니다');
+    window.setTimeout(() => this.castBtn?.classList.add('hidden'), 260);
+    window.setTimeout(() => { this.spawnSplash(); this.scheduleBite(); }, 820);
+  }
+
+  private hasWebGL(): boolean {
+    try {
+      const canvas = document.createElement('canvas');
+      return !!(canvas.getContext('webgl2') || canvas.getContext('webgl'));
+    } catch {
+      return false;
+    }
+  }
+
   private async enterImmersiveMode(): Promise<void> {
     try {
       if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
@@ -694,8 +783,14 @@ class AquaFantasiaGame {
     try {
       // TypeScript DOM 타입 환경마다 ScreenOrientation.lock() 전용 타입명이 다를 수 있어
       // GitHub Actions의 tsc 검증을 안정화하기 위해 좁은 런타임 타입으로만 사용합니다.
-      const orientation = globalThis.screen.orientation as unknown as { lock?: (orientation: 'portrait' | 'landscape') => Promise<void> };
-      await orientation?.lock?.(this.initialOrientation);
+      const orientation = globalThis.screen.orientation as unknown as { lock?: (orientation: 'portrait-primary' | 'portrait') => Promise<void> };
+      if (orientation.lock) {
+        try {
+          await orientation.lock(this.lockedOrientation);
+        } catch {
+          await orientation.lock('portrait');
+        }
+      }
     } catch {
       // Keep silent by design: no rotation/fullscreen warning popup.
     }
@@ -707,7 +802,8 @@ class AquaFantasiaGame {
       const w = window.visualViewport?.width ?? window.innerWidth;
       document.documentElement.style.setProperty('--app-height', `${h}px`);
       document.documentElement.style.setProperty('--app-width', `${w}px`);
-      document.documentElement.dataset.currentOrientation = w >= h ? 'landscape' : 'portrait';
+      document.documentElement.dataset.currentOrientation = 'portrait';
+      document.documentElement.classList.toggle('is-physical-landscape', w > h);
     };
     sync();
     window.visualViewport?.addEventListener('resize', sync, { passive: true });
@@ -733,7 +829,7 @@ class AquaFantasiaGame {
     try {
       if (!('caches' in window)) return;
       const keys = await caches.keys();
-      await Promise.all(keys.filter((key) => key.startsWith('aqua-fantasia-') && !key.includes(APP_VERSION)).map((key) => caches.delete(key)));
+      await Promise.all(keys.filter((key) => key.startsWith('aqua-fantasia-') && key !== CACHE_NAME).map((key) => caches.delete(key)));
       localStorage.setItem('aqua-cache-version', APP_VERSION);
     } catch {
       // CacheStorage can be blocked. The game still works online.

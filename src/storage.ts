@@ -1,8 +1,8 @@
 import { APP_VERSION, defaultSave } from './data';
 import type { SaveData } from './types';
 
-const KEY = 'aqua-fantasia-save-v640';
-const LEGACY_KEYS = ['aqua-fantasia-save-v630', 'aqua-fantasia-save-v620'];
+const KEY = 'aqua-fantasia-save-v650';
+const LEGACY_KEYS = ['aqua-fantasia-save-v640', 'aqua-fantasia-save-v630', 'aqua-fantasia-save-v620'];
 
 function normalizeSave(parsed: Partial<SaveData>): SaveData {
   const base = defaultSave();
@@ -24,6 +24,8 @@ function normalizeSave(parsed: Partial<SaveData>): SaveData {
     totalSuccess: Number.isFinite(parsed.totalSuccess) ? Number(parsed.totalSuccess) : 0,
     totalFail: Number.isFinite(parsed.totalFail) ? Number(parsed.totalFail) : 0,
     unlockedRegions: unlocked,
+    mastery: parsed.mastery ?? {},
+    lastRescueAt: Number.isFinite(parsed.lastRescueAt) ? Number(parsed.lastRescueAt) : 0,
   };
 }
 

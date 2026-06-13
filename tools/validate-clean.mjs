@@ -6,10 +6,10 @@ const required = [
   'index.html', 'src/main.ts', 'src/styles.css', 'src/data.ts', 'src/storage.ts', 'src/audio.ts', 'src/toast.ts',
   'public/sw.js', 'public/manifest.webmanifest', 'public/assets/art/bg_ocean.png', 'public/assets/art/player_boat.png',
   'public/assets/art/fishing_float.png', 'public/assets/art/fish_clown.png', 'public/assets/art/gauge_frame.png', 'public/assets/art/fish_slot.png',
-  'public/assets/art/login_ocean_fishing_25d.webp', 'public/assets/art/bg_glacier.webp', 'public/assets/art/bg_storm.webp',
+  'public/assets/art/login_ocean_fishing_25d.webp', 'public/assets/art/bg_glacier.webp', 'public/assets/art/bg_storm.webp', 'public/assets/art/bg_mangrove.webp', 'public/assets/art/bg_lunar.webp', 'public/assets/art/bg_reef_festival.webp',
   'public/assets/ui/nav_village_25d.png', 'public/assets/ui/nav_gear_25d.png', 'public/assets/ui/gear_rod_25d.png',
   'public/assets/ui/gear_reel_25d.png', 'public/assets/ui/gear_lure_25d.png', 'public/assets/ui/gear_line_25d.png',
-  'public/assets/ui/shop_bait_25d.png', 'public/assets/dex/fish_thunder_25d.png', 'public/assets/dex/fish_crystal_25d.png',
+  'public/assets/ui/shop_bait_25d.png', 'public/assets/ui/fx_surge_25d.png', 'public/assets/ui/badge_mastery_25d.png', 'public/assets/dex/fish_mangrove_25d.png', 'public/assets/dex/fish_lunar_25d.png', 'public/assets/dex/fish_thunder_25d.png', 'public/assets/dex/fish_crystal_25d.png',
   'public/assets/atlas/aqua_fishing_atlas.webp', 'public/assets/atlas/aqua_fishing_atlas.json', '.github/workflows/pages.yml'
 ];
 const forbiddenFiles = [/AquaFantasia_v\d/i, /PATCH_NOTES_v[1-5]/i, /STACK_SAFE/i];
@@ -46,24 +46,24 @@ const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 if (!index.includes('/src/main.ts')) fail('index.html is not using the Vite TypeScript entry');
 if (!index.includes('아쿠아 판타지아')) fail('Korean title is missing');
 const data = fs.readFileSync(path.join(root, 'src/data.ts'), 'utf8');
-if (!data.includes("APP_VERSION = '6.4.0'")) fail('APP_VERSION is not 6.4.0');
-for (const token of ['glacier', 'storm', 'fish_thunder_25d', 'fish_crystal_25d']) if (!data.includes(token)) fail(`missing v6.4 data token ${token}`);
+if (!data.includes("APP_VERSION = '6.5.1'")) fail('APP_VERSION is not 6.5.1');
+for (const token of ['glacier', 'storm', 'mangrove', 'lunar', 'reefFestival', 'fish_thunder_25d', 'fish_crystal_25d']) if (!data.includes(token)) fail(`missing v6.5 data token ${token}`);
 const sw = fs.readFileSync(path.join(root, 'public/sw.js'), 'utf8');
-if (!sw.includes('aqua-fantasia-v6.4.0-massive-2-5d-system-polish')) fail('service worker cache version mismatch');
+if (!sw.includes('aqua-fantasia-v6.5.1-portrait-lock-hotfix')) fail('service worker cache version mismatch');
 const manifest = fs.readFileSync(path.join(root, 'public/manifest.webmanifest'), 'utf8');
-if (!manifest.includes('"orientation": "any"')) fail('manifest must preserve the device start orientation');
+if (!manifest.includes('"orientation": "portrait-primary"')) fail('manifest must force portrait-primary orientation');
 const atlas = JSON.parse(fs.readFileSync(path.join(root, 'public/assets/atlas/aqua_fishing_atlas.json'), 'utf8'));
 for (const name of ['player_boat.png','fishing_float.png','fish_clown.png','gauge_frame.png','fish_slot.png','gear_line_25d.png','fish_thunder_25d.png']) {
   if (!atlas.frames?.[name]) fail(`atlas missing ${name}`);
 }
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-if (pkg.version !== '6.4.0') fail('package version mismatch');
+if (pkg.version !== '6.5.1') fail('package version mismatch');
 for (const dep of ['pixi.js','howler','firebase']) if (!pkg.dependencies?.[dep]) fail(`missing dependency ${dep}`);
 if (!pkg.devDependencies?.vite || !pkg.devDependencies?.typescript) fail('missing Vite/TypeScript dev dependencies');
 const main = fs.readFileSync(path.join(root, 'src/main.ts'), 'utf8');
-for (const token of ['enterImmersiveMode', 'safeZone', 'showResultCard', 'pickFish', 'updateUnlocks', 'requestFullscreen']) if (!main.includes(token)) fail(`missing runtime token ${token}`);
+for (const token of ['enterImmersiveMode', 'safeZone', 'showResultCard', 'pickFish', 'updateUnlocks', 'requestFullscreen', 'portrait-primary', 'orientationPolicy', 'initFallbackFishingStage', 'hasWebGL', 'surgeTimer']) if (!main.includes(token)) fail(`missing runtime token ${token}`);
 if (main.includes('v5.5.2') || main.includes('낚시 준비')) fail('legacy HUD text leaked into main runtime');
 
 if (!ok) process.exit(1);
-console.log('[validate-clean] Aqua Fantasia v6.4.0 massive 2.5D system runtime OK');
-console.log(JSON.stringify({ ok: true, version: '6.4.0', files: files.length, atlasFrames: Object.keys(atlas.frames).length }, null, 2));
+console.log('[validate-clean] Aqua Fantasia v6.5.1 portrait lock runtime OK');
+console.log(JSON.stringify({ ok: true, version: '6.5.1', files: files.length, atlasFrames: Object.keys(atlas.frames).length }, null, 2));

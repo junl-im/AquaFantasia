@@ -1,34 +1,15 @@
-# Aqua Fantasia v6.4.0
+# 아쿠아 판타지아 v6.5.0
 
-2.5D 모바일 캐주얼 낚시 웹게임 프로토타입입니다.
+2.5D 이미지 에셋 기반 모바일 캐주얼 낚시 웹게임 클린 런타임입니다.
 
-## 구조
+## 핵심
 
-```txt
-index.html
-src/main.ts
-src/styles.css
-src/data.ts
-src/storage.ts
-src/audio.ts
-src/toast.ts
-public/assets/
-public/sw.js
-public/manifest.webmanifest
-.github/workflows/pages.yml
-tools/
-```
-
-## 기술
-
-- Vite
-- TypeScript
-- PixiJS 8
-- Howler.js
-- Firebase 익명 서버연동 준비 구조
-- WebP/PNG Atlas
-- PWA Service Worker
-- GitHub Actions + GitHub Pages
+- 시작 방향 보존: 세로로 열면 세로, 가로로 열면 가로 레이아웃을 유지합니다.
+- 첫 터치 이후 전체화면 요청 및 PWA fullscreen manifest 적용.
+- 로그인 화면의 개발/패치 문구 제거, 한글 로고 `아쿠아 판타지아` 적용.
+- 시작 전 낚시 HUD, 상점 FAB, 버전 배지 미노출.
+- 마을 진입 후 하단 메뉴, 장비, 도감, 상점, 미션 시스템 연결.
+- PixiJS 8 낚시 액션, Howler 효과음, Firebase 익명 서버연동 준비 구조 유지.
 
 ## 실행
 
@@ -41,16 +22,13 @@ npm run dev
 
 ```bash
 npm run validate
-npm run runtime:check
-npm run audit
 npm run typecheck
 npm run build
 ```
 
-## v6.4.0 핵심
+## v6.5.0 추가
 
-- 시작 화면 전용 UI 분리 유지
-- 기기 시작 방향 유지와 전체화면 시도
-- 신규 수역과 2.5D 도감 자산 확장
-- 콤보, 결과 카드, 동적 안전지대, 보상/장비/수역 해금 연계
-- 모바일 저사양 대응과 PWA 캐시 자동 정리
+- WebGL/PixiJS 실패 시 HTML 대체 낚시 렌더링.
+- 신규 수역 3종과 신규 2.5D 물고기 8종.
+- 장력 서지, PERFECT GUARD, 수역 숙련도, 비상 구조 키트.
+- GitHub Actions 검증 유지.

@@ -1,7 +1,7 @@
 {
   "name": "아쿠아 판타지아",
   "short_name": "아쿠아판타지아",
-  "description": "아쿠아 판타지아 - 2.5D 모바일 캐주얼 낚시 웹게임 v6.4",
+  "description": "아쿠아 판타지아 - 세로 전용 2.5D 모바일 캐주얼 낚시 웹게임 v6.5.1",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",
@@ -10,9 +10,9 @@
     "standalone",
     "minimal-ui"
   ],
-  "orientation": "any",
+  "orientation": "portrait-primary",
   "background_color": "#061827",
-  "theme_color": "#061827",
+  "theme_color": "#052033",
   "icons": [
     {
       "src": "./assets/icons/icon-192.png",
