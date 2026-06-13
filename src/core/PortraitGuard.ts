@@ -5,6 +5,7 @@ export type PortraitViewportMetrics = {
   appHeight: number;
   physicalLandscape: boolean;
   kakaoInApp: boolean;
+  hostileInApp: boolean;
 };
 
 const clamp = (value: number, min: number, max: number): number => Math.max(min, Math.min(max, value));
@@ -14,17 +15,23 @@ export function isKakaoInAppBrowser(): boolean {
   return /KAKAOTALK|KakaoTalk|KAKAOSTORY|KAKAOBIZ/i.test(ua);
 }
 
+export function isHostileInAppBrowser(): boolean {
+  const ua = navigator.userAgent || '';
+  return isKakaoInAppBrowser() || /Instagram|FBAN|FBAV|Line\/|NAVER|DaumApps|WhaleInApp/i.test(ua);
+}
+
 export function getPortraitViewportMetrics(): PortraitViewportMetrics {
   const viewportWidth = Math.max(1, Math.floor(window.visualViewport?.width ?? window.innerWidth));
   const viewportHeight = Math.max(1, Math.floor(window.visualViewport?.height ?? window.innerHeight));
   const physicalLandscape = viewportWidth > viewportHeight;
   const kakaoInApp = isKakaoInAppBrowser();
+  const hostileInApp = isHostileInAppBrowser();
 
   // Aqua Fantasia is a portrait-only mobile game.
   // Some in-app browsers ignore manifest orientation and screen.orientation.lock().
   // When the physical viewport becomes landscape, keep rendering a portrait game shell
   // inside the landscape viewport instead of switching UI layout.
-  const maxPortraitWidth = kakaoInApp ? 430 : 480;
+  const maxPortraitWidth = hostileInApp ? 430 : 480;
   const minUsableWidth = Math.min(340, viewportWidth);
   const appWidth = physicalLandscape
     ? clamp(Math.floor(viewportHeight * 0.78), Math.min(280, viewportWidth), Math.min(maxPortraitWidth, viewportWidth))
@@ -38,6 +45,7 @@ export function getPortraitViewportMetrics(): PortraitViewportMetrics {
     appHeight,
     physicalLandscape,
     kakaoInApp,
+    hostileInApp,
   };
 }
 
@@ -54,6 +62,7 @@ export function applyPortraitViewportMetrics(): PortraitViewportMetrics {
   root.dataset.orientationPolicy = 'hard-portrait';
   root.classList.toggle('is-physical-landscape', metrics.physicalLandscape);
   root.classList.toggle('is-kakao-inapp', metrics.kakaoInApp);
+  root.classList.toggle('is-hostile-inapp', metrics.hostileInApp);
   return metrics;
 }
 
@@ -70,7 +79,18 @@ export function installPortraitCssGuards(): void {
   document.addEventListener('visibilitychange', sync, { passive: true });
 }
 
-export async function requestHardPortraitLock(): Promise<'locked' | 'fullscreen-only' | 'css-fallback'> {
+export async function requestHardPortraitLock(): Promise<'locked' | 'fullscreen-only' | 'css-fallback' | 'inapp-css-only'> {
+  const metrics = applyPortraitViewportMetrics();
+
+  // KakaoTalk and several in-app browsers may ignore or mishandle the Fullscreen API
+  // and screen.orientation.lock(). In those shells, requesting fullscreen can itself
+  // trigger a viewport/orientation jump. Aqua Fantasia therefore uses a CSS-only
+  // portrait game cage in hostile in-app browsers and never calls fullscreen or lock.
+  if (metrics.hostileInApp) {
+    document.documentElement.dataset.immersiveMode = 'inapp-css-only';
+    return 'inapp-css-only';
+  }
+
   let fullscreenAttempted = false;
   try {
     if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
@@ -78,7 +98,7 @@ export async function requestHardPortraitLock(): Promise<'locked' | 'fullscreen-
       await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
     }
   } catch {
-    // In-app browsers may block fullscreen. CSS portrait shell remains active.
+    // Browser may block fullscreen. CSS portrait shell remains active.
   }
 
   try {
@@ -92,6 +112,7 @@ export async function requestHardPortraitLock(): Promise<'locked' | 'fullscreen-
         await orientation.lock('portrait');
       }
       applyPortraitViewportMetrics();
+      document.documentElement.dataset.immersiveMode = 'orientation-locked';
       return 'locked';
     }
   } catch {
@@ -99,5 +120,6 @@ export async function requestHardPortraitLock(): Promise<'locked' | 'fullscreen-
   }
 
   applyPortraitViewportMetrics();
+  document.documentElement.dataset.immersiveMode = fullscreenAttempted ? 'fullscreen-only' : 'css-fallback';
   return fullscreenAttempted ? 'fullscreen-only' : 'css-fallback';
 }

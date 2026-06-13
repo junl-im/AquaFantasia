@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v6.7.0-portrait-rescue-engine-split';
+const CACHE_NAME = 'aqua-fantasia-v6.7.1-kakao-orientation-safe-mode';
 const PRECACHE = [
   './', './index.html', './manifest.webmanifest', './offline.html',
   './assets/art/login_ocean_fishing_25d.webp', './assets/art/bg_ocean.webp', './assets/art/bg_lake.webp', './assets/art/bg_river.webp', './assets/art/bg_harbor.webp', './assets/art/bg_deep.webp', './assets/art/bg_palace.webp', './assets/art/bg_dimension.webp', './assets/art/bg_glacier.webp', './assets/art/bg_storm.webp',
