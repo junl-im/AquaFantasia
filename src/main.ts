@@ -8,7 +8,7 @@ import { ToastManager } from './toast';
 import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPortraitLock } from './core/PortraitGuard';
 
 const ASSET = {
-  loginBg: './assets/screens/start_screen_clean_v740.webp',
+  loginBg: './assets/screens/start_screen_clean_v750.webp',
   player: './assets/art/player_boat.png',
   float: './assets/art/fishing_float.png',
   fish: './assets/art/fish_clown.png',
@@ -131,7 +131,7 @@ class AquaFantasiaGame {
       <button class="start-hotspot hit-depart" data-action="guest" aria-label="낚시터로 출항"></button>
       <button class="start-hotspot hit-new" data-action="new" aria-label="처음부터 새 게임"></button>
       <button class="start-hotspot hit-server" data-action="server" aria-label="익명 서버연동"></button>
-      <button class="start-hotspot hit-keep v720-keep-toggle v730-keep-toggle v740-keep-toggle" data-action="keep" aria-label="이 기기에서 로그인 유지" aria-pressed="false"><span class="keep-indicator" aria-hidden="true"></span><span class="keep-text">이 기기에서 로그인 유지</span></button>
+      <button class="start-hotspot hit-keep v720-keep-toggle v730-keep-toggle v740-keep-toggle v750-keep-toggle" data-action="keep" aria-label="이 기기에서 로그인 유지" aria-pressed="false"><span class="keep-indicator" aria-hidden="true"></span><span class="keep-text">이 기기에서 로그인 유지</span></button>
       <div class="login-touch-shine" aria-hidden="true"></div>`;
     dom.app.appendChild(shell);
     const keepEnabled = window.localStorage.getItem('aqua-login-keep') === 'true';
@@ -267,7 +267,7 @@ class AquaFantasiaGame {
 
   private baseGameShell(name: string): HTMLElement {
     const root = document.createElement('main');
-    root.className = `game-screen ${name}-screen`;
+    root.className = `game-screen ${name}-screen ${name === 'fishing' ? 'locked-screen' : 'scroll-screen'}`;
     root.innerHTML = `<div class="ambient-bg" aria-hidden="true"></div>`;
     return root;
   }
@@ -759,7 +759,7 @@ class AquaFantasiaGame {
     root.innerHTML += `
       <section class="page-head glass-card"><div><span class="eyebrow">바다 상점</span><h2>상점</h2><p>골드 ${this.save.coins} · 미끼와 강화 재료를 구매합니다.</p></div></section>
       <section class="shop-list">
-        ${goods.map((item, i) => `<button class="shop-card glass-card" data-buy="${i}"><img src="${item.icon}" alt="" /><strong>${item.name}</strong><span>${item.desc}<br />${item.cost} 골드</span></button>`).join('')}
+        ${goods.map((item, i) => `<button class="shop-card glass-card" data-buy="${i}"><img src="${item.icon}" alt="" /><strong>${item.name}<small>${item.desc}</small></strong><span class="price-badge">${item.cost}G</span></button>`).join('')}
       </section>`;
     dom.app.appendChild(root);
     this.mountBottomNav(root, 'shop');
@@ -780,22 +780,71 @@ class AquaFantasiaGame {
     }));
   }
 
+  private missionGoals(): Array<{ id: string; category: string; title: string; desc: string; max: number; value: number; reward: number; event?: boolean }> {
+    const caught = this.totalCaught();
+    const uniqueCaught = Object.keys(this.save.caught).filter((id) => (this.save.caught[id] ?? 0) > 0).length;
+    const rareCaught = Object.entries(this.save.caught).filter(([id, count]) => count > 0 && fishDex.find((fish) => fish.id === id)?.rarity === 'RARE').length;
+    const epicCaught = Object.entries(this.save.caught).filter(([id, count]) => count > 0 && fishDex.find((fish) => fish.id === id)?.rarity === 'EPIC').length;
+    const bossCaught = Object.entries(this.save.caught).filter(([id, count]) => count > 0 && fishDex.find((fish) => fish.id === id)?.rarity === 'BOSS').length;
+    const gearUpgradeCount = Math.max(0, this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel - 3);
+    const gearTotalLevel = this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel;
+    const masteryMax = Math.max(0, ...Object.values(this.save.mastery));
+    const missionDone = Object.values(this.save.missions).filter(Boolean).length;
+    const regionUnlocked = this.save.unlockedRegions.length;
+    const hasClown = (this.save.caught.clown ?? 0) > 0;
+    return [
+      { id: 'attendanceToday', category: '출석', title: '오늘 출석 선물', desc: '접속만 해도 받을 수 있는 데일리 보상', max: 1, value: 1, reward: 120, event: true },
+      { id: 'dailyCast3', category: '오늘', title: '오늘 3번 던지기', desc: '가볍게 낚시터에서 손맛을 확인하세요', max: 3, value: Math.min(3, this.save.totalCasts), reward: 100 },
+      { id: 'dailyCast10', category: '오늘', title: '오늘 10번 던지기', desc: '입질 타이밍에 익숙해지는 훈련', max: 10, value: Math.min(10, this.save.totalCasts), reward: 180 },
+      { id: 'dailyCatch3', category: '오늘', title: '오늘 3마리 잡기', desc: '기본 장비로도 충분히 가능한 목표', max: 3, value: Math.min(3, caught), reward: 150 },
+      { id: 'dailyCatch10', category: '오늘', title: '오늘 10마리 잡기', desc: '연속 성공과 장비 강화를 같이 노려보세요', max: 10, value: Math.min(10, caught), reward: 320 },
+      { id: 'firstCatch', category: '성장', title: '첫 물고기 잡기', desc: 'Aqua Fantasia의 첫 수집 기록', max: 1, value: Math.min(1, caught), reward: 100 },
+      { id: 'catch5', category: '성장', title: '누적 5마리 잡기', desc: '기초 낚시꾼 칭호에 도전', max: 5, value: Math.min(5, caught), reward: 200 },
+      { id: 'catch20', category: '성장', title: '누적 20마리 잡기', desc: '릴 조작 감각을 안정화하세요', max: 20, value: Math.min(20, caught), reward: 450 },
+      { id: 'catch50', category: '성장', title: '누적 50마리 잡기', desc: '숙련 낚시꾼을 위한 장기 목표', max: 50, value: Math.min(50, caught), reward: 900 },
+      { id: 'unique5', category: '도감', title: '도감 5종 발견', desc: '다른 수역으로 이동해 다양한 물고기를 찾기', max: 5, value: Math.min(5, uniqueCaught), reward: 260 },
+      { id: 'unique15', category: '도감', title: '도감 15종 발견', desc: '잠긴 수역 해금의 핵심 목표', max: 15, value: Math.min(15, uniqueCaught), reward: 620 },
+      { id: 'unique30', category: '도감', title: '도감 30종 발견', desc: '귀여운 2.5D 물고기 컬렉션 확장', max: 30, value: Math.min(30, uniqueCaught), reward: 1200 },
+      { id: 'rare3', category: '도감', title: '희귀 물고기 3종 발견', desc: 'RARE 등급 물고기를 찾아보세요', max: 3, value: Math.min(3, rareCaught), reward: 360 },
+      { id: 'epic3', category: '도감', title: '에픽 물고기 3종 발견', desc: 'EPIC 등급은 장력 관리가 중요합니다', max: 3, value: Math.min(3, epicCaught), reward: 560 },
+      { id: 'boss1', category: '보스', title: '보스급 물고기 첫 발견', desc: '강한 입질과 장력 서지를 버텨내세요', max: 1, value: Math.min(1, bossCaught), reward: 800, event: true },
+      { id: 'boss3', category: '보스', title: '보스급 물고기 3종 발견', desc: '고급 수역의 진짜 손맛을 확인', max: 3, value: Math.min(3, bossCaught), reward: 1600, event: true },
+      { id: 'streak2', category: '콤보', title: '연속 성공 2회', desc: '콤보 보상과 도감 수집을 같이 노리기', max: 2, value: Math.min(2, this.save.bestStreak), reward: 140 },
+      { id: 'streak5', category: '콤보', title: '연속 성공 5회', desc: '안전지대 유지 감각이 필요합니다', max: 5, value: Math.min(5, this.save.bestStreak), reward: 520 },
+      { id: 'streak10', category: '콤보', title: '연속 성공 10회', desc: '고수용 장기 콤보 도전', max: 10, value: Math.min(10, this.save.bestStreak), reward: 1400 },
+      { id: 'rod3', category: '장비', title: '낚싯대 Lv.3 달성', desc: '장력 상승이 조금 더 안정됩니다', max: 3, value: Math.min(3, this.save.gear.rodLevel), reward: 220 },
+      { id: 'rod6', category: '장비', title: '낚싯대 Lv.6 달성', desc: '고급 수역 준비를 위한 강화 목표', max: 6, value: Math.min(6, this.save.gear.rodLevel), reward: 720 },
+      { id: 'reel3', category: '장비', title: '릴 Lv.3 달성', desc: '릴링 반응성이 좋아집니다', max: 3, value: Math.min(3, this.save.gear.reelLevel), reward: 240 },
+      { id: 'line3', category: '장비', title: '낚싯줄 Lv.3 달성', desc: '안전지대가 넓어지는 강화 목표', max: 3, value: Math.min(3, this.save.gear.lineLevel), reward: 240 },
+      { id: 'gear10', category: '장비', title: '장비 총합 Lv.10', desc: '장비 균형 강화로 안정적인 손맛 확보', max: 10, value: Math.min(10, gearTotalLevel), reward: 680 },
+      { id: 'upgrade5', category: '장비', title: '장비 강화 5회', desc: '성장 루프를 체감하는 누적 미션', max: 5, value: Math.min(5, gearUpgradeCount), reward: 420 },
+      { id: 'lure10', category: '상점', title: '미끼 10개 보유', desc: '입질 대기시간을 줄일 준비', max: 10, value: Math.min(10, this.save.gear.lureStock), reward: 200 },
+      { id: 'unlock5', category: '수역', title: '수역 5곳 해금', desc: '도감과 미션을 진행하면 새 수역이 열립니다', max: 5, value: Math.min(5, regionUnlocked), reward: 520 },
+      { id: 'unlock8', category: '수역', title: '수역 8곳 해금', desc: '후반 수역까지 항해 경로 확장', max: 8, value: Math.min(8, regionUnlocked), reward: 900 },
+      { id: 'mastery10', category: '숙련', title: '수역 숙련도 10 달성', desc: '한 수역에서 꾸준히 성공하면 숙련도가 오릅니다', max: 10, value: Math.min(10, masteryMax), reward: 520 },
+      { id: 'mastery25', category: '숙련', title: '수역 숙련도 25 달성', desc: '고급 물고기를 안정적으로 노리는 장기 목표', max: 25, value: Math.min(25, masteryMax), reward: 1200 },
+      { id: 'eventClown', category: '깜짝 이벤트', title: '흰동가리 깜짝 출몰', desc: '잔잔한 해변에서 귀여운 인기 물고기 발견', max: 1, value: hasClown ? 1 : 0, reward: 300, event: true },
+      { id: 'eventStorm', category: '깜짝 이벤트', title: '폭풍 외해 소문 확인', desc: '폭풍 외해 해금 또는 성공 12회 달성', max: 1, value: this.isRegionUnlocked('storm') || this.save.totalSuccess >= 12 ? 1 : 0, reward: 450, event: true },
+      { id: 'missionCollector', category: '미션', title: '미션 10개 완료', desc: '보상 루프를 꾸준히 회수하세요', max: 10, value: Math.min(10, missionDone), reward: 1000, event: true },
+    ];
+  }
+
   private renderMission(): void {
     this.clear();
     const root = this.baseGameShell('mission');
-    const caught = this.totalCaught();
-    const goals = [
-      { id: 'firstCatch', title: '첫 물고기 잡기', max: 1, value: Math.min(1, caught), reward: 100 },
-      { id: 'fiveCatch', title: '도감 5마리 수집', max: 5, value: Math.min(5, caught), reward: 240 },
-      { id: 'gearUp', title: '장비 3회 강화', max: 3, value: Math.min(3, this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel - 3), reward: 180 },
-      { id: 'stormUnlock', title: '고급 수역 해금', max: 12, value: Math.min(12, this.save.totalSuccess), reward: 320 },
-      { id: 'masteryRoute', title: '수역 숙련도 10 달성', max: 10, value: Math.min(10, Math.max(...Object.values(this.save.mastery), 0)), reward: 360 },
-      { id: 'bossHunter', title: '보스급 물고기 발견', max: 1, value: Object.entries(this.save.caught).some(([id, count]) => count > 0 && fishDex.find((fish) => fish.id === id)?.rarity === 'BOSS') ? 1 : 0, reward: 500 },
-    ];
+    const goals = this.missionGoals();
+    const doneCount = Object.values(this.save.missions).filter(Boolean).length;
+    const readyCount = goals.filter((goal) => goal.value >= goal.max && !this.save.missions[goal.id]).length;
     root.innerHTML += `
-      <section class="page-head glass-card"><div><span class="eyebrow">오늘의 목표</span><h2>오늘의 미션</h2><p>보상은 장비 강화와 신규 수역 해금에 연결됩니다.</p></div></section>
-      <section class="mission-list">
-        ${goals.map((goal) => `<article class="mission-card glass-card"><strong>${goal.title}</strong><progress max="${goal.max}" value="${goal.value}"></progress><span>${this.save.missions[goal.id] ? '완료' : `${goal.value}/${goal.max}`} · 보상 ${goal.reward}G</span><button class="image-btn soft" data-claim="${goal.id}" ${goal.value < goal.max || this.save.missions[goal.id] ? 'disabled' : ''}>보상 받기</button></article>`).join('')}
+      <section class="page-head glass-card"><div><span class="eyebrow">데일리 · 성장 · 이벤트</span><h2>미션 보드</h2><p>출석, 누적 성장, 장비 강화, 깜짝 출몰, 보스 도전까지 폭넓게 준비했습니다.</p></div></section>
+      <section class="mission-dashboard glass-card"><strong>완료 ${doneCount}/${goals.length}</strong><span>수령 가능 ${readyCount}개 · 골드 ${this.save.coins}G</span></section>
+      <section class="mission-list mission-list-v750">
+        ${goals.map((goal) => {
+          const claimed = !!this.save.missions[goal.id];
+          const ready = goal.value >= goal.max && !claimed;
+          const percent = Math.max(0, Math.min(100, Math.round((goal.value / goal.max) * 100)));
+          return `<article class="mission-card glass-card ${ready ? 'ready' : ''} ${claimed ? 'claimed' : ''} ${goal.event ? 'event' : ''}"><div class="mission-row"><span class="mission-tag">${goal.category}</span><strong>${goal.title}</strong></div><p>${goal.desc}</p><progress max="${goal.max}" value="${goal.value}"></progress><span class="mission-state">${claimed ? '완료됨' : `${goal.value}/${goal.max} · ${percent}%`} · 보상 ${goal.reward}G</span><button class="image-btn soft" data-claim="${goal.id}" ${!ready ? 'disabled' : ''}>${claimed ? '완료' : ready ? '보상 받기' : '진행 중'}</button></article>`;
+        }).join('')}
       </section>`;
     dom.app.appendChild(root);
     this.mountBottomNav(root, 'mission');
@@ -804,12 +853,14 @@ class AquaFantasiaGame {
 
   private claimMission(id: string): void {
     if (this.save.missions[id]) return;
-    const reward = id === 'bossHunter' ? 500 : id === 'masteryRoute' ? 360 : id === 'stormUnlock' ? 320 : id === 'fiveCatch' ? 240 : id === 'gearUp' ? 180 : 100;
+    const goal = this.missionGoals().find((item) => item.id === id);
+    if (!goal || goal.value < goal.max) return;
+    const reward = goal.reward;
     this.save.missions[id] = true;
     this.save.coins += reward;
     this.updateUnlocks();
     saveGame(this.save);
-    this.toast.show({ type: 'reward', title: '미션 보상 획득', message: `${reward}G를 받았습니다.`, actionScreen: id === 'stormUnlock' ? 'village' : 'gear' });
+    this.toast.show({ type: 'reward', title: '미션 보상 획득', message: `${goal.title} · ${reward}G를 받았습니다.`, actionScreen: id.includes('unlock') ? 'village' : id.includes('gear') || id.includes('rod') || id.includes('reel') || id.includes('line') ? 'gear' : 'mission' });
     this.renderMission();
   }
 

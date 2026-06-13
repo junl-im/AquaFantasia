@@ -1,9 +1,20 @@
-const CACHE_NAME = 'aqua-fantasia-v7.4.0-user-asset-pack';
+const CACHE_NAME = 'aqua-fantasia-v7.5.0-ui-rescue-mission-expansion';
 const PRECACHE = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./offline.html",
+  "./assets/screens/start_screen_clean_v750.webp",
+  "./assets/screens/start_screen_clean_v750.png",
+  "./assets/ui/v750_keep_on.png",
+  "./assets/ui/v750_keep_off.png",
+  "./assets/ui/v750_button_gold.png",
+  "./assets/ui/v750_button_aqua.png",
+  "./assets/ui/v750_button_purple.png",
+  "./assets/ui/v750_button_green.png",
+  "./assets/ui/v750_panel_clean.png",
+  "./assets/ui/v750_modal_clean.png",
+  "./assets/ui/v750_card_clean.png",
   "./assets/screens/start_screen_clean_v740.webp",
   "./assets/screens/start_screen_clean_v740.png",
   "./assets/ui/v740_keep_on.png",

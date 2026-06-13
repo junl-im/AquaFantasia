@@ -1,7 +1,7 @@
 import type { FishInfo, RegionInfo, SaveData } from './types';
 
-export const APP_VERSION = '7.4.0';
-export const CACHE_NAME = 'aqua-fantasia-v7.4.0-user-asset-pack';
+export const APP_VERSION = '7.5.0';
+export const CACHE_NAME = 'aqua-fantasia-v7.5.0-ui-rescue-mission-expansion';
 
 export const regions: RegionInfo[] = [
   { key: 'lake', name: '잔잔한 해변', subtitle: '첫 출항 추천 · 부드러운 파도', bg: './assets/art/bg_user_ocean.webp', difficulty: 1.00, waterSpeed: 0.65, color: '#54dfff', tide: '잔물결', unlockHint: '기본 해금' },

@@ -1201,3 +1201,195 @@ html.is-hostile-inapp .glass-card { backdrop-filter:none !important; }
   .hit-keep.v740-keep-toggle .keep-text { font-size: 11px !important; }
   .hit-keep.v740-keep-toggle .keep-indicator { width: 26px !important; height: 26px !important; flex-basis: 26px !important; }
 }
+
+/* v7.5.0 UI RESCUE + SCROLL + MISSION EXPANSION
+   - Start screen keep-login is no longer embedded in the painted art.
+   - Non-fishing screens scroll vertically like a real mobile game menu.
+   - Store/mission readability and button hierarchy are rebuilt with clean user-asset style frames. */
+.start-art-screen .start-art-image { content: url('/assets/screens/start_screen_clean_v750.webp') !important; }
+.hit-keep.v740-keep-toggle,
+.hit-keep.v730-keep-toggle,
+.hit-keep.v720-keep-toggle,
+.hit-keep.v750-keep-toggle {
+  left: 21.5% !important;
+  top: 74.75% !important;
+  width: 57% !important;
+  height: 5.15% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  padding: 0 18px !important;
+  background: url('/assets/ui/v750_keep_off.png') center/100% 100% no-repeat !important;
+  color: #effdff !important;
+  text-shadow: 0 2px 3px rgba(0,35,70,.50) !important;
+  border-radius: 999px !important;
+}
+.hit-keep.v740-keep-toggle.checked,
+.hit-keep.v730-keep-toggle.checked,
+.hit-keep.v720-keep-toggle.checked,
+.hit-keep.v750-keep-toggle.checked {
+  background-image: url('/assets/ui/v750_keep_on.png') !important;
+  color: #06344c !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.80) !important;
+}
+.hit-keep .keep-indicator { display: none !important; }
+.hit-keep .keep-text { font-size: clamp(12px, 3.4vw, 16px) !important; font-weight: 1000 !important; white-space: nowrap !important; transform: translateY(-1px); }
+
+.game-screen.scroll-screen {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
+  align-content: start;
+  padding-bottom: calc(128px + env(safe-area-inset-bottom)) !important;
+}
+.game-screen.locked-screen,
+.fishing-screen { overflow: hidden !important; touch-action: none; }
+.village-screen .region-grid,
+.dex-screen .dex-grid,
+.gear-screen .gear-grid,
+.shop-screen .shop-list,
+.mission-screen .mission-list {
+  max-height: none !important;
+  overflow: visible !important;
+  padding-bottom: calc(130px + env(safe-area-inset-bottom)) !important;
+}
+html.is-kakao-inapp .game-screen.scroll-screen,
+html.is-hostile-inapp .game-screen.scroll-screen { overflow-y: auto !important; touch-action: pan-y !important; }
+
+/* Clean, no-stripe UI frame hierarchy */
+.hero-card,
+.page-head,
+.dex-summary,
+.mission-dashboard,
+.quick-card,
+.gear-card,
+.shop-card,
+.mission-card,
+.dex-card {
+  background: url('/assets/ui/v750_card_clean.png') center/100% 100% no-repeat, linear-gradient(180deg, rgba(132,232,255,.96), rgba(16,114,197,.97)) !important;
+  border: 0 !important;
+  box-shadow: 0 16px 30px rgba(0, 35, 72, .24) !important;
+}
+.hero-card,
+.page-head,
+.mission-dashboard { background-image: url('/assets/ui/v750_panel_clean.png') !important; }
+.game-dialog-card,
+.catch-result-card { background-image: url('/assets/ui/v750_modal_clean.png') !important; }
+.image-btn,
+.mission-card .image-btn,
+.gear-card .image-btn,
+.dialog-btn.ok,
+.catch-result-card button:first-child,
+.hero-card .image-btn {
+  background-image: url('/assets/ui/v750_button_gold.png') !important;
+  color: #5e2e00 !important;
+  text-shadow: 0 2px 0 rgba(255,255,255,.72) !important;
+}
+.image-btn.soft,
+.dialog-btn.cancel,
+.catch-result-card button:last-child,
+.hold-pad,
+.round-btn.home-btn {
+  background-image: url('/assets/ui/v750_button_aqua.png') !important;
+  color: #07314d !important;
+  text-shadow: 0 2px 0 rgba(255,255,255,.62) !important;
+}
+.image-btn.purple { background-image: url('/assets/ui/v750_button_purple.png') !important; color:#fff !important; text-shadow:0 2px 0 rgba(44,21,105,.45) !important; }
+.weather-pill { background-image: url('/assets/ui/v750_button_green.png') !important; color:#083d43 !important; }
+.page-head h2,
+.hero-card h2,
+.quick-card strong,
+.gear-card strong,
+.shop-card strong,
+.mission-card strong,
+.dex-card strong {
+  color: #fffdf3 !important;
+  text-shadow: 0 3px 0 rgba(0,57,102,.50), 0 8px 18px rgba(0,31,64,.25) !important;
+}
+.page-head p,
+.hero-card p,
+.quick-card span,
+.gear-card span,
+.shop-card span,
+.mission-card span,
+.dex-card span {
+  color: #effdff !important;
+  text-shadow: 0 2px 0 rgba(0,52,92,.25) !important;
+}
+
+.shop-list,
+.mission-list { gap: 14px !important; width: min(820px, 100%) !important; }
+.shop-card {
+  grid-template-columns: 70px 1fr 118px !important;
+  min-height: 124px !important;
+  padding: 17px 16px !important;
+  color: #fff !important;
+}
+.shop-card img { width: 68px !important; height: 68px !important; }
+.shop-card strong { display:block; font-size: 19px !important; line-height: 1.15; }
+.shop-card span { display:block; font-size: 13px !important; text-align:right !important; font-weight: 1000 !important; color:#fff8a6 !important; }
+.shop-card .price-badge { justify-self:end; min-width: 92px; padding: 10px 12px; border-radius: 999px; color:#603000; background: linear-gradient(180deg,#fff0a6,#ffb13f); box-shadow: inset 0 2px 0 rgba(255,255,255,.6), 0 8px 14px rgba(0,35,70,.18); text-align:center; }
+
+.mission-dashboard {
+  width: min(820px, 100%);
+  margin: 0 auto 14px;
+  padding: 16px 18px;
+  border-radius: 32px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.mission-dashboard strong { color:#fff6a8; font-size: 20px; font-weight:1000; text-shadow:0 3px 0 rgba(0,62,102,.45); }
+.mission-dashboard span { color:#eafcff; font-weight:900; }
+.mission-card {
+  padding: 18px !important;
+  border-radius: 32px !important;
+  min-height: 170px;
+  color:#fff;
+}
+.mission-card.ready { box-shadow: 0 0 0 4px rgba(255,230,96,.34), 0 20px 34px rgba(0,33,70,.28) !important; }
+.mission-card.claimed { filter: saturate(.82); opacity:.78; }
+.mission-card.event { background-image: url('/assets/ui/v750_modal_clean.png') !important; }
+.mission-row { display:flex; align-items:center; gap:10px; min-width:0; }
+.mission-row strong { flex:1; font-size: 18px !important; line-height: 1.12; }
+.mission-tag { flex:0 0 auto; border-radius:999px; padding:7px 10px; background:linear-gradient(180deg,#fff2a6,#ffad3f); color:#623100 !important; font-size:12px !important; font-weight:1000 !important; text-shadow:0 1px 0 rgba(255,255,255,.7) !important; }
+.mission-card p { margin: 0; color:#eafcff; font-weight:850; font-size:13px; line-height:1.35; }
+.mission-state { color:#fff8a6 !important; font-weight:1000 !important; }
+.mission-card progress { height: 20px !important; border-radius: 999px; overflow:hidden; border:2px solid rgba(255,255,255,.38); background:#073d69 !important; }
+.mission-card progress::-webkit-progress-bar { background:#073d69; }
+.mission-card progress::-webkit-progress-value { background:linear-gradient(90deg,#66efff,#fff06e,#ffad45); border-radius:999px; }
+.mission-card progress::-moz-progress-bar { background:linear-gradient(90deg,#66efff,#fff06e,#ffad45); border-radius:999px; }
+.mission-card .image-btn { min-height: 58px !important; border-radius: 24px !important; font-size: 16px !important; }
+.mission-card .image-btn:disabled { opacity: .56 !important; filter: saturate(.55) brightness(.88); }
+
+.dex-card img { background: transparent !important; border-radius: 0 !important; }
+.region-grid { margin-bottom: 0 !important; }
+.bottom-nav { z-index: 50 !important; }
+
+@media (max-width: 430px) {
+  .hit-keep.v740-keep-toggle,
+  .hit-keep.v730-keep-toggle,
+  .hit-keep.v720-keep-toggle,
+  .hit-keep.v750-keep-toggle {
+    left: 18.2% !important;
+    top: 74.75% !important;
+    width: 63.6% !important;
+    height: 5.0% !important;
+    padding: 0 12px !important;
+  }
+  .hit-keep .keep-text { font-size: 12px !important; }
+  .shop-card { grid-template-columns: 58px 1fr 92px !important; padding: 14px 12px !important; }
+  .shop-card img { width: 56px !important; height: 56px !important; }
+  .shop-card strong { font-size: 16px !important; }
+  .shop-card span, .shop-card .price-badge { font-size: 12px !important; }
+  .mission-dashboard { display:block; text-align:center; }
+  .mission-dashboard span { display:block; margin-top:5px; font-size:13px; }
+  .mission-card { padding: 15px !important; }
+  .mission-row { align-items:flex-start; }
+  .mission-row strong { font-size: 16px !important; }
+}
+.shop-card strong small { display:block; margin-top:4px; color:#eafcff; font-size:12px; font-weight:850; line-height:1.25; text-shadow:0 2px 0 rgba(0,52,92,.25); }

@@ -1,3 +1,7 @@
+# Aqua Fantasia v7.5.0
+
+UI Rescue + Mission Expansion build.
+
 # Aqua Fantasia v7.4.0
 
 세로 전용 2.5D 모바일 캐주얼 낚시 게임 프로토타입입니다.
