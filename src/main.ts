@@ -272,7 +272,7 @@ class AquaFantasiaGame {
 
   private baseGameShell(name: string): HTMLElement {
     const root = document.createElement('main');
-    root.className = `game-screen ${name}-screen ${name === 'fishing' ? 'locked-screen' : 'scroll-screen'}`;
+    root.className = `game-screen ${name}-screen v800-screen ${name === 'fishing' ? 'locked-screen' : 'scroll-screen'}`;
     root.innerHTML = `<div class="ambient-bg" aria-hidden="true"></div>`;
     return root;
   }
@@ -340,11 +340,11 @@ class AquaFantasiaGame {
     this.bgSprite.scale.set(bgScale);
     this.bgSprite.position.set((w - this.bgSprite.texture.width * bgScale) / 2, (h - this.bgSprite.texture.height * bgScale) / 2);
     const base = Math.min(w, h);
-    this.player.scale.set(base / 780);
+    this.player.scale.set(base / 260);
     this.player.position.set(w * 0.27, h * 0.72);
-    this.bobber.scale.set(base / 1100);
+    this.bobber.scale.set(base / 520);
     this.bobber.position.set(w * 0.68, h * 0.60);
-    this.catchSprite.scale.set(base / 780);
+    this.catchSprite.scale.set(base / 360);
     this.catchSprite.position.set(w * 0.5, h * 0.52);
     this.biteText.position.set(w * 0.69, h * 0.42);
   }
@@ -712,12 +712,12 @@ class AquaFantasiaGame {
     this.clear();
     const root = this.baseGameShell('gear');
     root.innerHTML += `
-      <section class="page-head glass-card"><div><span class="eyebrow">장비 관리</span><h2>장비 강화</h2><p>장비와 수역 숙련도가 올라갈수록 장력 흔들림이 줄고 고급 어종 성공률이 올라갑니다.</p></div></section>
+      <section class="page-head glass-card v800-head"><div><span class="eyebrow">EQUIPMENT</span><h2>장비 강화</h2><p>낚싯대 · 릴 · 낚싯줄 · 미끼를 강화해 장력 흔들림을 줄입니다.</p></div><strong class="page-coin">${this.save.coins}G</strong></section>
       <section class="gear-grid">
-        ${this.gearCard('rod', '낚싯대', './assets/ui/gear_rod_25d.png', this.save.gear.rodLevel, 120, '장력 상승 완화')}
-        ${this.gearCard('reel', '릴', './assets/ui/gear_reel_25d.png', this.save.gear.reelLevel, 140, '릴링 반응 개선')}
-        ${this.gearCard('line', '낚싯줄', './assets/ui/gear_line_25d.png', this.save.gear.lineLevel, 130, '안전지대 확대')}
-        ${this.gearCard('lure', '미끼', './assets/ui/gear_lure_25d.png', this.save.gear.lureStock, 60, '입질 유도 보조')}
+        ${this.gearCard('rod', '낚싯대', './assets/v9/equipment/rod.png', this.save.gear.rodLevel, 120, '장력 상승 완화')}
+        ${this.gearCard('reel', '릴', './assets/v9/equipment/reel.png', this.save.gear.reelLevel, 140, '릴링 반응 개선')}
+        ${this.gearCard('line', '낚싯줄', './assets/v9/equipment/line.png', this.save.gear.lineLevel, 130, '안전지대 확대')}
+        ${this.gearCard('lure', '미끼', './assets/v9/equipment/bait.png', this.save.gear.lureStock, 60, '입질 유도 보조')}
       </section>`;
     dom.app.appendChild(root);
     this.mountBottomNav(root, 'gear');
@@ -769,13 +769,13 @@ class AquaFantasiaGame {
     this.clear();
     const root = this.baseGameShell('shop');
     const goods = [
-      { name: '산호 미끼 묶음', desc: '미끼 +5', cost: 120, icon: './assets/ui/shop_bait_25d.png' },
-      { name: '릴 윤활 오일', desc: '릴 강화 보조', cost: 180, icon: './assets/ui/shop_oil_25d.png' },
-      { name: '물결 안정 부적', desc: '낚싯줄 강화 보조', cost: 210, icon: './assets/ui/shop_charm_25d.png' },
-      { name: '비상 구조 키트', desc: '실패 후 복구 보상', cost: 260, icon: './assets/ui/badge_rescue_25d.png' },
+      { name: '산호 미끼 묶음', desc: '미끼 +5', cost: 120, icon: './assets/v9/equipment/bait.png' },
+      { name: '릴 윤활 오일', desc: '릴 강화 보조', cost: 180, icon: './assets/v9/equipment/reel.png' },
+      { name: '물결 안정 부적', desc: '낚싯줄 강화 보조', cost: 210, icon: './assets/v9/equipment/line.png' },
+      { name: '비상 구조 키트', desc: '실패 후 복구 보상', cost: 260, icon: './assets/v9/equipment/chest.png' },
     ];
     root.innerHTML += `
-      <section class="page-head glass-card"><div><span class="eyebrow">바다 상점</span><h2>상점</h2><p>골드 ${this.save.coins} · 미끼와 강화 재료를 구매합니다.</p></div></section>
+      <section class="page-head glass-card v800-head"><div><span class="eyebrow">SHOP</span><h2>상점</h2><p>미끼와 강화 보조품을 구매합니다. 글씨가 겹치지 않도록 카드형으로 재정렬했습니다.</p></div><strong class="page-coin">${this.save.coins}G</strong></section>
       <section class="shop-list">
         ${goods.map((item, i) => `<button class="shop-card glass-card" data-buy="${i}"><img src="${item.icon}" alt="" /><strong>${item.name}<small>${item.desc}</small></strong><span class="price-badge">${item.cost}G</span></button>`).join('')}
       </section>`;
@@ -854,7 +854,7 @@ class AquaFantasiaGame {
     const doneCount = Object.values(this.save.missions).filter(Boolean).length;
     const readyCount = goals.filter((goal) => goal.value >= goal.max && !this.save.missions[goal.id]).length;
     root.innerHTML += `
-      <section class="page-head glass-card"><div><span class="eyebrow">데일리 · 성장 · 이벤트</span><h2>미션 보드</h2><p>출석, 누적 성장, 장비 강화, 깜짝 출몰, 보스 도전까지 폭넓게 준비했습니다.</p></div></section>
+      <section class="page-head glass-card v800-head"><div><span class="eyebrow">MISSION</span><h2>미션 보드</h2><p>데일리 · 성장 · 도감 · 장비 미션을 읽기 쉬운 세로 카드로 재배치했습니다.</p></div><strong class="page-coin">${readyCount}개 대기</strong></section>
       <section class="mission-dashboard glass-card"><strong>완료 ${doneCount}/${goals.length}</strong><span>수령 가능 ${readyCount}개 · 골드 ${this.save.coins}G</span></section>
       <section class="mission-list mission-list-v750">
         ${goals.map((goal) => {

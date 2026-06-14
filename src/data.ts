@@ -1,7 +1,7 @@
 import type { FishInfo, RegionInfo, SaveData } from './types';
 
-export const APP_VERSION = '7.6.0';
-export const CACHE_NAME = 'aqua-fantasia-v7.6.0-nav-fixed-25d-runtime';
+export const APP_VERSION = '8.0.0';
+export const CACHE_NAME = 'aqua-fantasia-v8.0.0-ui-asset-rebuild';
 
 export const regions: RegionInfo[] = [
   { key: 'lake', name: '잔잔한 해변', subtitle: '첫 출항 추천 · 부드러운 파도', bg: './assets/v9/bg/ocean.webp', difficulty: 1.00, waterSpeed: 0.65, color: '#54dfff', tide: '잔물결', unlockHint: '기본 해금' },
@@ -27,34 +27,34 @@ export const fishDex: FishInfo[] = [
   { id: 'leaf', name: '은비늘송어', regionKey: 'river', region: '산호숲 바다', img: './assets/v9/fish/fish_07.png', rarity: 'RARE', reward: 122, weight: 16 },
   { id: 'harbor', name: '점박이잉어', regionKey: 'harbor', region: '노을 항구', img: './assets/v9/fish/fish_08.png', rarity: 'RARE', reward: 128, weight: 30 },
   { id: 'moon', name: '줄무늬망둥어', regionKey: 'harbor', region: '노을 항구', img: './assets/v9/fish/fish_09.png', rarity: 'EPIC', reward: 185, weight: 12 },
-  { id: 'lantern', name: '비단잉어', regionKey: 'harbor', region: '노을 항구', img: './assets/dex/v740_fish_10.png', rarity: 'RARE', reward: 145, weight: 18 },
-  { id: 'deep', name: '녹색메기', regionKey: 'deep', region: '깊은 바다', img: './assets/v9/fish/fish_10.png', rarity: 'RARE', reward: 150, weight: 28 },
-  { id: 'abyss', name: '보라쏨뱅이', regionKey: 'deep', region: '깊은 바다', img: './assets/v9/fish/fish_11.png', rarity: 'EPIC', reward: 230, weight: 13 },
-  { id: 'shadow', name: '달빛줄무늬', regionKey: 'deep', region: '깊은 바다', img: './assets/v9/fish/fish_12.png', rarity: 'EPIC', reward: 245, weight: 9 },
-  { id: 'palace', name: '무지개해마', regionKey: 'palace', region: '용궁 정원', img: './assets/v9/fish/fish_13.png', rarity: 'EPIC', reward: 260, weight: 18 },
-  { id: 'sun', name: '심연불사조', regionKey: 'palace', region: '용궁 정원', img: './assets/v9/fish/fish_17.png', rarity: 'EPIC', reward: 280, weight: 14 },
-  { id: 'lotus', name: '황금피쉬', regionKey: 'palace', region: '용궁 정원', img: './assets/v9/fish/fish_14.png', rarity: 'RARE', reward: 172, weight: 20 },
-  { id: 'dimension', name: '불꽃쏨뱅이', regionKey: 'dimension', region: '차원의 바다', img: './assets/dex/v740_fish_17.png', rarity: 'BOSS', reward: 420, weight: 8 },
-  { id: 'king', name: '푸른보석고기', regionKey: 'dimension', region: '차원의 바다', img: './assets/v9/fish/fish_15.png', rarity: 'BOSS', reward: 520, weight: 5 },
-  { id: 'nova', name: '청룡피쉬', regionKey: 'dimension', region: '차원의 바다', img: './assets/v9/fish/fish_16.png', rarity: 'EPIC', reward: 310, weight: 13 },
-  { id: 'crystal', name: '수정장어', regionKey: 'glacier', region: '얼음 낚시터', img: './assets/v9/fish/fish_18.png', rarity: 'RARE', reward: 168, weight: 28 },
-  { id: 'aurora', name: '고대수호신', regionKey: 'glacier', region: '얼음 낚시터', img: './assets/v9/fish/fish_19.png', rarity: 'EPIC', reward: 285, weight: 13 },
-  { id: 'storm', name: '별빛해파리', regionKey: 'storm', region: '폭풍 외해', img: './assets/v9/fish/fish_20.png', rarity: 'EPIC', reward: 320, weight: 18 },
-  { id: 'thunder', name: '심해아귀', regionKey: 'storm', region: '폭풍 외해', img: './assets/v9/fish/fish_21.png', rarity: 'BOSS', reward: 560, weight: 6 },
+  { id: 'lantern', name: '비단잉어', regionKey: 'harbor', region: '노을 항구', img: './assets/v9/fish/fish_10.png', rarity: 'RARE', reward: 145, weight: 18 },
+  { id: 'deep', name: '녹색메기', regionKey: 'deep', region: '깊은 바다', img: './assets/v9/fish/fish_11.png', rarity: 'RARE', reward: 150, weight: 28 },
+  { id: 'abyss', name: '보라쏨뱅이', regionKey: 'deep', region: '깊은 바다', img: './assets/v9/fish/fish_12.png', rarity: 'EPIC', reward: 230, weight: 13 },
+  { id: 'shadow', name: '달빛줄무늬', regionKey: 'deep', region: '깊은 바다', img: './assets/v9/fish/fish_13.png', rarity: 'EPIC', reward: 245, weight: 9 },
+  { id: 'palace', name: '무지개해마', regionKey: 'palace', region: '용궁 정원', img: './assets/v9/fish/fish_14.png', rarity: 'EPIC', reward: 260, weight: 18 },
+  { id: 'sun', name: '심연불사조', regionKey: 'palace', region: '용궁 정원', img: './assets/v9/fish/fish_15.png', rarity: 'EPIC', reward: 280, weight: 14 },
+  { id: 'lotus', name: '황금피쉬', regionKey: 'palace', region: '용궁 정원', img: './assets/v9/fish/fish_16.png', rarity: 'RARE', reward: 172, weight: 20 },
+  { id: 'dimension', name: '불꽃쏨뱅이', regionKey: 'dimension', region: '차원의 바다', img: './assets/v9/fish/fish_17.png', rarity: 'BOSS', reward: 420, weight: 8 },
+  { id: 'king', name: '푸른보석고기', regionKey: 'dimension', region: '차원의 바다', img: './assets/v9/fish/fish_18.png', rarity: 'BOSS', reward: 520, weight: 5 },
+  { id: 'nova', name: '청룡피쉬', regionKey: 'dimension', region: '차원의 바다', img: './assets/v9/fish/fish_19.png', rarity: 'EPIC', reward: 310, weight: 13 },
+  { id: 'crystal', name: '수정장어', regionKey: 'glacier', region: '얼음 낚시터', img: './assets/v9/fish/fish_20.png', rarity: 'RARE', reward: 168, weight: 28 },
+  { id: 'aurora', name: '고대수호신', regionKey: 'glacier', region: '얼음 낚시터', img: './assets/v9/fish/fish_21.png', rarity: 'EPIC', reward: 285, weight: 13 },
+  { id: 'storm', name: '별빛해파리', regionKey: 'storm', region: '폭풍 외해', img: './assets/v9/fish/fish_22.png', rarity: 'EPIC', reward: 320, weight: 18 },
+  { id: 'thunder', name: '심해아귀', regionKey: 'storm', region: '폭풍 외해', img: './assets/v9/fish/fish_23.png', rarity: 'BOSS', reward: 560, weight: 6 },
 
-  { id: 'mangrove', name: '환상인어', regionKey: 'mangrove', region: '맹그로브 미궁', img: './assets/v9/fish/fish_22.png', rarity: 'RARE', reward: 235, weight: 22 },
-  { id: 'firefly', name: '투명메기', regionKey: 'mangrove', region: '맹그로브 미궁', img: './assets/dex/v740_fish_25.png', rarity: 'EPIC', reward: 340, weight: 12 },
-  { id: 'turtleGuardian', name: '화산쏨뱅이', regionKey: 'mangrove', region: '맹그로브 미궁', img: './assets/dex/v740_fish_26.png', rarity: 'BOSS', reward: 610, weight: 5 },
-  { id: 'lunar', name: '하늘가오리', regionKey: 'lunar', region: '달빛 산호해', img: './assets/dex/v740_fish_27.png', rarity: 'EPIC', reward: 370, weight: 16 },
-  { id: 'manta', name: '유령복어', regionKey: 'lunar', region: '달빛 산호해', img: './assets/v9/fish/fish_23.png', rarity: 'EPIC', reward: 390, weight: 11 },
-  { id: 'orcaBoss', name: '우뢰메기', regionKey: 'lunar', region: '달빛 산호해', img: './assets/v9/fish/fish_24.png', rarity: 'BOSS', reward: 760, weight: 4 },
-  { id: 'reefStar', name: '보라상어', regionKey: 'reefFestival', region: '산호 축제섬', img: './assets/dex/v740_fish_30.png', rarity: 'RARE', reward: 190, weight: 25 },
-  { id: 'prism', name: '금빛바늘', regionKey: 'reefFestival', region: '산호 축제섬', img: './assets/v9/fish/fish_28.png', rarity: 'EPIC', reward: 315, weight: 13 },
-  { id: 'candyfin', name: '루비쏨뱅이', regionKey: 'reefFestival', region: '산호 축제섬', img: './assets/v9/fish/fish_25.png', rarity: 'RARE', reward: 225, weight: 18 },
-  { id: 'bluesprite', name: '푸른가오리', regionKey: 'lake', region: '잔잔한 해변', img: './assets/v9/fish/fish_26.png', rarity: 'RARE', reward: 150, weight: 20 },
-  { id: 'royal', name: '분홍비단잉어', regionKey: 'palace', region: '용궁 정원', img: './assets/v9/fish/fish_27.png', rarity: 'BOSS', reward: 690, weight: 4 },
-  { id: 'melon', name: '금빛금붕어', regionKey: 'mangrove', region: '맹그로브 미궁', img: './assets/dex/v740_fish_35.png', rarity: 'EPIC', reward: 330, weight: 12 },
-  { id: 'unknown', name: '미발견', regionKey: 'lake', region: '???', img: './assets/dex/fish_unknown_25d.png', rarity: 'COMMON', reward: 0, weight: 0 },
+  { id: 'mangrove', name: '환상인어', regionKey: 'mangrove', region: '맹그로브 미궁', img: './assets/v9/fish/fish_24.png', rarity: 'RARE', reward: 235, weight: 22 },
+  { id: 'firefly', name: '투명메기', regionKey: 'mangrove', region: '맹그로브 미궁', img: './assets/v9/fish/fish_25.png', rarity: 'EPIC', reward: 340, weight: 12 },
+  { id: 'turtleGuardian', name: '화산쏨뱅이', regionKey: 'mangrove', region: '맹그로브 미궁', img: './assets/v9/fish/fish_26.png', rarity: 'BOSS', reward: 610, weight: 5 },
+  { id: 'lunar', name: '하늘가오리', regionKey: 'lunar', region: '달빛 산호해', img: './assets/v9/fish/fish_27.png', rarity: 'EPIC', reward: 370, weight: 16 },
+  { id: 'manta', name: '유령복어', regionKey: 'lunar', region: '달빛 산호해', img: './assets/v9/fish/fish_28.png', rarity: 'EPIC', reward: 390, weight: 11 },
+  { id: 'orcaBoss', name: '우뢰메기', regionKey: 'lunar', region: '달빛 산호해', img: './assets/v9/fish/fish_29.png', rarity: 'BOSS', reward: 760, weight: 4 },
+  { id: 'reefStar', name: '보라상어', regionKey: 'reefFestival', region: '산호 축제섬', img: './assets/v9/fish/fish_30.png', rarity: 'RARE', reward: 190, weight: 25 },
+  { id: 'prism', name: '금빛바늘', regionKey: 'reefFestival', region: '산호 축제섬', img: './assets/v9/fish/fish_31.png', rarity: 'EPIC', reward: 315, weight: 13 },
+  { id: 'candyfin', name: '루비쏨뱅이', regionKey: 'reefFestival', region: '산호 축제섬', img: './assets/v9/fish/fish_32.png', rarity: 'RARE', reward: 225, weight: 18 },
+  { id: 'bluesprite', name: '푸른가오리', regionKey: 'lake', region: '잔잔한 해변', img: './assets/v9/fish/fish_33.png', rarity: 'RARE', reward: 150, weight: 20 },
+  { id: 'royal', name: '분홍비단잉어', regionKey: 'palace', region: '용궁 정원', img: './assets/v9/fish/fish_34.png', rarity: 'BOSS', reward: 690, weight: 4 },
+  { id: 'melon', name: '금빛금붕어', regionKey: 'mangrove', region: '맹그로브 미궁', img: './assets/v9/fish/fish_35.png', rarity: 'EPIC', reward: 330, weight: 12 },
+  { id: 'unknown', name: '미발견', regionKey: 'lake', region: '???', img: './assets/v9/fish/fish_36.png', rarity: 'COMMON', reward: 0, weight: 0 },
 ];
 
 export const navItems: Array<{ screen: SaveData['screen']; icon: string; label: string }> = [
