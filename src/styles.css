@@ -2102,3 +2102,280 @@ body[data-screen="fishing"] .combo-badge {
   .fishing-guide-card { top: calc(80px + env(safe-area-inset-top)) !important; min-height: 52px !important; }
   body[data-screen="fishing"] .cast-button { min-height: 68px !important; }
 }
+
+/* v8.1.0 ASSET FIT + START KEEP BUTTON RESTORE
+   The baked keep-login row is removed from the start artwork. The real interactive button is visible,
+   non-overlapping, and uses the uploaded v12 rendered PNG/WebP button set. */
+:root {
+  --v810-nav-height: 86px;
+  --v810-bottom-safe: calc(var(--v810-nav-height) + 24px + env(safe-area-inset-bottom));
+}
+.start-art-screen .start-art-image {
+  content: url('/assets/v12/screens/start_screen_clean_v810.webp') !important;
+}
+.start-art-screen .hit-keep.v810-keep-button,
+.start-art-screen .hit-keep.v740-keep-toggle.v810-keep-button,
+.start-art-screen .hit-keep.v730-keep-toggle.v810-keep-button,
+.start-art-screen .hit-keep.v720-keep-toggle.v810-keep-button,
+.start-art-screen .hit-keep.v750-keep-toggle.v810-keep-button {
+  left: 20.7% !important;
+  top: 76.95% !important;
+  width: 58.6% !important;
+  height: 5.65% !important;
+  min-height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 0 18px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  overflow: visible !important;
+  background: url('/assets/v12/buttons/btn_mint_normal_wide_blank.webp') center/100% 100% no-repeat !important;
+  color: #06324b !important;
+  text-shadow: 0 2px 0 rgba(255,255,255,.72) !important;
+  box-shadow: 0 12px 22px rgba(0, 30, 70, .22) !important;
+  pointer-events: auto !important;
+  filter: saturate(1.08) drop-shadow(0 6px 10px rgba(0,34,72,.26));
+}
+.start-art-screen .hit-keep.v810-keep-button:active {
+  transform: scale(.985) !important;
+  background-image: url('/assets/v12/buttons/btn_mint_pressed_wide_blank.webp') !important;
+}
+.start-art-screen .hit-keep.v810-keep-button.checked {
+  background-image: url('/assets/v12/buttons/btn_gold_normal_wide_blank.webp') !important;
+  color: #643000 !important;
+}
+.start-art-screen .hit-keep.v810-keep-button .keep-text {
+  display: block !important;
+  position: relative !important;
+  z-index: 2 !important;
+  color: inherit !important;
+  font-size: clamp(12px, 3.45vw, 16px) !important;
+  font-weight: 1000 !important;
+  letter-spacing: -.06em !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  transform: none !important;
+}
+.start-art-screen .hit-keep.v810-keep-button .keep-indicator {
+  display: grid !important;
+  place-items: center !important;
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  flex: 0 0 28px !important;
+  transform: none !important;
+  border-radius: 999px !important;
+  background: radial-gradient(circle at 38% 28%, #ffffff 0 16%, #9deeff 32%, #1992c9 72%, #07517b 100%) !important;
+  border: 3px solid rgba(255,255,255,.86) !important;
+  box-shadow: inset 0 2px 2px rgba(255,255,255,.72), 0 3px 8px rgba(0,42,72,.30) !important;
+  filter: none !important;
+}
+.start-art-screen .hit-keep.v810-keep-button .keep-indicator::after {
+  content: "" !important;
+  display: block !important;
+  position: static !important;
+  width: 8px !important;
+  height: 14px !important;
+  border: solid #ffffff !important;
+  border-width: 0 4px 4px 0 !important;
+  transform: rotate(45deg) scale(0) !important;
+  transform-origin: center !important;
+  transition: transform .12s ease !important;
+}
+.start-art-screen .hit-keep.v810-keep-button.checked .keep-indicator {
+  background: radial-gradient(circle at 38% 28%, #fffbd5 0 18%, #58e9ff 38%, #0d85d0 100%) !important;
+}
+.start-art-screen .hit-keep.v810-keep-button.checked .keep-indicator::after {
+  transform: rotate(45deg) scale(1) !important;
+}
+@media (max-width: 390px) {
+  .start-art-screen .hit-keep.v810-keep-button { left: 17.8% !important; width: 64.4% !important; padding: 0 13px !important; }
+  .start-art-screen .hit-keep.v810-keep-button .keep-text { font-size: 12px !important; }
+  .start-art-screen .hit-keep.v810-keep-button .keep-indicator { width: 25px !important; height: 25px !important; min-width: 25px !important; flex-basis: 25px !important; }
+}
+
+.game-screen.v810-screen {
+  --v800-nav-height: var(--v810-nav-height);
+  background: linear-gradient(180deg, rgba(2, 40, 76, .48), rgba(0, 16, 38, .82)), url('/assets/v12/bg/ocean_portrait.webp') center/cover no-repeat !important;
+  padding-bottom: var(--v810-bottom-safe) !important;
+}
+.game-screen.v810-screen.scroll-screen {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: contain !important;
+  padding-bottom: var(--v810-bottom-safe) !important;
+}
+.gear-screen.v810-screen { background-image: linear-gradient(180deg, rgba(3,42,77,.46), rgba(0,17,42,.84)), url('/assets/v12/bg/pier_portrait.webp') !important; }
+.shop-screen.v810-screen { background-image: linear-gradient(180deg, rgba(3,50,82,.44), rgba(0,19,43,.84)), url('/assets/v12/bg/ocean_portrait.webp') !important; }
+.mission-screen.v810-screen { background-image: linear-gradient(180deg, rgba(3,49,83,.42), rgba(0,17,42,.86)), url('/assets/v12/bg/lake_portrait.webp') !important; }
+.dex-screen.v810-screen { background-image: linear-gradient(180deg, rgba(4,38,76,.44), rgba(0,14,42,.86)), url('/assets/v12/bg/deepsea_portrait.webp') !important; }
+.village-screen.v810-screen { background-image: linear-gradient(180deg, rgba(5,63,91,.36), rgba(0,21,48,.76)), url('/assets/v12/bg/stream_portrait.webp') !important; }
+.game-screen.v810-screen .ambient-bg {
+  background: radial-gradient(circle at 18% 12%, rgba(143,243,255,.32), transparent 23%), radial-gradient(circle at 82% 8%, rgba(255,218,119,.22), transparent 25%), linear-gradient(180deg, rgba(31,190,226,.12), rgba(0,32,75,.42)) !important;
+}
+.game-screen.v810-screen .page-head,
+.game-screen.v810-screen .hero-card,
+.game-screen.v810-screen .mission-dashboard,
+.game-screen.v810-screen .dex-summary,
+.game-screen.v810-screen .player-hud,
+.game-screen.v810-screen .system-strip {
+  background: url('/assets/v12/ui/panel_blank.webp') center/100% 100% no-repeat, linear-gradient(180deg,#27b9e2,#0a5888) !important;
+  border: 0 !important;
+  box-shadow: 0 16px 26px rgba(0,18,42,.34), inset 0 2px 0 rgba(255,255,255,.22) !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 0 rgba(0,35,66,.42) !important;
+}
+.game-screen.v810-screen .page-head,
+.game-screen.v810-screen .hero-card {
+  min-height: 112px !important;
+  padding: 18px 18px !important;
+  align-items: center !important;
+}
+.game-screen.v810-screen .page-head h2,
+.game-screen.v810-screen .hero-card h2 { font-size: clamp(25px, 7vw, 38px) !important; }
+.game-screen.v810-screen .page-head p,
+.game-screen.v810-screen .hero-card p,
+.game-screen.v810-screen .mission-dashboard span,
+.game-screen.v810-screen .dex-summary span { color: #eaffff !important; }
+.game-screen.v810-screen .gear-grid,
+.game-screen.v810-screen .shop-list,
+.game-screen.v810-screen .mission-list,
+.game-screen.v810-screen .dex-grid {
+  padding-bottom: calc(var(--v810-bottom-safe) + 14px) !important;
+}
+.game-screen.v810-screen .gear-card,
+.game-screen.v810-screen .shop-card,
+.game-screen.v810-screen .mission-card,
+.game-screen.v810-screen .quick-card,
+.game-screen.v810-screen .region-card,
+.game-screen.v810-screen .dex-card {
+  background: url('/assets/v12/ui/panel_blank.webp') center/100% 100% no-repeat, linear-gradient(180deg,#219ed0,#064a78) !important;
+  border: 0 !important;
+  box-shadow: 0 14px 24px rgba(0,18,42,.32), inset 0 2px 0 rgba(255,255,255,.18) !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 0 rgba(0,37,68,.42) !important;
+}
+.game-screen.v810-screen .gear-card {
+  grid-template-columns: 76px minmax(0, 1fr) minmax(92px, auto) !important;
+  min-height: 106px !important;
+  padding: 16px !important;
+}
+.game-screen.v810-screen .shop-card {
+  grid-template-columns: 76px minmax(0, 1fr) minmax(80px, auto) !important;
+  min-height: 106px !important;
+  padding: 16px !important;
+  background-image: url('/assets/v12/ui/panel_blank.webp'), linear-gradient(180deg,#29bfe0,#07527f) !important;
+}
+.game-screen.v810-screen .mission-card {
+  min-height: 152px !important;
+  background-image: url('/assets/v12/ui/panel_blank.webp'), linear-gradient(180deg,#26bcdf,#07527f) !important;
+}
+.game-screen.v810-screen .dex-card {
+  background-image: url('/assets/v12/ui/slot_square.webp'), linear-gradient(180deg,#27b9df,#0a4c7e) !important;
+}
+.game-screen.v810-screen .gear-card > img,
+.game-screen.v810-screen .shop-card img,
+.game-screen.v810-screen .quick-card img {
+  box-sizing: border-box !important;
+  width: 68px !important;
+  height: 68px !important;
+  padding: 7px !important;
+  border-radius: 22px !important;
+  object-fit: contain !important;
+  background: url('/assets/v12/ui/slot_square.webp') center/100% 100% no-repeat !important;
+  filter: drop-shadow(0 10px 10px rgba(0,16,36,.26)) saturate(1.12) !important;
+}
+.game-screen.v810-screen .shop-card strong,
+.game-screen.v810-screen .gear-card strong,
+.game-screen.v810-screen .mission-card strong {
+  color: #ffffff !important;
+  font-size: clamp(17px, 4.3vw, 21px) !important;
+  line-height: 1.15 !important;
+  overflow-wrap: anywhere !important;
+}
+.game-screen.v810-screen .shop-card small,
+.game-screen.v810-screen .gear-card span,
+.game-screen.v810-screen .mission-card p,
+.game-screen.v810-screen .mission-state {
+  color: #e9fcff !important;
+  font-size: clamp(12px, 3.1vw, 14px) !important;
+  line-height: 1.35 !important;
+}
+.game-screen.v810-screen .image-btn,
+.game-screen.v810-screen .dialog-btn.ok,
+.game-screen.v810-screen .mission-card .image-btn,
+.game-screen.v810-screen .gear-card .image-btn,
+.game-screen.v810-screen .price-badge,
+.page-coin {
+  background: url('/assets/v12/buttons/btn_gold_normal_mid_blank.webp') center/100% 100% no-repeat !important;
+  color: #623000 !important;
+  text-shadow: 0 2px 0 rgba(255,255,255,.72) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.game-screen.v810-screen .image-btn.soft,
+.game-screen.v810-screen .mission-card .image-btn[disabled] {
+  background-image: url('/assets/v12/buttons/btn_cyan_normal_mid_blank.webp') !important;
+  color: #06334e !important;
+}
+.game-screen.v810-screen .image-btn:active,
+.game-screen.v810-screen .mission-card .image-btn:active,
+.game-screen.v810-screen .gear-card .image-btn:active {
+  transform: translateY(1px) scale(.985) !important;
+  background-image: url('/assets/v12/buttons/btn_gold_pressed_mid_blank.webp') !important;
+}
+.game-screen.v810-screen .mission-card progress {
+  height: 18px !important;
+  border-radius: 999px !important;
+  background: rgba(6,48,82,.68) !important;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,.30) !important;
+}
+.bottom-nav.fixed-root-nav,
+html.portrait-only-game .bottom-nav.fixed-root-nav,
+.bottom-nav {
+  background: url('/assets/v12/ui/frame_bottom_nav.webp') center/100% 100% no-repeat, linear-gradient(180deg,#168fd0,#04325e) !important;
+  height: var(--v810-nav-height) !important;
+}
+.bottom-nav button.active {
+  background: rgba(255,255,255,.18) !important;
+  border-radius: 22px !important;
+  color: #fff6aa !important;
+}
+.bottom-nav button img {
+  width: 31px !important;
+  height: 31px !important;
+  object-fit: contain !important;
+}
+.fishing-shell.v810-screen { background: #064a79 !important; }
+body[data-screen="fishing"] .fishing-stage {
+  background: #07557e !important;
+}
+body[data-screen="fishing"] .cast-button {
+  background: url('/assets/v12/buttons/btn_orange_normal_wide_blank.webp') center/100% 100% no-repeat !important;
+  color: #673000 !important;
+  text-shadow: 0 2px 0 rgba(255,255,255,.72) !important;
+}
+body[data-screen="fishing"] .cast-button:active { background-image: url('/assets/v12/buttons/btn_orange_pressed_wide_blank.webp') !important; }
+body[data-screen="fishing"] .reel-panel,
+.fishing-guide-card,
+body[data-screen="fishing"] .fishing-top {
+  background: url('/assets/v12/ui/panel_blank.webp') center/100% 100% no-repeat, linear-gradient(180deg,#20b4dd,#064c7e) !important;
+  border: 0 !important;
+}
+@media (max-width: 430px) {
+  :root { --v810-nav-height: 82px; }
+  .game-screen.v810-screen .page-head,
+  .game-screen.v810-screen .hero-card { min-height: 104px !important; padding: 15px !important; }
+  .game-screen.v810-screen .gear-card { grid-template-columns: 62px minmax(0,1fr) 78px !important; gap: 9px !important; padding: 12px !important; min-height: 92px !important; }
+  .game-screen.v810-screen .shop-card { grid-template-columns: 62px minmax(0,1fr) 68px !important; gap: 9px !important; padding: 12px !important; min-height: 92px !important; }
+  .game-screen.v810-screen .gear-card > img,
+  .game-screen.v810-screen .shop-card img { width: 58px !important; height: 58px !important; padding: 6px !important; }
+  .game-screen.v810-screen .price-badge { min-width: 62px !important; font-size: 13px !important; padding: 8px 8px !important; }
+  .game-screen.v810-screen .mission-card { min-height: 142px !important; }
+}

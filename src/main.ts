@@ -8,17 +8,17 @@ import { ToastManager } from './toast';
 import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPortraitLock } from './core/PortraitGuard';
 
 const ASSET = {
-  loginBg: './assets/screens/start_screen_clean_v750.webp',
-  player: './assets/v9/equipment/boat.png',
-  float: './assets/v9/equipment/bobber.png',
-  fish: './assets/art/fish_clown.png',
-  gauge: './assets/v9/ui/progress_frame_aqua.png',
+  loginBg: './assets/v12/screens/start_screen_clean_v810.webp',
+  player: './assets/v12/characters/chibi_fisher_01.png',
+  float: './assets/v12/icons/bobber.png',
+  fish: './assets/v12/fish/fish_01.png',
+  gauge: './assets/v12/icons/gauge_level.png',
   slot: './assets/art/fish_slot.png',
   ripple: './assets/art/water_ripple_overlay.webp',
   caustics: './assets/art/caustic_sparkle_overlay.webp',
   castButton: './assets/ui/button_cast_clean.png',
-  perfect: './assets/v9/fx/particles_gold.png',
-  touchRing: './assets/v9/fx/ring_aqua.png',
+  perfect: './assets/v12/fx/particle_sparkle_cluster_ref_a.png',
+  touchRing: './assets/v12/icons/sparkle.png',
 };
 
 const dom = {
@@ -131,7 +131,7 @@ class AquaFantasiaGame {
       <button class="start-hotspot hit-depart" data-action="guest" aria-label="낚시터로 출항"></button>
       <button class="start-hotspot hit-new" data-action="new" aria-label="처음부터 새 게임"></button>
       <button class="start-hotspot hit-server" data-action="server" aria-label="익명 서버연동"></button>
-      <button class="start-hotspot hit-keep v720-keep-toggle v730-keep-toggle v740-keep-toggle v750-keep-toggle" data-action="keep" aria-label="이 기기에서 로그인 유지" aria-pressed="false"><span class="keep-indicator" aria-hidden="true"></span><span class="keep-text">이 기기에서 로그인 유지</span></button>
+      <button class="start-hotspot hit-keep v810-keep-button" data-action="keep" aria-label="이 기기에서 로그인 유지" aria-pressed="false"><span class="keep-indicator" aria-hidden="true"></span><span class="keep-text">이 기기에서 로그인 유지</span></button>
       <div class="login-touch-shine" aria-hidden="true"></div>`;
     dom.app.appendChild(shell);
     const keepEnabled = window.localStorage.getItem('aqua-login-keep') === 'true';
@@ -163,7 +163,7 @@ class AquaFantasiaGame {
     root.insertAdjacentHTML('beforeend', `
       <section class="player-hud glass-card">
         <div><span class="eyebrow">선장</span><strong>낚시꾼</strong></div>
-        <div class="hud-pill"><img src="./assets/ui/panel_badge_gold_25d.png" alt="" />${this.save.coins}</div>
+        <div class="hud-pill"><img src="./assets/v12/icons/coin.png" alt="" />${this.save.coins}</div>
         <div class="hud-pill">장비 Lv.${this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel - 2}</div>
         <div class="hud-pill">도감 ${totalCaught}</div>
       </section>
@@ -177,10 +177,10 @@ class AquaFantasiaGame {
         <button class="image-btn primary" data-go="fishing">낚시터로 출항</button>
       </section>
       <section class="quick-grid" aria-label="빠른 메뉴">
-        <button class="quick-card glass-card" data-go="gear"><img src="./assets/ui/nav_gear_25d.png" alt="" /><strong>장비 강화</strong><span>손맛 안정</span></button>
-        <button class="quick-card glass-card" data-go="dex"><img src="./assets/ui/nav_dex_25d.png" alt="" /><strong>물고기 도감</strong><span>${fishDex.length - 1}종 수집</span></button>
-        <button class="quick-card glass-card" data-go="mission"><img src="./assets/ui/nav_mission_25d.png" alt="" /><strong>미션</strong><span>보상 확인</span></button>
-        <button class="quick-card glass-card" data-go="shop"><img src="./assets/ui/nav_shop_25d.png" alt="" /><strong>상점</strong><span>미끼 구매</span></button>
+        <button class="quick-card glass-card" data-go="gear"><img src="./assets/v12/icons/gear.png" alt="" /><strong>장비 강화</strong><span>손맛 안정</span></button>
+        <button class="quick-card glass-card" data-go="dex"><img src="./assets/v12/icons/fish_card_common.png" alt="" /><strong>물고기 도감</strong><span>${fishDex.length - 1}종 수집</span></button>
+        <button class="quick-card glass-card" data-go="mission"><img src="./assets/v12/icons/star_coin.png" alt="" /><strong>미션</strong><span>보상 확인</span></button>
+        <button class="quick-card glass-card" data-go="shop"><img src="./assets/v12/icons/shop.png" alt="" /><strong>상점</strong><span>미끼 구매</span></button>
       </section>
       <section class="region-grid">
         ${regions.map((r) => this.regionCard(r.key)).join('')}
@@ -272,7 +272,7 @@ class AquaFantasiaGame {
 
   private baseGameShell(name: string): HTMLElement {
     const root = document.createElement('main');
-    root.className = `game-screen ${name}-screen v800-screen ${name === 'fishing' ? 'locked-screen' : 'scroll-screen'}`;
+    root.className = `game-screen ${name}-screen v800-screen v810-screen ${name === 'fishing' ? 'locked-screen' : 'scroll-screen'}`;
     root.innerHTML = `<div class="ambient-bg" aria-hidden="true"></div>`;
     return root;
   }
@@ -344,7 +344,7 @@ class AquaFantasiaGame {
     this.player.position.set(w * 0.27, h * 0.72);
     this.bobber.scale.set(base / 520);
     this.bobber.position.set(w * 0.68, h * 0.60);
-    this.catchSprite.scale.set(base / 360);
+    this.catchSprite.scale.set(base / 720);
     this.catchSprite.position.set(w * 0.5, h * 0.52);
     this.biteText.position.set(w * 0.69, h * 0.42);
   }
@@ -461,7 +461,7 @@ class AquaFantasiaGame {
       t += this.pixi.ticker.deltaMS / 1000;
       const bounce = Math.sin(Math.min(t * 6, Math.PI)) * 0.30;
       const s = Math.min(1, t * 2.4) + bounce;
-      this.catchSprite.scale.set((Math.min(this.pixi.screen.width, this.pixi.screen.height) / 650) * s);
+      this.catchSprite.scale.set((Math.min(this.pixi.screen.width, this.pixi.screen.height) / 1120) * s);
       this.catchSprite.rotation += 0.18;
       if (t > 1.15 && !this.stageHost?.querySelector('.catch-result-card')) this.showResultCard(reward);
       if (t > 3.4) {
@@ -714,10 +714,10 @@ class AquaFantasiaGame {
     root.innerHTML += `
       <section class="page-head glass-card v800-head"><div><span class="eyebrow">EQUIPMENT</span><h2>장비 강화</h2><p>낚싯대 · 릴 · 낚싯줄 · 미끼를 강화해 장력 흔들림을 줄입니다.</p></div><strong class="page-coin">${this.save.coins}G</strong></section>
       <section class="gear-grid">
-        ${this.gearCard('rod', '낚싯대', './assets/v9/equipment/rod.png', this.save.gear.rodLevel, 120, '장력 상승 완화')}
-        ${this.gearCard('reel', '릴', './assets/v9/equipment/reel.png', this.save.gear.reelLevel, 140, '릴링 반응 개선')}
-        ${this.gearCard('line', '낚싯줄', './assets/v9/equipment/line.png', this.save.gear.lineLevel, 130, '안전지대 확대')}
-        ${this.gearCard('lure', '미끼', './assets/v9/equipment/bait.png', this.save.gear.lureStock, 60, '입질 유도 보조')}
+        ${this.gearCard('rod', '낚싯대', './assets/v12/icons/rod.png', this.save.gear.rodLevel, 120, '장력 상승 완화')}
+        ${this.gearCard('reel', '릴', './assets/v12/icons/reel.png', this.save.gear.reelLevel, 140, '릴링 반응 개선')}
+        ${this.gearCard('line', '낚싯줄', './assets/v12/icons/line_hook.png', this.save.gear.lineLevel, 130, '안전지대 확대')}
+        ${this.gearCard('lure', '미끼', './assets/v12/icons/bait_shrimp.png', this.save.gear.lureStock, 60, '입질 유도 보조')}
       </section>`;
     dom.app.appendChild(root);
     this.mountBottomNav(root, 'gear');
@@ -769,10 +769,10 @@ class AquaFantasiaGame {
     this.clear();
     const root = this.baseGameShell('shop');
     const goods = [
-      { name: '산호 미끼 묶음', desc: '미끼 +5', cost: 120, icon: './assets/v9/equipment/bait.png' },
-      { name: '릴 윤활 오일', desc: '릴 강화 보조', cost: 180, icon: './assets/v9/equipment/reel.png' },
-      { name: '물결 안정 부적', desc: '낚싯줄 강화 보조', cost: 210, icon: './assets/v9/equipment/line.png' },
-      { name: '비상 구조 키트', desc: '실패 후 복구 보상', cost: 260, icon: './assets/v9/equipment/chest.png' },
+      { name: '산호 미끼 묶음', desc: '미끼 +5', cost: 120, icon: './assets/v12/icons/bait_shrimp.png' },
+      { name: '릴 윤활 오일', desc: '릴 강화 보조', cost: 180, icon: './assets/v12/icons/reel.png' },
+      { name: '물결 안정 부적', desc: '낚싯줄 강화 보조', cost: 210, icon: './assets/v12/icons/line_hook.png' },
+      { name: '비상 구조 키트', desc: '실패 후 복구 보상', cost: 260, icon: './assets/v12/icons/ticket.png' },
     ];
     root.innerHTML += `
       <section class="page-head glass-card v800-head"><div><span class="eyebrow">SHOP</span><h2>상점</h2><p>미끼와 강화 보조품을 구매합니다. 글씨가 겹치지 않도록 카드형으로 재정렬했습니다.</p></div><strong class="page-coin">${this.save.coins}G</strong></section>
