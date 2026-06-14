@@ -9,16 +9,16 @@ import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPort
 
 const ASSET = {
   loginBg: './assets/screens/start_screen_clean_v750.webp',
-  player: './assets/art/player_boat.png',
-  float: './assets/art/fishing_float.png',
+  player: './assets/v9/equipment/boat.png',
+  float: './assets/v9/equipment/bobber.png',
   fish: './assets/art/fish_clown.png',
-  gauge: './assets/art/gauge_frame.png',
+  gauge: './assets/v9/ui/progress_frame_aqua.png',
   slot: './assets/art/fish_slot.png',
   ripple: './assets/art/water_ripple_overlay.webp',
   caustics: './assets/art/caustic_sparkle_overlay.webp',
   castButton: './assets/ui/button_cast_clean.png',
-  perfect: './assets/ui/fx_perfect_25d.png',
-  touchRing: './assets/ui/fx_touch_ring_25d.png',
+  perfect: './assets/v9/fx/particles_gold.png',
+  touchRing: './assets/v9/fx/ring_aqua.png',
 };
 
 const dom = {
@@ -228,6 +228,10 @@ class AquaFantasiaGame {
         <div class="pixi-layer"></div>
         <div class="water-overlay"></div>
         <div class="caustic-overlay"></div>
+        <div class="fishing-guide-card glass-card" id="fishingGuide" aria-live="polite">
+          <strong>실전 조작</strong>
+          <span>① 찌 던지기</span><span>② 물었다! 터치</span><span>③ 눌렀다 떼며 녹색 3초</span>
+        </div>
         <div class="stage-ui"></div>
       </div>
       <div class="combo-badge ${this.save.currentStreak > 1 ? '' : 'hidden'}" id="comboBadge">연속 성공 x${Math.max(2, this.save.currentStreak)}</div>
@@ -240,6 +244,7 @@ class AquaFantasiaGame {
         <p>화면을 누르고 떼며 장력을 조절하세요. 녹색 안전지대 3초 유지!</p>
       </div>`;
     dom.app.appendChild(root);
+    this.mountBottomNav(root, 'fishing');
     root.querySelector('[data-go="village"]')?.addEventListener('click', () => void this.go('village'));
     this.stageHost = root.querySelector<HTMLDivElement>('#fishingStage')!;
     this.pixiLayer = root.querySelector<HTMLDivElement>('.pixi-layer')!;
@@ -273,11 +278,14 @@ class AquaFantasiaGame {
   }
 
   private mountBottomNav(root: HTMLElement, active: Screen): void {
+    dom.app.querySelector('.bottom-nav')?.remove();
     const nav = document.createElement('nav');
-    nav.className = 'bottom-nav glass-card premium-bottom-nav';
+    nav.className = 'bottom-nav glass-card premium-bottom-nav fixed-root-nav';
     nav.setAttribute('aria-label', '하단 메뉴');
+    nav.setAttribute('data-fixed-root', 'true');
     nav.innerHTML = navItems.map(({ screen, icon, label }) => `<button class="${screen === active ? 'active' : ''}" data-screen="${screen}"><img src="${icon}" alt="" /><span>${label}</span></button>`).join('');
-    root.appendChild(nav);
+    dom.app.appendChild(nav);
+    root.classList.add('has-fixed-root-nav');
     nav.querySelectorAll<HTMLButtonElement>('[data-screen]').forEach((btn) => btn.addEventListener('click', () => void this.go(btn.dataset.screen as Screen)));
   }
 
@@ -358,6 +366,8 @@ class AquaFantasiaGame {
     saveGame(this.save);
     this.activeFish = this.pickFish();
     this.state = 'casting';
+    this.stageHost?.classList.add('casting-mode');
+    this.stageHost?.classList.remove('reeling-mode');
     this.castStart = performance.now();
     this.castBtn.classList.add('pop-out');
     this.setHint('찌가 포물선을 그리며 날아갑니다');
@@ -366,6 +376,7 @@ class AquaFantasiaGame {
 
   private scheduleBite(): void {
     this.state = 'waiting';
+    this.stageHost?.classList.remove('casting-mode');
     this.setHint('입질을 기다리세요 · 물었다!가 뜨면 화면을 눌러 당기세요');
     const delay = 2200 + Math.random() * 1900 - this.save.gear.reelLevel * 60 - Math.min(420, this.save.gear.lureStock * 12);
     window.clearTimeout(this.biteTimeout);
@@ -389,6 +400,7 @@ class AquaFantasiaGame {
     if (this.state !== 'bite') return;
     this.vibrate(20);
     this.state = 'reeling';
+    this.stageHost?.classList.add('reeling-mode');
     this.tension = 46 + this.getRegion().difficulty * 5;
     this.safeTimer = 0;
     this.surgeTimer = 0;
@@ -485,7 +497,7 @@ class AquaFantasiaGame {
     if (this.biteText) this.biteText.visible = false;
     this.hideBiteCallout();
     this.reelPanel?.classList.add('hidden');
-    this.stageHost?.classList.remove('catch-bloom', 'fallback-casting', 'surge-alert', 'guard-active');
+    this.stageHost?.classList.remove('catch-bloom', 'fallback-casting', 'surge-alert', 'guard-active', 'casting-mode', 'reeling-mode');
     this.stageHost?.querySelector('.catch-result-card')?.remove();
     this.state = 'idle';
     this.castBtn?.classList.remove('hidden', 'pop-out');
@@ -525,6 +537,12 @@ class AquaFantasiaGame {
       const surgeActive = this.surgeTimer > 1.25 && Math.sin(now / 520) > 0.82;
       const drift = Math.sin(now / 215) * 0.31 * regionMod * bossMod + Math.sin(now / 770) * 0.10 + (surgeActive ? Math.sin(now / 80) * 0.38 : 0);
       this.tension += ((this.holding ? 0.75 + regionMod * 0.14 : -0.50) / gearRelief) * dt + drift;
+      if (this.bobber) {
+        const pull = this.holding ? -0.18 : 0.10;
+        this.bobber.x += Math.sin(now / 90) * 0.25 * dt;
+        this.bobber.y += pull * dt + Math.sin(now / 130) * 0.18 * dt;
+        this.bobber.rotation = Math.sin(now / 85) * (this.holding ? 0.28 : 0.12);
+      }
       const zone = this.safeZone();
       const safe = this.tension >= zone.left && this.tension <= zone.right;
       const center = (zone.left + zone.right) / 2;

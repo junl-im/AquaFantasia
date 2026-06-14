@@ -21,7 +21,7 @@ for (const token of ['v7.1.0 UI / UX REFINEMENT PASS','start_screen_clean_v710.w
   if (!css.includes(token) && !main.includes(token)) fail(`missing token ${token}`);
 }
 if (!main.includes('data-go="village"') || main.includes('data-go="dex">가방')) fail('fishing top action must be village, not bag');
-if (!data.includes("APP_VERSION = '7.2.0'") || !data.includes('aqua-fantasia-v7.2.0-total-ui-transparent-dex')) fail('v7.1 data/cache missing');
-if (!sw.includes('aqua-fantasia-v7.2.0-total-ui-transparent-dex') || !sw.includes('start_screen_clean_v710.webp') || !sw.includes('v710_button_yellow.png')) fail('service worker v7.1 assets missing');
-if (pkg.version !== '7.2.0') fail('package version must be 7.2.0');
+if (!data.includes("APP_VERSION = '7.3.0'") || !data.includes('aqua-fantasia-v7.3.0-total-ui-transparent-dex')) fail('v7.1 data/cache missing');
+if (!sw.includes('aqua-fantasia-v7.3.0-total-ui-transparent-dex') || !sw.includes('start_screen_clean_v710.webp') || !sw.includes('v710_button_yellow.png')) fail('service worker v7.1 assets missing');
+if (pkg.version !== '7.3.0') fail('package version must be 7.3.0');
 console.log('[check-v710] UI/UX dex polish OK');

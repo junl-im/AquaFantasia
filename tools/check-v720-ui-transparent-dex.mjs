@@ -9,17 +9,17 @@ const required = [
   'public/assets/ui/v720_toggle_on.png',
   'public/assets/ui/v720_toggle_off.png',
   'public/assets/ui/v720_panel_clean.png',
-  'reports/v7.2.0-total-ui-transparent-dex-audit.md'
+  'reports/v7.3.0-total-ui-transparent-dex-audit.md'
 ];
 for (const file of required) if (!fs.existsSync(path.join(root, file))) fail(`missing ${file}`);
 const data = fs.readFileSync(path.join(root, 'src/data.ts'), 'utf8');
-if (!data.includes("APP_VERSION = '7.2.0'")) fail('APP_VERSION mismatch');
-if (!data.includes('aqua-fantasia-v7.2.0-total-ui-transparent-dex')) fail('cache mismatch');
+if (!data.includes("APP_VERSION = '7.3.0'")) fail('APP_VERSION mismatch');
+if (!data.includes('aqua-fantasia-v7.3.0-total-ui-transparent-dex')) fail('cache mismatch');
 const main = fs.readFileSync(path.join(root, 'src/main.ts'), 'utf8');
 if (!main.includes('start_screen_clean_v720.webp')) fail('login art not upgraded');
 if (!main.includes('v720-keep-toggle')) fail('login keep toggle class missing');
 const css = fs.readFileSync(path.join(root, 'src/styles.css'), 'utf8');
-for (const token of ['v7.2.0 TOTAL UI/UX', 'start_screen_clean_v720.webp', 'v720_toggle_on.png', 'dex-fish-orb']) if (!css.includes(token)) fail(`missing css token ${token}`);
+for (const token of ['v7.3.0 TOTAL UI/UX', 'start_screen_clean_v720.webp', 'v720_toggle_on.png', 'dex-fish-orb']) if (!css.includes(token)) fail(`missing css token ${token}`);
 
 function parsePngAlpha(file) {
   const buf = fs.readFileSync(file);

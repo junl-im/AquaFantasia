@@ -1,0 +1,22 @@
+{
+  "version": "7.6.0",
+  "source": "AquaFantasia_v9_2_5D_rendered_game_assets_png_only",
+  "policy": "PNG/WebP rendered assets only, no SVG/vector runtime art",
+  "curated_counts": {
+    "ui_png": 25,
+    "icons_png": 10,
+    "fish_png": 28,
+    "equipment_png": 9,
+    "fx_png": 10,
+    "background_webp": 12
+  },
+  "paths": {
+    "bottomNav": "./assets/v9/ui/bottom_nav_bar_deepblue.png",
+    "statusPanel": "./assets/v9/ui/panel_status_deepblue.png",
+    "contentPanel": "./assets/v9/ui/content_panel_aqua.png",
+    "buttonGold": "./assets/v9/ui/button_large_gold_normal.png",
+    "buttonAqua": "./assets/v9/ui/button_medium_aqua_normal.png",
+    "fishPrefix": "./assets/v9/fish/fish_",
+    "backgroundPrefix": "./assets/v9/bg/"
+  }
+}

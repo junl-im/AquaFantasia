@@ -1,4 +1,4 @@
-# Aqua Fantasia v7.5.0
+# Aqua Fantasia v7.6.0
 
 UI Rescue + Mission Expansion build.
 
@@ -28,3 +28,9 @@ npm run build
 ## 적용 권장
 
 기존 누적 파일이 섞이지 않도록 `.git` 폴더만 남기고 전체 교체 ZIP을 압축 해제하는 방식을 권장합니다.
+
+
+## v7.6.0 업데이트
+- 하단 네비게이션이 모든 스크롤 화면과 낚시 화면에서 viewport fixed로 고정됩니다.
+- 첨부된 v9 2.5D/3D 렌더드 PNG 에셋을 `public/assets/v9`로 선별 배치했고, UI/아이콘/장비/물고기/FX/배경 일부를 실제 런타임에 연결했습니다.
+- SVG/벡터 느낌을 피하기 위해 v9 PNG/WebP 렌더드 에셋을 우선 사용합니다.

@@ -18,7 +18,7 @@ for (const file of [
 for (const token of ['v7.0.0 PREMIUM 2.5D UI POLISH PASS','v700_panel_soft.png','v700_nav_shell.png','v700_bite_banner.png','premium-bottom-nav','오늘의 출항','장비 관리','바다 상점','물고기 도감']) {
   if (!css.includes(token) && !main.includes(token)) fail(`missing UI polish token ${token}`);
 }
-if (!data.includes("APP_VERSION = '7.2.0'") || !data.includes('aqua-fantasia-v7.2.0-total-ui-transparent-dex')) fail('v7 data/cache missing');
-if (!sw.includes('aqua-fantasia-v7.2.0-total-ui-transparent-dex') || !sw.includes('v700_panel_soft.png')) fail('service worker v7 UI assets missing');
-if (pkg.version !== '7.2.0') fail('package version must be 7.2.0');
+if (!data.includes("APP_VERSION = '7.3.0'") || !data.includes('aqua-fantasia-v7.3.0-total-ui-transparent-dex')) fail('v7 data/cache missing');
+if (!sw.includes('aqua-fantasia-v7.3.0-total-ui-transparent-dex') || !sw.includes('v700_panel_soft.png')) fail('service worker v7 UI assets missing');
+if (pkg.version !== '7.3.0') fail('package version must be 7.3.0');
 console.log('[check-v700] Premium 2.5D UI polish OK');

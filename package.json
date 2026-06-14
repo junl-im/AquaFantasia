@@ -1,15 +1,15 @@
 {
   "name": "aqua-fantasia",
   "private": true,
-  "version": "7.5.0",
+  "version": "7.6.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build --base=./",
     "preview": "vite preview --host 0.0.0.0",
-    "validate": "node tools/validate-clean.mjs && node tools/check-v750-ui-rescue.mjs",
-    "runtime:check": "node tools/check-v750-ui-rescue.mjs --runtime",
-    "audit": "node tools/check-v750-ui-rescue.mjs --audit",
+    "validate": "node tools/validate-clean.mjs && node tools/check-v760-nav-fixed-25d-runtime.mjs",
+    "runtime:check": "node tools/check-v760-nav-fixed-25d-runtime.mjs --runtime",
+    "audit": "node tools/check-v760-nav-fixed-25d-runtime.mjs --audit",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
