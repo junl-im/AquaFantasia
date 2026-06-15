@@ -6,10 +6,11 @@ import { loadSave, saveGame, tryAnonymousServerLink } from './storage';
 import { initAudio, playSound } from './audio';
 import { ToastManager } from './toast';
 import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPortraitLock } from './core/PortraitGuard';
+import { UnderwaterWebglLayer, type UnderwaterLayerMood } from './core/UnderwaterWebglLayer';
 
 const ASSET = {
   loginBg: './assets/v85/screens/start_screen_clean_v810.webp',
-  player: './assets/v89/characters/fisher_boat_gallery.png',
+  player: './assets/v90/characters/fisher_boat_cute_crisp.png',
   float: './assets/v88/icons/bobber.png',
   fish: './assets/v85/fish/fish_01.png',
   gauge: './assets/v85/icons/gauge_level.png',
@@ -87,6 +88,7 @@ class AquaFantasiaGame {
   private activeFish: FishInfo = fishDex[0];
   private immersiveRetryAt = 0;
   private readonly lockedOrientation: 'portrait-primary' = 'portrait-primary';
+  private webglLayers: UnderwaterWebglLayer[] = [];
 
   async boot(): Promise<void> {
     this.compact = window.matchMedia('(max-width: 420px), (prefers-reduced-motion: reduce)').matches || (navigator.hardwareConcurrency ?? 8) <= 4;
@@ -116,6 +118,8 @@ class AquaFantasiaGame {
       this.pixi.destroy(true, { children: true, texture: false });
       this.pixi = undefined;
     }
+    this.webglLayers.forEach((layer) => layer.dispose());
+    this.webglLayers = [];
     dom.app.innerHTML = '';
     document.body.dataset.screen = this.screen;
   }
@@ -273,13 +277,21 @@ class AquaFantasiaGame {
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.innerHTML = `
-      <div class="runtime-3d-bg" aria-hidden="true"><span class="v3d-caustics"></span><span class="v3d-bubbles"></span><span class="v3d-depth-fog"></span></div>
+      <div class="runtime-3d-bg" aria-hidden="true"><div class="underwater-webgl-host" data-underwater-webgl></div><span class="v3d-caustics"></span><span class="v3d-bubbles"></span><span class="v3d-depth-fog"></span></div>
       <header class="runtime-hud" aria-label="플레이어 HUD">
         <div class="runtime-title"><span>AQUA FANTASIA</span><strong>${title}</strong><em>${subtitle}</em></div>
         <div class="runtime-wallet"><span><img src="./assets/v89/icons/coin.png" alt="" />${this.save.coins.toLocaleString('ko-KR')}</span><span><img src="./assets/v89/icons/bait.png" alt="" />${this.save.gear.lureStock}</span></div>
       </header>
       <div class="runtime-content"></div>`;
+    this.mountUnderwaterWebgl(root, active === 'ranking' ? 'deep' : active === 'village' || active === 'shop' ? 'town' : 'reef');
     return root;
+  }
+
+  private mountUnderwaterWebgl(root: HTMLElement, mood: UnderwaterLayerMood): void {
+    const host = root.querySelector<HTMLElement>('[data-underwater-webgl]');
+    if (!host || document.documentElement.classList.contains('pixi-fallback-ready')) return;
+    const layer = new UnderwaterWebglLayer(host, { mood, compact: this.compact });
+    if (layer.start()) this.webglLayers.push(layer);
   }
 
   private regionCard(key: RegionKey): string {
@@ -300,7 +312,7 @@ class AquaFantasiaGame {
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     root.innerHTML = `
       <span id="fishingHint" class="sr-only">낚시 시작 버튼으로 캐스팅하세요.</span>
-      <div class="fishing-3d-ambient" aria-hidden="true"><span class="v3d-caustics"></span><span class="v3d-bubbles"></span><span class="v3d-depth-fog"></span></div>
+      <div class="fishing-3d-ambient" aria-hidden="true"><div class="underwater-webgl-host" data-underwater-webgl></div><span class="v3d-caustics"></span><span class="v3d-bubbles"></span><span class="v3d-depth-fog"></span></div>
       <div class="fishing-stage v840-fishing-stage" id="fishingStage">
         <div class="pixi-layer"></div>
         <div class="water-overlay"></div>
@@ -325,6 +337,7 @@ class AquaFantasiaGame {
         <p>녹색 안전지대를 3초 유지하세요.</p>
       </div>`;
     dom.app.appendChild(root);
+    this.mountUnderwaterWebgl(root, 'fishing');
     this.mountBottomNav(root, 'fishing');
     this.stageHost = root.querySelector<HTMLDivElement>('#fishingStage')!;
     this.pixiLayer = root.querySelector<HTMLDivElement>('.pixi-layer')!;

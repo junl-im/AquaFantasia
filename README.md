@@ -1,40 +1,28 @@
-# AquaFantasia v8.9.0
+# AquaFantasia v9.0.0
 
-## 이번 패치 목적
+모바일 세로 고정 낚시 웹게임입니다. 이번 패치는 v8.9.0 위에 **WebGL 수중 배경 전용 레이어**와 **귀여운 치비 낚시 캐릭터 톤**을 안전하게 얹는 안정화 패치입니다.
 
-v8.9.0은 새로 제공된 `AquaFantasia_3D_Underwater_PlayCanvas_WebGL_WebGPU_AssetPack`를 실제 런타임에 배치하는 패치입니다. 통짜 화면 이미지를 다시 덮는 방식이 아니라, 수중 월드 배경 / 카스틱 / 버블 / HUD 아이콘 / 패널 / 버튼을 역할별로 분리해서 적용했습니다.
+## 이번 패치 핵심
 
-## 핵심 변경
-
-- `public/assets/v3d_underwater`에 새 3D 수중 에셋 팩 전체를 배치했습니다.
-- `public/assets/v89`에 모바일 런타임용으로 재가공한 배경, 캐릭터, 아이콘, UI 프레임을 생성했습니다.
-- 마을 / 장비 / 가방 / 도감 / 상점 / 미션 / 랭킹 화면 배경을 v89 수중 월드 배경으로 교체했습니다.
-- 랭킹은 심해/어비스 계열 배경과 deep 패널을 사용하도록 분리했습니다.
-- 낚시터는 지역별 v89 수중 배경을 PixiJS stage에 직접 연결했습니다.
-- 낚시 화면에 카스틱, 버블, 심도 안개 레이어를 추가해 2.5D~3D 느낌을 강화했습니다.
-- 하단 탭 네비는 v3d HUD 프레임과 탭 에셋 기반으로 다시 정리했습니다.
-- 아이콘은 v3d HUD 아이콘을 v89 경로로 재보정해서 연결했습니다.
-- 캐릭터는 기존 보정 캐릭터를 한 번 더 샤픈/명암 보정한 v89 PNG로 교체했습니다.
-- 기존 `CLEAN_REPLACE_GUIDE`, `FINAL_CONSOLIDATED`, `PATCH_NOTES`는 생성하지 않고 README 하나만 유지합니다.
-
-## 전체화면 / 세로 고정 정책
-
-- 일반 브라우저는 사용자 터치 이후 `requestFullscreen({ navigationUI: 'hide' })`를 시도합니다.
-- 카카오/인앱 브라우저는 기존 회전 버그를 막기 위해 Fullscreen API 호출을 계속 제한합니다.
-- Screen Orientation Lock API는 계속 사용하지 않습니다.
-- 세로 전용 레이아웃은 CSS/viewport cage와 manifest `orientation: portrait-primary`로 유지합니다.
-
-## PlayCanvas / WebGL / WebGPU 방향
-
-이번 패치는 전체 엔진 교체가 아니라 `배경 전용 3D 수중 월드 레이어`를 붙이는 안전 단계입니다. 현재 구조는 다음 순서로 확장하는 것을 기준으로 합니다.
-
-1. v8.9 안정 브랜치: PixiJS 8 낚시 런타임 + DOM UI + v3d 수중 배경/FX 에셋
-2. 다음 실험 브랜치: PlayCanvas 또는 raw WebGL/WebGPU 기반 배경 전용 월드 레이어
-3. 합류 기준: 카카오/인앱 세로 고정, 일반 브라우저 전체화면, 모바일 FPS, 메모리 사용량 검증 통과
+- GitHub Actions `validate` 실패 원인 수정
+  - 기존 repo에 남아 있던 `reports/`, `CLEAN_REPLACE_GUIDE_*`, `FINAL_CONSOLIDATED_*`, `PATCH_NOTES_*` 파일 때문에 실패하던 문제를 자동 정리합니다.
+  - `npm run validate`가 먼저 `tools/clean-old-patch-docs.mjs`를 실행합니다.
+- 문서 정책 유지
+  - 패치 ZIP 안의 문서는 `README.md` 하나만 유지합니다.
+  - 새 `PATCH_NOTES`, `FINAL_CONSOLIDATED`, `reports` 파일을 만들지 않습니다.
+- 3D 수중 배경 전용 레이어 추가
+  - 기존 PixiJS 낚시 플레이와 DOM UI는 유지합니다.
+  - 메뉴/낚시 화면의 배경에 `UnderwaterWebglLayer` 캔버스를 붙여 WebGL shader 기반 수중 파동, 광선, 카스틱, 심도감을 추가합니다.
+  - WebGL 미지원 기기에서는 기존 CSS/이미지 배경으로 자동 fallback됩니다.
+- 캐릭터 톤 개선
+  - 낚시터 플레이어 캐릭터를 `public/assets/v90/characters/fisher_boat_cute_crisp.png`로 연결했습니다.
+  - 첨부한 귀여운 치비 낚시 소녀 레퍼런스 톤은 `chibi_boat_tone_reference.webp`로 보관해 이후 캐릭터 확장 기준으로 삼습니다.
+- 캐시 갱신
+  - Service Worker 캐시 이름을 `aqua-fantasia-v9.0.0-webgl-underwater-cute-runtime`으로 변경했습니다.
 
 ## 적용 방법
 
-기존 프로젝트 루트에 ZIP 내용을 덮어쓴 뒤 다음을 실행합니다.
+기존 프로젝트 루트에 ZIP을 덮어쓴 뒤 아래 명령으로 확인합니다.
 
 ```bash
 npm install
@@ -44,6 +32,19 @@ npm run build
 npm run audit
 ```
 
-## 문서 정책
+## 카카오/인앱 브라우저 방침
 
-패치별 MD 파일을 더 이상 누적하지 않습니다. 프로젝트 문서는 `README.md` 하나만 계속 갱신합니다.
+- 카카오/인앱 브라우저에서는 `requestFullscreen()`과 `screen.orientation.lock()`을 호출하지 않습니다.
+- 회전 버그 방지를 위해 CSS 세로 고정/viewport cage만 사용합니다.
+- 일반 브라우저/PWA에서는 기존 정책에 따라 가능한 경우에만 몰입형 표시를 시도합니다.
+
+## 다음 우선순위
+
+1. PlayCanvas/WebGPU 브랜치 분리 실험
+   - 지금은 WebGL shader 배경 레이어만 적용했습니다.
+   - 다음 단계에서 PlayCanvas를 선택적으로 import하는 `3D 배경 전용 브랜치`를 만들면 됩니다.
+2. 캐릭터 확장
+   - 현재는 기존 투명 치비 보트 캐릭터를 선명하게 보정했습니다.
+   - 다음 단계에서 사용자 레퍼런스처럼 큰 눈, 밝은 금발/리본/아기자기한 표정의 원화급 캐릭터 세트를 별도 제작/교체하는 흐름이 좋습니다.
+3. UI 파츠 9-slice 정리
+   - 하단 탭/패널/버튼을 완전한 런타임 파츠로 더 분해해 화면별 밀림과 흐림을 계속 줄입니다.

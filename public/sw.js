@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v8.9.0-v3d-underwater-runtime-ui';
+const CACHE_NAME = 'aqua-fantasia-v9.0.0-webgl-underwater-cute-runtime';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -25,6 +25,8 @@ const PRECACHE = [
   "./assets/v89/bg/world_shop.webp",
   "./assets/v89/bg/world_town.webp",
   "./assets/v89/characters/fisher_boat_gallery.png",
+  "./assets/v90/characters/fisher_boat_cute_crisp.png",
+  "./assets/v90/characters/chibi_boat_tone_reference.webp",
   "./assets/v89/icons/bag.png",
   "./assets/v89/icons/bait.png",
   "./assets/v89/icons/check.png",
