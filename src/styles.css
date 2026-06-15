@@ -3322,3 +3322,221 @@ body[data-screen="fishing"] .combo-badge {
   .bottom-nav.v840-bottom-nav button span { font-size: 9px !important; }
   .recent-catch-strip { left: 7px !important; right: 7px !important; height: 88px !important; min-height: 88px !important; padding: 13px 12px 11px !important; }
 }
+
+/* v8.7.0 IMMERSIVE EXIT + HD UI POLISH
+   No browser fullscreen/orientation API calls are used here. The game occupies the visual viewport
+   with a fixed portrait cage, while installed PWA mode can use manifest fullscreen silently. */
+:root {
+  --v870-nav-height: clamp(96px, 11.8svh, 114px);
+  --v870-nav-gap: 3px;
+}
+html,
+body {
+  width: 100vw !important;
+  height: 100dvh !important;
+  min-height: 100svh !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
+  background: #031827 !important;
+}
+#app {
+  width: var(--portrait-width, 100vw) !important;
+  height: var(--portrait-height, 100dvh) !important;
+  min-height: var(--portrait-height, 100svh) !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
+  margin: 0 auto !important;
+  background: #031827 !important;
+}
+html[data-display-mode="fullscreen"] #app,
+html[data-display-mode="standalone"] #app {
+  max-width: none !important;
+}
+html.is-physical-landscape #app {
+  max-width: 480px !important;
+}
+
+/* Ranking had lost its art background. Restore a real aquatic background behind live-only data. */
+.v870-ranking-screen {
+  position: relative !important;
+  overflow: hidden auto !important;
+  background: #057ec0 !important;
+}
+.v870-ranking-screen .ranking-bg-art {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  background:
+    linear-gradient(180deg, rgba(1,15,35,.06), rgba(1,19,42,.38)),
+    url('/assets/v85/compositions/ranking.webp') center/cover no-repeat,
+    url('/assets/v85/bg/ocean_full.webp') center/cover no-repeat !important;
+  filter: saturate(1.08) contrast(1.04) !important;
+  transform: none !important;
+}
+.v870-ranking-screen .ranking-panel {
+  position: relative !important;
+  z-index: 2 !important;
+  margin-top: max(14px, env(safe-area-inset-top)) !important;
+}
+
+/* Rebuilt HD nav: less toy-flat, larger, and one menu only. */
+.bottom-nav.v840-bottom-nav,
+html.portrait-only-game .bottom-nav.v840-bottom-nav,
+html.is-kakao-inapp .bottom-nav.v840-bottom-nav,
+html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
+.bottom-nav.v840-bottom-nav.fixed-root-nav {
+  bottom: calc(var(--v870-nav-gap) + env(safe-area-inset-bottom)) !important;
+  width: min(484px, calc(100vw - 2px)) !important;
+  max-width: 484px !important;
+  height: var(--v870-nav-height) !important;
+  min-height: 96px !important;
+  padding: 15px 11px 16px !important;
+  gap: 4px !important;
+  border-radius: 36px !important;
+  background: url('/assets/v87/ui/bottom_nav_hd.png') center/100% 100% no-repeat !important;
+  box-shadow: 0 -8px 22px rgba(0, 34, 74, .20), 0 10px 30px rgba(0, 17, 50, .34) !important;
+}
+.bottom-nav.v840-bottom-nav button {
+  padding: 4px 1px 3px !important;
+  border-radius: 20px !important;
+  background: url('/assets/v87/ui/tab_blue_hd.png') center/100% 100% no-repeat !important;
+  filter: none !important;
+  color: #f0fdff !important;
+}
+.bottom-nav.v840-bottom-nav button.active {
+  background: url('/assets/v87/ui/tab_gold_hd.png') center/100% 100% no-repeat !important;
+  transform: translate3d(0, -3px, 0) !important;
+}
+.bottom-nav.v840-bottom-nav button img {
+  width: clamp(30px, 7.2vw, 38px) !important;
+  height: clamp(30px, 7.2vw, 38px) !important;
+  object-fit: contain !important;
+  image-rendering: auto !important;
+  filter: drop-shadow(0 4px 5px rgba(0,39,78,.35)) saturate(1.16) contrast(1.08) !important;
+}
+.bottom-nav.v840-bottom-nav button span {
+  font-size: clamp(9.5px, 2.7vw, 12px) !important;
+  color: inherit !important;
+  text-shadow: 0 2px 0 rgba(0, 36, 82, .56) !important;
+}
+.bottom-nav.v840-bottom-nav button.active span {
+  text-shadow: 0 2px 0 rgba(115, 50, 0, .45) !important;
+}
+
+/* Recent catch: exact-ratio HD panel, no border spill outside content box. */
+.recent-catch-strip {
+  left: 8px !important;
+  right: 8px !important;
+  bottom: calc(var(--v870-nav-height) + 5px + env(safe-area-inset-bottom)) !important;
+  height: 92px !important;
+  min-height: 92px !important;
+  max-height: 92px !important;
+  padding: 14px 16px 12px !important;
+  border-radius: 24px !important;
+  background: url('/assets/v87/ui/recent_panel_hd.png') center/100% 100% no-repeat !important;
+  box-shadow: 0 10px 24px rgba(0, 38, 85, .25) !important;
+  overflow: hidden !important;
+  clip-path: inset(0 round 24px) !important;
+}
+.recent-empty {
+  height: 62px !important;
+  display: grid !important;
+  align-content: center !important;
+  padding: 0 4px !important;
+}
+.recent-empty strong,
+.recent-title {
+  font-size: 15px !important;
+  line-height: 1 !important;
+  color: #073a5c !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.62) !important;
+}
+.recent-empty span {
+  font-size: 11.5px !important;
+  line-height: 1.22 !important;
+  color: rgba(6, 51, 81, .78) !important;
+}
+.recent-cards {
+  gap: 7px !important;
+  margin-top: 5px !important;
+  overflow: hidden !important;
+}
+.recent-card {
+  min-height: 46px !important;
+  max-height: 46px !important;
+  border-radius: 16px !important;
+  padding: 4px 7px !important;
+  grid-template-columns: 38px minmax(0, 1fr) auto !important;
+  background: rgba(255,255,255,.34) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.48), inset 0 -5px 9px rgba(0,70,130,.12) !important;
+  overflow: hidden !important;
+}
+.recent-card img {
+  width: 38px !important;
+  height: 38px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 5px 5px rgba(0,40,80,.24)) saturate(1.14) contrast(1.08) !important;
+}
+.recent-card span {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* Fishing UI/character visibility and HD button polish. */
+body[data-screen="fishing"] .v840-stage-ui .cast-button {
+  bottom: calc(var(--v870-nav-height) + 104px + env(safe-area-inset-bottom)) !important;
+  width: min(340px, 82vw) !important;
+  height: 80px !important;
+  min-height: 80px !important;
+  background-image: url('/assets/v87/buttons/btn_orange_normal_wide_blank.png') !important;
+  filter: saturate(1.06) contrast(1.04) drop-shadow(0 12px 18px rgba(80,45,0,.26)) !important;
+}
+body[data-screen="fishing"] .v840-stage-ui .cast-button:active {
+  background-image: url('/assets/v87/buttons/btn_orange_pressed_wide_blank.png') !important;
+}
+body[data-screen="fishing"] .v840-stage-ui .cast-button .cast-icon {
+  background-image: url('/assets/v87/icons/bobber.png') !important;
+  width: 38px !important;
+  height: 38px !important;
+}
+body[data-screen="fishing"] .v840-reel-panel.reel-panel,
+html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel {
+  bottom: calc(var(--v870-nav-height) + 108px + env(safe-area-inset-bottom)) !important;
+  background: url('/assets/v87/ui/reel_panel_hd.png') center/100% 100% no-repeat !important;
+  border-radius: 34px !important;
+  clip-path: inset(0 round 34px) !important;
+}
+body[data-screen="fishing"] .combo-badge {
+  bottom: calc(var(--v870-nav-height) + 102px + env(safe-area-inset-bottom)) !important;
+}
+body[data-screen="fishing"] .v840-fishing-stage canvas {
+  filter: saturate(1.04) contrast(1.025) !important;
+}
+
+.exit-fallback-hint {
+  position: fixed !important;
+  left: 50% !important;
+  bottom: calc(var(--v870-nav-height) + 18px + env(safe-area-inset-bottom)) !important;
+  transform: translateX(-50%) !important;
+  z-index: 250 !important;
+  width: min(360px, calc(100vw - 28px)) !important;
+  padding: 16px 16px 14px !important;
+  border-radius: 24px !important;
+  color: #07324f !important;
+  background: linear-gradient(180deg, rgba(236,253,255,.98), rgba(101,215,248,.94)) !important;
+  box-shadow: 0 18px 42px rgba(0,24,70,.36), inset 0 2px 0 rgba(255,255,255,.76) !important;
+  text-align: center !important;
+}
+.exit-fallback-hint strong { display:block !important; font-size: 17px !important; font-weight: 1000 !important; }
+.exit-fallback-hint span { display:block !important; margin: 6px 0 12px !important; font-size: 12.5px !important; line-height: 1.35 !important; font-weight: 850 !important; color: rgba(7,50,79,.78) !important; }
+.exit-fallback-hint button { min-height: 42px !important; padding: 0 18px !important; border-radius: 999px !important; color:#063454 !important; font-weight: 1000 !important; background: url('/assets/v87/buttons/btn_blue_normal_wide_blank.png') center/100% 100% no-repeat !important; }
+
+@media (max-width: 390px) {
+  :root { --v870-nav-height: 96px; }
+  .bottom-nav.v840-bottom-nav { width: calc(100vw - 2px) !important; padding: 13px 8px 14px !important; gap: 3px !important; }
+  .bottom-nav.v840-bottom-nav button img { width: 29px !important; height: 29px !important; }
+  .bottom-nav.v840-bottom-nav button span { font-size: 9.3px !important; }
+  .recent-catch-strip { left: 6px !important; right: 6px !important; height: 90px !important; min-height: 90px !important; padding: 13px 12px 11px !important; }
+  body[data-screen="fishing"] .v840-stage-ui .cast-button { width: min(318px, 82vw) !important; height: 76px !important; min-height: 76px !important; }
+}

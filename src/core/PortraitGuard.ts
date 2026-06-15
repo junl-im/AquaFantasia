@@ -60,6 +60,11 @@ export function applyPortraitViewportMetrics(): PortraitViewportMetrics {
   root.style.setProperty('--portrait-height', `${metrics.appHeight}px`);
   root.dataset.currentOrientation = 'portrait';
   root.dataset.orientationPolicy = 'hard-portrait';
+  root.dataset.displayMode = window.matchMedia('(display-mode: fullscreen)').matches
+    ? 'fullscreen'
+    : window.matchMedia('(display-mode: standalone)').matches
+      ? 'standalone'
+      : 'browser';
   root.classList.toggle('is-physical-landscape', metrics.physicalLandscape);
   root.classList.toggle('is-kakao-inapp', metrics.kakaoInApp);
   root.classList.toggle('is-hostile-inapp', metrics.hostileInApp);
@@ -92,7 +97,7 @@ export async function requestHardPortraitLock(): Promise<'css-portrait' | 'inapp
   const root = document.documentElement;
   root.dataset.fullscreenApi = 'disabled';
   root.dataset.orientationApi = 'disabled';
-  root.dataset.immersiveMode = metrics.hostileInApp ? 'inapp-css-only' : 'css-portrait';
+  root.dataset.immersiveMode = metrics.hostileInApp ? 'inapp-css-only' : 'css-immersive';
   applyPortraitViewportMetrics();
   return metrics.hostileInApp ? 'inapp-css-only' : 'css-portrait';
 }

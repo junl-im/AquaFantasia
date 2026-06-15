@@ -1,7 +1,7 @@
 import type { FishInfo, RegionInfo, SaveData } from './types';
 
-export const APP_VERSION = '8.6.0';
-export const CACHE_NAME = 'aqua-fantasia-v8.6.0-kakao-portrait-ui-cleanup';
+export const APP_VERSION = '8.7.0';
+export const CACHE_NAME = 'aqua-fantasia-v8.7.0-immersive-exit-hd-ui';
 
 export const regions: RegionInfo[] = [
   { key: 'lake', name: '잔잔한 해변', subtitle: '첫 출항 추천 · 부드러운 파도', bg: './assets/v85/bg/ocean_full.webp', difficulty: 1.00, waterSpeed: 0.65, color: '#54dfff', tide: '잔물결', unlockHint: '기본 해금' },
@@ -58,14 +58,14 @@ export const fishDex: FishInfo[] = [
 ];
 
 export const navItems: Array<{ screen: Exclude<SaveData['screen'], 'login'>; icon: string; label: string }> = [
-  { screen: 'village', icon: './assets/v85/icons/bag.png', label: '마을' },
-  { screen: 'fishing', icon: './assets/v85/icons/rod.png', label: '낚시' },
-  { screen: 'gear', icon: './assets/v85/icons/gear.png', label: '장비' },
-  { screen: 'inventory', icon: './assets/v85/icons/bag.png', label: '가방' },
-  { screen: 'dex', icon: './assets/v85/icons/fish_card_common.png', label: '도감' },
-  { screen: 'shop', icon: './assets/v85/icons/shop.png', label: '상점' },
-  { screen: 'mission', icon: './assets/v85/icons/star_coin.png', label: '미션' },
-  { screen: 'ranking', icon: './assets/v85/icons/star_big.png', label: '랭킹' },
+  { screen: 'village', icon: './assets/v87/icons/bag.png', label: '마을' },
+  { screen: 'fishing', icon: './assets/v87/icons/rod.png', label: '낚시' },
+  { screen: 'gear', icon: './assets/v87/icons/gear.png', label: '장비' },
+  { screen: 'inventory', icon: './assets/v87/icons/bag.png', label: '가방' },
+  { screen: 'dex', icon: './assets/v87/icons/fish_card_common.png', label: '도감' },
+  { screen: 'shop', icon: './assets/v87/icons/shop.png', label: '상점' },
+  { screen: 'mission', icon: './assets/v87/icons/star_coin.png', label: '미션' },
+  { screen: 'ranking', icon: './assets/v87/icons/star_big.png', label: '랭킹' },
 ];
 
 export function defaultSave(): SaveData {

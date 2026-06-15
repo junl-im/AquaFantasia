@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v8.6.0-kakao-portrait-ui-cleanup';
+const CACHE_NAME = 'aqua-fantasia-v8.7.0-immersive-exit-hd-ui';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -134,6 +134,27 @@ const PRECACHE = [
   "./assets/v86/ui/tab_blue.png",
   "./assets/v86/ui/tab_gold.png",
   "./assets/v86/ui/tab_cyan.png",
+  "./assets/v87/characters/fisher_boat_crisp.png",
+  "./assets/v87/ui/bottom_nav_hd.png",
+  "./assets/v87/ui/recent_panel_hd.png",
+  "./assets/v87/ui/reel_panel_hd.png",
+  "./assets/v87/ui/tab_blue_hd.png",
+  "./assets/v87/ui/tab_gold_hd.png",
+  "./assets/v87/ui/tab_cyan_hd.png",
+  "./assets/v87/icons/bag.png",
+  "./assets/v87/icons/rod.png",
+  "./assets/v87/icons/gear.png",
+  "./assets/v87/icons/fish_card_common.png",
+  "./assets/v87/icons/shop.png",
+  "./assets/v87/icons/star_coin.png",
+  "./assets/v87/icons/star_big.png",
+  "./assets/v87/icons/coin.png",
+  "./assets/v87/icons/bait_shrimp.png",
+  "./assets/v87/icons/bobber.png",
+  "./assets/v87/icons/sparkle.png",
+  "./assets/v87/buttons/btn_orange_normal_wide_blank.png",
+  "./assets/v87/buttons/btn_orange_pressed_wide_blank.png",
+  "./assets/v87/buttons/btn_blue_normal_wide_blank.png",
   "./assets/v12/fx/particle_sparkle_cluster_ref_a.png",
   "./assets/art/water_ripple_overlay.webp",
   "./assets/art/caustic_sparkle_overlay.webp"

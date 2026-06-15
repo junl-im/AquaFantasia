@@ -9,8 +9,8 @@ import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPort
 
 const ASSET = {
   loginBg: './assets/v85/screens/start_screen_clean_v810.webp',
-  player: './assets/v85/characters/chibi_fisher_01_hd.png',
-  float: './assets/v85/icons/bobber.png',
+  player: './assets/v87/characters/fisher_boat_crisp.png',
+  float: './assets/v87/icons/bobber.png',
   fish: './assets/v85/fish/fish_01.png',
   gauge: './assets/v85/icons/gauge_level.png',
   slot: './assets/art/fish_slot.png',
@@ -18,7 +18,7 @@ const ASSET = {
   caustics: './assets/art/caustic_sparkle_overlay.webp',
   castButton: './assets/ui/button_cast_clean.png',
   perfect: './assets/v12/fx/particle_sparkle_cluster_ref_a.png',
-  touchRing: './assets/v85/icons/sparkle.png',
+  touchRing: './assets/v87/icons/sparkle.png',
 };
 
 const V13_BG: Record<Exclude<Screen, 'login'>, string> = {
@@ -254,8 +254,8 @@ class AquaFantasiaGame {
       </div>
       <div class="fishing-hud v840-fishing-hud" aria-label="플레이어 정보">
         <div class="hud-chip region"><strong>${region.name}</strong><span>${region.tide}</span></div>
-        <div class="hud-chip"><img src="./assets/v85/icons/coin.png" alt="" /><strong>${this.save.coins.toLocaleString('ko-KR')}</strong></div>
-        <div class="hud-chip"><img src="./assets/v85/icons/bait_shrimp.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
+        <div class="hud-chip"><img src="./assets/v87/icons/coin.png" alt="" /><strong>${this.save.coins.toLocaleString('ko-KR')}</strong></div>
+        <div class="hud-chip"><img src="./assets/v87/icons/bait_shrimp.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
       </div>
       <div class="stage-ui v840-stage-ui"></div>
       <div class="combo-badge ${this.save.currentStreak > 1 ? '' : 'hidden'}" id="comboBadge">연속 성공 x${Math.max(2, this.save.currentStreak)}</div>
@@ -715,12 +715,13 @@ class AquaFantasiaGame {
       this.exitPromptOpen = true;
       const exit = await this.showGameConfirm({
         title: '게임을 종료할까요?',
-        message: '뒤로가기를 한 번 더 누르거나 종료를 선택하면 이전 페이지로 이동합니다.',
+        message: '종료를 선택하면 현재 인앱 브라우저/탭 닫기를 즉시 시도합니다.',
         okText: '종료',
         cancelText: '취소',
+        okAction: () => this.releaseBrowserBack(),
       });
       this.exitPromptOpen = false;
-      if (exit) this.releaseBrowserBack();
+      if (!exit) this.allowBrowserLeave = false;
       return;
     }
     void this.go('village');
@@ -728,15 +729,42 @@ class AquaFantasiaGame {
 
   private releaseBrowserBack(): void {
     this.allowBrowserLeave = true;
-    try {
-      history.back();
-      window.setTimeout(() => window.close(), 80);
-    } catch {
-      window.close();
+    const ua = navigator.userAgent || '';
+    const isKakao = /KAKAOTALK|KakaoTalk|KAKAOSTORY|KAKAOBIZ/i.test(ua);
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+    try { window.open('', '_self')?.close(); } catch { /* optional browser close path */ }
+    try { window.close(); } catch { /* optional browser close path */ }
+
+    if (isKakao) {
+      window.setTimeout(() => {
+        try {
+          window.location.href = isIOS ? 'kakaoweb://closeBrowser' : 'kakaotalk://inappbrowser/close';
+        } catch {
+          // Kakao scheme may be blocked by version or platform policy.
+        }
+      }, 35);
+      window.setTimeout(() => this.showExitFallbackHint(), 820);
+      return;
     }
+
+    window.setTimeout(() => {
+      try { history.length > 1 ? history.back() : window.close(); } catch { /* ignored */ }
+    }, 100);
+    window.setTimeout(() => this.showExitFallbackHint(), 820);
   }
 
-  private showGameConfirm(options: { title: string; message: string; okText: string; cancelText: string }): Promise<boolean> {
+  private showExitFallbackHint(): void {
+    if (!this.allowBrowserLeave || this.screen === 'login') return;
+    if (dom.app.querySelector('.exit-fallback-hint')) return;
+    const hint = document.createElement('div');
+    hint.className = 'exit-fallback-hint';
+    hint.innerHTML = `<strong>브라우저 닫기가 차단됐어요</strong><span>카카오/일부 브라우저 정책상 자동 닫기가 막힐 수 있습니다. 우측 상단 닫기 또는 뒤로가기를 한 번 더 눌러주세요.</span><button type="button">확인</button>`;
+    hint.querySelector('button')?.addEventListener('click', () => hint.remove());
+    dom.app.appendChild(hint);
+  }
+
+  private showGameConfirm(options: { title: string; message: string; okText: string; cancelText: string; okAction?: () => void }): Promise<boolean> {
     this.modalOpen = true;
     return new Promise((resolve) => {
       const backdrop = document.createElement('div');
@@ -757,7 +785,7 @@ class AquaFantasiaGame {
         resolve(value);
       };
       backdrop.querySelector<HTMLButtonElement>('[data-dialog="cancel"]')?.addEventListener('click', () => done(false));
-      backdrop.querySelector<HTMLButtonElement>('[data-dialog="ok"]')?.addEventListener('click', () => done(true));
+      backdrop.querySelector<HTMLButtonElement>('[data-dialog="ok"]')?.addEventListener('click', () => { options.okAction?.(); done(true); });
       backdrop.addEventListener('pointerdown', (ev) => {
         if (ev.target === backdrop) done(false);
       });
@@ -931,9 +959,9 @@ class AquaFantasiaGame {
     const caught = this.totalCaught();
     const linkedLabel = this.save.serverLinked ? '익명 서버 연동 계정' : '로컬 테스트 계정';
     const root = document.createElement('main');
-    root.className = 'game-screen ranking-screen v840-ranking-screen scroll-screen';
+    root.className = 'game-screen ranking-screen v840-ranking-screen v870-ranking-screen scroll-screen';
     root.innerHTML = `
-      <div class="ambient-bg" aria-hidden="true"></div>
+      <div class="ambient-bg ranking-bg-art" aria-hidden="true"></div>
       <section class="v840-page-panel ranking-panel" aria-label="랭킹">
         <header class="v840-panel-head">
           <span>REAL USER RANKING</span>
