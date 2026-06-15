@@ -4312,3 +4312,256 @@ html.perf-lite .underwater-webgl-canvas { opacity: .54 !important; }
 @media (max-width: 390px) {
   .underwater-webgl-canvas { opacity: .80 !important; }
 }
+
+/* v9.1.0 Visual polish layer
+   Goal: keep PixiJS gameplay + DOM UI, but upgrade image fidelity, cute chibi tone,
+   rendered 2.5D panel assets, and make the WebGL underwater layer actually visible. */
+:root {
+  --v910-nav-height: clamp(104px, 12.2svh, 122px);
+  --v910-safe-top: max(18px, calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 14px));
+  --v910-content-bottom: calc(var(--v910-nav-height) + env(safe-area-inset-bottom) + 30px);
+}
+html[data-version="9.1.0"],
+html[data-cache-name*="v9.1.0"] { background: #03101f !important; }
+
+.runtime-menu-screen.v890-v3d-screen,
+.runtime-menu-screen.v890-v3d-screen.scroll-screen {
+  width: var(--portrait-width, min(100vw, 520px)) !important;
+  max-width: 520px !important;
+  padding: var(--v910-safe-top) 14px var(--v910-content-bottom) !important;
+  background: #03101f !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-3d-bg,
+.fishing-screen.v890-fishing-screen .fishing-3d-ambient {
+  background-image:
+    radial-gradient(circle at 16% 5%, rgba(255,246,181,.20), transparent 24%),
+    radial-gradient(circle at 84% 14%, rgba(114,243,255,.20), transparent 32%),
+    linear-gradient(180deg, rgba(0, 66, 100, .08), rgba(0, 11, 35, .48)),
+    var(--v89-world-bg) !important;
+  background-size: cover, cover, cover, cover !important;
+  background-position: center top, center top, center, center !important;
+  filter: saturate(1.18) contrast(1.08) brightness(1.02) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .underwater-webgl-host,
+.fishing-screen.v890-fishing-screen .underwater-webgl-host { opacity: .96 !important; mix-blend-mode: screen !important; }
+.runtime-menu-screen.v890-v3d-screen .underwater-webgl-canvas { opacity: .74 !important; filter: saturate(1.28) contrast(1.10) brightness(1.05) !important; }
+.fishing-screen.v890-fishing-screen .fishing-3d-ambient {
+  z-index: 4 !important;
+  opacity: .72 !important;
+  mix-blend-mode: screen !important;
+}
+.fishing-screen.v890-fishing-screen .fishing-3d-ambient .underwater-webgl-canvas {
+  opacity: .62 !important;
+  filter: saturate(1.35) contrast(1.12) brightness(1.10) !important;
+}
+.fishing-screen.v890-fishing-screen .v840-fishing-stage { z-index: 1 !important; }
+.fishing-screen.v890-fishing-screen .pixi-layer { z-index: 2 !important; }
+.fishing-screen.v890-fishing-screen .water-overlay,
+.fishing-screen.v890-fishing-screen .caustic-overlay { z-index: 5 !important; opacity: .46 !important; mix-blend-mode: screen !important; }
+
+.runtime-bg-character {
+  position: fixed !important;
+  right: max(-120px, calc((100vw - var(--portrait-width, min(100vw, 520px))) / 2 - 92px)) !important;
+  bottom: calc(var(--v910-nav-height) - 26px + env(safe-area-inset-bottom)) !important;
+  width: min(380px, 76vw) !important;
+  height: auto !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  opacity: .26 !important;
+  transform: translateZ(0) rotate(-2deg) !important;
+  filter: drop-shadow(0 26px 28px rgba(0,10,30,.40)) saturate(1.14) contrast(1.08) brightness(1.02) !important;
+}
+.runtime-menu-screen[data-runtime-screen="village"] .runtime-bg-character { opacity: .38 !important; right: max(-84px, calc((100vw - var(--portrait-width, min(100vw, 520px))) / 2 - 56px)) !important; }
+.runtime-menu-screen[data-runtime-screen="ranking"] .runtime-bg-character,
+.runtime-menu-screen[data-runtime-screen="dex"] .runtime-bg-character { opacity: .18 !important; }
+
+.runtime-menu-screen.v890-v3d-screen .runtime-hud,
+.runtime-menu-screen.v890-v3d-screen .runtime-content { width: min(100%, 520px) !important; }
+.runtime-menu-screen.v890-v3d-screen .runtime-hud {
+  min-height: 112px !important;
+  padding: 18px 18px 17px !important;
+  border-radius: 34px !important;
+  background: url('/assets/v91/ui/panel_status_aqua.png') center/100% 100% no-repeat !important;
+  clip-path: inset(0 round 34px) !important;
+  filter: drop-shadow(0 18px 26px rgba(0,18,54,.32)) !important;
+}
+.runtime-menu-screen.v890-v3d-screen.ranking-screen .runtime-hud,
+.runtime-menu-screen.v890-v3d-screen[data-runtime-screen="ranking"] .runtime-hud {
+  background-image: url('/assets/v91/ui/panel_status_deep.png') !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-title strong {
+  font-size: clamp(38px, 9vw, 54px) !important;
+  color: #fff !important;
+  text-shadow: 0 3px 0 rgba(0,76,137,.82), 0 13px 22px rgba(0,16,44,.35) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-title span,
+.runtime-menu-screen.v890-v3d-screen .runtime-eyebrow,
+.runtime-menu-screen.v890-v3d-screen .runtime-panel-title span { color: rgba(229,253,255,.80) !important; text-shadow: 0 2px 7px rgba(0,28,58,.32) !important; }
+.runtime-menu-screen.v890-v3d-screen .runtime-title em { color: rgba(238,253,255,.88) !important; }
+.runtime-menu-screen.v890-v3d-screen .runtime-wallet span {
+  min-height: 36px !important;
+  background: rgba(2, 30, 66, .52) !important;
+  border: 1px solid rgba(178,247,255,.36) !important;
+  color: #fff !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-wallet img,
+.fishing-screen.v890-fishing-screen .hud-chip img { width: 30px !important; height: 30px !important; filter: drop-shadow(0 6px 6px rgba(0,18,50,.35)) saturate(1.20) contrast(1.14) !important; }
+
+.runtime-menu-screen.v890-v3d-screen .runtime-hero-card,
+.runtime-menu-screen.v890-v3d-screen .runtime-panel,
+.runtime-menu-screen.v890-v3d-screen .runtime-card-list .gear-card,
+.runtime-menu-screen.v890-v3d-screen .runtime-card-list .shop-card,
+.runtime-menu-screen.v890-v3d-screen .runtime-card-list .mission-card,
+.runtime-menu-screen.v890-v3d-screen .ranking-live-card {
+  background: url('/assets/v91/ui/panel_large_aqua.png') center/100% 100% no-repeat !important;
+  border: 0 !important;
+  box-shadow: 0 19px 34px rgba(0,15,48,.32) !important;
+  clip-path: inset(0 round 34px) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-hero-card {
+  min-height: 166px !important;
+  padding: 24px 22px !important;
+  border-radius: 36px !important;
+  clip-path: inset(0 round 36px) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-panel { padding: 21px 20px 22px !important; }
+.runtime-menu-screen.v890-v3d-screen.ranking-screen .runtime-panel,
+.runtime-menu-screen.v890-v3d-screen.ranking-screen .ranking-live-card,
+.runtime-menu-screen.v890-v3d-screen.ranking-screen .ranking-panel {
+  background-image: url('/assets/v91/ui/panel_large_deep.png') !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-menu-card,
+.runtime-menu-screen.v890-v3d-screen .runtime-item-card,
+.runtime-menu-screen.v890-v3d-screen .region-card {
+  min-height: 158px !important;
+  background: url('/assets/v91/ui/slot_square_aqua.png') center/100% 100% no-repeat !important;
+  border: 0 !important;
+  box-shadow: 0 15px 24px rgba(0,16,48,.26) !important;
+  clip-path: inset(0 round 30px) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-dex-card.dex-card,
+.runtime-menu-screen.v890-v3d-screen .runtime-item-card {
+  background-image: url('/assets/v91/ui/panel_card_aqua.png') !important;
+  border-radius: 32px !important;
+  clip-path: inset(0 round 32px) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-card-list .mission-card { background-image: url('/assets/v91/ui/panel_mission_aqua.png') !important; }
+.runtime-menu-screen.v890-v3d-screen .runtime-menu-card img,
+.runtime-menu-screen.v890-v3d-screen .runtime-item-card img,
+.runtime-menu-screen.v890-v3d-screen .gear-card > img,
+.runtime-menu-screen.v890-v3d-screen .shop-card img,
+.runtime-menu-screen.v890-v3d-screen .runtime-hero-card > img {
+  width: clamp(76px, 17vw, 92px) !important;
+  height: clamp(76px, 17vw, 92px) !important;
+  object-fit: contain !important;
+  image-rendering: auto !important;
+  filter: drop-shadow(0 14px 13px rgba(0,18,50,.38)) saturate(1.26) contrast(1.16) brightness(1.02) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-btn,
+.runtime-menu-screen.v890-v3d-screen .image-btn,
+.runtime-menu-screen.v890-v3d-screen .mission-card .runtime-btn {
+  min-height: 58px !important;
+  background: url('/assets/v91/ui/button_mid_aqua.png') center/100% 100% no-repeat !important;
+  border: 0 !important;
+  color: #053855 !important;
+  filter: drop-shadow(0 9px 12px rgba(0,18,48,.25)) saturate(1.16) contrast(1.10) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-btn.gold,
+.runtime-menu-screen.v890-v3d-screen .tide-card .runtime-btn { background-image: url('/assets/v91/ui/button_mid_gold.png') !important; color: #643600 !important; }
+.runtime-menu-screen.v890-v3d-screen .runtime-btn:active,
+.runtime-menu-screen.v890-v3d-screen .image-btn:active { background-image: url('/assets/v91/ui/button_mid_aqua_pressed.png') !important; }
+.runtime-menu-screen.v890-v3d-screen .runtime-btn.gold:active,
+.runtime-menu-screen.v890-v3d-screen .tide-card .runtime-btn:active { background-image: url('/assets/v91/ui/button_mid_gold_pressed.png') !important; }
+.runtime-menu-screen.v890-v3d-screen .runtime-menu-card strong,
+.runtime-menu-screen.v890-v3d-screen .runtime-item-card strong,
+.runtime-menu-screen.v890-v3d-screen .runtime-panel-title strong,
+.runtime-menu-screen.v890-v3d-screen .runtime-hero-card h2,
+.runtime-menu-screen.v890-v3d-screen .gear-card strong,
+.runtime-menu-screen.v890-v3d-screen .shop-card strong,
+.runtime-menu-screen.v890-v3d-screen .mission-card strong { color: #fff !important; text-shadow: 0 2px 0 rgba(0,76,138,.76), 0 8px 14px rgba(0,17,45,.32) !important; }
+.runtime-menu-screen.v890-v3d-screen .runtime-menu-card span,
+.runtime-menu-screen.v890-v3d-screen .runtime-item-card span,
+.runtime-menu-screen.v890-v3d-screen .runtime-hero-card p,
+.runtime-menu-screen.v890-v3d-screen .gear-card span,
+.runtime-menu-screen.v890-v3d-screen .shop-card small,
+.runtime-menu-screen.v890-v3d-screen .mission-card span,
+.runtime-menu-screen.v890-v3d-screen .ranking-note { color: rgba(241,253,255,.92) !important; text-shadow: 0 2px 8px rgba(0,20,48,.34) !important; }
+
+.bottom-nav.v840-bottom-nav,
+html.portrait-only-game .bottom-nav.v840-bottom-nav,
+html.is-kakao-inapp .bottom-nav.v840-bottom-nav,
+html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
+.bottom-nav.v840-bottom-nav.fixed-root-nav {
+  height: var(--v910-nav-height) !important;
+  min-height: 104px !important;
+  width: min(518px, calc(100vw - 0px)) !important;
+  padding: 13px 12px 16px !important;
+  background: url('/assets/v91/ui/bottom_nav_deep.png') center/100% 100% no-repeat !important;
+  filter: drop-shadow(0 -10px 24px rgba(0,12,38,.28)) !important;
+}
+.bottom-nav.v840-bottom-nav button {
+  background: transparent !important;
+  min-height: 68px !important;
+  border-radius: 26px !important;
+}
+.bottom-nav.v840-bottom-nav button.active {
+  background: radial-gradient(circle at 50% 24%, rgba(255,255,255,.35), rgba(82,220,255,.24) 48%, rgba(0,38,88,.04) 70%) !important;
+  transform: translateY(-4px) !important;
+}
+.bottom-nav.v840-bottom-nav button img {
+  width: clamp(35px, 8.2vw, 46px) !important;
+  height: clamp(35px, 8.2vw, 46px) !important;
+  filter: drop-shadow(0 7px 8px rgba(0,15,45,.42)) saturate(1.25) contrast(1.16) !important;
+}
+.bottom-nav.v840-bottom-nav button span { font-size: clamp(9.5px, 2.45vw, 11.3px) !important; color: #ecfbff !important; }
+.bottom-nav.v840-bottom-nav button.active span { color: #fff5a6 !important; }
+
+.fishing-screen.v890-fishing-screen { --v89-world-bg: url('/assets/v91/bg/region_lake.webp'); }
+.fishing-screen.v890-fishing-screen .fishing-hud { top: var(--v910-safe-top) !important; }
+.fishing-screen.v890-fishing-screen .hud-chip {
+  background: url('/assets/v91/ui/panel_status_aqua.png') center/100% 100% no-repeat !important;
+  min-height: 54px !important;
+  color: #fff !important;
+  text-shadow: 0 2px 4px rgba(0,23,58,.38) !important;
+}
+.fishing-screen.v890-fishing-screen .recent-catch-strip {
+  bottom: calc(var(--v910-nav-height) + 8px + env(safe-area-inset-bottom)) !important;
+  background: url('/assets/v91/ui/panel_status_aqua.png') center/100% 100% no-repeat !important;
+  min-height: 94px !important;
+  border-radius: 32px !important;
+  clip-path: inset(0 round 32px) !important;
+}
+.fishing-screen.v890-fishing-screen .recent-card { background-image: url('/assets/v91/ui/slot_square_deep.png') !important; }
+.fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button {
+  bottom: calc(var(--v910-nav-height) + 112px + env(safe-area-inset-bottom)) !important;
+  width: min(350px, 80vw) !important;
+  min-height: 78px !important;
+  background: url('/assets/v91/ui/button_large_gold.png') center/100% 100% no-repeat !important;
+  color: #5d3200 !important;
+  z-index: 12 !important;
+}
+.fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button:active { background-image: url('/assets/v91/ui/button_large_gold_pressed.png') !important; }
+.fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button .cast-icon { background-image: url('/assets/v91/icons/bobber.png') !important; width: 56px !important; height: 56px !important; }
+body[data-screen="fishing"] .v840-reel-panel.reel-panel,
+html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel {
+  bottom: calc(var(--v910-nav-height) + 116px + env(safe-area-inset-bottom)) !important;
+  background: url('/assets/v91/ui/panel_large_deep.png') center/100% 100% no-repeat !important;
+}
+.fishing-screen.v890-fishing-screen .pixi-layer canvas {
+  filter: saturate(1.18) contrast(1.08) brightness(1.03) !important;
+}
+
+@media (max-width: 390px) {
+  :root { --v910-nav-height: 102px; }
+  .runtime-menu-screen.v890-v3d-screen { padding-inline: 10px !important; }
+  .runtime-bg-character { width: min(330px, 76vw) !important; opacity: .22 !important; }
+  .runtime-menu-screen.v890-v3d-screen .runtime-hud { min-height: 106px !important; padding: 15px !important; }
+  .runtime-menu-screen.v890-v3d-screen .runtime-hero-card { min-height: 152px !important; padding: 20px 18px !important; }
+  .runtime-menu-screen.v890-v3d-screen .runtime-menu-card img,
+  .runtime-menu-screen.v890-v3d-screen .runtime-item-card img,
+  .runtime-menu-screen.v890-v3d-screen .gear-card > img,
+  .runtime-menu-screen.v890-v3d-screen .shop-card img { width: 70px !important; height: 70px !important; }
+  .bottom-nav.v840-bottom-nav { padding-inline: 9px !important; }
+  .bottom-nav.v840-bottom-nav button img { width: 32px !important; height: 32px !important; }
+  .fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button { width: min(326px, 82vw) !important; min-height: 72px !important; }
+}

@@ -1,28 +1,24 @@
-# AquaFantasia v9.0.0
+# AquaFantasia v9.1.0
 
-모바일 세로 고정 낚시 웹게임입니다. 이번 패치는 v8.9.0 위에 **WebGL 수중 배경 전용 레이어**와 **귀여운 치비 낚시 캐릭터 톤**을 안전하게 얹는 안정화 패치입니다.
+모바일 세로 전용 낚시 웹게임입니다. 이번 버전은 v9.0.0의 WebGL 수중 레이어 기준선을 유지하면서, 화면 품질을 다시 끌어올리는 비주얼 폴리싱 패치입니다.
 
-## 이번 패치 핵심
+## v9.1.0 핵심 변경
 
-- GitHub Actions `validate` 실패 원인 수정
-  - 기존 repo에 남아 있던 `reports/`, `CLEAN_REPLACE_GUIDE_*`, `FINAL_CONSOLIDATED_*`, `PATCH_NOTES_*` 파일 때문에 실패하던 문제를 자동 정리합니다.
-  - `npm run validate`가 먼저 `tools/clean-old-patch-docs.mjs`를 실행합니다.
-- 문서 정책 유지
-  - 패치 ZIP 안의 문서는 `README.md` 하나만 유지합니다.
-  - 새 `PATCH_NOTES`, `FINAL_CONSOLIDATED`, `reports` 파일을 만들지 않습니다.
-- 3D 수중 배경 전용 레이어 추가
-  - 기존 PixiJS 낚시 플레이와 DOM UI는 유지합니다.
-  - 메뉴/낚시 화면의 배경에 `UnderwaterWebglLayer` 캔버스를 붙여 WebGL shader 기반 수중 파동, 광선, 카스틱, 심도감을 추가합니다.
-  - WebGL 미지원 기기에서는 기존 CSS/이미지 배경으로 자동 fallback됩니다.
-- 캐릭터 톤 개선
-  - 낚시터 플레이어 캐릭터를 `public/assets/v90/characters/fisher_boat_cute_crisp.png`로 연결했습니다.
-  - 첨부한 귀여운 치비 낚시 소녀 레퍼런스 톤은 `chibi_boat_tone_reference.webp`로 보관해 이후 캐릭터 확장 기준으로 삼습니다.
-- 캐시 갱신
-  - Service Worker 캐시 이름을 `aqua-fantasia-v9.0.0-webgl-underwater-cute-runtime`으로 변경했습니다.
+- GitHub Actions `validate` 실패 방지 정책 유지
+  - 오래된 `reports/`, `CLEAN_REPLACE_GUIDE_*`, `FINAL_CONSOLIDATED_*`, `PATCH_NOTES_*` 문서는 자동 정리합니다.
+  - 프로젝트 문서는 `README.md` 하나만 유지합니다.
+- 캐릭터 톤을 귀엽고 선명한 치비 낚시 소녀 방향으로 교체했습니다.
+  - `public/assets/v91/characters/chibi_fisher_boat_story.png`
+- v91 전용 배경을 추가했습니다.
+  - 마을/장비/가방/도감/상점/미션/랭킹 메뉴 배경을 귀여운 바다 톤으로 재정렬했습니다.
+  - 낚시 수역 배경도 v91 경로로 연결했습니다.
+- 기존 PixiJS 낚시 런타임과 DOM UI는 유지합니다.
+- WebGL 수중 레이어는 계속 유지하되, 낚시 화면에서도 실제로 보이도록 overlay 계층을 조정했습니다.
+- UI 패널/버튼/하단 네비를 v91 렌더드 2.5D 에셋으로 재정렬했습니다.
+- 하단 메뉴 아이콘을 2.5D 렌더드 아이콘으로 교체했습니다.
+- 카카오/인앱 브라우저 세로 고정 정책은 유지합니다.
 
-## 적용 방법
-
-기존 프로젝트 루트에 ZIP을 덮어쓴 뒤 아래 명령으로 확인합니다.
+## 실행
 
 ```bash
 npm install
@@ -32,19 +28,10 @@ npm run build
 npm run audit
 ```
 
-## 카카오/인앱 브라우저 방침
+## 배포
 
-- 카카오/인앱 브라우저에서는 `requestFullscreen()`과 `screen.orientation.lock()`을 호출하지 않습니다.
-- 회전 버그 방지를 위해 CSS 세로 고정/viewport cage만 사용합니다.
-- 일반 브라우저/PWA에서는 기존 정책에 따라 가능한 경우에만 몰입형 표시를 시도합니다.
+GitHub Pages 기준 Vite 정적 빌드 구조입니다. ZIP을 프로젝트 루트에 덮어쓴 뒤 GitHub Desktop에서 commit/push 하면 GitHub Actions가 검증 후 배포합니다.
 
-## 다음 우선순위
+## 문서 정책
 
-1. PlayCanvas/WebGPU 브랜치 분리 실험
-   - 지금은 WebGL shader 배경 레이어만 적용했습니다.
-   - 다음 단계에서 PlayCanvas를 선택적으로 import하는 `3D 배경 전용 브랜치`를 만들면 됩니다.
-2. 캐릭터 확장
-   - 현재는 기존 투명 치비 보트 캐릭터를 선명하게 보정했습니다.
-   - 다음 단계에서 사용자 레퍼런스처럼 큰 눈, 밝은 금발/리본/아기자기한 표정의 원화급 캐릭터 세트를 별도 제작/교체하는 흐름이 좋습니다.
-3. UI 파츠 9-slice 정리
-   - 하단 탭/패널/버튼을 완전한 런타임 파츠로 더 분해해 화면별 밀림과 흐림을 계속 줄입니다.
+이번 버전부터 패치 문서는 `README.md` 하나에만 통합합니다. 이전 버전의 별도 MD 문서가 남아 있으면 `npm run validate`에서 자동 정리합니다.
