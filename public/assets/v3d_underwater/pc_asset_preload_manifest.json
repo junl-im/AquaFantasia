@@ -1,0 +1,3334 @@
+{
+  "assets": [
+    {
+      "name": "ui_icons_buttons_particles_atlas",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/atlases/ui_icons_buttons_particles_atlas.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "abyss_gate_nx",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/abyss_gate/abyss_gate_nx.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "abyss_gate_ny",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/abyss_gate/abyss_gate_ny.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "abyss_gate_nz",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/abyss_gate/abyss_gate_nz.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "abyss_gate_px",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/abyss_gate/abyss_gate_px.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "abyss_gate_py",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/abyss_gate/abyss_gate_py.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "abyss_gate_pz",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/abyss_gate/abyss_gate_pz.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "crystal_temple_nx",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/crystal_temple/crystal_temple_nx.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "crystal_temple_ny",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/crystal_temple/crystal_temple_ny.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "crystal_temple_nz",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/crystal_temple/crystal_temple_nz.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "crystal_temple_px",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/crystal_temple/crystal_temple_px.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "crystal_temple_py",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/crystal_temple/crystal_temple_py.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "crystal_temple_pz",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/crystal_temple/crystal_temple_pz.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "deep_lake_nx",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/deep_lake/deep_lake_nx.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "deep_lake_ny",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/deep_lake/deep_lake_ny.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "deep_lake_nz",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/deep_lake/deep_lake_nz.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "deep_lake_px",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/deep_lake/deep_lake_px.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "deep_lake_py",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/deep_lake/deep_lake_py.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "deep_lake_pz",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/deep_lake/deep_lake_pz.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "harbor_dome_nx",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/harbor_dome/harbor_dome_nx.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "harbor_dome_ny",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/harbor_dome/harbor_dome_ny.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "harbor_dome_nz",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/harbor_dome/harbor_dome_nz.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "harbor_dome_px",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/harbor_dome/harbor_dome_px.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "harbor_dome_py",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/harbor_dome/harbor_dome_py.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "harbor_dome_pz",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/harbor_dome/harbor_dome_pz.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reef_cove_nx",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/reef_cove/reef_cove_nx.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reef_cove_ny",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/reef_cove/reef_cove_ny.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reef_cove_nz",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/reef_cove/reef_cove_nz.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reef_cove_px",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/reef_cove/reef_cove_px.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reef_cove_py",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/reef_cove/reef_cove_py.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reef_cove_pz",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/reef_cove/reef_cove_pz.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "storm_trench_nx",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/storm_trench/storm_trench_nx.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "storm_trench_ny",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/storm_trench/storm_trench_ny.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "storm_trench_nz",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/storm_trench/storm_trench_nz.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "storm_trench_px",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/storm_trench/storm_trench_px.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "storm_trench_py",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/storm_trench/storm_trench_py.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "storm_trench_pz",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/skybox/storm_trench/storm_trench_pz.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "abyss_gate_square_1024",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/world_panorama/abyss_gate_square_1024.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "crystal_temple_square_1024",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/world_panorama/crystal_temple_square_1024.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "deep_lake_square_1024",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/world_panorama/deep_lake_square_1024.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "harbor_dome_square_1024",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/world_panorama/harbor_dome_square_1024.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reef_cove_square_1024",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/world_panorama/reef_cove_square_1024.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "storm_trench_square_1024",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/backgrounds/world_panorama/storm_trench_square_1024.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "screen_contact_sheet",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/previews/screen_contact_sheet.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "ui_contact_sheet",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/previews/ui_contact_sheet.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "boss_warning_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/boss_warning_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "dex_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/dex_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "exit_confirm_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/exit_confirm_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "fishing_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/fishing_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "gear_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/gear_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "inventory_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/inventory_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "loading_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/loading_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "mission_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/mission_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "ranking_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/ranking_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reward_popup_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/reward_popup_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "settings_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/settings_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "shop_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/shop_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "title_menu_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/title_menu_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "town_landscape_1920x1080",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/landscape/town_landscape_1920x1080.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "boss_warning_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/boss_warning_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "dex_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/dex_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "exit_confirm_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/exit_confirm_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "fishing_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/fishing_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "gear_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/gear_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "inventory_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/inventory_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "loading_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/loading_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "mission_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/mission_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "ranking_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/ranking_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reward_popup_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/reward_popup_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "settings_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/settings_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "shop_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/shop_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "title_menu_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/title_menu_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "town_portrait_1080x1920",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/screens/portrait/town_portrait_1080x1920.webp",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "bubble_decal_card",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/bubble_decal_card.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "caustics_loop_00",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/caustics_loop_00.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "caustics_loop_01",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/caustics_loop_01.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "caustics_loop_02",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/caustics_loop_02.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "caustics_loop_03",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/caustics_loop_03.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "caustics_loop_04",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/caustics_loop_04.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "caustics_loop_05",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/caustics_loop_05.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "caustics_loop_06",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/caustics_loop_06.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "caustics_loop_07",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/caustics_loop_07.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "caustics_loop_08",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/caustics_loop_08.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "caustics_loop_09",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/caustics_loop_09.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "caustics_loop_10",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/caustics_loop_10.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "caustics_loop_11",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/caustics_loop_11.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "coral_branch_card",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/coral_branch_card.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "deep_vignette",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/deep_vignette.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "jelly_glow_card",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/jelly_glow_card.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "kelp_leaf_card",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/kelp_leaf_card.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "mist_noise",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/mist_noise.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "surface_foam",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/fx/surface_foam.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "bubble_ring",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/particles/bubble_ring.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "bubble_soft",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/particles/bubble_soft.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "godray_star",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/particles/godray_star.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "magic_ring_gold",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/particles/magic_ring_gold.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "pearl_flash",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/particles/pearl_flash.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "plankton_glow",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/particles/plankton_glow.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "splash_aqua",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/particles/splash_aqua.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "warning_pulse",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/particles/warning_pulse.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "basalt_rock_albedo",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/basalt_rock/basalt_rock_albedo.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "basalt_rock_ao",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/basalt_rock/basalt_rock_ao.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "basalt_rock_metallic",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/basalt_rock/basalt_rock_metallic.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "basalt_rock_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/basalt_rock/basalt_rock_normal.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "basalt_rock_roughness",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/basalt_rock/basalt_rock_roughness.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "crystal_blue_albedo",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/crystal_blue/crystal_blue_albedo.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "crystal_blue_ao",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/crystal_blue/crystal_blue_ao.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "crystal_blue_metallic",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/crystal_blue/crystal_blue_metallic.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "crystal_blue_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/crystal_blue/crystal_blue_normal.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "crystal_blue_roughness",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/crystal_blue/crystal_blue_roughness.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "green_kelp_albedo",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/green_kelp/green_kelp_albedo.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "green_kelp_ao",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/green_kelp/green_kelp_ao.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "green_kelp_metallic",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/green_kelp/green_kelp_metallic.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "green_kelp_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/green_kelp/green_kelp_normal.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "green_kelp_roughness",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/green_kelp/green_kelp_roughness.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "hologram_glass_albedo",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/hologram_glass/hologram_glass_albedo.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "pearl_shell_albedo",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/pearl_shell/pearl_shell_albedo.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "pearl_shell_ao",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/pearl_shell/pearl_shell_ao.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "pearl_shell_metallic",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/pearl_shell/pearl_shell_metallic.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "pearl_shell_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/pearl_shell/pearl_shell_normal.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "pearl_shell_roughness",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/pearl_shell/pearl_shell_roughness.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reef_coral_albedo",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/reef_coral/reef_coral_albedo.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reef_coral_ao",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/reef_coral/reef_coral_ao.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reef_coral_metallic",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/reef_coral/reef_coral_metallic.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reef_coral_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/reef_coral/reef_coral_normal.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reef_coral_roughness",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/reef_coral/reef_coral_roughness.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "ruin_stone_albedo",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/ruin_stone/ruin_stone_albedo.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "ruin_stone_ao",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/ruin_stone/ruin_stone_ao.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "ruin_stone_metallic",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/ruin_stone/ruin_stone_metallic.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "ruin_stone_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/ruin_stone/ruin_stone_normal.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "ruin_stone_roughness",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/ruin_stone/ruin_stone_roughness.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "water_surface_albedo",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/water_surface/water_surface_albedo.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "water_surface_ao",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/water_surface/water_surface_ao.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "water_surface_metallic",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/water_surface/water_surface_metallic.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "water_surface_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/water_surface/water_surface_normal.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "water_surface_roughness",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/water_surface/water_surface_roughness.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "wet_sand_albedo",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/wet_sand/wet_sand_albedo.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "wet_sand_ao",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/wet_sand/wet_sand_ao.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "wet_sand_metallic",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/wet_sand/wet_sand_metallic.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "wet_sand_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/wet_sand/wet_sand_normal.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "wet_sand_roughness",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/textures/pbr/wet_sand/wet_sand_roughness.png",
+      "options": {
+        "mipmaps": true,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_aqua_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_aqua_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_aqua_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_aqua_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_aqua_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_aqua_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_deep_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_deep_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_deep_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_deep_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_deep_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_deep_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_emerald_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_emerald_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_emerald_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_emerald_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_emerald_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_emerald_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_gold_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_gold_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_gold_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_gold_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_gold_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_gold_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_purple_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_purple_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_purple_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_purple_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_mid_purple_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_mid_purple_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_aqua_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_aqua_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_aqua_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_aqua_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_aqua_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_aqua_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_deep_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_deep_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_deep_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_deep_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_deep_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_deep_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_emerald_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_emerald_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_emerald_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_emerald_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_emerald_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_emerald_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_gold_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_gold_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_gold_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_gold_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_gold_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_gold_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_purple_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_purple_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_purple_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_purple_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_pill_purple_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_pill_purple_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_aqua_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_aqua_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_aqua_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_aqua_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_aqua_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_aqua_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_deep_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_deep_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_deep_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_deep_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_deep_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_deep_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_emerald_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_emerald_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_emerald_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_emerald_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_emerald_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_emerald_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_gold_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_gold_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_gold_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_gold_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_gold_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_gold_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_purple_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_purple_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_purple_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_purple_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_small_purple_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_small_purple_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_aqua_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_aqua_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_aqua_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_aqua_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_aqua_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_aqua_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_deep_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_deep_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_deep_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_deep_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_deep_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_deep_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_emerald_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_emerald_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_emerald_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_emerald_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_emerald_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_emerald_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_gold_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_gold_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_gold_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_gold_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_gold_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_gold_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_purple_disabled",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_purple_disabled.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_purple_normal",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_purple_normal.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "button_wide_purple_pressed",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/buttons/button_wide_purple_pressed.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "bottom_nav_aqua",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/bottom_nav_aqua.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "bottom_nav_deep",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/bottom_nav_deep.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "bottom_nav_emerald",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/bottom_nav_emerald.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "bottom_nav_gold",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/bottom_nav_gold.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "bottom_nav_purple",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/bottom_nav_purple.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "card_aqua",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/card_aqua.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "card_deep",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/card_deep.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "card_emerald",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/card_emerald.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "card_gold",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/card_gold.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "card_purple",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/card_purple.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "hud_capsule_aqua",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/hud_capsule_aqua.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "hud_capsule_deep",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/hud_capsule_deep.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "hud_capsule_emerald",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/hud_capsule_emerald.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "hud_capsule_gold",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/hud_capsule_gold.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "hud_capsule_purple",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/hud_capsule_purple.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "modal_aqua",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/modal_aqua.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "modal_deep",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/modal_deep.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "modal_emerald",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/modal_emerald.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "modal_gold",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/modal_gold.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "modal_purple",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/modal_purple.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_large_aqua",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_large_aqua.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_large_deep",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_large_deep.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_large_emerald",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_large_emerald.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_large_gold",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_large_gold.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_large_purple",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_large_purple.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_medium_aqua",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_medium_aqua.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_medium_deep",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_medium_deep.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_medium_emerald",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_medium_emerald.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_medium_gold",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_medium_gold.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_medium_purple",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_medium_purple.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_small_aqua",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_small_aqua.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_small_deep",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_small_deep.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_small_emerald",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_small_emerald.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_small_gold",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_small_gold.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_small_purple",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/panel_small_purple.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "progress_frame_aqua",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/progress_frame_aqua.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "progress_frame_deep",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/progress_frame_deep.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "progress_frame_emerald",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/progress_frame_emerald.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "progress_frame_gold",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/progress_frame_gold.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "progress_frame_purple",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/progress_frame_purple.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "slot_square_aqua",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/slot_square_aqua.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "slot_square_deep",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/slot_square_deep.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "slot_square_emerald",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/slot_square_emerald.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "slot_square_gold",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/slot_square_gold.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "slot_square_purple",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/slot_square_purple.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "tooltip_aqua",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/tooltip_aqua.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "tooltip_deep",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/tooltip_deep.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "tooltip_emerald",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/tooltip_emerald.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "tooltip_gold",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/tooltip_gold.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "tooltip_purple",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/frames/tooltip_purple.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "nav_tab_aqua_active",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/nav_tab_aqua_active.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "nav_tab_aqua_inactive",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/nav_tab_aqua_inactive.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "nav_tab_deep_active",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/nav_tab_deep_active.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "nav_tab_deep_inactive",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/nav_tab_deep_inactive.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "nav_tab_emerald_active",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/nav_tab_emerald_active.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "nav_tab_emerald_inactive",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/nav_tab_emerald_inactive.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "nav_tab_gold_active",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/nav_tab_gold_active.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "nav_tab_gold_inactive",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/nav_tab_gold_inactive.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "nav_tab_purple_active",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/nav_tab_purple_active.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "nav_tab_purple_inactive",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/nav_tab_purple_inactive.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "progress_fill_aqua",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/progress_fill_aqua.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "progress_fill_deep",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/progress_fill_deep.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "progress_fill_emerald",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/progress_fill_emerald.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "progress_fill_gold",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/progress_fill_gold.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "progress_fill_purple",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/hud/progress_fill_purple.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_back",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_back.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_bag",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_bag.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_book",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_book.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_boss",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_boss.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_check",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_check.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_close",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_close.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_coin",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_coin.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_fish",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_fish.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_gear",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_gear.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_home",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_home.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_lock",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_lock.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_map",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_map.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_mission",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_mission.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_nav_dex",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_nav_dex.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_nav_fishing",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_nav_fishing.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_nav_gear",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_nav_gear.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_nav_inventory",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_nav_inventory.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_nav_mission",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_nav_mission.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_nav_ranking",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_nav_ranking.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_nav_shop",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_nav_shop.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_nav_town",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_nav_town.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_oxygen",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_oxygen.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_pearl",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_pearl.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_play",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_play.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_plus",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_plus.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_quest",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_quest.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_settings",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_settings.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_shop",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_shop.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_star",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_star.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_trophy",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_trophy.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "icon_warning",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/icons/icon_warning.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "boss_warning_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/boss_warning_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "boss_warning_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/boss_warning_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "dex_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/dex_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "dex_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/dex_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "exit_confirm_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/exit_confirm_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "exit_confirm_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/exit_confirm_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "fishing_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/fishing_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "fishing_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/fishing_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "gear_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/gear_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "gear_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/gear_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "inventory_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/inventory_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "inventory_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/inventory_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "loading_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/loading_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "loading_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/loading_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "mission_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/mission_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "mission_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/mission_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "ranking_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/ranking_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "ranking_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/ranking_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reward_popup_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/reward_popup_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "reward_popup_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/reward_popup_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "settings_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/settings_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "settings_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/settings_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "shop_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/shop_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "shop_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/shop_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "title_menu_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/title_menu_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "title_menu_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/title_menu_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "town_landscape_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/town_landscape_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "town_portrait_ui_overlay",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/menu_screens/town_portrait_ui_overlay.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_aqua_center",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_aqua_center.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_aqua_corner_bl",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_aqua_corner_bl.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_aqua_corner_br",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_aqua_corner_br.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_aqua_corner_tl",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_aqua_corner_tl.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_aqua_corner_tr",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_aqua_corner_tr.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_aqua_edge_bottom",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_aqua_edge_bottom.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_aqua_edge_left",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_aqua_edge_left.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_aqua_edge_right",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_aqua_edge_right.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_aqua_edge_top",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_aqua_edge_top.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_deep_center",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_deep_center.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_deep_corner_bl",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_deep_corner_bl.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_deep_corner_br",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_deep_corner_br.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_deep_corner_tl",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_deep_corner_tl.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_deep_corner_tr",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_deep_corner_tr.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_deep_edge_bottom",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_deep_edge_bottom.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_deep_edge_left",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_deep_edge_left.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_deep_edge_right",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_deep_edge_right.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_deep_edge_top",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_deep_edge_top.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_emerald_center",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_emerald_center.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_emerald_corner_bl",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_emerald_corner_bl.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_emerald_corner_br",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_emerald_corner_br.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_emerald_corner_tl",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_emerald_corner_tl.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_emerald_corner_tr",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_emerald_corner_tr.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_emerald_edge_bottom",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_emerald_edge_bottom.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_emerald_edge_left",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_emerald_edge_left.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_emerald_edge_right",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_emerald_edge_right.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_emerald_edge_top",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_emerald_edge_top.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_gold_center",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_gold_center.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_gold_corner_bl",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_gold_corner_bl.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_gold_corner_br",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_gold_corner_br.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_gold_corner_tl",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_gold_corner_tl.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_gold_corner_tr",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_gold_corner_tr.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_gold_edge_bottom",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_gold_edge_bottom.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_gold_edge_left",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_gold_edge_left.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_gold_edge_right",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_gold_edge_right.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_gold_edge_top",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_gold_edge_top.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_purple_center",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_purple_center.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_purple_corner_bl",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_purple_corner_bl.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_purple_corner_br",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_purple_corner_br.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_purple_corner_tl",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_purple_corner_tl.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_purple_corner_tr",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_purple_corner_tr.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_purple_edge_bottom",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_purple_edge_bottom.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_purple_edge_left",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_purple_edge_left.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_purple_edge_right",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_purple_edge_right.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    },
+    {
+      "name": "panel_purple_edge_top",
+      "type": "texture",
+      "url": "public/assets/v3d_underwater/ui/nine_slice/panel_purple_edge_top.png",
+      "options": {
+        "mipmaps": false,
+        "anisotropy": 4
+      }
+    }
+  ]
+}
