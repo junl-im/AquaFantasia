@@ -1,15 +1,15 @@
 {
   "name": "aqua-fantasia",
   "private": true,
-  "version": "8.1.0",
+  "version": "8.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build --base=./",
     "preview": "vite preview --host 0.0.0.0",
-    "validate": "node tools/validate-clean.mjs && node tools/check-v810-asset-fit-start-keep.mjs",
-    "runtime:check": "node tools/check-v810-asset-fit-start-keep.mjs --runtime",
-    "audit": "node tools/check-v810-asset-fit-start-keep.mjs --audit",
+    "validate": "node tools/validate-clean.mjs && node tools/check-v820-v13-tab-composition.mjs",
+    "runtime:check": "node tools/check-v820-v13-tab-composition.mjs --runtime",
+    "audit": "node tools/check-v820-v13-tab-composition.mjs --audit",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

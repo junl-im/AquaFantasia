@@ -5,7 +5,7 @@ let ok = true;
 const fail = (msg) => { console.error('[validate-clean]', msg); ok = false; };
 const required = [
   'index.html','src/main.ts','src/core/PortraitGuard.ts','src/styles.css','src/data.ts','src/storage.ts','src/audio.ts','src/toast.ts',
-  'public/sw.js','public/manifest.webmanifest','public/assets/v12/screens/start_screen_clean_v810.webp','public/assets/v12/bg/ocean_portrait.webp','public/assets/v12/characters/chibi_fisher_01.png','public/assets/v12/fish/fish_01.png','public/assets/ui/v750_button_gold.png','public/assets/ui/v750_keep_on.png',
+  'public/sw.js','public/manifest.webmanifest','public/assets/v12/screens/start_screen_clean_v810.webp','public/assets/v13/compositions/town.webp','public/assets/v13/compositions/fishing.webp','public/assets/v13/compositions/gear.webp','public/assets/v13/compositions/inventory.webp','public/assets/v13/compositions/dex.webp','public/assets/v13/compositions/shop.webp','public/assets/v13/compositions/mission.webp','public/assets/v13/compositions/ranking.webp','public/assets/v12/bg/ocean_portrait.webp','public/assets/v12/characters/chibi_fisher_01.png','public/assets/v12/fish/fish_01.png','public/assets/ui/v750_button_gold.png','public/assets/ui/v750_keep_on.png',
   'public/assets/v9/ui/bottom_nav_bar_deepblue.png','public/assets/v12/characters/chibi_fisher_01.png','public/assets/v12/bg/ocean_portrait.webp','public/assets/v12/fish/fish_01.png',
   'public/assets/art/player_boat.png','public/assets/art/fishing_float.png','public/assets/art/gauge_frame.png','public/assets/art/fish_slot.png',
   'public/assets/art/bg_user_ocean.webp','public/assets/dex/v740_fish_01.png','.github/workflows/pages.yml'
@@ -25,15 +25,15 @@ const index = fs.readFileSync(path.join(root,'index.html'),'utf8');
 if (!index.includes('/src/main.ts')) fail('index.html is not using Vite TypeScript entry');
 if (!index.includes('아쿠아 판타지아')) fail('Korean title is missing');
 const data = fs.readFileSync(path.join(root,'src/data.ts'),'utf8');
-if (!data.includes("APP_VERSION = '8.1.0'")) fail('APP_VERSION is not 8.1.0');
-if (!data.includes('aqua-fantasia-v8.1.0-asset-fit-start-keep')) fail('CACHE_NAME mismatch');
+if (!data.includes("APP_VERSION = '8.2.0'")) fail('APP_VERSION is not 8.2.0');
+if (!data.includes('aqua-fantasia-v8.2.0-v13-tab-composition')) fail('CACHE_NAME mismatch');
 const pkg = JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
-if (pkg.version !== '8.1.0') fail('package version mismatch');
+if (pkg.version !== '8.2.0') fail('package version mismatch');
 for (const dep of ['pixi.js','howler','firebase']) if (!pkg.dependencies?.[dep]) fail(`missing dependency ${dep}`);
 const manifest = fs.readFileSync(path.join(root,'public/manifest.webmanifest'),'utf8');
 if (!manifest.includes('portrait-primary')) fail('manifest must force portrait-primary');
 const main = fs.readFileSync(path.join(root,'src/main.ts'),'utf8');
 for (const token of ['installBackNavigationGuard','showBiteCallout','requestHardPortraitLock','inapp-css-only','start_screen_clean_v810']) if (!main.includes(token) && !fs.readFileSync(path.join(root,'src/core/PortraitGuard.ts'),'utf8').includes(token)) fail(`missing runtime token ${token}`);
 if (!ok) process.exit(1);
-console.log('[validate-clean] Aqua Fantasia v8.1.0 asset-fit start keep OK');
-console.log(JSON.stringify({ ok:true, version:'8.1.0', files: walk(root).length }, null, 2));
+console.log('[validate-clean] Aqua Fantasia v8.2.0 v13 tab composition OK');
+console.log(JSON.stringify({ ok:true, version:'8.2.0', files: walk(root).length }, null, 2));

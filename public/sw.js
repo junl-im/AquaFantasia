@@ -1,10 +1,18 @@
-const CACHE_NAME = 'aqua-fantasia-v8.1.0-asset-fit-start-keep';
+const CACHE_NAME = 'aqua-fantasia-v8.2.0-v13-tab-composition';
 const PRECACHE = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./offline.html",
   "./assets/v12/screens/start_screen_clean_v810.webp",
+  "./assets/v13/compositions/town.webp",
+  "./assets/v13/compositions/fishing.webp",
+  "./assets/v13/compositions/gear.webp",
+  "./assets/v13/compositions/inventory.webp",
+  "./assets/v13/compositions/dex.webp",
+  "./assets/v13/compositions/shop.webp",
+  "./assets/v13/compositions/mission.webp",
+  "./assets/v13/compositions/ranking.webp",
   "./assets/v12/manifest.runtime.json",
   "./assets/v12/bg/ocean_portrait.webp",
   "./assets/v12/bg/lake_portrait.webp",

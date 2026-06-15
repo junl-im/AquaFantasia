@@ -2379,3 +2379,252 @@ body[data-screen="fishing"] .fishing-top {
   .game-screen.v810-screen .price-badge { min-width: 62px !important; font-size: 13px !important; padding: 8px 8px !important; }
   .game-screen.v810-screen .mission-card { min-height: 142px !important; }
 }
+
+/* v8.2.0 V13 TAB COMPOSITION REBUILD
+   Uses the user-provided v13 full-screen UI compositions as the visual source of truth.
+   The DOM layer is now interaction-only to avoid duplicated/overlapping text. */
+.game-screen.v13-screen,
+html.portrait-only-game .game-screen.v13-screen {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #079bd0 !important;
+  border: 0 !important;
+  isolation: isolate !important;
+  touch-action: manipulation !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+.game-screen.v13-screen .ambient-bg,
+.game-screen.v13-screen .page-head,
+.game-screen.v13-screen .player-hud,
+.game-screen.v13-screen .system-strip,
+.game-screen.v13-screen .hero-card,
+.game-screen.v13-screen .quick-grid,
+.game-screen.v13-screen .region-grid,
+.game-screen.v13-screen .gear-grid,
+.game-screen.v13-screen .dex-grid,
+.game-screen.v13-screen .shop-list,
+.game-screen.v13-screen .mission-list,
+.game-screen.v13-screen .mission-dashboard,
+.game-screen.v13-screen .dex-summary {
+  display: none !important;
+}
+.v13-bg {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: fill !important;
+  object-position: center center !important;
+  image-rendering: auto !important;
+  pointer-events: none !important;
+  -webkit-user-drag: none !important;
+}
+.v13-hot-layer {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 36 !important;
+  pointer-events: none !important;
+}
+.v13-hotspot {
+  position: absolute !important;
+  left: var(--x) !important;
+  top: var(--y) !important;
+  width: var(--w) !important;
+  height: var(--h) !important;
+  border: 0 !important;
+  border-radius: 18px !important;
+  background: transparent !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.18) !important;
+}
+.v13-hotspot:active {
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.22), rgba(255,255,255,.06) 50%, transparent 76%) !important;
+}
+.v13-hotspot:focus-visible {
+  outline: 3px solid rgba(255, 246, 132, .95) !important;
+  outline-offset: 3px !important;
+  background: rgba(255,255,255,.10) !important;
+}
+.bottom-nav.v13-bottom-nav-hotspots,
+html.portrait-only-game .bottom-nav.v13-bottom-nav-hotspots,
+.bottom-nav.v13-bottom-nav-hotspots.fixed-root-nav {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: 0 !important;
+  top: auto !important;
+  transform: translateX(-50%) !important;
+  z-index: 80 !important;
+  width: min(100vw, 430px) !important;
+  max-width: 430px !important;
+  height: min(118px, calc(var(--app-height, 100svh) * .124)) !important;
+  min-height: 74px !important;
+  display: grid !important;
+  grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  padding: 0 8px max(0px, env(safe-area-inset-bottom)) !important;
+  margin: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  backdrop-filter: none !important;
+  pointer-events: auto !important;
+}
+.bottom-nav.v13-bottom-nav-hotspots::before,
+.bottom-nav.v13-bottom-nav-hotspots::after { display: none !important; }
+.bottom-nav.v13-bottom-nav-hotspots button,
+.bottom-nav.v13-bottom-nav-hotspots button.active {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  text-shadow: none !important;
+  transform: none !important;
+  filter: none !important;
+  -webkit-tap-highlight-color: rgba(255,255,255,.16) !important;
+}
+.bottom-nav.v13-bottom-nav-hotspots button span,
+.bottom-nav.v13-bottom-nav-hotspots button img { display: none !important; }
+.bottom-nav.v13-bottom-nav-hotspots button:active,
+.bottom-nav.v13-bottom-nav-hotspots button:focus-visible {
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.24), transparent 70%) !important;
+  outline: none !important;
+}
+body[data-screen="fishing"] .v13-screen.fishing-shell {
+  background: #079bd0 !important;
+}
+body[data-screen="fishing"] .v13-fishing-stage.fishing-stage,
+html.portrait-only-game body[data-screen="fishing"] .v13-fishing-stage.fishing-stage {
+  position: absolute !important;
+  left: 6.4815% !important;
+  top: 15.1042% !important;
+  right: auto !important;
+  bottom: auto !important;
+  inset: auto !important;
+  width: 87.037% !important;
+  height: 29.6875% !important;
+  z-index: 8 !important;
+  overflow: hidden !important;
+  border-radius: 22px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  touch-action: none !important;
+}
+body[data-screen="fishing"] .v13-fishing-stage .pixi-layer,
+body[data-screen="fishing"] .v13-fishing-stage canvas,
+body[data-screen="fishing"] .v13-fishing-stage .fallback-scene {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: inherit !important;
+}
+body[data-screen="fishing"] .v13-fishing-stage::before,
+body[data-screen="fishing"] .v13-fishing-stage::after { display: none !important; }
+body[data-screen="fishing"] .v13-fishing-stage .water-overlay,
+body[data-screen="fishing"] .v13-fishing-stage .caustic-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+}
+body[data-screen="fishing"] .v13-stage-ui.stage-ui {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 42 !important;
+  pointer-events: none !important;
+}
+body[data-screen="fishing"] .v13-stage-ui .cast-button {
+  position: absolute !important;
+  left: 22.222% !important;
+  top: 64.0625% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 55.556% !important;
+  height: 6.146% !important;
+  min-height: 0 !important;
+  transform: none !important;
+  opacity: 1 !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+  color: transparent !important;
+  text-shadow: none !important;
+  pointer-events: auto !important;
+  animation: none !important;
+}
+body[data-screen="fishing"] .v13-stage-ui .cast-button strong,
+body[data-screen="fishing"] .v13-stage-ui .cast-button .cast-icon,
+body[data-screen="fishing"] .v13-stage-ui .cast-button::after { opacity: 0 !important; display: none !important; }
+body[data-screen="fishing"] .v13-stage-ui .cast-button:active {
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.26), transparent 70%) !important;
+}
+body[data-screen="fishing"] .v13-reel-panel.reel-panel,
+html.portrait-only-game body[data-screen="fishing"] .v13-reel-panel.reel-panel {
+  position: absolute !important;
+  left: 6.4815% !important;
+  top: 48.4375% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 87.037% !important;
+  min-height: 13.02% !important;
+  padding: 12px 14px 14px !important;
+  z-index: 46 !important;
+  border: 0 !important;
+  border-radius: 22px !important;
+  background: url('/assets/v12/ui/panel_blank.webp') center/100% 100% no-repeat, linear-gradient(180deg,#20bde4,#075a8b) !important;
+  box-shadow: 0 16px 28px rgba(0,26,58,.34) !important;
+  color: #ffffff !important;
+}
+body[data-screen="fishing"] .v13-reel-panel.reel-panel > img {
+  width: 82% !important;
+  max-width: 330px !important;
+  margin: 0 auto -8px !important;
+}
+body[data-screen="fishing"] .v13-reel-panel .hold-pad {
+  min-height: 48px !important;
+  margin-top: 8px !important;
+  border-radius: 24px !important;
+}
+body[data-screen="fishing"] .v13-reel-panel p {
+  margin-top: 8px !important;
+  font-size: clamp(11px, 2.9vw, 13px) !important;
+  color: #eaffff !important;
+}
+body[data-screen="fishing"] .combo-badge {
+  left: 6.8% !important;
+  top: 42.5% !important;
+  right: auto !important;
+  bottom: auto !important;
+  z-index: 48 !important;
+}
+.v13-screen .bite-callout {
+  z-index: 44 !important;
+}
+@media (max-width: 390px) {
+  body[data-screen="fishing"] .v13-reel-panel.reel-panel { padding: 9px 11px 11px !important; }
+  body[data-screen="fishing"] .v13-reel-panel .hold-pad { min-height: 42px !important; font-size: 14px !important; }
+}
