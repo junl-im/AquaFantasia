@@ -35,22 +35,47 @@ float wave(vec2 uv, float speed, float scale, float amp) {
   return (a + b) * 0.5 * amp;
 }
 
+float bubble(vec2 uv, vec2 center, float radius) {
+  float d = distance(uv, center);
+  float rim = smoothstep(radius, radius * 0.72, d) - smoothstep(radius * 0.72, radius * 0.42, d);
+  float shine = smoothstep(radius * 0.45, 0.0, distance(uv, center + vec2(-radius * 0.22, radius * 0.20)));
+  return rim * 0.6 + shine * 0.22;
+}
+
+float fishShadow(vec2 uv, vec2 center, float scale, float flip) {
+  vec2 p = uv - center;
+  p.x *= flip;
+  float body = smoothstep(0.18 * scale, 0.0, length(vec2(p.x * 1.45, p.y * 3.2)));
+  float tail = smoothstep(0.12 * scale, 0.0, length(vec2((p.x + 0.18 * scale) * 3.2, p.y * 4.8)));
+  float fin = smoothstep(0.08 * scale, 0.0, length(vec2((p.x - 0.02 * scale) * 2.4, (p.y - 0.08 * scale) * 6.0)));
+  return clamp(body + tail * 0.55 + fin * 0.35, 0.0, 1.0);
+}
+
 void main() {
   vec2 uv = v_uv;
   vec2 aspectUv = vec2(uv.x * (u_resolution.x / max(u_resolution.y, 1.0)), uv.y);
   float depth = smoothstep(0.0, 1.0, uv.y);
   float drift = wave(aspectUv, 0.36, 9.0, 0.045) + wave(aspectUv + 0.17, 0.19, 23.0, 0.018);
   float caustic = sin((uv.x + drift) * 34.0 + u_time * 1.8) * sin((uv.y - drift) * 28.0 - u_time * 1.35);
-  caustic = smoothstep(0.66, 0.96, caustic) * 0.25;
-  float rays = pow(max(0.0, sin((uv.x * 4.0) + u_time * 0.33)), 5.0) * smoothstep(1.0, 0.05, uv.y) * 0.23;
+  caustic = smoothstep(0.64, 0.96, caustic) * 0.30;
+  float rays = pow(max(0.0, sin((uv.x * 4.0) + u_time * 0.33)), 5.0) * smoothstep(1.0, 0.05, uv.y) * 0.26;
+  float softRays = pow(max(0.0, sin((uv.x * 7.0) - u_time * 0.21)), 6.0) * smoothstep(0.86, 0.0, uv.y) * 0.12;
   float vignette = smoothstep(0.92, 0.24, distance(uv, vec2(0.5, 0.48)));
-  float grain = (hash(floor(uv * u_resolution.xy * 0.42) + floor(u_time * 8.0)) - 0.5) * 0.018;
+  float grain = (hash(floor(uv * u_resolution.xy * 0.42) + floor(u_time * 8.0)) - 0.5) * 0.014;
+  vec2 b1 = vec2(fract(0.18 + u_time * 0.025), fract(0.92 - u_time * 0.055));
+  vec2 b2 = vec2(fract(0.78 - u_time * 0.018), fract(0.72 - u_time * 0.041));
+  vec2 b3 = vec2(fract(0.45 + u_time * 0.012), fract(1.08 - u_time * 0.033));
+  float bubbles = bubble(uv, b1, 0.026) + bubble(uv, b2, 0.018) + bubble(uv, b3, 0.014);
+  float school = fishShadow(uv, vec2(fract(0.92 - u_time * 0.018), 0.34 + sin(u_time * 0.35) * 0.03), 0.90, -1.0)
+               + fishShadow(uv, vec2(fract(0.16 + u_time * 0.014), 0.57 + sin(u_time * 0.27) * 0.03), 0.70, 1.0);
   vec3 color = mix(u_top, u_bottom, depth + drift * 1.8);
-  color += u_glow * (caustic + rays) * u_intensity;
-  color += u_glow * 0.10 * vignette;
+  color += u_glow * (caustic + rays + softRays) * u_intensity;
+  color += u_glow * bubbles * 0.16;
+  color -= vec3(0.0, 0.05, 0.10) * school * 0.22;
+  color += u_glow * 0.11 * vignette;
   color += grain;
-  color *= mix(0.82, 1.08, vignette);
-  gl_FragColor = vec4(color, 0.72);
+  color *= mix(0.82, 1.09, vignette);
+  gl_FragColor = vec4(color, 0.74);
 }`;
 
 const MOODS: Record<UnderwaterLayerMood, { top: [number, number, number]; bottom: [number, number, number]; glow: [number, number, number]; intensity: number }> = {
