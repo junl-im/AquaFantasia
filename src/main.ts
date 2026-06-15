@@ -10,7 +10,7 @@ import { UnderwaterWebglLayer, type UnderwaterLayerMood } from './core/Underwate
 
 const ASSET = {
   loginBg: './assets/v85/screens/start_screen_clean_v810.webp',
-  player: './assets/v91/characters/chibi_fisher_boat_story.png',
+  player: './assets/v93/characters/fisher_boat_cute_action.png',
   float: './assets/v92/icons/bobber.png',
   fish: './assets/v92/fish/fish_01.png',
   gauge: './assets/v92/fx/gauge_050.png',
@@ -308,7 +308,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     root.innerHTML = `
@@ -324,7 +324,7 @@ class AquaFantasiaGame {
         <div class="hud-chip"><img src="./assets/v92/icons/coin.png" alt="" /><strong>${this.save.coins.toLocaleString('ko-KR')}</strong></div>
         <div class="hud-chip"><img src="./assets/v92/icons/bait.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
       </div>
-      <div class="stage-ui v840-stage-ui"></div>
+      <div class="stage-ui v840-stage-ui"></div><div class="cute-action-layer" aria-hidden="true"></div>
       <div class="combo-badge ${this.save.currentStreak > 1 ? '' : 'hidden'}" id="comboBadge">연속 성공 x${Math.max(2, this.save.currentStreak)}</div>
       <section class="recent-catch-strip" aria-label="최근 포획">
         ${this.recentCatchMarkup()}
@@ -495,6 +495,8 @@ class AquaFantasiaGame {
     this.stageHost?.classList.remove('reeling-mode');
     this.castStart = performance.now();
     this.castBtn.classList.add('pop-out');
+    this.spawnCastTrail();
+    this.spawnActionBadge('퐁!', '찌를 던졌어요');
     this.setHint('찌가 포물선을 그리며 날아갑니다');
     window.setTimeout(() => this.castBtn?.classList.add('hidden'), 260);
   }
@@ -518,6 +520,7 @@ class AquaFantasiaGame {
     this.stageHost?.classList.add('bite-flash');
     this.setHint(`${this.activeFish.rarity === 'BOSS' ? '보스 입질!' : '물었다!'} 화면을 눌러 당기세요`);
     this.showBiteCallout(this.activeFish.rarity === 'BOSS' ? '보스가 물었다!' : '물었다!');
+    this.spawnBiteBurst();
     window.setTimeout(() => this.stageHost?.classList.remove('camera-shake', 'bite-flash'), 520);
   }
 
@@ -537,6 +540,7 @@ class AquaFantasiaGame {
     this.reelPanel?.classList.remove('hidden');
     this.setHint('릴 감기! 안전지대에 장력을 3초 유지하세요');
     this.updateTensionUI();
+    this.spawnActionBadge('릴링!', '초록 안전지대를 유지해요');
   }
 
   private finishCatch(success: boolean): void {
@@ -559,6 +563,7 @@ class AquaFantasiaGame {
       saveGame(this.save);
       if (this.comboNode) { this.comboNode.textContent = `연속 성공 x${Math.max(2, this.save.currentStreak)}`; this.comboNode.classList.toggle('hidden', this.save.currentStreak < 2); }
       this.showCatchPopup(reward);
+      this.spawnRewardBurst(reward);
       this.toast.show({ type: 'dex', title: `${this.activeFish.name} 획득!`, message: `도감 카드와 보상 ${reward}G가 추가되었습니다.`, actionScreen: 'dex' });
     } else {
       playSound('fail');
@@ -599,8 +604,9 @@ class AquaFantasiaGame {
 
   private showResultCard(reward: number): void {
     const card = document.createElement('div');
-    card.className = `catch-result-card rarity-${this.activeFish.rarity.toLowerCase()}`;
-    card.innerHTML = `<img src="${this.activeFish.img}" alt="" /><strong>${this.activeFish.name}</strong><span>${this.activeFish.rarity} · ${reward}G · 연속 성공 x${Math.max(1, this.save.currentStreak)}</span><div><button data-next="fishing">계속 낚시</button><button data-next="dex">도감 보기</button></div>`;
+    card.className = `catch-result-card v930-result rarity-${this.activeFish.rarity.toLowerCase()}`;
+    const firstCatch = (this.save.caught[this.activeFish.id] ?? 0) <= 1;
+    card.innerHTML = `<i class="result-sparkle" aria-hidden="true"></i><img src="${this.activeFish.img}" alt="" /><small>${firstCatch ? 'NEW!' : this.activeFish.rarity}</small><h3>${this.activeFish.name}</h3><span>${this.activeFish.rarity} · ${reward}G · 연속 성공 x${Math.max(1, this.save.currentStreak)}</span><div><button data-next="fishing">계속 낚시</button><button data-next="dex">도감 보기</button></div>`;
     this.stageHost?.appendChild(card);
     card.querySelectorAll<HTMLButtonElement>('[data-next]').forEach((btn) => btn.addEventListener('click', () => {
       const next = btn.dataset.next as Screen;
@@ -623,6 +629,7 @@ class AquaFantasiaGame {
     this.hideBiteCallout();
     this.reelPanel?.classList.add('hidden');
     this.stageHost?.classList.remove('catch-bloom', 'fallback-casting', 'surge-alert', 'guard-active', 'casting-mode', 'reeling-mode');
+    this.stageHost?.querySelectorAll('.v930-fx, .action-badge').forEach((node) => node.remove());
     this.stageHost?.querySelector('.catch-result-card')?.remove();
     this.state = 'idle';
     this.castBtn?.classList.remove('hidden', 'pop-out');
@@ -676,6 +683,7 @@ class AquaFantasiaGame {
       if (this.perfectChain > 1.0 && !this.routeGuardActive) {
         this.routeGuardActive = true;
         this.stageHost?.classList.add('guard-active');
+        this.spawnActionBadge('PERFECT!', '장력 중심을 잡았어요');
         this.vibrate(10);
       }
       this.safeTimer = safe ? this.safeTimer + dt / 60 * (perfect ? 1.16 : 1) : Math.max(0, this.safeTimer - dt / 70);
@@ -686,9 +694,47 @@ class AquaFantasiaGame {
     }
   }
 
+
+  private spawnCastTrail(): void {
+    if (!this.stageHost) return;
+    const trail = document.createElement('div');
+    trail.className = 'v930-fx cast-trail-cute';
+    trail.innerHTML = '<i></i><i></i><i></i><i></i><i></i>';
+    this.stageHost.appendChild(trail);
+    window.setTimeout(() => trail.remove(), 980);
+  }
+
+  private spawnBiteBurst(): void {
+    if (!this.stageHost) return;
+    const burst = document.createElement('div');
+    burst.className = 'v930-fx bite-burst-cute';
+    burst.innerHTML = '<span>!</span>';
+    this.stageHost.appendChild(burst);
+    window.setTimeout(() => burst.remove(), 980);
+  }
+
+  private spawnRewardBurst(reward: number): void {
+    if (!this.stageHost) return;
+    const burst = document.createElement('div');
+    burst.className = 'v930-fx reward-burst-cute';
+    burst.innerHTML = `<strong>+${reward}G</strong><span></span><span></span><span></span><span></span>`;
+    this.stageHost.appendChild(burst);
+    window.setTimeout(() => burst.remove(), 1400);
+  }
+
+  private spawnActionBadge(title: string, subtitle: string): void {
+    if (!this.stageHost) return;
+    this.stageHost.querySelector('.action-badge')?.remove();
+    const badge = document.createElement('div');
+    badge.className = 'action-badge v930-fx';
+    badge.innerHTML = `<strong>${title}</strong><span>${subtitle}</span>`;
+    this.stageHost.appendChild(badge);
+    window.setTimeout(() => badge.remove(), 1550);
+  }
+
   private spawnSplash(): void {
     const splash = document.createElement('div');
-    splash.className = 'splash-ring';
+    splash.className = 'splash-ring v930-splash';
     this.stageHost?.appendChild(splash);
     window.setTimeout(() => splash.remove(), 760);
   }
@@ -1157,6 +1203,8 @@ class AquaFantasiaGame {
     this.activeFish = this.pickFish();
     this.state = 'casting';
     this.castBtn.classList.add('pop-out');
+    this.spawnCastTrail();
+    this.spawnActionBadge('퐁!', '찌를 던졌어요');
     this.stageHost?.classList.add('fallback-casting');
     this.setHint('찌가 수면으로 날아갑니다');
     window.setTimeout(() => this.castBtn?.classList.add('hidden'), 260);

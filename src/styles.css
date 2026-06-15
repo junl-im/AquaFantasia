@@ -4818,3 +4818,236 @@ html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel 
   .bottom-nav.v840-bottom-nav button span { font-size: 8.8px !important; }
   .fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button { width: min(332px, 84vw) !important; min-height: 74px !important; }
 }
+
+/* v9.3.0 Cute action polish layer
+   Fishing feedback is now treated as a cute mobile game action loop:
+   cast trail -> splash -> bite burst -> reel badge -> reward burst -> result modal. */
+:root {
+  --v930-cute-gold: #ffe777;
+  --v930-cute-pink: #ff9fd2;
+  --v930-cute-aqua: #72f6ff;
+}
+.fishing-screen.v930-action-screen .fishing-stage {
+  isolation: isolate;
+}
+.fishing-screen.v930-action-screen .pixi-layer canvas {
+  filter: saturate(1.30) contrast(1.12) brightness(1.05) drop-shadow(0 0 0 rgba(255,255,255,0)) !important;
+}
+.fishing-screen.v930-action-screen .v840-stage-ui .cast-button {
+  transform-origin: 50% 74% !important;
+  animation: v930CastIdle 1.55s ease-in-out infinite !important;
+}
+.fishing-screen.v930-action-screen .v840-stage-ui .cast-button strong::after {
+  content: ' ✦';
+  color: #fff9bd;
+  text-shadow: 0 2px 0 rgba(151,78,0,.45), 0 0 14px rgba(255,255,255,.70);
+}
+.fishing-screen.v930-action-screen .v840-stage-ui .cast-button.pop-out {
+  animation: squashOut .25s ease both !important;
+}
+.v930-fx {
+  position: absolute;
+  z-index: 17;
+  pointer-events: none;
+  transform: translate3d(0,0,0);
+  will-change: transform, opacity;
+}
+.cast-trail-cute {
+  left: 36%; top: 48%; width: 38%; height: 24%;
+  background: url('/assets/v93/fx/cute_bubbles.png') center/contain no-repeat;
+  opacity: 0;
+  animation: v930Trail 0.96s cubic-bezier(.15,.9,.25,1) forwards;
+  filter: drop-shadow(0 8px 10px rgba(0,39,72,.20));
+}
+.cast-trail-cute::before,
+.cast-trail-cute::after {
+  content: '';
+  position: absolute;
+  inset: 10% 8%;
+  border-top: 5px solid rgba(241,255,255,.78);
+  border-radius: 50% 40% 0 0;
+  transform: rotate(-19deg);
+  filter: drop-shadow(0 0 10px rgba(117,245,255,.55));
+}
+.cast-trail-cute::after {
+  inset: 24% 18%;
+  border-top-width: 3px;
+  opacity: .68;
+  transform: rotate(-13deg);
+}
+.cast-trail-cute i {
+  position: absolute;
+  width: clamp(10px, 3vw, 18px); height: clamp(10px, 3vw, 18px);
+  border-radius: 999px;
+  background: rgba(245,255,255,.88);
+  box-shadow: 0 0 16px rgba(118,247,255,.82), inset 0 0 0 3px rgba(102,222,255,.30);
+  animation: v930TrailDot .86s ease-out forwards;
+}
+.cast-trail-cute i:nth-child(1){ left: 6%; top: 66%; animation-delay: .03s; }
+.cast-trail-cute i:nth-child(2){ left: 25%; top: 44%; animation-delay: .08s; }
+.cast-trail-cute i:nth-child(3){ left: 46%; top: 25%; animation-delay: .13s; }
+.cast-trail-cute i:nth-child(4){ left: 65%; top: 22%; animation-delay: .18s; }
+.cast-trail-cute i:nth-child(5){ left: 82%; top: 42%; animation-delay: .23s; }
+.bite-burst-cute {
+  right: 16%; top: 31%; width: min(190px, 42vw); aspect-ratio: 1;
+  background: url('/assets/v93/fx/cute_starburst.png') center/contain no-repeat;
+  display: grid; place-items: center;
+  animation: v930BiteBurst .92s cubic-bezier(.2,1.36,.24,1) forwards;
+}
+.bite-burst-cute span {
+  width: 68px; height: 68px; display: grid; place-items: center;
+  border-radius: 999px;
+  background: #fff;
+  color: #ff593d;
+  font-size: 44px; font-weight: 1000;
+  box-shadow: 0 13px 22px rgba(91,28,0,.24), inset 0 -4px 0 rgba(255,200,121,.45);
+}
+.reward-burst-cute {
+  left: 50%; top: 39%; width: min(360px, 72vw); height: min(260px, 40vh);
+  transform: translate(-50%, -50%);
+  background: url('/assets/v93/fx/cute_starburst.png') center/contain no-repeat;
+  display: grid; place-items: center;
+  animation: v930RewardBurst 1.32s ease-out forwards;
+}
+.reward-burst-cute strong {
+  padding: 10px 24px 12px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff7bd, #ffbb4a);
+  color: #754000;
+  font-size: clamp(28px, 8vw, 44px);
+  font-weight: 1000;
+  text-shadow: 0 2px 0 rgba(255,255,255,.66);
+  box-shadow: 0 16px 24px rgba(68,27,0,.24), inset 0 3px 0 rgba(255,255,255,.62);
+}
+.reward-burst-cute span {
+  position: absolute;
+  width: 74px; height: 74px;
+  background: url('/assets/v93/fx/cute_heart_bubble.png') center/contain no-repeat;
+  animation: v930HeartFloat 1.18s ease-out forwards;
+}
+.reward-burst-cute span:nth-child(2){ left: 8%; top: 52%; animation-delay: .02s; }
+.reward-burst-cute span:nth-child(3){ right: 8%; top: 48%; animation-delay: .08s; }
+.reward-burst-cute span:nth-child(4){ left: 28%; top: 5%; animation-delay: .14s; }
+.reward-burst-cute span:nth-child(5){ right: 26%; top: 8%; animation-delay: .20s; }
+.action-badge {
+  left: 50%; top: calc(var(--v920-safe-top) + 80px);
+  transform: translateX(-50%);
+  width: min(350px, 78vw);
+  min-height: 88px;
+  padding: 18px 24px 18px 98px;
+  background: url('/assets/v93/ui/action_banner_cute.png') center/100% 100% no-repeat;
+  color: #763600;
+  filter: drop-shadow(0 15px 22px rgba(0,32,63,.25));
+  animation: v930BadgePop 1.48s ease both;
+}
+.action-badge::before {
+  content: '';
+  position: absolute; left: 22px; top: 50%; transform: translateY(-50%);
+  width: 64px; height: 64px;
+  background: url('/assets/v92/icons/bobber.png') center/contain no-repeat;
+  filter: drop-shadow(0 8px 8px rgba(0,0,0,.20));
+}
+.action-badge strong { display:block; font-size: clamp(27px,7.2vw,38px); line-height:.9; font-weight:1000; text-shadow: 0 2px 0 rgba(255,255,255,.72); }
+.action-badge span { display:block; margin-top: 7px; font-size: 14px; font-weight: 1000; color: #164b62; }
+.v930-splash.splash-ring {
+  width: min(220px, 44vw) !important;
+  height: min(220px, 44vw) !important;
+  left: 68% !important;
+  top: 60% !important;
+  border: 0 !important;
+  background: url('/assets/v93/fx/cute_splash.png') center/contain no-repeat !important;
+  opacity: 0;
+  animation: v930Splash 0.82s ease-out forwards !important;
+}
+body[data-screen="fishing"] .v840-reel-panel.reel-panel,
+html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel {
+  background-image: url('/assets/v93/ui/reel_panel_cute.png') !important;
+  padding-top: 24px !important;
+  box-shadow: 0 20px 34px rgba(0,14,52,.35), inset 0 2px 0 rgba(255,255,255,.22) !important;
+}
+.fishing-screen.v930-action-screen .reel-panel .hold-pad {
+  background-image: url('/assets/v92/ui/button_large_gold.png') !important;
+  color: #6a3900 !important;
+  min-height: 66px !important;
+  border-radius: 30px !important;
+  box-shadow: none !important;
+}
+.fishing-screen.v930-action-screen .reel-panel .hold-pad:active {
+  background-image: url('/assets/v92/ui/button_large_gold_pressed.png') !important;
+}
+.catch-result-card.v930-result {
+  width: min(390px, 90vw) !important;
+  min-height: 510px !important;
+  background: url('/assets/v93/ui/result_modal_cute.png') center/100% 100% no-repeat !important;
+  border: 0 !important;
+  color: #06466b !important;
+  padding: 30px 28px 24px !important;
+  overflow: visible;
+  animation: v930ResultPop .40s cubic-bezier(.19,1.35,.22,1) both !important;
+}
+.catch-result-card.v930-result .result-sparkle {
+  position: absolute; inset: -70px -46px auto auto; width: 180px; height: 180px;
+  background: url('/assets/v93/fx/cute_starburst.png') center/contain no-repeat;
+  animation: v930SlowSpin 4s linear infinite;
+}
+.catch-result-card.v930-result img {
+  width: 190px !important;
+  height: 148px !important;
+  margin-top: 6px !important;
+  filter: drop-shadow(0 19px 18px rgba(0,22,56,.30)) saturate(1.32) contrast(1.14) !important;
+}
+.catch-result-card.v930-result small {
+  display:inline-grid; place-items:center;
+  min-width: 84px; min-height: 36px; padding: 0 16px;
+  border-radius: 999px;
+  background: linear-gradient(180deg,#fff9b7,#ffbd4a);
+  color: #7a4100;
+  font-size: 17px; font-weight: 1000;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.65), 0 8px 12px rgba(0,38,65,.18);
+}
+.catch-result-card.v930-result h3 {
+  margin: 8px 0 3px !important;
+  color: #034d78 !important;
+  font-size: clamp(30px, 8.6vw, 40px) !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  text-shadow: 0 3px 0 rgba(255,255,255,.72), 0 8px 14px rgba(0,80,120,.16) !important;
+}
+.catch-result-card.v930-result span {
+  color: #23627c !important;
+  font-size: 14px !important;
+  margin-bottom: 16px !important;
+}
+.catch-result-card.v930-result div { gap: 10px !important; }
+.catch-result-card.v930-result button {
+  min-height: 60px !important;
+  border-radius: 26px !important;
+  font-size: 16px !important;
+}
+.catch-result-card.v930-result button:first-child { background-image: url('/assets/v92/ui/button_mid_gold.png') !important; color:#683a00 !important; }
+.catch-result-card.v930-result button:last-child { background-image: url('/assets/v92/ui/button_mid_aqua.png') !important; color:#073855 !important; }
+.fishing-screen.v930-action-screen .recent-catch-strip {
+  background-image: url('/assets/v93/ui/mini_panel_cute.png') !important;
+  min-height: 102px !important;
+}
+.fishing-screen.v930-action-screen .recent-title,
+.fishing-screen.v930-action-screen .recent-empty strong {
+  color: #fff !important;
+  text-shadow: 0 2px 0 rgba(0,84,142,.72), 0 8px 12px rgba(0,18,52,.22) !important;
+}
+@keyframes v930CastIdle { 0%,100%{ transform:translateX(-50%) scale(1); } 50%{ transform:translateX(-50%) translateY(-4px) scale(1.025); } }
+@keyframes v930Trail { 0%{opacity:0; transform:translate3d(-18px,18px,0) scale(.72) rotate(-8deg);} 14%{opacity:1;} 100%{opacity:0; transform:translate3d(36px,-34px,0) scale(1.10) rotate(6deg);} }
+@keyframes v930TrailDot { 0%{transform:scale(.3); opacity:0;} 25%{opacity:1;} 100%{transform:translate3d(14px,-22px,0) scale(1.6); opacity:0;} }
+@keyframes v930BiteBurst { 0%{opacity:0; transform:scale(.48) rotate(-12deg);} 22%{opacity:1; transform:scale(1.14) rotate(4deg);} 100%{opacity:0; transform:scale(1.26) rotate(8deg);} }
+@keyframes v930RewardBurst { 0%{opacity:0; transform:translate(-50%,-50%) scale(.48);} 20%{opacity:1; transform:translate(-50%,-50%) scale(1.05);} 78%{opacity:1;} 100%{opacity:0; transform:translate(-50%,-62%) scale(1.18);} }
+@keyframes v930HeartFloat { 0%{opacity:0; transform:translateY(12px) scale(.55);} 18%{opacity:1;} 100%{opacity:0; transform:translateY(-70px) scale(1.12);} }
+@keyframes v930BadgePop { 0%{opacity:0; transform:translate(-50%, -12px) scale(.72);} 15%,76%{opacity:1; transform:translate(-50%,0) scale(1);} 100%{opacity:0; transform:translate(-50%,-16px) scale(.96);} }
+@keyframes v930Splash { 0%{opacity:0; transform:translate(-50%,-50%) scale(.36);} 20%{opacity:1;} 100%{opacity:0; transform:translate(-50%,-50%) scale(1.28);} }
+@keyframes v930ResultPop { from{opacity:0; transform:translate(-50%,-50%) scale(.70) rotate(-2deg);} to{opacity:1; transform:translate(-50%,-50%) scale(1) rotate(0);} }
+@keyframes v930SlowSpin { to{ transform: rotate(360deg); } }
+@media (max-width: 390px) {
+  .action-badge { top: calc(var(--v920-safe-top) + 70px); min-height: 78px; padding-left: 84px; }
+  .action-badge::before { width: 54px; height: 54px; left: 20px; }
+  .catch-result-card.v930-result { width: min(360px, 92vw) !important; min-height: 488px !important; padding-inline: 22px !important; }
+  .catch-result-card.v930-result img { width: 170px !important; height: 134px !important; }
+}

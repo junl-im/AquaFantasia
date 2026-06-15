@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v9.2.0-cute-collection-webgl-polish';
+const CACHE_NAME = 'aqua-fantasia-v9.3.0-cute-action-webgl-polish';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -7,6 +7,15 @@ const PRECACHE = [
   "./assets/v85/screens/start_screen_clean_v810.webp",
   "./assets/v91/characters/chibi_fisher_boat_story.png",
   "./assets/v91/characters/chibi_fisher_face_icon.png",
+  "./assets/v93/characters/fisher_boat_cute_action.png",
+  "./assets/v93/fx/cute_starburst.png",
+  "./assets/v93/fx/cute_bubbles.png",
+  "./assets/v93/fx/cute_splash.png",
+  "./assets/v93/fx/cute_heart_bubble.png",
+  "./assets/v93/ui/result_modal_cute.png",
+  "./assets/v93/ui/reel_panel_cute.png",
+  "./assets/v93/ui/action_banner_cute.png",
+  "./assets/v93/ui/mini_panel_cute.png",
   "./assets/v92/bg/menu_town.webp",
   "./assets/v92/bg/menu_gear.webp",
   "./assets/v92/bg/menu_inventory.webp",
