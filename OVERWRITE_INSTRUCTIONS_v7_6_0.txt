@@ -1,8 +1,0 @@
-Aqua Fantasia v7.6.0 overwrite patch
-
-How to apply:
-1. Unzip this package.
-2. Copy all files and folders directly over your existing GitHub/Vite project root.
-3. Do not copy node_modules; it is intentionally not included.
-4. Run npm install if needed, then npm run validate, npm run typecheck, npm run build.
-5. Commit and push through GitHub Desktop. GitHub Actions will build and deploy Pages.

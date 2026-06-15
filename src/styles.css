@@ -3102,3 +3102,65 @@ body[data-screen="fishing"] .combo-badge {
   .recent-card img { width: 32px !important; height: 32px !important; }
   body[data-screen="fishing"] .v840-stage-ui .cast-button { width: min(300px, 78vw) !important; height: 70px !important; min-height: 70px !important; bottom: calc(var(--v840-nav-height) + 104px + env(safe-area-inset-bottom)) !important; }
 }
+
+/* v8.5.0 HD IMAGE FIDELITY PASS
+   Runtime images now use v85 source-quality assets. This layer avoids accidental CSS blur/downsampling. */
+img,
+.v13-bg,
+.start-art-image,
+.bottom-nav.v840-bottom-nav img,
+.recent-card img,
+.hud-chip img,
+.dex-card img,
+.gear-card img,
+.shop-card img,
+.fallback-player,
+.fallback-bobber,
+canvas {
+  image-rendering: auto !important;
+  backface-visibility: hidden !important;
+  transform-style: preserve-3d !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+.v13-bg,
+.start-art-image {
+  filter: saturate(1.035) contrast(1.025) !important;
+}
+body[data-screen="fishing"] .v840-fishing-stage canvas,
+body[data-screen="fishing"] .v840-fishing-stage .pixi-layer,
+body[data-screen="fishing"] .v840-fishing-stage .fallback-scene {
+  image-rendering: auto !important;
+  will-change: transform !important;
+}
+body[data-screen="fishing"] .v840-stage-ui .cast-button {
+  background-image: url('/assets/v85/buttons/btn_orange_normal_wide_blank.png') !important;
+  background-size: 100% 100% !important;
+}
+body[data-screen="fishing"] .v840-stage-ui .cast-button:active {
+  background-image: url('/assets/v85/buttons/btn_orange_pressed_wide_blank.png') !important;
+}
+body[data-screen="fishing"] .v840-stage-ui .cast-button .cast-icon {
+  background-image: url('/assets/v85/icons/bobber.png') !important;
+}
+.recent-catch-strip {
+  background: url('/assets/v85/ui/panel_bottom.png') center/100% 100% no-repeat, linear-gradient(180deg, rgba(174,242,255,.95), rgba(68,183,229,.88)) !important;
+}
+body[data-screen="fishing"] .v840-reel-panel.reel-panel,
+html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel {
+  background: url('/assets/v85/ui/panel_blank.png') center/100% 100% no-repeat, linear-gradient(180deg,#21c7ed,#075784) !important;
+}
+.v840-page-panel {
+  background: url('/assets/v85/ui/frame_mission_panel.png') center/100% 100% no-repeat, linear-gradient(180deg, rgba(113,225,255,.95), rgba(15,112,183,.90)) !important;
+}
+.ranking-cta {
+  background-image: url('/assets/v85/buttons/btn_orange_normal_wide_blank.png') !important;
+  background-size: 100% 100% !important;
+}
+.bottom-nav.v840-bottom-nav button img {
+  image-rendering: auto !important;
+  filter: drop-shadow(0 4px 5px rgba(0,42,82,.33)) saturate(1.08) contrast(1.04) !important;
+}
+.recent-card img,
+.hud-chip img {
+  filter: drop-shadow(0 5px 6px rgba(0,40,80,.24)) saturate(1.08) contrast(1.04) !important;
+}

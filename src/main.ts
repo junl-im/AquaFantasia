@@ -8,28 +8,28 @@ import { ToastManager } from './toast';
 import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPortraitLock } from './core/PortraitGuard';
 
 const ASSET = {
-  loginBg: './assets/v12/screens/start_screen_clean_v810.webp',
-  player: './assets/v84/characters/chibi_fisher_01_hd.png',
-  float: './assets/v12/icons/bobber.png',
-  fish: './assets/v12/fish/fish_01.png',
-  gauge: './assets/v12/icons/gauge_level.png',
+  loginBg: './assets/v85/screens/start_screen_clean_v810.webp',
+  player: './assets/v85/characters/chibi_fisher_01_hd.png',
+  float: './assets/v85/icons/bobber.png',
+  fish: './assets/v85/fish/fish_01.png',
+  gauge: './assets/v85/icons/gauge_level.png',
   slot: './assets/art/fish_slot.png',
   ripple: './assets/art/water_ripple_overlay.webp',
   caustics: './assets/art/caustic_sparkle_overlay.webp',
   castButton: './assets/ui/button_cast_clean.png',
   perfect: './assets/v12/fx/particle_sparkle_cluster_ref_a.png',
-  touchRing: './assets/v12/icons/sparkle.png',
+  touchRing: './assets/v85/icons/sparkle.png',
 };
 
 const V13_BG: Record<Exclude<Screen, 'login'>, string> = {
-  village: './assets/v13/compositions/town.webp',
-  fishing: './assets/v13/compositions/fishing.webp',
-  gear: './assets/v13/compositions/gear.webp',
-  inventory: './assets/v13/compositions/inventory.webp',
-  dex: './assets/v13/compositions/dex.webp',
-  shop: './assets/v13/compositions/shop.webp',
-  mission: './assets/v13/compositions/mission.webp',
-  ranking: './assets/v13/compositions/ranking.webp',
+  village: './assets/v85/compositions/town.webp',
+  fishing: './assets/v85/compositions/fishing.webp',
+  gear: './assets/v85/compositions/gear.webp',
+  inventory: './assets/v85/compositions/inventory.webp',
+  dex: './assets/v85/compositions/dex.webp',
+  shop: './assets/v85/compositions/shop.webp',
+  mission: './assets/v85/compositions/mission.webp',
+  ranking: './assets/v85/compositions/ranking.webp',
 };
 
 const dom = {
@@ -254,8 +254,8 @@ class AquaFantasiaGame {
       </div>
       <div class="fishing-hud v840-fishing-hud" aria-label="플레이어 정보">
         <div class="hud-chip region"><strong>${region.name}</strong><span>${region.tide}</span></div>
-        <div class="hud-chip"><img src="./assets/v12/icons/coin.png" alt="" /><strong>${this.save.coins.toLocaleString('ko-KR')}</strong></div>
-        <div class="hud-chip"><img src="./assets/v12/icons/bait_shrimp.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
+        <div class="hud-chip"><img src="./assets/v85/icons/coin.png" alt="" /><strong>${this.save.coins.toLocaleString('ko-KR')}</strong></div>
+        <div class="hud-chip"><img src="./assets/v85/icons/bait_shrimp.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
       </div>
       <div class="stage-ui v840-stage-ui"></div>
       <div class="combo-badge ${this.save.currentStreak > 1 ? '' : 'hidden'}" id="comboBadge">연속 성공 x${Math.max(2, this.save.currentStreak)}</div>
@@ -336,12 +336,13 @@ class AquaFantasiaGame {
     this.fallbackMode = false;
     if (!this.pixiLayer || !this.stageHost || !this.hasWebGL()) throw new Error('WebGL unavailable');
     const app = new Application();
-    await app.init({ resizeTo: this.stageHost, backgroundAlpha: 0, antialias: !this.compact, resolution: Math.min(window.devicePixelRatio || 1, this.compact ? 1.35 : 2), autoDensity: true, powerPreference: 'high-performance' });
+    await app.init({ resizeTo: this.stageHost, backgroundAlpha: 0, antialias: true, resolution: Math.min(window.devicePixelRatio || 1, this.compact ? 2 : 3), autoDensity: true, powerPreference: 'high-performance' });
     this.pixi = app;
     this.pixiLayer.appendChild(app.canvas);
 
     this.activeFish = this.pickFish();
     const textures = await Assets.load([this.getRegion().bg, ASSET.player, ASSET.float, this.activeFish.img]);
+    this.applyTextureFidelity([textures[this.getRegion().bg], textures[ASSET.player], textures[ASSET.float], textures[this.activeFish.img]]);
     this.bgSprite = new Sprite(textures[this.getRegion().bg]);
     this.player = new Sprite(textures[ASSET.player]);
     this.bobber = new Sprite(textures[ASSET.float]);
@@ -375,6 +376,17 @@ class AquaFantasiaGame {
     this.state = 'idle';
   }
 
+  private applyTextureFidelity(textures: unknown[]): void {
+    for (const texture of textures) {
+      const maybeTexture = texture as { source?: { scaleMode?: string; autoGenerateMipmaps?: boolean; antialias?: boolean } };
+      if (maybeTexture?.source) {
+        maybeTexture.source.scaleMode = 'linear';
+        maybeTexture.source.autoGenerateMipmaps = true;
+        maybeTexture.source.antialias = true;
+      }
+    }
+  }
+
   private resizePixi(): void {
     if (!this.pixi || !this.bgSprite || !this.player || !this.bobber || !this.catchSprite || !this.biteText) return;
     const w = this.pixi.screen.width;
@@ -382,13 +394,13 @@ class AquaFantasiaGame {
     const bgScale = Math.max(w / this.bgSprite.texture.width, h / this.bgSprite.texture.height);
     this.bgSprite.scale.set(bgScale);
     this.bgSprite.position.set((w - this.bgSprite.texture.width * bgScale) / 2, (h - this.bgSprite.texture.height * bgScale) / 2);
-    const playerTargetH = Math.min(h * 0.26, w * 0.58);
+    const playerTargetH = Math.min(h * 0.31, w * 0.68);
     this.player.scale.set(playerTargetH / Math.max(1, this.player.texture.height));
-    this.player.position.set(w * 0.24, h * 0.64);
+    this.player.position.set(w * 0.25, h * 0.66);
     const bobberTarget = Math.max(34, Math.min(58, w * 0.105));
     this.bobber.scale.set(bobberTarget / Math.max(1, this.bobber.texture.width));
     this.bobber.position.set(w * 0.68, h * 0.58);
-    const fishTargetW = Math.min(w * 0.44, 210);
+    const fishTargetW = Math.min(w * 0.50, 260);
     this.catchSprite.scale.set(fishTargetW / Math.max(1, this.catchSprite.texture.width));
     this.catchSprite.position.set(w * 0.55, h * 0.48);
     this.biteText.position.set(w * 0.69, h * 0.40);
