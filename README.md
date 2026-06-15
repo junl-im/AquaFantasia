@@ -1,50 +1,44 @@
-# AquaFantasia v8.7.0
+# AquaFantasia v8.8.0
 
-세로 전용 2.5D 모바일 웹 낚시게임 패치 프로젝트입니다. 이 패치부터 문서는 `README.md` 하나로만 유지합니다. `CLEAN_REPLACE_GUIDE`, `FINAL_CONSOLIDATED`, `PATCH_NOTES` 파일은 더 이상 생성하지 않습니다.
+## 이번 패치 목적
 
-## v8.7.0 핵심 변경
+v8.8.0은 `브라우저 전체화면 / 카카오 회전 방지 / 메뉴 UI 밀림 / 랭킹 배경 / 아이콘 오배치 / 캐릭터 선명도`를 다시 정리한 안정화 패치입니다.
 
-- 카카오/인앱 브라우저에서 `requestFullscreen()`과 `screen.orientation.lock()` 호출을 계속 금지합니다.
-- 설치형 PWA에서는 `manifest.webmanifest`의 `display: fullscreen`으로 시스템 메시지 없는 전체화면 표시를 시도합니다.
-- 일반/카카오 브라우저에서는 브라우저 전체화면 API 대신 `100dvh` 기반 몰입형 세로 화면으로 고정합니다.
-- 뒤로가기 후 `종료` 선택 시 현재 브라우저 닫기를 즉시 시도합니다.
-  - 일반 브라우저: `window.close()` / `history.back()` 순서로 처리
-  - 카카오 인앱: Android `kakaotalk://inappbrowser/close`, iOS `kakaoweb://closeBrowser` 스킴을 직접 클릭 흐름 안에서 시도
-  - 브라우저 정책으로 차단되면 안내 패널을 표시
-- 랭킹 화면에 수중 배경을 복구하고, 가짜 유저 데이터 없이 현재 저장 기록의 `나`만 표시합니다.
-- 캐릭터를 `public/assets/v87/characters/fisher_boat_crisp.png`로 교체했습니다.
-- 하단 네비/탭/최근 포획/릴 패널을 v87 HD PNG 에셋으로 재구성했습니다.
-- 최근 포획 패널은 실제 표시 비율에 맞춘 새 패널을 사용해 테두리 넘침을 줄였습니다.
-- 아이콘은 v87 PNG로 다시 샤픈/색보정 후 연결했습니다.
+## 핵심 변경
+
+- 일반 브라우저는 사용자 터치 이후 `requestFullscreen({ navigationUI: 'hide' })`를 시도합니다.
+- 카카오/인앱 브라우저는 회전 버그를 막기 위해 Fullscreen API를 호출하지 않고 CSS 몰입형 세로 화면만 사용합니다.
+- Screen Orientation Lock API는 계속 사용하지 않습니다.
+- 마을 / 장비 / 가방 / 도감 / 상점 / 미션 / 랭킹은 v13 통짜 구성도 의존을 줄이고 실제 DOM 런타임 UI로 재구성했습니다.
+- 상단 주소창/인앱 브라우저 오프셋을 `visualViewport.offsetTop` 기반으로 반영해 상단 HUD 짤림을 줄였습니다.
+- 우측 상단 버튼 가림 레이어를 런타임 UI에서는 사용하지 않습니다.
+- 마을 하단 탭 아이콘을 가방 아이콘이 아닌 `v88/icons/village.png`로 교체했습니다.
+- 가방/상점 화면의 옆 밀림 문제를 실제 grid/card 레이아웃으로 교체해 보정했습니다.
+- 오늘의 조류 확인 버튼을 실제 버튼형 UI로 재구성했습니다.
+- 랭킹 화면은 가짜 데이터 없이 현재 저장 기록의 `나`만 보여주며, 배경은 수중/심해 배경으로 복구했습니다.
+- 캐릭터와 주요 아이콘을 `v88` 보정 에셋으로 재연결했습니다.
+- 패치 문서는 이 README 하나만 유지합니다.
+
+## PlayCanvas / WebGL / WebGPU 방향
+
+전체 엔진을 즉시 교체하기보다, 현재 PixiJS 8 낚시 런타임은 유지하고 `배경 전용 3D 레이어`를 별도 브랜치로 실험하는 방향이 안전합니다.
+
+1. 현재 안정 브랜치: PixiJS 8 + DOM UI + 고화질 PNG/WebP
+2. 실험 브랜치: PlayCanvas/WebGL/WebGPU 수중 배경 레이어
+3. 합류 조건: 모바일 FPS, 메모리, 카카오/인앱 브라우저 세로 고정 검증 통과
 
 ## 적용 방법
 
-1. ZIP을 기존 GitHub 프로젝트 루트에 덮어씁니다.
-2. 한 번만 기존 누적 문서 파일을 삭제합니다.
-
-```bash
-rm -f CLEAN_REPLACE_GUIDE_v*.md FINAL_CONSOLIDATED_v*_통파일.md PATCH_NOTES_v*.md PROMPTS_DALLE_ASSETS_v*.md DELETE_OLD_FILES_v*.txt
-rm -rf reports
-```
-
-3. 검증합니다.
+기존 프로젝트 루트에 ZIP 내용을 덮어쓴 뒤 다음을 실행합니다.
 
 ```bash
 npm install
 npm run validate
 npm run typecheck
 npm run build
+npm run audit
 ```
 
-## 현재 구조
+## 문서 정책
 
-- Vite / TypeScript
-- PixiJS 8 낚시 런타임
-- Howler.js 오디오
-- Firebase Spark 기준 저장/서버 연동 준비
-- GitHub Pages / GitHub Actions 배포 구조
-- PWA manifest + Service Worker
-
-## 주의
-
-브라우저 탭 닫기와 일반 브라우저 UI 숨김은 브라우저/인앱 정책 영향을 받습니다. v8.7.0은 사용자의 직접 `종료` 터치 시점에 가능한 모든 닫기 경로를 시도하고, 설치형 PWA는 manifest fullscreen으로 풀화면을 시도합니다.
+앞으로 `CLEAN_REPLACE_GUIDE`, `FINAL_CONSOLIDATED`, `PATCH_NOTES` 파일은 만들지 않고 README.md 하나를 계속 갱신합니다.

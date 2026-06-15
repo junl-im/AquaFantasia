@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v8.7.0-immersive-exit-hd-ui';
+const CACHE_NAME = 'aqua-fantasia-v8.8.0-browser-fullscreen-runtime-ui';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -155,6 +155,25 @@ const PRECACHE = [
   "./assets/v87/buttons/btn_orange_normal_wide_blank.png",
   "./assets/v87/buttons/btn_orange_pressed_wide_blank.png",
   "./assets/v87/buttons/btn_blue_normal_wide_blank.png",
+
+  "./assets/v88/characters/fisher_boat_ultra.png",
+  "./assets/v88/icons/village.png",
+  "./assets/v88/icons/bag.png",
+  "./assets/v88/icons/rod.png",
+  "./assets/v88/icons/gear.png",
+  "./assets/v88/icons/fish_card_common.png",
+  "./assets/v88/icons/shop.png",
+  "./assets/v88/icons/star_coin.png",
+  "./assets/v88/icons/star_big.png",
+  "./assets/v88/icons/coin.png",
+  "./assets/v88/icons/bait_shrimp.png",
+  "./assets/v88/icons/bobber.png",
+  "./assets/v88/icons/sparkle.png",
+  "./assets/v88/ui/bottom_nav_hd.png",
+  "./assets/v88/ui/recent_panel_hd.png",
+  "./assets/v88/ui/reel_panel_hd.png",
+  "./assets/v88/ui/tab_blue_hd.png",
+  "./assets/v88/ui/tab_gold_hd.png",
   "./assets/v12/fx/particle_sparkle_cluster_ref_a.png",
   "./assets/art/water_ripple_overlay.webp",
   "./assets/art/caustic_sparkle_overlay.webp"

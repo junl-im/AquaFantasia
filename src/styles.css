@@ -3540,3 +3540,336 @@ body[data-screen="fishing"] .v840-fishing-stage canvas {
   .recent-catch-strip { left: 6px !important; right: 6px !important; height: 90px !important; min-height: 90px !important; padding: 13px 12px 11px !important; }
   body[data-screen="fishing"] .v840-stage-ui .cast-button { width: min(318px, 82vw) !important; height: 76px !important; min-height: 76px !important; }
 }
+
+/* v8.8.0 RUNTIME UI + SAFE FULLSCREEN RECOVERY
+   Non-fishing menus no longer rely on baked full-screen compositions. They use real DOM panels,
+   safe viewport offset, crisp 2.5D assets, and one fixed bottom nav. Kakao/in-app remains CSS-only. */
+:root {
+  --v880-nav-height: clamp(96px, 11.6svh, 112px);
+  --v880-safe-top: max(14px, calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 10px));
+  --v880-content-bottom: calc(var(--v880-nav-height) + env(safe-area-inset-bottom) + 24px);
+}
+
+html[data-immersive-mode="browser-fullscreen"] body,
+html[data-immersive-mode="browser-fullscreen"] #app {
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+}
+
+.runtime-menu-screen.v880-runtime-screen,
+.runtime-menu-screen.v880-runtime-screen.scroll-screen {
+  position: relative !important;
+  width: 100% !important;
+  height: var(--portrait-height, 100dvh) !important;
+  min-height: var(--portrait-height, 100svh) !important;
+  padding: var(--v880-safe-top) 12px var(--v880-content-bottom) !important;
+  overflow: hidden auto !important;
+  background: #07223c !important;
+  color: #f6fdff !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+}
+.runtime-menu-screen .runtime-3d-bg {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  background:
+    radial-gradient(circle at 22% 6%, rgba(255,255,255,.36) 0 1px, transparent 2px),
+    radial-gradient(circle at 76% 16%, rgba(154,255,238,.28) 0 2px, transparent 3px),
+    linear-gradient(180deg, rgba(0, 20, 48, .02), rgba(0, 25, 56, .52)),
+    url('/assets/v85/bg/ocean_full.webp') center/cover no-repeat !important;
+  filter: saturate(1.12) contrast(1.06) !important;
+  transform: translateZ(0) scale(1.015) !important;
+  pointer-events: none !important;
+}
+.runtime-menu-screen[data-runtime-screen="gear"] .runtime-3d-bg { background-image: radial-gradient(circle at 72% 10%, rgba(255,244,156,.24), transparent 28%), linear-gradient(180deg, rgba(1,18,45,.02), rgba(0,31,71,.54)), url('/assets/v85/bg/river_full.webp') !important; }
+.runtime-menu-screen[data-runtime-screen="inventory"] .runtime-3d-bg { background-image: radial-gradient(circle at 76% 13%, rgba(255,241,156,.26), transparent 30%), linear-gradient(180deg, rgba(0,16,42,.04), rgba(3,32,67,.56)), url('/assets/v85/bg/pier_full.webp') !important; }
+.runtime-menu-screen[data-runtime-screen="dex"] .runtime-3d-bg { background-image: radial-gradient(circle at 18% 8%, rgba(131,255,235,.25), transparent 32%), linear-gradient(180deg, rgba(0,18,45,.06), rgba(0,28,71,.56)), url('/assets/v85/bg/deepsea_full.webp') !important; }
+.runtime-menu-screen[data-runtime-screen="shop"] .runtime-3d-bg { background-image: radial-gradient(circle at 78% 12%, rgba(255,220,116,.30), transparent 34%), linear-gradient(180deg, rgba(0,19,43,.04), rgba(64,32,16,.38)), url('/assets/v85/bg/pier_full.webp') !important; }
+.runtime-menu-screen[data-runtime-screen="mission"] .runtime-3d-bg { background-image: radial-gradient(circle at 24% 8%, rgba(255,255,255,.28), transparent 30%), linear-gradient(180deg, rgba(0,17,43,.04), rgba(0,34,64,.54)), url('/assets/v85/bg/stream_full.webp') !important; }
+.runtime-menu-screen[data-runtime-screen="ranking"] .runtime-3d-bg { background-image: radial-gradient(circle at 50% 0%, rgba(255,229,121,.22), transparent 32%), linear-gradient(180deg, rgba(0,14,40,.04), rgba(0,23,53,.60)), url('/assets/v85/bg/deepsea_full.webp') !important; }
+.runtime-menu-screen .runtime-3d-bg::before,
+.runtime-menu-screen .runtime-3d-bg::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+}
+.runtime-menu-screen .runtime-3d-bg::before {
+  background:
+    radial-gradient(ellipse at 50% 14%, rgba(255,255,255,.22), transparent 38%),
+    url('/assets/art/caustic_sparkle_overlay.webp') center top/720px 360px repeat !important;
+  mix-blend-mode: screen !important;
+  opacity: .28 !important;
+  animation: caustics 18s ease-in-out infinite alternate !important;
+}
+.runtime-menu-screen .runtime-3d-bg::after {
+  background: linear-gradient(180deg, rgba(1,20,46,.02) 0%, rgba(2,16,38,.34) 100%) !important;
+}
+.runtime-hud,
+.runtime-content {
+  position: relative !important;
+  z-index: 2 !important;
+  width: min(100%, 500px) !important;
+  margin-inline: auto !important;
+}
+.runtime-hud {
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 12px 13px !important;
+  border-radius: 28px !important;
+  background: url('/assets/v85/ui/panel_wallet.png') center/100% 100% no-repeat, linear-gradient(180deg, rgba(204,249,255,.94), rgba(63,184,231,.90)) !important;
+  color: #073956 !important;
+  box-shadow: 0 14px 30px rgba(0,28,70,.28), inset 0 2px 0 rgba(255,255,255,.55) !important;
+  clip-path: inset(0 round 28px) !important;
+}
+.runtime-title span,
+.runtime-eyebrow,
+.runtime-panel-title span {
+  display: block !important;
+  font-size: 10.5px !important;
+  letter-spacing: .10em !important;
+  font-weight: 1000 !important;
+  color: rgba(6, 71, 107, .75) !important;
+}
+.runtime-title strong {
+  display: block !important;
+  margin-top: 2px !important;
+  font-size: clamp(24px, 6.5vw, 34px) !important;
+  line-height: .95 !important;
+  font-weight: 1000 !important;
+  color: #ffffff !important;
+  text-shadow: 0 3px 0 rgba(15,106,169,.78), 0 8px 18px rgba(0,38,80,.22) !important;
+}
+.runtime-title em {
+  display: block !important;
+  margin-top: 4px !important;
+  font-style: normal !important;
+  font-size: 11.5px !important;
+  line-height: 1.25 !important;
+  font-weight: 850 !important;
+  color: rgba(5, 51, 82, .78) !important;
+}
+.runtime-wallet {
+  display: grid !important;
+  gap: 6px !important;
+  min-width: 86px !important;
+}
+.runtime-wallet span {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 5px !important;
+  min-height: 30px !important;
+  padding: 4px 8px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.42) !important;
+  color: #063a5d !important;
+  font-weight: 1000 !important;
+  font-size: 13px !important;
+}
+.runtime-wallet img { width: 22px !important; height: 22px !important; object-fit: contain !important; }
+.runtime-content { display: grid !important; gap: 12px !important; padding-top: 12px !important; padding-bottom: 8px !important; }
+.runtime-hero-card,
+.runtime-panel,
+.runtime-menu-card,
+.runtime-item-card,
+.runtime-card-list .gear-card,
+.runtime-card-list .shop-card,
+.runtime-card-list .mission-card,
+.runtime-dex-card {
+  position: relative !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  color: #073956 !important;
+  background: url('/assets/v85/ui/panel_blank.png') center/100% 100% no-repeat, linear-gradient(180deg, rgba(231,253,255,.95), rgba(86,204,242,.90)) !important;
+  box-shadow: 0 16px 34px rgba(0,28,70,.28), inset 0 2px 0 rgba(255,255,255,.55) !important;
+}
+.runtime-hero-card {
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-height: 142px !important;
+  padding: 18px !important;
+  border-radius: 34px !important;
+  clip-path: inset(0 round 34px) !important;
+}
+.runtime-hero-card > img { width: 78px !important; height: 78px !important; object-fit: contain !important; grid-row: 1 / span 1 !important; filter: drop-shadow(0 10px 12px rgba(0,40,80,.26)) saturate(1.12) contrast(1.06) !important; }
+.runtime-hero-card:has(> img) { grid-template-columns: 82px 1fr auto !important; }
+.runtime-hero-card h2 { margin: 2px 0 4px !important; font-size: clamp(30px, 8vw, 42px) !important; line-height: .95 !important; color: #ffffff !important; text-shadow: 0 3px 0 rgba(15,98,156,.72), 0 8px 18px rgba(0,40,80,.22) !important; }
+.runtime-hero-card p { margin: 0 !important; font-size: 13px !important; line-height: 1.36 !important; font-weight: 850 !important; color: rgba(5, 51, 82, .80) !important; }
+.runtime-btn {
+  display: inline-grid !important;
+  place-items: center !important;
+  min-height: 50px !important;
+  min-width: 94px !important;
+  padding: 0 16px !important;
+  border-radius: 999px !important;
+  font-size: 14px !important;
+  font-weight: 1000 !important;
+  color: #073956 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.60) !important;
+  background: url('/assets/v88/ui/tab_blue_hd.png') center/100% 100% no-repeat !important;
+  filter: saturate(1.05) contrast(1.03) drop-shadow(0 8px 10px rgba(0,45,90,.20)) !important;
+}
+.runtime-btn.gold { background-image: url('/assets/v88/ui/tab_gold_hd.png') !important; color: #704000 !important; }
+.runtime-btn.cyan,
+.runtime-btn.blue { background-image: url('/assets/v88/ui/tab_blue_hd.png') !important; }
+.runtime-btn:active { transform: translateY(2px) scale(.985) !important; }
+.runtime-quick-grid,
+.runtime-item-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+.runtime-menu-card,
+.runtime-item-card {
+  min-height: 142px !important;
+  border-radius: 28px !important;
+  padding: 14px 10px !important;
+  display: grid !important;
+  place-items: center !important;
+  gap: 5px !important;
+  text-align: center !important;
+  clip-path: inset(0 round 28px) !important;
+}
+.runtime-menu-card img,
+.runtime-item-card img { width: 62px !important; height: 62px !important; object-fit: contain !important; filter: drop-shadow(0 10px 10px rgba(0,44,82,.24)) saturate(1.14) contrast(1.08) !important; }
+.runtime-menu-card strong,
+.runtime-item-card strong { font-size: 17px !important; font-weight: 1000 !important; color: #ffffff !important; text-shadow: 0 2px 0 rgba(13,86,139,.62) !important; }
+.runtime-menu-card span,
+.runtime-item-card span,
+.runtime-item-card small { font-size: 12px !important; line-height: 1.22 !important; font-weight: 850 !important; color: rgba(5,51,82,.78) !important; }
+.runtime-panel {
+  border-radius: 32px !important;
+  padding: 16px !important;
+  clip-path: inset(0 round 32px) !important;
+}
+.runtime-panel-title { display: flex !important; align-items: end !important; justify-content: space-between !important; margin-bottom: 10px !important; }
+.runtime-panel-title strong { font-size: 22px !important; font-weight: 1000 !important; color: #ffffff !important; text-shadow: 0 2px 0 rgba(12,89,145,.62) !important; }
+.runtime-region-grid.region-grid {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 0 2px !important;
+  max-height: none !important;
+  overflow: visible !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+.runtime-region-grid .region-card {
+  min-height: 132px !important;
+  border-radius: 24px !important;
+  padding: 12px !important;
+  border: 2px solid rgba(255,255,255,.42) !important;
+  clip-path: inset(0 round 24px) !important;
+}
+.runtime-region-grid .region-card strong { margin-top: 62px !important; font-size: 16px !important; }
+.runtime-region-grid .region-card span { font-size: 11px !important; line-height: 1.18 !important; }
+.runtime-card-list.gear-grid,
+.runtime-card-list.shop-list,
+.runtime-card-list.mission-list {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 10px !important;
+}
+.runtime-card-list .gear-card,
+.runtime-card-list .shop-card,
+.runtime-card-list .mission-card {
+  border-radius: 28px !important;
+  padding: 15px !important;
+  clip-path: inset(0 round 28px) !important;
+}
+.runtime-card-list .gear-card { grid-template-columns: 66px 1fr 96px !important; }
+.runtime-card-list .gear-card > img,
+.runtime-card-list .shop-card img { width: 62px !important; height: 62px !important; object-fit: contain !important; }
+.runtime-card-list .gear-card strong,
+.runtime-card-list .shop-card strong,
+.runtime-card-list .mission-card strong { color: #ffffff !important; text-shadow: 0 2px 0 rgba(14,91,145,.62) !important; }
+.runtime-card-list .gear-card span,
+.runtime-card-list .shop-card small,
+.runtime-card-list .mission-card span { color: rgba(5,51,82,.78) !important; font-weight: 850 !important; }
+.runtime-shop-card { grid-template-columns: 64px 1fr 72px !important; min-height: 104px !important; }
+.runtime-shop-card span { color: #764000 !important; font-weight: 1000 !important; font-size: 15px !important; }
+.runtime-item-card .runtime-btn { min-width: 100% !important; min-height: 44px !important; margin-top: 2px !important; }
+.runtime-dex-grid.dex-grid {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+.runtime-dex-card.dex-card {
+  min-height: 210px !important;
+  border-radius: 28px !important;
+  clip-path: inset(0 round 28px) !important;
+}
+.runtime-dex-card.dex-card img { height: 106px !important; filter: drop-shadow(0 12px 14px rgba(0,38,78,.26)) saturate(1.12) contrast(1.08) !important; }
+.runtime-mission-card progress {
+  height: 18px !important;
+  border: 2px solid rgba(255,255,255,.52) !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  background: rgba(3,58,94,.35) !important;
+}
+.runtime-mission-card progress::-webkit-progress-bar { background: rgba(3,58,94,.35) !important; }
+.runtime-mission-card progress::-webkit-progress-value { background: linear-gradient(90deg, #66efff, #fff17e, #ffb24f) !important; }
+.runtime-mission-card.ready { filter: saturate(1.10) brightness(1.04) !important; }
+.runtime-mission-card.done { opacity: .76 !important; }
+.runtime-mission-card .runtime-btn { width: 100% !important; }
+.runtime-menu-screen .ranking-panel { width: 100% !important; margin: 0 !important; }
+.runtime-menu-screen .ranking-live-card { background: rgba(255,255,255,.42) !important; }
+.runtime-menu-screen .ranking-stats-grid div { background: rgba(255,255,255,.35) !important; }
+
+/* Remove the ugly baked-composition cleaner layer from v8.6 for runtime screens. */
+.runtime-menu-screen .v13-top-action-cleaner,
+.runtime-menu-screen .v13-bottom-nav-cleaner,
+.runtime-menu-screen .v13-bg { display: none !important; }
+
+/* v8.8 nav: correct village icon and soften button color. */
+.bottom-nav.v840-bottom-nav,
+html.portrait-only-game .bottom-nav.v840-bottom-nav,
+html.is-kakao-inapp .bottom-nav.v840-bottom-nav,
+html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
+.bottom-nav.v840-bottom-nav.fixed-root-nav {
+  height: var(--v880-nav-height) !important;
+  min-height: 96px !important;
+  width: min(492px, calc(100vw - 2px)) !important;
+  background: url('/assets/v88/ui/bottom_nav_hd.png') center/100% 100% no-repeat !important;
+}
+.bottom-nav.v840-bottom-nav button { background-image: url('/assets/v88/ui/tab_blue_hd.png') !important; color: #eefcff !important; }
+.bottom-nav.v840-bottom-nav button.active { background-image: url('/assets/v88/ui/tab_gold_hd.png') !important; color: #fff8d2 !important; }
+.bottom-nav.v840-bottom-nav button img { width: clamp(30px, 7.2vw, 38px) !important; height: clamp(30px, 7.2vw, 38px) !important; filter: drop-shadow(0 4px 5px rgba(0,39,78,.32)) saturate(1.12) contrast(1.08) !important; }
+
+/* Fishing panel edge fit. */
+.recent-catch-strip {
+  bottom: calc(var(--v880-nav-height) + 5px + env(safe-area-inset-bottom)) !important;
+  border-radius: 26px !important;
+  background: url('/assets/v88/ui/recent_panel_hd.png') center/100% 100% no-repeat !important;
+  clip-path: inset(0 round 26px) !important;
+}
+body[data-screen="fishing"] .v840-reel-panel.reel-panel,
+html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel {
+  background-image: url('/assets/v88/ui/reel_panel_hd.png') !important;
+}
+body[data-screen="fishing"] .v840-stage-ui .cast-button { bottom: calc(var(--v880-nav-height) + 104px + env(safe-area-inset-bottom)) !important; }
+body[data-screen="fishing"] .v840-reel-panel.reel-panel { bottom: calc(var(--v880-nav-height) + 108px + env(safe-area-inset-bottom)) !important; }
+
+@media (max-width: 390px) {
+  :root { --v880-nav-height: 96px; }
+  .runtime-menu-screen.v880-runtime-screen { padding-inline: 9px !important; }
+  .runtime-hud { grid-template-columns: 1fr !important; }
+  .runtime-wallet { grid-template-columns: repeat(2, 1fr) !important; min-width: 0 !important; }
+  .runtime-wallet span { justify-content: center !important; }
+  .runtime-hero-card { grid-template-columns: 1fr !important; min-height: 132px !important; padding: 16px !important; }
+  .runtime-hero-card:has(> img) { grid-template-columns: 64px 1fr !important; }
+  .runtime-hero-card .runtime-btn { grid-column: 1 / -1 !important; width: 100% !important; }
+  .runtime-card-list .gear-card { grid-template-columns: 56px 1fr 82px !important; padding: 12px !important; }
+  .runtime-card-list .gear-card > img, .runtime-card-list .shop-card img { width: 54px !important; height: 54px !important; }
+  .runtime-shop-card { grid-template-columns: 54px 1fr 62px !important; }
+}

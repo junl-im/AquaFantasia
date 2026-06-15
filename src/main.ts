@@ -9,8 +9,8 @@ import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPort
 
 const ASSET = {
   loginBg: './assets/v85/screens/start_screen_clean_v810.webp',
-  player: './assets/v87/characters/fisher_boat_crisp.png',
-  float: './assets/v87/icons/bobber.png',
+  player: './assets/v88/characters/fisher_boat_ultra.png',
+  float: './assets/v88/icons/bobber.png',
   fish: './assets/v85/fish/fish_01.png',
   gauge: './assets/v85/icons/gauge_level.png',
   slot: './assets/art/fish_slot.png',
@@ -18,7 +18,7 @@ const ASSET = {
   caustics: './assets/art/caustic_sparkle_overlay.webp',
   castButton: './assets/ui/button_cast_clean.png',
   perfect: './assets/v12/fx/particle_sparkle_cluster_ref_a.png',
-  touchRing: './assets/v87/icons/sparkle.png',
+  touchRing: './assets/v88/icons/sparkle.png',
 };
 
 const V13_BG: Record<Exclude<Screen, 'login'>, string> = {
@@ -216,18 +216,59 @@ class AquaFantasiaGame {
   }
 
   private renderVillage(): void {
-    const root = this.createV13Screen('village');
-    this.addV13Hotspot(root, 'v13-town-fish-cta', '낚시터로 출항', [290, 1455, 500, 104], () => { void this.go('fishing'); });
-    this.addV13Hotspot(root, 'v13-town-gear', '장비 탭으로 이동', [70, 690, 450, 235], () => { void this.go('gear'); });
-    this.addV13Hotspot(root, 'v13-town-mission', '미션 탭으로 이동', [560, 690, 450, 235], () => { void this.go('mission'); });
-    this.addV13Hotspot(root, 'v13-town-shop', '상점 탭으로 이동', [70, 955, 450, 235], () => { void this.go('shop'); });
-    this.addV13Hotspot(root, 'v13-town-dex', '도감 탭으로 이동', [560, 955, 450, 235], () => { void this.go('dex'); });
-    this.addV13Hotspot(root, 'v13-town-notice', '오늘의 수역 안내', [70, 300, 940, 150], () => {
-      const region = this.getRegion();
-      this.toast.show({ type: 'fishing', title: region.name, message: `${region.subtitle} · ${region.tide}`, actionScreen: 'fishing' });
-    });
+    this.clear();
+    const region = this.getRegion();
+    const root = this.createRuntimeMenuScreen('village', '마을', '오늘의 조류와 수역을 고르고 바로 출항하세요.');
+    const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
+    content.innerHTML = `
+      <section class="runtime-hero-card tide-card" aria-label="오늘의 조류">
+        <div>
+          <span class="runtime-eyebrow">TODAY TIDE</span>
+          <h2>오늘의 조류</h2>
+          <p><strong>${region.name}</strong> · ${region.tide}<br>${region.subtitle}</p>
+        </div>
+        <button class="runtime-btn gold" type="button" data-go-fishing>확인</button>
+      </section>
+      <section class="runtime-quick-grid" aria-label="빠른 메뉴">
+        <button class="runtime-menu-card" type="button" data-go="fishing"><img src="./assets/v88/icons/rod.png" alt="" /><strong>낚시터</strong><span>바로 출항</span></button>
+        <button class="runtime-menu-card" type="button" data-go="gear"><img src="./assets/v88/icons/gear.png" alt="" /><strong>장비</strong><span>강화 관리</span></button>
+        <button class="runtime-menu-card" type="button" data-go="shop"><img src="./assets/v88/icons/shop.png" alt="" /><strong>상점</strong><span>미끼 보충</span></button>
+        <button class="runtime-menu-card" type="button" data-go="mission"><img src="./assets/v88/icons/star_coin.png" alt="" /><strong>미션</strong><span>보상 회수</span></button>
+      </section>
+      <section class="runtime-panel region-panel" aria-label="수역 선택">
+        <div class="runtime-panel-title"><span>FISHING AREA</span><strong>수역 선택</strong></div>
+        <div class="region-grid runtime-region-grid">${regions.slice(0, 8).map((item) => this.regionCard(item.key)).join('')}</div>
+      </section>`;
     dom.app.appendChild(root);
+    root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { void this.go('fishing'); });
+    root.querySelectorAll<HTMLButtonElement>('[data-go]').forEach((btn) => btn.addEventListener('click', () => { void this.go(btn.dataset.go as Screen); }));
+    root.querySelectorAll<HTMLButtonElement>('[data-region]').forEach((btn) => btn.addEventListener('click', () => {
+      const key = btn.dataset.region as RegionKey;
+      if (!this.isRegionUnlocked(key)) {
+        const item = regions.find((r) => r.key === key);
+        this.toast.show({ type: 'normal', title: '잠긴 수역', message: item?.unlockHint ?? '조건을 달성하면 열립니다.', actionScreen: 'mission' });
+        return;
+      }
+      this.save.region = key;
+      saveGame(this.save);
+      this.renderVillage();
+    }));
     this.mountBottomNav(root, 'village');
+  }
+
+  private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
+    this.clear();
+    const root = document.createElement('main');
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen ${active}-screen scroll-screen`;
+    root.setAttribute('data-runtime-screen', active);
+    root.innerHTML = `
+      <div class="runtime-3d-bg" aria-hidden="true"></div>
+      <header class="runtime-hud" aria-label="플레이어 HUD">
+        <div class="runtime-title"><span>AQUA FANTASIA</span><strong>${title}</strong><em>${subtitle}</em></div>
+        <div class="runtime-wallet"><span><img src="./assets/v88/icons/coin.png" alt="" />${this.save.coins.toLocaleString('ko-KR')}</span><span><img src="./assets/v88/icons/bait_shrimp.png" alt="" />${this.save.gear.lureStock}</span></div>
+      </header>
+      <div class="runtime-content"></div>`;
+    return root;
   }
 
   private regionCard(key: RegionKey): string {
@@ -254,8 +295,8 @@ class AquaFantasiaGame {
       </div>
       <div class="fishing-hud v840-fishing-hud" aria-label="플레이어 정보">
         <div class="hud-chip region"><strong>${region.name}</strong><span>${region.tide}</span></div>
-        <div class="hud-chip"><img src="./assets/v87/icons/coin.png" alt="" /><strong>${this.save.coins.toLocaleString('ko-KR')}</strong></div>
-        <div class="hud-chip"><img src="./assets/v87/icons/bait_shrimp.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
+        <div class="hud-chip"><img src="./assets/v88/icons/coin.png" alt="" /><strong>${this.save.coins.toLocaleString('ko-KR')}</strong></div>
+        <div class="hud-chip"><img src="./assets/v88/icons/bait_shrimp.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
       </div>
       <div class="stage-ui v840-stage-ui"></div>
       <div class="combo-badge ${this.save.currentStreak > 1 ? '' : 'hidden'}" id="comboBadge">연속 성공 x${Math.max(2, this.save.currentStreak)}</div>
@@ -794,16 +835,23 @@ class AquaFantasiaGame {
   }
 
   private renderGear(): void {
-    const root = this.createV13Screen('gear');
-    this.addV13Hotspot(root, 'v13-gear-rod-main', '낚싯대 강화', [70, 300, 940, 390], () => this.buyUpgrade('rod'));
-    this.addV13Hotspot(root, 'v13-gear-slot-rod', '낚싯대 슬롯 강화', [75, 750, 445, 145], () => this.buyUpgrade('rod'));
-    this.addV13Hotspot(root, 'v13-gear-slot-reel', '릴 슬롯 강화', [555, 750, 445, 145], () => this.buyUpgrade('reel'));
-    this.addV13Hotspot(root, 'v13-gear-slot-line', '낚싯줄 슬롯 강화', [75, 920, 445, 145], () => this.buyUpgrade('line'));
-    this.addV13Hotspot(root, 'v13-gear-slot-lure', '미끼 보충', [555, 920, 445, 145], () => this.buyUpgrade('lure'));
-    this.addV13Hotspot(root, 'v13-gear-slot-balance', '장비 균형 안내', [75, 1090, 925, 140], () => {
-      this.toast.show({ type: 'fishing', title: '장비 효과 합계', message: `낚싯대 Lv.${this.save.gear.rodLevel} · 릴 Lv.${this.save.gear.reelLevel} · 줄 Lv.${this.save.gear.lineLevel}`, actionScreen: 'fishing' });
-    });
+    const root = this.createRuntimeMenuScreen('gear', '장비', '낚싯대·릴·줄을 실제 수치에 맞춰 강화합니다.');
+    const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
+    content.innerHTML = `
+      <section class="runtime-hero-card gear-summary">
+        <img src="./assets/v88/icons/gear.png" alt="" />
+        <div><span class="runtime-eyebrow">EQUIPMENT</span><h2>장비 관리</h2><p>총합 Lv.${this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel} · 미끼 ${this.save.gear.lureStock}개</p></div>
+        <button class="runtime-btn cyan" type="button" data-go-fishing>낚시터</button>
+      </section>
+      <section class="gear-grid runtime-card-list">
+        ${this.gearCard('rod', '낚싯대', './assets/v88/icons/rod.png', this.save.gear.rodLevel, 120, '입질 반응 안정')}
+        ${this.gearCard('reel', '릴', './assets/v85/icons/reel.png', this.save.gear.reelLevel, 140, '릴링 반응 향상')}
+        ${this.gearCard('line', '낚싯줄', './assets/v85/icons/line_hook.png', this.save.gear.lineLevel, 130, '안전지대 보정')}
+        ${this.gearCard('lure', '미끼', './assets/v88/icons/bait_shrimp.png', this.save.gear.lureStock, 60, '입질 대기 감소')}
+      </section>`;
     dom.app.appendChild(root);
+    root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { void this.go('fishing'); });
+    root.querySelectorAll<HTMLButtonElement>('[data-upgrade]').forEach((btn) => btn.addEventListener('click', () => this.buyUpgrade(btn.dataset.upgrade as 'rod' | 'reel' | 'line' | 'lure')));
     this.mountBottomNav(root, 'gear');
   }
 
@@ -830,36 +878,63 @@ class AquaFantasiaGame {
   }
 
   private renderInventory(): void {
-    const root = this.createV13Screen('inventory');
-    this.addV13Hotspot(root, 'v13-inventory-bait', '미끼 사용하고 낚시로 이동', [70, 405, 220, 220], () => { void this.go('fishing'); });
-    this.addV13Hotspot(root, 'v13-inventory-ticket', '상점에서 아이템 보충', [315, 405, 220, 220], () => { void this.go('shop'); });
-    this.addV13Hotspot(root, 'v13-inventory-use', '선택 아이템 사용', [690, 1435, 310, 125], () => {
-      this.toast.show({ type: 'shop', title: '아이템 가방', message: `보유 미끼 ${this.save.gear.lureStock}개 · 낚시 화면에서 자동 사용됩니다.`, actionScreen: 'fishing' });
-    });
+    const root = this.createRuntimeMenuScreen('inventory', '가방', '보유 아이템과 낚시 준비 상태를 확인합니다.');
+    const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
+    content.innerHTML = `
+      <section class="runtime-hero-card inventory-summary">
+        <img src="./assets/v88/icons/bag.png" alt="" />
+        <div><span class="runtime-eyebrow">INVENTORY</span><h2>가방</h2><p>미끼 ${this.save.gear.lureStock}개 · 구조 키트 ${this.save.lastRescueAt ? '준비됨' : '없음'}</p></div>
+        <button class="runtime-btn gold" type="button" data-go-shop>상점</button>
+      </section>
+      <section class="runtime-item-grid">
+        <article class="runtime-item-card"><img src="./assets/v88/icons/bait_shrimp.png" alt="" /><strong>새우 미끼</strong><span>${this.save.gear.lureStock}개 보유</span><button class="runtime-btn cyan" data-go-fishing>사용하러 가기</button></article>
+        <article class="runtime-item-card"><img src="./assets/v85/icons/ticket.png" alt="" /><strong>출항 티켓</strong><span>기본 무제한</span><button class="runtime-btn blue" data-go-fishing>낚시터</button></article>
+        <article class="runtime-item-card"><img src="./assets/v88/icons/star_coin.png" alt="" /><strong>보상 상자</strong><span>미션에서 획득</span><button class="runtime-btn blue" data-go-mission>미션 보기</button></article>
+      </section>`;
     dom.app.appendChild(root);
+    root.querySelector<HTMLButtonElement>('[data-go-shop]')?.addEventListener('click', () => { void this.go('shop'); });
+    root.querySelectorAll<HTMLButtonElement>('[data-go-fishing]').forEach((btn) => btn.addEventListener('click', () => { void this.go('fishing'); }));
+    root.querySelector<HTMLButtonElement>('[data-go-mission]')?.addEventListener('click', () => { void this.go('mission'); });
     this.mountBottomNav(root, 'inventory');
   }
 
   private renderDex(): void {
-    const root = this.createV13Screen('dex');
-    this.addV13Hotspot(root, 'v13-dex-progress', '도감 진행도 보기', [70, 300, 940, 145], () => {
-      const caughtCount = this.totalCaught();
-      const discovered = fishDex.filter((fish) => fish.id !== 'unknown' && ((this.save.caught[fish.id] ?? 0) > 0 || fish.rarity === 'COMMON')).length;
-      this.toast.show({ type: 'dex', title: '도감 진행도', message: `수집 ${caughtCount}마리 · 발견 ${discovered}/${fishDex.length - 1}종`, actionScreen: 'fishing' });
-    });
-    this.addV13Hotspot(root, 'v13-dex-fishing', '도감 채우러 낚시하기', [70, 585, 940, 820], () => { void this.go('fishing'); });
+    const root = this.createRuntimeMenuScreen('dex', '도감', '실제 포획 기록 기준으로 물고기 카드를 표시합니다.');
+    const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
+    const discovered = fishDex.filter((fish) => fish.id !== 'unknown' && ((this.save.caught[fish.id] ?? 0) > 0 || fish.rarity === 'COMMON')).length;
+    const cards = fishDex.filter((fish) => fish.id !== 'unknown').slice(0, 18).map((fish) => {
+      const count = this.save.caught[fish.id] ?? 0;
+      const open = count > 0 || fish.rarity === 'COMMON';
+      return `<article class="dex-card runtime-dex-card rarity-${fish.rarity.toLowerCase()} ${open ? '' : 'locked'}"><img src="${open ? fish.img : './assets/v85/fish/fish_unknown.png'}" alt="" /><strong>${open ? fish.name : '미발견'}</strong><span>${open ? `${fish.region} · ${count}마리` : '낚시터에서 발견하세요'}</span><em>${fish.rarity}</em></article>`;
+    }).join('');
+    content.innerHTML = `
+      <section class="runtime-hero-card dex-summary">
+        <img src="./assets/v88/icons/fish_card_common.png" alt="" />
+        <div><span class="runtime-eyebrow">FISH DEX</span><h2>도감</h2><p>발견 ${discovered}/${fishDex.length - 1}종 · 누적 ${this.totalCaught()}마리</p></div>
+        <button class="runtime-btn gold" type="button" data-go-fishing>채우러 가기</button>
+      </section>
+      <section class="dex-grid runtime-dex-grid">${cards}</section>`;
     dom.app.appendChild(root);
+    root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { void this.go('fishing'); });
     this.mountBottomNav(root, 'dex');
   }
 
   private renderShop(): void {
-    const root = this.createV13Screen('shop');
+    const root = this.createRuntimeMenuScreen('shop', '상점', '미끼와 성장 아이템을 구매합니다.');
     const goods = [
-      { name: '산호 미끼 묶음', desc: '미끼 +5', cost: 120, effect: () => { this.save.gear.lureStock += 5; } },
-      { name: '릴 윤활 오일', desc: '릴 Lv.+1', cost: 180, effect: () => { this.save.gear.reelLevel += 1; } },
-      { name: '물결 안정 부적', desc: '낚싯줄 Lv.+1', cost: 210, effect: () => { this.save.gear.lineLevel += 1; } },
-      { name: '비상 구조 키트', desc: '미끼 +2', cost: 260, effect: () => { this.save.lastRescueAt = Date.now(); this.save.gear.lureStock += 2; } },
+      { name: '산호 미끼 묶음', desc: '미끼 +5', cost: 120, icon: './assets/v88/icons/bait_shrimp.png', effect: () => { this.save.gear.lureStock += 5; } },
+      { name: '릴 윤활 오일', desc: '릴 Lv.+1', cost: 180, icon: './assets/v85/icons/reel.png', effect: () => { this.save.gear.reelLevel += 1; } },
+      { name: '물결 안정 부적', desc: '낚싯줄 Lv.+1', cost: 210, icon: './assets/v85/icons/line_hook.png', effect: () => { this.save.gear.lineLevel += 1; } },
+      { name: '비상 구조 키트', desc: '미끼 +2', cost: 260, icon: './assets/v88/icons/star_coin.png', effect: () => { this.save.lastRescueAt = Date.now(); this.save.gear.lureStock += 2; } },
     ];
+    const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
+    content.innerHTML = `
+      <section class="runtime-hero-card shop-summary">
+        <img src="./assets/v88/icons/shop.png" alt="" />
+        <div><span class="runtime-eyebrow">SHOP</span><h2>상점</h2><p>보유 골드 ${this.save.coins.toLocaleString('ko-KR')}G · 미끼 ${this.save.gear.lureStock}개</p></div>
+        <button class="runtime-btn cyan" type="button" data-free>무료 50G</button>
+      </section>
+      <section class="shop-list runtime-card-list">${goods.map((item, index) => `<button class="shop-card runtime-shop-card" type="button" data-buy="${index}"><img src="${item.icon}" alt="" /><div><strong>${item.name}</strong><small>${item.desc}</small></div><span>${item.cost}G</span></button>`).join('')}</section>`;
     const buy = (index: number) => {
       const item = goods[index];
       if (!item) return;
@@ -871,18 +946,11 @@ class AquaFantasiaGame {
       item.effect();
       saveGame(this.save);
       this.toast.show({ type: 'shop', title: '구매 완료', message: `${item.name} · ${item.desc}`, actionScreen: 'inventory' });
+      this.renderShop();
     };
-    this.addV13Hotspot(root, 'v13-shop-featured', '추천 상품 구매', [70, 300, 940, 180], () => buy(0));
-    this.addV13Hotspot(root, 'v13-shop-card-a', '산호 미끼 묶음 구매', [70, 630, 455, 360], () => buy(0));
-    this.addV13Hotspot(root, 'v13-shop-card-b', '릴 윤활 오일 구매', [555, 630, 455, 360], () => buy(1));
-    this.addV13Hotspot(root, 'v13-shop-card-c', '물결 안정 부적 구매', [70, 1040, 455, 360], () => buy(2));
-    this.addV13Hotspot(root, 'v13-shop-card-d', '비상 구조 키트 구매', [555, 1040, 455, 360], () => buy(3));
-    this.addV13Hotspot(root, 'v13-shop-free', '무료 보상 받기', [70, 1470, 940, 130], () => {
-      this.save.coins += 50;
-      saveGame(this.save);
-      this.toast.show({ type: 'reward', title: '무료 보상', message: '50G를 받았습니다.', actionScreen: 'shop' });
-    });
     dom.app.appendChild(root);
+    root.querySelectorAll<HTMLButtonElement>('[data-buy]').forEach((btn) => btn.addEventListener('click', () => buy(Number(btn.dataset.buy))));
+    root.querySelector<HTMLButtonElement>('[data-free]')?.addEventListener('click', () => { this.save.coins += 50; saveGame(this.save); this.toast.show({ type: 'reward', title: '무료 보상', message: '50G를 받았습니다.', actionScreen: 'shop' }); this.renderShop(); });
     this.mountBottomNav(root, 'shop');
   }
 
@@ -936,20 +1004,21 @@ class AquaFantasiaGame {
   }
 
   private renderMission(): void {
-    const root = this.createV13Screen('mission');
+    const root = this.createRuntimeMenuScreen('mission', '미션', '실제 플레이 기록 기준으로 보상을 수령합니다.');
     const goals = this.missionGoals();
+    const doneCount = Object.values(this.save.missions).filter(Boolean).length;
     const readyCount = goals.filter((goal) => goal.value >= goal.max && !this.save.missions[goal.id]).length;
-    this.addV13Hotspot(root, 'v13-mission-dashboard', '미션 진행도 안내', [70, 300, 940, 160], () => {
-      const doneCount = Object.values(this.save.missions).filter(Boolean).length;
-      this.toast.show({ type: 'mission', title: '오늘의 미션', message: `완료 ${doneCount}/${goals.length} · 수령 가능 ${readyCount}개`, actionScreen: 'mission' });
-    });
-    goals.slice(0, 5).forEach((goal, index) => {
-      this.addV13Hotspot(root, `v13-mission-row-${index}`, `${goal.title} 미션`, [70, 510 + index * 178, 940, 150], () => this.tapMissionCard(goal.id));
-    });
-    this.addV13Hotspot(root, 'v13-mission-weekly', '주간 미션 안내', [70, 1450, 940, 130], () => {
-      this.toast.show({ type: 'mission', title: '주간 미션', message: '도감과 장비 성장 미션을 계속 누적하세요.', actionScreen: 'fishing' });
-    });
+    const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
+    content.innerHTML = `
+      <section class="runtime-hero-card mission-summary">
+        <img src="./assets/v88/icons/star_coin.png" alt="" />
+        <div><span class="runtime-eyebrow">MISSION</span><h2>미션</h2><p>완료 ${doneCount}/${goals.length} · 수령 가능 ${readyCount}개</p></div>
+        <button class="runtime-btn gold" type="button" data-go-fishing>진행하기</button>
+      </section>
+      <section class="mission-list runtime-card-list">${goals.slice(0, 12).map((goal) => `<article class="mission-card runtime-mission-card ${this.save.missions[goal.id] ? 'done' : goal.value >= goal.max ? 'ready' : ''}"><div><small>${goal.category}</small><strong>${goal.title}</strong><span>${goal.desc}</span></div><progress value="${goal.value}" max="${goal.max}"></progress><button class="runtime-btn ${goal.value >= goal.max && !this.save.missions[goal.id] ? 'gold' : 'blue'}" data-mission="${goal.id}">${this.save.missions[goal.id] ? '완료' : goal.value >= goal.max ? `${goal.reward}G 받기` : `${goal.value}/${goal.max}`}</button></article>`).join('')}</section>`;
     dom.app.appendChild(root);
+    root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { void this.go('fishing'); });
+    root.querySelectorAll<HTMLButtonElement>('[data-mission]').forEach((btn) => btn.addEventListener('click', () => this.tapMissionCard(btn.dataset.mission ?? '')));
     this.mountBottomNav(root, 'mission');
   }
 
@@ -958,32 +1027,18 @@ class AquaFantasiaGame {
     const score = this.save.bestStreak * 1000 + this.save.totalSuccess * 120 + this.totalCaught() * 35;
     const caught = this.totalCaught();
     const linkedLabel = this.save.serverLinked ? '익명 서버 연동 계정' : '로컬 테스트 계정';
-    const root = document.createElement('main');
-    root.className = 'game-screen ranking-screen v840-ranking-screen v870-ranking-screen scroll-screen';
-    root.innerHTML = `
-      <div class="ambient-bg ranking-bg-art" aria-hidden="true"></div>
-      <section class="v840-page-panel ranking-panel" aria-label="랭킹">
-        <header class="v840-panel-head">
-          <span>REAL USER RANKING</span>
-          <h2>랭킹</h2>
-          <p>가짜 유저 데이터는 제거했습니다. 지금은 실제 저장 기록 기준으로 내 계정만 표시합니다.</p>
-        </header>
-        <div class="ranking-live-card">
-          <div class="rank-medal">#1</div>
-          <div class="rank-user">
-            <strong>나</strong>
-            <span>${linkedLabel}</span>
-          </div>
-          <div class="rank-score"><strong>${score.toLocaleString('ko-KR')}</strong><span>점</span></div>
-        </div>
-        <div class="ranking-stats-grid">
-          <div><strong>${this.save.bestStreak}</strong><span>최고 콤보</span></div>
-          <div><strong>${this.save.totalSuccess}</strong><span>성공</span></div>
-          <div><strong>${caught}</strong><span>누적 포획</span></div>
-          <div><strong>${this.save.coins.toLocaleString('ko-KR')}</strong><span>골드</span></div>
-        </div>
-        <button class="image-btn ranking-cta" type="button" data-go-fishing>낚시터에서 기록 올리기</button>
-        <p class="ranking-note">Firebase 리더보드 쓰기/읽기 규칙을 연결하면 이 영역을 실제 서버 상위 유저 목록으로 확장합니다.</p>
+    const root = this.createRuntimeMenuScreen('ranking', '랭킹', '가짜 데이터 없이 내 실제 기록만 표시합니다.');
+    const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
+    content.innerHTML = `
+      <section class="runtime-hero-card ranking-summary">
+        <img src="./assets/v88/icons/star_big.png" alt="" />
+        <div><span class="runtime-eyebrow">REAL USER RANKING</span><h2>랭킹</h2><p>${linkedLabel}</p></div>
+        <button class="runtime-btn gold" type="button" data-go-fishing>기록 올리기</button>
+      </section>
+      <section class="runtime-panel ranking-panel">
+        <div class="ranking-live-card"><div class="rank-medal">#1</div><div class="rank-user"><strong>나</strong><span>${linkedLabel}</span></div><div class="rank-score"><strong>${score.toLocaleString('ko-KR')}</strong><span>점</span></div></div>
+        <div class="ranking-stats-grid"><div><strong>${this.save.bestStreak}</strong><span>최고 콤보</span></div><div><strong>${this.save.totalSuccess}</strong><span>성공</span></div><div><strong>${caught}</strong><span>누적 포획</span></div><div><strong>${this.save.coins.toLocaleString('ko-KR')}</strong><span>골드</span></div></div>
+        <p class="ranking-note">Firebase 리더보드 연결 전까지는 현재 테스트 계정의 실제 로컬/서버 연동 기록만 보여줍니다.</p>
       </section>`;
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { this.reassertImmersiveMode(); void this.go('fishing'); });

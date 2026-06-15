@@ -1,6 +1,7 @@
 export type PortraitViewportMetrics = {
   viewportWidth: number;
   viewportHeight: number;
+  offsetTop: number;
   appWidth: number;
   appHeight: number;
   physicalLandscape: boolean;
@@ -23,15 +24,15 @@ export function isHostileInAppBrowser(): boolean {
 export function getPortraitViewportMetrics(): PortraitViewportMetrics {
   const viewportWidth = Math.max(1, Math.floor(window.visualViewport?.width ?? window.innerWidth));
   const viewportHeight = Math.max(1, Math.floor(window.visualViewport?.height ?? window.innerHeight));
+  const offsetTop = Math.max(0, Math.floor(window.visualViewport?.offsetTop ?? 0));
   const physicalLandscape = viewportWidth > viewportHeight;
   const kakaoInApp = isKakaoInAppBrowser();
   const hostileInApp = isHostileInAppBrowser();
 
-  // Aqua Fantasia is a portrait-only mobile game.
-  // Some in-app browsers ignore manifest orientation and browser orientation API.
-  // When the physical viewport becomes landscape, keep rendering a portrait game shell
-  // inside the landscape viewport instead of switching UI layout.
-  const maxPortraitWidth = hostileInApp ? 430 : 480;
+  // Aqua Fantasia is a portrait-only mobile game. If an in-app browser rotates
+  // the physical viewport, keep a portrait-sized game surface centered instead
+  // of changing to a landscape layout.
+  const maxPortraitWidth = hostileInApp ? 430 : 500;
   const minUsableWidth = Math.min(340, viewportWidth);
   const appWidth = physicalLandscape
     ? clamp(Math.floor(viewportHeight * 0.78), Math.min(280, viewportWidth), Math.min(maxPortraitWidth, viewportWidth))
@@ -41,6 +42,7 @@ export function getPortraitViewportMetrics(): PortraitViewportMetrics {
   return {
     viewportWidth,
     viewportHeight,
+    offsetTop,
     appWidth: Math.max(minUsableWidth, appWidth),
     appHeight,
     physicalLandscape,
@@ -54,6 +56,7 @@ export function applyPortraitViewportMetrics(): PortraitViewportMetrics {
   const root = document.documentElement;
   root.style.setProperty('--viewport-width', `${metrics.viewportWidth}px`);
   root.style.setProperty('--viewport-height', `${metrics.viewportHeight}px`);
+  root.style.setProperty('--viewport-offset-top', `${metrics.offsetTop}px`);
   root.style.setProperty('--app-width', `${metrics.appWidth}px`);
   root.style.setProperty('--app-height', `${metrics.appHeight}px`);
   root.style.setProperty('--portrait-width', `${metrics.appWidth}px`);
@@ -85,19 +88,41 @@ export function installPortraitCssGuards(): void {
   document.addEventListener('fullscreenchange', sync, { passive: true });
 }
 
-
-export async function requestHardPortraitLock(): Promise<'css-portrait' | 'inapp-css-only'> {
-  const metrics = applyPortraitViewportMetrics();
-
-  // v8.6.0 Kakao hard-safe policy:
-  // Do not call browser fullscreen API and do not call browser orientation API.
-  // KakaoTalk/WebView may show a system fullscreen message and then rotate the viewport
-  // when those APIs are requested. Aqua Fantasia now keeps the game portrait by CSS
-  // viewport metrics only, so user taps/back gestures never trigger a fullscreen prompt.
+async function requestBrowserFullscreenWhenSafe(metrics: PortraitViewportMetrics): Promise<'fullscreen' | 'blocked' | 'skipped'> {
   const root = document.documentElement;
-  root.dataset.fullscreenApi = 'disabled';
+
+  // Kakao/hostile in-app browsers are deliberately excluded. In those shells,
+  // browser fullscreen frequently shows a system message and can rotate the
+  // viewport. They stay in CSS immersive portrait mode.
+  if (metrics.hostileInApp || metrics.physicalLandscape) return 'skipped';
+  if (document.fullscreenElement) return 'fullscreen';
+  if (!document.fullscreenEnabled || !root.requestFullscreen) return 'skipped';
+
+  try {
+    await root.requestFullscreen({ navigationUI: 'hide' } as FullscreenOptions);
+    return 'fullscreen';
+  } catch {
+    return 'blocked';
+  }
+}
+
+export async function requestHardPortraitLock(): Promise<'browser-fullscreen' | 'css-portrait' | 'inapp-css-only'> {
+  const metrics = applyPortraitViewportMetrics();
+  const root = document.documentElement;
+
+  // Never call the Screen Orientation lock API. Portrait is enforced by the
+  // manifest, viewport metrics and CSS cage so Kakao/Android rotation bugs do
+  // not reappear.
   root.dataset.orientationApi = 'disabled';
-  root.dataset.immersiveMode = metrics.hostileInApp ? 'inapp-css-only' : 'css-immersive';
+
+  const fullscreenResult = await requestBrowserFullscreenWhenSafe(metrics);
+  root.dataset.fullscreenApi = metrics.hostileInApp ? 'disabled-inapp' : fullscreenResult;
+  root.dataset.immersiveMode = metrics.hostileInApp
+    ? 'inapp-css-only'
+    : fullscreenResult === 'fullscreen'
+      ? 'browser-fullscreen'
+      : 'css-immersive';
+
   applyPortraitViewportMetrics();
-  return metrics.hostileInApp ? 'inapp-css-only' : 'css-portrait';
+  return metrics.hostileInApp ? 'inapp-css-only' : fullscreenResult === 'fullscreen' ? 'browser-fullscreen' : 'css-portrait';
 }
