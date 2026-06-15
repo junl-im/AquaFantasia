@@ -139,13 +139,15 @@ class AquaFantasiaGame {
     const shell = document.createElement('main');
     shell.className = 'login-screen start-art-screen';
     shell.innerHTML = `
-      <img class="start-art-image" src="${ASSET.loginBg}" alt="아쿠아 판타지아 시작 화면" />
-      <h1 class="sr-only">아쿠아 판타지아</h1>
-      <button class="start-hotspot hit-depart" data-action="guest" aria-label="낚시터로 출항"></button>
-      <button class="start-hotspot hit-new" data-action="new" aria-label="처음부터 새 게임"></button>
-      <button class="start-hotspot hit-server" data-action="server" aria-label="익명 서버연동"></button>
-      <button class="start-hotspot hit-keep v810-keep-button" data-action="keep" aria-label="이 기기에서 로그인 유지" aria-pressed="false"><span class="keep-indicator" aria-hidden="true"></span><span class="keep-text">이 기기에서 로그인 유지</span></button>
-      <div class="login-touch-shine" aria-hidden="true"></div>`;
+      <div class="start-design-surface" data-design="1024x1536">
+        <img class="start-art-image" src="${ASSET.loginBg}" alt="아쿠아 판타지아 시작 화면" />
+        <h1 class="sr-only">아쿠아 판타지아</h1>
+        <button class="start-hotspot hit-depart" data-action="guest" aria-label="낚시터로 출항"></button>
+        <button class="start-hotspot hit-new" data-action="new" aria-label="처음부터 새 게임"></button>
+        <button class="start-hotspot hit-server" data-action="server" aria-label="익명 서버연동"></button>
+        <button class="start-hotspot hit-keep v810-keep-button" data-action="keep" aria-label="이 기기에서 로그인 유지" aria-pressed="false"><span class="keep-indicator" aria-hidden="true"></span><span class="keep-text">이 기기에서 로그인 유지</span></button>
+        <div class="login-touch-shine" aria-hidden="true"></div>
+      </div>`;
     dom.app.appendChild(shell);
     const keepEnabled = window.localStorage.getItem('aqua-login-keep') === 'true';
     const keepButton = shell.querySelector<HTMLButtonElement>('[data-action="keep"]');
@@ -173,7 +175,7 @@ class AquaFantasiaGame {
     const root = document.createElement('main');
     root.className = `game-screen v13-screen v820-screen ${active}-screen locked-screen`;
     root.setAttribute('data-v13-tab', active);
-    root.innerHTML = `<img class="v13-bg" src="${V13_BG[active]}" alt="${active} 탭 UI 구성" loading="eager" /><div class="v13-hot-layer" aria-hidden="false"></div>`;
+    root.innerHTML = `<div class="v13-design-surface" data-design="1080x1920"><img class="v13-bg" src="${V13_BG[active]}" alt="${active} 탭 UI 구성" loading="eager" /><div class="v13-hot-layer" aria-hidden="false"></div></div>`;
     return root;
   }
 
@@ -239,7 +241,8 @@ class AquaFantasiaGame {
     const root = this.createV13Screen('fishing');
     root.classList.add('fishing-shell');
     root.style.setProperty('--region-glow', region.color);
-    root.insertAdjacentHTML('beforeend', `
+    const surface = root.querySelector<HTMLDivElement>('.v13-design-surface')!;
+    surface.insertAdjacentHTML('beforeend', `
       <span id="fishingHint" class="sr-only">찌 던지기로 출항을 시작하세요</span>
       <div class="fishing-stage v13-fishing-stage" id="fishingStage">
         <div class="pixi-layer"></div>
@@ -766,7 +769,7 @@ class AquaFantasiaGame {
     const root = this.createV13Screen('inventory');
     this.addV13Hotspot(root, 'v13-inventory-bait', '미끼 사용하고 낚시로 이동', [70, 405, 220, 220], () => { void this.go('fishing'); });
     this.addV13Hotspot(root, 'v13-inventory-ticket', '상점에서 아이템 보충', [315, 405, 220, 220], () => { void this.go('shop'); });
-    this.addV13Hotspot(root, 'v13-inventory-use', '선택 아이템 사용', [710, 1450, 270, 90], () => {
+    this.addV13Hotspot(root, 'v13-inventory-use', '선택 아이템 사용', [690, 1435, 310, 125], () => {
       this.toast.show({ type: 'shop', title: '아이템 가방', message: `보유 미끼 ${this.save.gear.lureStock}개 · 낚시 화면에서 자동 사용됩니다.`, actionScreen: 'fishing' });
     });
     dom.app.appendChild(root);

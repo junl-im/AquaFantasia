@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v8.2.0-v13-tab-composition';
+const CACHE_NAME = 'aqua-fantasia-v8.3.0-ui-polish-audit';
 const PRECACHE = [
   "./",
   "./index.html",

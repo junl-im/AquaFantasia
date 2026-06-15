@@ -2628,3 +2628,111 @@ body[data-screen="fishing"] .combo-badge {
   body[data-screen="fishing"] .v13-reel-panel.reel-panel { padding: 9px 11px 11px !important; }
   body[data-screen="fishing"] .v13-reel-panel .hold-pad { min-height: 42px !important; font-size: 14px !important; }
 }
+
+/* v8.3.0 UI POLISH AUDIT FIX
+   Do not stretch the painted UI compositions directly to every device ratio.
+   Keep each reference artwork on its original design surface, then crop evenly like a real mobile game camera.
+   Hotspots and Pixi fishing overlays live on the same surface, so touch coordinates stay aligned with the art. */
+.start-art-screen,
+.game-screen.v13-screen {
+  --aqua-visible-width: min(100vw, 430px);
+}
+.start-design-surface,
+.v13-design-surface {
+  position: absolute !important;
+  top: 0 !important;
+  left: 50% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  transform: translateX(-50%) !important;
+  transform-origin: center top !important;
+  overflow: visible !important;
+  z-index: 0 !important;
+  contain: layout paint style !important;
+}
+.start-design-surface {
+  aspect-ratio: 2 / 3 !important;
+  min-width: 100% !important;
+}
+.v13-design-surface {
+  aspect-ratio: 9 / 16 !important;
+  min-width: 100% !important;
+}
+.start-design-surface .start-art-image,
+.v13-design-surface .v13-bg {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: fill !important;
+  object-position: center center !important;
+  max-width: none !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-drag: none !important;
+}
+.start-design-surface .start-hotspot,
+.start-design-surface .login-touch-shine,
+.v13-design-surface .v13-hot-layer,
+.v13-design-surface .fishing-stage,
+.v13-design-surface .stage-ui,
+.v13-design-surface .combo-badge,
+.v13-design-surface .reel-panel {
+  transform-origin: center center !important;
+}
+.start-design-surface .start-hotspot,
+.v13-design-surface .v13-hotspot {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+.start-design-surface .hit-keep.v810-keep-button {
+  min-width: 240px !important;
+  min-height: 46px !important;
+}
+/* Align transparent tab hitboxes to the same cropped 9:16 v13 surface shown behind them. */
+.bottom-nav.v13-bottom-nav-hotspots,
+html.portrait-only-game .bottom-nav.v13-bottom-nav-hotspots,
+.bottom-nav.v13-bottom-nav-hotspots.fixed-root-nav {
+  width: max(min(100vw, 430px), calc(var(--app-height, 100svh) * 0.5625)) !important;
+  max-width: none !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  height: clamp(84px, calc(var(--app-height, 100svh) * 0.124), 118px) !important;
+  padding-left: calc(max(0px, (calc(var(--app-height, 100svh) * 0.5625) - min(100vw, 430px)) / 2) + 8px) !important;
+  padding-right: calc(max(0px, (calc(var(--app-height, 100svh) * 0.5625) - min(100vw, 430px)) / 2) + 8px) !important;
+}
+body[data-screen="fishing"] .v13-design-surface .v13-fishing-stage.fishing-stage,
+html.portrait-only-game body[data-screen="fishing"] .v13-design-surface .v13-fishing-stage.fishing-stage {
+  left: 6.4815% !important;
+  top: 15.1042% !important;
+  width: 87.037% !important;
+  height: 29.6875% !important;
+}
+body[data-screen="fishing"] .v13-design-surface .v13-stage-ui.stage-ui {
+  inset: 0 !important;
+}
+body[data-screen="fishing"] .v13-design-surface .v13-reel-panel.reel-panel,
+html.portrait-only-game body[data-screen="fishing"] .v13-design-surface .v13-reel-panel.reel-panel {
+  left: 6.4815% !important;
+  top: 48.4375% !important;
+  width: 87.037% !important;
+}
+body[data-screen="fishing"] .v13-design-surface .combo-badge {
+  left: 6.8% !important;
+  top: 42.5% !important;
+}
+@media (max-width: 390px) {
+  .start-design-surface .hit-keep.v810-keep-button {
+    min-width: 228px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .start-design-surface .hit-keep.v810-keep-button .keep-text { font-size: 12px !important; }
+}
+/* v8.3.0 final nav alignment guard: keep the transparent tab strip on the same 9:16 surface, without extra internal offset. */
+.bottom-nav.v13-bottom-nav-hotspots,
+html.portrait-only-game .bottom-nav.v13-bottom-nav-hotspots,
+.bottom-nav.v13-bottom-nav-hotspots.fixed-root-nav {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
