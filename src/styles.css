@@ -5051,3 +5051,324 @@ html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel 
   .catch-result-card.v930-result { width: min(360px, 92vw) !important; min-height: 488px !important; padding-inline: 22px !important; }
   .catch-result-card.v930-result img { width: 170px !important; height: 134px !important; }
 }
+
+/* v9.4.0 UI scale and nav polish layer
+   Purpose: keep v9.3 cute action loop, but make bottom-menu selection fit inside each tab cell
+   and normalize card/button sizes across the mobile portrait UI. */
+:root {
+  --v940-nav-height: clamp(88px, 12.2vh, 100px);
+  --v940-nav-gap: 7px;
+  --v940-content-max: 500px;
+  --v940-card-radius: 30px;
+}
+
+.bottom-nav.v840-bottom-nav,
+html.portrait-only-game .bottom-nav.v840-bottom-nav,
+html.is-kakao-inapp .bottom-nav.v840-bottom-nav,
+html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
+.bottom-nav.v840-bottom-nav.fixed-root-nav {
+  height: var(--v940-nav-height) !important;
+  min-height: 0 !important;
+  width: min(510px, calc(100vw - 12px)) !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  bottom: calc(var(--v940-nav-gap) + env(safe-area-inset-bottom)) !important;
+  display: grid !important;
+  grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  gap: 2px !important;
+  padding: 11px 10px 13px !important;
+  border-radius: 30px !important;
+  background: url('/assets/v92/ui/bottom_nav.png') center/100% 100% no-repeat !important;
+  box-shadow: 0 -10px 22px rgba(0,10,36,.24) !important;
+  filter: saturate(1.03) contrast(1.02) !important;
+  overflow: hidden !important;
+  contain: layout paint !important;
+}
+.bottom-nav.v840-bottom-nav button {
+  position: relative !important;
+  display: grid !important;
+  grid-template-rows: 1fr auto !important;
+  place-items: center !important;
+  gap: 1px !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  padding: 7px 1px 6px !important;
+  border-radius: 20px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+.bottom-nav.v840-bottom-nav button::before {
+  content: '';
+  position: absolute;
+  inset: 6px 5px 7px;
+  border-radius: 18px;
+  opacity: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(70,225,255,.12));
+  pointer-events: none;
+  transition: opacity .16s ease, transform .16s ease;
+  z-index: 0;
+}
+.bottom-nav.v840-bottom-nav button.active {
+  background: transparent !important;
+  color: #fff8b8 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+.bottom-nav.v840-bottom-nav button.active::before {
+  opacity: 1;
+  outline: 2px solid rgba(255,239,144,.88);
+  outline-offset: -2px;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.30), inset 0 -3px 0 rgba(0,75,130,.22), 0 3px 8px rgba(0,25,64,.12);
+  transform: scale(.98);
+}
+.bottom-nav.v840-bottom-nav button:active { transform: translateY(1px) !important; }
+.bottom-nav.v840-bottom-nav button img {
+  position: relative;
+  z-index: 1;
+  width: clamp(28px, 7.1vw, 37px) !important;
+  height: clamp(28px, 7.1vw, 37px) !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 4px 5px rgba(0,14,42,.32)) saturate(1.18) contrast(1.10) brightness(1.03) !important;
+}
+.bottom-nav.v840-bottom-nav button.active img {
+  transform: translateY(-1px) scale(1.04) !important;
+  filter: drop-shadow(0 4px 5px rgba(0,15,42,.30)) saturate(1.22) contrast(1.12) brightness(1.08) !important;
+}
+.bottom-nav.v840-bottom-nav button span {
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+  font-size: clamp(8.5px, 2.18vw, 10.4px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.04em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  color: #effcff !important;
+  text-shadow: 0 2px 3px rgba(0,41,82,.62) !important;
+}
+.bottom-nav.v840-bottom-nav button.active span {
+  color: #fff4a2 !important;
+  text-shadow: 0 1px 0 rgba(111,61,0,.34), 0 0 8px rgba(255,248,165,.35) !important;
+}
+
+.game-screen.has-fixed-root-nav.scroll-screen,
+.runtime-menu-screen.v890-v3d-screen.scroll-screen {
+  padding-bottom: calc(var(--v940-nav-height) + 26px + env(safe-area-inset-bottom)) !important;
+}
+
+.runtime-menu-screen.v890-v3d-screen,
+.runtime-menu-screen.v890-v3d-screen.scroll-screen {
+  padding-inline: clamp(12px, 3.7vw, 18px) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-hud,
+.runtime-menu-screen.v890-v3d-screen .runtime-content {
+  width: min(100%, var(--v940-content-max)) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-hud {
+  min-height: clamp(96px, 13vh, 118px) !important;
+  padding: clamp(14px, 3.4vw, 18px) !important;
+  border-radius: 31px !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-title strong {
+  font-size: clamp(27px, 7.5vw, 39px) !important;
+  line-height: .98 !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-title em {
+  font-size: clamp(11px, 2.9vw, 13px) !important;
+  line-height: 1.25 !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-wallet span {
+  min-height: 39px !important;
+  padding: 6px 10px !important;
+  font-size: clamp(12px, 3.2vw, 15px) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-wallet img,
+.fishing-screen.v890-fishing-screen .hud-chip img {
+  width: clamp(24px, 6.4vw, 30px) !important;
+  height: clamp(24px, 6.4vw, 30px) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-content {
+  display: grid !important;
+  gap: clamp(12px, 3.2vw, 16px) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-hero-card,
+.runtime-menu-screen.v890-v3d-screen .runtime-panel,
+.runtime-menu-screen.v890-v3d-screen .runtime-card-list .gear-card,
+.runtime-menu-screen.v890-v3d-screen .runtime-card-list .shop-card,
+.runtime-menu-screen.v890-v3d-screen .runtime-card-list .mission-card,
+.runtime-menu-screen.v890-v3d-screen .ranking-live-card {
+  border-radius: var(--v940-card-radius) !important;
+  clip-path: inset(0 round var(--v940-card-radius)) !important;
+  padding: clamp(16px, 4.1vw, 22px) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-hero-card {
+  min-height: clamp(150px, 20vh, 190px) !important;
+  gap: 14px !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-panel { padding: clamp(17px, 4vw, 22px) !important; }
+.runtime-menu-screen.v890-v3d-screen .runtime-card-list {
+  display: grid !important;
+  gap: clamp(10px, 2.8vw, 14px) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-menu-card,
+.runtime-menu-screen.v890-v3d-screen .region-card {
+  min-height: clamp(108px, 16vh, 132px) !important;
+  padding: clamp(14px, 3.6vw, 18px) !important;
+  border-radius: 27px !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-item-card,
+.runtime-menu-screen.v890-v3d-screen .runtime-dex-card.dex-card {
+  min-height: clamp(132px, 18vh, 166px) !important;
+  padding: clamp(13px, 3.4vw, 18px) !important;
+  border-radius: 27px !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-card-list .gear-card,
+.runtime-menu-screen.v890-v3d-screen .runtime-card-list .shop-card,
+.runtime-menu-screen.v890-v3d-screen .runtime-card-list .mission-card {
+  min-height: clamp(126px, 17vh, 156px) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-menu-card img,
+.runtime-menu-screen.v890-v3d-screen .runtime-item-card img,
+.runtime-menu-screen.v890-v3d-screen .gear-card > img,
+.runtime-menu-screen.v890-v3d-screen .shop-card img,
+.runtime-menu-screen.v890-v3d-screen .runtime-hero-card > img {
+  width: clamp(66px, 17.2vw, 88px) !important;
+  height: clamp(66px, 17.2vw, 88px) !important;
+  object-fit: contain !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-dex-card.dex-card img {
+  width: clamp(82px, 22vw, 112px) !important;
+  height: clamp(66px, 17.4vw, 90px) !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-menu-card strong,
+.runtime-menu-screen.v890-v3d-screen .runtime-item-card strong,
+.runtime-menu-screen.v890-v3d-screen .runtime-panel-title strong,
+.runtime-menu-screen.v890-v3d-screen .runtime-hero-card h2,
+.runtime-menu-screen.v890-v3d-screen .gear-card strong,
+.runtime-menu-screen.v890-v3d-screen .shop-card strong,
+.runtime-menu-screen.v890-v3d-screen .mission-card strong {
+  font-size: clamp(18px, 4.9vw, 24px) !important;
+  line-height: 1.05 !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-menu-card span,
+.runtime-menu-screen.v890-v3d-screen .runtime-item-card span,
+.runtime-menu-screen.v890-v3d-screen .runtime-hero-card p,
+.runtime-menu-screen.v890-v3d-screen .gear-card span,
+.runtime-menu-screen.v890-v3d-screen .shop-card small,
+.runtime-menu-screen.v890-v3d-screen .mission-card span,
+.runtime-menu-screen.v890-v3d-screen .ranking-note {
+  font-size: clamp(12px, 3.2vw, 14px) !important;
+  line-height: 1.35 !important;
+}
+.runtime-menu-screen.v890-v3d-screen .runtime-btn,
+.runtime-menu-screen.v890-v3d-screen .image-btn,
+.runtime-menu-screen.v890-v3d-screen .mission-card .runtime-btn {
+  min-height: clamp(46px, 11.7vw, 56px) !important;
+  padding: 0 clamp(14px, 4vw, 20px) !important;
+  border-radius: 23px !important;
+  font-size: clamp(13px, 3.5vw, 16px) !important;
+}
+
+.fishing-screen.v890-fishing-screen .fishing-hud {
+  left: clamp(10px, 3vw, 16px) !important;
+  right: clamp(10px, 3vw, 16px) !important;
+  gap: 7px !important;
+}
+.fishing-screen.v890-fishing-screen .hud-chip {
+  min-height: clamp(48px, 7.4vh, 56px) !important;
+  padding: 9px 11px !important;
+  border-radius: 24px !important;
+}
+.fishing-screen.v890-fishing-screen .hud-chip strong { font-size: clamp(13px, 3.5vw, 16px) !important; }
+.fishing-screen.v890-fishing-screen .hud-chip span { font-size: clamp(10px, 2.8vw, 12px) !important; }
+.fishing-screen.v890-fishing-screen .recent-catch-strip,
+.fishing-screen.v930-action-screen .recent-catch-strip {
+  width: min(500px, calc(100vw - 16px)) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  bottom: calc(var(--v940-nav-height) + 8px + env(safe-area-inset-bottom)) !important;
+  min-height: clamp(84px, 12vh, 98px) !important;
+  padding: 13px clamp(15px, 4vw, 20px) !important;
+  border-radius: 30px !important;
+  clip-path: inset(0 round 30px) !important;
+  background-size: 100% 100% !important;
+}
+.fishing-screen.v890-fishing-screen .recent-card {
+  min-width: clamp(82px, 22vw, 106px) !important;
+  min-height: 65px !important;
+  padding: 7px 8px !important;
+  border-radius: 21px !important;
+}
+.fishing-screen.v890-fishing-screen .recent-card img {
+  height: clamp(40px, 10vw, 50px) !important;
+  max-width: clamp(50px, 14vw, 64px) !important;
+}
+.fishing-screen.v890-fishing-screen .recent-title { font-size: clamp(12px, 3.1vw, 14px) !important; }
+.fishing-screen.v890-fishing-screen .recent-empty span { font-size: clamp(11px, 2.9vw, 13px) !important; }
+.fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button {
+  width: min(352px, 84vw) !important;
+  min-height: clamp(68px, 10.8vh, 82px) !important;
+  bottom: calc(var(--v940-nav-height) + clamp(106px, 15vh, 128px) + env(safe-area-inset-bottom)) !important;
+  border-radius: 30px !important;
+}
+.fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button .cast-icon {
+  width: clamp(48px, 12vw, 58px) !important;
+  height: clamp(48px, 12vw, 58px) !important;
+}
+body[data-screen="fishing"] .v840-reel-panel.reel-panel,
+html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel {
+  width: min(382px, calc(100vw - 20px)) !important;
+  bottom: calc(var(--v940-nav-height) + 112px + env(safe-area-inset-bottom)) !important;
+  border-radius: 32px !important;
+  clip-path: inset(0 round 32px) !important;
+}
+.catch-result-card.v930-result {
+  width: min(372px, 90vw) !important;
+  min-height: min(504px, calc(100dvh - 42px - env(safe-area-inset-top) - env(safe-area-inset-bottom))) !important;
+  padding: clamp(22px, 5vw, 28px) clamp(22px, 5vw, 27px) 22px !important;
+  border-radius: 34px !important;
+}
+.catch-result-card.v930-result img {
+  width: clamp(160px, 43vw, 186px) !important;
+  height: clamp(124px, 32vw, 144px) !important;
+}
+.catch-result-card.v930-result h3 { font-size: clamp(28px, 7.4vw, 37px) !important; }
+.catch-result-card.v930-result button { min-height: clamp(52px, 12vw, 60px) !important; }
+.action-badge {
+  width: min(330px, 76vw) !important;
+  min-height: 78px !important;
+  padding: 15px 20px 15px 84px !important;
+}
+.action-badge::before { width: 56px !important; height: 56px !important; left: 18px !important; }
+.action-badge strong { font-size: clamp(25px, 6.6vw, 35px) !important; }
+.action-badge span { font-size: 13px !important; }
+
+@media (max-width: 390px) {
+  :root { --v940-nav-height: 86px; --v940-nav-gap: 6px; }
+  .bottom-nav.v840-bottom-nav,
+  html.portrait-only-game .bottom-nav.v840-bottom-nav,
+  html.is-kakao-inapp .bottom-nav.v840-bottom-nav,
+  html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
+  .bottom-nav.v840-bottom-nav.fixed-root-nav {
+    width: calc(100vw - 8px) !important;
+    padding: 10px 7px 11px !important;
+    gap: 1px !important;
+    border-radius: 27px !important;
+  }
+  .bottom-nav.v840-bottom-nav button { border-radius: 17px !important; padding-inline: 0 !important; }
+  .bottom-nav.v840-bottom-nav button::before { inset: 5px 3px 6px; border-radius: 15px; }
+  .bottom-nav.v840-bottom-nav button.active::before { outline-width: 1.5px; }
+  .bottom-nav.v840-bottom-nav button img { width: 29px !important; height: 29px !important; }
+  .bottom-nav.v840-bottom-nav button span { font-size: 8.2px !important; letter-spacing: -0.07em !important; }
+  .runtime-menu-screen.v890-v3d-screen .runtime-menu-card img,
+  .runtime-menu-screen.v890-v3d-screen .runtime-item-card img,
+  .runtime-menu-screen.v890-v3d-screen .gear-card > img,
+  .runtime-menu-screen.v890-v3d-screen .shop-card img { width: 66px !important; height: 66px !important; }
+  .fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button { width: min(330px, 86vw) !important; }
+}

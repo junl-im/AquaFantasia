@@ -19,8 +19,8 @@ if (banned.length) fail(`old patch documents must not be included: ${banned.join
 if (!files.includes('README.md')) fail('README.md missing');
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 const data = fs.readFileSync(path.join(root, 'src/data.ts'), 'utf8');
-if (pkg.version !== '9.3.0') fail('package version mismatch');
-if (!data.includes("APP_VERSION = '9.3.0'")) fail('APP_VERSION is not 9.3.0');
-if (!data.includes('aqua-fantasia-v9.3.0-cute-action-webgl-polish')) fail('CACHE_NAME mismatch');
-console.log('[validate-clean] Aqua Fantasia v9.3.0 clean single README package OK');
-console.log(JSON.stringify({ ok:true, version:'9.3.0', files: files.length }, null, 2));
+if (pkg.version !== '9.4.0') fail('package version mismatch');
+if (!data.includes("APP_VERSION = '9.4.0'")) fail('APP_VERSION is not 9.4.0');
+if (!data.includes('aqua-fantasia-v9.4.0-ui-scale-nav-polish')) fail('CACHE_NAME mismatch');
+console.log('[validate-clean] Aqua Fantasia v9.4.0 clean single README package OK');
+console.log(JSON.stringify({ ok:true, version:'9.4.0', files: files.length }, null, 2));
