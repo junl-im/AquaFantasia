@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v8.5.0-hd-image-fidelity';
+const CACHE_NAME = 'aqua-fantasia-v8.6.0-kakao-portrait-ui-cleanup';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -127,6 +127,13 @@ const PRECACHE = [
   "./assets/v85/buttons/btn_orange_normal_wide_blank.png",
   "./assets/v85/buttons/btn_orange_pressed_wide_blank.png",
   "./assets/v12/manifest.runtime.json",
+
+  "./assets/v86/ui/bottom_nav_clean.png",
+  "./assets/v86/ui/recent_panel_clean.png",
+  "./assets/v86/ui/reel_panel_clean.png",
+  "./assets/v86/ui/tab_blue.png",
+  "./assets/v86/ui/tab_gold.png",
+  "./assets/v86/ui/tab_cyan.png",
   "./assets/v12/fx/particle_sparkle_cluster_ref_a.png",
   "./assets/art/water_ripple_overlay.webp",
   "./assets/art/caustic_sparkle_overlay.webp"

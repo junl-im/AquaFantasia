@@ -1,31 +1,30 @@
-# AquaFantasia
+# AquaFantasia v8.6.0
 
-세로 전용 2.5D 모바일 웹 낚시 게임입니다.
+세로 전용 2.5D 모바일 낚시 웹게임 프로젝트입니다. 이번 버전부터 패치 설명, 적용 방법, 검증 결과는 이 `README.md` 하나에 통합합니다. `CLEAN_REPLACE_GUIDE_*`, `FINAL_CONSOLIDATED_*`, `PATCH_NOTES_*` 같은 누적 MD 파일은 더 만들지 않습니다.
 
-## 현재 버전
+## 이번 패치 핵심
 
-- v8.4.0 UI Polish Audit Fix
+- 카카오톡/카카오 브라우저에서 `requestFullscreen()` 호출을 완전히 중단했습니다.
+- `screen.orientation.lock()` 호출도 중단했습니다.
+- 전체화면 시스템 메시지가 뜨면서 화면이 돌아가는 문제를 막기 위해, 세로 고정은 CSS viewport cage 방식만 사용합니다.
+- 기존 세로 전용 정책은 유지합니다. 물리적으로 가로가 되더라도 게임 UI는 세로 셸 안에서만 렌더링됩니다.
+- 마을/메뉴 화면에서 v13 구성도에 이미 구워진 하단 메뉴와 실제 메뉴가 겹치던 문제를 가림 레이어로 정리했습니다.
+- 실제 하단 탭 네비게이션은 8탭 기준으로 다시 맞췄습니다.
+- 하단 메뉴 배경을 v86 전용 정리 프레임으로 교체했습니다.
+- 최근 포획 패널과 릴 패널의 모서리/테두리 넘침을 줄이도록 전용 정리 프레임을 적용했습니다.
+- 버튼형 UI 색감은 과한 보라/금색 느낌을 줄이고 물빛 2.5D 톤으로 맞췄습니다.
+- 문서 누적 문제를 막기 위해 루트 MD는 `README.md`만 유지합니다.
 
-## 현재 구조
+## 적용 방법
 
-- GitHub Desktop + GitHub Pages 배포
-- Vite + TypeScript
-- PixiJS 8 낚시 스테이지
-- Howler.js 사운드
-- Firebase 무료 Spark 플랜 연동 준비
-- PWA manifest / service worker
+기존 프로젝트 루트에 패치 ZIP 내용을 덮어씁니다. 이전에 생성된 아래 파일들은 한 번 정리해 주세요.
 
-## v8.4.0 핵심
+```bash
+rm -f CLEAN_REPLACE_GUIDE_v*.md FINAL_CONSOLIDATED_v*_통파일.md PATCH_NOTES_v*.md PROMPTS_DALLE_ASSETS_v*.md DELETE_OLD_FILES_v*.txt
+rm -rf reports
+```
 
-- v13 탭별 전체 UI 구성도를 무작정 화면에 늘리지 않고, 원본 1080x1920 디자인 비율을 유지하는 `v13-design-surface`로 재배치
-- 시작 화면도 원본 1024x1536 디자인 비율을 유지하는 `start-design-surface`로 재배치
-- 시작 화면 `이 기기에서 로그인 유지`는 삭제하지 않고 실제 버튼형 UI로 유지
-- 투명 hotspot / 하단 탭 / 낚시 PixiJS 스테이지가 같은 디자인 좌표계를 쓰도록 정리
-- 낚시 화면의 PixiJS stage / CAST 버튼 / 릴 패널 / 콤보 배지를 v13 구성도 좌표에 맞춰 정렬
-- 가방의 CTA hotspot 최소 터치 높이를 모바일 기준 44px 이상으로 확대
-- `check-v830-ui-polish.mjs` 검증 추가: 에셋 크기, 버전, 캐시명, 디자인 표면, 터치 타겟 검사
-
-## 검증
+그 뒤 검증합니다.
 
 ```bash
 npm install
@@ -34,20 +33,27 @@ npm run typecheck
 npm run build
 ```
 
+## 주의
 
-## v8.4.0 Fullscreen Fishing UI Polish
-- 낚시터는 v13 구운 구성도에서 분리하고, 전체 화면 PixiJS 배경/게임 영역으로 재구성했습니다.
-- 낚싯대/미끼/오늘 목표 카드와 낚시 화면 내 불필요한 핫스팟을 제거했습니다.
-- 최근 포획 패널을 하단 메뉴 바로 위로 내렸습니다.
-- 하단 탭은 안 어울리던 투명 핫스팟 방식 대신 실제 아이콘 버튼 네비로 교체했습니다.
-- 랭킹은 가짜 유저 데이터를 제거하고 현재 실제 저장 기록의 내 계정만 표시합니다.
-- 카카오/인앱 브라우저에서 메뉴/액션 시 몰입형 세로 화면을 재시도합니다.
+GitHub Desktop에서 단순 덮어쓰기만 하면 기존 루트에 남아 있던 예전 MD 파일은 자동 삭제되지 않을 수 있습니다. 이번 ZIP 자체에는 누적 MD를 넣지 않았지만, 로컬 저장소에 이미 남아 있는 파일은 위 삭제 명령으로 한 번 정리해야 완전히 깨끗해집니다.
 
+## 현재 구조
 
-## v8.5.0 HD Image Fidelity
-- `public/assets/v85` 고화질 런타임 에셋 레이어 추가.
-- 과압축 v13 구성도 이미지를 원본 기반 고품질 WebP로 재생성.
-- 낚시 배경을 1440×2560 세로 텍스처로 교체.
-- 물고기/네비 아이콘/버튼/패널을 v85 경로로 연결.
-- PixiJS 렌더러 DPR 상한과 텍스처 선명도 힌트 개선.
-- 검증: `npm run validate`, `npm run typecheck`, `npm run build` 통과.
+- Vite / TypeScript
+- PixiJS 8 낚시 런타임
+- Howler.js 오디오
+- Firebase Spark 기준 저장/익명 연동 준비 구조
+- PWA manifest + service worker
+- GitHub Pages / GitHub Actions 배포 구조
+
+## 검증 기준
+
+`npm run validate`는 다음을 확인합니다.
+
+- v8.6.0 버전/캐시명 일치
+- fullscreen API 미사용
+- orientation lock API 미사용
+- 카카오/인앱 브라우저 CSS 세로 고정 정책 유지
+- v86 하단 네비/최근 포획/릴 패널 정리 에셋 존재
+- 누적 패치 MD 파일 미포함
+

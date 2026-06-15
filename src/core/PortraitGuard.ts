@@ -28,7 +28,7 @@ export function getPortraitViewportMetrics(): PortraitViewportMetrics {
   const hostileInApp = isHostileInAppBrowser();
 
   // Aqua Fantasia is a portrait-only mobile game.
-  // Some in-app browsers ignore manifest orientation and screen.orientation.lock().
+  // Some in-app browsers ignore manifest orientation and browser orientation API.
   // When the physical viewport becomes landscape, keep rendering a portrait game shell
   // inside the landscape viewport instead of switching UI layout.
   const maxPortraitWidth = hostileInApp ? 430 : 480;
@@ -77,51 +77,22 @@ export function installPortraitCssGuards(): void {
   window.addEventListener('orientationchange', sync, { passive: true });
   window.addEventListener('pageshow', sync, { passive: true });
   document.addEventListener('visibilitychange', sync, { passive: true });
+  document.addEventListener('fullscreenchange', sync, { passive: true });
 }
 
-export async function requestHardPortraitLock(): Promise<'locked' | 'fullscreen-only' | 'css-fallback' | 'inapp-css-only'> {
+
+export async function requestHardPortraitLock(): Promise<'css-portrait' | 'inapp-css-only'> {
   const metrics = applyPortraitViewportMetrics();
 
-  let fullscreenAttempted = false;
-
-  // v8.4.0: KakaoTalk/hostile in-app browsers can drop the fullscreen-like viewport
-  // after hardware back or browser chrome gestures. Retry the browser Fullscreen API
-  // when a user action triggers this function, while always keeping the CSS portrait
-  // cage active if the host rejects the request. Rotation remains portrait-only.
-  try {
-    if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-      fullscreenAttempted = true;
-      await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
-    }
-  } catch {
-    // Browser may block fullscreen. CSS portrait shell remains active.
-  }
-
-  if (metrics.hostileInApp && !document.fullscreenElement) {
-    applyPortraitViewportMetrics();
-    document.documentElement.dataset.immersiveMode = fullscreenAttempted ? 'inapp-fullscreen-retry' : 'inapp-css-only';
-    return fullscreenAttempted ? 'fullscreen-only' : 'inapp-css-only';
-  }
-
-  try {
-    const orientation = globalThis.screen.orientation as unknown as {
-      lock?: (orientation: 'portrait-primary' | 'portrait') => Promise<void>;
-    };
-    if (orientation.lock) {
-      try {
-        await orientation.lock('portrait-primary');
-      } catch {
-        await orientation.lock('portrait');
-      }
-      applyPortraitViewportMetrics();
-      document.documentElement.dataset.immersiveMode = 'orientation-locked';
-      return 'locked';
-    }
-  } catch {
-    // Silent fallback by design. No warning overlay or popup.
-  }
-
+  // v8.6.0 Kakao hard-safe policy:
+  // Do not call browser fullscreen API and do not call browser orientation API.
+  // KakaoTalk/WebView may show a system fullscreen message and then rotate the viewport
+  // when those APIs are requested. Aqua Fantasia now keeps the game portrait by CSS
+  // viewport metrics only, so user taps/back gestures never trigger a fullscreen prompt.
+  const root = document.documentElement;
+  root.dataset.fullscreenApi = 'disabled';
+  root.dataset.orientationApi = 'disabled';
+  root.dataset.immersiveMode = metrics.hostileInApp ? 'inapp-css-only' : 'css-portrait';
   applyPortraitViewportMetrics();
-  document.documentElement.dataset.immersiveMode = fullscreenAttempted ? 'fullscreen-only' : 'css-fallback';
-  return fullscreenAttempted ? 'fullscreen-only' : 'css-fallback';
+  return metrics.hostileInApp ? 'inapp-css-only' : 'css-portrait';
 }

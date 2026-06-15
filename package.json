@@ -1,15 +1,15 @@
 {
   "name": "aqua-fantasia",
   "private": true,
-  "version": "8.5.0",
+  "version": "8.6.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build --base=./",
     "preview": "vite preview --host 0.0.0.0",
-    "validate": "node tools/validate-clean.mjs && node tools/check-v850-image-fidelity.mjs",
-    "runtime:check": "node tools/check-v850-image-fidelity.mjs --runtime",
-    "audit": "node tools/check-v850-image-fidelity.mjs --audit",
+    "validate": "node tools/validate-clean.mjs && node tools/check-v860-kakao-portrait-ui-cleanup.mjs",
+    "runtime:check": "node tools/check-v860-kakao-portrait-ui-cleanup.mjs --runtime",
+    "audit": "node tools/check-v860-kakao-portrait-ui-cleanup.mjs --audit",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

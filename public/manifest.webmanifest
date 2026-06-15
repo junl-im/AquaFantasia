@@ -4,10 +4,11 @@
   "description": "세로 전용 2.5D 모바일 캐주얼 낚시 게임",
   "start_url": "./",
   "scope": "./",
-  "display": "fullscreen",
+  "display": "standalone",
   "display_override": [
-    "fullscreen",
-    "standalone"
+    "standalone",
+    "minimal-ui",
+    "browser"
   ],
   "orientation": "portrait-primary",
   "background_color": "#061827",
