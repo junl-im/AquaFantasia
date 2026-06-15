@@ -4,7 +4,7 @@
 
 ## 현재 버전
 
-- v8.3.0 UI Polish Audit Fix
+- v8.4.0 UI Polish Audit Fix
 
 ## 현재 구조
 
@@ -15,7 +15,7 @@
 - Firebase 무료 Spark 플랜 연동 준비
 - PWA manifest / service worker
 
-## v8.3.0 핵심
+## v8.4.0 핵심
 
 - v13 탭별 전체 UI 구성도를 무작정 화면에 늘리지 않고, 원본 1080x1920 디자인 비율을 유지하는 `v13-design-surface`로 재배치
 - 시작 화면도 원본 1024x1536 디자인 비율을 유지하는 `start-design-surface`로 재배치
@@ -33,3 +33,12 @@ npm run validate
 npm run typecheck
 npm run build
 ```
+
+
+## v8.4.0 Fullscreen Fishing UI Polish
+- 낚시터는 v13 구운 구성도에서 분리하고, 전체 화면 PixiJS 배경/게임 영역으로 재구성했습니다.
+- 낚싯대/미끼/오늘 목표 카드와 낚시 화면 내 불필요한 핫스팟을 제거했습니다.
+- 최근 포획 패널을 하단 메뉴 바로 위로 내렸습니다.
+- 하단 탭은 안 어울리던 투명 핫스팟 방식 대신 실제 아이콘 버튼 네비로 교체했습니다.
+- 랭킹은 가짜 유저 데이터를 제거하고 현재 실제 저장 기록의 내 계정만 표시합니다.
+- 카카오/인앱 브라우저에서 메뉴/액션 시 몰입형 세로 화면을 재시도합니다.

@@ -2736,3 +2736,369 @@ html.portrait-only-game .bottom-nav.v13-bottom-nav-hotspots,
   padding-left: 8px !important;
   padding-right: 8px !important;
 }
+
+/* v8.4.0 FULLSCREEN FISHING + UI SCALE POLISH
+   Fishing is no longer painted as a small v13 composition. It is a real full-screen Pixi playfield.
+   Menu screens keep the v13 reference art but are slightly enlarged, with dynamic nav replacing the baked tab strip. */
+:root {
+  --v840-nav-height: clamp(88px, 10.8svh, 104px);
+  --v840-nav-gap: 8px;
+}
+
+/* Slightly enlarge reference menu screens so cards/buttons do not look shrunken. */
+.game-screen.v840-menu-screen:not(.fishing-screen) .v13-design-surface {
+  height: 106.5% !important;
+  top: -2.8% !important;
+  filter: saturate(1.06) contrast(1.035) !important;
+}
+.game-screen.v840-menu-screen .v13-bg {
+  image-rendering: auto !important;
+  backface-visibility: hidden !important;
+}
+.game-screen.v840-menu-screen .v13-top-action-cleaner {
+  position: absolute !important;
+  left: 74.5% !important;
+  top: 6.1% !important;
+  width: 21.8% !important;
+  height: 7.5% !important;
+  z-index: 3 !important;
+  border-radius: 28px !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(circle at 78% 18%, rgba(255,255,255,.24), transparent 44%),
+    linear-gradient(135deg, rgba(69,184,229,.94), rgba(33,148,207,.90)) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.16), 0 4px 18px rgba(0,80,140,.14) !important;
+  opacity: .98 !important;
+}
+
+/* Dynamic nav: remove the mismatched painted-looking strip and use crisp 2.5D icon tabs. */
+.bottom-nav.v840-bottom-nav,
+html.portrait-only-game .bottom-nav.v840-bottom-nav,
+.bottom-nav.v840-bottom-nav.fixed-root-nav {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: calc(var(--v840-nav-gap) + env(safe-area-inset-bottom)) !important;
+  transform: translateX(-50%) !important;
+  z-index: 100 !important;
+  width: min(424px, calc(100vw - 12px)) !important;
+  max-width: 424px !important;
+  height: var(--v840-nav-height) !important;
+  min-height: 86px !important;
+  display: grid !important;
+  grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  gap: 3px !important;
+  padding: 8px 7px 9px !important;
+  margin: 0 !important;
+  border-radius: 25px !important;
+  border: 1px solid rgba(167, 247, 255, .42) !important;
+  background: linear-gradient(180deg, rgba(32, 196, 239, .90), rgba(9, 101, 170, .92)) !important;
+  box-shadow:
+    inset 0 3px 0 rgba(255,255,255,.24),
+    inset 0 -10px 16px rgba(0,39,88,.34),
+    0 10px 24px rgba(0,22,60,.36) !important;
+  backdrop-filter: none !important;
+  pointer-events: auto !important;
+}
+.bottom-nav.v840-bottom-nav::before,
+.bottom-nav.v840-bottom-nav::after { display: none !important; }
+.bottom-nav.v840-bottom-nav button {
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  align-content: center !important;
+  gap: 1px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 5px 1px 4px !important;
+  border: 1px solid rgba(226,255,255,.26) !important;
+  border-radius: 18px !important;
+  color: rgba(245, 253, 255, .88) !important;
+  background: linear-gradient(180deg, rgba(91,216,255,.42), rgba(13,116,198,.34)) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.18), inset 0 -6px 9px rgba(0,55,112,.22) !important;
+  filter: none !important;
+  text-shadow: 0 2px 0 rgba(0, 45, 90, .58) !important;
+  transform: none !important;
+  overflow: hidden !important;
+}
+.bottom-nav.v840-bottom-nav button.active {
+  color: #fff !important;
+  background: linear-gradient(180deg, #ffe478, #f4a333 62%, #db7621) !important;
+  border-color: rgba(255, 244, 166, .88) !important;
+  box-shadow: inset 0 3px 0 rgba(255,255,255,.38), inset 0 -7px 0 rgba(153,79,20,.25), 0 0 0 2px rgba(255,238,119,.28) !important;
+}
+.bottom-nav.v840-bottom-nav button:active { transform: translate3d(0, 2px, 0) scale(.98) !important; }
+.bottom-nav.v840-bottom-nav button img {
+  display: block !important;
+  width: clamp(25px, 6.6vw, 32px) !important;
+  height: clamp(25px, 6.6vw, 32px) !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 4px 4px rgba(0,42,82,.30)) !important;
+}
+.bottom-nav.v840-bottom-nav button span {
+  display: block !important;
+  font-size: clamp(9px, 2.45vw, 11px) !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+  letter-spacing: -.04em !important;
+  white-space: nowrap !important;
+}
+
+/* Fullscreen fishing playfield */
+body[data-screen="fishing"] #app { background: #008fcf !important; }
+.game-screen.v840-fishing-screen,
+html.portrait-only-game .game-screen.v840-fishing-screen {
+  position: relative !important;
+  width: 100% !important;
+  height: var(--app-height, 100svh) !important;
+  min-height: var(--app-height, 100svh) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #049bd5 !important;
+  isolation: isolate !important;
+  touch-action: none !important;
+}
+body[data-screen="fishing"] .v840-fishing-stage.fishing-stage,
+html.portrait-only-game body[data-screen="fishing"] .v840-fishing-stage.fishing-stage {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  z-index: 0 !important;
+  background: #078fd0 !important;
+  box-shadow: none !important;
+}
+body[data-screen="fishing"] .v840-fishing-stage .pixi-layer,
+body[data-screen="fishing"] .v840-fishing-stage canvas,
+body[data-screen="fishing"] .v840-fishing-stage .fallback-scene {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0 !important;
+}
+body[data-screen="fishing"] .v840-fishing-stage::before,
+body[data-screen="fishing"] .v840-fishing-stage::after { display: none !important; }
+body[data-screen="fishing"] .v840-fishing-stage .water-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+  opacity: .22 !important;
+  background-image: url('/assets/art/water_ripple_overlay.webp') !important;
+  background-size: 920px 300px !important;
+  mix-blend-mode: screen !important;
+  animation: waterDrift var(--water-speed, 22s) linear infinite !important;
+}
+body[data-screen="fishing"] .v840-fishing-stage .caustic-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 3 !important;
+  pointer-events: none !important;
+  opacity: .18 !important;
+  background-image: radial-gradient(circle at 20% 78%, rgba(255,255,255,.32), transparent 18%), url('/assets/art/caustic_sparkle_overlay.webp') !important;
+  background-size: 100% 100%, 720px 360px !important;
+  mix-blend-mode: screen !important;
+}
+.v840-fishing-hud {
+  position: absolute !important;
+  z-index: 30 !important;
+  top: calc(10px + env(safe-area-inset-top)) !important;
+  left: 10px !important;
+  right: 10px !important;
+  display: grid !important;
+  grid-template-columns: 1fr auto auto !important;
+  align-items: center !important;
+  gap: 7px !important;
+  pointer-events: none !important;
+}
+.v840-fishing-hud .hud-chip {
+  min-height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  padding: 7px 10px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, rgba(239,253,255,.92), rgba(149,235,255,.80)) !important;
+  color: #063f66 !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.72), 0 8px 20px rgba(0,48,92,.22) !important;
+  font-weight: 1000 !important;
+}
+.v840-fishing-hud .hud-chip.region {
+  justify-content: flex-start !important;
+  padding-left: 14px !important;
+  border-radius: 22px !important;
+}
+.v840-fishing-hud .hud-chip strong { display: block !important; font-size: clamp(13px, 3.8vw, 17px) !important; line-height: 1.05 !important; }
+.v840-fishing-hud .hud-chip span { display: block !important; color: rgba(5,62,101,.74) !important; font-size: 10px !important; font-weight: 900 !important; }
+.v840-fishing-hud .hud-chip img { width: 30px !important; height: 30px !important; object-fit: contain !important; }
+
+body[data-screen="fishing"] .v840-stage-ui.stage-ui {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 42 !important;
+  pointer-events: none !important;
+}
+body[data-screen="fishing"] .v840-stage-ui .cast-button {
+  position: absolute !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: calc(var(--v840-nav-height) + 112px + env(safe-area-inset-bottom)) !important;
+  width: min(320px, 78vw) !important;
+  height: 76px !important;
+  min-height: 76px !important;
+  transform: translateX(-50%) !important;
+  pointer-events: auto !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: url('/assets/v12/buttons/btn_orange_normal_wide_blank.webp') center/100% 100% no-repeat !important;
+  box-shadow: 0 12px 22px rgba(91,47,0,.32) !important;
+  color: #6c3500 !important;
+  text-shadow: 0 2px 0 rgba(255,255,255,.66) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  font-weight: 1000 !important;
+  font-size: clamp(21px, 5.5vw, 27px) !important;
+  animation: pulseCast 2.2s ease-in-out infinite !important;
+  opacity: 1 !important;
+}
+body[data-screen="fishing"] .v840-stage-ui .cast-button .cast-icon {
+  display: block !important;
+  opacity: 1 !important;
+  width: 34px !important;
+  height: 34px !important;
+  background: url('/assets/v12/icons/bobber.png') center/contain no-repeat !important;
+}
+body[data-screen="fishing"] .v840-stage-ui .cast-button strong { display: block !important; opacity: 1 !important; }
+body[data-screen="fishing"] .v840-stage-ui .cast-button::after { display: none !important; }
+body[data-screen="fishing"] .v840-stage-ui .cast-button:active { background-image: url('/assets/v12/buttons/btn_orange_pressed_wide_blank.webp') !important; }
+body[data-screen="fishing"] .v840-stage-ui .cast-button.pop-out { animation: squashOut .32s ease forwards !important; }
+body[data-screen="fishing"] .v840-stage-ui .cast-button.hidden { display: none !important; }
+
+.recent-catch-strip {
+  position: absolute !important;
+  z-index: 38 !important;
+  left: 10px !important;
+  right: 10px !important;
+  bottom: calc(var(--v840-nav-height) + 14px + env(safe-area-inset-bottom)) !important;
+  min-height: 82px !important;
+  padding: 10px 12px !important;
+  border-radius: 24px !important;
+  background: url('/assets/v12/ui/panel_bottom.webp') center/100% 100% no-repeat, linear-gradient(180deg, rgba(174,242,255,.92), rgba(68,183,229,.82)) !important;
+  box-shadow: 0 12px 25px rgba(0,37,83,.32) !important;
+  color: #073954 !important;
+  pointer-events: auto !important;
+}
+.recent-empty { display: grid !important; gap: 3px !important; align-content: center !important; height: 62px !important; }
+.recent-empty strong,
+.recent-title { font-weight: 1000 !important; font-size: 15px !important; color: #064060 !important; text-shadow: 0 1px 0 rgba(255,255,255,.65) !important; }
+.recent-empty span { font-size: 12px !important; font-weight: 850 !important; color: rgba(5,55,88,.74) !important; }
+.recent-cards { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 6px !important; margin-top: 4px !important; }
+.recent-card {
+  display: grid !important;
+  grid-template-columns: 38px 1fr auto !important;
+  align-items: center !important;
+  gap: 4px !important;
+  min-height: 43px !important;
+  border-radius: 16px !important;
+  padding: 3px 6px 3px 3px !important;
+  background: rgba(255,255,255,.34) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55) !important;
+  overflow: hidden !important;
+}
+.recent-card img { width: 38px !important; height: 38px !important; object-fit: contain !important; filter: drop-shadow(0 5px 6px rgba(0,40,80,.24)) !important; }
+.recent-card span { font-size: 10.5px !important; line-height: 1.05 !important; font-weight: 1000 !important; color: #063b59 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+.recent-card em { font-style: normal !important; font-size: 10px !important; font-weight: 1000 !important; color: #7b3c00 !important; }
+
+body[data-screen="fishing"] .v840-reel-panel.reel-panel,
+html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel {
+  position: absolute !important;
+  left: 10px !important;
+  right: 10px !important;
+  top: auto !important;
+  bottom: calc(var(--v840-nav-height) + 108px + env(safe-area-inset-bottom)) !important;
+  width: auto !important;
+  min-height: 168px !important;
+  z-index: 56 !important;
+  border: 0 !important;
+  border-radius: 25px !important;
+  padding: 14px 16px 15px !important;
+  background: url('/assets/v12/ui/panel_blank.webp') center/100% 100% no-repeat, linear-gradient(180deg,#21c7ed,#075784) !important;
+  color: #ffffff !important;
+  box-shadow: 0 18px 34px rgba(0,27,62,.38) !important;
+}
+body[data-screen="fishing"] .v840-reel-panel.reel-panel > img { width: min(330px, 82%) !important; margin: 0 auto -7px !important; }
+body[data-screen="fishing"] .v840-reel-panel .hold-pad { min-height: 54px !important; border-radius: 24px !important; margin-top: 8px !important; font-size: 16px !important; }
+body[data-screen="fishing"] .v840-reel-panel p { font-size: 12px !important; margin-top: 7px !important; color: #ebfdff !important; }
+body[data-screen="fishing"] .combo-badge {
+  position: absolute !important;
+  left: 12px !important;
+  top: auto !important;
+  bottom: calc(var(--v840-nav-height) + 104px + env(safe-area-inset-bottom)) !important;
+  z-index: 44 !important;
+}
+
+/* Ranking: no fake users, only real local/server-linked tester data. */
+.v840-ranking-screen {
+  padding: calc(18px + env(safe-area-inset-top)) 12px calc(var(--v840-nav-height) + 26px + env(safe-area-inset-bottom)) !important;
+  overflow: hidden auto !important;
+}
+.v840-page-panel {
+  position: relative !important;
+  z-index: 2 !important;
+  width: min(100%, 420px) !important;
+  margin: 0 auto !important;
+  border-radius: 32px !important;
+  padding: 18px !important;
+  background: url('/assets/v12/ui/frame_mission_panel.webp') center/100% 100% no-repeat, linear-gradient(180deg, rgba(113,225,255,.92), rgba(15,112,183,.88)) !important;
+  color: #073a5d !important;
+  box-shadow: 0 18px 38px rgba(0,26,70,.32) !important;
+}
+.v840-panel-head span { display:block !important; font-size: 11px !important; font-weight: 1000 !important; letter-spacing: .08em !important; color: rgba(5,60,96,.78) !important; }
+.v840-panel-head h2 { margin: 4px 0 4px !important; font-size: 38px !important; line-height: .95 !important; color: #ffffff !important; text-shadow: 0 3px 0 #136eaa, 0 8px 18px rgba(0,40,80,.28) !important; }
+.v840-panel-head p { margin: 0 0 14px !important; font-size: 13px !important; line-height: 1.35 !important; font-weight: 850 !important; color: rgba(5,51,82,.78) !important; }
+.ranking-live-card {
+  display: grid !important;
+  grid-template-columns: 60px 1fr auto !important;
+  gap: 10px !important;
+  align-items: center !important;
+  min-height: 88px !important;
+  border-radius: 25px !important;
+  padding: 10px !important;
+  background: rgba(255,255,255,.34) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.56), 0 10px 20px rgba(0,47,95,.18) !important;
+}
+.rank-medal { display:grid !important; place-items:center !important; width:58px !important; height:58px !important; border-radius:50% !important; background:linear-gradient(180deg,#ffe77a,#ee992d) !important; color:#764000 !important; font-weight:1000 !important; box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 8px 14px rgba(114,67,0,.25) !important; }
+.rank-user strong,
+.rank-score strong { display:block !important; font-size:18px !important; font-weight:1000 !important; color:#063b5c !important; }
+.rank-user span,
+.rank-score span { display:block !important; font-size:11px !important; font-weight:900 !important; color:rgba(4,54,88,.70) !important; }
+.ranking-stats-grid { display:grid !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:9px !important; margin:13px 0 !important; }
+.ranking-stats-grid div { min-height:70px !important; border-radius:20px !important; padding:10px !important; background:rgba(255,255,255,.27) !important; display:grid !important; place-items:center !important; }
+.ranking-stats-grid strong { font-size:23px !important; font-weight:1000 !important; color:#053858 !important; }
+.ranking-stats-grid span { font-size:11px !important; font-weight:900 !important; color:rgba(5,55,88,.75) !important; }
+.ranking-cta { width:100% !important; margin-top:4px !important; background-image:url('/assets/v12/buttons/btn_orange_normal_wide_blank.webp') !important; background-size:100% 100% !important; }
+.ranking-note { margin:12px 4px 0 !important; font-size:11px !important; line-height:1.35 !important; color:rgba(5,52,82,.72) !important; font-weight:850 !important; }
+
+@media (max-width: 390px) {
+  :root { --v840-nav-height: 88px; }
+  .bottom-nav.v840-bottom-nav { width: calc(100vw - 8px) !important; padding: 7px 5px 8px !important; gap: 2px !important; }
+  .bottom-nav.v840-bottom-nav button img { width: 25px !important; height: 25px !important; }
+  .bottom-nav.v840-bottom-nav button span { font-size: 9px !important; }
+  .v840-fishing-hud { left: 8px !important; right: 8px !important; gap: 5px !important; }
+  .v840-fishing-hud .hud-chip { min-height: 43px !important; padding: 6px 8px !important; }
+  .v840-fishing-hud .hud-chip img { width: 26px !important; height: 26px !important; }
+  .recent-catch-strip { left: 8px !important; right: 8px !important; min-height: 76px !important; padding: 9px 10px !important; }
+  .recent-card { grid-template-columns: 32px 1fr auto !important; }
+  .recent-card img { width: 32px !important; height: 32px !important; }
+  body[data-screen="fishing"] .v840-stage-ui .cast-button { width: min(300px, 78vw) !important; height: 70px !important; min-height: 70px !important; bottom: calc(var(--v840-nav-height) + 104px + env(safe-area-inset-bottom)) !important; }
+}

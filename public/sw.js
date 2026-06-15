@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v8.3.0-ui-polish-audit';
+const CACHE_NAME = 'aqua-fantasia-v8.4.0-fishing-fullscreen-ui-polish';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -14,6 +14,13 @@ const PRECACHE = [
   "./assets/v13/compositions/mission.webp",
   "./assets/v13/compositions/ranking.webp",
   "./assets/v12/manifest.runtime.json",
+  "./assets/v84/bg/ocean_full.webp",
+  "./assets/v84/bg/lake_full.webp",
+  "./assets/v84/bg/river_full.webp",
+  "./assets/v84/bg/stream_full.webp",
+  "./assets/v84/bg/deepsea_full.webp",
+  "./assets/v84/bg/pier_full.webp",
+  "./assets/v84/characters/chibi_fisher_01_hd.png",
   "./assets/v12/bg/ocean_portrait.webp",
   "./assets/v12/bg/lake_portrait.webp",
   "./assets/v12/bg/river_portrait.webp",

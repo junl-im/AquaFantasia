@@ -9,7 +9,7 @@ import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPort
 
 const ASSET = {
   loginBg: './assets/v12/screens/start_screen_clean_v810.webp',
-  player: './assets/v12/characters/chibi_fisher_01.png',
+  player: './assets/v84/characters/chibi_fisher_01_hd.png',
   float: './assets/v12/icons/bobber.png',
   fish: './assets/v12/fish/fish_01.png',
   gauge: './assets/v12/icons/gauge_level.png',
@@ -75,6 +75,7 @@ class AquaFantasiaGame {
   private lastTick = performance.now();
   private compact = false;
   private activeFish: FishInfo = fishDex[0];
+  private immersiveRetryAt = 0;
   private readonly lockedOrientation: 'portrait-primary' = 'portrait-primary';
 
   async boot(): Promise<void> {
@@ -88,6 +89,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
+    this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
     this.installBackNavigationGuard();
     initAudio();
@@ -111,6 +113,7 @@ class AquaFantasiaGame {
   private async go(screen: Screen): Promise<void> {
     playSound('tap');
     if (screen !== 'login') await this.enterImmersiveMode();
+    this.reassertImmersiveMode();
     this.screen = screen;
     this.save.screen = screen;
     saveGame(this.save);
@@ -173,9 +176,9 @@ class AquaFantasiaGame {
   private createV13Screen(active: Exclude<Screen, 'login'>): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen v13-screen v820-screen ${active}-screen locked-screen`;
+    root.className = `game-screen v13-screen v820-screen v840-menu-screen ${active}-screen locked-screen`;
     root.setAttribute('data-v13-tab', active);
-    root.innerHTML = `<div class="v13-design-surface" data-design="1080x1920"><img class="v13-bg" src="${V13_BG[active]}" alt="${active} 탭 UI 구성" loading="eager" /><div class="v13-hot-layer" aria-hidden="false"></div></div>`;
+    root.innerHTML = `<div class="v13-design-surface" data-design="1080x1920"><img class="v13-bg" src="${V13_BG[active]}" alt="${active} 탭 UI 구성" loading="eager" /><div class="v13-top-action-cleaner" aria-hidden="true"></div><div class="v13-hot-layer" aria-hidden="false"></div></div>`;
     return root;
   }
 
@@ -238,29 +241,35 @@ class AquaFantasiaGame {
 
   private async renderFishing(): Promise<void> {
     const region = this.getRegion();
-    const root = this.createV13Screen('fishing');
-    root.classList.add('fishing-shell');
+    this.clear();
+    const root = document.createElement('main');
+    root.className = 'game-screen fishing-screen v840-fishing-screen locked-screen';
     root.style.setProperty('--region-glow', region.color);
-    const surface = root.querySelector<HTMLDivElement>('.v13-design-surface')!;
-    surface.insertAdjacentHTML('beforeend', `
-      <span id="fishingHint" class="sr-only">찌 던지기로 출항을 시작하세요</span>
-      <div class="fishing-stage v13-fishing-stage" id="fishingStage">
+    root.innerHTML = `
+      <span id="fishingHint" class="sr-only">낚시 시작 버튼으로 캐스팅하세요.</span>
+      <div class="fishing-stage v840-fishing-stage" id="fishingStage">
         <div class="pixi-layer"></div>
         <div class="water-overlay"></div>
         <div class="caustic-overlay"></div>
       </div>
-      <div class="stage-ui v13-stage-ui"></div>
+      <div class="fishing-hud v840-fishing-hud" aria-label="플레이어 정보">
+        <div class="hud-chip region"><strong>${region.name}</strong><span>${region.tide}</span></div>
+        <div class="hud-chip"><img src="./assets/v12/icons/coin.png" alt="" /><strong>${this.save.coins.toLocaleString('ko-KR')}</strong></div>
+        <div class="hud-chip"><img src="./assets/v12/icons/bait_shrimp.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
+      </div>
+      <div class="stage-ui v840-stage-ui"></div>
       <div class="combo-badge ${this.save.currentStreak > 1 ? '' : 'hidden'}" id="comboBadge">연속 성공 x${Math.max(2, this.save.currentStreak)}</div>
-      <div class="reel-panel glass-card hidden v13-reel-panel" id="reelPanel">
+      <section class="recent-catch-strip" aria-label="최근 포획">
+        ${this.recentCatchMarkup()}
+      </section>
+      <div class="reel-panel glass-card hidden v840-reel-panel" id="reelPanel">
         <img src="${ASSET.gauge}" alt="장력 게이지" />
         <div class="tension-track"><span class="safe-zone"></span><span class="tension-fill"></span></div>
         <div class="safe-progress"><span></span></div>
         <div class="surge-meter"><span></span></div>
         <button class="hold-pad">꾹 눌러 릴 감기</button>
         <p>녹색 안전지대를 3초 유지하세요.</p>
-      </div>`);
-    this.addV13Hotspot(root, 'v13-fishing-gear-card', '장비 화면으로 이동', [70, 930, 300, 250], () => { void this.go('gear'); });
-    this.addV13Hotspot(root, 'v13-fishing-shop-card', '미끼 구매 화면으로 이동', [710, 930, 300, 250], () => { void this.go('shop'); });
+      </div>`;
     dom.app.appendChild(root);
     this.mountBottomNav(root, 'fishing');
     this.stageHost = root.querySelector<HTMLDivElement>('#fishingStage')!;
@@ -274,7 +283,7 @@ class AquaFantasiaGame {
     this.comboNode = root.querySelector<HTMLDivElement>('#comboBadge')!;
     this.progressNode = root.querySelector<HTMLDivElement>('.safe-progress span')!;
     this.waterLayer.style.setProperty('--water-speed', `${Math.max(10, 24 / region.waterSpeed)}s`);
-    const startHold = (ev: PointerEvent) => { this.holding = true; this.holdPad?.setPointerCapture?.(ev.pointerId); this.spawnTouchRing(ev.clientX, ev.clientY); this.vibrate(8); };
+    const startHold = (ev: PointerEvent) => { this.reassertImmersiveMode(); this.holding = true; this.holdPad?.setPointerCapture?.(ev.pointerId); this.spawnTouchRing(ev.clientX, ev.clientY); this.vibrate(8); };
     const stopHold = () => { this.holding = false; };
     this.holdPad.addEventListener('pointerdown', startHold);
     this.holdPad.addEventListener('pointerup', stopHold);
@@ -287,6 +296,19 @@ class AquaFantasiaGame {
     }
   }
 
+  private recentCatchMarkup(): string {
+    const entries = Object.entries(this.save.caught)
+      .filter(([, count]) => count > 0)
+      .map(([id, count]) => ({ fish: fishDex.find((item) => item.id === id), count }))
+      .filter((item): item is { fish: FishInfo; count: number } => Boolean(item.fish))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 3);
+    if (!entries.length) {
+      return `<div class="recent-empty"><strong>최근 포획</strong><span>아직 기록이 없어요. 낚시 시작으로 첫 포획을 노려보세요.</span></div>`;
+    }
+    return `<strong class="recent-title">최근 포획</strong><div class="recent-cards">${entries.map(({ fish, count }) => `<div class="recent-card rarity-${fish.rarity.toLowerCase()}"><img src="${fish.img}" alt="" /><span>${fish.name}</span><em>x${count}</em></div>`).join('')}</div>`;
+  }
+
   private baseGameShell(name: string): HTMLElement {
     const root = document.createElement('main');
     root.className = `game-screen ${name}-screen v800-screen v810-screen ${name === 'fishing' ? 'locked-screen' : 'scroll-screen'}`;
@@ -297,8 +319,8 @@ class AquaFantasiaGame {
   private mountBottomNav(root: HTMLElement, active: Screen): void {
     dom.app.querySelector('.bottom-nav')?.remove();
     const nav = document.createElement('nav');
-    const v13 = root.classList.contains('v13-screen');
-    nav.className = v13 ? 'bottom-nav v13-bottom-nav-hotspots fixed-root-nav' : 'bottom-nav glass-card premium-bottom-nav fixed-root-nav';
+    const v13 = false;
+    nav.className = 'bottom-nav glass-card premium-bottom-nav fixed-root-nav v840-bottom-nav';
     nav.setAttribute('aria-label', '하단 메뉴');
     nav.setAttribute('data-fixed-root', 'true');
     nav.innerHTML = navItems.map(({ screen, icon, label }) => {
@@ -307,7 +329,7 @@ class AquaFantasiaGame {
     }).join('');
     dom.app.appendChild(nav);
     root.classList.add('has-fixed-root-nav');
-    nav.querySelectorAll<HTMLButtonElement>('[data-screen]').forEach((btn) => btn.addEventListener('click', () => void this.go(btn.dataset.screen as Screen)));
+    nav.querySelectorAll<HTMLButtonElement>('[data-screen]').forEach((btn) => btn.addEventListener('click', () => { this.reassertImmersiveMode(); void this.go(btn.dataset.screen as Screen); }));
   }
 
   private async initPixiStage(): Promise<void> {
@@ -360,21 +382,23 @@ class AquaFantasiaGame {
     const bgScale = Math.max(w / this.bgSprite.texture.width, h / this.bgSprite.texture.height);
     this.bgSprite.scale.set(bgScale);
     this.bgSprite.position.set((w - this.bgSprite.texture.width * bgScale) / 2, (h - this.bgSprite.texture.height * bgScale) / 2);
-    const base = Math.min(w, h);
-    this.player.scale.set(base / 260);
-    this.player.position.set(w * 0.27, h * 0.72);
-    this.bobber.scale.set(base / 520);
-    this.bobber.position.set(w * 0.68, h * 0.60);
-    this.catchSprite.scale.set(base / 720);
-    this.catchSprite.position.set(w * 0.5, h * 0.52);
-    this.biteText.position.set(w * 0.69, h * 0.42);
+    const playerTargetH = Math.min(h * 0.26, w * 0.58);
+    this.player.scale.set(playerTargetH / Math.max(1, this.player.texture.height));
+    this.player.position.set(w * 0.24, h * 0.64);
+    const bobberTarget = Math.max(34, Math.min(58, w * 0.105));
+    this.bobber.scale.set(bobberTarget / Math.max(1, this.bobber.texture.width));
+    this.bobber.position.set(w * 0.68, h * 0.58);
+    const fishTargetW = Math.min(w * 0.44, 210);
+    this.catchSprite.scale.set(fishTargetW / Math.max(1, this.catchSprite.texture.width));
+    this.catchSprite.position.set(w * 0.55, h * 0.48);
+    this.biteText.position.set(w * 0.69, h * 0.40);
   }
 
   private createCastButton(): void {
     if (!this.uiLayer) return;
-    this.uiLayer.innerHTML = `<button class="cast-button" type="button" aria-label="찌 던지기"><span class="cast-icon" aria-hidden="true"></span><strong>찌 던지기</strong></button>`;
+    this.uiLayer.innerHTML = `<button class="cast-button" type="button" aria-label="낚시 시작"><span class="cast-icon" aria-hidden="true"></span><strong>낚시 시작</strong></button>`;
     this.castBtn = this.uiLayer.querySelector<HTMLButtonElement>('.cast-button')!;
-    this.castBtn.addEventListener('click', () => this.castLine());
+    this.castBtn.addEventListener('click', () => { this.reassertImmersiveMode(); this.castLine(); });
   }
 
   private castLine(): void {
@@ -890,12 +914,39 @@ class AquaFantasiaGame {
   }
 
   private renderRanking(): void {
-    const root = this.createV13Screen('ranking');
-    this.addV13Hotspot(root, 'v13-ranking-challenge', '랭킹 도전하러 낚시하기', [70, 1465, 940, 115], () => { void this.go('fishing'); });
-    this.addV13Hotspot(root, 'v13-ranking-list', '내 랭킹 정보', [70, 760, 940, 650], () => {
-      this.toast.show({ type: 'reward', title: '내 랭킹', message: `최고 콤보 ${this.save.bestStreak}회 · 성공 ${this.save.totalSuccess}회`, actionScreen: 'fishing' });
-    });
+    this.clear();
+    const score = this.save.bestStreak * 1000 + this.save.totalSuccess * 120 + this.totalCaught() * 35;
+    const caught = this.totalCaught();
+    const linkedLabel = this.save.serverLinked ? '익명 서버 연동 계정' : '로컬 테스트 계정';
+    const root = document.createElement('main');
+    root.className = 'game-screen ranking-screen v840-ranking-screen scroll-screen';
+    root.innerHTML = `
+      <div class="ambient-bg" aria-hidden="true"></div>
+      <section class="v840-page-panel ranking-panel" aria-label="랭킹">
+        <header class="v840-panel-head">
+          <span>REAL USER RANKING</span>
+          <h2>랭킹</h2>
+          <p>가짜 유저 데이터는 제거했습니다. 지금은 실제 저장 기록 기준으로 내 계정만 표시합니다.</p>
+        </header>
+        <div class="ranking-live-card">
+          <div class="rank-medal">#1</div>
+          <div class="rank-user">
+            <strong>나</strong>
+            <span>${linkedLabel}</span>
+          </div>
+          <div class="rank-score"><strong>${score.toLocaleString('ko-KR')}</strong><span>점</span></div>
+        </div>
+        <div class="ranking-stats-grid">
+          <div><strong>${this.save.bestStreak}</strong><span>최고 콤보</span></div>
+          <div><strong>${this.save.totalSuccess}</strong><span>성공</span></div>
+          <div><strong>${caught}</strong><span>누적 포획</span></div>
+          <div><strong>${this.save.coins.toLocaleString('ko-KR')}</strong><span>골드</span></div>
+        </div>
+        <button class="image-btn ranking-cta" type="button" data-go-fishing>낚시터에서 기록 올리기</button>
+        <p class="ranking-note">Firebase 리더보드 쓰기/읽기 규칙을 연결하면 이 영역을 실제 서버 상위 유저 목록으로 확장합니다.</p>
+      </section>`;
     dom.app.appendChild(root);
+    root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { this.reassertImmersiveMode(); void this.go('fishing'); });
     this.mountBottomNav(root, 'ranking');
   }
 
@@ -997,6 +1048,23 @@ class AquaFantasiaGame {
     } catch {
       return false;
     }
+  }
+
+  private installImmersiveRetryHooks(): void {
+    const retry = () => this.reassertImmersiveMode();
+    window.addEventListener('pointerdown', retry, { passive: true });
+    window.addEventListener('touchend', retry, { passive: true });
+    window.addEventListener('pageshow', retry, { passive: true });
+    document.addEventListener('visibilitychange', retry, { passive: true });
+  }
+
+  private reassertImmersiveMode(): void {
+    const now = performance.now();
+    applyPortraitViewportMetrics();
+    window.scrollTo?.(0, 0);
+    if (now - this.immersiveRetryAt < 900) return;
+    this.immersiveRetryAt = now;
+    void requestHardPortraitLock();
   }
 
   private async enterImmersiveMode(): Promise<void> {
