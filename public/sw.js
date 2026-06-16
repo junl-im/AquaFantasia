@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v1.0.6-swipe-nav-aqua-bubble-ui-polish';
+const CACHE_NAME = 'aqua-fantasia-v1.0.7-clean-ui-final-pass';
 const PRECACHE = [
   "./",
   "./index.html",
