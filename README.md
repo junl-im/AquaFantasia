@@ -1,33 +1,26 @@
-# AquaFantasia
+# AquaFantasia v1.0.9 UI Detail Cleanup Polish
 
-## Current patch: v1.0.8 Home / Shop / Mission Polish
+모바일 웹 낚시 게임 AquaFantasia의 v1.0.9 덮어쓰기용 소스 패치입니다.
 
-This overwrite patch continues from v1.0.7 and focuses on practical UI cleanup requested during mobile testing.
+## 이번 패치 핵심
 
-### Main changes
+- 하단 메뉴바 프레임은 더 낮고 단정하게 정리
+- 하단 메뉴 아이콘은 크게 유지해서 시인성 확보
+- 선택된 메뉴 효과는 과하지 않게 얇은 빛/작은 진주점만 유지
+- 메뉴 화면 좌우 스와이프 이동 안정성 보강
+- 마을 메인 배너/타이틀/오늘의 조류/수역 카드 간격 재정리
+- 상점 2열 카드의 아이콘/가격 버튼/텍스트 containment 추가 보강
+- 장비/가방/도감/미션/랭킹 카드 내부 글자 넘침 추가 차단
+- 본문 CTA 버튼은 더 작고 단정하게 조정
+- 미션 게이지바 높이와 카드 밀도 정리
+- 랭킹 한 줄 기록 가독성/대비 보강
+- 낚시 화면에서 낚시 시작/최근 포획/릴 패널/콤보가 서로 겹치지 않도록 재배치
+- WebGL 수중 효과는 UI를 가리지 않도록 대비와 알파를 정리
+- 문서는 README.md 하나만 유지
 
-- Version naming continues as `1.0.x`.
-- Village/home screen now uses the supplied bright island background.
-- Supplied Aqua Fantasia banner is placed at the top of the village home screen.
-- The old large quick buttons on the village screen were removed.
-- The village title card was moved below the banner.
-- Today's tide card was moved lower and now acts as the main home CTA section.
-- Swipe tab navigation was rebuilt with both pointer and touch handlers.
-- Fishing screen remains excluded from swipe navigation to prevent accidental input.
-- Fishing start button was moved higher so it no longer overlaps the recent catch strip.
-- Gear cost buttons were shortened.
-- Inventory, Dex, Shop, and Mission CTA buttons were shortened.
-- Shop items now use a compact two-column layout.
-- Shop item icons were resized so they stay inside the card frame.
-- Mission progress bars were rebuilt as aqua gradient gauges.
-- Mission action buttons are shorter.
-- Ranking now includes compact practice-bot rows so the page does not feel empty during solo testing.
-- Ranking rows use bright text and compact one-line stats.
-- `README.md` remains the only project patch document.
+## 적용 방법
 
-### Validation
-
-Run:
+기존 프로젝트 루트에 ZIP 내용을 그대로 덮어쓴 뒤 아래 명령을 실행합니다.
 
 ```bash
 npm install
@@ -37,10 +30,17 @@ npm run build
 npm run audit
 ```
 
-Expected result: all commands pass. Existing Vite warnings about old CSS public asset paths may still appear, but they are non-blocking warnings.
+## 유지 정책
 
-### Notes
+- GitHub Pages + GitHub Actions 배포 구조 유지
+- PWA 구조 유지
+- Firebase 무료 Spark 플랜 친화 구조 유지
+- PixiJS 낚시 런타임 유지
+- WebGL 수중 배경 레이어 유지
+- 세로 고정 정책 유지
+- 낚시 화면은 좌우 스와이프 탭 이동 비활성화 유지
 
-- This patch keeps PixiJS fishing, DOM UI, and the WebGL underwater background layer.
-- It does not use `requestFullscreen()` in Kakao/in-app browser paths where rotation bugs were previously observed.
-- Browser fullscreen still depends on platform rules and user interaction.
+## 버전
+
+- 현재 버전: 1.0.9
+- 다음 예정: 1.1.0 또는 1.0.10
