@@ -17,6 +17,8 @@ const ASSET = {
   slot: './assets/art/fish_slot.png',
   ripple: './assets/art/water_ripple_overlay.webp',
   caustics: './assets/art/caustic_sparkle_overlay.webp',
+  homeBg: './assets/v108/home/island_home_bg_1080x1920.webp',
+  homeBanner: './assets/v108/home/aqua_fantasia_banner.png',
   castButton: './assets/ui/button_cast_clean.png',
   perfect: './assets/v12/fx/particle_sparkle_cluster_ref_a.png',
   touchRing: './assets/v92/fx/ring_aqua.png',
@@ -123,7 +125,7 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
-    document.documentElement.dataset.visualPolish = 'v107-clean-ui-final-pass';
+    document.documentElement.dataset.visualPolish = 'v108-home-shop-mission-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -258,10 +260,27 @@ class AquaFantasiaGame {
   private renderVillage(): void {
     this.clear();
     const region = this.getRegion();
-    const root = this.createRuntimeMenuScreen('village', '마을', '오늘의 조류와 수역을 고르고 바로 출항하세요.');
+    const root = this.createRuntimeMenuScreen('village', '마을', '메인 항구에서 오늘의 조류와 수역을 확인하세요.');
+    root.classList.add('v108-home-main');
+    root.style.setProperty('--v108-home-bg', `url("${ASSET.homeBg}")`);
     const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
     content.innerHTML = `
-      <section class="runtime-hero-card tide-card v950-tide-card" aria-label="오늘의 조류">
+      <section class="v108-home-banner" aria-label="아쿠아 판타지아 메인 배너">
+        <img src="${ASSET.homeBanner}" alt="아쿠아 판타지아 Aqua Fantasia" loading="eager" />
+      </section>
+      <section class="runtime-hero-card v108-home-title" aria-label="마을 안내">
+        <img class="tide-mascot" src="./assets/v91/characters/chibi_fisher_face_icon.png" alt="" />
+        <div>
+          <span class="runtime-eyebrow">MAIN HARBOR</span>
+          <h2>마을</h2>
+          <p>오늘은 <strong>${region.name}</strong> 수역이 좋아요. 아래에서 수역을 고르고 바로 출항하세요.</p>
+        </div>
+      </section>
+      <section class="runtime-panel region-panel v108-region-panel" aria-label="수역 선택">
+        <div class="runtime-panel-title"><span>FISHING AREA</span><strong>수역 선택</strong></div>
+        <div class="region-grid runtime-region-grid">${regions.slice(0, 8).map((item) => this.regionCard(item.key)).join('')}</div>
+      </section>
+      <section class="runtime-hero-card tide-card v950-tide-card v108-tide-card" aria-label="오늘의 조류">
         <img class="tide-mascot" src="./assets/v91/characters/chibi_fisher_face_icon.png" alt="" />
         <div>
           <span class="runtime-eyebrow">TODAY TIDE</span>
@@ -269,21 +288,10 @@ class AquaFantasiaGame {
           <p><strong>${region.name}</strong> · ${region.tide}<br>${region.subtitle}</p>
           <div class="v950-mini-chips"><span>보유 ${this.save.coins.toLocaleString('ko-KR')}G</span><span>미끼 ${this.save.gear.lureStock}개</span></div>
         </div>
-        <button class="runtime-btn gold v950-primary-cta" type="button" data-go-fishing>출항</button>
-      </section>
-      <section class="runtime-quick-grid" aria-label="빠른 메뉴">
-        <button class="runtime-menu-card" type="button" data-go="fishing"><img src="./assets/v91/icons/fishing.png" alt="" /><strong>낚시터</strong><span>바로 출항</span></button>
-        <button class="runtime-menu-card" type="button" data-go="gear"><img src="./assets/v91/icons/gear.png" alt="" /><strong>장비</strong><span>강화 관리</span></button>
-        <button class="runtime-menu-card" type="button" data-go="shop"><img src="./assets/v91/icons/shop.png" alt="" /><strong>상점</strong><span>미끼 보충</span></button>
-        <button class="runtime-menu-card" type="button" data-go="mission"><img src="./assets/v91/icons/mission.png" alt="" /><strong>미션</strong><span>보상 회수</span></button>
-      </section>
-      <section class="runtime-panel region-panel" aria-label="수역 선택">
-        <div class="runtime-panel-title"><span>FISHING AREA</span><strong>수역 선택</strong></div>
-        <div class="region-grid runtime-region-grid">${regions.slice(0, 8).map((item) => this.regionCard(item.key)).join('')}</div>
+        <button class="runtime-btn gold v950-primary-cta compact-cta" type="button" data-go-fishing>출항</button>
       </section>`;
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { void this.go('fishing'); });
-    root.querySelectorAll<HTMLButtonElement>('[data-go]').forEach((btn) => btn.addEventListener('click', () => { void this.go(btn.dataset.go as Screen); }));
     root.querySelectorAll<HTMLButtonElement>('[data-region]').forEach((btn) => btn.addEventListener('click', () => {
       const key = btn.dataset.region as RegionKey;
       if (!this.isRegionUnlocked(key)) {
@@ -301,7 +309,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -439,30 +447,54 @@ class AquaFantasiaGame {
     let startY = 0;
     let startAt = 0;
     let tracking = false;
-    root.classList.add('swipe-enabled-screen');
-    root.addEventListener('pointerdown', (ev) => {
-      const target = ev.target as HTMLElement | null;
-      if (target?.closest('button, a, input, textarea, select, .bottom-nav, .region-grid, .runtime-card-list')) return;
+    let lastSwipeAt = 0;
+    const canStart = (target: EventTarget | null) => {
+      const el = target as HTMLElement | null;
+      if (!el) return true;
+      return !el.closest('.bottom-nav, input, textarea, select, [data-no-swipe]');
+    };
+    const begin = (x: number, y: number, target: EventTarget | null) => {
+      if (!canStart(target)) return;
       tracking = true;
-      startX = ev.clientX;
-      startY = ev.clientY;
+      startX = x;
+      startY = y;
       startAt = performance.now();
-    }, { passive: true });
-    root.addEventListener('pointerup', (ev) => {
+    };
+    const finish = (x: number, y: number) => {
       if (!tracking) return;
       tracking = false;
-      const dx = ev.clientX - startX;
-      const dy = ev.clientY - startY;
+      const dx = x - startX;
+      const dy = y - startY;
       const elapsed = performance.now() - startAt;
-      if (elapsed > 760 || Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.45) return;
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+      if (elapsed > 980 || absX < 42 || absX < absY * 1.12) return;
       const index = swipeOrder.indexOf(active);
       if (index < 0) return;
       const next = dx < 0 ? swipeOrder[Math.min(swipeOrder.length - 1, index + 1)] : swipeOrder[Math.max(0, index - 1)];
       if (!next || next === active) return;
-      this.toast.show({ type: 'normal', title: '탭 이동', message: dx < 0 ? '다음 메뉴로 넘깁니다.' : '이전 메뉴로 돌아갑니다.' });
+      lastSwipeAt = performance.now();
       void this.go(next);
-    }, { passive: true });
-    root.addEventListener('pointercancel', () => { tracking = false; }, { passive: true });
+    };
+    root.classList.add('swipe-enabled-screen');
+    root.addEventListener('click', (ev) => {
+      if (performance.now() - lastSwipeAt < 420) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        ev.stopImmediatePropagation();
+      }
+    }, true);
+    root.addEventListener('pointerdown', (ev) => begin(ev.clientX, ev.clientY, ev.target), { passive: true, capture: true });
+    root.addEventListener('pointerup', (ev) => finish(ev.clientX, ev.clientY), { passive: true, capture: true });
+    root.addEventListener('pointercancel', () => { tracking = false; }, { passive: true, capture: true });
+    root.addEventListener('touchstart', (ev) => {
+      const t = ev.changedTouches[0];
+      if (t) begin(t.clientX, t.clientY, ev.target);
+    }, { passive: true, capture: true });
+    root.addEventListener('touchend', (ev) => {
+      const t = ev.changedTouches[0];
+      if (t) finish(t.clientX, t.clientY);
+    }, { passive: true, capture: true });
   }
 
   private async initPixiStage(): Promise<void> {
@@ -990,7 +1022,7 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card gear-summary">
         <img src="./assets/v91/icons/gear.png" alt="" />
         <div><span class="runtime-eyebrow">EQUIPMENT</span><h2>장비 관리</h2><p>총합 Lv.${this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel} · 미끼 ${this.save.gear.lureStock}개</p></div>
-        <button class="runtime-btn cyan" type="button" data-go-fishing>낚시터</button>
+        <button class="runtime-btn cyan compact-cta" type="button" data-go-fishing>낚시터</button>
       </section>
       <section class="gear-grid runtime-card-list">
         ${this.gearCard('rod', '낚싯대', './assets/v92/equipment/rod.png', this.save.gear.rodLevel, 120, '입질 반응 안정')}
@@ -1007,7 +1039,7 @@ class AquaFantasiaGame {
   private gearCard(kind: 'rod' | 'reel' | 'line' | 'lure', name: string, icon: string, level: number, baseCost: number, desc: string): string {
     const cost = kind === 'lure' ? baseCost : baseCost + level * 90;
     const pct = Math.min(100, kind === 'lure' ? Math.max(18, level * 8) : level * 13 + 12);
-    return `<article class="gear-card glass-card v950-gear-card"><div class="v950-item-orb"><img src="${icon}" alt="" /></div><div class="v950-card-main"><strong>${name}</strong><span>Lv.${level} · ${desc}</span><i class="v950-stat-bar" style="--p:${pct}%"><b></b></i></div><button class="image-btn soft v950-price-btn" data-upgrade="${kind}">${cost}G</button></article>`;
+    return `<article class="gear-card glass-card v950-gear-card"><div class="v950-item-orb"><img src="${icon}" alt="" /></div><div class="v950-card-main"><strong>${name}</strong><span>Lv.${level} · ${desc}</span><i class="v950-stat-bar" style="--p:${pct}%"><b></b></i></div><button class="image-btn soft v950-price-btn compact-cost-btn" data-upgrade="${kind}">${cost}G</button></article>`;
   }
 
   private buyUpgrade(kind: 'rod' | 'reel' | 'line' | 'lure'): void {
@@ -1034,12 +1066,12 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card inventory-summary">
         <img src="./assets/v91/icons/bag.png" alt="" />
         <div><span class="runtime-eyebrow">INVENTORY</span><h2>가방</h2><p>미끼 ${this.save.gear.lureStock}개 · 구조 키트 ${this.save.lastRescueAt ? '준비됨' : '없음'}</p></div>
-        <button class="runtime-btn gold" type="button" data-go-shop>상점</button>
+        <button class="runtime-btn gold compact-cta" type="button" data-go-shop>상점</button>
       </section>
       <section class="runtime-item-grid">
-        <article class="runtime-item-card v950-inventory-card"><em class="v950-count">x${this.save.gear.lureStock}</em><img src="./assets/v92/equipment/bait.png" alt="" /><strong>새우 미끼</strong><span>입질 대기시간을 줄여줘요</span><button class="runtime-btn cyan" data-go-fishing>사용하러 가기</button></article>
-        <article class="runtime-item-card v950-inventory-card"><em class="v950-count">∞</em><img src="./assets/v92/equipment/ticket.png" alt="" /><strong>출항 티켓</strong><span>언제든 바로 출항 가능</span><button class="runtime-btn blue" data-go-fishing>낚시터</button></article>
-        <article class="runtime-item-card v950-inventory-card"><em class="v950-count">NEW</em><img src="./assets/v92/equipment/chest.png" alt="" /><strong>보상 상자</strong><span>미션 보상으로 열 수 있어요</span><button class="runtime-btn blue" data-go-mission>미션 보기</button></article>
+        <article class="runtime-item-card v950-inventory-card"><em class="v950-count">x${this.save.gear.lureStock}</em><img src="./assets/v92/equipment/bait.png" alt="" /><strong>새우 미끼</strong><span>입질 대기시간을 줄여줘요</span><button class="runtime-btn cyan compact-cta" data-go-fishing>사용</button></article>
+        <article class="runtime-item-card v950-inventory-card"><em class="v950-count">∞</em><img src="./assets/v92/equipment/ticket.png" alt="" /><strong>출항 티켓</strong><span>언제든 바로 출항 가능</span><button class="runtime-btn blue compact-cta" data-go-fishing>낚시</button></article>
+        <article class="runtime-item-card v950-inventory-card"><em class="v950-count">NEW</em><img src="./assets/v92/equipment/chest.png" alt="" /><strong>보상 상자</strong><span>미션 보상으로 열 수 있어요</span><button class="runtime-btn blue compact-cta" data-go-mission>미션</button></article>
       </section>`;
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-shop]')?.addEventListener('click', () => { void this.go('shop'); });
@@ -1061,7 +1093,7 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card dex-summary">
         <img src="./assets/v91/icons/dex.png" alt="" />
         <div><span class="runtime-eyebrow">FISH DEX</span><h2>도감</h2><p>발견 ${discovered}/${fishDex.length - 1}종 · 누적 ${this.totalCaught()}마리</p></div>
-        <button class="runtime-btn gold" type="button" data-go-fishing>채우러 가기</button>
+        <button class="runtime-btn gold compact-cta" type="button" data-go-fishing>채우기</button>
       </section>
       <div class="v950-filter-row" aria-label="도감 필터 미리보기"><span>COMMON</span><span>RARE</span><span>EPIC</span><span>BOSS</span></div><section class="dex-grid runtime-dex-grid">${cards}</section>`;
     dom.app.appendChild(root);
@@ -1082,9 +1114,9 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card shop-summary">
         <img src="./assets/v91/icons/shop.png" alt="" />
         <div><span class="runtime-eyebrow">SHOP</span><h2>상점</h2><p>보유 골드 ${this.save.coins.toLocaleString('ko-KR')}G · 미끼 ${this.save.gear.lureStock}개</p></div>
-        <button class="runtime-btn cyan" type="button" data-free>무료 50G</button>
+        <button class="runtime-btn cyan compact-cta" type="button" data-free>무료</button>
       </section>
-      <section class="shop-list runtime-card-list">${goods.map((item, index) => `<button class="shop-card runtime-shop-card v950-shop-card" type="button" data-buy="${index}"><em>${index === 0 ? '추천' : index === 3 ? '안전' : '강화'}</em><img src="${item.icon}" alt="" /><div><strong>${item.name}</strong><small>${item.desc}</small></div><span>${item.cost}G</span></button>`).join('')}</section>`;
+      <section class="shop-list runtime-card-list v108-shop-grid">${goods.map((item, index) => `<button class="shop-card runtime-shop-card v950-shop-card v108-shop-card" type="button" data-buy="${index}"><em>${index === 0 ? '추천' : index === 3 ? '안전' : '강화'}</em><img src="${item.icon}" alt="" /><div><strong>${item.name}</strong><small>${item.desc}</small></div><span class="shop-price compact-cost-badge">${item.cost}G</span></button>`).join('')}</section>`;
     const buy = (index: number) => {
       const item = goods[index];
       if (!item) return;
@@ -1163,9 +1195,13 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card mission-summary">
         <img src="./assets/v91/icons/mission.png" alt="" />
         <div><span class="runtime-eyebrow">MISSION</span><h2>미션</h2><p>완료 ${doneCount}/${goals.length} · 수령 가능 ${readyCount}개</p></div>
-        <button class="runtime-btn gold" type="button" data-go-fishing>진행하기</button>
+        <button class="runtime-btn gold compact-cta" type="button" data-go-fishing>진행</button>
       </section>
-      <section class="mission-list runtime-card-list">${goals.slice(0, 12).map((goal) => `<article class="mission-card runtime-mission-card v950-mission-card ${goal.event ? 'event' : ''} ${this.save.missions[goal.id] ? 'done' : goal.value >= goal.max ? 'ready' : ''}"><div><small>${goal.category}</small><strong>${goal.title}</strong><span>${goal.desc}</span></div><progress value="${goal.value}" max="${goal.max}"></progress><button class="runtime-btn ${goal.value >= goal.max && !this.save.missions[goal.id] ? 'gold' : 'blue'}" data-mission="${goal.id}">${this.save.missions[goal.id] ? '완료' : goal.value >= goal.max ? `${goal.reward}G 받기` : `${goal.value}/${goal.max}`}</button></article>`).join('')}</section>`;
+      <section class="mission-list runtime-card-list v108-mission-list">${goals.slice(0, 12).map((goal) => {
+        const pct = Math.min(100, Math.round((goal.value / goal.max) * 100));
+        const buttonLabel = this.save.missions[goal.id] ? '완료' : goal.value >= goal.max ? '수령' : `${goal.value}/${goal.max}`;
+        return `<article class="mission-card runtime-mission-card v950-mission-card v108-mission-card ${goal.event ? 'event' : ''} ${this.save.missions[goal.id] ? 'done' : goal.value >= goal.max ? 'ready' : ''}"><div><small>${goal.category}</small><strong>${goal.title}</strong><span>${goal.desc}</span></div><div class="v108-mission-progress" style="--p:${pct}%"><i></i><b>${pct}%</b></div><button class="runtime-btn compact-cta ${goal.value >= goal.max && !this.save.missions[goal.id] ? 'gold' : 'blue'}" data-mission="${goal.id}">${buttonLabel}</button></article>`;
+      }).join('')}</section>`;
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { void this.go('fishing'); });
     root.querySelectorAll<HTMLButtonElement>('[data-mission]').forEach((btn) => btn.addEventListener('click', () => this.tapMissionCard(btn.dataset.mission ?? '')));
@@ -1176,19 +1212,28 @@ class AquaFantasiaGame {
     this.clear();
     const score = this.save.bestStreak * 1000 + this.save.totalSuccess * 120 + this.totalCaught() * 35;
     const caught = this.totalCaught();
-    const linkedLabel = this.save.serverLinked ? '익명 서버 연동 계정' : '로컬 테스트 계정';
-    const root = this.createRuntimeMenuScreen('ranking', '랭킹', '가짜 데이터 없이 내 실제 기록만 표시합니다.');
+    const linkedLabel = this.save.serverLinked ? '익명 서버 연동' : '로컬 테스트';
+    const botRows = [
+      { name: '코코 선장', tag: '연습봇', score: Math.max(420, score + 180), combo: Math.max(2, this.save.bestStreak + 1), catch: Math.max(5, caught + 4) },
+      { name: '루루 낚시단', tag: '연습봇', score: Math.max(260, score - 90), combo: Math.max(1, this.save.bestStreak), catch: Math.max(3, caught + 1) },
+      { name: '산호냥', tag: '연습봇', score: Math.max(180, score - 210), combo: Math.max(1, this.save.bestStreak - 1), catch: Math.max(2, caught) },
+    ];
+    const rows = [
+      { name: '나', tag: linkedLabel, score, combo: this.save.bestStreak, catch: caught, me: true },
+      ...botRows.map((row) => ({ ...row, me: false })),
+    ].sort((a, b) => b.score - a.score).map((row, index) => ({ ...row, rank: index + 1 }));
+    const root = this.createRuntimeMenuScreen('ranking', '랭킹', '내 실제 기록과 연습봇 기록을 간단히 비교합니다.');
     const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
     content.innerHTML = `
-      <section class="runtime-hero-card ranking-summary">
+      <section class="runtime-hero-card ranking-summary v108-ranking-summary">
         <img src="./assets/v91/icons/ranking.png" alt="" />
-        <div><span class="runtime-eyebrow">REAL USER RANKING</span><h2>랭킹</h2><p>${linkedLabel}</p></div>
-        <button class="runtime-btn gold" type="button" data-go-fishing>기록 올리기</button>
+        <div><span class="runtime-eyebrow">TRAINING LEAGUE</span><h2>랭킹</h2><p>${linkedLabel} · 연습봇 포함 테스트 리그</p></div>
+        <button class="runtime-btn gold compact-cta" type="button" data-go-fishing>도전</button>
       </section>
-      <section class="runtime-panel ranking-panel">
-        <div class="ranking-live-card v950-ranking-card"><img class="rank-avatar" src="./assets/v91/characters/chibi_fisher_face_icon.png" alt="" /><div class="rank-medal">#1</div><div class="rank-user"><strong>나</strong><span>${linkedLabel}</span><em>테스트 리그</em></div><div class="rank-score"><strong>${score.toLocaleString('ko-KR')}</strong><span>점</span></div></div>
+      <section class="runtime-panel ranking-panel v108-ranking-panel">
+        <div class="v108-ranking-list">${rows.map((row) => `<div class="v108-rank-row ${row.me ? 'me' : ''}"><b>#${row.rank}</b><strong>${row.name}</strong><span>${row.tag}</span><em>${row.score.toLocaleString('ko-KR')}점</em><i>${row.combo}콤보 · ${row.catch}마리</i></div>`).join('')}</div>
         <div class="ranking-stats-grid"><div><strong>${this.save.bestStreak}</strong><span>최고 콤보</span></div><div><strong>${this.save.totalSuccess}</strong><span>성공</span></div><div><strong>${caught}</strong><span>누적 포획</span></div><div><strong>${this.save.coins.toLocaleString('ko-KR')}</strong><span>골드</span></div></div>
-        <p class="ranking-note">Firebase 리더보드 연결 전까지는 현재 테스트 계정의 실제 로컬/서버 연동 기록만 보여줍니다.</p>
+        <p class="ranking-note">연습봇은 화면 밀도 확인용 가상 기록입니다. 내 기록은 실제 저장 데이터만 사용합니다.</p>
       </section>`;
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { this.reassertImmersiveMode(); void this.go('fishing'); });

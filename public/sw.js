@@ -1,9 +1,11 @@
-const CACHE_NAME = 'aqua-fantasia-v1.0.7-clean-ui-final-pass';
+const CACHE_NAME = 'aqua-fantasia-v1.0.8-home-shop-mission-polish';
 const PRECACHE = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./offline.html",
+  "./assets/v108/home/island_home_bg_1080x1920.webp",
+  "./assets/v108/home/aqua_fantasia_banner.png",
   "./assets/v85/screens/start_screen_clean_v810.webp",
   "./assets/v101/water/water_deep_mystic.webp",
   "./assets/v101/water/water_clear_calm.webp",
