@@ -123,7 +123,7 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
-    document.documentElement.dataset.visualPolish = 'v104-ui-refinement-polish';
+    document.documentElement.dataset.visualPolish = 'v105-fishing-depth-visibility-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -301,7 +301,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -338,7 +338,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -450,8 +450,15 @@ class AquaFantasiaGame {
     this.biteText = new Text({ text: '!', style: { fontFamily: 'Arial', fontSize: 82, fontWeight: '900', fill: 0xff5848, stroke: { color: 0xffffff, width: 9 } } });
 
     const world = new Container();
+    world.sortableChildren = true;
     app.stage.addChild(world);
     world.addChild(this.bgSprite, this.player, this.bobber, this.catchSprite, this.biteText);
+    this.bgSprite.zIndex = 0;
+    this.bgSprite.alpha = 0.78;
+    this.player.zIndex = 20;
+    this.bobber.zIndex = 26;
+    this.catchSprite.zIndex = 32;
+    this.biteText.zIndex = 40;
     this.player.anchor.set(0.5, 0.9);
     this.bobber.anchor.set(0.5, 0.5);
     this.catchSprite.anchor.set(0.5, 0.5);
@@ -494,16 +501,16 @@ class AquaFantasiaGame {
     const bgScale = Math.max(w / this.bgSprite.texture.width, h / this.bgSprite.texture.height);
     this.bgSprite.scale.set(bgScale);
     this.bgSprite.position.set((w - this.bgSprite.texture.width * bgScale) / 2, (h - this.bgSprite.texture.height * bgScale) / 2);
-    const playerTargetH = Math.min(h * 0.62, w * 1.24);
+    const playerTargetH = Math.min(h * 0.66, w * 1.34);
     this.player.scale.set(playerTargetH / Math.max(1, this.player.texture.height));
-    this.player.position.set(w * 0.37, h * 0.74);
+    this.player.position.set(w * 0.36, h * 0.71);
     const bobberTarget = Math.max(34, Math.min(58, w * 0.105));
     this.bobber.scale.set(bobberTarget / Math.max(1, this.bobber.texture.width));
-    this.bobber.position.set(w * 0.68, h * 0.58);
+    this.bobber.position.set(w * 0.70, h * 0.52);
     const fishTargetW = Math.min(w * 0.50, 260);
     this.catchSprite.scale.set(fishTargetW / Math.max(1, this.catchSprite.texture.width));
     this.catchSprite.position.set(w * 0.55, h * 0.48);
-    this.biteText.position.set(w * 0.69, h * 0.40);
+    this.biteText.position.set(w * 0.70, h * 0.34);
   }
 
   private createCastButton(): void {

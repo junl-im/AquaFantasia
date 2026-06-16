@@ -8040,3 +8040,233 @@ html.portrait-only-game body[data-screen="fishing"] .v104-ui-refinement-fishing 
   .runtime-menu-screen.v104-ui-refinement-screen .mission-card .runtime-btn { font-size: 10px !important; padding-inline: 6px !important; }
   .bottom-nav.v840-bottom-nav button span { font-size: 5.7px !important; }
 }
+
+/* v1.0.5 FISHING DEPTH VISIBILITY POLISH
+   Background remains beautiful, but gameplay objects must not be buried behind
+   WebGL water, caustics, or oversized HUD panels. */
+:root {
+  --v105-nav-height: var(--v104-nav-height, 70px);
+  --v105-play-bottom: calc(var(--v105-nav-height) + env(safe-area-inset-bottom));
+}
+
+.fishing-screen.v105-fishing-depth-fishing {
+  background:
+    radial-gradient(circle at 52% -8%, rgba(181, 255, 255, .22), transparent 30%),
+    linear-gradient(180deg, #073c61 0%, #032543 52%, #011527 100%) !important;
+  isolation: isolate !important;
+}
+
+/* Put the water shader behind gameplay and let it show through the transparent
+   Pixi background image, instead of washing over character/effects. */
+.fishing-screen.v105-fishing-depth-fishing .fishing-3d-ambient {
+  z-index: 0 !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  filter: saturate(1.28) contrast(1.12) brightness(1.03) !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .underwater-webgl-host {
+  opacity: .98 !important;
+  mix-blend-mode: normal !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .underwater-webgl-canvas {
+  opacity: .96 !important;
+  mix-blend-mode: normal !important;
+  filter: saturate(1.34) contrast(1.13) brightness(1.07) !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .fishing-3d-ambient::before {
+  opacity: .34 !important;
+  mix-blend-mode: screen !important;
+  filter: blur(.15px) saturate(1.2) !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .fishing-3d-ambient::after {
+  opacity: .56 !important;
+  mix-blend-mode: normal !important;
+  background:
+    radial-gradient(circle at 48% 3%, rgba(255,255,255,.24), transparent 24%),
+    linear-gradient(105deg, transparent 0 16%, rgba(139,238,255,.16) 20%, transparent 30% 48%, rgba(105,220,255,.10) 55%, transparent 68%),
+    linear-gradient(180deg, rgba(4, 93, 130, .02), rgba(0, 20, 42, .22) 62%, rgba(0, 7, 22, .45)) !important;
+}
+
+.fishing-screen.v105-fishing-depth-fishing .v840-fishing-stage {
+  z-index: 2 !important;
+  background: transparent !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .pixi-layer {
+  z-index: 4 !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .pixi-layer canvas {
+  filter:
+    saturate(1.20)
+    contrast(1.12)
+    brightness(1.05)
+    drop-shadow(0 18px 20px rgba(0, 9, 32, .18)) !important;
+}
+
+/* Keep overlay water behind UI accents. The WebGL layer now carries most of the
+   water feeling; these are light highlights only. */
+.fishing-screen.v105-fishing-depth-fishing .water-overlay {
+  z-index: 5 !important;
+  opacity: .14 !important;
+  mix-blend-mode: screen !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .caustic-overlay {
+  z-index: 6 !important;
+  opacity: .12 !important;
+  mix-blend-mode: screen !important;
+}
+
+/* A gentle focus vignette makes the boat/float readable while preserving depth. */
+.fishing-screen.v105-fishing-depth-fishing .fishing-stage::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 7 !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(ellipse at 38% 63%, transparent 0 28%, rgba(0, 8, 31, .12) 48%, rgba(0, 6, 24, .22) 100%),
+    radial-gradient(circle at 70% 51%, rgba(255,255,255,.10), transparent 17%) !important;
+  mix-blend-mode: normal !important;
+}
+
+.fishing-screen.v105-fishing-depth-fishing .fishing-hud,
+.fishing-screen.v105-fishing-depth-fishing .stage-ui,
+.fishing-screen.v105-fishing-depth-fishing .cute-action-layer,
+.fishing-screen.v105-fishing-depth-fishing .combo-badge,
+.fishing-screen.v105-fishing-depth-fishing .recent-catch-strip,
+.fishing-screen.v105-fishing-depth-fishing .reel-panel,
+.fishing-screen.v105-fishing-depth-fishing .catch-result-card {
+  z-index: 120 !important;
+}
+
+.fishing-screen.v105-fishing-depth-fishing .fishing-hud.v840-fishing-hud {
+  top: max(8px, calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 6px)) !important;
+  left: 9px !important;
+  right: 9px !important;
+  gap: 6px !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .fishing-hud .hud-chip {
+  min-height: 42px !important;
+  padding: 6px 9px !important;
+  background:
+    linear-gradient(180deg, rgba(248, 255, 255, .94), rgba(135, 234, 255, .82)) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.72), 0 7px 16px rgba(0,28,70,.24) !important;
+  color: #063758 !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .fishing-hud .hud-chip.region {
+  max-width: min(210px, 48vw) !important;
+  overflow: hidden !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .fishing-hud .hud-chip strong,
+.fishing-screen.v105-fishing-depth-fishing .fishing-hud .hud-chip span {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* Move combo high enough that it never collides with cast/start or reel UI. */
+.fishing-screen.v105-fishing-depth-fishing .combo-badge {
+  top: max(58px, calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 52px)) !important;
+  left: 9px !important;
+  min-height: 30px !important;
+  max-width: min(142px, 36vw) !important;
+  padding: 6px 10px !important;
+  font-size: clamp(10.5px, 2.65vw, 12.5px) !important;
+  color: #fff4a8 !important;
+  background: linear-gradient(135deg, rgba(28, 88, 142, .92), rgba(5, 34, 82, .96)) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 236, 144, .28), 0 8px 18px rgba(0, 20, 54, .28) !important;
+}
+
+.fishing-screen.v105-fishing-depth-fishing .v840-stage-ui .cast-button {
+  bottom: calc(var(--v105-play-bottom) + clamp(66px, 9.4svh, 84px)) !important;
+  width: min(260px, 66vw) !important;
+  min-height: clamp(50px, 7.2svh, 60px) !important;
+  height: auto !important;
+  border-radius: 999px !important;
+  filter:
+    drop-shadow(0 10px 14px rgba(0, 25, 72, .28))
+    saturate(1.12) contrast(1.08) !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .v840-stage-ui .cast-button strong {
+  font-size: clamp(18px, 5vw, 23px) !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .v840-stage-ui .cast-button .cast-icon {
+  width: clamp(34px, 8.7vw, 43px) !important;
+  height: clamp(34px, 8.7vw, 43px) !important;
+}
+
+.fishing-screen.v105-fishing-depth-fishing .recent-catch-strip {
+  bottom: calc(var(--v105-play-bottom) + 3px) !important;
+  width: min(500px, calc(100vw - 14px)) !important;
+  min-height: clamp(54px, 11.5vw, 64px) !important;
+  height: auto !important;
+  padding: 8px 12px !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/panel_small_aqua.png'), linear-gradient(160deg, rgba(18, 99, 158, .94), rgba(3, 35, 78, .98)) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  filter: drop-shadow(0 10px 16px rgba(0, 14, 46, .30)) !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .recent-card {
+  min-height: 42px !important;
+  max-height: 48px !important;
+  background: rgba(3, 35, 75, .30) !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .recent-card img {
+  filter: drop-shadow(0 4px 5px rgba(0, 16, 50, .32)) saturate(1.15) contrast(1.1) !important;
+}
+
+body[data-screen="fishing"] .v105-fishing-depth-fishing .v840-reel-panel.reel-panel,
+html.portrait-only-game body[data-screen="fishing"] .v105-fishing-depth-fishing .v840-reel-panel.reel-panel {
+  bottom: calc(var(--v105-play-bottom) + clamp(70px, 9.8svh, 88px)) !important;
+  width: min(430px, calc(100vw - 16px)) !important;
+  padding: 13px 14px 12px !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/progress_frame_aqua.png'), linear-gradient(160deg, rgba(18, 113, 168, .96), rgba(3, 30, 75, .98)) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  filter: drop-shadow(0 12px 18px rgba(0, 15, 49, .34)) !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .tension-track {
+  height: 22px !important;
+  background: linear-gradient(180deg, #0a315c, #031b3a) !important;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,.38), 0 1px 0 rgba(255,255,255,.20) !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .safe-zone {
+  background: linear-gradient(90deg, rgba(106,255,167,.28), rgba(111,255,209,.90), rgba(106,255,167,.28)) !important;
+  box-shadow: 0 0 14px rgba(103,255,187,.48) !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .tension-fill {
+  height: 100% !important;
+  background: linear-gradient(90deg, #ffe16d, #75f6ff, #7affb3) !important;
+  box-shadow: 0 0 12px rgba(116,242,255,.56) !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .safe-progress { height: 10px !important; }
+.fishing-screen.v105-fishing-depth-fishing .hold-pad {
+  min-height: 46px !important;
+  font-size: clamp(15px, 4vw, 18px) !important;
+}
+
+/* Bite/catch/action FX: force them over the environment and give them a cute game
+   sticker contrast so they are not swallowed by water. */
+.fishing-screen.v105-fishing-depth-fishing .v930-fx,
+.fishing-screen.v105-fishing-depth-fishing .bite-callout,
+.fishing-screen.v105-fishing-depth-fishing .action-badge,
+.fishing-screen.v105-fishing-depth-fishing .catch-result-card {
+  z-index: 180 !important;
+  filter: drop-shadow(0 10px 14px rgba(0, 13, 40, .34)) saturate(1.18) contrast(1.1) !important;
+}
+.fishing-screen.v105-fishing-depth-fishing .bite-burst-cute,
+.fishing-screen.v105-fishing-depth-fishing .reward-burst-cute {
+  mix-blend-mode: normal !important;
+}
+
+@media (max-width: 430px) {
+  .fishing-screen.v105-fishing-depth-fishing .fishing-hud .hud-chip { min-height: 38px !important; padding-inline: 7px !important; }
+  .fishing-screen.v105-fishing-depth-fishing .fishing-hud .hud-chip img { width: 23px !important; height: 23px !important; }
+  .fishing-screen.v105-fishing-depth-fishing .v840-stage-ui .cast-button { width: min(238px, 64vw) !important; bottom: calc(var(--v105-play-bottom) + 62px) !important; }
+  body[data-screen="fishing"] .v105-fishing-depth-fishing .v840-reel-panel.reel-panel { bottom: calc(var(--v105-play-bottom) + 64px) !important; }
+}
+
+@media (max-height: 720px) {
+  .fishing-screen.v105-fishing-depth-fishing .v840-stage-ui .cast-button { bottom: calc(var(--v105-play-bottom) + 56px) !important; }
+  .fishing-screen.v105-fishing-depth-fishing .combo-badge { top: max(50px, calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 45px)) !important; }
+  body[data-screen="fishing"] .v105-fishing-depth-fishing .v840-reel-panel.reel-panel { bottom: calc(var(--v105-play-bottom) + 58px) !important; }
+}

@@ -70,7 +70,7 @@ float bubble(vec2 uv, vec2 center, float radius) {
 
 float bubbleField(vec2 uv) {
   float b = 0.0;
-  for (int i = 0; i < 9; i++) {
+  for (int i = 0; i < 13; i++) {
     float fi = float(i);
     float lane = hash(vec2(fi, 8.1));
     float rise = fract(u_time * (0.035 + fi * 0.003) + hash(vec2(fi, 2.7)));
@@ -105,7 +105,8 @@ void main() {
 
   float swell = fbm(vec2(auv.x * 2.2 + slow, auv.y * 3.0 - slow * 0.7));
   float micro = fbm(vec2(auv.x * 12.0 - u_time * 0.08, auv.y * 10.0 + u_time * 0.10));
-  vec2 warp = vec2(sin(uv.y * 8.0 + u_time * 0.55), cos(uv.x * 7.0 - u_time * 0.42)) * (0.010 + swell * 0.018);
+  vec2 current = vec2(sin(uv.y * 13.0 + u_time * 0.62 + micro * 1.8), cos(uv.x * 10.0 - u_time * 0.48 + swell * 2.0));
+  vec2 warp = current * (0.012 + swell * 0.020);
   vec2 wuv = uv + warp;
   vec2 sceneUv = clamp(vec2(uv.x + warp.x * 0.55, uv.y + warp.y * 0.38), 0.002, 0.998);
   vec3 scene = texture2D(u_scene, sceneUv).rgb;
@@ -113,18 +114,19 @@ void main() {
   vec3 base = mix(u_top * 1.08, u_bottom * 0.86, pow(depth, 1.08));
   base = mix(base, vec3(0.02, 0.40, 0.52), smoothstep(0.06, 0.42, 1.0 - depth) * 0.13);
 
-  float ca1 = causticCell(wuv + vec2(0.0, u_time * 0.025), 5.8, 0.78);
-  float ca2 = causticCell(wuv.yx + vec2(u_time * 0.018, 0.1), 9.5, 0.54);
-  float caustic = (ca1 * 0.54 + ca2 * 0.32) * smoothstep(1.02, 0.10, depth);
+  float ca1 = causticCell(wuv + vec2(0.0, u_time * 0.025), 6.2, 0.84);
+  float ca2 = causticCell(wuv.yx + vec2(u_time * 0.018, 0.1), 11.5, 0.58);
+  float ca3 = causticCell(wuv + vec2(0.18, -0.12), 17.0, 0.36);
+  float caustic = (ca1 * 0.48 + ca2 * 0.34 + ca3 * 0.18) * smoothstep(1.04, 0.08, depth);
 
-  float rayPulse = 0.72 + sin(u_time * 0.42) * 0.12;
+  float rayPulse = 0.76 + sin(u_time * 0.42) * 0.14;
   float rays = godRay(uv, 0.15, 0.075, 0.18, rayPulse)
              + godRay(uv, 0.38, 0.050, -0.11, 0.62)
              + godRay(uv, 0.70, 0.070, 0.09, 0.52)
              + godRay(uv, 0.91, 0.045, -0.16, 0.34);
 
   float bubbles = bubbleField(uv);
-  float plankton = smoothstep(0.82, 1.0, hash(floor((uv + vec2(u_time * 0.018, -u_time * 0.024)) * u_resolution.xy * 0.075))) * 0.14;
+  float plankton = smoothstep(0.80, 1.0, hash(floor((uv + vec2(u_time * 0.018, -u_time * 0.024)) * u_resolution.xy * 0.095))) * 0.18;
   float school = fishShadow(uv, vec2(fract(1.08 - u_time * 0.021), 0.32 + sin(u_time * 0.37) * 0.035), 0.86, -1.0)
                + fishShadow(uv, vec2(fract(0.09 + u_time * 0.016), 0.57 + sin(u_time * 0.29) * 0.030), 0.64, 1.0)
                + fishShadow(uv, vec2(fract(0.47 + u_time * 0.012), 0.71 + sin(u_time * 0.23) * 0.018), 0.42, 1.0);
@@ -136,8 +138,8 @@ void main() {
 
   vec3 color = mix(base, scene, clamp(u_has_scene, 0.0, 1.0) * 0.56);
   color = mix(color, base, fog * 0.18);
-  color += u_glow * caustic * (0.58 * u_intensity);
-  color += vec3(0.70, 0.96, 1.0) * rays * (0.34 * u_intensity);
+  color += u_glow * caustic * (0.74 * u_intensity);
+  color += vec3(0.70, 0.96, 1.0) * rays * (0.42 * u_intensity);
   color += u_glow * (bubbles * 0.24 + plankton * 0.30);
   color += vec3(0.75, 0.95, 1.0) * surface;
   color = mix(color, u_bottom * 0.72, fog * 0.35);
@@ -145,12 +147,12 @@ void main() {
   color *= mix(0.74, 1.12, vignette);
   color += grain;
 
-  gl_FragColor = vec4(color, 0.90);
+  gl_FragColor = vec4(color, 0.82);
 }`;
 
 const MOODS: Record<UnderwaterLayerMood, { top: [number, number, number]; bottom: [number, number, number]; glow: [number, number, number]; intensity: number }> = {
   town: { top: [0.04, 0.43, 0.76], bottom: [0.01, 0.12, 0.27], glow: [0.42, 0.94, 1.0], intensity: 0.82 },
-  fishing: { top: [0.02, 0.55, 0.78], bottom: [0.01, 0.16, 0.34], glow: [0.65, 1.0, 0.96], intensity: 1.0 },
+  fishing: { top: [0.02, 0.58, 0.80], bottom: [0.00, 0.14, 0.31], glow: [0.72, 1.0, 0.98], intensity: 1.08 },
   deep: { top: [0.03, 0.18, 0.45], bottom: [0.00, 0.05, 0.16], glow: [0.35, 0.68, 1.0], intensity: 0.74 },
   reef: { top: [0.02, 0.48, 0.62], bottom: [0.00, 0.14, 0.24], glow: [0.54, 1.0, 0.74], intensity: 0.9 },
 };
