@@ -10937,3 +10937,318 @@ html[data-runtime-quality="lite"] .v1113-micro-detail-fishing .fishing-3d-ambien
     animation-duration: .01ms !important;
   }
 }
+
+/* v1.1.4 PIXEL PERFECT POLISH PASS
+   Tiny layout/detail sweep on top of v1.1.1-v1.1.3. No SVG/vector assets; keep PNG/WebP 2.5D finish. */
+:root {
+  --v114-nav-bottom: calc(var(--v1111-nav-h, 70px) + 10px + env(safe-area-inset-bottom));
+  --v114-tight-fill: linear-gradient(180deg, rgba(34, 158, 209, .965), rgba(4, 37, 89, .99));
+  --v114-deep-fill: linear-gradient(180deg, rgba(8, 69, 141, .975), rgba(1, 13, 39, .992));
+  --v114-text-glow: 0 1px 2px rgba(0, 9, 24, .65), 0 0 10px rgba(98, 232, 255, .18);
+}
+html[data-pixel-polish="v1114-pixel-perfect-polish"] #app {
+  isolation: isolate !important;
+  max-width: 100vw !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+html[data-pixel-polish="v1114-pixel-perfect-polish"] :is(.login-screen,.game-screen) {
+  max-width: 100vw !important;
+  min-width: 0 !important;
+  contain: layout paint style !important;
+}
+html[data-pixel-polish="v1114-pixel-perfect-polish"] :is(.runtime-content,.runtime-card-list,.runtime-item-grid,.runtime-dex-grid,.v108-shop-grid,.mission-list,.ranking-panel,.recent-cards) {
+  min-width: 0 !important;
+}
+html[data-pixel-polish="v1114-pixel-perfect-polish"] :is(.runtime-hud,.runtime-hero-card,.runtime-panel,.gear-card,.shop-card,.mission-card,.runtime-item-card,.runtime-dex-card,.catch-result-card,.game-dialog-card,.exit-fallback-hint) {
+  transform: translateZ(0) !important;
+  overflow: hidden !important;
+}
+.v1114-pixel-polish-screen .runtime-hud {
+  grid-template-columns: clamp(34px, 9vw, 42px) minmax(0, 1fr) minmax(72px, 96px) !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/hud_capsule_deep.png'), var(--v114-tight-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+}
+.v1114-pixel-polish-screen .runtime-title,
+.v1114-pixel-polish-screen .runtime-hero-card > div,
+.v1114-pixel-polish-screen .v950-card-main,
+.v1114-pixel-polish-screen .shop-card > div,
+.v1114-pixel-polish-screen .mission-card > div:first-child,
+.v1114-pixel-polish-screen .runtime-item-card,
+.v1114-pixel-polish-screen .runtime-dex-card {
+  min-width: 0 !important;
+}
+.v1114-pixel-polish-screen .runtime-title :is(strong,em),
+.v1114-pixel-polish-screen .runtime-wallet span,
+.v1114-pixel-polish-screen .runtime-hero-card :is(h2,p),
+.v1114-pixel-polish-screen .gear-card :is(strong,span),
+.v1114-pixel-polish-screen .shop-card :is(strong,small),
+.v1114-pixel-polish-screen .mission-card :is(strong,span,small),
+.v1114-pixel-polish-screen .runtime-dex-card :is(strong,span),
+.v1114-pixel-polish-screen .runtime-item-card :is(strong,span),
+.v1114-pixel-polish-screen .v108-rank-row :is(strong,span,em,i) {
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-shadow: var(--v114-text-glow) !important;
+}
+.v1114-pixel-polish-screen .runtime-title :is(strong,em),
+.v1114-pixel-polish-screen .runtime-wallet span,
+.v1114-pixel-polish-screen .gear-card :is(strong,span),
+.v1114-pixel-polish-screen .shop-card :is(strong,small),
+.v1114-pixel-polish-screen .v108-rank-row :is(strong,span,em,i) {
+  white-space: nowrap !important;
+}
+.v1114-pixel-polish-screen .runtime-hero-card p,
+.v1114-pixel-polish-screen .mission-card span,
+.v1114-pixel-polish-screen .runtime-dex-card span,
+.v1114-pixel-polish-screen .runtime-item-card span {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  white-space: normal !important;
+  line-height: 1.24 !important;
+}
+.v1114-pixel-polish-screen .runtime-wallet {
+  min-width: 0 !important;
+  justify-items: stretch !important;
+}
+.v1114-pixel-polish-screen .runtime-wallet span {
+  justify-content: center !important;
+  min-width: 0 !important;
+  padding-inline: 5px !important;
+}
+html[data-pixel-polish="v1114-pixel-perfect-polish"] .bottom-nav.v840-bottom-nav {
+  left: max(6px, env(safe-area-inset-left)) !important;
+  right: max(6px, env(safe-area-inset-right)) !important;
+  max-width: calc(100vw - 12px) !important;
+  grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  overflow: hidden !important;
+}
+html[data-pixel-polish="v1114-pixel-perfect-polish"] .bottom-nav.v840-bottom-nav button {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  padding-inline: 1px !important;
+}
+html[data-pixel-polish="v1114-pixel-perfect-polish"] .bottom-nav.v840-bottom-nav button span {
+  width: 100% !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-align: center !important;
+}
+html[data-pixel-polish="v1114-pixel-perfect-polish"] .bottom-nav.v840-bottom-nav button:active {
+  transform: translateY(1px) scale(.98) !important;
+}
+.v1114-pixel-polish-screen .region-card {
+  box-shadow: 0 10px 18px rgba(0, 15, 44, .24), inset 0 1px 0 rgba(255,255,255,.18) !important;
+}
+.v1114-pixel-polish-screen .region-card span {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  overflow: hidden !important;
+}
+.v1114-pixel-polish-screen .v108-shop-card.shop-card {
+  grid-template-columns: clamp(34px, 10vw, 40px) minmax(0, 1fr) minmax(48px, 62px) !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/card_gold.png'), linear-gradient(180deg, rgba(255, 232, 119, .96), rgba(7, 102, 170, .98)) !important;
+  background-size: 100% 100%, 100% 100% !important;
+}
+.v1114-pixel-polish-screen .v108-shop-card.shop-card .shop-price,
+.v1114-pixel-polish-screen .compact-cost-btn,
+.v1114-pixel-polish-screen .compact-cta {
+  min-width: 50px !important;
+  max-width: 72px !important;
+  white-space: nowrap !important;
+}
+.v1114-pixel-polish-screen .v108-mission-card {
+  background-image: url('/assets/v3d_underwater/ui/frames/card_emerald.png'), var(--v114-tight-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+}
+.v1114-pixel-polish-screen .v108-mission-progress b {
+  font-size: 8.5px !important;
+  line-height: 1 !important;
+  text-shadow: 0 1px 2px rgba(0, 12, 26, .72) !important;
+}
+.v1114-pixel-polish-screen .runtime-dex-card img,
+.v1114-pixel-polish-screen .runtime-item-card img,
+.v1114-pixel-polish-screen .gear-card img,
+.v1114-pixel-polish-screen .shop-card img {
+  image-rendering: auto !important;
+  backface-visibility: hidden !important;
+}
+.v1114-pixel-polish-screen .v108-rank-row {
+  grid-template-columns: 24px minmax(48px, .95fr) minmax(34px, .54fr) minmax(50px, .72fr) minmax(62px, .82fr) !important;
+  background-image: linear-gradient(180deg, rgba(20, 105, 170, .96), rgba(2, 25, 70, .985)) !important;
+  border: 1px solid rgba(175, 245, 255, .14) !important;
+}
+.v1114-pixel-polish-screen .v108-rank-row.me {
+  background-image: linear-gradient(180deg, rgba(114, 226, 255, .985), rgba(22, 96, 174, .99)) !important;
+  border-color: rgba(255, 235, 122, .34) !important;
+}
+.v1114-pixel-polish-screen .ranking-stats-grid > div {
+  min-width: 0 !important;
+  padding: 7px 5px !important;
+}
+.v1114-pixel-polish-screen .ranking-stats-grid span,
+.v1114-pixel-polish-screen .ranking-stats-grid strong {
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+.v1114-pixel-polish-fishing {
+  --v114-fishing-bottom: calc(var(--v1111-nav-h, 70px) + 8px + env(safe-area-inset-bottom));
+  background-color: #041423 !important;
+}
+.v1114-pixel-polish-fishing .fishing-3d-ambient { opacity: .94 !important; }
+.v1114-pixel-polish-fishing .underwater-webgl-host,
+.v1114-pixel-polish-fishing .underwater-webgl-canvas {
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+.v1114-pixel-polish-fishing .fishing-stage {
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  max-width: 100vw !important;
+  overflow: hidden !important;
+}
+.v1114-pixel-polish-fishing .fishing-hud.v840-fishing-hud {
+  grid-template-columns: minmax(88px, 1.15fr) minmax(58px, .55fr) minmax(46px, .45fr) !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/hud_capsule_deep.png'), var(--v114-deep-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  box-shadow: 0 8px 18px rgba(0, 16, 46, .28), inset 0 1px 0 rgba(255,255,255,.20) !important;
+}
+.v1114-pixel-polish-fishing .fishing-hud .hud-chip {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+.v1114-pixel-polish-fishing .fishing-hud .hud-chip :is(strong,span) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.v1114-pixel-polish-fishing .recent-catch-strip {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 6px !important;
+  z-index: 22 !important;
+}
+.v1114-pixel-polish-fishing .recent-title {
+  white-space: nowrap !important;
+  font-size: 10px !important;
+}
+.v1114-pixel-polish-fishing .recent-cards {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+}
+.v1114-pixel-polish-fishing .recent-card {
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+.v1114-pixel-polish-fishing .recent-card span {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+.v1114-pixel-polish-fishing .recent-empty {
+  grid-column: 1 / -1 !important;
+  min-width: 0 !important;
+}
+.v1114-pixel-polish-fishing .v840-stage-ui .cast-button,
+.v1114-pixel-polish-fishing .hold-pad,
+.v1114-pixel-polish-fishing .catch-result-card button {
+  touch-action: manipulation !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+.v1114-pixel-polish-fishing .v840-stage-ui .cast-button {
+  box-shadow: 0 10px 18px rgba(0, 31, 70, .30), inset 0 2px 0 rgba(255,255,255,.28) !important;
+}
+.v1114-pixel-polish-fishing .v840-reel-panel.reel-panel {
+  z-index: 34 !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/panel_medium_aqua.png'), var(--v114-tight-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  overflow: hidden !important;
+}
+.v1114-pixel-polish-fishing .tension-track,
+.v1114-pixel-polish-fishing .safe-progress,
+.v1114-pixel-polish-fishing .surge-meter {
+  contain: paint !important;
+}
+.v1114-pixel-polish-fishing .catch-result-card {
+  z-index: 42 !important;
+  max-height: min(74svh, 560px) !important;
+}
+.v1114-pixel-polish-fishing .catch-result-card > div {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+.v1114-pixel-polish-fishing .catch-result-card button {
+  min-width: 0 !important;
+  min-height: 42px !important;
+  padding-inline: 8px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.v1114-pixel-polish-fishing .fallback-scene {
+  background-size: cover !important;
+  background-position: center !important;
+  transform: translateZ(0) !important;
+}
+.v1114-pixel-polish-fishing .fallback-bobber,
+.v1114-pixel-polish-fishing .fallback-player {
+  filter: drop-shadow(0 10px 18px rgba(0, 12, 36, .34)) saturate(1.08) !important;
+}
+html[data-pixel-polish="v1114-pixel-perfect-polish"] .game-dialog-backdrop {
+  backdrop-filter: blur(8px) saturate(1.06) !important;
+}
+html[data-pixel-polish="v1114-pixel-perfect-polish"] .game-dialog-card,
+html[data-pixel-polish="v1114-pixel-perfect-polish"] .exit-fallback-hint {
+  width: min(342px, calc(100vw - 28px)) !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/modal_deep.png'), var(--v114-deep-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  color: #f8ffff !important;
+  text-shadow: var(--v114-text-glow) !important;
+}
+html[data-pixel-polish="v1114-pixel-perfect-polish"] .game-dialog-card p,
+html[data-pixel-polish="v1114-pixel-perfect-polish"] .exit-fallback-hint span {
+  line-height: 1.35 !important;
+}
+html[data-runtime-quality="lite"] .v1114-pixel-polish-screen .runtime-3d-bg,
+html[data-runtime-quality="lite"] .v1114-pixel-polish-fishing .fishing-3d-ambient {
+  filter: saturate(.94) brightness(.94) !important;
+}
+@media (max-width: 360px) {
+  .v1114-pixel-polish-screen .runtime-hud { grid-template-columns: 32px minmax(0, 1fr) minmax(64px, 76px) !important; }
+  .v1114-pixel-polish-screen .runtime-hud-mascot { width: 31px !important; height: 31px !important; }
+  .v1114-pixel-polish-screen .runtime-title strong { font-size: clamp(15px, 4.5vw, 18px) !important; }
+  .v1114-pixel-polish-screen .runtime-wallet span { font-size: 9px !important; padding-inline: 3px !important; }
+  .v1114-pixel-polish-screen .runtime-wallet img { width: 14px !important; height: 14px !important; }
+  .v1114-pixel-polish-screen .v108-rank-row { grid-template-columns: 22px minmax(44px, .92fr) minmax(30px, .50fr) minmax(46px, .68fr) minmax(58px, .78fr) !important; gap: 3px !important; }
+  .v1114-pixel-polish-fishing .fishing-hud.v840-fishing-hud { grid-template-columns: minmax(78px, 1fr) minmax(52px, .52fr) minmax(42px, .42fr) !important; }
+  .v1114-pixel-polish-fishing .recent-catch-strip { grid-template-columns: 1fr !important; max-height: 66px !important; }
+  .v1114-pixel-polish-fishing .recent-title { display: none !important; }
+  .v1114-pixel-polish-fishing .recent-cards { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .v1114-pixel-polish-fishing .catch-result-card > div { gap: 6px !important; }
+  .v1114-pixel-polish-fishing .catch-result-card button { font-size: 12px !important; min-height: 39px !important; }
+}
+@media (min-width: 700px) and (orientation: portrait) {
+  .v1114-pixel-polish-screen .runtime-content { max-width: 560px !important; }
+  .v1114-pixel-polish-fishing .fishing-hud.v840-fishing-hud,
+  .v1114-pixel-polish-fishing .recent-catch-strip { max-width: 560px !important; margin-inline: auto !important; }
+  .v1114-pixel-polish-fishing .v840-reel-panel.reel-panel { max-width: 420px !important; }
+}

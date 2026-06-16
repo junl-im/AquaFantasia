@@ -134,6 +134,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.visualPolish = 'v1111-quality-engine-ui-audit';
     document.documentElement.dataset.enginePatch = 'v1112-premium-25d-engine';
     document.documentElement.dataset.detailPolish = 'v1113-micro-detail-polish';
+    document.documentElement.dataset.pixelPolish = 'v1114-pixel-perfect-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -333,7 +334,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -370,7 +371,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -415,7 +416,14 @@ class AquaFantasiaGame {
     this.comboNode = root.querySelector<HTMLDivElement>('#comboBadge')!;
     this.progressNode = root.querySelector<HTMLDivElement>('.safe-progress span')!;
     this.waterLayer.style.setProperty('--water-speed', `${Math.max(10, 24 / region.waterSpeed)}s`);
-    const startHold = (ev: PointerEvent) => { this.reassertImmersiveMode(); this.holding = true; this.holdPad?.setPointerCapture?.(ev.pointerId); this.spawnTouchRing(ev.clientX, ev.clientY); this.vibrate(8); };
+    const startHold = (ev: PointerEvent) => {
+      this.reassertImmersiveMode();
+      if (this.state !== 'reeling') return;
+      this.holding = true;
+      this.holdPad?.setPointerCapture?.(ev.pointerId);
+      this.spawnTouchRing(ev.clientX, ev.clientY);
+      this.vibrate(8);
+    };
     const stopHold = () => { this.holding = false; };
     this.holdPad.addEventListener('pointerdown', startHold);
     this.holdPad.addEventListener('pointerup', stopHold);
@@ -457,7 +465,7 @@ class AquaFantasiaGame {
     nav.setAttribute('data-fixed-root', 'true');
     nav.innerHTML = navItems.map(({ screen, icon, label }) => {
       if (v13) return `<button class="${screen === active ? 'active' : ''}" data-screen="${screen}" aria-label="${label}"><span>${label}</span></button>`;
-      return `<button class="${screen === active ? 'active' : ''}" data-screen="${screen}"><img src="${icon}" alt="" /><span>${label}</span></button>`;
+      return `<button class="${screen === active ? 'active' : ''}" data-screen="${screen}" aria-label="${label}" data-label="${label}"><img src="${icon}" alt="" /><span>${label}</span></button>`;
     }).join('');
     dom.app.appendChild(nav);
     root.classList.add('has-fixed-root-nav');
@@ -800,7 +808,12 @@ class AquaFantasiaGame {
     this.stageHost?.classList.add('catch-bloom');
     let t = 0;
     const popup = () => {
-      if (!this.pixi || !this.catchSprite || this.state !== 'success') return;
+      if (!this.pixi || !this.catchSprite) return;
+      if (this.state !== 'success') {
+        this.pixi.ticker.remove(popup);
+        this.stageHost?.classList.remove('catch-bloom');
+        return;
+      }
       t += this.pixi.ticker.deltaMS / 1000;
       const bounce = Math.sin(Math.min(t * 6, Math.PI)) * 0.30;
       const s = Math.min(1, t * 2.4) + bounce;
@@ -848,7 +861,7 @@ class AquaFantasiaGame {
     this.castBtn?.classList.remove('hidden', 'pop-out');
     this.resizePixi();
     this.setHint('좋아요! 찌 던지기로 다음 물고기를 노려보세요');
-    if (this.comboNode) { this.comboNode.textContent = `연속 성공 x${Math.max(2, this.save.currentStreak)}`; this.comboNode.classList.add('hidden'); }
+    if (this.comboNode) { this.comboNode.textContent = `연속 성공 x${Math.max(2, this.save.currentStreak)}`; this.comboNode.classList.toggle('hidden', this.save.currentStreak < 2); }
   }
 
   private tick(): void {

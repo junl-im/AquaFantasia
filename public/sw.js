@@ -1,4 +1,5 @@
-const CACHE_NAME = 'aqua-fantasia-v1.1.3-micro-detail-polish';
+// v1.1.4 keeps v1.1.1-v1.1.3 safety policies and refreshes the offline cache.
+const CACHE_NAME = 'aqua-fantasia-v1.1.4-pixel-perfect-polish';
 const PRECACHE = [
   "./",
   "./index.html",
