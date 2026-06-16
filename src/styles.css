@@ -4381,13 +4381,13 @@ html[data-cache-name*="v9.1.0"] { background: #03101f !important; }
   min-height: 112px !important;
   padding: 18px 18px 17px !important;
   border-radius: 34px !important;
-  background: url('../assets/v91/ui/panel_status_aqua.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v91/ui/panel_status_aqua.png') center/100% 100% no-repeat !important;
   clip-path: inset(0 round 34px) !important;
   filter: drop-shadow(0 18px 26px rgba(0,18,54,.32)) !important;
 }
 .runtime-menu-screen.v890-v3d-screen.ranking-screen .runtime-hud,
 .runtime-menu-screen.v890-v3d-screen[data-runtime-screen="ranking"] .runtime-hud {
-  background-image: url('../assets/v91/ui/panel_status_deep.png') !important;
+  background-image: url('/assets/v91/ui/panel_status_deep.png') !important;
 }
 .runtime-menu-screen.v890-v3d-screen .runtime-title strong {
   font-size: clamp(38px, 9vw, 54px) !important;
@@ -4413,7 +4413,7 @@ html[data-cache-name*="v9.1.0"] { background: #03101f !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-card-list .shop-card,
 .runtime-menu-screen.v890-v3d-screen .runtime-card-list .mission-card,
 .runtime-menu-screen.v890-v3d-screen .ranking-live-card {
-  background: url('../assets/v91/ui/panel_large_aqua.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v91/ui/panel_large_aqua.png') center/100% 100% no-repeat !important;
   border: 0 !important;
   box-shadow: 0 19px 34px rgba(0,15,48,.32) !important;
   clip-path: inset(0 round 34px) !important;
@@ -4428,24 +4428,24 @@ html[data-cache-name*="v9.1.0"] { background: #03101f !important; }
 .runtime-menu-screen.v890-v3d-screen.ranking-screen .runtime-panel,
 .runtime-menu-screen.v890-v3d-screen.ranking-screen .ranking-live-card,
 .runtime-menu-screen.v890-v3d-screen.ranking-screen .ranking-panel {
-  background-image: url('../assets/v91/ui/panel_large_deep.png') !important;
+  background-image: url('/assets/v91/ui/panel_large_deep.png') !important;
 }
 .runtime-menu-screen.v890-v3d-screen .runtime-menu-card,
 .runtime-menu-screen.v890-v3d-screen .runtime-item-card,
 .runtime-menu-screen.v890-v3d-screen .region-card {
   min-height: 158px !important;
-  background: url('../assets/v91/ui/slot_square_aqua.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v91/ui/slot_square_aqua.png') center/100% 100% no-repeat !important;
   border: 0 !important;
   box-shadow: 0 15px 24px rgba(0,16,48,.26) !important;
   clip-path: inset(0 round 30px) !important;
 }
 .runtime-menu-screen.v890-v3d-screen .runtime-dex-card.dex-card,
 .runtime-menu-screen.v890-v3d-screen .runtime-item-card {
-  background-image: url('../assets/v91/ui/panel_card_aqua.png') !important;
+  background-image: url('/assets/v91/ui/panel_card_aqua.png') !important;
   border-radius: 32px !important;
   clip-path: inset(0 round 32px) !important;
 }
-.runtime-menu-screen.v890-v3d-screen .runtime-card-list .mission-card { background-image: url('../assets/v91/ui/panel_mission_aqua.png') !important; }
+.runtime-menu-screen.v890-v3d-screen .runtime-card-list .mission-card { background-image: url('/assets/v91/ui/panel_mission_aqua.png') !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-menu-card img,
 .runtime-menu-screen.v890-v3d-screen .runtime-item-card img,
 .runtime-menu-screen.v890-v3d-screen .gear-card > img,
@@ -4461,17 +4461,17 @@ html[data-cache-name*="v9.1.0"] { background: #03101f !important; }
 .runtime-menu-screen.v890-v3d-screen .image-btn,
 .runtime-menu-screen.v890-v3d-screen .mission-card .runtime-btn {
   min-height: 58px !important;
-  background: url('../assets/v91/ui/button_mid_aqua.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v91/ui/button_mid_aqua.png') center/100% 100% no-repeat !important;
   border: 0 !important;
   color: #053855 !important;
   filter: drop-shadow(0 9px 12px rgba(0,18,48,.25)) saturate(1.16) contrast(1.10) !important;
 }
 .runtime-menu-screen.v890-v3d-screen .runtime-btn.gold,
-.runtime-menu-screen.v890-v3d-screen .tide-card .runtime-btn { background-image: url('../assets/v91/ui/button_mid_gold.png') !important; color: #643600 !important; }
+.runtime-menu-screen.v890-v3d-screen .tide-card .runtime-btn { background-image: url('/assets/v91/ui/button_mid_gold.png') !important; color: #643600 !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-btn:active,
-.runtime-menu-screen.v890-v3d-screen .image-btn:active { background-image: url('../assets/v91/ui/button_mid_aqua_pressed.png') !important; }
+.runtime-menu-screen.v890-v3d-screen .image-btn:active { background-image: url('/assets/v91/ui/button_mid_aqua_pressed.png') !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-btn.gold:active,
-.runtime-menu-screen.v890-v3d-screen .tide-card .runtime-btn:active { background-image: url('../assets/v91/ui/button_mid_gold_pressed.png') !important; }
+.runtime-menu-screen.v890-v3d-screen .tide-card .runtime-btn:active { background-image: url('/assets/v91/ui/button_mid_gold_pressed.png') !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-menu-card strong,
 .runtime-menu-screen.v890-v3d-screen .runtime-item-card strong,
 .runtime-menu-screen.v890-v3d-screen .runtime-panel-title strong,
@@ -4496,7 +4496,7 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
   min-height: 104px !important;
   width: min(518px, calc(100vw - 0px)) !important;
   padding: 13px 12px 16px !important;
-  background: url('../assets/v91/ui/bottom_nav_deep.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v91/ui/bottom_nav_deep.png') center/100% 100% no-repeat !important;
   filter: drop-shadow(0 -10px 24px rgba(0,12,38,.28)) !important;
 }
 .bottom-nav.v840-bottom-nav button {
@@ -4516,36 +4516,36 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
 .bottom-nav.v840-bottom-nav button span { font-size: clamp(9.5px, 2.45vw, 11.3px) !important; color: #ecfbff !important; }
 .bottom-nav.v840-bottom-nav button.active span { color: #fff5a6 !important; }
 
-.fishing-screen.v890-fishing-screen { --v89-world-bg: url('../assets/v91/bg/region_lake.webp'); }
+.fishing-screen.v890-fishing-screen { --v89-world-bg: url('/assets/v91/bg/region_lake.webp'); }
 .fishing-screen.v890-fishing-screen .fishing-hud { top: var(--v910-safe-top) !important; }
 .fishing-screen.v890-fishing-screen .hud-chip {
-  background: url('../assets/v91/ui/panel_status_aqua.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v91/ui/panel_status_aqua.png') center/100% 100% no-repeat !important;
   min-height: 54px !important;
   color: #fff !important;
   text-shadow: 0 2px 4px rgba(0,23,58,.38) !important;
 }
 .fishing-screen.v890-fishing-screen .recent-catch-strip {
   bottom: calc(var(--v910-nav-height) + 8px + env(safe-area-inset-bottom)) !important;
-  background: url('../assets/v91/ui/panel_status_aqua.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v91/ui/panel_status_aqua.png') center/100% 100% no-repeat !important;
   min-height: 94px !important;
   border-radius: 32px !important;
   clip-path: inset(0 round 32px) !important;
 }
-.fishing-screen.v890-fishing-screen .recent-card { background-image: url('../assets/v91/ui/slot_square_deep.png') !important; }
+.fishing-screen.v890-fishing-screen .recent-card { background-image: url('/assets/v91/ui/slot_square_deep.png') !important; }
 .fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button {
   bottom: calc(var(--v910-nav-height) + 112px + env(safe-area-inset-bottom)) !important;
   width: min(350px, 80vw) !important;
   min-height: 78px !important;
-  background: url('../assets/v91/ui/button_large_gold.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v91/ui/button_large_gold.png') center/100% 100% no-repeat !important;
   color: #5d3200 !important;
   z-index: 12 !important;
 }
-.fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button:active { background-image: url('../assets/v91/ui/button_large_gold_pressed.png') !important; }
-.fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button .cast-icon { background-image: url('../assets/v91/icons/bobber.png') !important; width: 56px !important; height: 56px !important; }
+.fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button:active { background-image: url('/assets/v91/ui/button_large_gold_pressed.png') !important; }
+.fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button .cast-icon { background-image: url('/assets/v91/icons/bobber.png') !important; width: 56px !important; height: 56px !important; }
 body[data-screen="fishing"] .v840-reel-panel.reel-panel,
 html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel {
   bottom: calc(var(--v910-nav-height) + 116px + env(safe-area-inset-bottom)) !important;
-  background: url('../assets/v91/ui/panel_large_deep.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v91/ui/panel_large_deep.png') center/100% 100% no-repeat !important;
 }
 .fishing-screen.v890-fishing-screen .pixi-layer canvas {
   filter: saturate(1.18) contrast(1.08) brightness(1.03) !important;
@@ -4608,14 +4608,14 @@ html[data-cache-name*="v9.2.0"] { background: #031221 !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-hud {
   min-height: 116px !important;
   padding: 18px 18px 17px !important;
-  background: url('../assets/v92/ui/panel_status.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v92/ui/panel_status.png') center/100% 100% no-repeat !important;
   border: 0 !important;
   border-radius: 35px !important;
   clip-path: inset(0 round 35px) !important;
   filter: drop-shadow(0 19px 28px rgba(0,16,48,.32)) saturate(1.04) !important;
 }
 .runtime-menu-screen.v890-v3d-screen[data-runtime-screen="ranking"] .runtime-hud,
-.runtime-menu-screen.v890-v3d-screen.ranking-screen .runtime-hud { background-image: url('../assets/v92/ui/panel_status_deep.png') !important; }
+.runtime-menu-screen.v890-v3d-screen.ranking-screen .runtime-hud { background-image: url('/assets/v92/ui/panel_status_deep.png') !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-title strong {
   font-size: clamp(39px, 9.4vw, 56px) !important;
   letter-spacing: -1.05px !important;
@@ -4632,7 +4632,7 @@ html[data-cache-name*="v9.2.0"] { background: #031221 !important; }
   color: rgba(244,253,255,.94) !important;
 }
 .runtime-menu-screen.v890-v3d-screen .runtime-wallet span {
-  background: url('../assets/v92/ui/button_pill_aqua.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v92/ui/button_pill_aqua.png') center/100% 100% no-repeat !important;
   border: 0 !important;
   min-height: 40px !important;
   padding-inline: 14px !important;
@@ -4651,7 +4651,7 @@ html[data-cache-name*="v9.2.0"] { background: #031221 !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-card-list .gear-card,
 .runtime-menu-screen.v890-v3d-screen .runtime-card-list .shop-card,
 .runtime-menu-screen.v890-v3d-screen .ranking-live-card {
-  background: url('../assets/v92/ui/panel_large.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v92/ui/panel_large.png') center/100% 100% no-repeat !important;
   border: 0 !important;
   border-radius: 38px !important;
   clip-path: inset(0 round 38px) !important;
@@ -4659,7 +4659,7 @@ html[data-cache-name*="v9.2.0"] { background: #031221 !important; }
 }
 .runtime-menu-screen.v890-v3d-screen[data-runtime-screen="ranking"] .runtime-panel,
 .runtime-menu-screen.v890-v3d-screen.ranking-screen .runtime-panel,
-.runtime-menu-screen.v890-v3d-screen.ranking-screen .ranking-live-card { background-image: url('../assets/v92/ui/panel_large_deep.png') !important; }
+.runtime-menu-screen.v890-v3d-screen.ranking-screen .ranking-live-card { background-image: url('/assets/v92/ui/panel_large_deep.png') !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-hero-card {
   min-height: 170px !important;
   padding: 24px 23px !important;
@@ -4667,7 +4667,7 @@ html[data-cache-name*="v9.2.0"] { background: #031221 !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-panel { padding: 22px 20px 24px !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-menu-card,
 .runtime-menu-screen.v890-v3d-screen .region-card {
-  background: url('../assets/v92/ui/zone_card.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v92/ui/zone_card.png') center/100% 100% no-repeat !important;
   border: 0 !important;
   border-radius: 32px !important;
   clip-path: inset(0 round 32px) !important;
@@ -4677,13 +4677,13 @@ html[data-cache-name*="v9.2.0"] { background: #031221 !important; }
 }
 .runtime-menu-screen.v890-v3d-screen .runtime-item-card,
 .runtime-menu-screen.v890-v3d-screen .runtime-dex-card.dex-card {
-  background: url('../assets/v92/ui/panel_dex.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v92/ui/panel_dex.png') center/100% 100% no-repeat !important;
   border: 0 !important;
   border-radius: 34px !important;
   clip-path: inset(0 round 34px) !important;
 }
 .runtime-menu-screen.v890-v3d-screen .runtime-card-list .mission-card {
-  background: url('../assets/v92/ui/mission_card.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v92/ui/mission_card.png') center/100% 100% no-repeat !important;
   border: 0 !important;
   border-radius: 32px !important;
   clip-path: inset(0 round 32px) !important;
@@ -4709,7 +4709,7 @@ html[data-cache-name*="v9.2.0"] { background: #031221 !important; }
 .runtime-menu-screen.v890-v3d-screen .image-btn,
 .runtime-menu-screen.v890-v3d-screen .mission-card .runtime-btn {
   min-height: 60px !important;
-  background: url('../assets/v92/ui/button_mid_aqua.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v92/ui/button_mid_aqua.png') center/100% 100% no-repeat !important;
   border: 0 !important;
   border-radius: 24px !important;
   color: #073855 !important;
@@ -4717,11 +4717,11 @@ html[data-cache-name*="v9.2.0"] { background: #031221 !important; }
   filter: drop-shadow(0 10px 12px rgba(0,18,48,.26)) saturate(1.15) contrast(1.08) !important;
 }
 .runtime-menu-screen.v890-v3d-screen .runtime-btn.gold,
-.runtime-menu-screen.v890-v3d-screen .tide-card .runtime-btn { background-image: url('../assets/v92/ui/button_mid_gold.png') !important; color: #5e3400 !important; }
+.runtime-menu-screen.v890-v3d-screen .tide-card .runtime-btn { background-image: url('/assets/v92/ui/button_mid_gold.png') !important; color: #5e3400 !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-btn:active,
-.runtime-menu-screen.v890-v3d-screen .image-btn:active { background-image: url('../assets/v92/ui/button_mid_aqua_pressed.png') !important; }
+.runtime-menu-screen.v890-v3d-screen .image-btn:active { background-image: url('/assets/v92/ui/button_mid_aqua_pressed.png') !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-btn.gold:active,
-.runtime-menu-screen.v890-v3d-screen .tide-card .runtime-btn:active { background-image: url('../assets/v92/ui/button_mid_gold_pressed.png') !important; }
+.runtime-menu-screen.v890-v3d-screen .tide-card .runtime-btn:active { background-image: url('/assets/v92/ui/button_mid_gold_pressed.png') !important; }
 .runtime-menu-screen.v890-v3d-screen .runtime-menu-card strong,
 .runtime-menu-screen.v890-v3d-screen .runtime-item-card strong,
 .runtime-menu-screen.v890-v3d-screen .runtime-panel-title strong,
@@ -4742,7 +4742,7 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
   min-height: 106px !important;
   width: min(536px, 100vw) !important;
   padding: 15px 13px 17px !important;
-  background: url('../assets/v92/ui/bottom_nav.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v92/ui/bottom_nav.png') center/100% 100% no-repeat !important;
   filter: drop-shadow(0 -12px 26px rgba(0,10,34,.30)) saturate(1.05) !important;
 }
 .bottom-nav.v840-bottom-nav button {
@@ -4765,21 +4765,21 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
 }
 .bottom-nav.v840-bottom-nav button.active span { color: #fff4a5 !important; }
 
-.fishing-screen.v890-fishing-screen { --v89-world-bg: url('../assets/v92/bg/world_fishing.webp'); }
+.fishing-screen.v890-fishing-screen { --v89-world-bg: url('/assets/v92/bg/world_fishing.webp'); }
 .fishing-screen.v890-fishing-screen .fishing-hud { top: var(--v920-safe-top) !important; }
 .fishing-screen.v890-fishing-screen .hud-chip {
-  background: url('../assets/v92/ui/panel_status.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v92/ui/panel_status.png') center/100% 100% no-repeat !important;
   min-height: 56px !important;
   color: #fff !important;
 }
 .fishing-screen.v890-fishing-screen .recent-catch-strip {
   bottom: calc(var(--v920-nav-height) + 8px + env(safe-area-inset-bottom)) !important;
-  background: url('../assets/v92/ui/panel_status.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v92/ui/panel_status.png') center/100% 100% no-repeat !important;
   min-height: 96px !important;
   border-radius: 34px !important;
   clip-path: inset(0 round 34px) !important;
 }
-.fishing-screen.v890-fishing-screen .recent-card { background-image: url('../assets/v92/ui/slot_inventory.png') !important; }
+.fishing-screen.v890-fishing-screen .recent-card { background-image: url('/assets/v92/ui/slot_inventory.png') !important; }
 .fishing-screen.v890-fishing-screen .recent-card img {
   height: 48px !important;
   max-width: 58px !important;
@@ -4790,20 +4790,20 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
   bottom: calc(var(--v920-nav-height) + 114px + env(safe-area-inset-bottom)) !important;
   width: min(360px, 82vw) !important;
   min-height: 80px !important;
-  background: url('../assets/v92/ui/button_large_gold.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v92/ui/button_large_gold.png') center/100% 100% no-repeat !important;
   color: #573100 !important;
   filter: drop-shadow(0 16px 20px rgba(0,18,48,.32)) saturate(1.14) contrast(1.09) !important;
 }
-.fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button:active { background-image: url('../assets/v92/ui/button_large_gold_pressed.png') !important; }
-.fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button .cast-icon { background-image: url('../assets/v92/icons/bobber.png') !important; width: 58px !important; height: 58px !important; }
+.fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button:active { background-image: url('/assets/v92/ui/button_large_gold_pressed.png') !important; }
+.fishing-screen.v890-fishing-screen .v840-stage-ui .cast-button .cast-icon { background-image: url('/assets/v92/icons/bobber.png') !important; width: 58px !important; height: 58px !important; }
 body[data-screen="fishing"] .v840-reel-panel.reel-panel,
 html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel {
   bottom: calc(var(--v920-nav-height) + 118px + env(safe-area-inset-bottom)) !important;
-  background: url('../assets/v92/ui/panel_large_deep.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v92/ui/panel_large_deep.png') center/100% 100% no-repeat !important;
   border-radius: 36px !important;
   clip-path: inset(0 round 36px) !important;
 }
-.fishing-screen.v890-fishing-screen .combo-badge { background-image: url('../assets/v92/ui/button_pill_aqua.png') !important; }
+.fishing-screen.v890-fishing-screen .combo-badge { background-image: url('/assets/v92/ui/button_pill_aqua.png') !important; }
 .fishing-screen.v890-fishing-screen .pixi-layer canvas { filter: saturate(1.22) contrast(1.10) brightness(1.04) !important; }
 
 @media (max-width: 390px) {
@@ -4854,7 +4854,7 @@ html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel 
 }
 .cast-trail-cute {
   left: 36%; top: 48%; width: 38%; height: 24%;
-  background: url('../assets/v93/fx/cute_bubbles.png') center/contain no-repeat;
+  background: url('/assets/v93/fx/cute_bubbles.png') center/contain no-repeat;
   opacity: 0;
   animation: v930Trail 0.96s cubic-bezier(.15,.9,.25,1) forwards;
   filter: drop-shadow(0 8px 10px rgba(0,39,72,.20));
@@ -4890,7 +4890,7 @@ html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel 
 .cast-trail-cute i:nth-child(5){ left: 82%; top: 42%; animation-delay: .23s; }
 .bite-burst-cute {
   right: 16%; top: 31%; width: min(190px, 42vw); aspect-ratio: 1;
-  background: url('../assets/v93/fx/cute_starburst.png') center/contain no-repeat;
+  background: url('/assets/v93/fx/cute_starburst.png') center/contain no-repeat;
   display: grid; place-items: center;
   animation: v930BiteBurst .92s cubic-bezier(.2,1.36,.24,1) forwards;
 }
@@ -4905,7 +4905,7 @@ html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel 
 .reward-burst-cute {
   left: 50%; top: 39%; width: min(360px, 72vw); height: min(260px, 40vh);
   transform: translate(-50%, -50%);
-  background: url('../assets/v93/fx/cute_starburst.png') center/contain no-repeat;
+  background: url('/assets/v93/fx/cute_starburst.png') center/contain no-repeat;
   display: grid; place-items: center;
   animation: v930RewardBurst 1.32s ease-out forwards;
 }
@@ -4922,7 +4922,7 @@ html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel 
 .reward-burst-cute span {
   position: absolute;
   width: 74px; height: 74px;
-  background: url('../assets/v93/fx/cute_heart_bubble.png') center/contain no-repeat;
+  background: url('/assets/v93/fx/cute_heart_bubble.png') center/contain no-repeat;
   animation: v930HeartFloat 1.18s ease-out forwards;
 }
 .reward-burst-cute span:nth-child(2){ left: 8%; top: 52%; animation-delay: .02s; }
@@ -4935,7 +4935,7 @@ html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel 
   width: min(350px, 78vw);
   min-height: 88px;
   padding: 18px 24px 18px 98px;
-  background: url('../assets/v93/ui/action_banner_cute.png') center/100% 100% no-repeat;
+  background: url('/assets/v93/ui/action_banner_cute.png') center/100% 100% no-repeat;
   color: #763600;
   filter: drop-shadow(0 15px 22px rgba(0,32,63,.25));
   animation: v930BadgePop 1.48s ease both;
@@ -4944,7 +4944,7 @@ html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel 
   content: '';
   position: absolute; left: 22px; top: 50%; transform: translateY(-50%);
   width: 64px; height: 64px;
-  background: url('../assets/v92/icons/bobber.png') center/contain no-repeat;
+  background: url('/assets/v92/icons/bobber.png') center/contain no-repeat;
   filter: drop-shadow(0 8px 8px rgba(0,0,0,.20));
 }
 .action-badge strong { display:block; font-size: clamp(27px,7.2vw,38px); line-height:.9; font-weight:1000; text-shadow: 0 2px 0 rgba(255,255,255,.72); }
@@ -4955,30 +4955,30 @@ html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel 
   left: 68% !important;
   top: 60% !important;
   border: 0 !important;
-  background: url('../assets/v93/fx/cute_splash.png') center/contain no-repeat !important;
+  background: url('/assets/v93/fx/cute_splash.png') center/contain no-repeat !important;
   opacity: 0;
   animation: v930Splash 0.82s ease-out forwards !important;
 }
 body[data-screen="fishing"] .v840-reel-panel.reel-panel,
 html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel {
-  background-image: url('../assets/v93/ui/reel_panel_cute.png') !important;
+  background-image: url('/assets/v93/ui/reel_panel_cute.png') !important;
   padding-top: 24px !important;
   box-shadow: 0 20px 34px rgba(0,14,52,.35), inset 0 2px 0 rgba(255,255,255,.22) !important;
 }
 .fishing-screen.v930-action-screen .reel-panel .hold-pad {
-  background-image: url('../assets/v92/ui/button_large_gold.png') !important;
+  background-image: url('/assets/v92/ui/button_large_gold.png') !important;
   color: #6a3900 !important;
   min-height: 66px !important;
   border-radius: 30px !important;
   box-shadow: none !important;
 }
 .fishing-screen.v930-action-screen .reel-panel .hold-pad:active {
-  background-image: url('../assets/v92/ui/button_large_gold_pressed.png') !important;
+  background-image: url('/assets/v92/ui/button_large_gold_pressed.png') !important;
 }
 .catch-result-card.v930-result {
   width: min(390px, 90vw) !important;
   min-height: 510px !important;
-  background: url('../assets/v93/ui/result_modal_cute.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v93/ui/result_modal_cute.png') center/100% 100% no-repeat !important;
   border: 0 !important;
   color: #06466b !important;
   padding: 30px 28px 24px !important;
@@ -4987,7 +4987,7 @@ html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel 
 }
 .catch-result-card.v930-result .result-sparkle {
   position: absolute; inset: -70px -46px auto auto; width: 180px; height: 180px;
-  background: url('../assets/v93/fx/cute_starburst.png') center/contain no-repeat;
+  background: url('/assets/v93/fx/cute_starburst.png') center/contain no-repeat;
   animation: v930SlowSpin 4s linear infinite;
 }
 .catch-result-card.v930-result img {
@@ -5024,10 +5024,10 @@ html.portrait-only-game body[data-screen="fishing"] .v840-reel-panel.reel-panel 
   border-radius: 26px !important;
   font-size: 16px !important;
 }
-.catch-result-card.v930-result button:first-child { background-image: url('../assets/v92/ui/button_mid_gold.png') !important; color:#683a00 !important; }
-.catch-result-card.v930-result button:last-child { background-image: url('../assets/v92/ui/button_mid_aqua.png') !important; color:#073855 !important; }
+.catch-result-card.v930-result button:first-child { background-image: url('/assets/v92/ui/button_mid_gold.png') !important; color:#683a00 !important; }
+.catch-result-card.v930-result button:last-child { background-image: url('/assets/v92/ui/button_mid_aqua.png') !important; color:#073855 !important; }
 .fishing-screen.v930-action-screen .recent-catch-strip {
-  background-image: url('../assets/v93/ui/mini_panel_cute.png') !important;
+  background-image: url('/assets/v93/ui/mini_panel_cute.png') !important;
   min-height: 102px !important;
 }
 .fishing-screen.v930-action-screen .recent-title,
@@ -5079,7 +5079,7 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
   gap: 2px !important;
   padding: 11px 10px 13px !important;
   border-radius: 30px !important;
-  background: url('../assets/v92/ui/bottom_nav.png') center/100% 100% no-repeat !important;
+  background: url('/assets/v92/ui/bottom_nav.png') center/100% 100% no-repeat !important;
   box-shadow: 0 -10px 22px rgba(0,10,36,.24) !important;
   filter: saturate(1.03) contrast(1.02) !important;
   overflow: hidden !important;
@@ -5407,7 +5407,7 @@ html[data-visual-polish="v950-cute-ui-harmony"] body {
   gap: 12px !important;
   overflow: hidden !important;
   background:
-    url('../assets/v91/ui/panel_status_aqua.png') center/100% 100% no-repeat,
+    url('/assets/v91/ui/panel_status_aqua.png') center/100% 100% no-repeat,
     linear-gradient(145deg, rgba(118,230,255,.78), rgba(27,104,166,.74)) !important;
   box-shadow: 0 18px 34px rgba(0,27,61,.24), inset 0 2px 0 rgba(255,255,255,.36) !important;
 }
@@ -5436,7 +5436,7 @@ html[data-visual-polish="v950-cute-ui-harmony"] body {
   grid-template-columns: auto 1fr auto !important;
   align-items: center !important;
   background:
-    url('../assets/v91/ui/panel_large_aqua.png') center/100% 100% no-repeat,
+    url('/assets/v91/ui/panel_large_aqua.png') center/100% 100% no-repeat,
     linear-gradient(145deg, rgba(91,216,255,.78), rgba(18,94,159,.82)) !important;
 }
 .v950-tide-card .tide-mascot {
@@ -5461,7 +5461,7 @@ html[data-visual-polish="v950-cute-ui-harmony"] body {
 .runtime-menu-screen.v950-cute-ui-screen .runtime-panel,
 .runtime-menu-screen.v950-cute-ui-screen .ranking-live-card {
   background:
-    url('../assets/v91/ui/panel_card_aqua.png') center/100% 100% no-repeat,
+    url('/assets/v91/ui/panel_card_aqua.png') center/100% 100% no-repeat,
     linear-gradient(145deg, rgba(91,217,255,.72), rgba(9,70,125,.86)) !important;
   border: 0 !important;
   box-shadow: 0 16px 28px rgba(0,30,67,.23), inset 0 2px 0 rgba(255,255,255,.22) !important;
@@ -5533,7 +5533,7 @@ html[data-visual-polish="v950-cute-ui-harmony"] body {
 .v950-shop-card img { margin-top: 12px; }
 .v950-mission-card.event {
   background:
-    url('../assets/v91/ui/panel_mission_aqua.png') center/100% 100% no-repeat,
+    url('/assets/v91/ui/panel_mission_aqua.png') center/100% 100% no-repeat,
     linear-gradient(145deg, rgba(123,228,255,.8), rgba(54,93,198,.82)) !important;
 }
 .v950-mission-card.ready { outline: 2px solid rgba(255,247,148,.62); box-shadow: 0 0 0 4px rgba(255,225,105,.12), 0 18px 30px rgba(0,30,67,.22) !important; }
@@ -5545,7 +5545,7 @@ html[data-visual-polish="v950-cute-ui-harmony"] body {
 .rank-user em { display:inline-flex; margin-top:5px; border-radius:999px; padding:4px 8px; color:#09314d; background:linear-gradient(135deg,#fff5a4,#76ffed); font-style:normal; font-size:10px; font-weight:1000; }
 .bottom-nav.v840-bottom-nav {
   background:
-    url('../assets/v91/ui/bottom_nav_deep.png') center/100% 100% no-repeat,
+    url('/assets/v91/ui/bottom_nav_deep.png') center/100% 100% no-repeat,
     linear-gradient(180deg, rgba(40,132,202,.88), rgba(8,47,93,.96)) !important;
 }
 .bottom-nav.v840-bottom-nav button.active {
@@ -5873,7 +5873,7 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
   border-radius: 29px !important;
   background:
     linear-gradient(180deg, rgba(109, 222, 255, .10), rgba(0, 33, 75, .10)),
-    url('../assets/v92/ui/bottom_nav.png') center/100% 100% no-repeat !important;
+    url('/assets/v92/ui/bottom_nav.png') center/100% 100% no-repeat !important;
   filter: drop-shadow(0 -9px 20px rgba(0, 12, 36, .24)) saturate(1.02) contrast(1.02) !important;
 }
 .bottom-nav.v840-bottom-nav button {
@@ -10428,4 +10428,512 @@ html[data-runtime-quality="lite"] .v3d-bubbles { animation-duration: 34s !import
   html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav button img { width: 35px !important; height: 35px !important; }
   html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav button span { font-size: 7.7px !important; }
   .fishing-screen.v1111-quality-engine-fishing .v840-stage-ui .cast-button { bottom: calc(var(--v1111-play-bottom) + 102px) !important; width: min(172px, 50vw) !important; }
+}
+
+/* v1.1.2 PREMIUM 2.5D ENGINE PASS
+   Keep the v1.1.1 safety cage, then add a stronger rendered-game finish without SVG/vector styling. */
+:root {
+  --v112-depth-fill: linear-gradient(180deg, rgba(31, 154, 198, .90), rgba(6, 51, 105, .98));
+  --v112-deep-fill: linear-gradient(180deg, rgba(8, 62, 126, .96), rgba(1, 15, 42, .985));
+  --v112-gold-fill: linear-gradient(180deg, #fff4a0 0%, #ffce53 42%, #d87925 100%);
+  --v112-aqua-fill: linear-gradient(180deg, #a8fbff 0%, #3dd4f0 44%, #0877b8 100%);
+  --v112-card-shadow: 0 12px 24px rgba(0, 18, 54, .24), inset 0 1px 0 rgba(255,255,255,.20);
+  --v112-safe-bottom: calc(var(--v1111-nav-h, 70px) + max(8px, env(safe-area-inset-bottom)));
+}
+html[data-engine-patch="v1112-premium-25d-engine"] #app {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(90, 218, 255, .18), transparent 34%),
+    linear-gradient(180deg, #031a2b 0%, #020b18 100%) !important;
+}
+html[data-engine-patch="v1112-premium-25d-engine"] .game-screen {
+  background-color: #031828 !important;
+  backface-visibility: hidden !important;
+}
+html[data-engine-patch="v1112-premium-25d-engine"] .bottom-nav.v840-bottom-nav {
+  height: clamp(64px, 8.8svh, 74px) !important;
+  padding: 4px 6px 6px !important;
+  border-radius: 22px 22px 17px 17px !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/bottom_nav_aqua.png'), linear-gradient(180deg, rgba(40, 157, 207, .96), rgba(2, 34, 79, .99)) !important;
+  box-shadow: 0 -5px 14px rgba(0, 18, 49, .34), inset 0 1px 0 rgba(255,255,255,.19) !important;
+}
+html[data-engine-patch="v1112-premium-25d-engine"] .bottom-nav.v840-bottom-nav button {
+  min-height: 50px !important;
+  border-radius: 14px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(0, 61, 115, .14)) !important;
+}
+html[data-engine-patch="v1112-premium-25d-engine"] .bottom-nav.v840-bottom-nav button img {
+  width: clamp(34px, 8.4vw, 41px) !important;
+  height: clamp(34px, 8.4vw, 41px) !important;
+  transform: translateZ(0) scale(1.02) !important;
+}
+html[data-engine-patch="v1112-premium-25d-engine"] .bottom-nav.v840-bottom-nav button span {
+  font-size: clamp(7.6px, 2vw, 9.3px) !important;
+  letter-spacing: -.03em !important;
+}
+.v1112-premium-engine-screen .runtime-3d-bg::before {
+  opacity: calc(var(--premium-depth-alpha, .58) * .62) !important;
+  filter: saturate(1.08) contrast(1.04) !important;
+}
+.v1112-premium-engine-screen .runtime-3d-bg::after,
+.v1112-premium-engine-fishing .fishing-3d-ambient::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(ellipse at 52% 15%, rgba(255,255,255,.18), transparent 28%),
+    radial-gradient(ellipse at 18% 55%, rgba(89,239,255,.10), transparent 32%),
+    linear-gradient(180deg, rgba(0,11,28,.02), rgba(0,10,25,.36) 72%, rgba(0,5,16,.52)) !important;
+  mix-blend-mode: screen !important;
+  opacity: var(--premium-depth-alpha, .58) !important;
+  z-index: 1 !important;
+}
+.v1112-premium-engine-screen .underwater-webgl-canvas {
+  opacity: min(.58, var(--water-fx-alpha, .60)) !important;
+}
+.v1112-premium-engine-screen :is(.runtime-hud,.runtime-hero-card,.runtime-panel,.runtime-item-card,.runtime-dex-card,.gear-card,.shop-card,.mission-card,.ranking-summary,.ranking-panel,.ranking-stats-grid > div) {
+  position: relative !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/panel_medium_aqua.png'), var(--v112-depth-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  box-shadow: var(--v112-card-shadow) !important;
+  border-radius: clamp(17px, 4.2vw, 24px) !important;
+}
+.v1112-premium-engine-screen :is(.runtime-hero-card,.runtime-panel,.ranking-panel)::before,
+.v1112-premium-engine-screen :is(.runtime-item-card,.runtime-dex-card,.gear-card,.shop-card,.mission-card)::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 4px 6px auto 6px !important;
+  height: 32% !important;
+  border-radius: inherit !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.12), transparent) !important;
+  pointer-events: none !important;
+}
+.v1112-premium-engine-screen :is(.runtime-hud,.runtime-hero-card,.runtime-panel,.runtime-item-card,.runtime-dex-card,.gear-card,.shop-card,.mission-card,.ranking-panel,.ranking-stats-grid > div) > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+.v1112-premium-engine-screen .runtime-content {
+  padding-bottom: calc(var(--v112-safe-bottom) + 16px) !important;
+  scrollbar-width: none !important;
+}
+.v1112-premium-engine-screen .runtime-content::-webkit-scrollbar { display: none !important; }
+.v1112-premium-engine-screen :is(.runtime-btn,.image-btn,.compact-cta,.compact-cost-btn,.compact-cost-badge,.shop-price) {
+  min-width: 48px !important;
+  max-width: 76px !important;
+  min-height: 28px !important;
+  padding: 6px 8px !important;
+  border-radius: 13px !important;
+  background-image: url('/assets/v3d_underwater/ui/buttons/button_mid_gold_normal.png'), var(--v112-gold-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  color: #542900 !important;
+  font-weight: 1000 !important;
+  letter-spacing: -.03em !important;
+}
+.v1112-premium-engine-screen :is(.runtime-btn.blue,.runtime-btn.cyan,.image-btn.soft) {
+  background-image: url('/assets/v3d_underwater/ui/buttons/button_mid_aqua_normal.png'), var(--v112-aqua-fill) !important;
+  color: #f8ffff !important;
+}
+.v1112-premium-engine-screen .v108-shop-card.shop-card {
+  display: grid !important;
+  grid-template-columns: 42px minmax(0, 1fr) 58px !important;
+  grid-template-rows: auto auto !important;
+  grid-template-areas: "icon main price" "tag main price" !important;
+  min-height: 96px !important;
+  gap: 3px 7px !important;
+  padding: 9px !important;
+  text-align: left !important;
+}
+.v1112-premium-engine-screen .v108-shop-card.shop-card > em {
+  grid-area: tag !important;
+  align-self: start !important;
+  width: 42px !important;
+  padding: 3px 2px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, rgba(255,244,160,.96), rgba(245,160,55,.96)) !important;
+  color: #562800 !important;
+  text-align: center !important;
+  font-size: 8px !important;
+  line-height: 1 !important;
+  text-shadow: none !important;
+}
+.v1112-premium-engine-screen .v108-shop-card.shop-card > img { grid-area: icon !important; width: 40px !important; height: 40px !important; }
+.v1112-premium-engine-screen .v108-shop-card.shop-card > div { grid-area: main !important; min-width: 0 !important; align-self: center !important; }
+.v1112-premium-engine-screen .v108-shop-card.shop-card .shop-price { grid-area: price !important; justify-self: end !important; align-self: center !important; min-width: 54px !important; }
+.v1112-premium-engine-screen .v108-shop-card.shop-card strong { font-size: 13px !important; line-height: 1.08 !important; }
+.v1112-premium-engine-screen .v108-shop-card.shop-card small { font-size: 10px !important; line-height: 1.18 !important; }
+.v1112-premium-engine-screen .v108-mission-card {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 58px !important;
+  grid-template-rows: auto auto !important;
+  min-height: 90px !important;
+  gap: 6px 8px !important;
+  padding: 9px 10px !important;
+}
+.v1112-premium-engine-screen .v108-mission-card > div:first-child { min-width: 0 !important; }
+.v1112-premium-engine-screen .v108-mission-card > .runtime-btn { grid-column: 2 !important; grid-row: 1 !important; justify-self: end !important; align-self: center !important; }
+.v1112-premium-engine-screen .v108-mission-progress { grid-column: 1 / 3 !important; grid-row: 2 !important; height: 13px !important; border-radius: 999px !important; overflow: hidden !important; }
+.v1112-premium-engine-screen .v108-rank-row {
+  background: linear-gradient(180deg, rgba(18,98,155,.92), rgba(3,31,78,.96)) !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.14) !important;
+}
+.v1112-premium-engine-screen .v108-rank-row.me {
+  background: linear-gradient(180deg, rgba(84,203,255,.96), rgba(19,85,168,.98)) !important;
+}
+.v1112-premium-engine-screen .ranking-stats-grid { gap: 6px !important; }
+.v1112-premium-engine-fishing {
+  --v112-fishing-control-bottom: calc(var(--v1111-nav-h, 70px) + 9px + env(safe-area-inset-bottom));
+}
+.v1112-premium-engine-fishing .fishing-3d-ambient { z-index: 0 !important; }
+.v1112-premium-engine-fishing .fishing-3d-ambient .underwater-webgl-canvas,
+.v1112-premium-engine-fishing .underwater-webgl-canvas {
+  opacity: min(.56, var(--water-fx-alpha, .60)) !important;
+  filter: saturate(var(--water-fx-blend, .92)) contrast(1.02) brightness(.96) !important;
+}
+.v1112-premium-engine-fishing .fishing-stage {
+  z-index: 5 !important;
+  filter: saturate(1.14) contrast(1.08) brightness(1.04) drop-shadow(0 8px 18px rgba(0,0,0,.14)) !important;
+}
+.v1112-premium-engine-fishing .fishing-hud {
+  top: max(8px, calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 5px)) !important;
+  z-index: 28 !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/hud_capsule_aqua.png'), linear-gradient(180deg, rgba(33,158,207,.92), rgba(4,51,103,.96)) !important;
+  background-size: 100% 100%, 100% 100% !important;
+}
+.v1112-premium-engine-fishing .recent-catch-strip {
+  bottom: calc(var(--v112-fishing-control-bottom) + 4px) !important;
+  max-height: 64px !important;
+  z-index: 20 !important;
+}
+.v1112-premium-engine-fishing .v840-stage-ui .cast-button {
+  bottom: calc(var(--v112-fishing-control-bottom) + clamp(96px, 13svh, 126px)) !important;
+  min-height: 46px !important;
+  background-image: url('/assets/ui/button_cast_clean.png'), var(--v112-gold-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  filter: drop-shadow(0 10px 18px rgba(0, 27, 58, .28)) !important;
+}
+body[data-screen="fishing"] .v1112-premium-engine-fishing .v840-reel-panel.reel-panel {
+  bottom: calc(var(--v112-fishing-control-bottom) + clamp(74px, 9.2svh, 94px)) !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/panel_medium_deep.png'), var(--v112-deep-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  max-width: min(360px, calc(100% - 18px)) !important;
+  padding: 12px 14px 13px !important;
+}
+.v1112-premium-engine-fishing .tension-track {
+  box-shadow: inset 0 2px 7px rgba(0,0,0,.38), 0 1px 0 rgba(255,255,255,.14) !important;
+}
+.v1112-premium-engine-fishing .fallback-scene {
+  filter: saturate(1.12) contrast(1.06) brightness(1.03) !important;
+}
+.v1112-premium-engine-fishing .fallback-player,
+.v1112-premium-engine-fishing .fallback-bobber {
+  filter: drop-shadow(0 12px 18px rgba(0,0,0,.22)) saturate(1.08) !important;
+}
+html[data-runtime-quality="lite"] .v1112-premium-engine-fishing .fishing-3d-ambient .underwater-webgl-canvas,
+html[data-runtime-quality="lite"] .v1112-premium-engine-screen .underwater-webgl-canvas {
+  opacity: .42 !important;
+}
+@media (max-width: 390px) {
+  .v1112-premium-engine-screen .v108-shop-card.shop-card {
+    grid-template-columns: 38px minmax(0, 1fr) 52px !important;
+    min-height: 88px !important;
+    padding: 8px !important;
+  }
+  .v1112-premium-engine-screen .v108-shop-card.shop-card > img { width: 36px !important; height: 36px !important; }
+  .v1112-premium-engine-screen .v108-mission-card { grid-template-columns: minmax(0, 1fr) 52px !important; min-height: 86px !important; }
+  .v1112-premium-engine-fishing .v840-stage-ui .cast-button { bottom: calc(var(--v112-fishing-control-bottom) + 96px) !important; width: min(168px, 49vw) !important; }
+}
+
+/* v1.1.3 MICRO DETAIL POLISH PASS
+   Small-detail audit layer: keeps v1.1.1 safety + v1.1.2 premium engine, then tightens text, button, card, HUD, and fallback rendering edges. */
+:root {
+  --v113-inner-stroke: rgba(205, 255, 255, .32);
+  --v113-panel-fill: linear-gradient(180deg, rgba(28, 144, 196, .94), rgba(4, 41, 92, .985));
+  --v113-panel-deep-fill: linear-gradient(180deg, rgba(13, 80, 146, .97), rgba(1, 13, 38, .99));
+  --v113-button-press: translate3d(0, 2px, 0) scale(.985);
+}
+html[data-detail-polish="v1113-micro-detail-polish"] #app,
+.v1113-micro-detail-screen,
+.v1113-micro-detail-fishing {
+  isolation: isolate !important;
+  text-rendering: geometricPrecision !important;
+}
+.v1113-micro-detail-screen :is(.runtime-hud,.runtime-hero-card,.runtime-panel,.runtime-item-card,.runtime-dex-card,.gear-card,.shop-card,.mission-card,.ranking-summary,.ranking-panel,.ranking-stats-grid > div),
+.v1113-micro-detail-fishing :is(.fishing-hud,.recent-catch-strip,.reel-panel,.combo-badge,.catch-result-card) {
+  overflow: hidden !important;
+  border: 1px solid var(--v113-inner-stroke) !important;
+  background-blend-mode: normal, normal !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -12px 24px rgba(0,16,48,.26),
+    0 10px 22px rgba(0,17,50,.22) !important;
+}
+.v1113-micro-detail-screen :is(.runtime-hud,.runtime-hero-card,.runtime-panel,.runtime-item-card,.runtime-dex-card,.gear-card,.shop-card,.mission-card,.ranking-summary,.ranking-panel,.ranking-stats-grid > div)::before,
+.v1113-micro-detail-fishing :is(.fishing-hud,.recent-catch-strip,.reel-panel,.catch-result-card)::before {
+  z-index: 0 !important;
+  opacity: .82 !important;
+}
+.v1113-micro-detail-screen :is(.runtime-hud,.runtime-hero-card,.runtime-panel,.runtime-item-card,.runtime-dex-card,.gear-card,.shop-card,.mission-card,.ranking-panel,.ranking-stats-grid > div) > *,
+.v1113-micro-detail-fishing :is(.fishing-hud,.recent-catch-strip,.reel-panel,.catch-result-card) > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+.v1113-micro-detail-screen :is(.runtime-title,.runtime-title *, .runtime-hero-card div,.runtime-hero-card h2,.runtime-hero-card p,.runtime-menu-card strong,.runtime-menu-card span,.gear-card strong,.gear-card span,.shop-card strong,.shop-card small,.mission-card small,.mission-card strong,.mission-card span,.ranking-note,.dex-card strong,.dex-card span,.runtime-item-card strong,.runtime-item-card span,.region-card strong,.region-card span,.v108-rank-row *) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+}
+.v1113-micro-detail-screen :is(.runtime-title strong,.runtime-hero-card h2,.runtime-menu-card strong,.gear-card strong,.shop-card strong,.mission-card strong,.dex-card strong,.runtime-item-card strong,.region-card strong) {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical !important;
+}
+.v1113-micro-detail-screen :is(.runtime-title em,.runtime-hero-card p,.runtime-menu-card span,.gear-card span,.shop-card small,.mission-card span,.ranking-note,.dex-card span,.runtime-item-card span,.region-card span) {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+.v1113-micro-detail-screen .runtime-hud {
+  grid-template-columns: clamp(34px, 9vw, 40px) minmax(0, 1fr) minmax(74px, 112px) !important;
+  gap: 7px !important;
+  padding: 7px 9px !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/hud_capsule_aqua.png'), var(--v113-panel-fill) !important;
+}
+.v1113-micro-detail-screen .runtime-hud-mascot {
+  width: clamp(34px, 9vw, 40px) !important;
+  height: clamp(34px, 9vw, 40px) !important;
+  filter: drop-shadow(0 5px 8px rgba(0,18,45,.28)) saturate(1.06) !important;
+}
+.v1113-micro-detail-screen .runtime-title span { font-size: clamp(7.5px, 2vw, 9px) !important; letter-spacing: .09em !important; }
+.v1113-micro-detail-screen .runtime-title strong { font-size: clamp(18px, 4.8vw, 27px) !important; line-height: 1.02 !important; }
+.v1113-micro-detail-screen .runtime-title em { font-size: clamp(9.5px, 2.45vw, 12px) !important; line-height: 1.18 !important; color: rgba(232, 251, 255, .88) !important; }
+.v1113-micro-detail-screen .runtime-wallet {
+  display: grid !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+  max-width: 112px !important;
+}
+.v1113-micro-detail-screen .runtime-wallet span {
+  min-width: 0 !important;
+  height: 23px !important;
+  padding: 3px 6px !important;
+  font-size: clamp(8.5px, 2.25vw, 10.5px) !important;
+  line-height: 1 !important;
+  justify-content: center !important;
+}
+.v1113-micro-detail-screen .runtime-wallet img { width: 14px !important; height: 14px !important; }
+.v1113-micro-detail-screen .runtime-content {
+  width: min(760px, calc(100vw - 12px)) !important;
+  padding-inline: 6px !important;
+  padding-top: 2px !important;
+  overscroll-behavior: contain !important;
+  transform: translate3d(var(--swipe-peek-x, 0px), 0, 0) !important;
+  backface-visibility: hidden !important;
+}
+.v1113-micro-detail-screen .runtime-hero-card {
+  min-height: 76px !important;
+  gap: 8px !important;
+  padding: 10px !important;
+}
+.v1113-micro-detail-screen .runtime-hero-card > img {
+  width: clamp(42px, 11vw, 56px) !important;
+  height: clamp(42px, 11vw, 56px) !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 7px 10px rgba(0,22,54,.28)) saturate(1.06) !important;
+}
+.v1113-micro-detail-screen :is(.runtime-btn,.image-btn) {
+  max-width: none !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.26) !important;
+  transition: transform .10s ease, filter .10s ease !important;
+}
+.v1113-micro-detail-screen .runtime-hero-card :is(.runtime-btn,.image-btn) {
+  min-width: clamp(64px, 17vw, 92px) !important;
+  max-width: 112px !important;
+  padding-inline: 9px !important;
+}
+.v1113-micro-detail-screen :is(.compact-cost-btn,.compact-cost-badge,.shop-price,.v950-price-btn) {
+  min-width: 52px !important;
+  max-width: 82px !important;
+  justify-self: end !important;
+}
+.v1113-micro-detail-screen :is(.runtime-btn,.image-btn,.compact-cost-btn,.compact-cost-badge,.shop-price):active,
+.v1113-micro-detail-fishing :is(.cast-button,.hold-pad,.catch-result-card button):active {
+  transform: var(--v113-button-press) !important;
+  filter: brightness(.98) saturate(1.04) !important;
+}
+.v1113-micro-detail-screen .runtime-region-grid { gap: 9px !important; padding-bottom: calc(var(--v112-safe-bottom) + 28px) !important; }
+.v1113-micro-detail-screen .region-card {
+  min-height: clamp(108px, 26svh, 148px) !important;
+  border-radius: 20px !important;
+  background: #07395f !important;
+}
+.v1113-micro-detail-screen .region-card img { opacity: .94 !important; filter: saturate(1.08) contrast(1.04) brightness(.98) !important; }
+.v1113-micro-detail-screen .region-card::after { background: linear-gradient(180deg, rgba(0,8,24,.05), rgba(0,14,37,.42) 54%, rgba(0,6,20,.78)) !important; }
+.v1113-micro-detail-screen .region-card strong { margin-top: clamp(54px, 13svh, 78px) !important; font-size: clamp(13px, 3.4vw, 17px) !important; }
+.v1113-micro-detail-screen .runtime-item-grid,
+.v1113-micro-detail-screen .runtime-dex-grid,
+.v1113-micro-detail-screen .v108-shop-grid,
+.v1113-micro-detail-screen .runtime-card-list { gap: 9px !important; }
+.v1113-micro-detail-screen .runtime-item-card,
+.v1113-micro-detail-screen .runtime-dex-card {
+  min-height: 126px !important;
+  padding: 8px !important;
+}
+.v1113-micro-detail-screen .runtime-dex-card img,
+.v1113-micro-detail-screen .runtime-item-card img {
+  max-height: 58px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 7px 9px rgba(0,18,48,.30)) saturate(1.08) !important;
+}
+.v1113-micro-detail-screen .gear-card {
+  grid-template-columns: 45px minmax(0, 1fr) minmax(58px, 76px) !important;
+  gap: 7px !important;
+  min-height: 76px !important;
+  padding: 8px 9px !important;
+}
+.v1113-micro-detail-screen .v950-item-orb { width: 43px !important; height: 43px !important; }
+.v1113-micro-detail-screen .v950-item-orb img { width: 36px !important; height: 36px !important; }
+.v1113-micro-detail-screen .v108-shop-card.shop-card {
+  grid-template-columns: 39px minmax(0, 1fr) minmax(50px, 64px) !important;
+  min-height: 92px !important;
+  padding: 8px 9px !important;
+  gap: 3px 7px !important;
+}
+.v1113-micro-detail-screen .v108-shop-card.shop-card > img { width: 37px !important; height: 37px !important; }
+.v1113-micro-detail-screen .v108-shop-card.shop-card strong { font-size: clamp(11.2px, 3vw, 13px) !important; }
+.v1113-micro-detail-screen .v108-shop-card.shop-card small { font-size: clamp(9px, 2.4vw, 10.5px) !important; }
+.v1113-micro-detail-screen .v108-mission-card {
+  grid-template-columns: minmax(0, 1fr) minmax(50px, 64px) !important;
+  min-height: 88px !important;
+  padding: 8px 9px !important;
+  gap: 5px 7px !important;
+}
+.v1113-micro-detail-screen .v108-mission-card small { font-size: 8.5px !important; letter-spacing: .03em !important; }
+.v1113-micro-detail-screen .v108-mission-progress { height: 12px !important; box-shadow: inset 0 2px 5px rgba(0,0,0,.42) !important; }
+.v1113-micro-detail-screen .v108-rank-row {
+  min-height: 31px !important;
+  grid-template-columns: 24px minmax(56px, .9fr) minmax(40px, .52fr) minmax(54px, .68fr) minmax(68px, .86fr) !important;
+  gap: 4px !important;
+  padding: 4px 6px !important;
+}
+.v1113-micro-detail-screen .v108-rank-row :is(strong,span,em,i,b) {
+  font-size: clamp(8.5px, 2.15vw, 10px) !important;
+  line-height: 1.08 !important;
+  text-shadow: 0 1px 3px rgba(0,8,24,.42) !important;
+}
+.v1113-micro-detail-screen .ranking-note { font-size: clamp(9px, 2.3vw, 11px) !important; line-height: 1.28 !important; }
+.v1113-micro-detail-fishing {
+  --v113-fishing-bottom: calc(var(--v1111-nav-h, 70px) + 8px + env(safe-area-inset-bottom));
+}
+.v1113-micro-detail-fishing .fishing-3d-ambient::after { opacity: calc(var(--premium-depth-alpha, .58) * .82) !important; }
+.v1113-micro-detail-fishing .fishing-stage {
+  contain: layout paint size !important;
+  will-change: transform !important;
+}
+.v1113-micro-detail-fishing .fishing-hud.v840-fishing-hud {
+  left: 8px !important;
+  right: 8px !important;
+  min-height: 48px !important;
+  padding: 6px !important;
+  gap: 5px !important;
+  border-radius: 18px !important;
+}
+.v1113-micro-detail-fishing .fishing-hud .hud-chip {
+  min-width: 0 !important;
+  min-height: 34px !important;
+  padding: 5px 7px !important;
+  border-radius: 13px !important;
+}
+.v1113-micro-detail-fishing .fishing-hud .hud-chip img { width: 22px !important; height: 22px !important; }
+.v1113-micro-detail-fishing .fishing-hud .hud-chip strong { font-size: clamp(11px, 3vw, 14px) !important; line-height: 1.05 !important; }
+.v1113-micro-detail-fishing .fishing-hud .hud-chip span { font-size: clamp(8.5px, 2.25vw, 10px) !important; line-height: 1.1 !important; }
+.v1113-micro-detail-fishing .recent-catch-strip {
+  left: 8px !important;
+  right: 8px !important;
+  bottom: calc(var(--v113-fishing-bottom) + 3px) !important;
+  max-height: 62px !important;
+  padding: 6px 8px !important;
+  border-radius: 18px !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/panel_medium_deep.png'), var(--v113-panel-deep-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+}
+.v1113-micro-detail-fishing .recent-card {
+  min-width: 0 !important;
+  height: 33px !important;
+  gap: 4px !important;
+  padding: 3px 5px !important;
+  border-radius: 11px !important;
+}
+.v1113-micro-detail-fishing .recent-card img { width: 27px !important; height: 27px !important; }
+.v1113-micro-detail-fishing .recent-card span { font-size: clamp(8.5px, 2.25vw, 10px) !important; }
+.v1113-micro-detail-fishing .recent-card em { font-size: 8.5px !important; }
+.v1113-micro-detail-fishing .recent-empty { gap: 2px !important; }
+.v1113-micro-detail-fishing .recent-empty strong { font-size: 11px !important; }
+.v1113-micro-detail-fishing .recent-empty span { font-size: 9px !important; }
+.v1113-micro-detail-fishing .v840-stage-ui .cast-button {
+  bottom: calc(var(--v113-fishing-bottom) + clamp(96px, 13svh, 124px)) !important;
+  min-height: 48px !important;
+  width: min(190px, 52vw) !important;
+  border-radius: 20px !important;
+}
+.v1113-micro-detail-fishing .v840-stage-ui .cast-button strong { font-size: clamp(15px, 4vw, 18px) !important; letter-spacing: -.04em !important; }
+body[data-screen="fishing"] .v1113-micro-detail-fishing .v840-reel-panel.reel-panel {
+  bottom: calc(var(--v113-fishing-bottom) + clamp(72px, 9.4svh, 94px)) !important;
+  max-width: min(354px, calc(100vw - 18px)) !important;
+  padding: 11px 13px 12px !important;
+  border-radius: 21px !important;
+}
+.v1113-micro-detail-fishing .tension-track { height: 19px !important; border-radius: 999px !important; }
+.v1113-micro-detail-fishing .safe-progress { height: 8px !important; }
+.v1113-micro-detail-fishing .hold-pad {
+  min-height: 44px !important;
+  border-radius: 16px !important;
+  font-size: clamp(14px, 3.8vw, 17px) !important;
+  letter-spacing: -.035em !important;
+}
+.v1113-micro-detail-fishing .catch-result-card {
+  width: min(322px, calc(100vw - 28px)) !important;
+  padding: 16px 14px !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/panel_large_deep.png'), var(--v113-panel-deep-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+}
+.v1113-micro-detail-fishing .catch-result-card img { max-height: min(28svh, 190px) !important; object-fit: contain !important; }
+.v1113-micro-detail-fishing .catch-result-card h3 { font-size: clamp(22px, 6vw, 30px) !important; line-height: 1.02 !important; }
+.v1113-micro-detail-fishing .catch-result-card span { font-size: clamp(10.5px, 2.8vw, 13px) !important; line-height: 1.25 !important; }
+.v1113-micro-detail-fishing .fallback-scene::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background: radial-gradient(ellipse at 50% 36%, rgba(255,255,255,.12), transparent 30%), linear-gradient(180deg, rgba(0,22,48,.04), rgba(0,8,28,.28)) !important;
+  mix-blend-mode: screen !important;
+}
+html[data-runtime-quality="lite"] .v1113-micro-detail-screen :is(.runtime-bg-character,.runtime-3d-bg::after),
+html[data-runtime-quality="lite"] .v1113-micro-detail-fishing .fishing-3d-ambient::after {
+  opacity: .36 !important;
+}
+@media (max-width: 390px) {
+  .v1113-micro-detail-screen .runtime-hud { grid-template-columns: 34px minmax(0, 1fr) minmax(68px, 82px) !important; gap: 5px !important; padding-inline: 7px !important; }
+  .v1113-micro-detail-screen .runtime-wallet { max-width: 82px !important; }
+  .v1113-micro-detail-screen .runtime-content { width: calc(100vw - 8px) !important; padding-inline: 4px !important; }
+  .v1113-micro-detail-screen .runtime-hero-card { padding: 8px !important; }
+  .v1113-micro-detail-screen .runtime-hero-card :is(.runtime-btn,.image-btn) { min-width: 60px !important; max-width: 86px !important; font-size: 11px !important; }
+  .v1113-micro-detail-screen .gear-card { grid-template-columns: 40px minmax(0, 1fr) minmax(52px, 66px) !important; }
+  .v1113-micro-detail-screen .v108-shop-card.shop-card { grid-template-columns: 36px minmax(0, 1fr) minmax(48px, 58px) !important; }
+  .v1113-micro-detail-screen .v108-mission-card { grid-template-columns: minmax(0, 1fr) minmax(48px, 58px) !important; }
+  .v1113-micro-detail-fishing .fishing-hud.v840-fishing-hud { left: 6px !important; right: 6px !important; gap: 4px !important; }
+  .v1113-micro-detail-fishing .recent-catch-strip { left: 6px !important; right: 6px !important; }
+  .v1113-micro-detail-fishing .v840-stage-ui .cast-button { width: min(172px, 50vw) !important; bottom: calc(var(--v113-fishing-bottom) + 94px) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v1113-micro-detail-screen *,
+  .v1113-micro-detail-fishing * {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
 }

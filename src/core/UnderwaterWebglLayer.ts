@@ -182,6 +182,7 @@ export class UnderwaterWebglLayer {
   private texture?: WebGLTexture;
   private sceneReady = false;
   private startedAt = performance.now();
+  private frameIndex = 0;
   private uniforms?: {
     time: WebGLUniformLocation | null;
     resolution: WebGLUniformLocation | null;
@@ -201,15 +202,16 @@ export class UnderwaterWebglLayer {
     this.sceneUrl = options.sceneUrl;
     this.quality = options.quality ?? 'balanced';
     this.canvas = document.createElement('canvas');
-    this.canvas.className = 'underwater-webgl-canvas';
+    this.canvas.className = `underwater-webgl-canvas quality-${this.quality}`;
     this.canvas.setAttribute('aria-hidden', 'true');
     this.host.prepend(this.canvas);
   }
 
   start(): boolean {
     if (this.disposed) return false;
-    const gl = this.canvas.getContext('webgl2', { alpha: true, antialias: false, depth: false, stencil: false, premultipliedAlpha: true, powerPreference: 'high-performance' })
-      ?? this.canvas.getContext('webgl', { alpha: true, antialias: false, depth: false, stencil: false, premultipliedAlpha: true, powerPreference: 'high-performance' });
+    const powerPreference: WebGLPowerPreference = this.compact || this.quality === 'lite' ? 'low-power' : 'high-performance';
+    const gl = this.canvas.getContext('webgl2', { alpha: true, antialias: false, depth: false, stencil: false, premultipliedAlpha: true, powerPreference })
+      ?? this.canvas.getContext('webgl', { alpha: true, antialias: false, depth: false, stencil: false, premultipliedAlpha: true, powerPreference });
     if (!gl) {
       this.canvas.classList.add('webgl-unavailable');
       return false;
@@ -249,7 +251,7 @@ export class UnderwaterWebglLayer {
       uiSafety: gl.getUniformLocation(program, 'u_ui_safety'),
     };
     this.resize();
-    this.host.classList.add('underwater-webgl-ready');
+    this.host.classList.add('underwater-webgl-ready', `underwater-quality-${this.quality}`);
     this.loadSceneTexture();
     this.tick();
     return true;
@@ -334,6 +336,11 @@ export class UnderwaterWebglLayer {
 
   private tick = (): void => {
     if (this.disposed || !this.gl || !this.program || !this.uniforms) return;
+    this.frameIndex += 1;
+    if (this.quality === 'lite' && this.frameIndex % 2 === 1) {
+      this.raf = requestAnimationFrame(this.tick);
+      return;
+    }
     this.resize();
     const gl = this.gl;
     const mood = MOODS[this.mood];
@@ -345,7 +352,7 @@ export class UnderwaterWebglLayer {
     gl.uniform3fv(this.uniforms.glow, mood.glow);
     gl.uniform1f(this.uniforms.intensity, mood.intensity);
     gl.uniform1f(this.uniforms.quality, this.quality === 'high' ? 1.15 : this.quality === 'lite' ? 0.70 : 1.0);
-    gl.uniform1f(this.uniforms.uiSafety, this.mood === 'fishing' ? 0.74 : 1.0);
+    gl.uniform1f(this.uniforms.uiSafety, this.mood === 'fishing' ? 0.62 : 1.0);
     gl.activeTexture(gl.TEXTURE0);
     if (this.texture) gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.uniform1i(this.uniforms.scene, 0);

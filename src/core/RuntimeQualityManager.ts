@@ -9,6 +9,8 @@ export class RuntimeQualityManager {
   private last = 0;
   private samples: number[] = [];
   private lowFpsFrames = 0;
+  private highFpsFrames = 0;
+  private lastAppliedQuality: RuntimeQualityTier | '' = '';
 
   start(): void {
     if (this.started) return;
@@ -67,26 +69,45 @@ export class RuntimeQualityManager {
   private evaluateAverageFps(): void {
     const avg = this.samples.reduce((sum, fps) => sum + fps, 0) / this.samples.length;
     const current = this.quality;
-    if (avg < 38) this.lowFpsFrames += 1;
-    else this.lowFpsFrames = Math.max(0, this.lowFpsFrames - 1);
+    if (avg < 38) {
+      this.lowFpsFrames += 1;
+      this.highFpsFrames = 0;
+    } else {
+      this.lowFpsFrames = Math.max(0, this.lowFpsFrames - 1);
+      if (avg > 56) this.highFpsFrames += 1;
+      else this.highFpsFrames = Math.max(0, this.highFpsFrames - 1);
+    }
 
     if (this.lowFpsFrames > 7 && current !== 'lite') {
       this.quality = current === 'high' ? 'balanced' : 'lite';
       this.samples = [];
       this.lowFpsFrames = 0;
+      this.highFpsFrames = 0;
       this.applyQuality('fps-downshift');
+    } else if (this.highFpsFrames > 220 && current === 'lite' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.quality = 'balanced';
+      this.samples = [];
+      this.lowFpsFrames = 0;
+      this.highFpsFrames = 0;
+      this.applyQuality('fps-recovery');
     }
   }
 
   private applyQuality(reason: string): void {
     const root = document.documentElement;
+    const changed = this.lastAppliedQuality !== this.quality;
+    this.lastAppliedQuality = this.quality;
     root.dataset.runtimeQuality = this.quality;
     root.dataset.runtimeQualityReason = reason;
     root.style.setProperty('--runtime-dpr-cap', String(this.recommendedDprCap()));
-    root.style.setProperty('--water-fx-alpha', this.quality === 'lite' ? '.54' : this.quality === 'high' ? '.76' : '.66');
-    root.style.setProperty('--water-fx-blend', this.quality === 'lite' ? '.80' : this.quality === 'high' ? '1.06' : '.94');
-    root.style.setProperty('--ui-motion-scale', this.quality === 'lite' ? '.62' : '1');
+    root.style.setProperty('--water-fx-alpha', this.quality === 'lite' ? '.48' : this.quality === 'high' ? '.70' : '.60');
+    root.style.setProperty('--water-fx-blend', this.quality === 'lite' ? '.78' : this.quality === 'high' ? '1.04' : '.92');
+    root.style.setProperty('--ui-motion-scale', this.quality === 'lite' ? '.58' : '1');
+    root.style.setProperty('--premium-depth-alpha', this.quality === 'lite' ? '.42' : this.quality === 'high' ? '.72' : '.58');
     this.syncViewportVars();
+    if (changed) {
+      window.dispatchEvent(new CustomEvent('aqua-runtime-quality-change', { detail: { tier: this.quality, reason, dprCap: this.recommendedDprCap() } }));
+    }
   }
 
   private syncViewportVars = (): void => {

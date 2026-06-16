@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v1.1.1-quality-engine-ui-audit';
+const CACHE_NAME = 'aqua-fantasia-v1.1.3-micro-detail-polish';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -51,15 +51,8 @@ const PRECACHE = [
   "./assets/v92/bg/region_mangrove.webp",
   "./assets/v92/bg/region_lunar.webp",
   "./assets/v92/bg/region_reefFestival.webp",
-  "./assets/v92/ui/panel_large_aqua.png",
   "./assets/v92/ui/panel_large_deep.png",
-  "./assets/v92/ui/panel_status_aqua.png",
   "./assets/v92/ui/panel_status_deep.png",
-  "./assets/v92/ui/panel_card_aqua.png",
-  "./assets/v92/ui/panel_mission_aqua.png",
-  "./assets/v92/ui/slot_square_aqua.png",
-  "./assets/v92/ui/slot_square_deep.png",
-  "./assets/v92/ui/bottom_nav_deep.png",
   "./assets/v92/ui/button_large_gold.png",
   "./assets/v92/ui/button_large_gold_pressed.png",
   "./assets/v92/ui/button_mid_aqua.png",
@@ -341,10 +334,7 @@ const PRECACHE = [
   "./assets/v92/fish/fish_26.png",
   "./assets/v92/fish/fish_27.png",
   "./assets/v92/fish/fish_28.png",
-  "./assets/v92/fish/fish_29.png",
-  "./assets/v92/fish/fish_30.png",
-  "./assets/v92/fish/fish_unknown.png"
-
+  "./assets/v92/fish/fish_unknown.png",
   "./assets/v92/bg/world_fishing.webp",
   "./assets/v92/ui/bottom_nav.png",
   "./assets/v92/ui/bottom_nav_aqua.png",
@@ -411,16 +401,23 @@ const PRECACHE = [
   "./assets/v92/props/splash.png",
   "./assets/v92/props/water_tile_deep.png",
   "./assets/v92/props/water_tile_lake.png",
-  "./assets/v92/props/water_tile_ocean.png",
+  "./assets/v92/props/water_tile_ocean.png"
 ];
+
+async function precacheSafely() {
+  const cache = await caches.open(CACHE_NAME);
+  const results = await Promise.allSettled(PRECACHE.map((url) => cache.add(url)));
+  const failed = results.filter((result) => result.status === 'rejected').length;
+  if (failed) console.warn(`[AquaFantasia SW] precache skipped ${failed} missing or blocked asset(s)`);
+}
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
-    const cache = await caches.open(CACHE_NAME);
-    await cache.addAll(PRECACHE);
+    await precacheSafely();
     await self.skipWaiting();
   })());
 });
+
 self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
@@ -428,6 +425,7 @@ self.addEventListener('activate', (event) => {
     await self.clients.claim();
   })());
 });
+
 self.addEventListener('message', (event) => {
   if (event.data?.type === 'AQUA_FORCE_CACHE_SWEEP') {
     event.waitUntil((async () => {
@@ -436,6 +434,7 @@ self.addEventListener('message', (event) => {
     })());
   }
 });
+
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const req = event.request;
