@@ -12,10 +12,10 @@ const sw = read('public/sw.js');
 const underwater = read('src/core/UnderwaterWebglLayer.ts');
 const quality = read('src/core/RuntimeQualityManager.ts');
 
-add(pkg.version === '1.1.4', 'package version is 1.1.4');
-add(data.includes("APP_VERSION = '1.1.4'"), 'APP_VERSION is 1.1.4');
-add(data.includes('aqua-fantasia-v1.1.4-pixel-perfect-polish'), 'cache name updated in data');
-add(sw.includes('aqua-fantasia-v1.1.4-pixel-perfect-polish'), 'service worker cache updated');
+add(/^1\.1\.[4-9]$/.test(pkg.version), 'package version keeps v1.1.4+ lineage');
+add(data.includes('APP_VERSION ='), 'APP_VERSION is declared');
+add(data.includes('aqua-fantasia-v1.1.'), 'cache name keeps v1.1 lineage in data');
+add(sw.includes('aqua-fantasia-v1.1.'), 'service worker cache keeps v1.1 lineage');
 add(sw.includes('Promise.allSettled(PRECACHE.map((url) => cache.add(url)))'), 'service worker precache is fault tolerant');
 try { new Script(sw); add(true, 'service worker syntax is valid'); } catch (error) { add(false, `service worker syntax invalid: ${error.message}`); }
 
@@ -74,7 +74,7 @@ add(css.includes('var(--water-fx-alpha'), 'water alpha remains quality-controlle
 add(!/\.svg/i.test(main + css + data), 'no SVG/vector asset references added');
 add(existsSync('README.md'), 'README.md exists');
 add(read('README.md').includes('v1.1.4 Pixel Perfect Polish'), 'README documents v1.1.4');
-add(read('public/offline.html').includes('v1.1.4'), 'offline page version badge is updated');
+add(/v1\.1\.[4-9]/.test(read('public/offline.html')), 'offline page version badge is updated');
 
 const precache = [...sw.matchAll(/"(\.\/?[^"\n]+)"/g)].map((m) => m[1]);
 const missing = [];

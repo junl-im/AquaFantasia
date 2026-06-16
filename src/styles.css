@@ -11252,3 +11252,489 @@ html[data-runtime-quality="lite"] .v1114-pixel-polish-fishing .fishing-3d-ambien
   .v1114-pixel-polish-fishing .recent-catch-strip { max-width: 560px !important; margin-inline: auto !important; }
   .v1114-pixel-polish-fishing .v840-reel-panel.reel-panel { max-width: 420px !important; }
 }
+
+/* v1.1.5 UI LAYOUT RESCUE HOTFIX
+   Fixes the v1.1.4 nav drift regression and re-locks every menu inside the mobile viewport.
+   No SVG/vector assets added; this is a layout safety layer over the existing PNG/WebP 2.5D UI. */
+:root {
+  --v115-nav-height: clamp(66px, 9.6svh, 78px);
+  --v115-nav-gap: 5px;
+  --v115-screen-x: clamp(8px, 2.8vw, 13px);
+  --v115-screen-top: max(10px, calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 8px));
+  --v115-content-bottom: calc(var(--v115-nav-height) + var(--v115-nav-gap) + env(safe-area-inset-bottom) + 18px);
+  --v1111-nav-h: var(--v115-nav-height);
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"],
+html[data-layout-rescue="v1115-ui-layout-rescue"] body,
+html[data-layout-rescue="v1115-ui-layout-rescue"] #app {
+  width: 100% !important;
+  max-width: 100vw !important;
+  min-width: 0 !important;
+  height: var(--portrait-height, 100dvh) !important;
+  max-height: var(--portrait-height, 100dvh) !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] *,
+html[data-layout-rescue="v1115-ui-layout-rescue"] *::before,
+html[data-layout-rescue="v1115-ui-layout-rescue"] *::after {
+  box-sizing: border-box !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] #app {
+  position: relative !important;
+  isolation: isolate !important;
+  background: #041827 !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] :is(.login-screen,.game-screen) {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-width: 0 !important;
+  left: auto !important;
+  right: auto !important;
+  margin: 0 !important;
+  transform: none !important;
+  translate: none !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-menu-screen.v1115-layout-rescue-screen,
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-menu-screen.v1115-layout-rescue-screen.scroll-screen,
+html[data-layout-rescue="v1115-ui-layout-rescue"] .game-screen.runtime-menu-screen.scroll-screen {
+  position: relative !important;
+  height: var(--portrait-height, 100dvh) !important;
+  min-height: 0 !important;
+  max-height: var(--portrait-height, 100dvh) !important;
+  padding: var(--v115-screen-top) var(--v115-screen-x) var(--v115-content-bottom) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: contain !important;
+  touch-action: pan-y !important;
+  scroll-padding-bottom: var(--v115-content-bottom) !important;
+  contain: layout paint style !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-menu-screen .runtime-3d-bg {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  transform: translateZ(0) scale(1.01) !important;
+  overflow: hidden !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-menu-screen .runtime-hud,
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-menu-screen .runtime-content {
+  width: min(500px, calc(100vw - (var(--v115-screen-x) * 2))) !important;
+  max-width: calc(100vw - (var(--v115-screen-x) * 2)) !important;
+  min-width: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  transform: none !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-menu-screen .runtime-content {
+  display: grid !important;
+  gap: clamp(8px, 2.4vw, 12px) !important;
+  padding: clamp(8px, 2.4vw, 12px) 0 calc(var(--v115-content-bottom) + 4px) !important;
+  overflow: visible !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] :is(.runtime-hud,.runtime-hero-card,.runtime-panel,.runtime-menu-card,.runtime-item-card,.runtime-dex-card,.gear-card,.shop-card,.mission-card,.ranking-panel,.ranking-summary,.ranking-stats-grid > div) {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-hud {
+  grid-template-columns: clamp(30px, 8.2vw, 38px) minmax(0, 1fr) minmax(62px, 86px) !important;
+  gap: 6px !important;
+  padding: clamp(7px, 2.2vw, 10px) !important;
+  min-height: clamp(66px, 10.6svh, 84px) !important;
+  border-radius: 20px !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-hud-mascot {
+  width: clamp(30px, 8.2vw, 38px) !important;
+  height: clamp(30px, 8.2vw, 38px) !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-title strong {
+  font-size: clamp(17px, 5.1vw, 25px) !important;
+  line-height: 1.02 !important;
+  white-space: nowrap !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-title em {
+  font-size: clamp(9px, 2.55vw, 11.5px) !important;
+  line-height: 1.22 !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  white-space: normal !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-wallet {
+  min-width: 0 !important;
+  max-width: 86px !important;
+  gap: 3px !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-wallet span {
+  min-width: 0 !important;
+  min-height: 24px !important;
+  padding: 3px 5px !important;
+  font-size: clamp(9px, 2.6vw, 11px) !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-wallet img {
+  width: clamp(14px, 4vw, 19px) !important;
+  height: clamp(14px, 4vw, 19px) !important;
+  flex: 0 0 auto !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-hero-card {
+  grid-template-columns: clamp(42px, 12vw, 62px) minmax(0, 1fr) minmax(58px, 78px) !important;
+  gap: 7px !important;
+  min-height: clamp(86px, 15svh, 118px) !important;
+  padding: clamp(8px, 2.6vw, 12px) !important;
+  border-radius: 22px !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-hero-card > img {
+  width: clamp(42px, 12vw, 62px) !important;
+  height: clamp(42px, 12vw, 62px) !important;
+  min-width: 0 !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-hero-card h2 {
+  font-size: clamp(18px, 5.4vw, 27px) !important;
+  line-height: 1.02 !important;
+  margin: 0 0 3px !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-hero-card p {
+  font-size: clamp(10px, 2.8vw, 12px) !important;
+  line-height: 1.25 !important;
+  -webkit-line-clamp: 3 !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] :is(.runtime-btn,.image-btn,.compact-cta,.compact-cost-btn,.shop-price,.price-badge) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 34px !important;
+  padding: 5px 8px !important;
+  font-size: clamp(10px, 2.8vw, 12.5px) !important;
+  line-height: 1.05 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] :is(.runtime-item-grid,.runtime-dex-grid,.runtime-region-grid,.v108-shop-grid) {
+  width: 100% !important;
+  max-width: 100% !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  overflow: visible !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-card-list,
+html[data-layout-rescue="v1115-ui-layout-rescue"] .shop-list,
+html[data-layout-rescue="v1115-ui-layout-rescue"] .mission-list,
+html[data-layout-rescue="v1115-ui-layout-rescue"] .gear-grid {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 8px !important;
+  overflow: visible !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-region-grid .region-card {
+  min-height: clamp(104px, 25svh, 136px) !important;
+  border-radius: 18px !important;
+  padding: 8px !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-region-grid .region-card strong {
+  margin-top: clamp(48px, 12svh, 66px) !important;
+  font-size: clamp(12px, 3.25vw, 15px) !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-region-grid .region-card span {
+  font-size: clamp(9px, 2.45vw, 10.5px) !important;
+  line-height: 1.17 !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-item-card,
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-dex-card {
+  min-height: clamp(122px, 26svh, 170px) !important;
+  border-radius: 20px !important;
+  padding: 8px !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] :is(.runtime-item-card,.runtime-dex-card) img {
+  max-width: 100% !important;
+  height: clamp(54px, 14svh, 82px) !important;
+  object-fit: contain !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .gear-card {
+  grid-template-columns: clamp(38px, 11vw, 50px) minmax(0, 1fr) minmax(52px, 72px) !important;
+  gap: 7px !important;
+  min-height: 76px !important;
+  padding: 8px !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .v108-shop-card.shop-card,
+html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-shop-card.shop-card {
+  grid-template-columns: clamp(34px, 10vw, 44px) minmax(0, 1fr) minmax(48px, 64px) !important;
+  gap: 6px !important;
+  min-height: 86px !important;
+  padding: 8px !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .shop-card > img,
+html[data-layout-rescue="v1115-ui-layout-rescue"] .gear-card > img {
+  width: clamp(34px, 10vw, 48px) !important;
+  height: clamp(34px, 10vw, 48px) !important;
+  object-fit: contain !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .v108-mission-card {
+  grid-template-columns: minmax(0, 1fr) minmax(50px, 68px) !important;
+  gap: 6px !important;
+  min-height: 86px !important;
+  padding: 8px !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .ranking-panel {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 8px !important;
+  border-radius: 20px !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .v108-rank-row {
+  grid-template-columns: 22px minmax(0, 1fr) minmax(32px, .52fr) minmax(42px, .62fr) minmax(48px, .70fr) !important;
+  min-width: 0 !important;
+  gap: 3px !important;
+  padding: 4px 5px !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .v108-rank-row :is(strong,span,em,i,b) {
+  min-width: 0 !important;
+  font-size: clamp(8px, 2.05vw, 9.5px) !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* Bottom nav emergency reset: v1.1.4 changed left/right but left the old translateX(-50%). */
+html[data-layout-rescue="v1115-ui-layout-rescue"] .bottom-nav.v840-bottom-nav,
+html[data-layout-rescue="v1115-ui-layout-rescue"] html.portrait-only-game .bottom-nav.v840-bottom-nav,
+html[data-layout-rescue="v1115-ui-layout-rescue"] .bottom-nav.v840-bottom-nav.fixed-root-nav,
+html[data-layout-rescue="v1115-ui-layout-rescue"] .bottom-nav.fixed-root-nav {
+  position: fixed !important;
+  left: max(5px, env(safe-area-inset-left)) !important;
+  right: max(5px, env(safe-area-inset-right)) !important;
+  top: auto !important;
+  bottom: calc(var(--v115-nav-gap) + env(safe-area-inset-bottom)) !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: var(--v115-nav-height) !important;
+  min-height: 0 !important;
+  max-height: 82px !important;
+  transform: none !important;
+  translate: none !important;
+  margin: 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 2px !important;
+  padding: 5px 5px 6px !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  contain: layout paint style !important;
+  z-index: 320 !important;
+  pointer-events: auto !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .bottom-nav.v840-bottom-nav button {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 2px 1px 3px !important;
+  border-radius: 14px !important;
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) auto !important;
+  place-items: center !important;
+  align-content: center !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+  transform: none !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .bottom-nav.v840-bottom-nav button:active {
+  transform: translateY(1px) scale(.985) !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .bottom-nav.v840-bottom-nav button img {
+  width: clamp(24px, 6.5vw, 34px) !important;
+  height: clamp(24px, 6.5vw, 34px) !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  margin: 0 !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .bottom-nav.v840-bottom-nav button span {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+  font-size: clamp(7.2px, 2.05vw, 9.2px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.055em !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+}
+
+/* Fishing stays full-screen, but every HUD/control is bounded above the recovered bottom nav. */
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen.v1115-layout-rescue-fishing,
+html[data-layout-rescue="v1115-ui-layout-rescue"] .game-screen.fishing-screen.locked-screen {
+  position: relative !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: var(--portrait-height, 100dvh) !important;
+  min-height: 0 !important;
+  max-height: var(--portrait-height, 100dvh) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  touch-action: none !important;
+  contain: layout paint style !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .fishing-stage {
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  overflow: hidden !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .fishing-hud.v840-fishing-hud {
+  position: absolute !important;
+  left: var(--v115-screen-x) !important;
+  right: var(--v115-screen-x) !important;
+  top: var(--v115-screen-top) !important;
+  width: auto !important;
+  max-width: none !important;
+  min-height: 42px !important;
+  grid-template-columns: minmax(84px, 1fr) minmax(54px, .56fr) minmax(42px, .45fr) !important;
+  gap: 5px !important;
+  padding: 5px !important;
+  border-radius: 16px !important;
+  z-index: 220 !important;
+  overflow: hidden !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .fishing-hud .hud-chip {
+  min-width: 0 !important;
+  min-height: 32px !important;
+  padding: 4px 6px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .fishing-hud .hud-chip img {
+  width: 20px !important;
+  height: 20px !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .fishing-hud .hud-chip :is(strong,span) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  font-size: clamp(8.5px, 2.6vw, 12px) !important;
+  line-height: 1.08 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .recent-catch-strip {
+  left: var(--v115-screen-x) !important;
+  right: var(--v115-screen-x) !important;
+  bottom: calc(var(--v115-nav-height) + var(--v115-nav-gap) + env(safe-area-inset-bottom) + 5px) !important;
+  width: auto !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  max-height: 62px !important;
+  padding: 6px 8px !important;
+  border-radius: 16px !important;
+  z-index: 210 !important;
+  overflow: hidden !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .v840-stage-ui .cast-button {
+  left: 50% !important;
+  right: auto !important;
+  bottom: calc(var(--v115-nav-height) + var(--v115-nav-gap) + env(safe-area-inset-bottom) + clamp(78px, 12.5svh, 104px)) !important;
+  width: min(184px, 52vw) !important;
+  min-width: 0 !important;
+  min-height: 44px !important;
+  height: 48px !important;
+  transform: translateX(-50%) !important;
+  z-index: 230 !important;
+  overflow: hidden !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .v840-stage-ui .cast-button:active {
+  transform: translateX(-50%) translateY(1px) scale(.985) !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .v840-stage-ui .cast-button strong {
+  font-size: clamp(14px, 4vw, 17px) !important;
+  white-space: nowrap !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] body[data-screen="fishing"] .fishing-screen .v840-reel-panel.reel-panel,
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .v840-reel-panel.reel-panel {
+  left: var(--v115-screen-x) !important;
+  right: var(--v115-screen-x) !important;
+  bottom: calc(var(--v115-nav-height) + var(--v115-nav-gap) + env(safe-area-inset-bottom) + clamp(60px, 9svh, 80px)) !important;
+  width: auto !important;
+  max-width: none !important;
+  padding: 9px 11px 10px !important;
+  border-radius: 18px !important;
+  z-index: 240 !important;
+  overflow: hidden !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .hold-pad {
+  min-height: 40px !important;
+  font-size: clamp(13px, 3.7vw, 16px) !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .combo-badge:not(.hidden) {
+  left: auto !important;
+  right: var(--v115-screen-x) !important;
+  top: calc(var(--v115-screen-top) + 48px) !important;
+  bottom: auto !important;
+  max-width: min(140px, 40vw) !important;
+  z-index: 245 !important;
+}
+html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .catch-result-card {
+  width: min(318px, calc(100vw - 24px)) !important;
+  max-width: calc(100vw - 24px) !important;
+  max-height: calc(var(--portrait-height, 100dvh) - var(--v115-nav-height) - env(safe-area-inset-bottom) - 38px) !important;
+  overflow: hidden auto !important;
+  top: 48% !important;
+  z-index: 260 !important;
+}
+
+@media (max-width: 360px) {
+  :root {
+    --v115-nav-height: clamp(62px, 9.2svh, 70px);
+    --v115-screen-x: 7px;
+  }
+  html[data-layout-rescue="v1115-ui-layout-rescue"] .bottom-nav.v840-bottom-nav {
+    left: 4px !important;
+    right: 4px !important;
+    gap: 1px !important;
+    padding: 4px 4px 5px !important;
+    border-radius: 17px !important;
+  }
+  html[data-layout-rescue="v1115-ui-layout-rescue"] .bottom-nav.v840-bottom-nav button img {
+    width: clamp(21px, 6.2vw, 28px) !important;
+    height: clamp(21px, 6.2vw, 28px) !important;
+  }
+  html[data-layout-rescue="v1115-ui-layout-rescue"] .bottom-nav.v840-bottom-nav button span {
+    font-size: clamp(6.7px, 1.95vw, 8px) !important;
+  }
+  html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-hud {
+    grid-template-columns: 28px minmax(0, 1fr) minmax(56px, 72px) !important;
+  }
+  html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-hero-card {
+    grid-template-columns: minmax(0, 1fr) minmax(54px, 70px) !important;
+  }
+  html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-hero-card > img {
+    display: none !important;
+  }
+  html[data-layout-rescue="v1115-ui-layout-rescue"] .runtime-region-grid .region-card {
+    min-height: 96px !important;
+  }
+  html[data-layout-rescue="v1115-ui-layout-rescue"] .v108-rank-row {
+    grid-template-columns: 19px minmax(0, 1fr) minmax(28px, .46fr) minmax(36px, .56fr) minmax(42px, .62fr) !important;
+  }
+  html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .recent-catch-strip {
+    max-height: 58px !important;
+  }
+  html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .v840-stage-ui .cast-button {
+    width: min(166px, 50vw) !important;
+    height: 44px !important;
+    min-height: 42px !important;
+  }
+}
