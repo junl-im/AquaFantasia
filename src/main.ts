@@ -43,6 +43,31 @@ const V3D_MENU_BG: Record<Exclude<Screen, 'login' | 'fishing'>, string> = {
   ranking: './assets/v92/bg/menu_ranking.webp',
 };
 
+const V101_WATER_BG: Record<Exclude<Screen, 'login'>, string> = {
+  village: './assets/v101/water/water_clear_calm.webp',
+  fishing: './assets/v101/water/water_sunlit.webp',
+  gear: './assets/v101/water/water_quiet_path.webp',
+  inventory: './assets/v101/water/water_kelp_forest.webp',
+  dex: './assets/v101/water/water_coral_reef.webp',
+  shop: './assets/v101/water/water_lily_dream.webp',
+  mission: './assets/v101/water/water_deep_mystic.webp',
+  ranking: './assets/v101/water/water_abyss_canyon.webp',
+};
+
+const V101_REGION_BG: Partial<Record<RegionKey, string>> = {
+  lake: './assets/v101/water/water_clear_calm.webp',
+  river: './assets/v101/water/water_coral_reef.webp',
+  harbor: './assets/v101/water/water_sunlit.webp',
+  deep: './assets/v101/water/water_deep_light.webp',
+  palace: './assets/v101/water/water_lily_dream.webp',
+  dimension: './assets/v101/water/water_dark_mystic.webp',
+  glacier: './assets/v101/water/water_quiet_path.webp',
+  storm: './assets/v101/water/water_abyss_canyon.webp',
+  mangrove: './assets/v101/water/water_kelp_forest.webp',
+  lunar: './assets/v101/water/water_deep_mystic.webp',
+  reefFestival: './assets/v101/water/water_coral_reef.webp',
+};
+
 const dom = {
   app: document.querySelector<HTMLDivElement>('#app')!,
   toastRoot: document.querySelector<HTMLDivElement>('#toast-root')!,
@@ -98,7 +123,7 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
-    document.documentElement.dataset.visualPolish = 'v980-water-ui-frame-polish';
+    document.documentElement.dataset.visualPolish = 'v101-ui-water-frame-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -276,9 +301,10 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
+    root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
     root.innerHTML = `
       <div class="runtime-3d-bg" aria-hidden="true"><div class="underwater-webgl-host" data-underwater-webgl></div><span class="v3d-caustics"></span><span class="v3d-bubbles"></span><span class="v3d-depth-fog"></span></div>
       <img class="runtime-bg-character" src="${ASSET.player}" alt="" aria-hidden="true" loading="eager" />
@@ -288,14 +314,14 @@ class AquaFantasiaGame {
         <div class="runtime-wallet"><span><img src="./assets/v92/icons/coin.png" alt="" />${this.save.coins.toLocaleString('ko-KR')}</span><span><img src="./assets/v92/icons/bait.png" alt="" />${this.save.gear.lureStock}</span></div>
       </header>
       <div class="runtime-content"></div>`;
-    this.mountUnderwaterWebgl(root, active === 'ranking' ? 'deep' : active === 'village' || active === 'shop' ? 'town' : 'reef');
+    this.mountUnderwaterWebgl(root, active === 'ranking' ? 'deep' : active === 'village' || active === 'shop' ? 'town' : 'reef', V101_WATER_BG[active]);
     return root;
   }
 
-  private mountUnderwaterWebgl(root: HTMLElement, mood: UnderwaterLayerMood): void {
+  private mountUnderwaterWebgl(root: HTMLElement, mood: UnderwaterLayerMood, sceneUrl?: string): void {
     const host = root.querySelector<HTMLElement>('[data-underwater-webgl]');
     if (!host || document.documentElement.classList.contains('pixi-fallback-ready')) return;
-    const layer = new UnderwaterWebglLayer(host, { mood, compact: this.compact });
+    const layer = new UnderwaterWebglLayer(host, { mood, compact: this.compact, sceneUrl });
     if (layer.start()) this.webglLayers.push(layer);
   }
 
@@ -312,9 +338,11 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
+    const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
+    root.style.setProperty('--v101-water-bg', `url("${v101FishingBg}")`);
     root.innerHTML = `
       <span id="fishingHint" class="sr-only">낚시 시작 버튼으로 캐스팅하세요.</span>
       <div class="fishing-3d-ambient" aria-hidden="true"><div class="underwater-webgl-host" data-underwater-webgl></div><span class="v3d-caustics"></span><span class="v3d-bubbles"></span><span class="v3d-depth-fog"></span></div>
@@ -342,7 +370,7 @@ class AquaFantasiaGame {
         <p>녹색 안전지대를 3초 유지하세요.</p>
       </div>`;
     dom.app.appendChild(root);
-    this.mountUnderwaterWebgl(root, 'fishing');
+    this.mountUnderwaterWebgl(root, 'fishing', v101FishingBg);
     this.mountBottomNav(root, 'fishing');
     this.stageHost = root.querySelector<HTMLDivElement>('#fishingStage')!;
     this.pixiLayer = root.querySelector<HTMLDivElement>('.pixi-layer')!;

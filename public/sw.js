@@ -1,10 +1,20 @@
-const CACHE_NAME = 'aqua-fantasia-v9.8.0-water-ui-frame-polish';
+const CACHE_NAME = 'aqua-fantasia-v1.0.1-ui-water-frame-polish';
 const PRECACHE = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./offline.html",
   "./assets/v85/screens/start_screen_clean_v810.webp",
+  "./assets/v101/water/water_deep_mystic.webp",
+  "./assets/v101/water/water_clear_calm.webp",
+  "./assets/v101/water/water_kelp_forest.webp",
+  "./assets/v101/water/water_deep_light.webp",
+  "./assets/v101/water/water_dark_mystic.webp",
+  "./assets/v101/water/water_abyss_canyon.webp",
+  "./assets/v101/water/water_quiet_path.webp",
+  "./assets/v101/water/water_sunlit.webp",
+  "./assets/v101/water/water_coral_reef.webp",
+  "./assets/v101/water/water_lily_dream.webp",
   "./assets/v91/characters/chibi_fisher_boat_story.png",
   "./assets/v91/characters/chibi_fisher_face_icon.png",
   "./assets/v93/characters/fisher_boat_cute_action.png",

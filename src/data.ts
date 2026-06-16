@@ -1,20 +1,20 @@
 import type { FishInfo, RegionInfo, SaveData } from './types';
 
-export const APP_VERSION = '9.8.0';
-export const CACHE_NAME = 'aqua-fantasia-v9.8.0-water-ui-frame-polish';
+export const APP_VERSION = '1.0.1';
+export const CACHE_NAME = 'aqua-fantasia-v1.0.1-ui-water-frame-polish';
 
 export const regions: RegionInfo[] = [
-  { key: 'lake', name: '잔잔한 해변', subtitle: '첫 출항 추천 · 부드러운 파도', bg: './assets/v92/bg/region_lake.webp', difficulty: 1.00, waterSpeed: 0.65, color: '#54dfff', tide: '잔물결', unlockHint: '기본 해금' },
-  { key: 'river', name: '산호숲 바다', subtitle: '수류가 빠른 중급 수역', bg: './assets/v92/bg/region_river.webp', difficulty: 1.14, waterSpeed: 0.92, color: '#5cf4d9', tide: '빠른 수류', unlockHint: '기본 해금' },
-  { key: 'harbor', name: '노을 항구', subtitle: '노을 반사광 속 희귀어', bg: './assets/v92/bg/region_harbor.webp', difficulty: 1.23, waterSpeed: 0.75, color: '#ffb45d', tide: '노을 반사', unlockHint: '기본 해금' },
-  { key: 'deep', name: '깊은 바다', subtitle: '장력 변화가 큰 심해', bg: './assets/v92/bg/region_deep.webp', difficulty: 1.38, waterSpeed: 0.58, color: '#4a79ff', tide: '심해 압력', unlockHint: '성공 2회' },
-  { key: 'palace', name: '용궁 정원', subtitle: '빛나는 유적과 고급 어종', bg: './assets/v92/bg/region_palace.webp', difficulty: 1.50, waterSpeed: 0.84, color: '#89f3ff', tide: '궁전 광류', unlockHint: '도감 5마리' },
-  { key: 'dimension', name: '차원의 바다', subtitle: '보스 입질 확률 상승', bg: './assets/v92/bg/region_dimension.webp', difficulty: 1.68, waterSpeed: 1.05, color: '#b487ff', tide: '차원 파동', unlockHint: '콤보 4회 또는 도감 10마리' },
-  { key: 'glacier', name: '얼음 낚시터', subtitle: '차가운 수면과 미끄러운 장력', bg: './assets/v92/bg/region_glacier.webp', difficulty: 1.42, waterSpeed: 0.46, color: '#b9f2ff', tide: '빙판 장력', unlockHint: '성공 8회' },
-  { key: 'storm', name: '폭풍 외해', subtitle: '강한 파도와 높은 보상', bg: './assets/v92/bg/region_storm.webp', difficulty: 1.78, waterSpeed: 1.18, color: '#6f8cff', tide: '폭풍 파도', unlockHint: '성공 12회' },
-  { key: 'mangrove', name: '맹그로브 미궁', subtitle: '뿌리 사이로 숨은 희귀어', bg: './assets/v92/bg/region_mangrove.webp', difficulty: 1.55, waterSpeed: 0.72, color: '#5cffbd', tide: '뿌리 소용돌이', unlockHint: '도감 14마리' },
-  { key: 'lunar', name: '달빛 산호해', subtitle: '밤바다 광원과 보스 그림자', bg: './assets/v92/bg/region_lunar.webp', difficulty: 1.92, waterSpeed: 0.88, color: '#c7a6ff', tide: '달빛 너울', unlockHint: '최고 콤보 6회' },
-  { key: 'reefFestival', name: '산호 축제섬', subtitle: '보너스 보상이 큰 이벤트 수역', bg: './assets/v92/bg/region_reefFestival.webp', difficulty: 1.28, waterSpeed: 1.02, color: '#61ffe2', tide: '축제 파문', unlockHint: '미션 2개 완료' },
+  { key: 'lake', name: '잔잔한 해변', subtitle: '첫 출항 추천 · 부드러운 파도', bg: './assets/v101/water/water_clear_calm.webp', difficulty: 1.00, waterSpeed: 0.65, color: '#54dfff', tide: '잔물결', unlockHint: '기본 해금' },
+  { key: 'river', name: '산호숲 바다', subtitle: '수류가 빠른 중급 수역', bg: './assets/v101/water/water_coral_reef.webp', difficulty: 1.14, waterSpeed: 0.92, color: '#5cf4d9', tide: '빠른 수류', unlockHint: '기본 해금' },
+  { key: 'harbor', name: '노을 항구', subtitle: '노을 반사광 속 희귀어', bg: './assets/v101/water/water_sunlit.webp', difficulty: 1.23, waterSpeed: 0.75, color: '#ffb45d', tide: '노을 반사', unlockHint: '기본 해금' },
+  { key: 'deep', name: '깊은 바다', subtitle: '장력 변화가 큰 심해', bg: './assets/v101/water/water_deep_light.webp', difficulty: 1.38, waterSpeed: 0.58, color: '#4a79ff', tide: '심해 압력', unlockHint: '성공 2회' },
+  { key: 'palace', name: '용궁 정원', subtitle: '빛나는 유적과 고급 어종', bg: './assets/v101/water/water_lily_dream.webp', difficulty: 1.50, waterSpeed: 0.84, color: '#89f3ff', tide: '궁전 광류', unlockHint: '도감 5마리' },
+  { key: 'dimension', name: '차원의 바다', subtitle: '보스 입질 확률 상승', bg: './assets/v101/water/water_dark_mystic.webp', difficulty: 1.68, waterSpeed: 1.05, color: '#b487ff', tide: '차원 파동', unlockHint: '콤보 4회 또는 도감 10마리' },
+  { key: 'glacier', name: '얼음 낚시터', subtitle: '차가운 수면과 미끄러운 장력', bg: './assets/v101/water/water_quiet_path.webp', difficulty: 1.42, waterSpeed: 0.46, color: '#b9f2ff', tide: '빙판 장력', unlockHint: '성공 8회' },
+  { key: 'storm', name: '폭풍 외해', subtitle: '강한 파도와 높은 보상', bg: './assets/v101/water/water_abyss_canyon.webp', difficulty: 1.78, waterSpeed: 1.18, color: '#6f8cff', tide: '폭풍 파도', unlockHint: '성공 12회' },
+  { key: 'mangrove', name: '맹그로브 미궁', subtitle: '뿌리 사이로 숨은 희귀어', bg: './assets/v101/water/water_kelp_forest.webp', difficulty: 1.55, waterSpeed: 0.72, color: '#5cffbd', tide: '뿌리 소용돌이', unlockHint: '도감 14마리' },
+  { key: 'lunar', name: '달빛 산호해', subtitle: '밤바다 광원과 보스 그림자', bg: './assets/v101/water/water_deep_mystic.webp', difficulty: 1.92, waterSpeed: 0.88, color: '#c7a6ff', tide: '달빛 너울', unlockHint: '최고 콤보 6회' },
+  { key: 'reefFestival', name: '산호 축제섬', subtitle: '보너스 보상이 큰 이벤트 수역', bg: './assets/v101/water/water_coral_reef.webp', difficulty: 1.28, waterSpeed: 1.02, color: '#61ffe2', tide: '축제 파문', unlockHint: '미션 2개 완료' },
 ];
 
 export const fishDex: FishInfo[] = [

@@ -3,6 +3,7 @@ export type UnderwaterLayerMood = 'town' | 'fishing' | 'deep' | 'reef';
 export type UnderwaterLayerOptions = {
   mood?: UnderwaterLayerMood;
   compact?: boolean;
+  sceneUrl?: string;
 };
 
 type WebGLCtx = WebGLRenderingContext | WebGL2RenderingContext;
@@ -24,6 +25,8 @@ uniform vec3 u_top;
 uniform vec3 u_bottom;
 uniform vec3 u_glow;
 uniform float u_intensity;
+uniform sampler2D u_scene;
+uniform float u_has_scene;
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
@@ -104,6 +107,8 @@ void main() {
   float micro = fbm(vec2(auv.x * 12.0 - u_time * 0.08, auv.y * 10.0 + u_time * 0.10));
   vec2 warp = vec2(sin(uv.y * 8.0 + u_time * 0.55), cos(uv.x * 7.0 - u_time * 0.42)) * (0.010 + swell * 0.018);
   vec2 wuv = uv + warp;
+  vec2 sceneUv = clamp(vec2(uv.x + warp.x * 0.55, uv.y + warp.y * 0.38), 0.002, 0.998);
+  vec3 scene = texture2D(u_scene, sceneUv).rgb;
 
   vec3 base = mix(u_top * 1.08, u_bottom * 0.86, pow(depth, 1.08));
   base = mix(base, vec3(0.02, 0.40, 0.52), smoothstep(0.06, 0.42, 1.0 - depth) * 0.13);
@@ -129,7 +134,8 @@ void main() {
   float vignette = smoothstep(0.92, 0.22, distance(uv, vec2(0.5, 0.50)));
   float grain = (hash(floor(uv * u_resolution.xy * 0.36) + floor(u_time * 7.0)) - 0.5) * 0.010;
 
-  vec3 color = base;
+  vec3 color = mix(base, scene, clamp(u_has_scene, 0.0, 1.0) * 0.56);
+  color = mix(color, base, fog * 0.18);
   color += u_glow * caustic * (0.58 * u_intensity);
   color += vec3(0.70, 0.96, 1.0) * rays * (0.34 * u_intensity);
   color += u_glow * (bubbles * 0.24 + plankton * 0.30);
@@ -139,7 +145,7 @@ void main() {
   color *= mix(0.74, 1.12, vignette);
   color += grain;
 
-  gl_FragColor = vec4(color, 0.86);
+  gl_FragColor = vec4(color, 0.90);
 }`;
 
 const MOODS: Record<UnderwaterLayerMood, { top: [number, number, number]; bottom: [number, number, number]; glow: [number, number, number]; intensity: number }> = {
@@ -158,6 +164,9 @@ export class UnderwaterWebglLayer {
   private disposed = false;
   private readonly mood: UnderwaterLayerMood;
   private readonly compact: boolean;
+  private readonly sceneUrl?: string;
+  private texture?: WebGLTexture;
+  private sceneReady = false;
   private startedAt = performance.now();
   private uniforms?: {
     time: WebGLUniformLocation | null;
@@ -166,11 +175,14 @@ export class UnderwaterWebglLayer {
     bottom: WebGLUniformLocation | null;
     glow: WebGLUniformLocation | null;
     intensity: WebGLUniformLocation | null;
+    scene: WebGLUniformLocation | null;
+    hasScene: WebGLUniformLocation | null;
   };
 
   constructor(private readonly host: HTMLElement, options: UnderwaterLayerOptions = {}) {
     this.mood = options.mood ?? 'town';
     this.compact = Boolean(options.compact || window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    this.sceneUrl = options.sceneUrl;
     this.canvas = document.createElement('canvas');
     this.canvas.className = 'underwater-webgl-canvas';
     this.canvas.setAttribute('aria-hidden', 'true');
@@ -214,9 +226,12 @@ export class UnderwaterWebglLayer {
       bottom: gl.getUniformLocation(program, 'u_bottom'),
       glow: gl.getUniformLocation(program, 'u_glow'),
       intensity: gl.getUniformLocation(program, 'u_intensity'),
+      scene: gl.getUniformLocation(program, 'u_scene'),
+      hasScene: gl.getUniformLocation(program, 'u_has_scene'),
     };
     this.resize();
     this.host.classList.add('underwater-webgl-ready');
+    this.loadSceneTexture();
     this.tick();
     return true;
   }
@@ -226,6 +241,7 @@ export class UnderwaterWebglLayer {
     cancelAnimationFrame(this.raf);
     if (this.gl) {
       if (this.buffer) this.gl.deleteBuffer(this.buffer);
+      if (this.texture) this.gl.deleteTexture(this.texture);
       if (this.program) this.gl.deleteProgram(this.program);
     }
     this.canvas.remove();
@@ -244,6 +260,39 @@ export class UnderwaterWebglLayer {
       return undefined;
     }
     return shader;
+  }
+
+  private loadSceneTexture(): void {
+    const gl = this.gl;
+    if (!gl || !this.sceneUrl) return;
+    const texture = gl.createTexture();
+    if (!texture) return;
+    this.texture = texture;
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    const pixel = new Uint8Array([12, 120, 156, 255]);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixel);
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.decoding = 'async';
+    img.onload = () => {
+      if (this.disposed || !this.gl || !this.texture) return;
+      const active = this.gl;
+      active.bindTexture(active.TEXTURE_2D, this.texture);
+      active.pixelStorei(active.UNPACK_FLIP_Y_WEBGL, 0);
+      active.texImage2D(active.TEXTURE_2D, 0, active.RGBA, active.RGBA, active.UNSIGNED_BYTE, img);
+      active.texParameteri(active.TEXTURE_2D, active.TEXTURE_WRAP_S, active.CLAMP_TO_EDGE);
+      active.texParameteri(active.TEXTURE_2D, active.TEXTURE_WRAP_T, active.CLAMP_TO_EDGE);
+      active.texParameteri(active.TEXTURE_2D, active.TEXTURE_MIN_FILTER, active.LINEAR);
+      active.texParameteri(active.TEXTURE_2D, active.TEXTURE_MAG_FILTER, active.LINEAR);
+      this.sceneReady = true;
+      this.host.classList.add('underwater-scene-texture-ready');
+    };
+    img.onerror = () => { this.sceneReady = false; };
+    img.src = this.sceneUrl;
   }
 
   private resize(): void {
@@ -274,6 +323,10 @@ export class UnderwaterWebglLayer {
     gl.uniform3fv(this.uniforms.bottom, mood.bottom);
     gl.uniform3fv(this.uniforms.glow, mood.glow);
     gl.uniform1f(this.uniforms.intensity, mood.intensity);
+    gl.activeTexture(gl.TEXTURE0);
+    if (this.texture) gl.bindTexture(gl.TEXTURE_2D, this.texture);
+    gl.uniform1i(this.uniforms.scene, 0);
+    gl.uniform1f(this.uniforms.hasScene, this.sceneReady ? 1 : 0);
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
