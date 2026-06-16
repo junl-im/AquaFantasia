@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v9.5.0-cute-ui-harmony';
+const CACHE_NAME = 'aqua-fantasia-v9.7.0-nav-fishing-visibility';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -16,6 +16,11 @@ const PRECACHE = [
   "./assets/v93/ui/reel_panel_cute.png",
   "./assets/v93/ui/action_banner_cute.png",
   "./assets/v93/ui/mini_panel_cute.png",
+  "./assets/v97/ui/bottom_nav_full_frame.png",
+  "./assets/v97/ui/tab_cell_soft.png",
+  "./assets/v97/ui/tab_cell_active_soft.png",
+  "./assets/v97/fx/reel_gauge_frame_hd.png",
+  "./assets/v97/fx/tension_track_hd.png",
   "./assets/v92/bg/menu_town.webp",
   "./assets/v92/bg/menu_gear.webp",
   "./assets/v92/bg/menu_inventory.webp",

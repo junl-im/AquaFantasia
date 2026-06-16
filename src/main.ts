@@ -98,7 +98,7 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
-    document.documentElement.dataset.visualPolish = 'v950-cute-ui-harmony';
+    document.documentElement.dataset.visualPolish = 'v970-nav-fishing-visibility';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -276,7 +276,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.innerHTML = `
@@ -312,7 +312,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     root.innerHTML = `
@@ -466,9 +466,9 @@ class AquaFantasiaGame {
     const bgScale = Math.max(w / this.bgSprite.texture.width, h / this.bgSprite.texture.height);
     this.bgSprite.scale.set(bgScale);
     this.bgSprite.position.set((w - this.bgSprite.texture.width * bgScale) / 2, (h - this.bgSprite.texture.height * bgScale) / 2);
-    const playerTargetH = Math.min(h * 0.52, w * 1.08);
+    const playerTargetH = Math.min(h * 0.62, w * 1.24);
     this.player.scale.set(playerTargetH / Math.max(1, this.player.texture.height));
-    this.player.position.set(w * 0.36, h * 0.80);
+    this.player.position.set(w * 0.37, h * 0.74);
     const bobberTarget = Math.max(34, Math.min(58, w * 0.105));
     this.bobber.scale.set(bobberTarget / Math.max(1, this.bobber.texture.width));
     this.bobber.position.set(w * 0.68, h * 0.58);
