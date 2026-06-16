@@ -1,15 +1,15 @@
 {
   "name": "aqua-fantasia",
   "private": true,
-  "version": "9.7.0",
+  "version": "9.8.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build --base=./",
     "preview": "vite preview --host 0.0.0.0",
-    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v970-nav-fishing-visibility.mjs",
-    "runtime:check": "node tools/check-v970-nav-fishing-visibility.mjs --runtime",
-    "audit": "node tools/check-v970-nav-fishing-visibility.mjs --audit",
+    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v980-water-ui-frame-polish.mjs",
+    "runtime:check": "node tools/check-v980-water-ui-frame-polish.mjs --runtime",
+    "audit": "node tools/check-v980-water-ui-frame-polish.mjs --audit",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

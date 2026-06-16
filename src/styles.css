@@ -6281,3 +6281,280 @@ body[data-screen="fishing"] .v970-nav-fishing-screen .reel-panel p {
     padding: 15px 13px !important;
   }
 }
+
+/* v9.8.0 Water UI Frame Polish
+   Cleanup pass for fake color-filled frames, text overflow, and stronger game-water WebGL presentation. */
+:root {
+  --v980-nav-height: clamp(104px, 12.2svh, 122px);
+  --v980-nav-gap: 2px;
+  --v980-content-max: 520px;
+  --v980-panel-pad: clamp(16px, 4vw, 22px);
+  --v980-frame-radius: clamp(28px, 7vw, 38px);
+}
+
+/* Make every UI element size itself inside the visible frame. */
+.runtime-menu-screen.v980-water-ui-frame-screen,
+.runtime-menu-screen.v980-water-ui-frame-screen * ,
+.fishing-screen.v980-water-ui-frame-fishing,
+.fishing-screen.v980-water-ui-frame-fishing * {
+  box-sizing: border-box !important;
+  min-width: 0;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen :is(h1,h2,h3,strong,p,span,small,em,button),
+.fishing-screen.v980-water-ui-frame-fishing :is(h1,h2,h3,strong,p,span,small,em,button) {
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen :is(.runtime-title strong,.runtime-title em,.runtime-hero-card p,.runtime-menu-card span,.runtime-item-card span,.gear-card span,.shop-card small,.mission-card span,.region-card span,.dex-card span,.ranking-note),
+.fishing-screen.v980-water-ui-frame-fishing :is(.recent-card span,.recent-empty span,.reel-panel p) {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen :is(.runtime-title em,.runtime-menu-card span,.runtime-item-card span,.gear-card span,.shop-card small,.region-card span,.dex-card span) { -webkit-line-clamp: 1 !important; }
+.runtime-menu-screen.v980-water-ui-frame-screen :is(.runtime-hero-card p,.mission-card span,.ranking-note) { -webkit-line-clamp: 2 !important; }
+
+/* Remove the old fake solid-fill frame feeling. Use either real v3d frames or clean glass, never a tiny colored border. */
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-content {
+  width: min(100%, var(--v980-content-max)) !important;
+  gap: clamp(12px, 3vw, 16px) !important;
+  padding-bottom: calc(var(--v980-nav-height) + 10px + env(safe-area-inset-bottom)) !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen :is(.runtime-hero-card,.runtime-panel,.runtime-menu-card,.runtime-item-card,.gear-card,.shop-card,.mission-card,.dex-card,.ranking-panel) {
+  position: relative !important;
+  border: 0 !important;
+  outline: 0 !important;
+  background-color: transparent !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100% !important;
+  box-shadow: 0 16px 34px rgba(0, 18, 52, .26), inset 0 1px 0 rgba(255,255,255,.18) !important;
+  overflow: hidden !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen :is(.runtime-hero-card,.runtime-panel,.ranking-panel) {
+  padding: var(--v980-panel-pad) !important;
+  border-radius: var(--v980-frame-radius) !important;
+  clip-path: inset(0 round var(--v980-frame-radius)) !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/panel_medium_aqua.png') !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen[data-runtime-screen="ranking"] :is(.runtime-hero-card,.runtime-panel,.ranking-panel),
+.runtime-menu-screen.v980-water-ui-frame-screen[data-runtime-screen="dex"] :is(.runtime-hero-card,.runtime-panel) {
+  background-image: url('/assets/v3d_underwater/ui/frames/panel_medium_deep.png') !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen :is(.runtime-menu-card,.runtime-item-card,.gear-card,.shop-card,.mission-card,.dex-card,.region-card,.ranking-live-card,.ranking-stats-grid div) {
+  border-radius: clamp(22px, 5.6vw, 30px) !important;
+  clip-path: inset(0 round clamp(22px, 5.6vw, 30px)) !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/card_aqua.png') !important;
+  background-color: transparent !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen[data-runtime-screen="ranking"] :is(.ranking-live-card,.ranking-stats-grid div),
+.runtime-menu-screen.v980-water-ui-frame-screen[data-runtime-screen="dex"] .runtime-dex-card.dex-card {
+  background-image: url('/assets/v3d_underwater/ui/frames/card_deep.png') !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-hero-card {
+  grid-template-columns: clamp(56px, 14vw, 76px) minmax(0, 1fr) minmax(84px, auto) !important;
+  align-items: center !important;
+  min-height: clamp(136px, 18svh, 166px) !important;
+  gap: clamp(10px, 3vw, 15px) !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-hero-card img,
+.runtime-menu-screen.v980-water-ui-frame-screen .tide-mascot {
+  width: clamp(54px, 14vw, 72px) !important;
+  height: clamp(54px, 14vw, 72px) !important;
+  object-fit: contain !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen h2 {
+  font-size: clamp(25px, 7vw, 34px) !important;
+  line-height: .98 !important;
+  margin: 2px 0 5px !important;
+  letter-spacing: -0.045em !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-eyebrow,
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-panel-title span {
+  font-size: clamp(10px, 2.6vw, 11.5px) !important;
+  white-space: nowrap !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-btn,
+.runtime-menu-screen.v980-water-ui-frame-screen .image-btn,
+.runtime-menu-screen.v980-water-ui-frame-screen .v950-price-btn {
+  min-height: clamp(44px, 10.8vw, 54px) !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  padding: 0 clamp(10px, 3vw, 16px) !important;
+  background-image: url('/assets/v3d_underwater/ui/buttons/button_mid_aqua_normal.png') !important;
+  background-size: 100% 100% !important;
+  border-radius: 22px !important;
+  color: #063654 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.55) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-btn.gold,
+.runtime-menu-screen.v980-water-ui-frame-screen .v950-primary-cta,
+.runtime-menu-screen.v980-water-ui-frame-screen .v950-price-btn {
+  background-image: url('/assets/v3d_underwater/ui/buttons/button_mid_gold_normal.png') !important;
+  color: #6a3d00 !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-card-list .gear-card,
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-card-list .shop-card {
+  grid-template-columns: clamp(58px, 15vw, 72px) minmax(0, 1fr) minmax(68px, 88px) !important;
+  padding: clamp(13px, 3.4vw, 18px) !important;
+  gap: clamp(9px, 2.6vw, 13px) !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-card-list .mission-card {
+  grid-template-columns: minmax(0, 1fr) minmax(78px, 102px) !important;
+  padding: clamp(14px, 3.7vw, 18px) !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-dex-card.dex-card { min-height: clamp(188px, 25svh, 230px) !important; }
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-dex-card.dex-card img { max-width: 84% !important; object-fit: contain !important; }
+
+/* Bottom nav: one full-width frame, no tiny fake button border. */
+.bottom-nav.v840-bottom-nav,
+html.portrait-only-game .bottom-nav.v840-bottom-nav,
+html.is-kakao-inapp .bottom-nav.v840-bottom-nav,
+html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
+.bottom-nav.v840-bottom-nav.fixed-root-nav {
+  height: var(--v980-nav-height) !important;
+  min-height: 104px !important;
+  width: min(540px, 100vw) !important;
+  max-width: 540px !important;
+  bottom: calc(var(--v980-nav-gap) + env(safe-area-inset-bottom)) !important;
+  padding: clamp(17px, 4.2vw, 23px) clamp(12px, 3vw, 17px) clamp(14px, 3.2vw, 18px) !important;
+  gap: clamp(2px, .8vw, 5px) !important;
+  border-radius: 0 !important;
+  background: url('/assets/v3d_underwater/ui/frames/bottom_nav_aqua.png') center/100% 100% no-repeat !important;
+  box-shadow: 0 -14px 30px rgba(0, 16, 42, .24), 0 12px 26px rgba(0, 10, 36, .26) !important;
+  filter: saturate(1.12) contrast(1.04) !important;
+}
+.bottom-nav.v840-bottom-nav button {
+  position: relative !important;
+  padding: clamp(8px, 2.2vw, 12px) 0 clamp(6px, 1.6vw, 9px) !important;
+  background: transparent !important;
+  border-radius: 18px !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+.bottom-nav.v840-bottom-nav button.active {
+  background: radial-gradient(ellipse at 50% 46%, rgba(255,246,164,.24), rgba(72,230,255,.10) 48%, transparent 72%) !important;
+  transform: translateY(-1px) !important;
+}
+.bottom-nav.v840-bottom-nav button.active::before {
+  top: auto !important;
+  bottom: clamp(9px, 2.1vw, 13px) !important;
+  width: clamp(24px, 6.2vw, 34px) !important;
+  height: clamp(5px, 1.5vw, 7px) !important;
+  opacity: 1 !important;
+  border-radius: 999px !important;
+  background: linear-gradient(90deg, transparent, rgba(255,247,154,.96), rgba(89,239,255,.92), transparent) !important;
+  box-shadow: 0 0 12px rgba(255,245,152,.34), 0 0 10px rgba(87,233,255,.24) !important;
+  transform: translateX(-50%) !important;
+}
+.bottom-nav.v840-bottom-nav button.active::after {
+  top: 5px !important;
+  bottom: auto !important;
+  width: clamp(7px, 1.9vw, 10px) !important;
+  height: clamp(7px, 1.9vw, 10px) !important;
+  opacity: 1 !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 35% 25%, #fff, #fff1a4 42%, #62eeff 80%) !important;
+  box-shadow: 0 0 10px rgba(255,243,143,.40) !important;
+  transform: translateX(-50%) !important;
+}
+.bottom-nav.v840-bottom-nav button img {
+  width: clamp(29px, 7.3vw, 37px) !important;
+  height: clamp(29px, 7.3vw, 37px) !important;
+  margin-top: 1px !important;
+}
+.bottom-nav.v840-bottom-nav button span {
+  font-size: clamp(8px, 2.05vw, 10px) !important;
+  letter-spacing: -0.08em !important;
+  line-height: 1 !important;
+  padding-inline: 0 !important;
+}
+
+/* WebGL water layer: make it visible as game water, not just a weak blue tint. */
+.underwater-webgl-host,
+.underwater-webgl-canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-3d-bg,
+.fishing-screen.v980-water-ui-frame-fishing .fishing-3d-ambient {
+  opacity: 1 !important;
+  filter: saturate(1.26) contrast(1.12) brightness(1.02) !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen .underwater-webgl-canvas,
+.fishing-screen.v980-water-ui-frame-fishing .underwater-webgl-canvas {
+  opacity: .92 !important;
+  mix-blend-mode: screen !important;
+  filter: saturate(1.20) contrast(1.12) brightness(1.08) !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-3d-bg::before,
+.fishing-screen.v980-water-ui-frame-fishing .fishing-3d-ambient::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: -4% !important;
+  background:
+    url('/assets/v3d_underwater/textures/fx/caustics_loop_06.png') center/cover repeat,
+    url('/assets/v3d_underwater/textures/fx/mist_noise.png') center/360px repeat !important;
+  opacity: .26 !important;
+  mix-blend-mode: screen !important;
+  animation: v980CausticDrift 11s linear infinite !important;
+  pointer-events: none !important;
+}
+.runtime-menu-screen.v980-water-ui-frame-screen .runtime-3d-bg::after,
+.fishing-screen.v980-water-ui-frame-fishing .fishing-3d-ambient::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    radial-gradient(circle at 50% -6%, rgba(255,255,255,.30), transparent 26%),
+    linear-gradient(115deg, transparent 0 13%, rgba(167,242,255,.15) 17%, transparent 24% 37%, rgba(123,226,255,.11) 43%, transparent 52%),
+    linear-gradient(180deg, rgba(4, 47, 79, .03), rgba(0, 18, 48, .46) 66%, rgba(0, 7, 24, .72)) !important;
+  pointer-events: none !important;
+}
+.fishing-screen.v980-water-ui-frame-fishing .water-overlay,
+.fishing-screen.v980-water-ui-frame-fishing .caustic-overlay {
+  opacity: .18 !important;
+  mix-blend-mode: screen !important;
+}
+
+@keyframes v980CausticDrift {
+  0% { transform: translate3d(-2%, -1%, 0) scale(1.04) rotate(0deg); background-position: 0 0, 0 0; }
+  50% { transform: translate3d(2%, 1%, 0) scale(1.08) rotate(.4deg); background-position: 160px 90px, -80px 45px; }
+  100% { transform: translate3d(-2%, -1%, 0) scale(1.04) rotate(0deg); background-position: 320px 180px, -160px 90px; }
+}
+
+/* Fishing readability after stronger water. */
+.fishing-screen.v980-water-ui-frame-fishing .pixi-layer { z-index: 5 !important; }
+.fishing-screen.v980-water-ui-frame-fishing .fishing-hud,
+.fishing-screen.v980-water-ui-frame-fishing .recent-catch-strip,
+.fishing-screen.v980-water-ui-frame-fishing .reel-panel,
+.fishing-screen.v980-water-ui-frame-fishing .cast-button,
+.fishing-screen.v980-water-ui-frame-fishing .combo-badge { filter: drop-shadow(0 8px 12px rgba(0, 14, 42, .24)); }
+.fishing-screen.v980-water-ui-frame-fishing .recent-catch-strip {
+  background-image: url('/assets/v3d_underwater/ui/frames/panel_small_aqua.png') !important;
+  background-size: 100% 100% !important;
+  border-radius: 30px !important;
+  clip-path: inset(0 round 30px) !important;
+}
+body[data-screen="fishing"] .v980-water-ui-frame-fishing .v840-reel-panel.reel-panel,
+html.portrait-only-game body[data-screen="fishing"] .v980-water-ui-frame-fishing .v840-reel-panel.reel-panel {
+  background-image: url('/assets/v3d_underwater/ui/frames/progress_frame_aqua.png') !important;
+  background-size: 100% 100% !important;
+}
+
+@media (max-width: 390px) {
+  :root { --v980-nav-height: 100px; --v980-nav-gap: 1px; }
+  .runtime-menu-screen.v980-water-ui-frame-screen .runtime-hero-card { grid-template-columns: 56px minmax(0, 1fr) !important; }
+  .runtime-menu-screen.v980-water-ui-frame-screen .runtime-hero-card .runtime-btn { grid-column: 1 / -1 !important; width: 100% !important; }
+  .runtime-menu-screen.v980-water-ui-frame-screen .runtime-card-list .gear-card,
+  .runtime-menu-screen.v980-water-ui-frame-screen .runtime-card-list .shop-card { grid-template-columns: 54px minmax(0, 1fr) !important; }
+  .runtime-menu-screen.v980-water-ui-frame-screen .runtime-card-list .mission-card { grid-template-columns: minmax(0, 1fr) !important; }
+  .bottom-nav.v840-bottom-nav span { font-size: 7.6px !important; }
+  .bottom-nav.v840-bottom-nav button img { width: 27px !important; height: 27px !important; }
+}

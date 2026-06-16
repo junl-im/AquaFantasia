@@ -1,45 +1,57 @@
-# AquaFantasia v9.7.0
+# AquaFantasia v9.8.0
 
-모바일 웹/PWA 낚시 게임 **AquaFantasia**의 v9.7.0 패치입니다.
+모바일 웹 낚시 게임 `AquaFantasia`의 v9.8.0 패치입니다.
 
 ## 이번 패치 목표
 
-v9.6.0에서 지적된 하단 메뉴바 프레임 문제와 낚시 화면 가시성 문제를 우선 수정했습니다.
+- 색만 채워둔 듯한 가짜 테두리/작은 프레임 느낌 정리
+- UI 프레임보다 글씨가 밖으로 나가는 문제 방지
+- 하단 메뉴바를 하단 전체 프레임으로 다시 안정화
+- WebGL 수중 레이어를 더 물속 게임 화면처럼 개선
+- 기존 PixiJS 낚시 런타임과 DOM UI 유지
+- 문서는 `README.md` 하나만 유지
 
-- 하단 메뉴바 테두리가 버튼보다 작아 보이던 문제 개선
-- 하단 전체를 감싸는 큰 PNG 프레임으로 메뉴바 재구성
-- 선택된 메뉴 표시는 큰 테두리 대신 부드러운 금빛 셀 + 작은 진주 점으로 변경
-- 낚시터 캐릭터가 UI에 묻혀 잘 안 보이던 문제 개선
-- PixiJS 캐릭터 스케일/위치 재조정
-- 낚시 게이지바를 더 크고 선명하게 재구성
-- 안전 구간/장력 fill 대비 강화
-- 최근 포획 / 낚시 시작 / 릴 패널이 서로 과하게 겹치지 않도록 하단 간격 재조정
-- 배경은 기존 WebGL 수중 레이어 유지하면서 가독성 레이어 보정
-- `README.md` 단일 문서 정책 유지
+## 주요 변경
 
-## 유지되는 방향성
+### UI 프레임 정리
 
-- 세로 고정 유지
-- 기존 PixiJS 낚시 런타임 유지
-- 기존 DOM UI 유지
-- WebGL 수중 배경 레이어 유지
-- 귀여운 치비/2.5D 낚시 게임 톤 유지
-- 카카오/인앱 브라우저에서는 회전 버그 방지를 위해 Screen Orientation Lock API를 사용하지 않음
+- 메뉴 패널/카드/버튼에 v3d underwater UI frame assets를 우선 연결했습니다.
+- 작게 겹쳐 보이던 단색 테두리 느낌의 배경을 제거하거나 실제 프레임 PNG로 교체했습니다.
+- 카드, 패널, 미션, 상점, 장비, 랭킹 카드에 `minmax(0, 1fr)`, `line-clamp`, `ellipsis`, `overflow-wrap`를 적용했습니다.
+- 한국어 텍스트가 버튼과 패널 밖으로 밀리지 않도록 `word-break: keep-all`과 폭 제한을 보강했습니다.
 
-## 검증 명령
+### 하단 메뉴바
+
+- 하단 메뉴는 작은 개별 테두리보다 전체 하단부를 감싸는 큰 프레임 중심으로 재정리했습니다.
+- 선택 상태는 작은 진주점/빛줄기만 남겨 과한 칸 테두리 느낌을 줄였습니다.
+- 390px 이하 작은 화면에서도 버튼/아이콘/글자가 프레임 안에 들어오도록 재조정했습니다.
+
+### WebGL 수중 레이어
+
+- `UnderwaterWebglLayer` 셰이더를 개선했습니다.
+- 추가된 표현:
+  - 수중 깊이 그라디언트
+  - 다층 카스틱
+  - 빛줄기 god ray
+  - 버블 필드
+  - 플랑크톤 입자감
+  - 물고기 그림자
+  - 심도 안개와 비네팅
+- WebGL 미지원 기기에서는 기존 배경/fallback 구조를 유지합니다.
+
+## 검증
 
 ```bash
-npm install
 npm run validate
 npm run typecheck
 npm run build
 npm run audit
 ```
 
-## 배포
+## 배포 구조
 
-GitHub Desktop으로 덮어쓰기 후 commit/push하면 GitHub Actions가 빌드 및 Pages 배포를 진행합니다.
-
-## 문서 정책
-
-패치별 `CLEAN_REPLACE_GUIDE`, `FINAL_CONSOLIDATED`, `PATCH_NOTES`, `reports` 파일은 더 이상 생성하지 않습니다. 변경 사항은 이 `README.md` 하나에 계속 통합합니다.
+- GitHub Desktop + GitHub Pages 구조 유지
+- Firebase Spark 플랜 기준 유지
+- PWA 구조 유지
+- 회전 방지/세로 고정 정책 유지
+- `dist`, `node_modules`는 ZIP에서 제외

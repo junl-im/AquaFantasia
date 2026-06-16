@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v9.7.0-nav-fishing-visibility';
+const CACHE_NAME = 'aqua-fantasia-v9.8.0-water-ui-frame-polish';
 const PRECACHE = [
   "./",
   "./index.html",
