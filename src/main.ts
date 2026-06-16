@@ -7,6 +7,7 @@ import { initAudio, playSound } from './audio';
 import { ToastManager } from './toast';
 import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPortraitLock } from './core/PortraitGuard';
 import { UnderwaterWebglLayer, type UnderwaterLayerMood } from './core/UnderwaterWebglLayer';
+import { RuntimeQualityManager } from './core/RuntimeQualityManager';
 
 const ASSET = {
   loginBg: './assets/v85/screens/start_screen_clean_v810.webp',
@@ -116,16 +117,18 @@ class AquaFantasiaGame {
   private immersiveRetryAt = 0;
   private readonly lockedOrientation: 'portrait-primary' = 'portrait-primary';
   private webglLayers: UnderwaterWebglLayer[] = [];
+  private readonly quality = new RuntimeQualityManager();
 
   async boot(): Promise<void> {
-    this.compact = window.matchMedia('(max-width: 420px), (prefers-reduced-motion: reduce)').matches || (navigator.hardwareConcurrency ?? 8) <= 4;
+    this.quality.start();
+    this.compact = this.quality.isLite() || window.matchMedia('(max-width: 420px), (prefers-reduced-motion: reduce)').matches || (navigator.hardwareConcurrency ?? 8) <= 4;
     document.documentElement.classList.toggle('perf-lite', this.compact);
     document.documentElement.dataset.initialOrientation = 'portrait';
     document.documentElement.dataset.orientationPolicy = 'hard-portrait';
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
-    document.documentElement.dataset.visualPolish = 'v111-layout-color-polish';
+    document.documentElement.dataset.visualPolish = 'v1111-quality-engine-ui-audit';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -309,7 +312,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -329,7 +332,7 @@ class AquaFantasiaGame {
   private mountUnderwaterWebgl(root: HTMLElement, mood: UnderwaterLayerMood, sceneUrl?: string): void {
     const host = root.querySelector<HTMLElement>('[data-underwater-webgl]');
     if (!host || document.documentElement.classList.contains('pixi-fallback-ready')) return;
-    const layer = new UnderwaterWebglLayer(host, { mood, compact: this.compact, sceneUrl });
+    const layer = new UnderwaterWebglLayer(host, { mood, compact: this.compact || this.quality.isLite(), sceneUrl, quality: this.quality.tier() });
     if (layer.start()) this.webglLayers.push(layer);
   }
 
@@ -346,7 +349,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -486,7 +489,7 @@ class AquaFantasiaGame {
         root.classList.add('swipe-route-peek');
       }
       if (horizontalIntent) {
-        root.style.setProperty('--swipe-peek-x', `${Math.max(-10, Math.min(10, dx * 0.035))}px`);
+        root.style.setProperty('--swipe-peek-x', `${Math.max(-8, Math.min(8, dx * 0.028))}px`);
       }
     };
     const finish = (x = lastX, y = lastY) => {
@@ -498,8 +501,8 @@ class AquaFantasiaGame {
       const absY = Math.abs(dy);
       reset();
       const width = window.visualViewport?.width ?? window.innerWidth;
-      const distancePass = absX > Math.max(48, Math.min(86, width * 0.16));
-      const velocityPass = elapsed < 420 && absX > Math.max(38, width * 0.10);
+      const distancePass = absX > Math.max(42, Math.min(76, width * 0.14));
+      const velocityPass = elapsed < 460 && absX > Math.max(34, width * 0.085);
       if (elapsed > 900 || (!distancePass && !velocityPass) || absX < absY * 1.45) return;
       const index = swipeOrder.indexOf(active);
       if (index < 0) return;
@@ -551,7 +554,7 @@ class AquaFantasiaGame {
     this.fallbackMode = false;
     if (!this.pixiLayer || !this.stageHost || !this.hasWebGL()) throw new Error('WebGL unavailable');
     const app = new Application();
-    await app.init({ resizeTo: this.stageHost, backgroundAlpha: 0, antialias: true, resolution: Math.min(window.devicePixelRatio || 1, this.compact ? 2 : 3), autoDensity: true, powerPreference: 'high-performance' });
+    await app.init({ resizeTo: this.stageHost, backgroundAlpha: 0, antialias: true, resolution: Math.min(window.devicePixelRatio || 1, this.quality.recommendedDprCap()), autoDensity: true, powerPreference: 'high-performance' });
     this.pixi = app;
     this.pixiLayer.appendChild(app.canvas);
 

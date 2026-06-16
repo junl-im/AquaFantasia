@@ -1,15 +1,15 @@
 {
   "name": "aqua-fantasia",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build --base=./",
     "preview": "vite preview --host 0.0.0.0",
-    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v111-layout-color-polish.mjs",
-    "runtime:check": "node tools/check-v111-layout-color-polish.mjs --runtime",
-    "audit": "node tools/check-v111-layout-color-polish.mjs --audit",
+    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v1111-quality-engine-ui-audit.mjs",
+    "runtime:check": "node tools/check-v1111-quality-engine-ui-audit.mjs --runtime",
+    "audit": "node tools/check-v1111-quality-engine-ui-audit.mjs --audit",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

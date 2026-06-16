@@ -10143,3 +10143,289 @@ body[data-screen="fishing"] .fishing-screen.v111-layout-polish-fishing .v840-ree
   .runtime-menu-screen.v111-layout-polish-screen .v108-shop-card.shop-card img { width: 34px !important; height: 34px !important; }
   .fishing-screen.v111-layout-polish-fishing .v840-stage-ui .cast-button { bottom: calc(var(--v105-play-bottom) + 108px) !important; width: min(178px, 50vw) !important; }
 }
+
+/* v1.1.1 QUALITY ENGINE + UI AUDIT
+   Final guard layer for large-project stability: no off-screen drift, cleaner frame fills,
+   stronger readable colors, safer WebGL water, and tighter mobile UI containment. */
+:root {
+  --v1111-shell-w: min(var(--portrait-width, 430px), 500px);
+  --v1111-edge-pad: clamp(7px, 2.1vw, 11px);
+  --v1111-nav-h: clamp(66px, 9.2svh, 78px);
+  --v1111-nav-gap: max(4px, env(safe-area-inset-bottom));
+  --v1111-panel-fill: linear-gradient(180deg, rgba(14, 108, 154, .91), rgba(5, 37, 78, .96));
+  --v1111-panel-soft-fill: linear-gradient(180deg, rgba(31, 149, 185, .84), rgba(7, 50, 92, .92));
+  --v1111-button-aqua: linear-gradient(180deg, #9ff9ff 0%, #38cde9 45%, #1684c2 100%);
+  --v1111-button-gold: linear-gradient(180deg, #fff5aa 0%, #ffd052 50%, #f29b32 100%);
+  --v1111-readable: #f7ffff;
+  --v1111-muted-readable: rgba(229, 250, 255, .88);
+  --v1111-shadow: 0 2px 0 rgba(0, 29, 64, .62), 0 0 12px rgba(67, 226, 255, .18);
+}
+html[data-visual-polish="v1111-quality-engine-ui-audit"],
+html[data-visual-polish="v1111-quality-engine-ui-audit"] body {
+  overflow: hidden !important;
+  max-width: 100vw !important;
+  overscroll-behavior: none !important;
+  background: #02121f !important;
+}
+html[data-visual-polish="v1111-quality-engine-ui-audit"] #app {
+  width: var(--v1111-shell-w) !important;
+  max-width: var(--v1111-shell-w) !important;
+  min-width: min(100vw, 300px) !important;
+  height: var(--portrait-height, 100dvh) !important;
+  max-height: var(--portrait-height, 100dvh) !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  contain: layout paint size !important;
+  transform: translateZ(0) !important;
+}
+html[data-visual-polish="v1111-quality-engine-ui-audit"] .game-screen {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: var(--portrait-height, 100dvh) !important;
+  max-height: var(--portrait-height, 100dvh) !important;
+  left: auto !important;
+  right: auto !important;
+  margin-inline: auto !important;
+  overflow-x: hidden !important;
+  transform: none !important;
+  translate: none !important;
+}
+html[data-visual-polish="v1111-quality-engine-ui-audit"] .swipe-route-peek {
+  transform: translate3d(var(--swipe-peek-x, 0px), 0, 0) !important;
+}
+html[data-visual-polish="v1111-quality-engine-ui-audit"] .swipe-route-out {
+  transform: translate3d(calc(var(--swipe-peek-x, 0px) * .35), 0, 0) scale(.998) !important;
+  opacity: .98 !important;
+}
+
+/* Bottom nav: compact frame, bigger icon cells, no drift and no black bottom strip. */
+html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav,
+html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.fixed-root-nav {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: calc(var(--v1111-nav-gap) + env(safe-area-inset-bottom)) !important;
+  width: min(calc(var(--v1111-shell-w) - 8px), 424px) !important;
+  max-width: calc(100% - 8px) !important;
+  height: var(--v1111-nav-h) !important;
+  padding: 5px 7px 6px !important;
+  gap: 3px !important;
+  grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  border-radius: 24px 24px 18px 18px !important;
+  background-image: url('/assets/v102/ui/bottom_nav_frame_clean.png'), linear-gradient(180deg, rgba(25, 128, 177, .96), rgba(2, 38, 80, .98)) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  background-repeat: no-repeat !important;
+  box-shadow: 0 -6px 16px rgba(0, 18, 48, .30), inset 0 1px 0 rgba(255,255,255,.16) !important;
+  overflow: hidden !important;
+  z-index: 60 !important;
+}
+html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav::before,
+html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav::after { display: none !important; }
+html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav button {
+  min-width: 0 !important;
+  min-height: 54px !important;
+  padding: 2px 1px 3px !important;
+  border-radius: 15px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,65,111,.18)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10) !important;
+  color: rgba(230, 251, 255, .86) !important;
+  overflow: hidden !important;
+}
+html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav button.active {
+  color: #fff8ad !important;
+  background: radial-gradient(circle at 50% 18%, rgba(255,244,145,.25), rgba(67,208,255,.16) 48%, rgba(0,50,97,.12)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 0 9px rgba(75,228,255,.16) !important;
+}
+html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav button.active::after {
+  width: 16px !important;
+  height: 2px !important;
+  bottom: 1px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(90deg, transparent, rgba(255,238,121,.95), transparent) !important;
+}
+html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav button img {
+  width: clamp(35px, 8.8vw, 43px) !important;
+  height: clamp(35px, 8.8vw, 43px) !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 3px 5px rgba(0,20,55,.34)) saturate(1.12) !important;
+}
+html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav button span {
+  margin-top: -2px !important;
+  font-size: clamp(8px, 2.15vw, 9.8px) !important;
+  line-height: 1 !important;
+  max-width: 100% !important;
+  text-shadow: 0 1px 0 rgba(0, 32, 70, .72) !important;
+}
+
+/* Unified card frame and internal background: no hollow transparent frames. */
+.v1111-quality-engine-screen .runtime-content {
+  width: min(760px, calc(100% - 16px)) !important;
+  max-width: calc(100% - 16px) !important;
+  margin: 0 auto !important;
+  padding: 7px 0 calc(var(--v1111-nav-h) + 18px + env(safe-area-inset-bottom)) !important;
+  gap: 8px !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-x: none !important;
+}
+.v1111-quality-engine-screen :is(.runtime-hud,.runtime-hero-card,.runtime-panel,.runtime-item-card,.runtime-dex-card,.gear-card,.shop-card,.mission-card,.ranking-summary,.ranking-panel,.ranking-stats-grid > div) {
+  background-image: url('/assets/v3d_underwater/ui/frames/panel_small_aqua.png'), var(--v1111-panel-soft-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  border: 0 !important;
+  overflow: hidden !important;
+  contain: layout paint style !important;
+  color: var(--v1111-readable) !important;
+}
+.v1111-quality-engine-screen :is(.runtime-hud,.runtime-hero-card,.runtime-panel) {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 10px 24px rgba(0, 23, 62, .18) !important;
+}
+.v1111-quality-engine-screen :is(h1,h2,h3,strong,b) {
+  color: var(--v1111-readable) !important;
+  text-shadow: var(--v1111-shadow) !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+.v1111-quality-engine-screen :is(p,span,small,em,i) {
+  color: var(--v1111-muted-readable) !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+.v1111-quality-engine-screen :is(p,small,.mission-card span,.shop-card small,.runtime-item-card span,.runtime-dex-card span,.region-card span,.ranking-note) {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  line-clamp: 2 !important;
+  white-space: normal !important;
+}
+
+/* Buttons: small utility buttons remain small, readable, and inside their frames. */
+.v1111-quality-engine-screen :is(.runtime-btn,.image-btn,.compact-cta,.compact-cost-btn,.compact-cost-badge,.shop-price) {
+  width: auto !important;
+  min-width: 38px !important;
+  max-width: 66px !important;
+  min-height: 25px !important;
+  padding: 5px 7px !important;
+  border-radius: 12px !important;
+  font-size: clamp(9px, 2.35vw, 11px) !important;
+  line-height: 1 !important;
+  color: #07314d !important;
+  background-image: var(--v1111-button-gold) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.42) !important;
+  white-space: nowrap !important;
+  justify-self: end !important;
+  align-self: center !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.56), 0 3px 8px rgba(0,24,54,.20) !important;
+}
+.v1111-quality-engine-screen :is(.runtime-btn.blue,.runtime-btn.cyan,.image-btn.soft) {
+  color: #f9ffff !important;
+  background-image: var(--v1111-button-aqua) !important;
+  text-shadow: 0 1px 0 rgba(0,42,84,.55) !important;
+}
+
+/* Screen density upgrades. */
+.v1111-quality-engine-screen .runtime-hud {
+  width: min(760px, calc(100% - 16px)) !important;
+  grid-template-columns: 36px minmax(0, 1fr) auto !important;
+  padding: 7px 8px !important;
+  gap: 6px !important;
+}
+.v1111-quality-engine-screen .runtime-hud-mascot { width: 36px !important; height: 36px !important; }
+.v1111-quality-engine-screen .runtime-title em { max-width: 100% !important; }
+.v1111-quality-engine-screen .runtime-wallet { display: grid !important; gap: 3px !important; }
+.v1111-quality-engine-screen .runtime-wallet span { min-width: 42px !important; padding: 4px 6px !important; font-size: 10px !important; }
+.v1111-quality-engine-screen.v108-home-main .v108-home-banner { margin-top: 2px !important; }
+.v1111-quality-engine-screen.v108-home-main .v108-home-banner img { max-height: min(21svh, 184px) !important; }
+.v1111-quality-engine-screen.v108-home-main .v108-home-title.runtime-hero-card,
+.v1111-quality-engine-screen.v108-home-main .v108-tide-card.runtime-hero-card { padding: 8px 10px !important; gap: 8px !important; }
+.v1111-quality-engine-screen .runtime-region-grid,
+.v1111-quality-engine-screen .runtime-item-grid,
+.v1111-quality-engine-screen .runtime-dex-grid,
+.v1111-quality-engine-screen .v108-shop-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+}
+.v1111-quality-engine-screen .region-card { min-height: 114px !important; padding: 9px !important; border-radius: 19px !important; }
+.v1111-quality-engine-screen .region-card strong { margin-top: 56px !important; font-size: 13px !important; }
+.v1111-quality-engine-screen :is(.runtime-item-card,.runtime-dex-card) { min-height: 128px !important; padding: 8px !important; }
+.v1111-quality-engine-screen .runtime-dex-card img { max-height: 56px !important; object-fit: contain !important; }
+.v1111-quality-engine-screen .gear-card { grid-template-columns: 46px minmax(0, 1fr) 48px !important; min-height: 74px !important; padding: 8px !important; gap: 6px !important; }
+.v1111-quality-engine-screen .v950-item-orb { width: 42px !important; height: 42px !important; }
+.v1111-quality-engine-screen .v950-item-orb img { width: 36px !important; height: 36px !important; }
+.v1111-quality-engine-screen .v108-shop-card.shop-card { min-height: 100px !important; padding: 8px !important; grid-template-columns: 36px minmax(0, 1fr) !important; gap: 4px 6px !important; }
+.v1111-quality-engine-screen .v108-shop-card.shop-card img { width: 34px !important; height: 34px !important; object-fit: contain !important; }
+.v1111-quality-engine-screen .v108-shop-card.shop-card strong { font-size: 12px !important; }
+.v1111-quality-engine-screen .v108-shop-card.shop-card small { font-size: 10px !important; }
+.v1111-quality-engine-screen .v108-mission-card { grid-template-columns: minmax(0, 1fr) 44px !important; min-height: 82px !important; padding: 8px !important; gap: 5px !important; }
+.v1111-quality-engine-screen .v108-mission-progress { height: 12px !important; background: linear-gradient(180deg, rgba(0,30,70,.82), rgba(0,91,137,.50)) !important; }
+.v1111-quality-engine-screen .v108-mission-progress i { background: linear-gradient(90deg, #62efff, #8cffc8, #fff080) !important; }
+.v1111-quality-engine-screen .v108-rank-row { grid-template-columns: 23px minmax(52px,.88fr) minmax(36px,.48fr) minmax(48px,.62fr) minmax(66px,.82fr) !important; min-height: 29px !important; padding: 4px 6px !important; gap: 4px !important; }
+.v1111-quality-engine-screen .v108-rank-row :is(strong,span,em,i,b) { font-size: 9.8px !important; color: #f9ffff !important; }
+.v1111-quality-engine-screen .ranking-panel { background-image: url('/assets/v3d_underwater/ui/frames/panel_large_deep.png'), linear-gradient(180deg, rgba(6, 39, 86, .94), rgba(1, 14, 40, .98)) !important; }
+
+/* Fishing foreground visibility and separated controls. */
+.fishing-screen.v1111-quality-engine-fishing {
+  --v1111-play-bottom: calc(var(--v1111-nav-h) + 6px + env(safe-area-inset-bottom));
+}
+.fishing-screen.v1111-quality-engine-fishing .fishing-3d-ambient .underwater-webgl-canvas,
+.fishing-screen.v1111-quality-engine-fishing .underwater-webgl-canvas {
+  opacity: var(--water-fx-alpha, .66) !important;
+  filter: saturate(var(--water-fx-blend, .94)) contrast(1.03) brightness(.98) !important;
+}
+.fishing-screen.v1111-quality-engine-fishing .v3d-bubbles { opacity: .13 !important; }
+.fishing-screen.v1111-quality-engine-fishing .v3d-caustics { opacity: .20 !important; }
+.fishing-screen.v1111-quality-engine-fishing .fishing-stage { z-index: 4 !important; filter: saturate(1.10) contrast(1.07) brightness(1.03) !important; }
+.fishing-screen.v1111-quality-engine-fishing .pixi-layer canvas { filter: drop-shadow(0 8px 14px rgba(0,0,0,.16)) !important; }
+.fishing-screen.v1111-quality-engine-fishing .fishing-hud { z-index: 20 !important; }
+.fishing-screen.v1111-quality-engine-fishing .recent-catch-strip {
+  bottom: calc(var(--v1111-play-bottom) + 8px) !important;
+  left: 9px !important;
+  right: 9px !important;
+  min-height: 48px !important;
+  max-height: 72px !important;
+  padding: 6px 8px !important;
+  z-index: 18 !important;
+  background-image: url('/assets/v93/ui/mini_panel_cute.png'), linear-gradient(180deg, rgba(16, 111, 154, .89), rgba(4, 37, 78, .95)) !important;
+  background-size: 100% 100%, 100% 100% !important;
+}
+.fishing-screen.v1111-quality-engine-fishing .v840-stage-ui .cast-button {
+  bottom: calc(var(--v1111-play-bottom) + clamp(104px, 14svh, 136px)) !important;
+  width: min(184px, 48vw) !important;
+  min-height: 43px !important;
+  z-index: 24 !important;
+}
+body[data-screen="fishing"] .fishing-screen.v1111-quality-engine-fishing .v840-reel-panel.reel-panel {
+  bottom: calc(var(--v1111-play-bottom) + clamp(80px, 10svh, 100px)) !important;
+  max-width: min(354px, calc(100% - 20px)) !important;
+  z-index: 26 !important;
+}
+.fishing-screen.v1111-quality-engine-fishing .combo-badge:not(.hidden) {
+  top: max(50px, calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 48px)) !important;
+  right: 9px !important;
+  left: auto !important;
+  max-width: 146px !important;
+  z-index: 27 !important;
+}
+.fishing-screen.v1111-quality-engine-fishing .tension-track { height: 20px !important; }
+.fishing-screen.v1111-quality-engine-fishing .safe-progress { height: 9px !important; }
+
+html[data-runtime-quality="lite"] .underwater-webgl-canvas,
+html[data-runtime-quality="lite"] .v3d-caustics,
+html[data-runtime-quality="lite"] .v3d-bubbles { animation-duration: 34s !important; filter: saturate(.96) brightness(.96) !important; }
+
+@media (max-width: 390px) {
+  :root { --v1111-nav-h: 64px; }
+  html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav { padding: 5px 5px 6px !important; gap: 2px !important; }
+  html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav button { min-height: 51px !important; }
+  html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav button img { width: 35px !important; height: 35px !important; }
+  html[data-visual-polish="v1111-quality-engine-ui-audit"] .bottom-nav.v840-bottom-nav button span { font-size: 7.7px !important; }
+  .fishing-screen.v1111-quality-engine-fishing .v840-stage-ui .cast-button { bottom: calc(var(--v1111-play-bottom) + 102px) !important; width: min(172px, 50vw) !important; }
+}

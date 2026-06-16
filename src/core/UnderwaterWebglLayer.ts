@@ -1,9 +1,11 @@
 export type UnderwaterLayerMood = 'town' | 'fishing' | 'deep' | 'reef';
+export type UnderwaterQualityTier = 'lite' | 'balanced' | 'high';
 
 export type UnderwaterLayerOptions = {
   mood?: UnderwaterLayerMood;
   compact?: boolean;
   sceneUrl?: string;
+  quality?: UnderwaterQualityTier;
 };
 
 type WebGLCtx = WebGLRenderingContext | WebGL2RenderingContext;
@@ -27,6 +29,8 @@ uniform vec3 u_glow;
 uniform float u_intensity;
 uniform sampler2D u_scene;
 uniform float u_has_scene;
+uniform float u_quality;
+uniform float u_ui_safety;
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
@@ -77,12 +81,12 @@ float aquaDroplet(vec2 uv, vec2 center, float radius, float seed) {
 
 float bubbleField(vec2 uv) {
   float b = 0.0;
-  for (int i = 0; i < 17; i++) {
+  for (int i = 0; i < 19; i++) {
     float fi = float(i);
     float lane = hash(vec2(fi, 8.1));
     float rise = fract(u_time * (0.025 + fi * 0.0024) + hash(vec2(fi, 2.7)));
     vec2 c = vec2(fract(lane + sin(u_time * 0.22 + fi * 1.7) * 0.030), 1.10 - rise * 1.24);
-    float r = 0.007 + hash(vec2(fi, 5.5)) * 0.015;
+    float r = 0.006 + hash(vec2(fi, 5.5)) * 0.013;
     b += aquaDroplet(uv, c, r, fi);
   }
   return b;
@@ -145,16 +149,16 @@ void main() {
 
   vec3 color = mix(base, scene, clamp(u_has_scene, 0.0, 1.0) * 0.56);
   color = mix(color, base, fog * 0.18);
-  color += u_glow * caustic * (0.74 * u_intensity);
-  color += vec3(0.70, 0.96, 1.0) * rays * (0.42 * u_intensity);
-  color += vec3(0.76, 1.0, 1.0) * bubbles * 0.34 + u_glow * plankton * 0.26;
+  color += u_glow * caustic * (0.64 * u_intensity * u_quality);
+  color += vec3(0.70, 0.96, 1.0) * rays * (0.36 * u_intensity * u_quality);
+  color += vec3(0.76, 1.0, 1.0) * bubbles * (0.25 + 0.10 * u_quality) + u_glow * plankton * (0.18 + 0.06 * u_quality);
   color += vec3(0.75, 0.95, 1.0) * surface;
   color = mix(color, u_bottom * 0.72, fog * 0.35);
   color -= vec3(0.0, 0.08, 0.14) * school * 0.26;
-  color *= mix(0.74, 1.12, vignette);
+  color *= mix(0.78, 1.08, vignette);
   color += grain;
 
-  gl_FragColor = vec4(color, 0.84);
+  gl_FragColor = vec4(color, mix(0.62, 0.82, u_ui_safety));
 }`;
 
 const MOODS: Record<UnderwaterLayerMood, { top: [number, number, number]; bottom: [number, number, number]; glow: [number, number, number]; intensity: number }> = {
@@ -174,6 +178,7 @@ export class UnderwaterWebglLayer {
   private readonly mood: UnderwaterLayerMood;
   private readonly compact: boolean;
   private readonly sceneUrl?: string;
+  private readonly quality: UnderwaterQualityTier;
   private texture?: WebGLTexture;
   private sceneReady = false;
   private startedAt = performance.now();
@@ -186,12 +191,15 @@ export class UnderwaterWebglLayer {
     intensity: WebGLUniformLocation | null;
     scene: WebGLUniformLocation | null;
     hasScene: WebGLUniformLocation | null;
+    quality: WebGLUniformLocation | null;
+    uiSafety: WebGLUniformLocation | null;
   };
 
   constructor(private readonly host: HTMLElement, options: UnderwaterLayerOptions = {}) {
     this.mood = options.mood ?? 'town';
     this.compact = Boolean(options.compact || window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     this.sceneUrl = options.sceneUrl;
+    this.quality = options.quality ?? 'balanced';
     this.canvas = document.createElement('canvas');
     this.canvas.className = 'underwater-webgl-canvas';
     this.canvas.setAttribute('aria-hidden', 'true');
@@ -237,6 +245,8 @@ export class UnderwaterWebglLayer {
       intensity: gl.getUniformLocation(program, 'u_intensity'),
       scene: gl.getUniformLocation(program, 'u_scene'),
       hasScene: gl.getUniformLocation(program, 'u_has_scene'),
+      quality: gl.getUniformLocation(program, 'u_quality'),
+      uiSafety: gl.getUniformLocation(program, 'u_ui_safety'),
     };
     this.resize();
     this.host.classList.add('underwater-webgl-ready');
@@ -308,7 +318,9 @@ export class UnderwaterWebglLayer {
     const gl = this.gl;
     if (!gl) return;
     const rect = this.host.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, this.compact ? 1.5 : 2.25);
+    const qualityCap = this.quality === 'high' ? 2.35 : this.quality === 'lite' ? 1.30 : 1.85;
+    const cssCap = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--runtime-dpr-cap')) || qualityCap;
+    const dpr = Math.min(window.devicePixelRatio || 1, this.compact ? 1.35 : Math.min(qualityCap, cssCap));
     const width = Math.max(2, Math.floor(rect.width * dpr));
     const height = Math.max(2, Math.floor(rect.height * dpr));
     if (this.canvas.width !== width || this.canvas.height !== height) {
@@ -332,6 +344,8 @@ export class UnderwaterWebglLayer {
     gl.uniform3fv(this.uniforms.bottom, mood.bottom);
     gl.uniform3fv(this.uniforms.glow, mood.glow);
     gl.uniform1f(this.uniforms.intensity, mood.intensity);
+    gl.uniform1f(this.uniforms.quality, this.quality === 'high' ? 1.15 : this.quality === 'lite' ? 0.70 : 1.0);
+    gl.uniform1f(this.uniforms.uiSafety, this.mood === 'fishing' ? 0.74 : 1.0);
     gl.activeTexture(gl.TEXTURE0);
     if (this.texture) gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.uniform1i(this.uniforms.scene, 0);

@@ -1,0 +1,102 @@
+export type RuntimeQualityTier = 'lite' | 'balanced' | 'high';
+
+const clamp = (value: number, min: number, max: number): number => Math.max(min, Math.min(max, value));
+
+export class RuntimeQualityManager {
+  private quality: RuntimeQualityTier = 'balanced';
+  private started = false;
+  private raf = 0;
+  private last = 0;
+  private samples: number[] = [];
+  private lowFpsFrames = 0;
+
+  start(): void {
+    if (this.started) return;
+    this.started = true;
+    this.quality = this.detectInitialTier();
+    this.applyQuality('initial');
+    this.last = performance.now();
+    this.raf = requestAnimationFrame(this.tick);
+    window.addEventListener('resize', this.syncViewportVars, { passive: true });
+    window.visualViewport?.addEventListener('resize', this.syncViewportVars, { passive: true });
+    window.visualViewport?.addEventListener('scroll', this.syncViewportVars, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        this.last = performance.now();
+        this.samples = [];
+        this.applyQuality('resume');
+      }
+    }, { passive: true });
+  }
+
+  tier(): RuntimeQualityTier {
+    return this.quality;
+  }
+
+  isLite(): boolean {
+    return this.quality === 'lite';
+  }
+
+  recommendedDprCap(): number {
+    return this.quality === 'high' ? 2.35 : this.quality === 'balanced' ? 1.85 : 1.35;
+  }
+
+  private detectInitialTier(): RuntimeQualityTier {
+    const cores = navigator.hardwareConcurrency ?? 4;
+    const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 4;
+    const dpr = window.devicePixelRatio || 1;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const small = Math.min(window.innerWidth, window.innerHeight) < 380;
+    if (reduced || cores <= 3 || memory <= 2 || small) return 'lite';
+    if (cores >= 8 && memory >= 6 && dpr >= 2) return 'high';
+    return 'balanced';
+  }
+
+  private tick = (now: number): void => {
+    const dt = now - this.last;
+    this.last = now;
+    if (dt > 0 && dt < 1000) {
+      const fps = 1000 / dt;
+      this.samples.push(fps);
+      if (this.samples.length > 60) this.samples.shift();
+      if (this.samples.length >= 40) this.evaluateAverageFps();
+    }
+    this.raf = requestAnimationFrame(this.tick);
+  };
+
+  private evaluateAverageFps(): void {
+    const avg = this.samples.reduce((sum, fps) => sum + fps, 0) / this.samples.length;
+    const current = this.quality;
+    if (avg < 38) this.lowFpsFrames += 1;
+    else this.lowFpsFrames = Math.max(0, this.lowFpsFrames - 1);
+
+    if (this.lowFpsFrames > 7 && current !== 'lite') {
+      this.quality = current === 'high' ? 'balanced' : 'lite';
+      this.samples = [];
+      this.lowFpsFrames = 0;
+      this.applyQuality('fps-downshift');
+    }
+  }
+
+  private applyQuality(reason: string): void {
+    const root = document.documentElement;
+    root.dataset.runtimeQuality = this.quality;
+    root.dataset.runtimeQualityReason = reason;
+    root.style.setProperty('--runtime-dpr-cap', String(this.recommendedDprCap()));
+    root.style.setProperty('--water-fx-alpha', this.quality === 'lite' ? '.54' : this.quality === 'high' ? '.76' : '.66');
+    root.style.setProperty('--water-fx-blend', this.quality === 'lite' ? '.80' : this.quality === 'high' ? '1.06' : '.94');
+    root.style.setProperty('--ui-motion-scale', this.quality === 'lite' ? '.62' : '1');
+    this.syncViewportVars();
+  }
+
+  private syncViewportVars = (): void => {
+    const vv = window.visualViewport;
+    const width = Math.max(1, Math.floor(vv?.width ?? window.innerWidth));
+    const height = Math.max(1, Math.floor(vv?.height ?? window.innerHeight));
+    const portraitWidth = clamp(width, 300, 500);
+    const root = document.documentElement;
+    root.style.setProperty('--runtime-viewport-width', `${width}px`);
+    root.style.setProperty('--runtime-viewport-height', `${height}px`);
+    root.style.setProperty('--runtime-shell-width', `${portraitWidth}px`);
+  };
+}
