@@ -1,24 +1,24 @@
-# AquaFantasia v1.0.2
+# AquaFantasia v1.0.3 UI Cleanup Polish
 
-모바일 웹 낚시 게임 AquaFantasia의 현재 패치입니다. 버전 체계는 `1.0.1 → 1.0.2 → ... → 1.1.0` 방식으로 유지합니다.
+세로 전용 모바일 웹 낚시 게임 **AquaFantasia**의 v1.0.3 덮어쓰기용 패치입니다.
 
-## v1.0.2 핵심 변경
+## 이번 패치 핵심
 
-- 하단 메뉴바 프레임 양끝 흰점/구슬 느낌 제거
-- 하단 메뉴바를 `v102` 전용 무점 프레임 PNG로 교체
-- 버튼형 UI 색감과 글씨색을 수중 톤에 맞게 재정리
-- 버튼 크기를 아담하게 줄이되 렌더드 질감 유지
-- 투명 프레임 뒤가 뚫려 보이지 않도록 모든 주요 패널에 100% 배경 fill 적용
-- 상점 / 미션 / 랭킹 / 도감 / 가방 / 장비 카드의 텍스트 overflow 방지
-- 긴 글은 1~2줄 안에서 ellipsis 처리
-- 상점 가격, 미션 보상 버튼, 랭킹 점수 영역이 프레임 밖으로 나가지 않도록 grid 재조정
-- 낚시터 콤보 / 낚시 시작 / 최근 포획 / 릴 게이지 간격 재정리
-- 기존 PixiJS 낚시 런타임과 WebGL 수중 레이어 유지
-- 프로젝트 문서는 계속 `README.md` 하나만 유지
+- 버전 체계는 `1.0.x` 유지
+- 하단 메뉴바는 v1.0.2의 흰점 제거 프레임을 유지하면서 더 슬림하게 조정
+- 카드/패널/버튼의 투명 프레임 뒤가 비어 보이지 않도록 내부 fill 레이어 강화
+- 상점 / 미션 / 랭킹 / 장비 / 가방 / 도감에서 텍스트와 숫자가 프레임 밖으로 나가지 않도록 containment 보강
+- 버튼은 v3d 렌더드 버튼 이미지를 다시 사용해, 크기는 아담하지만 질감은 유지
+- 낚시터 콤보 / 낚시 시작 / 최근 포획 / 릴 패널이 서로 겹치지 않도록 레이어별 위치 재정리
+- 기존 PixiJS 낚시 런타임, WebGL 수중 레이어, Firebase Spark 기준 구조 유지
+- 문서는 `README.md` 하나만 유지
 
-## 검증
+## 적용 방법
+
+기존 GitHub 프로젝트 루트에 ZIP 내용을 그대로 덮어쓴 뒤 다음 명령으로 확인합니다.
 
 ```bash
+npm install
 npm run validate
 npm run typecheck
 npm run build
@@ -27,4 +27,8 @@ npm run audit
 
 ## 문서 정책
 
-`CLEAN_REPLACE_GUIDE`, `FINAL_CONSOLIDATED`, `PATCH_NOTES`, `reports/`는 더 이상 생성하지 않습니다. 필요한 변경 기록은 이 `README.md`에 통합합니다.
+이제 패치마다 `CLEAN_REPLACE_GUIDE`, `FINAL_CONSOLIDATED`, `PATCH_NOTES` 파일을 추가 생성하지 않습니다. 변경 내용은 이 `README.md` 하나에 통합해 계속 덮어씁니다.
+
+## 주의
+
+기존 저장소에 과거 문서 파일이나 `reports/` 폴더가 남아 있어도 `npm run validate` 시 `tools/clean-old-patch-docs.mjs`가 먼저 정리합니다.
