@@ -125,7 +125,7 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
-    document.documentElement.dataset.visualPolish = 'v110-micro-ui-polish';
+    document.documentElement.dataset.visualPolish = 'v111-layout-color-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -309,7 +309,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -346,7 +346,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -443,18 +443,25 @@ class AquaFantasiaGame {
 
   private installTabSwipe(root: HTMLElement, active: Exclude<Screen, 'login' | 'fishing'>): void {
     const swipeOrder: Screen[] = ['village', 'fishing', 'gear', 'inventory', 'dex', 'shop', 'mission', 'ranking'];
+    if ((active as Screen) === 'fishing') return;
     let startX = 0;
     let startY = 0;
+    let lastX = 0;
+    let lastY = 0;
     let startAt = 0;
     let tracking = false;
     let horizontalIntent = false;
-    let lastX = 0;
-    let lastY = 0;
     let lastSwipeAt = 0;
+    const reset = () => {
+      tracking = false;
+      horizontalIntent = false;
+      root.classList.remove('swipe-route-peek', 'swipe-route-out');
+      root.style.removeProperty('--swipe-peek-x');
+    };
     const canStart = (target: EventTarget | null) => {
       const el = target as HTMLElement | null;
       if (!el) return true;
-      return !el.closest('.bottom-nav, input, textarea, select, [data-no-swipe], button, a');
+      return !el.closest('.bottom-nav, input, textarea, select, [data-no-swipe], button, a, .hold-pad, .fishing-stage');
     };
     const begin = (x: number, y: number, target: EventTarget | null) => {
       if (!canStart(target)) return;
@@ -464,6 +471,7 @@ class AquaFantasiaGame {
       startY = lastY = y;
       startAt = performance.now();
       root.classList.remove('swipe-route-out');
+      root.style.removeProperty('--swipe-peek-x');
     };
     const move = (x: number, y: number) => {
       if (!tracking) return;
@@ -471,47 +479,56 @@ class AquaFantasiaGame {
       lastY = y;
       const dx = x - startX;
       const dy = y - startY;
-      if (!horizontalIntent && Math.abs(dx) > 16 && Math.abs(dx) > Math.abs(dy) * 1.08) {
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+      if (!horizontalIntent && absX > 18 && absX > absY * 1.35) {
         horizontalIntent = true;
         root.classList.add('swipe-route-peek');
       }
       if (horizontalIntent) {
-        root.style.setProperty('--swipe-peek-x', `${Math.max(-18, Math.min(18, dx * .08))}px`);
+        root.style.setProperty('--swipe-peek-x', `${Math.max(-10, Math.min(10, dx * 0.035))}px`);
       }
     };
     const finish = (x = lastX, y = lastY) => {
       if (!tracking) return;
-      tracking = false;
-      root.classList.remove('swipe-route-peek');
-      root.style.removeProperty('--swipe-peek-x');
       const dx = x - startX;
       const dy = y - startY;
       const elapsed = performance.now() - startAt;
       const absX = Math.abs(dx);
       const absY = Math.abs(dy);
-      const velocityPass = elapsed < 520 && absX > 34;
-      const distancePass = absX > 52;
-      if (elapsed > 1100 || (!distancePass && !velocityPass) || absX < absY * 1.04) return;
+      reset();
+      const width = window.visualViewport?.width ?? window.innerWidth;
+      const distancePass = absX > Math.max(48, Math.min(86, width * 0.16));
+      const velocityPass = elapsed < 420 && absX > Math.max(38, width * 0.10);
+      if (elapsed > 900 || (!distancePass && !velocityPass) || absX < absY * 1.45) return;
       const index = swipeOrder.indexOf(active);
       if (index < 0) return;
       const next = dx < 0 ? swipeOrder[Math.min(swipeOrder.length - 1, index + 1)] : swipeOrder[Math.max(0, index - 1)];
       if (!next || next === active) return;
       lastSwipeAt = performance.now();
       root.classList.add('swipe-route-out');
-      window.setTimeout(() => { void this.go(next); }, 64);
+      window.setTimeout(() => { void this.go(next); }, 34);
     };
     root.classList.add('swipe-enabled-screen');
     root.addEventListener('click', (ev) => {
-      if (performance.now() - lastSwipeAt < 420) {
+      if (performance.now() - lastSwipeAt < 360) {
         ev.preventDefault();
         ev.stopPropagation();
         ev.stopImmediatePropagation();
       }
     }, true);
-    root.addEventListener('pointerdown', (ev) => begin(ev.clientX, ev.clientY, ev.target), { passive: true, capture: true });
-    root.addEventListener('pointermove', (ev) => move(ev.clientX, ev.clientY), { passive: true, capture: true });
-    root.addEventListener('pointerup', (ev) => finish(ev.clientX, ev.clientY), { passive: true, capture: true });
-    root.addEventListener('pointercancel', () => { tracking = false; root.classList.remove('swipe-route-peek'); root.style.removeProperty('--swipe-peek-x'); }, { passive: true, capture: true });
+
+    // Prefer Pointer Events. Installing both pointer and touch handlers on mobile
+    // caused duplicate swipe completions on some WebViews, which made the whole
+    // route feel shifted or unstable.
+    if ('PointerEvent' in window) {
+      root.addEventListener('pointerdown', (ev) => begin(ev.clientX, ev.clientY, ev.target), { passive: true, capture: true });
+      root.addEventListener('pointermove', (ev) => move(ev.clientX, ev.clientY), { passive: true, capture: true });
+      root.addEventListener('pointerup', (ev) => finish(ev.clientX, ev.clientY), { passive: true, capture: true });
+      root.addEventListener('pointercancel', reset, { passive: true, capture: true });
+      return;
+    }
+
     root.addEventListener('touchstart', (ev) => {
       const t = ev.changedTouches[0];
       if (t) begin(t.clientX, t.clientY, ev.target);
@@ -527,7 +544,7 @@ class AquaFantasiaGame {
       if (t) finish(t.clientX, t.clientY);
       else finish();
     }, { passive: true, capture: true });
-    root.addEventListener('touchcancel', () => { tracking = false; root.classList.remove('swipe-route-peek'); root.style.removeProperty('--swipe-peek-x'); }, { passive: true, capture: true });
+    root.addEventListener('touchcancel', reset, { passive: true, capture: true });
   }
 
   private async initPixiStage(): Promise<void> {

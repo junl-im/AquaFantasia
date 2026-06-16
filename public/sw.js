@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aqua-fantasia-v1.0.10-micro-ui-polish';
+const CACHE_NAME = 'aqua-fantasia-v1.1.0-layout-color-polish';
 const PRECACHE = [
   "./",
   "./index.html",
