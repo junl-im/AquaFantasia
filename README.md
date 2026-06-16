@@ -14,6 +14,10 @@
 - SVG/벡터 신규 자산은 추가하지 않았고 PNG/WebP 기반 2.5D 렌더 스타일을 유지했습니다.
 - 문서는 계속 `README.md` 하나만 유지합니다.
 
+## v1.1.4 설치 Hotfix
+
+GitHub Actions의 `npm install` 단계에서 존재하지 않는 `@protobufjs/*@1.1.3` 잠금 버전을 찾으며 실패할 수 있는 문제를 수정했습니다. `package-lock.json`은 npm에 실제 배포되어 있는 `@protobufjs/aspromise@1.1.2`, `@protobufjs/base64@1.1.2`, `@protobufjs/path@1.1.2`로 되돌렸고, `package.json`에는 동일 버전 override를 추가해 CI 설치가 다시 흔들리지 않게 고정했습니다. 게임 런타임, UI, 2.5D 렌더 방향은 v1.1.4 상태 그대로 유지됩니다.
+
 ## 검증 명령
 
 ```bash
