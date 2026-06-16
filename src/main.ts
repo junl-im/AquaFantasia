@@ -125,7 +125,7 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
-    document.documentElement.dataset.visualPolish = 'v109-clean-ui-detail-polish';
+    document.documentElement.dataset.visualPolish = 'v110-micro-ui-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -309,7 +309,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -346,7 +346,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -447,35 +447,58 @@ class AquaFantasiaGame {
     let startY = 0;
     let startAt = 0;
     let tracking = false;
+    let horizontalIntent = false;
+    let lastX = 0;
+    let lastY = 0;
     let lastSwipeAt = 0;
     const canStart = (target: EventTarget | null) => {
       const el = target as HTMLElement | null;
       if (!el) return true;
-      return !el.closest('.bottom-nav, input, textarea, select, [data-no-swipe]');
+      return !el.closest('.bottom-nav, input, textarea, select, [data-no-swipe], button, a');
     };
     const begin = (x: number, y: number, target: EventTarget | null) => {
       if (!canStart(target)) return;
       tracking = true;
-      startX = x;
-      startY = y;
+      horizontalIntent = false;
+      startX = lastX = x;
+      startY = lastY = y;
       startAt = performance.now();
+      root.classList.remove('swipe-route-out');
     };
-    const finish = (x: number, y: number) => {
+    const move = (x: number, y: number) => {
+      if (!tracking) return;
+      lastX = x;
+      lastY = y;
+      const dx = x - startX;
+      const dy = y - startY;
+      if (!horizontalIntent && Math.abs(dx) > 16 && Math.abs(dx) > Math.abs(dy) * 1.08) {
+        horizontalIntent = true;
+        root.classList.add('swipe-route-peek');
+      }
+      if (horizontalIntent) {
+        root.style.setProperty('--swipe-peek-x', `${Math.max(-18, Math.min(18, dx * .08))}px`);
+      }
+    };
+    const finish = (x = lastX, y = lastY) => {
       if (!tracking) return;
       tracking = false;
+      root.classList.remove('swipe-route-peek');
+      root.style.removeProperty('--swipe-peek-x');
       const dx = x - startX;
       const dy = y - startY;
       const elapsed = performance.now() - startAt;
       const absX = Math.abs(dx);
       const absY = Math.abs(dy);
-      if (elapsed > 980 || absX < 42 || absX < absY * 1.12) return;
+      const velocityPass = elapsed < 520 && absX > 34;
+      const distancePass = absX > 52;
+      if (elapsed > 1100 || (!distancePass && !velocityPass) || absX < absY * 1.04) return;
       const index = swipeOrder.indexOf(active);
       if (index < 0) return;
       const next = dx < 0 ? swipeOrder[Math.min(swipeOrder.length - 1, index + 1)] : swipeOrder[Math.max(0, index - 1)];
       if (!next || next === active) return;
       lastSwipeAt = performance.now();
       root.classList.add('swipe-route-out');
-      window.setTimeout(() => { void this.go(next); }, 70);
+      window.setTimeout(() => { void this.go(next); }, 64);
     };
     root.classList.add('swipe-enabled-screen');
     root.addEventListener('click', (ev) => {
@@ -486,16 +509,25 @@ class AquaFantasiaGame {
       }
     }, true);
     root.addEventListener('pointerdown', (ev) => begin(ev.clientX, ev.clientY, ev.target), { passive: true, capture: true });
+    root.addEventListener('pointermove', (ev) => move(ev.clientX, ev.clientY), { passive: true, capture: true });
     root.addEventListener('pointerup', (ev) => finish(ev.clientX, ev.clientY), { passive: true, capture: true });
-    root.addEventListener('pointercancel', () => { tracking = false; }, { passive: true, capture: true });
+    root.addEventListener('pointercancel', () => { tracking = false; root.classList.remove('swipe-route-peek'); root.style.removeProperty('--swipe-peek-x'); }, { passive: true, capture: true });
     root.addEventListener('touchstart', (ev) => {
       const t = ev.changedTouches[0];
       if (t) begin(t.clientX, t.clientY, ev.target);
     }, { passive: true, capture: true });
+    root.addEventListener('touchmove', (ev) => {
+      const t = ev.changedTouches[0];
+      if (!t) return;
+      move(t.clientX, t.clientY);
+      if (horizontalIntent) ev.preventDefault();
+    }, { passive: false, capture: true });
     root.addEventListener('touchend', (ev) => {
       const t = ev.changedTouches[0];
       if (t) finish(t.clientX, t.clientY);
+      else finish();
     }, { passive: true, capture: true });
+    root.addEventListener('touchcancel', () => { tracking = false; root.classList.remove('swipe-route-peek'); root.style.removeProperty('--swipe-peek-x'); }, { passive: true, capture: true });
   }
 
   private async initPixiStage(): Promise<void> {
