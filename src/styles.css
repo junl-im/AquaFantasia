@@ -7720,3 +7720,323 @@ html.portrait-only-game body[data-screen="fishing"] .v103-ui-cleanup-fishing .v8
   .runtime-menu-screen.v103-ui-cleanup-screen .shop-card > span { max-width: 56px !important; }
   .runtime-menu-screen.v103-ui-cleanup-screen .mission-card { min-height: 110px !important; }
 }
+
+/* v1.0.4 UI REFINEMENT POLISH
+   Tighter containment for every menu card/button. This layer deliberately avoids large decorative borders
+   and keeps text inside the rendered frames on small mobile screens. */
+:root {
+  --v104-nav-height: 72px;
+  --v104-content-max: 744px;
+  --v104-panel-fill: linear-gradient(160deg, rgba(20, 118, 173, .96), rgba(6, 55, 107, .985) 57%, rgba(2, 27, 61, .99));
+  --v104-card-fill: linear-gradient(160deg, rgba(56, 184, 218, .92), rgba(11, 89, 145, .965) 55%, rgba(4, 38, 83, .985));
+  --v104-card-fill-soft: linear-gradient(160deg, rgba(79, 205, 225, .90), rgba(19, 109, 161, .96) 56%, rgba(8, 50, 97, .985));
+  --v104-gold-fill: linear-gradient(180deg, #ffeaa2 0%, #ffc75f 46%, #f0923d 100%);
+  --v104-blue-fill: linear-gradient(180deg, #b6fbff 0%, #65d7ef 45%, #287fcb 100%);
+  --v104-text-main: #f4fdff;
+  --v104-text-soft: #c9f2fb;
+  --v104-text-dark: #073552;
+  --v104-shadow: 0 12px 24px rgba(0, 25, 62, .24), inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+.runtime-menu-screen.v104-ui-refinement-screen,
+.fishing-screen.v104-ui-refinement-fishing {
+  --bottom-nav-height-v760: var(--v104-nav-height) !important;
+  --v102-nav-height: var(--v104-nav-height) !important;
+  --v103-nav-height: var(--v104-nav-height) !important;
+}
+
+.runtime-menu-screen.v104-ui-refinement-screen * {
+  min-width: 0 !important;
+}
+
+.runtime-menu-screen.v104-ui-refinement-screen :is(.runtime-content,.runtime-card-list,.gear-grid,.shop-list,.mission-list,.runtime-item-grid,.dex-grid,.runtime-quick-grid,.runtime-region-grid) {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-content {
+  max-width: var(--v104-content-max) !important;
+  padding: calc(var(--viewport-offset-top, 0px) + 9px) clamp(12px, 3.2vw, 18px) calc(var(--v104-nav-height) + 20px + env(safe-area-inset-bottom)) !important;
+  gap: clamp(10px, 2.6vw, 15px) !important;
+}
+
+.runtime-menu-screen.v104-ui-refinement-screen :is(.runtime-hud,.runtime-hero-card,.runtime-panel,.runtime-menu-card,.runtime-item-card,.dex-card,.gear-card,.shop-card,.mission-card,.ranking-live-card,.ranking-stats-grid div,.region-card) {
+  position: relative !important;
+  overflow: hidden !important;
+  contain: layout paint !important;
+  isolation: isolate !important;
+}
+
+.runtime-menu-screen.v104-ui-refinement-screen :is(.runtime-hero-card,.runtime-panel) {
+  background-image: url('/assets/v3d_underwater/ui/frames/panel_medium_aqua.png'), var(--v104-panel-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  border-radius: clamp(23px, 5.8vw, 31px) !important;
+  padding: clamp(14px, 3.4vw, 18px) !important;
+  box-shadow: var(--v104-shadow) !important;
+}
+
+.runtime-menu-screen.v104-ui-refinement-screen :is(.runtime-menu-card,.runtime-item-card,.dex-card,.gear-card,.shop-card,.mission-card,.ranking-live-card,.ranking-stats-grid div,.region-card) {
+  background-image: url('/assets/v3d_underwater/ui/frames/card_aqua.png'), var(--v104-card-fill) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  border-radius: clamp(19px, 5vw, 27px) !important;
+  box-shadow: 0 10px 20px rgba(0, 24, 59, .20), inset 0 1px 0 rgba(255,255,255,.13) !important;
+}
+
+.runtime-menu-screen.v104-ui-refinement-screen :is(.runtime-title,.runtime-title *, .runtime-hero-card div,.runtime-hero-card h2,.runtime-hero-card p,.runtime-menu-card strong,.runtime-menu-card span,.gear-card strong,.gear-card span,.shop-card strong,.shop-card small,.shop-card span,.mission-card small,.mission-card strong,.mission-card span,.rank-user,.rank-user *,.rank-score,.rank-score *,.ranking-note,.dex-card strong,.dex-card span,.runtime-item-card strong,.runtime-item-card span,.region-card strong,.region-card span,.runtime-panel-title,.runtime-panel-title *) {
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+
+.runtime-menu-screen.v104-ui-refinement-screen :is(.runtime-title strong,.runtime-title em,.runtime-hero-card h2,.runtime-hero-card p,.runtime-menu-card strong,.runtime-menu-card span,.gear-card strong,.gear-card span,.shop-card strong,.shop-card small,.mission-card small,.mission-card strong,.mission-card span,.rank-user strong,.rank-user span,.rank-user em,.ranking-note,.dex-card strong,.dex-card span,.runtime-item-card strong,.runtime-item-card span,.region-card strong,.region-card span) {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  white-space: normal !important;
+}
+.runtime-menu-screen.v104-ui-refinement-screen :is(.runtime-title strong,.runtime-hero-card h2,.runtime-menu-card strong,.gear-card strong,.shop-card strong,.mission-card small,.mission-card strong,.rank-user strong,.rank-user em,.dex-card strong,.runtime-item-card strong,.region-card strong) { -webkit-line-clamp: 1 !important; }
+.runtime-menu-screen.v104-ui-refinement-screen :is(.runtime-title em,.runtime-hero-card p,.runtime-menu-card span,.gear-card span,.shop-card small,.mission-card span,.rank-user span,.ranking-note,.dex-card span,.runtime-item-card span,.region-card span) { -webkit-line-clamp: 2 !important; }
+
+/* Header refinement: logo area stays pretty but no text escapes. */
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-hud {
+  width: min(100%, var(--v104-content-max)) !important;
+  grid-template-columns: clamp(38px, 9.8vw, 50px) minmax(0, 1fr) minmax(76px, 104px) !important;
+  gap: clamp(8px, 2.2vw, 12px) !important;
+  padding: calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 8px) clamp(12px, 3.2vw, 18px) 8px !important;
+  margin-inline: auto !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/hud_capsule_deep.png'), linear-gradient(145deg, rgba(17,125,178,.94), rgba(4,45,94,.98)) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  border-radius: 0 0 clamp(20px, 5vw, 28px) clamp(20px, 5vw, 28px) !important;
+}
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-hud-mascot { width: clamp(36px, 9.4vw, 48px) !important; height: clamp(36px, 9.4vw, 48px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-title span { font-size: clamp(8px, 2.1vw, 10px) !important; letter-spacing: .08em !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-title strong { font-size: clamp(19px, 5vw, 28px) !important; line-height: 1.02 !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-title em { font-size: clamp(10px, 2.55vw, 12.5px) !important; line-height: 1.18 !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-wallet { max-width: 104px !important; gap: 4px !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-wallet span { height: 24px !important; padding: 3px 7px !important; font-size: clamp(9px, 2.5vw, 11.5px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-wallet img { width: 14px !important; height: 14px !important; }
+
+/* Hero/CTA: compact but still attractive. */
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-hero-card {
+  grid-template-columns: clamp(46px, 12vw, 60px) minmax(0, 1fr) minmax(78px, 104px) !important;
+  gap: clamp(9px, 2.6vw, 13px) !important;
+  min-height: clamp(92px, 22vw, 116px) !important;
+}
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-hero-card > img { width: clamp(44px, 11.5vw, 58px) !important; height: clamp(44px, 11.5vw, 58px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-hero-card h2 { font-size: clamp(20px, 5.1vw, 28px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-hero-card p { font-size: clamp(10.5px, 2.8vw, 13.5px) !important; line-height: 1.25 !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-eyebrow { font-size: clamp(8px, 2.1vw, 10px) !important; white-space: nowrap !important; }
+
+/* Buttons: smaller, softer color, no awkward text color mismatch. */
+.runtime-menu-screen.v104-ui-refinement-screen :is(.runtime-btn,.image-btn,.v950-price-btn,.mission-card .runtime-btn,.gear-card .image-btn),
+.fishing-screen.v104-ui-refinement-fishing :is(.hold-pad,.catch-result-card button) {
+  min-height: clamp(34px, 7.8vw, 42px) !important;
+  max-width: 100% !important;
+  padding-inline: clamp(10px, 2.8vw, 15px) !important;
+  border-radius: clamp(15px, 3.8vw, 19px) !important;
+  background-image: url('/assets/v3d_underwater/ui/buttons/button_mid_aqua_normal.png'), var(--v104-blue-fill) !important;
+  color: var(--v104-text-dark) !important;
+  font-size: clamp(10.5px, 2.8vw, 13.5px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.035em !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.68) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.runtime-menu-screen.v104-ui-refinement-screen :is(.runtime-btn.gold,.image-btn.gold,.v950-price-btn,.mission-card.ready .runtime-btn) {
+  background-image: url('/assets/v3d_underwater/ui/buttons/button_mid_gold_normal.png'), var(--v104-gold-fill) !important;
+  color: #593000 !important;
+}
+.runtime-menu-screen.v104-ui-refinement-screen :is(.runtime-btn.blue,.runtime-btn.cyan,.image-btn.soft) {
+  background-image: url('/assets/v3d_underwater/ui/buttons/button_mid_deep_normal.png'), linear-gradient(180deg,#85ebff,#1f78c7) !important;
+  color: #effcff !important;
+  text-shadow: 0 2px 3px rgba(0,32,70,.55) !important;
+}
+
+/* Quick/grid cards stay compact and centered. */
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: clamp(8px, 2.3vw, 11px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-menu-card { min-height: clamp(96px, 24vw, 116px) !important; padding: 12px 8px 10px !important; gap: 4px !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-menu-card img { width: clamp(38px, 10.2vw, 52px) !important; height: clamp(38px, 10.2vw, 52px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-menu-card strong { font-size: clamp(13.5px, 3.55vw, 16px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-menu-card span { font-size: clamp(9.5px, 2.45vw, 11.5px) !important; }
+
+/* Gear/shop/inventory containment. */
+.runtime-menu-screen.v104-ui-refinement-screen .gear-card {
+  grid-template-columns: clamp(48px, 12vw, 60px) minmax(0, 1fr) minmax(58px, 76px) !important;
+  min-height: 96px !important;
+  padding: clamp(11px, 2.9vw, 15px) !important;
+  gap: clamp(8px, 2.2vw, 11px) !important;
+}
+.runtime-menu-screen.v104-ui-refinement-screen .gear-card .v950-item-orb,
+.runtime-menu-screen.v104-ui-refinement-screen .gear-card > img { width: clamp(46px, 11.5vw, 58px) !important; height: clamp(46px, 11.5vw, 58px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .gear-card strong { font-size: clamp(14px, 3.6vw, 17px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .gear-card span { font-size: clamp(9.5px, 2.55vw, 12.5px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .gear-card .image-btn { width: 100% !important; min-width: 0 !important; }
+
+.runtime-menu-screen.v104-ui-refinement-screen .shop-card {
+  grid-template-columns: clamp(46px, 11.6vw, 58px) minmax(0, 1fr) minmax(50px, 70px) !important;
+  min-height: 98px !important;
+  padding: clamp(14px, 3.5vw, 17px) clamp(10px, 2.7vw, 14px) 11px !important;
+  gap: clamp(7px, 2vw, 11px) !important;
+}
+.runtime-menu-screen.v104-ui-refinement-screen .shop-card em {
+  top: 7px !important;
+  left: 12px !important;
+  max-width: 54px !important;
+  height: 19px !important;
+  padding: 2px 7px !important;
+  font-size: clamp(8px, 2.15vw, 10px) !important;
+  border-radius: 999px !important;
+  white-space: nowrap !important;
+}
+.runtime-menu-screen.v104-ui-refinement-screen .shop-card img { width: clamp(44px, 11vw, 56px) !important; height: clamp(44px, 11vw, 56px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .shop-card strong { font-size: clamp(13.5px, 3.45vw, 16.5px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .shop-card small { font-size: clamp(9.5px, 2.5vw, 12px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .shop-card > span {
+  width: 100% !important;
+  max-width: 68px !important;
+  min-height: 31px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 15px !important;
+  background: rgba(255, 235, 143, .18) !important;
+  color: #fff1a8 !important;
+  font-size: clamp(10px, 2.65vw, 12.5px) !important;
+  text-shadow: 0 2px 0 rgba(0,45,77,.45) !important;
+  white-space: nowrap !important;
+}
+
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-item-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: clamp(9px, 2.3vw, 12px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-item-card { min-height: clamp(174px, 43vw, 208px) !important; padding: clamp(13px, 3.2vw, 17px) 10px 12px !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-item-card img { height: clamp(58px, 16vw, 78px) !important; max-width: min(86px, 64%) !important; object-fit: contain !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .runtime-item-card .runtime-btn { width: 100% !important; margin-top: auto !important; }
+
+/* Missions: each section has a reserved text column, progress lane and button lane. */
+.runtime-menu-screen.v104-ui-refinement-screen .mission-list { display: grid !important; grid-template-columns: 1fr !important; gap: clamp(8px, 2.2vw, 11px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .mission-card {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(70px, 88px) !important;
+  grid-template-rows: auto auto !important;
+  grid-template-areas: 'text action' 'bar action' !important;
+  align-items: center !important;
+  min-height: 104px !important;
+  padding: clamp(12px, 3vw, 15px) !important;
+  gap: 8px clamp(8px, 2.2vw, 12px) !important;
+}
+.runtime-menu-screen.v104-ui-refinement-screen .mission-card > div { grid-area: text !important; min-width: 0 !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .mission-card progress { grid-area: bar !important; width: 100% !important; height: 14px !important; min-width: 0 !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .mission-card .runtime-btn { grid-area: action !important; width: 100% !important; min-width: 0 !important; align-self: center !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .mission-card small { font-size: clamp(8px, 2.1vw, 10px) !important; color: #fff3a4 !important; margin-bottom: 2px !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .mission-card strong { font-size: clamp(13px, 3.45vw, 16px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .mission-card span { font-size: clamp(9.5px, 2.45vw, 11.5px) !important; line-height: 1.24 !important; }
+
+/* Ranking: fixed inner lanes so score and user label do not pierce the frame. */
+.runtime-menu-screen.v104-ui-refinement-screen .ranking-live-card {
+  grid-template-columns: clamp(38px, 9.8vw, 48px) clamp(27px, 7vw, 34px) minmax(0, 1fr) minmax(60px, 84px) !important;
+  padding: clamp(11px, 2.9vw, 15px) !important;
+  gap: clamp(6px, 1.8vw, 10px) !important;
+}
+.runtime-menu-screen.v104-ui-refinement-screen .rank-avatar { width: clamp(38px, 9.8vw, 48px) !important; height: clamp(38px, 9.8vw, 48px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .rank-medal { width: clamp(27px, 7vw, 34px) !important; height: clamp(27px, 7vw, 34px) !important; font-size: clamp(10px, 2.65vw, 12px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .rank-user strong { font-size: clamp(14px, 3.6vw, 17px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .rank-user span,
+.runtime-menu-screen.v104-ui-refinement-screen .rank-user em { font-size: clamp(9px, 2.35vw, 11.5px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .rank-score strong { font-size: clamp(14px, 4vw, 20px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .rank-score span { font-size: clamp(9px, 2.35vw, 11.5px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .ranking-stats-grid { gap: clamp(7px, 1.9vw, 10px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .ranking-stats-grid div { min-height: 58px !important; padding: 10px 7px !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .ranking-stats-grid strong { font-size: clamp(15px, 4.2vw, 21px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .ranking-stats-grid span { font-size: clamp(8.8px, 2.25vw, 11px) !important; }
+
+/* Dex and region cards use consistent inner margins. */
+.runtime-menu-screen.v104-ui-refinement-screen .dex-grid { gap: clamp(8px, 2.2vw, 11px) !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .dex-card { min-height: clamp(166px, 41vw, 202px) !important; padding: clamp(12px, 3vw, 16px) 9px 11px !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .dex-card img { height: clamp(72px, 20vw, 100px) !important; width: 100% !important; object-fit: contain !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .region-card { min-height: 104px !important; padding: 10px !important; }
+.runtime-menu-screen.v104-ui-refinement-screen .region-card img { max-height: 48px !important; object-fit: cover !important; border-radius: 14px !important; }
+
+/* Bottom nav: keep the full frame, but make cells calmer and height consistent. */
+.bottom-nav.v840-bottom-nav,
+html.portrait-only-game .bottom-nav.v840-bottom-nav,
+html.is-kakao-inapp .bottom-nav.v840-bottom-nav,
+html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
+.bottom-nav.v840-bottom-nav.fixed-root-nav {
+  height: calc(var(--v104-nav-height) + env(safe-area-inset-bottom)) !important;
+  padding: 5px clamp(8px, 2.2vw, 12px) calc(5px + env(safe-area-inset-bottom)) !important;
+  background-image: url('/assets/v102/ui/bottom_nav_frame_clean.png'), linear-gradient(180deg, rgba(34, 154, 198, .96), rgba(3, 35, 74, .99)) !important;
+  box-shadow: 0 -6px 15px rgba(0, 16, 42, .22) !important;
+}
+.bottom-nav.v840-bottom-nav button {
+  border-radius: 13px !important;
+  padding: 4px 0 2px !important;
+  background: transparent !important;
+  color: rgba(226, 248, 255, .84) !important;
+}
+.bottom-nav.v840-bottom-nav button.active {
+  background: linear-gradient(180deg, rgba(255, 239, 147, .18), rgba(89, 226, 255, .08)) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 241, 156, .22) !important;
+  color: #fff7ba !important;
+}
+.bottom-nav.v840-bottom-nav button.active::before { opacity: 0 !important; display: none !important; }
+.bottom-nav.v840-bottom-nav button.active::after { left: 34% !important; right: 34% !important; bottom: 3px !important; height: 2px !important; background: linear-gradient(90deg, transparent, rgba(255,245,166,.86), transparent) !important; }
+.bottom-nav.v840-bottom-nav button img { width: clamp(22px, 5.6vw, 28px) !important; height: clamp(22px, 5.6vw, 28px) !important; }
+.bottom-nav.v840-bottom-nav button span { font-size: clamp(6px, 1.6vw, 8px) !important; letter-spacing: -0.09em !important; }
+
+/* Fishing HUD lane separation. */
+.fishing-screen.v104-ui-refinement-fishing .combo-badge {
+  top: max(70px, calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 64px)) !important;
+  left: 8px !important;
+  max-width: min(132px, 34vw) !important;
+  min-height: 30px !important;
+  font-size: clamp(10.5px, 2.65vw, 12.5px) !important;
+}
+.fishing-screen.v104-ui-refinement-fishing .v840-stage-ui .cast-button {
+  bottom: calc(var(--v104-nav-height) + clamp(72px, 10.5svh, 92px) + env(safe-area-inset-bottom)) !important;
+  width: min(250px, 64vw) !important;
+  min-height: clamp(48px, 7svh, 58px) !important;
+  font-size: clamp(19px, 5.4vw, 25px) !important;
+  border-radius: 28px !important;
+}
+.fishing-screen.v104-ui-refinement-fishing .recent-catch-strip {
+  bottom: calc(var(--v104-nav-height) + 3px + env(safe-area-inset-bottom)) !important;
+  width: min(492px, calc(100vw - 14px)) !important;
+  min-height: clamp(52px, 11.5vw, 60px) !important;
+  padding: 8px 12px !important;
+}
+body[data-screen="fishing"] .v104-ui-refinement-fishing .v840-reel-panel.reel-panel,
+html.portrait-only-game body[data-screen="fishing"] .v104-ui-refinement-fishing .v840-reel-panel.reel-panel {
+  bottom: calc(var(--v104-nav-height) + clamp(74px, 10.8svh, 94px) + env(safe-area-inset-bottom)) !important;
+  width: min(408px, calc(100vw - 18px)) !important;
+  padding: 11px 13px !important;
+}
+.fishing-screen.v104-ui-refinement-fishing .tension-track { height: 18px !important; }
+.fishing-screen.v104-ui-refinement-fishing .safe-progress { height: 9px !important; }
+
+@media (max-width: 430px) {
+  :root { --v104-nav-height: 70px; }
+  .runtime-menu-screen.v104-ui-refinement-screen .runtime-content { padding-inline: 10px !important; }
+  .runtime-menu-screen.v104-ui-refinement-screen .runtime-hud { grid-template-columns: clamp(36px, 9.6vw, 44px) minmax(0, 1fr) minmax(70px, 88px) !important; padding-inline: 10px !important; }
+  .runtime-menu-screen.v104-ui-refinement-screen .runtime-wallet { max-width: 84px !important; }
+  .runtime-menu-screen.v104-ui-refinement-screen .runtime-hero-card { grid-template-columns: clamp(42px, 11vw, 52px) minmax(0, 1fr) !important; }
+  .runtime-menu-screen.v104-ui-refinement-screen .runtime-hero-card :is(.runtime-btn,.v950-primary-cta) { grid-column: 1 / -1 !important; width: 100% !important; }
+  .runtime-menu-screen.v104-ui-refinement-screen .shop-card { grid-template-columns: clamp(42px, 10.5vw, 50px) minmax(0, 1fr) minmax(48px, 58px) !important; padding: 14px 9px 10px !important; }
+  .runtime-menu-screen.v104-ui-refinement-screen .shop-card > span { max-width: 58px !important; font-size: clamp(9.2px, 2.45vw, 11px) !important; }
+  .runtime-menu-screen.v104-ui-refinement-screen .mission-card { grid-template-columns: minmax(0, 1fr) minmax(64px, 76px) !important; min-height: 102px !important; padding: 12px !important; }
+  .runtime-menu-screen.v104-ui-refinement-screen .ranking-live-card { grid-template-columns: clamp(34px, 9vw, 42px) clamp(24px, 6.5vw, 30px) minmax(0, 1fr) minmax(54px, 64px) !important; padding: 11px 8px !important; }
+  .runtime-menu-screen.v104-ui-refinement-screen .rank-score strong { font-size: clamp(12.5px, 3.6vw, 17px) !important; }
+}
+
+@media (max-width: 380px) {
+  :root { --v104-nav-height: 68px; }
+  .runtime-menu-screen.v104-ui-refinement-screen .runtime-content { padding-inline: 8px !important; }
+  .runtime-menu-screen.v104-ui-refinement-screen .runtime-wallet { max-width: 76px !important; }
+  .runtime-menu-screen.v104-ui-refinement-screen .mission-card { grid-template-columns: minmax(0, 1fr) minmax(58px, 68px) !important; }
+  .runtime-menu-screen.v104-ui-refinement-screen .mission-card .runtime-btn { font-size: 10px !important; padding-inline: 6px !important; }
+  .bottom-nav.v840-bottom-nav button span { font-size: 5.7px !important; }
+}
