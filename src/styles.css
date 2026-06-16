@@ -8270,3 +8270,283 @@ html.portrait-only-game body[data-screen="fishing"] .v105-fishing-depth-fishing 
   .fishing-screen.v105-fishing-depth-fishing .combo-badge { top: max(50px, calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 45px)) !important; }
   body[data-screen="fishing"] .v105-fishing-depth-fishing .v840-reel-panel.reel-panel { bottom: calc(var(--v105-play-bottom) + 58px) !important; }
 }
+
+/* v1.0.6 SWIPE NAV + AQUA BUBBLE UI POLISH
+   Bottom menu frame is slimmer, icons are easier to read, content CTAs are compact,
+   ranking text contrast is restored, and the water bubble feel is more aqua/teardrop-like. */
+:root {
+  --bottom-nav-height-v760: 78px;
+  --bottom-nav-gap-v760: 5px;
+  --v106-nav-frame: url('/assets/v106/ui/bottom_nav_frame_slim.png');
+}
+
+.bottom-nav.v840-bottom-nav,
+html.portrait-only-game .bottom-nav.v840-bottom-nav,
+html.is-kakao-inapp .bottom-nav.v840-bottom-nav,
+html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
+.bottom-nav.v840-bottom-nav.fixed-root-nav {
+  width: min(428px, calc(100vw - 8px)) !important;
+  height: var(--bottom-nav-height-v760) !important;
+  bottom: calc(4px + env(safe-area-inset-bottom)) !important;
+  padding: 6px 7px 7px !important;
+  gap: 2px !important;
+  background-image: var(--v106-nav-frame), linear-gradient(180deg, rgba(20, 124, 177, .92), rgba(3, 36, 84, .98)) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  background-repeat: no-repeat !important;
+  border-radius: 24px !important;
+  box-shadow: 0 8px 18px rgba(0, 12, 44, .34), inset 0 1px 0 rgba(255,255,255,.26) !important;
+  overflow: visible !important;
+}
+.bottom-nav.v840-bottom-nav::before,
+.bottom-nav.v840-bottom-nav::after { display: none !important; content: none !important; }
+.bottom-nav.v840-bottom-nav button {
+  min-height: 63px !important;
+  height: 63px !important;
+  padding: 4px 1px 3px !important;
+  gap: 1px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(45, 155, 203, .08)) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08) !important;
+  overflow: hidden !important;
+}
+.bottom-nav.v840-bottom-nav button.active {
+  background: linear-gradient(180deg, rgba(255, 239, 158, .26), rgba(73, 207, 231, .20)) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,244,176,.34), 0 3px 8px rgba(0, 28, 72, .24) !important;
+  transform: translateY(-1px) !important;
+}
+.bottom-nav.v840-bottom-nav button.active::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 4px !important;
+  left: 22% !important;
+  right: 22% !important;
+  height: 2px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(90deg, transparent, rgba(255,248,178,.95), transparent) !important;
+  opacity: .92 !important;
+}
+.bottom-nav.v840-bottom-nav button.active::after {
+  content: '' !important;
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 3px !important;
+  width: 5px !important;
+  height: 5px !important;
+  margin-left: -2.5px !important;
+  border-radius: 999px !important;
+  background: #fff7bf !important;
+  box-shadow: 0 0 6px rgba(255,244,176,.75) !important;
+}
+.bottom-nav.v840-bottom-nav button img {
+  width: clamp(32px, 8.6vw, 39px) !important;
+  height: clamp(32px, 8.6vw, 39px) !important;
+  margin-top: 0 !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 4px 6px rgba(0, 17, 50, .35)) saturate(1.18) contrast(1.08) !important;
+}
+.bottom-nav.v840-bottom-nav button span {
+  max-width: 100% !important;
+  font-size: clamp(9.2px, 2.35vw, 10.5px) !important;
+  line-height: 1 !important;
+  color: rgba(239, 253, 255, .90) !important;
+  text-shadow: 0 2px 3px rgba(0, 18, 50, .45) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Content buttons are the compact buttons the user meant: 출항/구매/비용/수령. */
+.runtime-btn,
+.image-btn,
+.v950-primary-cta,
+.runtime-hero-card .runtime-btn,
+.shop-card .runtime-btn,
+.mission-card .runtime-btn,
+.gear-card .runtime-btn,
+.catch-result-card button {
+  min-height: 38px !important;
+  height: auto !important;
+  min-width: 74px !important;
+  max-width: min(136px, 38vw) !important;
+  padding: 0 13px !important;
+  border-radius: 16px !important;
+  font-size: clamp(12px, 3.15vw, 14px) !important;
+  line-height: 1.05 !important;
+  color: #083354 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.42) !important;
+  letter-spacing: -.02em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  justify-self: end !important;
+}
+.runtime-btn.gold,
+.image-btn.gold,
+.v950-primary-cta,
+.shop-card .runtime-btn.gold,
+.mission-card .runtime-btn.gold {
+  background-image: linear-gradient(180deg, #fff5a8 0%, #78edff 50%, #2ed4cc 100%) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.62), 0 8px 14px rgba(0,34,78,.26) !important;
+}
+.runtime-btn.blue,
+.image-btn.blue,
+.mission-card .runtime-btn.blue {
+  color: #eafcff !important;
+  text-shadow: 0 2px 3px rgba(0, 20, 58, .48) !important;
+  background-image: linear-gradient(180deg, rgba(96, 220, 255, .96), rgba(21, 102, 189, .98)) !important;
+}
+
+.runtime-hero-card,
+.runtime-panel,
+.runtime-menu-card,
+.runtime-item-card,
+.runtime-mission-card,
+.shop-card,
+.mission-card,
+.gear-card,
+.ranking-live-card,
+.ranking-stats-grid > div {
+  overflow: hidden !important;
+  contain: layout paint !important;
+}
+.runtime-hero-card > div,
+.runtime-panel-title,
+.runtime-menu-card strong,
+.runtime-menu-card span,
+.runtime-item-card strong,
+.runtime-item-card span,
+.shop-card strong,
+.shop-card span,
+.mission-card strong,
+.mission-card span,
+.gear-card strong,
+.gear-card span,
+.rank-user,
+.rank-score,
+.ranking-note {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+.shop-card,
+.gear-card {
+  grid-template-columns: minmax(48px, 56px) minmax(0, 1fr) minmax(74px, 112px) !important;
+  gap: 10px !important;
+}
+.mission-card {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(76px, 104px) !important;
+  grid-template-rows: auto auto !important;
+  align-items: center !important;
+  gap: 8px 10px !important;
+}
+.mission-card > div { min-width: 0 !important; grid-column: 1 / 2 !important; }
+.mission-card progress { grid-column: 1 / -1 !important; height: 14px !important; }
+.mission-card .runtime-btn { grid-column: 2 / 3 !important; grid-row: 1 / 2 !important; }
+
+/* Ranking needs bright text because the abyss background is dark and busy. */
+.ranking-screen .runtime-title strong,
+.ranking-screen .runtime-title em,
+.ranking-screen .runtime-eyebrow,
+.ranking-screen .ranking-panel,
+.ranking-screen .ranking-live-card,
+.ranking-screen .ranking-note,
+.ranking-screen .ranking-stats-grid strong,
+.ranking-screen .ranking-stats-grid span,
+.ranking-screen .rank-user strong,
+.ranking-screen .rank-user span,
+.ranking-screen .rank-user em,
+.ranking-screen .rank-score strong,
+.ranking-screen .rank-score span {
+  color: #f2fdff !important;
+  text-shadow: 0 2px 6px rgba(0, 13, 44, .74), 0 0 12px rgba(88, 235, 255, .20) !important;
+}
+.ranking-screen .ranking-live-card,
+.ranking-screen .ranking-stats-grid > div,
+.ranking-screen .ranking-panel {
+  background-image: url('/assets/v3d_underwater/ui/frames/panel_small_aqua.png'), linear-gradient(160deg, rgba(9, 61, 116, .90), rgba(1, 16, 50, .96)) !important;
+  background-size: 100% 100%, 100% 100% !important;
+}
+.ranking-screen .rank-medal {
+  color: #07304e !important;
+  background: linear-gradient(180deg, #fff2a0, #54f0ff) !important;
+  box-shadow: 0 0 14px rgba(112, 240, 255, .38) !important;
+}
+
+/* Swiping works on menus only. Fishing is deliberately excluded to prevent accidental input. */
+.swipe-enabled-screen {
+  touch-action: pan-y !important;
+}
+.fishing-screen.v106-swipe-nav-ui-fishing {
+  touch-action: none !important;
+}
+.swipe-enabled-screen::after {
+  content: '← 밀어서 메뉴 이동 →' !important;
+  position: fixed !important;
+  left: 50% !important;
+  bottom: calc(var(--bottom-nav-height-v760) + 13px + env(safe-area-inset-bottom)) !important;
+  transform: translateX(-50%) !important;
+  z-index: 42 !important;
+  pointer-events: none !important;
+  padding: 5px 10px !important;
+  border-radius: 999px !important;
+  color: rgba(237, 254, 255, .72) !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  background: rgba(4, 36, 70, .34) !important;
+  backdrop-filter: blur(6px) !important;
+  opacity: .72 !important;
+}
+
+/* Combo means consecutive successful catches. It starts hidden, then appears only
+   after casting/earning a streak. */
+.fishing-screen.v106-swipe-nav-ui-fishing .combo-badge.hidden { display: none !important; }
+.fishing-screen.v106-swipe-nav-ui-fishing .combo-badge {
+  max-width: min(154px, 40vw) !important;
+  color: #fff7a8 !important;
+  background: linear-gradient(135deg, rgba(12, 75, 136, .93), rgba(4, 28, 70, .96)) !important;
+}
+
+/* Aqua droplet fallback layer: less 'floating circles', more water-bubble streaks. */
+.v3d-bubbles,
+.fishing-3d-ambient .v3d-bubbles {
+  opacity: .32 !important;
+  background-image:
+    radial-gradient(ellipse 42% 58% at 18% 82%, rgba(230, 255, 255, .46) 0 8%, rgba(128, 239, 255, .18) 12%, transparent 24%),
+    radial-gradient(ellipse 38% 62% at 78% 68%, rgba(255, 255, 255, .38) 0 7%, rgba(112, 234, 255, .14) 13%, transparent 25%),
+    radial-gradient(ellipse 34% 66% at 42% 48%, rgba(230, 255, 255, .30) 0 6%, rgba(86, 225, 255, .12) 12%, transparent 24%),
+    linear-gradient(180deg, transparent, rgba(138, 240, 255, .08), transparent) !important;
+  background-size: 180px 260px, 220px 310px, 150px 230px, 100% 100% !important;
+  background-position: 0 0, 30px 80px, 90px 34px, 0 0 !important;
+  filter: blur(.15px) saturate(1.25) !important;
+}
+
+/* Fishing layout after smaller nav: keep cast/recent/reel lanes readable. */
+.fishing-screen.v106-swipe-nav-ui-fishing {
+  --v105-play-bottom: calc(var(--bottom-nav-height-v760) + 9px + env(safe-area-inset-bottom)) !important;
+}
+.fishing-screen.v106-swipe-nav-ui-fishing .v840-stage-ui .cast-button {
+  bottom: calc(var(--v105-play-bottom) + clamp(58px, 8.4svh, 76px)) !important;
+  width: min(224px, 58vw) !important;
+  min-height: 48px !important;
+}
+.fishing-screen.v106-swipe-nav-ui-fishing .v840-stage-ui .cast-button strong { font-size: clamp(17px, 4.6vw, 21px) !important; }
+.fishing-screen.v106-swipe-nav-ui-fishing .recent-catch-strip {
+  bottom: calc(var(--v105-play-bottom) + 2px) !important;
+  width: min(492px, calc(100vw - 14px)) !important;
+}
+body[data-screen="fishing"] .fishing-screen.v106-swipe-nav-ui-fishing .v840-reel-panel.reel-panel {
+  bottom: calc(var(--v105-play-bottom) + clamp(62px, 8.8svh, 78px)) !important;
+}
+
+@media (max-width: 390px) {
+  :root { --bottom-nav-height-v760: 74px; --bottom-nav-gap-v760: 4px; }
+  .bottom-nav.v840-bottom-nav { width: calc(100vw - 6px) !important; padding: 5px 6px 6px !important; gap: 1px !important; }
+  .bottom-nav.v840-bottom-nav button { min-height: 60px !important; height: 60px !important; border-radius: 14px !important; }
+  .bottom-nav.v840-bottom-nav button img { width: 31px !important; height: 31px !important; }
+  .bottom-nav.v840-bottom-nav button span { font-size: 8.7px !important; }
+  .runtime-btn, .image-btn { min-width: 66px !important; padding-inline: 10px !important; }
+}

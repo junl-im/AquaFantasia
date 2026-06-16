@@ -61,22 +61,29 @@ float causticCell(vec2 uv, float scale, float speed) {
   return pow(smoothstep(0.60, 1.0, c), 3.2);
 }
 
-float bubble(vec2 uv, vec2 center, float radius) {
-  float d = distance(uv, center);
-  float rim = smoothstep(radius, radius * 0.66, d) - smoothstep(radius * 0.66, radius * 0.38, d);
-  float shine = smoothstep(radius * 0.52, 0.0, distance(uv, center + vec2(-radius * 0.24, radius * 0.20)));
-  return rim * 0.72 + shine * 0.25;
+float aquaDroplet(vec2 uv, vec2 center, float radius, float seed) {
+  vec2 p = uv - center;
+  p.x += sin((uv.y + seed) * 32.0 + u_time * 1.4) * radius * 0.10;
+  p.y *= 1.0 + smoothstep(0.0, radius * 1.7, abs(p.x)) * 0.16;
+  p.y -= radius * 0.18 * smoothstep(0.0, radius * 1.2, -p.y);
+  float d = length(vec2(p.x * 0.86, p.y * 1.18));
+  float rim = smoothstep(radius * 1.03, radius * 0.82, d) - smoothstep(radius * 0.70, radius * 0.46, d);
+  float body = smoothstep(radius * 0.92, 0.0, d) * 0.10;
+  float glint1 = smoothstep(radius * 0.26, 0.0, distance(p, vec2(-radius * 0.26, -radius * 0.22)));
+  float glint2 = smoothstep(radius * 0.15, 0.0, distance(p, vec2(radius * 0.18, radius * 0.16)));
+  float tail = smoothstep(radius * 0.62, 0.0, length(vec2(p.x * 1.5, (p.y + radius * 0.68) * 2.7))) * 0.16;
+  return rim * 0.82 + body + glint1 * 0.28 + glint2 * 0.18 + tail;
 }
 
 float bubbleField(vec2 uv) {
   float b = 0.0;
-  for (int i = 0; i < 13; i++) {
+  for (int i = 0; i < 17; i++) {
     float fi = float(i);
     float lane = hash(vec2(fi, 8.1));
-    float rise = fract(u_time * (0.035 + fi * 0.003) + hash(vec2(fi, 2.7)));
-    vec2 c = vec2(fract(lane + sin(u_time * 0.17 + fi) * 0.018), 1.08 - rise * 1.22);
-    float r = 0.010 + hash(vec2(fi, 5.5)) * 0.018;
-    b += bubble(uv, c, r);
+    float rise = fract(u_time * (0.025 + fi * 0.0024) + hash(vec2(fi, 2.7)));
+    vec2 c = vec2(fract(lane + sin(u_time * 0.22 + fi * 1.7) * 0.030), 1.10 - rise * 1.24);
+    float r = 0.007 + hash(vec2(fi, 5.5)) * 0.015;
+    b += aquaDroplet(uv, c, r, fi);
   }
   return b;
 }
@@ -140,14 +147,14 @@ void main() {
   color = mix(color, base, fog * 0.18);
   color += u_glow * caustic * (0.74 * u_intensity);
   color += vec3(0.70, 0.96, 1.0) * rays * (0.42 * u_intensity);
-  color += u_glow * (bubbles * 0.24 + plankton * 0.30);
+  color += vec3(0.76, 1.0, 1.0) * bubbles * 0.34 + u_glow * plankton * 0.26;
   color += vec3(0.75, 0.95, 1.0) * surface;
   color = mix(color, u_bottom * 0.72, fog * 0.35);
   color -= vec3(0.0, 0.08, 0.14) * school * 0.26;
   color *= mix(0.74, 1.12, vignette);
   color += grain;
 
-  gl_FragColor = vec4(color, 0.82);
+  gl_FragColor = vec4(color, 0.84);
 }`;
 
 const MOODS: Record<UnderwaterLayerMood, { top: [number, number, number]; bottom: [number, number, number]; glow: [number, number, number]; intensity: number }> = {

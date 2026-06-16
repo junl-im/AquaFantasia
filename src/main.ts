@@ -123,7 +123,7 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
-    document.documentElement.dataset.visualPolish = 'v105-fishing-depth-visibility-polish';
+    document.documentElement.dataset.visualPolish = 'v106-swipe-nav-aqua-bubble-ui-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -301,7 +301,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -338,7 +338,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -357,7 +357,7 @@ class AquaFantasiaGame {
         <div class="hud-chip"><img src="./assets/v92/icons/bait.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
       </div>
       <div class="stage-ui v840-stage-ui"></div><div class="cute-action-layer" aria-hidden="true"></div>
-      <div class="combo-badge ${this.save.currentStreak > 1 ? '' : 'hidden'}" id="comboBadge">연속 성공 x${Math.max(2, this.save.currentStreak)}</div>
+      <div class="combo-badge hidden" id="comboBadge" data-combo-label="연속 성공">연속 성공 x${Math.max(2, this.save.currentStreak)}</div>
       <section class="recent-catch-strip" aria-label="최근 포획">
         ${this.recentCatchMarkup()}
       </section>
@@ -430,6 +430,39 @@ class AquaFantasiaGame {
     dom.app.appendChild(nav);
     root.classList.add('has-fixed-root-nav');
     nav.querySelectorAll<HTMLButtonElement>('[data-screen]').forEach((btn) => btn.addEventListener('click', () => { this.reassertImmersiveMode(); void this.go(btn.dataset.screen as Screen); }));
+    if (active !== 'fishing' && active !== 'login') this.installTabSwipe(root, active as Exclude<Screen, 'login' | 'fishing'>);
+  }
+
+  private installTabSwipe(root: HTMLElement, active: Exclude<Screen, 'login' | 'fishing'>): void {
+    const swipeOrder: Screen[] = ['village', 'fishing', 'gear', 'inventory', 'dex', 'shop', 'mission', 'ranking'];
+    let startX = 0;
+    let startY = 0;
+    let startAt = 0;
+    let tracking = false;
+    root.classList.add('swipe-enabled-screen');
+    root.addEventListener('pointerdown', (ev) => {
+      const target = ev.target as HTMLElement | null;
+      if (target?.closest('button, a, input, textarea, select, .bottom-nav, .region-grid, .runtime-card-list')) return;
+      tracking = true;
+      startX = ev.clientX;
+      startY = ev.clientY;
+      startAt = performance.now();
+    }, { passive: true });
+    root.addEventListener('pointerup', (ev) => {
+      if (!tracking) return;
+      tracking = false;
+      const dx = ev.clientX - startX;
+      const dy = ev.clientY - startY;
+      const elapsed = performance.now() - startAt;
+      if (elapsed > 760 || Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.45) return;
+      const index = swipeOrder.indexOf(active);
+      if (index < 0) return;
+      const next = dx < 0 ? swipeOrder[Math.min(swipeOrder.length - 1, index + 1)] : swipeOrder[Math.max(0, index - 1)];
+      if (!next || next === active) return;
+      this.toast.show({ type: 'normal', title: '탭 이동', message: dx < 0 ? '다음 메뉴로 넘깁니다.' : '이전 메뉴로 돌아갑니다.' });
+      void this.go(next);
+    }, { passive: true });
+    root.addEventListener('pointercancel', () => { tracking = false; }, { passive: true });
   }
 
   private async initPixiStage(): Promise<void> {
@@ -534,6 +567,10 @@ class AquaFantasiaGame {
     this.stageHost?.classList.remove('reeling-mode');
     this.castStart = performance.now();
     this.castBtn.classList.add('pop-out');
+    if (this.comboNode) {
+      this.comboNode.textContent = `연속 성공 x${Math.max(2, this.save.currentStreak)}`;
+      this.comboNode.classList.toggle('hidden', this.save.currentStreak < 2);
+    }
     this.spawnCastTrail();
     this.spawnActionBadge('퐁!', '찌를 던졌어요');
     this.setHint('찌가 포물선을 그리며 날아갑니다');
@@ -674,7 +711,7 @@ class AquaFantasiaGame {
     this.castBtn?.classList.remove('hidden', 'pop-out');
     this.resizePixi();
     this.setHint('좋아요! 찌 던지기로 다음 물고기를 노려보세요');
-    if (this.comboNode) { this.comboNode.textContent = `연속 성공 x${Math.max(2, this.save.currentStreak)}`; this.comboNode.classList.toggle('hidden', this.save.currentStreak < 2); }
+    if (this.comboNode) { this.comboNode.textContent = `연속 성공 x${Math.max(2, this.save.currentStreak)}`; this.comboNode.classList.add('hidden'); }
   }
 
   private tick(): void {
@@ -1243,6 +1280,10 @@ class AquaFantasiaGame {
     this.activeFish = this.pickFish();
     this.state = 'casting';
     this.castBtn.classList.add('pop-out');
+    if (this.comboNode) {
+      this.comboNode.textContent = `연속 성공 x${Math.max(2, this.save.currentStreak)}`;
+      this.comboNode.classList.toggle('hidden', this.save.currentStreak < 2);
+    }
     this.spawnCastTrail();
     this.spawnActionBadge('퐁!', '찌를 던졌어요');
     this.stageHost?.classList.add('fallback-casting');
