@@ -148,7 +148,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.detailStabilityQa = 'v11113-detail-stability-qa';
     document.documentElement.dataset.buttonStyleQa = 'v11114-button-style-hotfix';
     document.documentElement.dataset.foundationFrameRescue = 'v11115-foundation-frame-rescue';
-    document.documentElement.dataset.villagePolish = 'v202-mobile-rpg-controls';
+    document.documentElement.dataset.villagePolish = 'v203-asset-integration';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -311,7 +311,7 @@ class AquaFantasiaGame {
     saveGame(this.save);
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen locked-screen';
+    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen locked-screen';
     root.classList.add('v108-home-main', 'v1110-village-flow');
     root.dataset.legacyVillageFlow = 'v1110-home-banner v1110-tide-card before v1110-region-panel';
     root.innerHTML = `
@@ -332,6 +332,20 @@ class AquaFantasiaGame {
       <section class="v2-objective-card glass-card" aria-live="polite"><strong>오늘의 목표</strong><span data-v2-objective>길·꽃·벤치를 배치해서 관광객 100점을 먼저 열기</span></section>
       <section class="v2-village-guide glass-card" aria-live="polite"><strong>첫 마을</strong><span>좌측 조이스틱 이동 · 탭 이동 · 우측 메뉴 · +/− 캐릭터 시점 줌</span></section>
       <section class="v2-dialog-panel glass-card" aria-live="polite"></section>
+      <section class="v203-interior-panel" aria-live="polite" aria-hidden="true">
+        <div class="v203-interior-backdrop" data-v203-interior-close></div>
+        <article class="v203-interior-card glass-card">
+          <img class="v203-interior-image" src="" alt="" />
+          <div class="v203-interior-copy">
+            <strong data-v203-interior-title>건물 내부</strong>
+            <span data-v203-interior-body>루미나 베이 시설 내부입니다.</span>
+            <div class="v203-interior-actions">
+              <button type="button" data-v203-interior-go-fishing>출항하기</button>
+              <button type="button" data-v203-interior-close>나가기</button>
+            </div>
+          </div>
+        </article>
+      </section>
       <div class="v2-build-backdrop" data-village-build-close aria-hidden="true"></div>
       <aside class="v2-build-tray glass-card" aria-label="건물 설치 모드" role="dialog" aria-modal="true">
         <div class="v2-build-title"><strong>설치모드</strong><button type="button" data-village-build-close>닫기</button></div>
@@ -350,8 +364,8 @@ class AquaFantasiaGame {
         <button type="button" data-village-zoom-in aria-label="확대">＋</button>
         <button type="button" data-village-zoom-out aria-label="축소">－</button>
         <button type="button" data-village-center aria-label="플레이어 위치로 이동">◎</button>
-        <button type="button" data-village-build-open aria-label="건설 메뉴 열기">건설</button>
-        <button type="button" data-village-fishing aria-label="항구 출항">출항</button>
+        <button type="button" data-village-build-open aria-label="건설 메뉴 열기"><img src="./assets/v22/icons/nav_build.png" alt="" />건설</button>
+        <button type="button" data-village-fishing aria-label="항구 출항"><img src="./assets/v22/icons/nav_fishing.png" alt="" />출항</button>
       </div>
       <div class="v2-joystick" data-village-joystick data-no-swipe aria-label="이동 조이스틱">
         <div class="v2-joystick-base"><div class="v2-joystick-knob" data-village-joystick-knob></div></div>

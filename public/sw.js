@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.2-mobile-rpg-controls';
+const CACHE_NAME = 'aqua-fantasia-v2.0.3-asset-integration';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -18,6 +18,21 @@ const PRECACHE = [
   "./assets/v22/icons/nav_quest.png",
   "./assets/v22/icons/nav_map.png",
   "./assets/v22/icons/nav_village.png",
+  "./assets/v22/icons/nav_build.png",
+  "./assets/v22/icons/nav_fishing.png",
+  "./assets/v203/portraits/chief_portrait.png",
+  "./assets/v203/portraits/merchant_portrait.png",
+  "./assets/v203/portraits/guild_portrait.png",
+  "./assets/v203/portraits/captain_portrait.png",
+  "./assets/v203/portraits/tourist_portrait.png",
+  "./assets/v203/portraits/vip_portrait.png",
+  "./assets/v203/portraits/player_portrait.png",
+  "./assets/v203/ui/dialog_frame.png",
+  "./assets/v203/ui/popup_frame.png",
+  "./assets/v22/generated/05_Building_Interior_Inn.png",
+  "./assets/v22/generated/06_Building_Interior_Fish_Market.png",
+  "./assets/v22/generated/07_Building_Interior_Fishing_Guild.png",
+  "./assets/v22/generated/08_Building_Interior_Harbor_Office.png",
   "./assets/v108/home/island_home_bg_1080x1920.webp",
   "./assets/v108/home/aqua_fantasia_banner.png",
   "./assets/v85/screens/start_screen_clean_v810.webp",

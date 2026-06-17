@@ -197,6 +197,41 @@ const ACTOR_TEXTURES: Record<Actor['role'], string> = {
   vip: './assets/v22/characters/npc_vip.png',
 };
 
+
+const PORTRAIT_ASSETS: Record<Actor['role'], string> = {
+  player: './assets/v203/portraits/player_portrait.png',
+  chief: './assets/v203/portraits/chief_portrait.png',
+  merchant: './assets/v203/portraits/merchant_portrait.png',
+  guild: './assets/v203/portraits/guild_portrait.png',
+  captain: './assets/v203/portraits/captain_portrait.png',
+  tourist: './assets/v203/portraits/tourist_portrait.png',
+  vip: './assets/v203/portraits/vip_portrait.png',
+};
+
+const INTERIOR_ASSETS: Partial<Record<VillageBuildingType, { title: string; image: string; body: string; fishing?: boolean }>> = {
+  inn: {
+    title: '여관 내부',
+    image: './assets/v22/generated/05_Building_Interior_Inn.png',
+    body: '따뜻한 조명과 조개 장식이 있는 루미나 베이 여관입니다. 다음 단계에서 숙박, 회복, 여관 주인 퀘스트가 연결됩니다.',
+  },
+  market: {
+    title: '어시장 내부',
+    image: './assets/v22/generated/06_Building_Interior_Fish_Market.png',
+    body: '오늘 잡은 물고기를 정산하고 마을 기금을 늘리는 자동 판매 거점입니다.',
+  },
+  guild: {
+    title: '낚시 길드 내부',
+    image: './assets/v22/generated/07_Building_Interior_Fishing_Guild.png',
+    body: '낚시 의뢰, 희귀 어종 정보, 새 수역 개척 퀘스트가 붙을 길드 홀입니다.',
+  },
+  harbor: {
+    title: '항구 사무소 내부',
+    image: './assets/v22/generated/08_Building_Interior_Harbor_Office.png',
+    body: '선장과 항로를 확인하는 출항 준비실입니다. 출항하기를 누르면 낚시 화면으로 이동합니다.',
+    fishing: true,
+  },
+};
+
 const CAMERA_PAD = 280;
 
 const VILLAGE_DECORATIONS: Decoration[] = [
@@ -808,6 +843,8 @@ export class VillageWorld {
     this.root.querySelectorAll<HTMLElement>('[data-village-build-close]').forEach((node) => node.addEventListener('click', () => this.setBuildTrayOpen(false)));
     this.bindJoystick();
     this.root.querySelector<HTMLButtonElement>('[data-village-fishing]')?.addEventListener('click', () => this.onGoFishing());
+    this.root.querySelectorAll<HTMLElement>('[data-v203-interior-close]').forEach((node) => node.addEventListener('click', () => this.closeInterior()));
+    this.root.querySelector<HTMLButtonElement>('[data-v203-interior-go-fishing]')?.addEventListener('click', () => this.onGoFishing());
   }
 
   private bindJoystick(): void {
@@ -1002,13 +1039,6 @@ export class VillageWorld {
   private interactBuilding(building: VillageBuildingSave): void {
     const def = BUILD_DEFS[building.type];
     if (!def) return;
-    if (building.type === 'harbor') {
-      this.showGuide('항구 입구', '항구에서 낚싯배를 선택하고 수역으로 출항합니다.');
-      window.setTimeout(() => {
-        if (!this.destroyed) this.onGoFishing();
-      }, 420);
-      return;
-    }
     if (building.type === 'market') {
       const caught = Object.values(this.save.caught).reduce((sum, count) => sum + count, 0);
       const bonus = Math.min(300, caught * 4 + this.save.village.buildings.length * 12);
@@ -1016,18 +1046,44 @@ export class VillageWorld {
       this.save.village.fund += Math.floor(bonus * 0.25);
       this.onSave();
       this.syncHud();
-      this.showGuide('어시장', `오늘의 자동 판매 정산 +${bonus.toLocaleString('ko-KR')}G · 창고/시장 자동화의 첫 단계입니다.`);
+      this.openInterior(building.type, `오늘의 자동 판매 정산 +${bonus.toLocaleString('ko-KR')}G · 창고/시장 자동화의 첫 단계입니다.`);
       return;
     }
-    if (building.type === 'inn') {
-      this.showGuide('여관 내부', '실내 진입 시스템 준비 완료: 다음 패치에서 침대, 벽난로, 여관 NPC가 들어갑니다.');
-      return;
-    }
-    if (building.type === 'guild') {
-      this.showGuide('낚시 길드', '퀘스트: 아무 물고기 10마리 납품 → 마을 기금 증가 → 새 건물 해금.');
+    if (building.type === 'harbor' || building.type === 'inn' || building.type === 'guild') {
+      this.openInterior(building.type);
       return;
     }
     this.showGuide(def.label, def.description);
+  }
+
+  private openInterior(type: VillageBuildingType, overrideBody?: string): void {
+    const interior = INTERIOR_ASSETS[type];
+    if (!interior) {
+      const def = BUILD_DEFS[type];
+      this.showGuide(def?.label ?? '건물', def?.description ?? '아직 준비 중인 건물입니다.');
+      return;
+    }
+    const panel = this.root.querySelector<HTMLElement>('.v203-interior-panel');
+    const image = this.root.querySelector<HTMLImageElement>('.v203-interior-image');
+    const title = this.root.querySelector<HTMLElement>('[data-v203-interior-title]');
+    const body = this.root.querySelector<HTMLElement>('[data-v203-interior-body]');
+    const action = this.root.querySelector<HTMLElement>('[data-v203-interior-go-fishing]');
+    if (!panel || !image || !title || !body || !action) return;
+    image.src = interior.image;
+    image.alt = interior.title;
+    title.textContent = interior.title;
+    body.textContent = overrideBody ?? interior.body;
+    action.toggleAttribute('hidden', !interior.fishing);
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+    this.showGuide(interior.title, overrideBody ?? interior.body);
+  }
+
+  private closeInterior(): void {
+    const panel = this.root.querySelector<HTMLElement>('.v203-interior-panel');
+    if (!panel) return;
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
   }
 
   private openDialogue(actor: Actor): void {
@@ -1037,9 +1093,10 @@ export class VillageWorld {
     const text = actor.talk[Math.floor(Math.random() * actor.talk.length)] ?? '안녕하세요.';
     const panel = this.root.querySelector<HTMLElement>('.v2-dialog-panel');
     if (!panel) return;
+    const portrait = PORTRAIT_ASSETS[actor.role] ?? PORTRAIT_ASSETS.tourist;
     panel.classList.add('open');
-    panel.innerHTML = `<div><strong>${actor.name}</strong><span>${actor.mood}</span></div><p>${text}</p>`;
-    window.setTimeout(() => panel.classList.remove('open'), 4300);
+    panel.innerHTML = `<img class="v203-dialog-portrait" src="${portrait}" alt="${actor.name}" /><div class="v203-dialog-copy"><div><strong>${actor.name}</strong><span>${actor.mood}</span></div><p>${text}</p></div>`;
+    window.setTimeout(() => panel.classList.remove('open'), 5200);
   }
 
   private showGuide(title: string, message: string): void {
