@@ -16842,3 +16842,147 @@ body[data-screen="fishing"] .reel-panel.v205-reel-panel,
   .runtime-menu-screen.v2010-menu-full-screen .v204-full-quest-list,
   .runtime-menu-screen.v2010-menu-full-screen .runtime-region-grid { grid-template-columns: 1fr !important; }
 }
+
+/* v2.0.11 Right-bottom wing dock + build placement polish
+   Fixes: menu dock shape, screen overlap, no dock frame, build selection preview flow, and label layers. */
+:root {
+  --v2011-dock-button: clamp(58px, 14.8vw, 66px);
+  --v2011-dock-icon: clamp(37px, 9.7vw, 45px);
+  --v2011-dock-gap: clamp(5px, 1.7vw, 8px);
+  --v2011-dock-width: calc(var(--v2011-dock-button) * 3 + var(--v2011-dock-gap) * 2);
+  --v2011-dock-height: calc(var(--v2011-dock-button) * 2 + var(--v2011-dock-gap));
+  --v2011-dock-safe-bottom: calc(var(--v2011-dock-height) + 24px + env(safe-area-inset-bottom));
+  --v2011-dock-safe-right: calc(var(--v2011-dock-width) + 20px + env(safe-area-inset-right));
+}
+body:not([data-screen="fishing"]) .bottom-nav.v2011-wing-dock-nav,
+html.portrait-only-game body:not([data-screen="fishing"]) .bottom-nav.v2011-wing-dock-nav.fixed-root-nav {
+  position: fixed !important;
+  left: auto !important;
+  right: max(10px, env(safe-area-inset-right)) !important;
+  bottom: max(10px, env(safe-area-inset-bottom)) !important;
+  width: var(--v2011-dock-width) !important;
+  min-width: 0 !important;
+  max-width: calc(100vw - 18px) !important;
+  height: var(--v2011-dock-height) !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, var(--v2011-dock-button)) !important;
+  grid-template-rows: repeat(2, var(--v2011-dock-button)) !important;
+  gap: var(--v2011-dock-gap) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  overflow: visible !important;
+  transform: none !important;
+  translate: none !important;
+  isolation: isolate !important;
+  z-index: 122 !important;
+}
+body[data-screen="login"] .bottom-nav.v2011-wing-dock-nav,
+body[data-screen="fishing"] .bottom-nav.v2011-wing-dock-nav { display: none !important; }
+.bottom-nav.v2011-wing-dock-nav::before,
+.bottom-nav.v2011-wing-dock-nav::after { content: none !important; display: none !important; }
+.bottom-nav.v2011-wing-dock-nav button {
+  position: relative !important;
+  width: var(--v2011-dock-button) !important;
+  height: var(--v2011-dock-button) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  gap: 0 !important;
+  padding: 5px 4px 5px !important;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 20px !important;
+  background: radial-gradient(circle at 39% 18%, rgba(255,255,255,.82), rgba(142,239,255,.28) 36%, rgba(25,112,193,.72) 80%), linear-gradient(160deg, rgba(255,255,255,.50), rgba(45,171,232,.66)) !important;
+  box-shadow: 0 10px 20px rgba(0,28,72,.24), inset 0 2px 0 rgba(255,255,255,.54), inset 0 -3px 8px rgba(0,43,92,.18) !important;
+  color: #effdff !important;
+  overflow: hidden !important;
+  transform: translateZ(0) !important;
+}
+.bottom-nav.v2011-wing-dock-nav button[data-screen="inventory"] { grid-column: 1 !important; grid-row: 2 !important; }
+.bottom-nav.v2011-wing-dock-nav button[data-screen="mission"] { grid-column: 2 !important; grid-row: 2 !important; }
+.bottom-nav.v2011-wing-dock-nav button[data-screen="map"] { grid-column: 3 !important; grid-row: 2 !important; }
+.bottom-nav.v2011-wing-dock-nav button[data-screen="village"] { grid-column: 3 !important; grid-row: 1 !important; }
+.bottom-nav.v2011-wing-dock-nav button.active {
+  background: radial-gradient(circle at 40% 18%, rgba(255,255,255,.92), rgba(255,245,160,.48) 35%, rgba(73,218,255,.78) 80%), linear-gradient(160deg, rgba(255,246,171,.72), rgba(58,188,239,.70)) !important;
+  transform: translateY(-1px) scale(1.025) !important;
+  box-shadow: 0 13px 24px rgba(0,29,77,.30), inset 0 2px 0 rgba(255,255,255,.62) !important;
+}
+.bottom-nav.v2011-wing-dock-nav button img {
+  width: var(--v2011-dock-icon) !important;
+  height: var(--v2011-dock-icon) !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  margin: -1px 0 0 !important;
+  filter: drop-shadow(0 4px 5px rgba(0,18,58,.30)) saturate(1.18) contrast(1.08) brightness(1.03) !important;
+  z-index: 1 !important;
+}
+.bottom-nav.v2011-wing-dock-nav button span {
+  width: 100% !important;
+  margin-top: -4px !important;
+  font-size: clamp(8.5px, 2.2vw, 10px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.055em !important;
+  color: rgba(242,253,255,.98) !important;
+  text-shadow: 0 2px 3px rgba(0,33,76,.58) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  z-index: 1 !important;
+}
+.bottom-nav.v2011-wing-dock-nav button.active span { color: #fff6ac !important; }
+.runtime-menu-screen.v2011-menu-dock-screen,
+.runtime-menu-screen.v2011-menu-dock-screen.scroll-screen {
+  padding-bottom: calc(var(--v2011-dock-safe-bottom) + 12px) !important;
+}
+.runtime-menu-screen.v2011-menu-dock-screen .runtime-content {
+  padding-bottom: calc(var(--v2011-dock-safe-bottom) + 6px) !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+.runtime-menu-screen.v2011-menu-dock-screen :is(.runtime-hero-card,.v204-window-card,.runtime-panel,.v204-map-shell,.v206-quest-npc-board,.v204-inventory-shell,.mission-list,.runtime-card-list) {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+.village-world-screen.v2011-dock-safe-screen .v2-objective-card,
+.village-world-screen.v2011-dock-safe-screen .v2-village-guide {
+  bottom: calc(var(--v2011-dock-safe-bottom) + 10px) !important;
+  right: max(10px, env(safe-area-inset-right)) !important;
+  max-width: min(300px, calc(100vw - 22px)) !important;
+}
+.village-world-screen.v2011-dock-safe-screen .v206-village-status {
+  right: max(10px, env(safe-area-inset-right)) !important;
+  bottom: calc(var(--v2011-dock-safe-bottom) + 118px) !important;
+}
+.village-world-screen.v2011-dock-safe-screen .v2-world-controls {
+  right: max(10px, env(safe-area-inset-right)) !important;
+  bottom: calc(var(--v2011-dock-safe-bottom) + 18px) !important;
+}
+.village-world-screen.v2011-dock-safe-screen.v2-build-active .v2-world-controls {
+  opacity: .54 !important;
+}
+.village-world-screen.v2011-dock-safe-screen .v2-build-tray {
+  max-height: min(72dvh, 640px) !important;
+  bottom: calc(var(--v2011-dock-safe-bottom) + 10px) !important;
+}
+.village-world-screen.v2011-dock-safe-screen.v2-build-active .v2-build-tray,
+.village-world-screen.v2011-dock-safe-screen:not(.v2-build-tray-open) .v2-build-tray { pointer-events: none !important; }
+.village-world-screen.v2011-dock-safe-screen.v2-build-active .v2-village-stage { cursor: copy !important; }
+.village-world-screen.v2011-dock-safe-screen.v2-build-active .v2-village-guide span::after {
+  content: ' · 선택한 건물을 반투명 미리보기로 배치 중';
+}
+@media (max-width: 390px) {
+  :root { --v2011-dock-button: 56px; --v2011-dock-icon: 36px; --v2011-dock-gap: 5px; }
+  .bottom-nav.v2011-wing-dock-nav button { border-radius: 18px !important; }
+  .runtime-menu-screen.v2011-menu-dock-screen .runtime-hero-card { grid-template-columns: 44px minmax(0,1fr) !important; }
+  .runtime-menu-screen.v2011-menu-dock-screen .runtime-hero-card .runtime-btn { grid-column: 1 / -1 !important; width: 100% !important; }
+}

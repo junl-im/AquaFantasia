@@ -417,6 +417,7 @@ export class VillageWorld {
   private tileLayer = new Graphics();
   private buildingLayer = new Container();
   private decorationLayer = new Container();
+  private labelLayer = new Container();
   private actorLayer = new Container();
   private markerLayer = new Container();
   private previewLayer = new Container();
@@ -467,16 +468,18 @@ export class VillageWorld {
     this.world.sortableChildren = true;
     this.buildingLayer.sortableChildren = true;
     this.decorationLayer.sortableChildren = true;
+    this.labelLayer.sortableChildren = true;
     this.actorLayer.sortableChildren = true;
     this.markerLayer.sortableChildren = true;
     this.tileLayer.zIndex = 0;
     this.buildingLayer.zIndex = 20;
     this.decorationLayer.zIndex = 24;
+    this.labelLayer.zIndex = 28;
     this.actorLayer.zIndex = 30;
     this.markerLayer.zIndex = 44;
     this.previewLayer.zIndex = 50;
     app.stage.addChild(this.world);
-    this.world.addChild(this.tileLayer, this.buildingLayer, this.decorationLayer, this.actorLayer, this.markerLayer, this.previewLayer);
+    this.world.addChild(this.tileLayer, this.buildingLayer, this.decorationLayer, this.labelLayer, this.actorLayer, this.markerLayer, this.previewLayer);
     this.generateTiles();
     await this.loadTextures();
     this.renderTiles();
@@ -501,7 +504,10 @@ export class VillageWorld {
 
   setBuildMode(type: VillageBuildingType | null): void {
     this.selectedBuild = type;
-    if (type) this.buildTrayOpen = true;
+    if (type) {
+      this.buildTrayOpen = false;
+      this.hoverTile = null;
+    }
     this.root.classList.toggle('v2-build-active', Boolean(type));
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
     this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => {
@@ -514,11 +520,12 @@ export class VillageWorld {
     }
   }
 
-  setBuildTrayOpen(open: boolean): void {
+  setBuildTrayOpen(open: boolean, keepSelection = false): void {
     this.buildTrayOpen = open;
     this.root.classList.toggle('v2-build-tray-open', open);
-    if (!open) {
+    if (!open && !keepSelection) {
       this.selectedBuild = null;
+      this.hoverTile = null;
       this.root.classList.remove('v2-build-active');
       this.previewLayer.removeChildren();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
@@ -660,6 +667,7 @@ export class VillageWorld {
 
   private renderBuildings(): void {
     this.buildingLayer.removeChildren();
+    this.labelLayer.removeChildren();
     this.rebuildCollision();
     for (const building of this.save.village.buildings) {
       const def = BUILD_DEFS[building.type];
@@ -685,7 +693,8 @@ export class VillageWorld {
       });
       label.anchor.set(0.5);
       label.position.set(center.x, center.y + TILE_H * 0.54);
-      container.addChild(label);
+      label.zIndex = (building.y + building.h) * 20 + 19;
+      this.labelLayer.addChild(label);
       this.buildingLayer.addChild(container);
     }
   }
@@ -986,6 +995,7 @@ export class VillageWorld {
           return;
         }
         this.setBuildMode(type);
+        this.setBuildTrayOpen(false, true);
       });
     });
     this.root.querySelector<HTMLButtonElement>('[data-village-zoom-in]')?.addEventListener('click', () => this.zoom(0.11, true));
@@ -1119,8 +1129,36 @@ export class VillageWorld {
         g.stroke({ color: 0xffffff, alpha: 0.82, width: 2 });
       }
     }
+    const ghost = this.createBuildGhost(def, tile.x, tile.y, ok);
     g.zIndex = 99999;
     this.previewLayer.addChild(g);
+    if (ghost) this.previewLayer.addChild(ghost);
+  }
+
+
+  private createBuildGhost(def: BuildDefinition, x: number, y: number, ok: boolean): Container | undefined {
+    if (def.kind === 'path') return undefined;
+    const [w, h] = def.size;
+    const center = centerOfTile(x + w / 2 - 0.5, y + h - 0.5);
+    const ghost = new Container();
+    ghost.zIndex = 100000;
+    ghost.alpha = 0.62;
+    const texture = def.texture ? this.textures.get(def.texture) : undefined;
+    if (texture) {
+      const sprite = new Sprite(texture);
+      sprite.anchor.set(0.5, 1);
+      const targetW = Math.max(96, w * TILE_W * BUILDING_VISUAL_SCALE);
+      sprite.scale.set(targetW / Math.max(1, sprite.texture.width));
+      sprite.position.set(center.x, center.y + TILE_H * 0.62);
+      sprite.tint = ok ? 0x88ffb6 : 0xff8a8a;
+      ghost.addChild(sprite);
+      return ghost;
+    }
+    const graphic = this.createPropGraphic(def.type, w, h);
+    graphic.position.set(center.x, center.y + TILE_H * 0.4);
+    graphic.alpha = 0.72;
+    ghost.addChild(graphic);
+    return ghost;
   }
 
   private tileFromPointer(ev: PointerEvent): { x: number; y: number } {
@@ -1337,7 +1375,7 @@ export class VillageWorld {
   }
 
   private setActorFacing(actor: Actor, dx: number): void {
-    const direction = dx < 0 ? 1 : -1;
+    const direction = dx < 0 ? -1 : 1;
     const bodyScaleX = Math.abs(actor.body.scale.x || 1);
     actor.body.scale.x = bodyScaleX * direction;
     actor.label.scale.x = 1;
