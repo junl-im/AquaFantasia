@@ -139,11 +139,13 @@ class AquaFantasiaGame {
     document.documentElement.dataset.uiBounds = 'v1116-ui-bounds-polish';
     document.documentElement.dataset.viewportSafe = 'v1117-viewport-safe-lock';
     document.documentElement.dataset.layoutQa = 'v1118-layout-qa-sweep';
+    document.documentElement.dataset.layoutStability = 'v1119-interaction-qa-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
     this.installViewportSafeLock();
     this.installLayoutQaSweep();
+    this.installInteractionQaPolish();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
     this.installBackNavigationGuard();
@@ -340,7 +342,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -377,7 +379,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -1579,6 +1581,61 @@ class AquaFantasiaGame {
     document.addEventListener('visibilitychange', sync, { passive: true });
   }
 
+  private installInteractionQaPolish(): void {
+    const sync = () => {
+      const metrics = applyPortraitViewportMetrics();
+      const root = document.documentElement;
+      const viewport = window.visualViewport;
+      const vw = Math.max(1, Math.floor(viewport?.width ?? window.innerWidth));
+      const vh = Math.max(1, Math.floor(viewport?.height ?? window.innerHeight));
+      const offsetLeft = Math.max(0, Math.floor(viewport?.offsetLeft ?? 0));
+      const offsetTop = Math.max(0, Math.floor(viewport?.offsetTop ?? 0));
+      const appWidth = Math.min(vw, metrics.appWidth);
+      const appHeight = Math.min(vh, metrics.appHeight);
+      root.style.setProperty('--v119-visual-left', `${offsetLeft}px`);
+      root.style.setProperty('--v119-visual-top', `${offsetTop}px`);
+      root.style.setProperty('--v119-visual-width', `${vw}px`);
+      root.style.setProperty('--v119-visual-height', `${vh}px`);
+      root.style.setProperty('--v119-app-width', `${appWidth}px`);
+      root.style.setProperty('--v119-app-height', `${appHeight}px`);
+      root.style.setProperty('--v119-edge-left', 'max(4px, env(safe-area-inset-left))');
+      root.style.setProperty('--v119-edge-right', 'max(4px, env(safe-area-inset-right))');
+      root.classList.toggle('v119-ultra-narrow', vw <= 360);
+      root.classList.toggle('v119-compact-height', vh <= 680);
+      root.classList.toggle('v119-short-height', vh <= 620);
+      root.classList.toggle('v119-keyboard-safe', Math.max(0, window.innerHeight - vh) > 120);
+      root.classList.toggle('v119-tablet-portrait', vw >= 540 && vh >= vw);
+      this.repairActiveViewportBounds();
+      this.repairInteractiveBounds();
+      this.repairFixedInteractiveBounds();
+    };
+    sync();
+    window.visualViewport?.addEventListener('resize', sync, { passive: true });
+    window.visualViewport?.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync, { passive: true });
+    window.addEventListener('orientationchange', sync, { passive: true });
+    window.addEventListener('pageshow', sync, { passive: true });
+    document.addEventListener('visibilitychange', sync, { passive: true });
+  }
+
+  private repairFixedInteractiveBounds(): void {
+    const appRect = dom.app.getBoundingClientRect();
+    if (!appRect.width || !appRect.height) return;
+    const nodes = dom.app.querySelectorAll<HTMLElement>('.bottom-nav, .fishing-hud, .recent-catch-strip, .reel-panel, .catch-result-card, .bite-callout, .action-badge');
+    let repaired = false;
+    nodes.forEach((node) => {
+      const rect = node.getBoundingClientRect();
+      const outsideX = rect.width > appRect.width + 1 || rect.left < appRect.left - 1 || rect.right > appRect.right + 1;
+      const outsideY = rect.top < appRect.top - 1 || rect.bottom > appRect.bottom + 1;
+      const tooLarge = rect.height > appRect.height - 2;
+      const needsRepair = outsideX || outsideY || tooLarge;
+      node.classList.toggle('v1119-fixed-bounds-repaired', needsRepair);
+      repaired ||= needsRepair;
+    });
+    document.documentElement.classList.toggle('v119-fixed-bounds-emergency', repaired);
+  }
+
+
   private repairInteractiveBounds(): void {
     const appRect = dom.app.getBoundingClientRect();
     if (!appRect.width) return;
@@ -1594,7 +1651,7 @@ class AquaFantasiaGame {
   }
 
   private applyViewportSafeGuards(root: HTMLElement, nav?: HTMLElement): void {
-    root.classList.add('v1117-viewport-safe-screen', 'v1118-layout-qa-screen');
+    root.classList.add('v1117-viewport-safe-screen', 'v1118-layout-qa-screen', 'v1119-interaction-qa-screen');
     const repair = () => {
       this.repairScreenBounds(root);
       if (nav) this.repairBottomNavBounds(nav);
@@ -1630,17 +1687,17 @@ class AquaFantasiaGame {
   }
 
   private repairBottomNavBounds(nav: HTMLElement): void {
-    nav.classList.add('v1117-nav-safe', 'v1118-nav-safe');
+    nav.classList.add('v1117-nav-safe', 'v1118-nav-safe', 'v1119-nav-safe');
     const appRect = dom.app.getBoundingClientRect();
     const rect = nav.getBoundingClientRect();
     const tooWide = rect.width > appRect.width + 1 || rect.left < appRect.left - 1 || rect.right > appRect.right + 1;
     document.documentElement.classList.toggle('v117-nav-bounds-emergency', tooWide);
     nav.classList.toggle('v1117-nav-repaired', tooWide);
     if (!tooWide) return;
-    nav.style.setProperty('left', 'max(4px, calc((100vw - var(--v117-app-width, 100vw)) / 2 + env(safe-area-inset-left)))', 'important');
-    nav.style.setProperty('right', 'max(4px, calc((100vw - var(--v117-app-width, 100vw)) / 2 + env(safe-area-inset-right)))', 'important');
-    nav.style.setProperty('width', 'auto', 'important');
-    nav.style.setProperty('max-width', 'none', 'important');
+    nav.style.setProperty('left', 'calc(var(--v119-visual-left, 0px) + ((var(--v119-visual-width, var(--v118-visual-width, 100vw)) - var(--v119-app-width, var(--v118-app-width, 100vw))) / 2) + var(--v119-edge-left, 4px))', 'important');
+    nav.style.setProperty('right', 'auto', 'important');
+    nav.style.setProperty('width', 'max(0px, calc(var(--v119-app-width, var(--v118-app-width, 100vw)) - var(--v119-edge-left, 4px) - var(--v119-edge-right, 4px)))', 'important');
+    nav.style.setProperty('max-width', 'max(0px, calc(var(--v119-app-width, var(--v118-app-width, 100vw)) - var(--v119-edge-left, 4px) - var(--v119-edge-right, 4px)))', 'important');
     nav.style.setProperty('min-width', '0', 'important');
     nav.style.setProperty('margin', '0', 'important');
     nav.style.setProperty('transform', 'none', 'important');

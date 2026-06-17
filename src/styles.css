@@ -12834,3 +12834,212 @@ html.v118-short-height[data-layout-qa="v1118-layout-qa-sweep"] {
   --v118-nav-height: clamp(54px, 8.2svh, 62px);
   --v118-content-bottom: calc(var(--v118-nav-height) + var(--v118-nav-gap) + env(safe-area-inset-bottom) + 14px);
 }
+
+/* v1.1.9 INTERACTION QA POLISH
+   Final interaction/bounds hardening over v1.1.8. This keeps the PNG/WebP
+   2.5D direction and avoids new SVG/vector assets while reducing real-device
+   fixed-element drift, touch blocking, and service-worker fallback side effects. */
+:root {
+  --v119-nav-height: clamp(56px, 8svh, 68px);
+  --v119-nav-gap: 5px;
+  --v119-edge-x: clamp(5px, 1.8vw, 10px);
+  --v119-content-bottom: calc(var(--v119-nav-height) + var(--v119-nav-gap) + env(safe-area-inset-bottom) + 20px);
+  --v119-edge-left: max(4px, env(safe-area-inset-left));
+  --v119-edge-right: max(4px, env(safe-area-inset-right));
+  --v118-nav-height: var(--v119-nav-height);
+  --v118-nav-gap: var(--v119-nav-gap);
+  --v118-edge-x: var(--v119-edge-x);
+  --v118-content-bottom: var(--v119-content-bottom);
+}
+html[data-layout-stability="v1119-interaction-qa-polish"],
+html[data-layout-stability="v1119-interaction-qa-polish"] body {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  -webkit-text-size-adjust: 100% !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] #app {
+  width: var(--v119-app-width, var(--v118-app-width, min(500px, 100vw))) !important;
+  max-width: min(500px, var(--v119-visual-width, var(--v118-visual-width, 100vw))) !important;
+  height: var(--v119-app-height, var(--v118-app-height, 100dvh)) !important;
+  max-height: var(--v119-app-height, var(--v118-app-height, 100dvh)) !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  position: relative !important;
+  contain: layout paint size !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] :is(.game-screen,.login-screen,.runtime-menu-screen,.fishing-screen) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: var(--v119-app-height, var(--v118-app-height, 100dvh)) !important;
+  max-height: var(--v119-app-height, var(--v118-app-height, 100dvh)) !important;
+  overflow-x: hidden !important;
+  transform: none !important;
+  translate: none !important;
+  box-sizing: border-box !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .runtime-menu-screen.v1119-interaction-qa-screen {
+  padding: var(--v117-top-y) var(--v119-edge-x) var(--v119-content-bottom) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-y: contain !important;
+  scroll-padding-bottom: var(--v119-content-bottom) !important;
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .runtime-menu-screen.v1119-interaction-qa-screen :is(.runtime-hud,.runtime-content,.runtime-panel,.runtime-hero-card,.ranking-panel,.ranking-summary,.ranking-stats-grid,.runtime-card-list,.runtime-region-grid,.runtime-item-grid,.runtime-dex-grid,.runtime-quick-grid,.shop-list,.mission-list,.gear-grid,.dex-grid) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+  translate: none !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .runtime-menu-screen.v1119-interaction-qa-screen :is(.runtime-panel,.runtime-hero-card,.runtime-item-card,.gear-card,.shop-card,.mission-card,.runtime-dex-card,.dex-card,.region-card,.ranking-live-card,.ranking-stats-grid > div) {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .runtime-menu-screen.v1119-interaction-qa-screen :is(button,.image-btn,.card-action,.shop-card button,.mission-card button,.gear-card button,.region-card button) {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .bottom-nav.v840-bottom-nav,
+html[data-layout-stability="v1119-interaction-qa-polish"] .bottom-nav.fixed-root-nav,
+html[data-layout-stability="v1119-interaction-qa-polish"] .bottom-nav.v1119-nav-safe,
+html.v119-fixed-bounds-emergency[data-layout-stability="v1119-interaction-qa-polish"] .bottom-nav.v840-bottom-nav {
+  position: fixed !important;
+  left: calc(var(--v119-visual-left, 0px) + ((var(--v119-visual-width, var(--v118-visual-width, 100vw)) - var(--v119-app-width, var(--v118-app-width, 100vw))) / 2) + var(--v119-edge-left)) !important;
+  right: auto !important;
+  width: max(0px, calc(var(--v119-app-width, var(--v118-app-width, 100vw)) - var(--v119-edge-left) - var(--v119-edge-right))) !important;
+  max-width: max(0px, calc(var(--v119-app-width, var(--v118-app-width, 100vw)) - var(--v119-edge-left) - var(--v119-edge-right))) !important;
+  min-width: 0 !important;
+  height: var(--v119-nav-height) !important;
+  max-height: 68px !important;
+  bottom: calc(var(--v119-nav-gap) + env(safe-area-inset-bottom)) !important;
+  margin: 0 !important;
+  padding: 4px 4px 5px !important;
+  grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  gap: 2px !important;
+  overflow: hidden !important;
+  transform: none !important;
+  translate: none !important;
+  box-sizing: border-box !important;
+  isolation: isolate !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .bottom-nav.v840-bottom-nav button {
+  min-width: 0 !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  padding: 1px 0 !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .bottom-nav.v840-bottom-nav button img {
+  width: clamp(19px, 5.4vw, 28px) !important;
+  height: clamp(19px, 5.4vw, 28px) !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .bottom-nav.v840-bottom-nav button span {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  font-size: clamp(6px, 1.55vw, 8px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.075em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .fishing-screen.v1119-interaction-qa-fishing :is(.fishing-3d-ambient,.underwater-webgl-host,.underwater-webgl-canvas,.pixi-layer canvas) {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  box-sizing: border-box !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .fishing-screen.v1119-interaction-qa-fishing :is(.fishing-3d-ambient,.underwater-webgl-host,.underwater-webgl-canvas) {
+  pointer-events: none !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .fishing-screen.v1119-interaction-qa-fishing :is(.fishing-hud.v840-fishing-hud,.recent-catch-strip,.reel-panel,.fishing-guide-card) {
+  left: var(--v119-edge-x) !important;
+  right: var(--v119-edge-x) !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+  translate: none !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .fishing-screen.v1119-interaction-qa-fishing .recent-catch-strip {
+  bottom: calc(var(--v119-nav-height) + var(--v119-nav-gap) + env(safe-area-inset-bottom) + 5px) !important;
+  z-index: 36 !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .fishing-screen.v1119-interaction-qa-fishing .v840-stage-ui .cast-button {
+  bottom: calc(var(--v119-nav-height) + var(--v119-nav-gap) + env(safe-area-inset-bottom) + clamp(60px, 10svh, 84px)) !important;
+  width: min(314px, calc(100% - 24px)) !important;
+  max-width: calc(100% - 24px) !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+  z-index: 42 !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .fishing-screen.v1119-interaction-qa-fishing .v840-reel-panel.reel-panel {
+  bottom: calc(var(--v119-nav-height) + var(--v119-nav-gap) + env(safe-area-inset-bottom) + clamp(48px, 7.4svh, 64px)) !important;
+  z-index: 40 !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] .fishing-screen.v1119-interaction-qa-fishing .catch-result-card {
+  width: min(300px, calc(100% - 22px)) !important;
+  max-width: calc(100% - 22px) !important;
+  max-height: calc(var(--v119-app-height, var(--v118-app-height, 100dvh)) - var(--v119-nav-height) - env(safe-area-inset-bottom) - 34px) !important;
+  overflow: hidden auto !important;
+  z-index: 220 !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+}
+html[data-layout-stability="v1119-interaction-qa-polish"] #toast-root {
+  left: calc(var(--v119-visual-left, 0px) + ((var(--v119-visual-width, var(--v118-visual-width, 100vw)) - var(--v119-app-width, var(--v118-app-width, 100vw))) / 2) + 8px) !important;
+  right: auto !important;
+  width: max(0px, calc(var(--v119-app-width, var(--v118-app-width, 100vw)) - 16px)) !important;
+  max-width: max(0px, calc(var(--v119-app-width, var(--v118-app-width, 100vw)) - 16px)) !important;
+  pointer-events: none !important;
+}
+html.v119-ultra-narrow[data-layout-stability="v1119-interaction-qa-polish"] {
+  --v119-nav-height: clamp(54px, 8svh, 62px);
+  --v119-nav-gap: 4px;
+  --v119-edge-x: 5px;
+  --v119-content-bottom: calc(var(--v119-nav-height) + var(--v119-nav-gap) + env(safe-area-inset-bottom) + 14px);
+}
+html.v119-ultra-narrow[data-layout-stability="v1119-interaction-qa-polish"] .runtime-menu-screen.v1119-interaction-qa-screen {
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+}
+html.v119-ultra-narrow[data-layout-stability="v1119-interaction-qa-polish"] .bottom-nav.v840-bottom-nav {
+  padding: 3px 3px 4px !important;
+  gap: 1px !important;
+}
+html.v119-ultra-narrow[data-layout-stability="v1119-interaction-qa-polish"] .bottom-nav.v840-bottom-nav button img {
+  width: clamp(18px, 5.2vw, 24px) !important;
+  height: clamp(18px, 5.2vw, 24px) !important;
+}
+html.v119-ultra-narrow[data-layout-stability="v1119-interaction-qa-polish"] .runtime-card-list :is(.gear-card,.shop-card,.mission-card) {
+  gap: 5px !important;
+  padding: 8px !important;
+}
+html.v119-short-height[data-layout-stability="v1119-interaction-qa-polish"] {
+  --v119-nav-height: clamp(52px, 7.8svh, 60px);
+  --v119-content-bottom: calc(var(--v119-nav-height) + var(--v119-nav-gap) + env(safe-area-inset-bottom) + 10px);
+}
+html.v119-short-height[data-layout-stability="v1119-interaction-qa-polish"] .fishing-screen.v1119-interaction-qa-fishing .v840-stage-ui .cast-button {
+  bottom: calc(var(--v119-nav-height) + env(safe-area-inset-bottom) + 52px) !important;
+}
+html.v119-short-height[data-layout-stability="v1119-interaction-qa-polish"] .fishing-screen.v1119-interaction-qa-fishing .v840-reel-panel.reel-panel {
+  bottom: calc(var(--v119-nav-height) + env(safe-area-inset-bottom) + 40px) !important;
+}
+html.v119-keyboard-safe[data-layout-stability="v1119-interaction-qa-polish"] .bottom-nav.v840-bottom-nav,
+html.v119-keyboard-safe[data-layout-stability="v1119-interaction-qa-polish"] .recent-catch-strip {
+  transition: none !important;
+}

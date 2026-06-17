@@ -1,8 +1,8 @@
-# AquaFantasia v1.1.8 Layout QA Sweep
+# AquaFantasia v1.1.9 Interaction QA Polish
 
-모바일 웹 낚시 게임 AquaFantasia의 v1.1.8 레이아웃 QA 보강 패치입니다. v1.1.7에서 viewport 기준을 잠근 뒤에도 실제 기기에서 남을 수 있는 작은 흔들림을 다시 점검했고, 하단 8칸 메뉴바와 각 메뉴 UI가 화면 밖으로 나가지 않도록 한 겹 더 보수적으로 고정했습니다.
+모바일 웹 낚시 게임 AquaFantasia의 v1.1.9 상호작용 QA 보강 패치입니다. v1.1.8에서 화면 밖 이탈 방지를 강화한 뒤에도 실제 모바일 브라우저에서 남을 수 있는 fixed UI 흔들림, 터치 차단, 오프라인 캐시 fallback 부작용을 다시 점검했습니다.
 
-이번 패치는 새 기능 추가보다 안정화가 우선입니다. v1.1.1 안전 UI 정책, v1.1.2 Premium 2.5D 엔진, v1.1.3 Micro Detail Polish, v1.1.4 Pixel Perfect Polish, v1.1.4 설치 Hotfix, v1.1.5 Layout Rescue, v1.1.6 UI Bounds Polish, v1.1.7 Viewport Safe Lock을 유지합니다.
+이번 패치는 새 기능 추가보다 안정화가 우선입니다. v1.1.1 안전 UI 정책, v1.1.2 Premium 2.5D 엔진, v1.1.3 Micro Detail Polish, v1.1.4 Pixel Perfect Polish, v1.1.4 설치 Hotfix, v1.1.5 Layout Rescue, v1.1.6 UI Bounds Polish, v1.1.7 Viewport Safe Lock, v1.1.8 Layout QA Sweep을 유지합니다.
 
 ## 핵심 유지 정책
 
@@ -14,18 +14,18 @@
 - 하단 메뉴바 8칸 고정 유지
 - RuntimeQualityManager와 WebGL/HTML fallback 안전 정책 유지
 
-## v1.1.8에서 다시 점검하고 고친 부분
+## v1.1.9에서 다시 점검하고 고친 부분
 
-- v1.1.7 패치에서 누락되어 있던 오프라인 페이지 버전 표기 불일치 수정
-- README 버전/캐시 설명을 v1.1.8 기준으로 정리
+- 하단 메뉴바 emergency JS 보정이 아직 `100vw` / v1.1.7 변수에 기대던 부분을 v1.1.9 visual viewport 기준으로 정리
+- visualViewport의 `offsetLeft`, `offsetTop`을 런타임 CSS 변수로 저장해 일부 모바일 브라우저의 주소창/줌/스크롤 상태에서 fixed UI 기준이 흔들릴 가능성 축소
+- 하단 메뉴바를 left/right 동시 계산이 아니라 `left + deterministic width` 방식으로 다시 고정
+- fixed 인터랙션 UI의 가로/세로 이탈을 함께 감지하는 `repairFixedInteractiveBounds` 추가
+- 낚시 화면의 WebGL/수중 레이어가 버튼 터치를 가로막지 않도록 pointer layer를 한 번 더 잠금
+- 하단 메뉴바 버튼, 상점/미션/장비/지역 카드 버튼의 모바일 터치 동작 안정화
+- 짧은 높이 화면, 초소형 화면, 키보드/visual viewport 변화 상태에 대한 v1.1.9 class guard 추가
+- service worker에서 이미지/JS/CSS 요청 실패 시 `offline.html`을 반환하지 않도록 수정
 - PWA / service worker 캐시 버전 갱신
-- 기존 v1.1.7 검증 스크립트가 새 버전에서 막히지 않도록 lineage 검증으로 보정
-- `100vw` 직접 계산 의존도를 줄이고, 런타임에서 측정한 visual viewport / app width 기준을 추가
-- 하단 메뉴바 left/right 계산을 `--v118-visual-width`와 `--v118-app-width` 기준으로 재보정
-- 메뉴 루트, HUD, 콘텐츠, 카드, 랭킹 패널, 목록 그리드의 `min-width`, `max-width`, `overflow-x` 재정리
-- 초소형 화면과 짧은 높이 화면용 별도 guard 추가
-- 낚시 HUD, 최근 포획, 릴 패널, 캐스팅 버튼, 결과 카드가 하단 메뉴바와 겹치지 않도록 재보강
-- 런타임에서 주요 인터랙션 UI가 앱 밖으로 나가면 emergency class를 붙이는 bounds 감지 추가
+- v1.1.9 검증 스크립트 추가
 
 ## 개발 / 검증
 
@@ -44,11 +44,12 @@ node --check public/sw.js
 1. 마을 화면에서 하단 메뉴바 8칸이 모두 화면 안에 있는지 확인합니다.
 2. 마을, 낚시, 장비, 가방, 도감, 상점, 미션, 랭킹을 차례대로 눌러 카드/버튼/텍스트가 밖으로 나가지 않는지 확인합니다.
 3. 낚시 화면에서 HUD, 최근 포획, 캐스팅 버튼, 릴 패널, 결과 카드가 하단 메뉴바와 겹치지 않는지 확인합니다.
-4. 360px급 작은 화면, 390px급 일반 폰, 430px급 큰 폰, 태블릿 세로 화면에서 한 번씩 확인합니다.
+4. 낚시 화면에서 캐스팅 버튼과 릴 패널이 WebGL/수중 레이어에 터치 차단되지 않는지 확인합니다.
+5. 360px급 작은 화면, 390px급 일반 폰, 430px급 큰 폰, 태블릿 세로 화면에서 한 번씩 확인합니다.
 
 ## 배포 메모
 
-- 앱 버전: `1.1.8`
-- PWA / service worker 캐시 버전: `aqua-fantasia-v1.1.8-layout-qa-sweep`
+- 앱 버전: `1.1.9`
+- PWA / service worker 캐시 버전: `aqua-fantasia-v1.1.9-interaction-qa-polish`
 - 패치 형태: 기존 프로젝트 루트에 덮어쓰기
 - `node_modules`와 `dist`는 패치 ZIP에서 제외

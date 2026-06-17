@@ -1,5 +1,5 @@
-// v1.1.8 keeps previous safety policies and refreshes the offline cache.
-const CACHE_NAME = 'aqua-fantasia-v1.1.8-layout-qa-sweep';
+// v1.1.9 keeps previous safety policies and hardens offline fetch fallbacks.
+const CACHE_NAME = 'aqua-fantasia-v1.1.9-interaction-qa-polish';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -439,9 +439,9 @@ self.addEventListener('message', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const req = event.request;
+  const isHtml = req.mode === 'navigate' || req.headers.get('accept')?.includes('text/html');
   event.respondWith((async () => {
     try {
-      const isHtml = req.mode === 'navigate' || req.headers.get('accept')?.includes('text/html');
       if (isHtml) {
         const res = await fetch(req, { cache: 'no-store' });
         const copy = res.clone();
@@ -457,7 +457,8 @@ self.addEventListener('fetch', (event) => {
       }
       return fresh;
     } catch {
-      return await caches.match('./offline.html') || Response.error();
+      if (isHtml) return await caches.match('./offline.html') || Response.error();
+      return await caches.match(req) || Response.error();
     }
   })());
 });

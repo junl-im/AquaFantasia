@@ -11,11 +11,11 @@ const files = {
 };
 
 const must = [
-  [files.pkg, '"version": "1.1.8"', 'package version must be 1.1.8'],
-  [files.data, "APP_VERSION = '1.1.8'", 'APP_VERSION must be 1.1.8'],
-  [files.data, 'aqua-fantasia-v1.1.8-layout-qa-sweep', 'data cache name must be v1.1.8'],
-  [files.sw, 'aqua-fantasia-v1.1.8-layout-qa-sweep', 'service worker cache must be v1.1.8'],
-  [files.offline, 'v1.1.8', 'offline page badge must be v1.1.8'],
+  [files.pkg, '"version": "1.1.', 'package version keeps v1.1.8+ lineage'],
+  [files.data, "APP_VERSION = '1.1.", 'APP_VERSION keeps v1.1.8+ lineage'],
+  [files.data, 'aqua-fantasia-v1.1.', 'data cache name keeps v1.1.8+ lineage'],
+  [files.sw, 'aqua-fantasia-v1.1.', 'service worker cache keeps v1.1.8+ lineage'],
+  [files.offline, 'v1.1.', 'offline page badge keeps v1.1.8+ lineage'],
   [files.readme, 'v1.1.8 Layout QA Sweep', 'README must document v1.1.8'],
   [files.pkg, 'check-v118-layout-qa-sweep.mjs', 'package scripts must call v118 validation'],
   [files.main, "dataset.layoutQa = 'v1118-layout-qa-sweep'", 'layout QA dataset flag is missing'],
