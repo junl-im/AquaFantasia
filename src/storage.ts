@@ -3,7 +3,7 @@ import type { RegionKey, SaveData, Screen, VillageBuildingSave, VillageBuildingT
 
 const KEY = 'aqua-fantasia-save-v650';
 const LEGACY_KEYS = ['aqua-fantasia-save-v640', 'aqua-fantasia-save-v630', 'aqua-fantasia-save-v620'];
-const VALID_SCREENS: Screen[] = ['login', 'village', 'fishing', 'gear', 'inventory', 'dex', 'shop', 'mission', 'ranking'];
+const VALID_SCREENS: Screen[] = ['login', 'village', 'map', 'fishing', 'gear', 'inventory', 'dex', 'shop', 'mission', 'ranking'];
 const VALID_REGIONS = new Set<RegionKey>(regions.map((region) => region.key));
 
 function finiteNumber(value: unknown, fallback: number, min = 0, max = Number.MAX_SAFE_INTEGER): number {

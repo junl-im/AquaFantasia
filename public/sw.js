@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.3-asset-integration';
+const CACHE_NAME = 'aqua-fantasia-v2.0.5-fishing-minigame-assets';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -29,6 +29,21 @@ const PRECACHE = [
   "./assets/v203/portraits/player_portrait.png",
   "./assets/v203/ui/dialog_frame.png",
   "./assets/v203/ui/popup_frame.png",
+  "./assets/v205/fishing/gauge_vertical.png",
+  "./assets/v205/fishing/gauge_horizontal.png",
+  "./assets/v205/fishing/resistance_bar.png",
+  "./assets/v205/fishing/catch_window.png",
+  "./assets/v205/fishing/slot_rod.png",
+  "./assets/v205/fishing/slot_bait.png",
+  "./assets/v205/fishing/line_effect.png",
+  "./assets/v205/fishing/water_splash.png",
+  "./assets/v205/fishing/water_ripple.png",
+  "./assets/v205/fishing/fish_shadow_common.png",
+  "./assets/v205/fishing/fish_shadow_large.png",
+  "./assets/v205/fishing/pearl_reward.png",
+  "./assets/v205/fishing/treasure_chest.png",
+  "./assets/v205/fishing/alert_icon.png",
+  "./assets/v205/fishing/danger_warning.png",
   "./assets/v22/generated/05_Building_Interior_Inn.png",
   "./assets/v22/generated/06_Building_Interior_Fish_Market.png",
   "./assets/v22/generated/07_Building_Interior_Fishing_Guild.png",

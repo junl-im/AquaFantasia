@@ -1,4 +1,4 @@
-export type Screen = 'login' | 'village' | 'fishing' | 'gear' | 'inventory' | 'dex' | 'shop' | 'mission' | 'ranking';
+export type Screen = 'login' | 'village' | 'map' | 'fishing' | 'gear' | 'inventory' | 'dex' | 'shop' | 'mission' | 'ranking';
 export type FishingState = 'idle' | 'casting' | 'waiting' | 'bite' | 'reeling' | 'success' | 'fail';
 export type RegionKey = 'lake' | 'river' | 'harbor' | 'deep' | 'palace' | 'dimension' | 'glacier' | 'storm' | 'mangrove' | 'lunar' | 'reefFestival';
 export type Rarity = 'COMMON' | 'RARE' | 'EPIC' | 'BOSS';

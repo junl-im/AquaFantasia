@@ -1,7 +1,7 @@
 import type { FishInfo, RegionInfo, SaveData } from './types';
 
-export const APP_VERSION = '2.0.3';
-export const CACHE_NAME = 'aqua-fantasia-v2.0.3-asset-integration';
+export const APP_VERSION = '2.0.5';
+export const CACHE_NAME = 'aqua-fantasia-v2.0.5-fishing-minigame-assets';
 
 export const regions: RegionInfo[] = [
   { key: 'lake', name: '잔잔한 해변', subtitle: '첫 출항 추천 · 부드러운 파도', bg: './assets/v101/water/water_clear_calm.webp', difficulty: 1.00, waterSpeed: 0.65, color: '#54dfff', tide: '잔물결', unlockHint: '기본 해금' },
@@ -60,7 +60,7 @@ export const fishDex: FishInfo[] = [
 export const navItems: Array<{ screen: Exclude<SaveData['screen'], 'login'>; icon: string; label: string }> = [
   { screen: 'inventory', icon: './assets/v22/icons/nav_bag.png', label: '가방' },
   { screen: 'mission', icon: './assets/v22/icons/nav_quest.png', label: '퀘스트' },
-  { screen: 'fishing', icon: './assets/v22/icons/nav_map.png', label: '지도' },
+  { screen: 'map', icon: './assets/v22/icons/nav_map.png', label: '지도' },
   { screen: 'village', icon: './assets/v22/icons/nav_village.png', label: '마을' },
 ];
 
