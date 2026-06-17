@@ -1,31 +1,66 @@
-import { APP_VERSION, defaultSave } from './data';
-import type { SaveData } from './types';
+import { APP_VERSION, defaultSave, regions } from './data';
+import type { RegionKey, SaveData, Screen } from './types';
 
 const KEY = 'aqua-fantasia-save-v650';
 const LEGACY_KEYS = ['aqua-fantasia-save-v640', 'aqua-fantasia-save-v630', 'aqua-fantasia-save-v620'];
+const VALID_SCREENS: Screen[] = ['login', 'village', 'fishing', 'gear', 'inventory', 'dex', 'shop', 'mission', 'ranking'];
+const VALID_REGIONS = new Set<RegionKey>(regions.map((region) => region.key));
+
+function finiteNumber(value: unknown, fallback: number, min = 0, max = Number.MAX_SAFE_INTEGER): number {
+  const numeric = typeof value === 'number' ? value : Number(value);
+  if (!Number.isFinite(numeric)) return fallback;
+  return Math.max(min, Math.min(max, Math.floor(numeric)));
+}
+
+function sanitizeRecord(value: unknown): Record<string, number> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  return Object.fromEntries(Object.entries(value as Record<string, unknown>)
+    .filter(([key]) => /^[a-zA-Z0-9_-]+$/.test(key))
+    .map(([key, count]) => [key, finiteNumber(count, 0)]));
+}
+
+function sanitizeMissions(value: unknown): Record<string, boolean> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  return Object.fromEntries(Object.entries(value as Record<string, unknown>)
+    .filter(([key]) => /^[a-zA-Z0-9_-]+$/.test(key))
+    .map(([key, done]) => [key, Boolean(done)]));
+}
 
 function normalizeSave(parsed: Partial<SaveData>): SaveData {
   const base = defaultSave();
-  const gear = { ...base.gear, ...(parsed.gear ?? {}) };
-  const unlocked = Array.isArray(parsed.unlockedRegions) && parsed.unlockedRegions.length > 0 ? parsed.unlockedRegions : base.unlockedRegions;
+  const gear = {
+    rodLevel: finiteNumber(parsed.gear?.rodLevel, base.gear.rodLevel, 1, 99),
+    reelLevel: finiteNumber(parsed.gear?.reelLevel, base.gear.reelLevel, 1, 99),
+    lureStock: finiteNumber(parsed.gear?.lureStock, base.gear.lureStock, 0, 9999),
+    lineLevel: finiteNumber(parsed.gear?.lineLevel, base.gear.lineLevel, 1, 99),
+  };
+  const parsedScreen = parsed.screen as Screen | undefined;
+  const parsedRegion = parsed.region as RegionKey | undefined;
+  const screen = parsedScreen && VALID_SCREENS.includes(parsedScreen) ? parsedScreen : base.screen;
+  const region = parsedRegion && VALID_REGIONS.has(parsedRegion) ? parsedRegion : base.region;
+  const unlocked = Array.isArray(parsed.unlockedRegions)
+    ? parsed.unlockedRegions.filter((key): key is RegionKey => VALID_REGIONS.has(key as RegionKey))
+    : [];
+  const unlockedRegions = Array.from(new Set<RegionKey>([...base.unlockedRegions, ...unlocked]));
   return {
     ...base,
     ...parsed,
     version: APP_VERSION,
-    screen: parsed.screen === 'login' ? 'login' : (parsed.screen ?? base.screen),
-    region: parsed.region ?? base.region,
-    coins: Number.isFinite(parsed.coins) ? Number(parsed.coins) : base.coins,
-    caught: parsed.caught ?? {},
-    missions: parsed.missions ?? {},
+    screen,
+    region: unlockedRegions.includes(region) ? region : base.region,
+    coins: finiteNumber(parsed.coins, base.coins, 0),
+    caught: sanitizeRecord(parsed.caught),
+    missions: sanitizeMissions(parsed.missions),
+    serverLinked: Boolean(parsed.serverLinked),
     gear,
-    bestStreak: Number.isFinite(parsed.bestStreak) ? Number(parsed.bestStreak) : base.bestStreak,
-    currentStreak: Number.isFinite(parsed.currentStreak) ? Number(parsed.currentStreak) : 0,
-    totalCasts: Number.isFinite(parsed.totalCasts) ? Number(parsed.totalCasts) : 0,
-    totalSuccess: Number.isFinite(parsed.totalSuccess) ? Number(parsed.totalSuccess) : 0,
-    totalFail: Number.isFinite(parsed.totalFail) ? Number(parsed.totalFail) : 0,
-    unlockedRegions: unlocked,
-    mastery: parsed.mastery ?? {},
-    lastRescueAt: Number.isFinite(parsed.lastRescueAt) ? Number(parsed.lastRescueAt) : 0,
+    bestStreak: finiteNumber(parsed.bestStreak, base.bestStreak, 0),
+    currentStreak: finiteNumber(parsed.currentStreak, 0, 0),
+    totalCasts: finiteNumber(parsed.totalCasts, 0, 0),
+    totalSuccess: finiteNumber(parsed.totalSuccess, 0, 0),
+    totalFail: finiteNumber(parsed.totalFail, 0, 0),
+    unlockedRegions,
+    mastery: sanitizeRecord(parsed.mastery),
+    lastRescueAt: finiteNumber(parsed.lastRescueAt, 0, 0),
   };
 }
 

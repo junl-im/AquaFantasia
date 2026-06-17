@@ -176,9 +176,9 @@ export class UnderwaterWebglLayer {
   private raf = 0;
   private disposed = false;
   private readonly mood: UnderwaterLayerMood;
-  private readonly compact: boolean;
+  private compact: boolean;
   private readonly sceneUrl?: string;
-  private readonly quality: UnderwaterQualityTier;
+  private quality: UnderwaterQualityTier;
   private texture?: WebGLTexture;
   private sceneReady = false;
   private startedAt = performance.now();
@@ -204,6 +204,11 @@ export class UnderwaterWebglLayer {
     this.canvas = document.createElement('canvas');
     this.canvas.className = `underwater-webgl-canvas quality-${this.quality}`;
     this.canvas.setAttribute('aria-hidden', 'true');
+    this.canvas.addEventListener('webglcontextlost', (ev) => {
+      ev.preventDefault();
+      this.host.classList.add('underwater-context-lost');
+      cancelAnimationFrame(this.raf);
+    });
     this.host.prepend(this.canvas);
   }
 
@@ -252,6 +257,7 @@ export class UnderwaterWebglLayer {
     };
     this.resize();
     this.host.classList.add('underwater-webgl-ready', `underwater-quality-${this.quality}`);
+    this.host.dataset.underwaterQuality = this.quality;
     this.loadSceneTexture();
     this.tick();
     return true;
@@ -267,6 +273,19 @@ export class UnderwaterWebglLayer {
     }
     this.canvas.remove();
   }
+  setQuality(quality: UnderwaterQualityTier, compact = this.compact): void {
+    if (this.disposed) return;
+    const previous = this.quality;
+    this.quality = quality;
+    this.compact = compact || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.canvas.classList.remove('quality-lite', 'quality-balanced', 'quality-high');
+    this.canvas.classList.add(`quality-${this.quality}`);
+    this.host.classList.remove('underwater-quality-lite', 'underwater-quality-balanced', 'underwater-quality-high');
+    this.host.classList.add(`underwater-quality-${this.quality}`);
+    this.host.dataset.underwaterQuality = this.quality;
+    if (previous !== quality) this.resize();
+  }
+
 
   private compile(type: number, source: string): WebGLShader | undefined {
     const gl = this.gl;
@@ -336,6 +355,10 @@ export class UnderwaterWebglLayer {
 
   private tick = (): void => {
     if (this.disposed || !this.gl || !this.program || !this.uniforms) return;
+    if (document.visibilityState === 'hidden') {
+      this.raf = requestAnimationFrame(this.tick);
+      return;
+    }
     this.frameIndex += 1;
     if (this.quality === 'lite' && this.frameIndex % 2 === 1) {
       this.raf = requestAnimationFrame(this.tick);

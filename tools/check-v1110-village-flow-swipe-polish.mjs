@@ -22,12 +22,12 @@ const sw = read('public/sw.js');
 const offline = read('public/offline.html');
 const readme = read('README.md');
 
-assert(pkg.version === '1.1.10', 'package version is v1.1.10');
-assert(data.includes("APP_VERSION = '1.1.10'"), 'APP_VERSION is v1.1.10');
-assert(data.includes('aqua-fantasia-v1.1.10-village-flow-swipe-polish'), 'cache name is v1.1.10');
-assert(sw.includes('aqua-fantasia-v1.1.10-village-flow-swipe-polish'), 'service worker cache is v1.1.10');
-assert(offline.includes('v1.1.10'), 'offline page badge is v1.1.10');
-assert(readme.includes('v1.1.10 Village Flow Swipe Polish'), 'README documents v1.1.10');
+assert(/^1\.1\.(1[0-9]|[2-9][0-9])$/.test(pkg.version), 'package version keeps v1.1.10+ lineage');
+assert(/APP_VERSION = '1\.1\.(1[0-9]|[2-9][0-9])'/.test(data), 'APP_VERSION keeps v1.1.10+ lineage');
+assert(data.includes(`aqua-fantasia-v${pkg.version}-`) || data.includes('aqua-fantasia-v1.1.10-village-flow-swipe-polish'), 'cache name keeps v1.1.10+ lineage');
+assert(sw.includes(`aqua-fantasia-v${pkg.version}-`) || sw.includes('aqua-fantasia-v1.1.10-village-flow-swipe-polish'), 'service worker cache keeps v1.1.10+ lineage');
+assert(offline.includes(`v${pkg.version}`) || offline.includes('v1.1.10'), 'offline page badge keeps v1.1.10+ lineage');
+assert(readme.includes('v1.1.10 Village Flow Swipe Polish') || readme.includes('v1.1.11 Tech Perf Compat'), 'README documents v1.1.10+ lineage');
 assert(exists('public/assets/v1110/home/village_islands_user_bg.webp'), 'uploaded village background webp exists');
 assert(exists('public/assets/v1110/home/village_islands_user_bg.png'), 'uploaded village background source png exists');
 assert(main.includes("homeBg: './assets/v1110/home/village_islands_user_bg.webp'"), 'village screen uses uploaded background');

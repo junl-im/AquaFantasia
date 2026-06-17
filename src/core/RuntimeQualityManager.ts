@@ -22,6 +22,7 @@ export class RuntimeQualityManager {
     window.addEventListener('resize', this.syncViewportVars, { passive: true });
     window.visualViewport?.addEventListener('resize', this.syncViewportVars, { passive: true });
     window.visualViewport?.addEventListener('scroll', this.syncViewportVars, { passive: true });
+    window.addEventListener('orientationchange', this.syncViewportVars, { passive: true });
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {
         this.last = performance.now();
@@ -49,7 +50,9 @@ export class RuntimeQualityManager {
     const dpr = window.devicePixelRatio || 1;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const small = Math.min(window.innerWidth, window.innerHeight) < 380;
-    if (reduced || cores <= 3 || memory <= 2 || small) return 'lite';
+    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection?.saveData ?? false;
+    const slowNetwork = /(^|-)2g$/.test((navigator as Navigator & { connection?: { effectiveType?: string } }).connection?.effectiveType ?? '');
+    if (reduced || saveData || slowNetwork || cores <= 3 || memory <= 2 || small) return 'lite';
     if (cores >= 8 && memory >= 6 && dpr >= 2) return 'high';
     return 'balanced';
   }
@@ -99,6 +102,9 @@ export class RuntimeQualityManager {
     this.lastAppliedQuality = this.quality;
     root.dataset.runtimeQuality = this.quality;
     root.dataset.runtimeQualityReason = reason;
+    root.classList.toggle('runtime-quality-lite', this.quality === 'lite');
+    root.classList.toggle('runtime-quality-balanced', this.quality === 'balanced');
+    root.classList.toggle('runtime-quality-high', this.quality === 'high');
     root.style.setProperty('--runtime-dpr-cap', String(this.recommendedDprCap()));
     root.style.setProperty('--water-fx-alpha', this.quality === 'lite' ? '.48' : this.quality === 'high' ? '.70' : '.60');
     root.style.setProperty('--water-fx-blend', this.quality === 'lite' ? '.78' : this.quality === 'high' ? '1.04' : '.92');
@@ -115,9 +121,13 @@ export class RuntimeQualityManager {
     const width = Math.max(1, Math.floor(vv?.width ?? window.innerWidth));
     const height = Math.max(1, Math.floor(vv?.height ?? window.innerHeight));
     const portraitWidth = clamp(width, 300, 500);
+    const offsetLeft = Math.max(0, Math.floor(vv?.offsetLeft ?? 0));
+    const offsetTop = Math.max(0, Math.floor(vv?.offsetTop ?? 0));
     const root = document.documentElement;
     root.style.setProperty('--runtime-viewport-width', `${width}px`);
     root.style.setProperty('--runtime-viewport-height', `${height}px`);
     root.style.setProperty('--runtime-shell-width', `${portraitWidth}px`);
+    root.style.setProperty('--runtime-visual-left', `${offsetLeft}px`);
+    root.style.setProperty('--runtime-visual-top', `${offsetTop}px`);
   };
 }

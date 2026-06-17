@@ -1,5 +1,5 @@
-// v1.1.10 keeps previous safety policies and adds village flow/supplied-background caching.
-const CACHE_NAME = 'aqua-fantasia-v1.1.10-village-flow-swipe-polish';
+// v1.1.11 keeps village flow and adds tech/perf/compat service-worker hardening.
+const CACHE_NAME = 'aqua-fantasia-v1.1.11-tech-perf-compat';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -425,6 +425,9 @@ self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
     await Promise.all(keys.filter((key) => key.startsWith('aqua-fantasia-') && key !== CACHE_NAME).map((key) => caches.delete(key)));
+    if ('navigationPreload' in self.registration) {
+      try { await self.registration.navigationPreload.enable(); } catch { /* optional browser optimization */ }
+    }
     await self.clients.claim();
   })());
 });
@@ -441,19 +444,23 @@ self.addEventListener('message', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const req = event.request;
+  if (req.headers.has('range')) return;
   const isHtml = req.mode === 'navigate' || req.headers.get('accept')?.includes('text/html');
   event.respondWith((async () => {
     try {
       if (isHtml) {
-        const res = await fetch(req, { cache: 'no-store' });
-        const copy = res.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put('./index.html', copy));
+        const preload = await event.preloadResponse;
+        const res = preload || await fetch(req, { cache: 'no-store' });
+        if (res && res.ok && req.url.startsWith(self.location.origin)) {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put('./index.html', copy));
+        }
         return res;
       }
       const cached = await caches.match(req);
       if (cached) return cached;
       const fresh = await fetch(req);
-      if (fresh && fresh.ok && req.url.startsWith(self.location.origin)) {
+      if (fresh && fresh.ok && req.url.startsWith(self.location.origin) && fresh.type !== 'opaque') {
         const copy = fresh.clone();
         caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
       }

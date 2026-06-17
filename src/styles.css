@@ -13252,3 +13252,84 @@ html[data-village-flow="v1110-village-flow-swipe-polish"] .fishing-screen.v1119-
     min-height: 76px !important;
   }
 }
+
+/* v1.1.11 TECH / PERF / COMPAT PASS
+   Technical stability pass over v1.1.10. Keeps the supplied village background,
+   restored one-step tab swipe, and PNG/WebP 2.5D direction while tightening
+   runtime quality adaptation, scroll performance, fixed UI bounds, and PWA safety. */
+:root {
+  --v1111-tech-edge: var(--v119-edge-x, clamp(5px, 1.8vw, 10px));
+  --v1111-tech-bottom: var(--v119-content-bottom, calc(74px + env(safe-area-inset-bottom)));
+  --v1111-fixed-width: max(0px, calc(var(--v1111-app-width, var(--v119-app-width, 100vw)) - max(4px, env(safe-area-inset-left)) - max(4px, env(safe-area-inset-right))));
+}
+html[data-tech-perf-compat="v1111-tech-perf-compat"] #app {
+  width: var(--v1111-app-width, var(--v119-app-width, min(500px, 100vw))) !important;
+  max-width: min(500px, var(--v1111-visual-width, var(--v119-visual-width, 100vw))) !important;
+  height: var(--v1111-app-height, var(--v119-app-height, 100dvh)) !important;
+  max-height: var(--v1111-app-height, var(--v119-app-height, 100dvh)) !important;
+  overflow: hidden !important;
+  contain: layout paint size !important;
+}
+html[data-tech-perf-compat="v1111-tech-perf-compat"] .runtime-menu-screen {
+  overscroll-behavior-y: contain !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  scroll-padding-bottom: var(--v1111-tech-bottom) !important;
+}
+html[data-tech-perf-compat="v1111-tech-perf-compat"] .runtime-menu-screen :is(.runtime-content,.runtime-card-list,.runtime-region-grid,.runtime-dex-grid,.runtime-item-grid,.shop-list,.mission-list,.gear-grid,.dex-grid) {
+  contain: layout paint !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+html[data-tech-perf-compat="v1111-tech-perf-compat"] .runtime-menu-screen :is(.runtime-card-list,.runtime-region-grid,.runtime-dex-grid,.runtime-item-grid,.shop-list,.mission-list,.gear-grid,.dex-grid) > * {
+  content-visibility: auto;
+  contain-intrinsic-size: 96px;
+}
+html[data-tech-perf-compat="v1111-tech-perf-compat"] .bottom-nav.v840-bottom-nav {
+  left: calc(var(--v119-visual-left, var(--runtime-visual-left, 0px)) + ((var(--v1111-visual-width, var(--v119-visual-width, 100vw)) - var(--v1111-app-width, var(--v119-app-width, 100vw))) / 2) + max(4px, env(safe-area-inset-left))) !important;
+  right: auto !important;
+  width: var(--v1111-fixed-width) !important;
+  max-width: var(--v1111-fixed-width) !important;
+  min-width: 0 !important;
+  transform: none !important;
+  translate: none !important;
+  will-change: auto !important;
+}
+html[data-tech-perf-compat="v1111-tech-perf-compat"] :is(.fishing-3d-ambient,.runtime-3d-bg,.underwater-webgl-host,.underwater-webgl-canvas) {
+  contain: strict !important;
+  pointer-events: none !important;
+  touch-action: none !important;
+}
+html[data-tech-perf-compat="v1111-tech-perf-compat"] .underwater-webgl-host[data-underwater-quality="lite"] .underwater-webgl-canvas,
+html.runtime-quality-lite[data-tech-perf-compat="v1111-tech-perf-compat"] .underwater-webgl-canvas {
+  opacity: .50 !important;
+  filter: saturate(.94) contrast(.96) !important;
+}
+html.runtime-quality-balanced[data-tech-perf-compat="v1111-tech-perf-compat"] .underwater-webgl-canvas { opacity: .62 !important; }
+html.runtime-quality-high[data-tech-perf-compat="v1111-tech-perf-compat"] .underwater-webgl-canvas { opacity: .70 !important; }
+html.v1111-low-memory[data-tech-perf-compat="v1111-tech-perf-compat"] :is(.runtime-bg-character,.v3d-bubbles,.v3d-caustics,.caustic-overlay) {
+  animation-duration: calc(var(--ui-motion-scale, 1) * 2s + 22s) !important;
+  opacity: .45 !important;
+}
+html.v1111-save-data[data-tech-perf-compat="v1111-tech-perf-compat"] .underwater-webgl-canvas {
+  opacity: .42 !important;
+}
+html[data-tech-perf-compat="v1111-tech-perf-compat"] .fishing-screen :is(.cast-button,.hold-pad,.bottom-nav button,.catch-result-card button),
+html[data-tech-perf-compat="v1111-tech-perf-compat"] .runtime-menu-screen :is(button,.region-card,.shop-card,.gear-card,.mission-card,.runtime-btn) {
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html[data-tech-perf-compat="v1111-tech-perf-compat"] .fishing-screen .catch-result-card {
+  overscroll-behavior: contain !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-tech-perf-compat="v1111-tech-perf-compat"] *,
+  html[data-tech-perf-compat="v1111-tech-perf-compat"] *::before,
+  html[data-tech-perf-compat="v1111-tech-perf-compat"] *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+  html[data-tech-perf-compat="v1111-tech-perf-compat"] .underwater-webgl-canvas { opacity: .38 !important; }
+}

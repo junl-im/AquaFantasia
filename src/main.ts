@@ -7,7 +7,7 @@ import { initAudio, playSound } from './audio';
 import { ToastManager } from './toast';
 import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPortraitLock } from './core/PortraitGuard';
 import { UnderwaterWebglLayer, type UnderwaterLayerMood } from './core/UnderwaterWebglLayer';
-import { RuntimeQualityManager } from './core/RuntimeQualityManager';
+import { RuntimeQualityManager, type RuntimeQualityTier } from './core/RuntimeQualityManager';
 
 const ASSET = {
   loginBg: './assets/v85/screens/start_screen_clean_v810.webp',
@@ -141,12 +141,14 @@ class AquaFantasiaGame {
     document.documentElement.dataset.layoutQa = 'v1118-layout-qa-sweep';
     document.documentElement.dataset.layoutStability = 'v1119-interaction-qa-polish';
     document.documentElement.dataset.villageFlow = 'v1110-village-flow-swipe-polish';
+    document.documentElement.dataset.techPerfCompat = 'v1111-tech-perf-compat';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
     this.installViewportSafeLock();
     this.installLayoutQaSweep();
     this.installInteractionQaPolish();
+    this.installTechPerfCompatPass();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
     this.installBackNavigationGuard();
@@ -357,7 +359,10 @@ class AquaFantasiaGame {
     const host = root.querySelector<HTMLElement>('[data-underwater-webgl]');
     if (!host || document.documentElement.classList.contains('pixi-fallback-ready')) return;
     const layer = new UnderwaterWebglLayer(host, { mood, compact: this.compact || this.quality.isLite(), sceneUrl, quality: this.quality.tier() });
-    if (layer.start()) this.webglLayers.push(layer);
+    if (layer.start()) {
+      layer.setQuality(this.quality.tier(), this.compact || this.quality.isLite());
+      this.webglLayers.push(layer);
+    }
   }
 
   private regionCard(key: RegionKey): string {
@@ -1698,6 +1703,52 @@ class AquaFantasiaGame {
     nav.style.setProperty('transform', 'none', 'important');
     nav.style.setProperty('translate', 'none', 'important');
     nav.style.setProperty('overflow', 'hidden', 'important');
+  }
+
+  private installTechPerfCompatPass(): void {
+    const sync = () => {
+      const metrics = applyPortraitViewportMetrics();
+      const root = document.documentElement;
+      const viewport = window.visualViewport;
+      const vw = Math.max(1, Math.floor(viewport?.width ?? window.innerWidth));
+      const vh = Math.max(1, Math.floor(viewport?.height ?? window.innerHeight));
+      const appWidth = Math.min(vw, metrics.appWidth);
+      const appHeight = Math.min(vh, metrics.appHeight);
+      root.style.setProperty('--v1111-visual-width', `${vw}px`);
+      root.style.setProperty('--v1111-visual-height', `${vh}px`);
+      root.style.setProperty('--v1111-app-width', `${appWidth}px`);
+      root.style.setProperty('--v1111-app-height', `${appHeight}px`);
+      root.classList.toggle('v1111-low-memory', ((navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 4) <= 2);
+      root.classList.toggle('v1111-save-data', Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData));
+      root.classList.toggle('v1111-touch-coarse', window.matchMedia('(pointer: coarse)').matches);
+      this.repairActiveViewportBounds();
+      this.repairInteractiveBounds();
+      this.repairFixedInteractiveBounds();
+    };
+    sync();
+    window.addEventListener('aqua-runtime-quality-change', ((event: Event) => {
+      const detail = (event as CustomEvent<{ tier: RuntimeQualityTier }>).detail;
+      const tier = detail?.tier ?? this.quality.tier();
+      this.compact = tier === 'lite' || window.matchMedia('(max-width: 420px), (prefers-reduced-motion: reduce)').matches || (navigator.hardwareConcurrency ?? 8) <= 4;
+      document.documentElement.classList.toggle('perf-lite', this.compact);
+      this.webglLayers.forEach((layer) => layer.setQuality(tier, this.compact));
+      this.resizePixi();
+    }) as EventListener, { passive: true });
+    const stopInteraction = () => {
+      this.holding = false;
+      this.stageHost?.classList.remove('camera-shake');
+    };
+    window.visualViewport?.addEventListener('resize', sync, { passive: true });
+    window.visualViewport?.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync, { passive: true });
+    window.addEventListener('orientationchange', sync, { passive: true });
+    window.addEventListener('pageshow', sync, { passive: true });
+    window.addEventListener('blur', stopInteraction, { passive: true });
+    window.addEventListener('pagehide', stopInteraction, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState !== 'visible') stopInteraction();
+      else sync();
+    }, { passive: true });
   }
 
   private vibrate(pattern: VibratePattern): void {
