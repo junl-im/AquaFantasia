@@ -3,7 +3,7 @@ import path from 'node:path';
 
 const root = process.cwd();
 const removed = [];
-const bannedFile = /^(CLEAN_REPLACE_GUIDE|FINAL_CONSOLIDATED|PATCH_NOTES|PROMPTS_DALLE_ASSETS|DELETE_OLD_FILES).*\.md$/;
+const skipDirs = new Set(['node_modules', 'dist', '.git']);
 
 function removeEntry(p) {
   if (!fs.existsSync(p)) return;
@@ -12,13 +12,25 @@ function removeEntry(p) {
   removed.push(rel);
 }
 
-for (const name of fs.readdirSync(root)) {
-  if (bannedFile.test(name)) removeEntry(path.join(root, name));
+function walk(dir) {
+  for (const name of fs.readdirSync(dir)) {
+    if (skipDirs.has(name)) continue;
+    const p = path.join(dir, name);
+    const rel = path.relative(root, p).replace(/\\/g, '/');
+    const st = fs.statSync(p);
+    if (st.isDirectory()) {
+      if (rel === 'reports') removeEntry(p);
+      else walk(p);
+      continue;
+    }
+    if (st.isFile() && name.endsWith('.md') && rel !== 'README.md') removeEntry(p);
+  }
 }
-removeEntry(path.join(root, 'reports'));
+
+walk(root);
 
 if (removed.length) {
-  console.log('[clean-old-patch-docs] removed stale patch docs:');
+  console.log('[clean-old-patch-docs] removed stale markdown/docs:');
   for (const rel of removed) console.log(`- ${rel}`);
 } else {
   console.log('[clean-old-patch-docs] no stale patch docs found');

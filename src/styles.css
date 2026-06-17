@@ -14571,7 +14571,7 @@ html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-scr
   .v2-dialog-panel { bottom: calc(var(--v1112-nav-height, 86px) + max(16px, env(safe-area-inset-bottom)) + 110px); }
 }
 
-/* v2.1 Village Polish: collapsible build tray, goal card, touch-first mobile RPG feel */
+/* v2.0.1 Village Polish: collapsible build tray, goal card, touch-first mobile RPG feel */
 html[data-village-polish="v21-lumina-village-polish"] .v2-objective-card,
 .v2-objective-card {
   position: absolute;
@@ -14663,17 +14663,17 @@ html[data-village-polish="v21-lumina-village-polish"] .v2-objective-card,
   .v2-world-controls [data-village-build-open] { min-width: 52px; font-size: 12px; }
 }
 
-/* v2.2 Joystick / UI Polish: no swipe tabs, compact HUD, right-side modern nav, popup build panel */
-html[data-village-polish="v22-joystick-ui-polish"] .swipe-enabled-screen,
-.v22-joystick-ui-screen {
+/* v2.0.2 Joystick / UI Polish: no swipe tabs, compact HUD, right-side modern nav, popup build panel */
+html[data-village-polish="v202-mobile-rpg-controls"] .swipe-enabled-screen,
+.v202-mobile-rpg-screen {
   overscroll-behavior: none;
 }
 
-.v22-joystick-ui-screen .v2-village-stage {
+.v202-mobile-rpg-screen .v2-village-stage {
   inset: 0 !important;
 }
 
-.v22-joystick-ui-screen .v2-village-hud {
+.v202-mobile-rpg-screen .v2-village-hud {
   left: max(10px, env(safe-area-inset-left)) !important;
   right: max(78px, env(safe-area-inset-right) + 72px) !important;
   top: max(8px, env(safe-area-inset-top)) !important;
@@ -14684,48 +14684,48 @@ html[data-village-polish="v22-joystick-ui-polish"] .swipe-enabled-screen,
   backdrop-filter: blur(12px) saturate(1.16) !important;
 }
 
-.v22-joystick-ui-screen .v2-profile-chip {
+.v202-mobile-rpg-screen .v2-profile-chip {
   grid-template-columns: auto 1fr !important;
   column-gap: 7px !important;
 }
 
-.v22-joystick-ui-screen .v2-profile-chip span {
+.v202-mobile-rpg-screen .v2-profile-chip span {
   min-width: 42px !important;
   height: 31px !important;
   border-radius: 13px !important;
   font-size: 11px !important;
 }
 
-.v22-joystick-ui-screen .v2-profile-chip strong {
+.v202-mobile-rpg-screen .v2-profile-chip strong {
   font-size: clamp(14px, 3.8vw, 18px) !important;
 }
 
-.v22-joystick-ui-screen .v2-profile-chip em {
+.v202-mobile-rpg-screen .v2-profile-chip em {
   font-size: 9.5px !important;
 }
 
-.v22-joystick-ui-screen .v2-wallet-row {
+.v202-mobile-rpg-screen .v2-wallet-row {
   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   gap: 4px !important;
   margin-top: 6px !important;
 }
 
-.v22-joystick-ui-screen .v2-wallet-row span {
+.v202-mobile-rpg-screen .v2-wallet-row span {
   padding: 4px 3px !important;
   border-radius: 11px !important;
   font-size: 8.5px !important;
 }
 
-.v22-joystick-ui-screen .v2-wallet-row strong {
+.v202-mobile-rpg-screen .v2-wallet-row strong {
   font-size: 10.5px !important;
   margin-top: 0 !important;
 }
 
-.v22-joystick-ui-screen .v2-milestone-line {
+.v202-mobile-rpg-screen .v2-milestone-line {
   display: none !important;
 }
 
-.v22-joystick-ui-screen .v2-objective-card {
+.v202-mobile-rpg-screen .v2-objective-card {
   top: calc(max(8px, env(safe-area-inset-top)) + 82px) !important;
   left: max(10px, env(safe-area-inset-left)) !important;
   right: max(92px, env(safe-area-inset-right) + 78px) !important;
@@ -14733,8 +14733,8 @@ html[data-village-polish="v22-joystick-ui-polish"] .swipe-enabled-screen,
   border-radius: 16px !important;
 }
 
-.v22-joystick-ui-screen .v2-objective-card strong { font-size: 10.5px !important; }
-.v22-joystick-ui-screen .v2-objective-card span { font-size: 9.5px !important; }
+.v202-mobile-rpg-screen .v2-objective-card strong { font-size: 10.5px !important; }
+.v202-mobile-rpg-screen .v2-objective-card span { font-size: 9.5px !important; }
 
 .bottom-nav.v840-bottom-nav,
 html.portrait-only-game .bottom-nav.v840-bottom-nav,
@@ -14799,7 +14799,7 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
   letter-spacing: -.04em !important;
 }
 
-.v22-joystick-ui-screen .v2-world-controls {
+.v202-mobile-rpg-screen .v2-world-controls {
   top: calc(max(8px, env(safe-area-inset-top)) + 8px) !important;
   right: max(8px, env(safe-area-inset-right)) !important;
   bottom: auto !important;
@@ -14807,7 +14807,7 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
   z-index: 35 !important;
 }
 
-.v22-joystick-ui-screen .v2-world-controls button {
+.v202-mobile-rpg-screen .v2-world-controls button {
   min-width: 46px !important;
   min-height: 42px !important;
   border-radius: 16px !important;
@@ -14815,13 +14815,13 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
   background: linear-gradient(135deg, rgba(255,255,255,.82), rgba(179,235,255,.66)) !important;
 }
 
-.v22-joystick-ui-screen .v2-world-controls [data-village-build-open] {
+.v202-mobile-rpg-screen .v2-world-controls [data-village-build-open] {
   min-width: 46px !important;
   font-size: 11px !important;
   background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(129,235,255,.76)) !important;
 }
 
-.v22-joystick-ui-screen .v2-world-controls [data-village-fishing] {
+.v202-mobile-rpg-screen .v2-world-controls [data-village-fishing] {
   min-width: 46px !important;
   font-size: 11px !important;
   background: linear-gradient(135deg, #ffd978, #ff9e62) !important;
@@ -14844,7 +14844,7 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
   pointer-events: auto;
 }
 
-.v22-joystick-ui-screen .v2-build-tray {
+.v202-mobile-rpg-screen .v2-build-tray {
   left: max(18px, env(safe-area-inset-left)) !important;
   right: max(18px, env(safe-area-inset-right)) !important;
   top: 50% !important;
@@ -14859,18 +14859,18 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
   z-index: 36 !important;
 }
 
-.v22-joystick-ui-screen.v2-build-tray-open .v2-build-tray,
-.v22-joystick-ui-screen.v2-build-active .v2-build-tray {
+.v202-mobile-rpg-screen.v2-build-tray-open .v2-build-tray,
+.v202-mobile-rpg-screen.v2-build-active .v2-build-tray {
   transform: translateY(-50%) scale(1) !important;
   opacity: 1 !important;
   pointer-events: auto !important;
 }
 
-.v22-joystick-ui-screen .v2-build-title strong { font-size: 15px !important; }
-.v22-joystick-ui-screen .v2-build-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px !important; }
-.v22-joystick-ui-screen .v2-build-grid button { min-height: 56px !important; border-radius: 18px !important; }
-.v22-joystick-ui-screen .v2-build-grid strong { font-size: 12.5px !important; }
-.v22-joystick-ui-screen .v2-build-grid span { font-size: 9.5px !important; }
+.v202-mobile-rpg-screen .v2-build-title strong { font-size: 15px !important; }
+.v202-mobile-rpg-screen .v2-build-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px !important; }
+.v202-mobile-rpg-screen .v2-build-grid button { min-height: 56px !important; border-radius: 18px !important; }
+.v202-mobile-rpg-screen .v2-build-grid strong { font-size: 12.5px !important; }
+.v202-mobile-rpg-screen .v2-build-grid span { font-size: 9.5px !important; }
 
 .v2-joystick {
   position: absolute;
@@ -14925,7 +14925,7 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
   box-shadow: 0 5px 12px rgba(20,83,112,.14);
 }
 
-.v22-joystick-ui-screen .v2-village-guide {
+.v202-mobile-rpg-screen .v2-village-guide {
   left: calc(max(16px, env(safe-area-inset-left)) + 132px) !important;
   right: max(82px, env(safe-area-inset-right) + 72px) !important;
   bottom: calc(24px + env(safe-area-inset-bottom)) !important;
@@ -14933,20 +14933,20 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
   border-radius: 18px !important;
 }
 
-.v22-joystick-ui-screen .v2-dialog-panel {
+.v202-mobile-rpg-screen .v2-dialog-panel {
   left: max(16px, env(safe-area-inset-left)) !important;
   right: max(82px, env(safe-area-inset-right) + 72px) !important;
   bottom: calc(156px + env(safe-area-inset-bottom)) !important;
 }
 
 @media (max-width: 390px), (max-height: 760px) {
-  .v22-joystick-ui-screen .v2-village-hud {
+  .v202-mobile-rpg-screen .v2-village-hud {
     right: max(66px, env(safe-area-inset-right) + 62px) !important;
   }
-  .v22-joystick-ui-screen .v2-wallet-row {
+  .v202-mobile-rpg-screen .v2-wallet-row {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
-  .v22-joystick-ui-screen .v2-objective-card {
+  .v202-mobile-rpg-screen .v2-objective-card {
     display: none !important;
   }
   .v2-joystick {
@@ -14959,5 +14959,5 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
   .bottom-nav.v840-bottom-nav button { min-height: 49px !important; }
   .bottom-nav.v840-bottom-nav button img { width: 22px !important; height: 22px !important; }
   .bottom-nav.v840-bottom-nav button span { font-size: 8.3px !important; }
-  .v22-joystick-ui-screen .v2-village-guide { display: none !important; }
+  .v202-mobile-rpg-screen .v2-village-guide { display: none !important; }
 }

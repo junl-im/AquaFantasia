@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v1.1.15-foundation-frame-rescue';
+const CACHE_NAME = 'aqua-fantasia-v2.0.2-mobile-rpg-controls';
 const PRECACHE = [
   "./",
   "./index.html",

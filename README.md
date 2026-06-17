@@ -1,112 +1,129 @@
-# AquaFantasia v1.1.15 Foundation Frame Rescue
+# AquaFantasia v2.0.2
 
-모바일 웹 낚시 게임 AquaFantasia의 v1.1.15 뼈대 안정화 패치입니다. 이번 패치는 새 기능을 늘리는 대신, 실제 화면에서 가장 먼저 무너져 보이는 마을 첫 화면, 상단 배너, 로그인 유지 토글, 공통 프레임 모서리, 미션 탭 밀림, 낚시 효과 화면 이탈을 우선 복구합니다.
+고퀄리티 SD 해양 판타지 RPG 방향으로 전환 중인 PixiJS 기반 모바일 세로형 웹게임입니다. 현재 목표는 메뉴형 낚시 게임에서 벗어나, 플레이어가 직접 루미나 베이 마을을 돌아다니고 NPC, 건물, 항구, 건설 시스템을 자연스럽게 이용하는 첫 마을 RPG 기반을 완성하는 것입니다.
 
-## v1.1.15에서 확인한 문제
+## 현재 방향
 
-- 마을 배경이 CSS 배경 변수와 여러 배경 레이어에 묻혀, 사용자가 제공한 섬 배경 이미지가 실제 화면에서 보이지 않을 수 있었습니다.
-- 마을 상단 `Aqua Fantasia` 배너가 화면 좌우를 충분히 채우지 못하고 작아 보였습니다.
-- 첫 시작 화면의 `이 기기에서 로그인 유지` 글씨가 배경 아트와 섞여 번져 보일 수 있었고, 체크 상태도 눈에 잘 들어오지 않았습니다.
-- 여러 카드/패널 프레임의 모서리가 서로 다른 패치 레이어에 덮이며 통일감이 떨어질 수 있었습니다.
-- 테두리 안쪽 텍스트 여백이 부족해 글씨가 프레임에 붙어 보이는 문제가 남아 있었습니다.
-- 미션 탭의 카드 레이아웃이 이전 compact 규칙과 frame 규칙이 겹치며 옆으로 밀려 보일 수 있었습니다.
-- 낚시 화면의 버블/스플래시/캐스팅 효과 일부가 낚시 스테이지 밖으로 튀거나 잘려 깨져 보일 수 있었습니다.
-- 낚시 캐릭터를 우측으로 배치한 뒤에도 Pixi 캐스팅 경로와 HTML fallback 캐스팅 효과가 충분히 왼쪽 투척처럼 보이지 않았습니다.
+- 장르: SD 해양 판타지 RPG
+- 화면: 모바일 세로모드 1080 x 1920 기준
+- 렌더링: PixiJS 8 기반 2.5D 마을 월드
+- 조작: 좌측 가상 조이스틱, 터치 이동, 우측 간소 메뉴, 캐릭터 시점 확대/축소
+- 배포: GitHub Pages 가능 구조
+- 저장: 로컬 저장 우선, Firebase 연동 준비 구조 유지
 
-## v1.1.15에서 반영한 부분
+## v2.0.2 변경사항
 
-- 마을 배경 복구
-  - 사용자가 제공한 섬 이미지를 마을 화면에 실제 `<img>` 배경 레이어로 삽입
-  - 기본 마을 배경을 `public/assets/v1110/home/village_islands_user_bg.png`로 지정
-  - WebP 자산도 유지하여 기존 최적화 자산을 보존
-  - 배경 레이어가 WebGL/수중 레이어에 묻히지 않도록 z-index와 opacity 재정리
+- 루트 문서 정책 정리
+  - 별도 패치 노트 `*_NOTES.md` 파일 생성 금지
+  - 루트 문서는 `README.md` 하나만 유지
+  - 변경사항, 적용법, 버전 기록은 모두 이 문서에 누적
 
-- 마을 상단 배너 재조정
-  - 위아래는 과하게 늘리지 않되, 요청대로 좌우 폭을 화면에 더 가득 차게 보정
-  - 매우 작은 화면에서는 자동 축소하여 UI 밖으로 나가지 않게 유지
+- 버전 체계 정리
+  - 기존 실험성 `v2.1`, `v2.2` 표기 대신 `2.0.1 -> 2.0.2 -> 2.0.3` 순서 사용
+  - `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.2`로 통일
 
-- 시작 화면 로그인 유지 토글 개선
-  - `이 기기에서 로그인 유지` 글씨를 흰색으로 고정
-  - 낚시터로 출항 계열과 비슷한 밝은 게임 UI 텍스트 느낌으로 보정
-  - 체크 박스 표시를 별도 aqua 박스와 체크 표시로 다시 보이게 개선
+- 모바일 RPG 조작 개선 유지
+  - 기존 좌우 스와이프 탭 이동 비활성화
+  - 좌측 하단 가상 조이스틱 적용
+  - 터치 이동 유지
+  - 플레이어/NPC 이동 속도 완화
+  - 우측 세로형 간소 메뉴 적용: 가방, 퀘스트, 지도, 마을
+  - `+`, `-` 버튼은 캐릭터 시점 기준 확대/축소
+  - 건설은 작은 `건설` 버튼을 누르면 팝업으로 열리는 방식 유지
 
-- 공통 프레임 모서리 정비
-  - 카드, 패널, 미션, 상점, 도감, 랭킹, HUD의 모서리를 aqua 2.5D 프레임 톤으로 통일
-  - 텍스트가 테두리에 붙지 않도록 내부 여백 보강
-  - SVG/벡터가 아닌 기존 PNG 프레임 자산 유지
+- 화면 밀도 정리 유지
+  - 상단 HUD 축소
+  - 하단 고정 설치 패널 제거
+  - 건물 시각 크기 축소
+  - 마을 장식/오브젝트/건물 충돌 구조 유지
 
-- 미션 탭 밀림 복구
-  - 미션 카드 grid를 `copy / button / progress` 구조로 재고정
-  - 진행 게이지가 텍스트나 버튼과 겹치지 않게 재배치
-  - 세로 스크롤은 유지하고 가로 밀림만 차단
+- 에셋 반영 유지
+  - SD 플레이어 캐릭터 반영
+  - 주요 NPC 캐릭터 반영
+  - 가방/퀘스트/지도/마을 아이콘 반영
+  - 신규 생성 에셋 원본 정리 위치 유지: `public/assets/v22/generated/`
+  - 다음 단계에서 UI 프레임, 대화창, NPC 초상화, 건물 내부맵, 낚시 미니게임 UI를 순차 반영 예정
 
-- 낚시 화면 효과 클리핑
-  - 낚시 스테이지, Pixi 레이어, HTML fallback, stage-ui에 `contain: paint`와 overflow clipping 보강
-  - 캐스팅 trail, splash, bite/action FX가 화면 밖으로 깨져 나가는 문제를 줄임
+## v2.0.1 변경사항
 
-- 낚시 캐릭터/찌 방향 보정
-  - 캐릭터는 더 작고 우측에 붙은 상태 유지
-  - Pixi 캐스팅 시작점을 우측, 도착점을 왼쪽 수면으로 재조정
-  - HTML fallback 찌 애니메이션도 우측에서 왼쪽으로 던지는 방향으로 보정
+- 루미나 베이 첫 마을 다듬기
+- 오늘의 목표 카드 추가
+- 건설 패널 접이식 구조 적용
+- 모바일 핀치 줌 지원
+- 터치 타일 마커 추가
+- 카메라 부드러운 추적 및 맵 경계 보정
+- 등대, 나무, 야자수, 벤치, 가로등, 꽃밭, 깃발, 부두, 상자, 부표 등 마을 장식 레이어 추가
+- 큰 장식물 충돌 처리
+- 제공된 NPC/오브젝트/타일 시트 정리
 
-## 유지 중인 정책
+## 조작 방식
 
-- v1.1.4 설치 Hotfix 유지
-- v1.1.5~v1.1.9 레이아웃/viewport/PWA 안전장치 유지
-- v1.1.10 마을 배경/메뉴 순서/스와이프 정책 유지
-- v1.1.11 기술·성능·호환성 안정화 유지
-- v1.1.12 콘텐츠 흐름/엔진 QA 유지
-- v1.1.13 세부 안정화 QA 유지
-- v1.1.14 버튼 스타일 Hotfix 유지
-- README.md 단일 문서 정책 유지
-- SVG/벡터 신규 자산 추가 없음
-- PNG/WebP 기반 2.5D/3D 방향 유지
+- 좌측 조이스틱: 자유 이동
+- 마을 타일 터치: 해당 위치로 이동
+- 우측 `+`, `-`: 플레이어 중심 확대/축소
+- 우측 `◎`: 플레이어 위치로 카메라 복귀
+- 우측 `건설`: 건설 팝업 열기/닫기
+- 우측 `출항`: 낚시 화면 이동
+- 우측 메뉴: 가방, 퀘스트, 지도, 마을 화면 진입용 간소 메뉴
+
+## 에셋 반영 원칙
+
+- 새 에셋은 한 번에 무리하게 전부 교체하지 않고, 화면별로 안정적으로 반영합니다.
+- 우선순위는 다음과 같습니다.
+  1. 캐릭터/NPC 스프라이트 안정화
+  2. 대화창 + NPC 초상화
+  3. 상단 HUD/우측 메뉴/팝업 UI 프레임
+  4. 건물 내부 진입 화면
+  5. 월드맵 UI
+  6. 낚시 미니게임 UI/VFX
+- 이미지 파일명은 기능을 알 수 있게 유지합니다.
+- 루트에는 에셋 설명용 별도 MD를 만들지 않습니다. 필요한 설명은 이 README에만 적습니다.
+
+## 문서 정책
+
+- 루트 문서는 `README.md` 하나만 사용합니다.
+- `PATCH_NOTES.md`, `*_NOTES.md`, `FINAL_CONSOLIDATED.md`, `CLEAN_REPLACE_GUIDE.md` 같은 별도 패치 문서는 만들지 않습니다.
+- 다음 패치부터 변경 내역은 이 README의 버전 섹션에만 추가합니다.
 
 ## 적용 방법
 
-1. 변경 파일만 ZIP을 압축 해제합니다.
-2. 기존 프로젝트 루트에 그대로 덮어씁니다.
-3. GitHub Desktop에서 변경 파일을 확인합니다.
-4. Commit 후 Push 합니다.
-5. GitHub Actions `validate`가 통과하는지 확인합니다.
+전체 덮어쓰기 패치 사용을 권장합니다.
+
+```bash
+npm install
+npm run dev
+```
+
+배포 전 검증:
+
+```bash
+npm run typecheck
+npm run build
+npm run validate
+```
 
 ## 검증 명령
 
 ```bash
-npm ci --ignore-scripts --no-audit --progress=false
 npm run validate
 npm run typecheck
 npm run build
-npm run audit
-npm run runtime:check
-node --check public/sw.js
 ```
 
-## 버전
+현재 `validate`는 다음을 확인합니다.
 
-- 앱 버전: `1.1.15`
-- PWA / service worker 캐시 버전: `aqua-fantasia-v1.1.15-foundation-frame-rescue`
-- 문서 정책: README.md 단일 문서 유지
+- 루트 문서가 `README.md` 하나뿐인지
+- 버전이 `2.0.x` 체계를 따르는지
+- `package.json`, `APP_VERSION`, service worker cache, offline page가 같은 버전을 쓰는지
+- 조이스틱, 건설 팝업, SD 캐릭터, 간소 메뉴 에셋이 연결되어 있는지
 
-## 누적 검증 마커
+## 버전 기록
 
-- v1.1.4 Pixel Perfect Polish
-- v1.1.5 UI Layout Rescue
-- v1.1.6 UI Bounds Polish
-- v1.1.7 Viewport Safe Lock
-- v1.1.8 Layout QA Sweep
-- v1.1.9 Interaction QA Polish
-- v1.1.10 Village Flow Swipe Polish
-- v1.1.11 Tech Perf Compat
-- v1.1.12 Content Flow Engine QA
-- v1.1.13 Detail Stability QA
-- v1.1.14 Button Style Hotfix
-- v1.1.15 Foundation Frame Rescue
-
-## v2.1 Lumina Village Polish Notes
-
-The v2 village overhaul now includes a polished first-village pass: Lumina Bay naming, a collapsible build tray, objective tracker, mobile pinch zoom, tap tile feedback, soft camera follow, camera bounds, and generated village decoration layer. The supplied object/NPC/tilemap sheets are staged under `public/assets/v2/village/` for the next sprite slicing pass.
-
-## v2.2 Mobile RPG Controls Polish Notes
-
-The v2 village world now uses mobile RPG-style controls: horizontal swipe tab routing is disabled, the top HUD is compact, the old bottom menu is replaced by a right-side four-button menu, a left-bottom analog joystick is added, build mode opens as a popup from a small Build button, player/NPC movement is slower, buildings render smaller, +/− zoom buttons refocus on the player, and supplied SD character/icon/generated asset packs are staged under `public/assets/v22/`.
+- `2.0.2` Mobile RPG Controls Cleanup
+  - 문서 정책 정리
+  - 버전 체계 정리
+  - 조이스틱/간소 메뉴/건설 팝업/캐릭터 에셋 반영 유지
+- `2.0.1` Lumina Bay Village Polish
+  - 루미나 베이 마을 조작감, 장식, 카메라, 목표 카드 다듬기
+- `2.0.0` Village World Overhaul
+  - 메뉴형 메인 구조에서 마을 월드 기반으로 전환

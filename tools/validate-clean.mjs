@@ -14,17 +14,22 @@ function walk(dir, acc = []) {
   return acc;
 }
 const files = walk(root);
-const banned = files.filter((f) => /^(CLEAN_REPLACE_GUIDE|FINAL_CONSOLIDATED|PATCH_NOTES|PROMPTS_DALLE_ASSETS|DELETE_OLD_FILES).*\.md$/.test(path.basename(f)) || f.startsWith('reports/'));
+const markdown = files.filter((f) => f.endsWith('.md'));
+const banned = files.filter((f) => /^(CLEAN_REPLACE_GUIDE|FINAL_CONSOLIDATED|PATCH_NOTES|PROMPTS_DALLE_ASSETS|DELETE_OLD_FILES).*\.md$/.test(path.basename(f)) || /_NOTES\.md$/i.test(path.basename(f)) || f.startsWith('reports/'));
 if (banned.length) fail(`old patch documents must not be included: ${banned.join(', ')}`);
-if (!files.includes('README.md')) fail('README.md missing');
+if (markdown.length !== 1 || markdown[0] !== 'README.md') fail(`markdown must be README.md only: ${markdown.join(', ')}`);
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 const data = fs.readFileSync(path.join(root, 'src/data.ts'), 'utf8');
 const sw = fs.readFileSync(path.join(root, 'public/sw.js'), 'utf8');
+const offline = fs.readFileSync(path.join(root, 'public/offline.html'), 'utf8');
+const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
 const version = pkg.version;
-if (!/^1\.0\.\d+$|^1\.1\.\d+$/.test(version)) fail(`unsupported semantic version ${version}`);
+if (!/^2\.0\.\d+$/.test(version)) fail(`unsupported version ${version}; use 2.0.x sequence`);
 if (!data.includes(`APP_VERSION = '${version}'`)) fail(`APP_VERSION is not ${version}`);
 const expectedCachePrefix = `aqua-fantasia-v${version}-`;
 if (!data.includes(expectedCachePrefix)) fail('CACHE_NAME mismatch in data.ts');
 if (!sw.includes(expectedCachePrefix)) fail('CACHE_NAME mismatch in sw.js');
-console.log(`[validate-clean] Aqua Fantasia v${version} clean single README package OK`);
+if (!offline.includes(`v${version}`)) fail('offline page version badge mismatch');
+if (!readme.includes(`AquaFantasia v${version}`)) fail('README title version mismatch');
+console.log(`[validate-clean] AquaFantasia v${version} clean README-only package OK`);
 console.log(JSON.stringify({ ok:true, version, files: files.length }, null, 2));
