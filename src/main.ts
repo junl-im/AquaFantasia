@@ -144,6 +144,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.techPerfCompat = 'v1111-tech-perf-compat';
     document.documentElement.dataset.contentFlowEngine = 'v1112-content-flow-engine-qa';
     document.documentElement.dataset.detailStabilityQa = 'v11113-detail-stability-qa';
+    document.documentElement.dataset.buttonStyleQa = 'v11114-button-style-hotfix';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -346,7 +347,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -386,7 +387,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing v1112-content-flow-fishing v11113-detail-stability-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing v1112-content-flow-fishing v11113-detail-stability-fishing v11114-button-style-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -1204,7 +1205,7 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card gear-summary">
         <img src="./assets/v91/icons/gear.png" alt="" />
         <div><span class="runtime-eyebrow">EQUIPMENT</span><h2>장비 관리</h2><p>총합 Lv.${this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel} · 미끼 ${this.save.gear.lureStock}개</p></div>
-        <button class="runtime-btn cyan compact-cta" type="button" data-go-fishing>낚시터</button>
+        <button class="runtime-btn cyan compact-cta btn-aqua-action" type="button" data-go-fishing>낚시터</button>
       </section>
       <section class="gear-grid runtime-card-list">
         ${this.gearCard('rod', '낚싯대', './assets/v92/equipment/rod.png', this.save.gear.rodLevel, 120, '입질 반응 안정')}
@@ -1221,7 +1222,7 @@ class AquaFantasiaGame {
   private gearCard(kind: 'rod' | 'reel' | 'line' | 'lure', name: string, icon: string, level: number, baseCost: number, desc: string): string {
     const cost = kind === 'lure' ? baseCost : baseCost + level * 90;
     const pct = Math.min(100, kind === 'lure' ? Math.max(18, level * 8) : level * 13 + 12);
-    return `<article class="gear-card glass-card v950-gear-card"><div class="v950-item-orb"><img src="${icon}" alt="" /></div><div class="v950-card-main"><strong>${name}</strong><span>Lv.${level} · ${desc}</span><i class="v950-stat-bar" style="--p:${pct}%"><b></b></i></div><button class="image-btn soft v950-price-btn compact-cost-btn" data-upgrade="${kind}">${cost}G</button></article>`;
+    return `<article class="gear-card glass-card v950-gear-card"><div class="v950-item-orb"><img src="${icon}" alt="" /></div><div class="v950-card-main"><strong>${name}</strong><span>Lv.${level} · ${desc}</span><i class="v950-stat-bar" style="--p:${pct}%"><b></b></i></div><button class="image-btn gold v950-price-btn compact-cost-btn btn-gold-cost" data-upgrade="${kind}">${cost}G</button></article>`;
   }
 
   private buyUpgrade(kind: 'rod' | 'reel' | 'line' | 'lure'): void {
@@ -1248,12 +1249,12 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card inventory-summary">
         <img src="./assets/v91/icons/bag.png" alt="" />
         <div><span class="runtime-eyebrow">INVENTORY</span><h2>가방</h2><p>미끼 ${this.save.gear.lureStock}개 · 구조 키트 ${this.save.lastRescueAt ? '준비됨' : '없음'}</p></div>
-        <button class="runtime-btn cyan compact-cta" type="button" data-go-shop>상점</button>
+        <button class="runtime-btn cyan compact-cta btn-aqua-action" type="button" data-go-shop>상점</button>
       </section>
       <section class="runtime-item-grid">
-        <article class="runtime-item-card v950-inventory-card"><em class="v950-count">x${this.save.gear.lureStock}</em><img src="./assets/v92/equipment/bait.png" alt="" /><strong>새우 미끼</strong><span>입질 대기시간을 줄여줘요</span><button class="runtime-btn cyan compact-cta" data-go-fishing>사용</button></article>
-        <article class="runtime-item-card v950-inventory-card"><em class="v950-count">∞</em><img src="./assets/v92/equipment/ticket.png" alt="" /><strong>출항 티켓</strong><span>언제든 바로 출항 가능</span><button class="runtime-btn blue compact-cta" data-go-fishing>낚시</button></article>
-        <article class="runtime-item-card v950-inventory-card"><em class="v950-count">NEW</em><img src="./assets/v92/equipment/chest.png" alt="" /><strong>보상 상자</strong><span>미션 보상으로 열 수 있어요</span><button class="runtime-btn blue compact-cta" data-go-mission>미션</button></article>
+        <article class="runtime-item-card v950-inventory-card"><em class="v950-count">x${this.save.gear.lureStock}</em><img src="./assets/v92/equipment/bait.png" alt="" /><strong>새우 미끼</strong><span>입질 대기시간을 줄여줘요</span><button class="runtime-btn cyan compact-cta btn-aqua-action" data-go-fishing>사용</button></article>
+        <article class="runtime-item-card v950-inventory-card"><em class="v950-count">∞</em><img src="./assets/v92/equipment/ticket.png" alt="" /><strong>출항 티켓</strong><span>언제든 바로 출항 가능</span><button class="runtime-btn cyan compact-cta btn-aqua-action" data-go-fishing>낚시</button></article>
+        <article class="runtime-item-card v950-inventory-card"><em class="v950-count">NEW</em><img src="./assets/v92/equipment/chest.png" alt="" /><strong>보상 상자</strong><span>미션 보상으로 열 수 있어요</span><button class="runtime-btn cyan compact-cta btn-aqua-action" data-go-mission>미션</button></article>
       </section>`;
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-shop]')?.addEventListener('click', () => { void this.go('shop'); });
@@ -1275,7 +1276,7 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card dex-summary">
         <img src="./assets/v91/icons/dex.png" alt="" />
         <div><span class="runtime-eyebrow">FISH DEX</span><h2>도감</h2><p>발견 ${discovered}/${fishDex.length - 1}종 · 누적 ${this.totalCaught()}마리</p></div>
-        <button class="runtime-btn cyan compact-cta" type="button" data-go-fishing>채우기</button>
+        <button class="runtime-btn cyan compact-cta btn-aqua-action" type="button" data-go-fishing>채우기</button>
       </section>
       <div class="v950-filter-row" aria-label="도감 필터 미리보기"><span>COMMON</span><span>RARE</span><span>EPIC</span><span>BOSS</span></div><section class="dex-grid runtime-dex-grid">${cards}</section>`;
     dom.app.appendChild(root);
@@ -1296,9 +1297,9 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card shop-summary">
         <img src="./assets/v91/icons/shop.png" alt="" />
         <div><span class="runtime-eyebrow">SHOP</span><h2>상점</h2><p>보유 골드 ${this.save.coins.toLocaleString('ko-KR')}G · 미끼 ${this.save.gear.lureStock}개</p></div>
-        <button class="runtime-btn gold compact-cta" type="button" data-free>무료</button>
+        <button class="runtime-btn gold compact-cta btn-gold-cost" type="button" data-free>무료</button>
       </section>
-      <section class="shop-list runtime-card-list v108-shop-grid">${goods.map((item, index) => `<button class="shop-card runtime-shop-card v950-shop-card v108-shop-card" type="button" data-buy="${index}"><em>${index === 0 ? '추천' : index === 3 ? '안전' : '강화'}</em><img src="${item.icon}" alt="" /><div><strong>${item.name}</strong><small>${item.desc}</small></div><span class="shop-price compact-cost-badge">${item.cost}G</span></button>`).join('')}</section>`;
+      <section class="shop-list runtime-card-list v108-shop-grid">${goods.map((item, index) => `<button class="shop-card runtime-shop-card v950-shop-card v108-shop-card" type="button" data-buy="${index}"><em>${index === 0 ? '추천' : index === 3 ? '안전' : '강화'}</em><img src="${item.icon}" alt="" /><div><strong>${item.name}</strong><small>${item.desc}</small></div><span class="shop-price compact-cost-badge btn-gold-cost">${item.cost}G</span></button>`).join('')}</section>`;
     const buy = (index: number) => {
       const item = goods[index];
       if (!item) return;
@@ -1377,12 +1378,12 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card mission-summary">
         <img src="./assets/v91/icons/mission.png" alt="" />
         <div><span class="runtime-eyebrow">MISSION</span><h2>미션</h2><p>완료 ${doneCount}/${goals.length} · 수령 가능 ${readyCount}개</p></div>
-        <button class="runtime-btn cyan compact-cta" type="button" data-go-fishing>진행</button>
+        <button class="runtime-btn cyan compact-cta btn-aqua-action" type="button" data-go-fishing>진행</button>
       </section>
       <section class="mission-list runtime-card-list v108-mission-list">${goals.map((goal) => {
         const pct = Math.min(100, Math.round((goal.value / goal.max) * 100));
         const buttonLabel = this.save.missions[goal.id] ? '완료' : goal.value >= goal.max ? '수령' : `${goal.value}/${goal.max}`;
-        return `<article class="mission-card runtime-mission-card v950-mission-card v108-mission-card ${goal.event ? 'event' : ''} ${this.save.missions[goal.id] ? 'done' : goal.value >= goal.max ? 'ready' : ''}"><div><small>${goal.category}</small><strong>${goal.title}</strong><span>${goal.desc}</span></div><div class="v108-mission-progress" style="--p:${pct}%"><i></i><b>${pct}%</b></div><button class="runtime-btn compact-cta ${goal.value >= goal.max && !this.save.missions[goal.id] ? 'cyan' : 'blue'}" data-mission="${goal.id}">${buttonLabel}</button></article>`;
+        return `<article class="mission-card runtime-mission-card v950-mission-card v108-mission-card ${goal.event ? 'event' : ''} ${this.save.missions[goal.id] ? 'done' : goal.value >= goal.max ? 'ready' : ''}"><div><small>${goal.category}</small><strong>${goal.title}</strong><span>${goal.desc}</span></div><div class="v108-mission-progress" style="--p:${pct}%"><i></i><b>${pct}%</b></div><button class="runtime-btn cyan compact-cta btn-aqua-action" data-mission="${goal.id}">${buttonLabel}</button></article>`;
       }).join('')}</section>`;
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { void this.go('fishing'); });
@@ -1410,7 +1411,7 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card ranking-summary v108-ranking-summary">
         <img src="./assets/v91/icons/ranking.png" alt="" />
         <div><span class="runtime-eyebrow">TRAINING LEAGUE</span><h2>랭킹</h2><p>${linkedLabel} · 연습봇 포함 테스트 리그</p></div>
-        <button class="runtime-btn cyan compact-cta" type="button" data-go-fishing>도전</button>
+        <button class="runtime-btn cyan compact-cta btn-aqua-action" type="button" data-go-fishing>도전</button>
       </section>
       <section class="runtime-panel ranking-panel v108-ranking-panel">
         <div class="v108-ranking-list">${rows.map((row) => `<div class="v108-rank-row ${row.me ? 'me' : ''}"><b>#${row.rank}</b><strong>${row.name}</strong><span>${row.tag}</span><em>${row.score.toLocaleString('ko-KR')}점</em><i>${row.combo}콤보 · ${row.catch}마리</i></div>`).join('')}</div>

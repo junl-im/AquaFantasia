@@ -13768,3 +13768,120 @@ html.v11113-short-height[data-detail-stability-qa="v11113-detail-stability-qa"] 
     max-width: min(500px, calc(var(--v11113-app-width, 500px) - 18px)) !important;
   }
 }
+
+/* v1.1.14 BUTTON STYLE HOTFIX
+   The previous polish kept the old compact classes, but some later CSS layers still
+   overrode requested button colors/lengths. This final layer gives requested
+   buttons explicit aqua/gold roles without changing the 2.5D PNG button assets. */
+html[data-button-style-qa="v11114-button-style-hotfix"] {
+  --v11114-aqua-button: url('/assets/v3d_underwater/ui/buttons/button_mid_aqua_normal.png');
+  --v11114-aqua-button-pressed: url('/assets/v3d_underwater/ui/buttons/button_mid_aqua_pressed.png');
+  --v11114-gold-button: url('/assets/v3d_underwater/ui/buttons/button_mid_gold_normal.png');
+  --v11114-gold-button-pressed: url('/assets/v3d_underwater/ui/buttons/button_mid_gold_pressed.png');
+}
+html[data-button-style-qa="v11114-button-style-hotfix"] .runtime-menu-screen.v11114-button-style-screen :is(.btn-aqua-action,.runtime-btn.btn-aqua-action,.image-btn.btn-aqua-action) {
+  display: inline-grid !important;
+  place-items: center !important;
+  width: fit-content !important;
+  min-width: clamp(60px, 16vw, 78px) !important;
+  max-width: min(104px, 30vw) !important;
+  min-height: clamp(32px, 5.2svh, 42px) !important;
+  padding: 6px clamp(10px, 2.9vw, 15px) !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background-image: var(--v11114-aqua-button), linear-gradient(145deg, #b8ffff, #36d8ff 55%, #086fb0) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  color: #06375d !important;
+  font-weight: 1000 !important;
+  font-size: clamp(10.5px, 2.75vw, 12.5px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.035em !important;
+  text-align: center !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.62), 0 4px 8px rgba(0,43,86,.18) !important;
+  box-shadow: none !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  justify-self: end !important;
+  align-self: center !important;
+}
+html[data-button-style-qa="v11114-button-style-hotfix"] .runtime-menu-screen.v11114-button-style-screen :is(.btn-aqua-action,.runtime-btn.btn-aqua-action,.image-btn.btn-aqua-action):active {
+  background-image: var(--v11114-aqua-button-pressed), linear-gradient(145deg, #8ef9ff, #17bfe9 55%, #045a94) !important;
+  transform: translateY(2px) scale(.985) !important;
+}
+html[data-button-style-qa="v11114-button-style-hotfix"] .runtime-menu-screen.v11114-button-style-screen :is(.btn-gold-cost,.runtime-btn.btn-gold-cost,.image-btn.btn-gold-cost,.shop-price.btn-gold-cost) {
+  display: inline-grid !important;
+  place-items: center !important;
+  width: fit-content !important;
+  min-width: clamp(54px, 15vw, 72px) !important;
+  max-width: min(96px, 27vw) !important;
+  min-height: clamp(30px, 5svh, 40px) !important;
+  padding: 6px clamp(9px, 2.5vw, 13px) !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background-image: var(--v11114-gold-button), linear-gradient(145deg, #fff5a6, #f7bc31 56%, #b56a08) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  color: #5b2d00 !important;
+  font-weight: 1000 !important;
+  font-size: clamp(10px, 2.65vw, 12px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.03em !important;
+  text-align: center !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.72), 0 4px 8px rgba(126,63,0,.18) !important;
+  box-shadow: none !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  justify-self: end !important;
+  align-self: center !important;
+}
+html[data-button-style-qa="v11114-button-style-hotfix"] .runtime-menu-screen.v11114-button-style-screen :is(.btn-gold-cost,.runtime-btn.btn-gold-cost,.image-btn.btn-gold-cost,.shop-price.btn-gold-cost):active {
+  background-image: var(--v11114-gold-button-pressed), linear-gradient(145deg, #ffe985, #e59c18 56%, #945000) !important;
+  transform: translateY(2px) scale(.985) !important;
+}
+html[data-button-style-qa="v11114-button-style-hotfix"] .runtime-menu-screen.v11114-button-style-screen .runtime-hero-card :is(.btn-aqua-action,.btn-gold-cost) {
+  grid-column: auto !important;
+  justify-self: end !important;
+  margin-inline-start: auto !important;
+}
+html[data-button-style-qa="v11114-button-style-hotfix"] .runtime-menu-screen.v11114-button-style-screen .runtime-item-card .btn-aqua-action {
+  width: fit-content !important;
+  min-width: clamp(58px, 15vw, 74px) !important;
+  max-width: min(92px, 26vw) !important;
+  margin: 6px auto 0 !important;
+  justify-self: center !important;
+}
+html[data-button-style-qa="v11114-button-style-hotfix"] .runtime-menu-screen.v11114-button-style-screen .gear-card .btn-gold-cost {
+  min-width: clamp(58px, 15vw, 74px) !important;
+  max-width: min(88px, 25vw) !important;
+}
+html[data-button-style-qa="v11114-button-style-hotfix"] .runtime-menu-screen.v11114-button-style-screen .shop-card.runtime-shop-card {
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  align-items: center !important;
+}
+html[data-button-style-qa="v11114-button-style-hotfix"] .runtime-menu-screen.v11114-button-style-screen .shop-card.runtime-shop-card .shop-price.btn-gold-cost {
+  min-width: clamp(52px, 14vw, 68px) !important;
+  max-width: min(82px, 24vw) !important;
+}
+html[data-button-style-qa="v11114-button-style-hotfix"] .runtime-menu-screen.v11114-button-style-screen .mission-card.runtime-mission-card .btn-aqua-action {
+  grid-area: button !important;
+  width: fit-content !important;
+  min-width: clamp(56px, 14vw, 72px) !important;
+  max-width: min(88px, 24vw) !important;
+  justify-self: end !important;
+}
+html[data-button-style-qa="v11114-button-style-hotfix"] .runtime-menu-screen.v11114-button-style-screen .mission-card.runtime-mission-card.done .btn-aqua-action {
+  opacity: .72 !important;
+  filter: saturate(.86) brightness(.96) !important;
+}
+html.v11113-ultra-narrow[data-button-style-qa="v11114-button-style-hotfix"] .runtime-menu-screen.v11114-button-style-screen :is(.btn-aqua-action,.btn-gold-cost) {
+  min-width: 50px !important;
+  max-width: 76px !important;
+  min-height: 30px !important;
+  padding-inline: 8px !important;
+  font-size: 9.8px !important;
+}
