@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.5-fishing-minigame-assets';
+const CACHE_NAME = 'aqua-fantasia-v2.0.6-interior-menu-detail-assets';
 const PRECACHE = [
   "./",
   "./index.html",

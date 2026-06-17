@@ -208,27 +208,39 @@ const PORTRAIT_ASSETS: Record<Actor['role'], string> = {
   vip: './assets/v203/portraits/vip_portrait.png',
 };
 
-const INTERIOR_ASSETS: Partial<Record<VillageBuildingType, { title: string; image: string; body: string; fishing?: boolean }>> = {
+const INTERIOR_ASSETS: Partial<Record<VillageBuildingType, { title: string; image: string; body: string; portrait: string; status: string[]; fishing?: boolean; mission?: boolean; map?: boolean; inventory?: boolean }>> = {
   inn: {
     title: '여관 내부',
     image: './assets/v22/generated/05_Building_Interior_Inn.png',
-    body: '따뜻한 조명과 조개 장식이 있는 루미나 베이 여관입니다. 다음 단계에서 숙박, 회복, 여관 주인 퀘스트가 연결됩니다.',
+    body: '따뜻한 조명과 조개 장식이 있는 루미나 베이 여관입니다. 여관 의뢰와 관광객 체류 보너스가 연결됩니다.',
+    portrait: './assets/v203/portraits/innkeeper_happy.png',
+    status: ['체류 보너스 +15%', '관광 만족도 상승', '여관 의뢰 준비'],
+    mission: true,
   },
   market: {
     title: '어시장 내부',
     image: './assets/v22/generated/06_Building_Interior_Fish_Market.png',
     body: '오늘 잡은 물고기를 정산하고 마을 기금을 늘리는 자동 판매 거점입니다.',
+    portrait: './assets/v203/portraits/merchant_happy.png',
+    status: ['자동 판매 정산', '마을 기금 적립', '물고기 납품 의뢰'],
+    inventory: true,
   },
   guild: {
     title: '낚시 길드 내부',
     image: './assets/v22/generated/07_Building_Interior_Fishing_Guild.png',
     body: '낚시 의뢰, 희귀 어종 정보, 새 수역 개척 퀘스트가 붙을 길드 홀입니다.',
+    portrait: './assets/v203/portraits/guild_happy.png',
+    status: ['추천 의뢰 갱신', '희귀 어종 정보', '수역 개척 조건'],
+    mission: true,
   },
   harbor: {
     title: '항구 사무소 내부',
     image: './assets/v22/generated/08_Building_Interior_Harbor_Office.png',
     body: '선장과 항로를 확인하는 출항 준비실입니다. 출항하기를 누르면 낚시 화면으로 이동합니다.',
+    portrait: './assets/v203/portraits/captain_happy.png',
+    status: ['월드맵 항로 확인', '출항 가능', '잠긴 수역 조건 안내'],
     fishing: true,
+    map: true,
   },
 };
 
@@ -1068,12 +1080,25 @@ export class VillageWorld {
     const title = this.root.querySelector<HTMLElement>('[data-v203-interior-title]');
     const body = this.root.querySelector<HTMLElement>('[data-v203-interior-body]');
     const action = this.root.querySelector<HTMLElement>('[data-v203-interior-go-fishing]');
+    const portrait = this.root.querySelector<HTMLImageElement>('[data-v206-interior-portrait]');
+    const status = this.root.querySelector<HTMLElement>('[data-v206-interior-status]');
+    const mapAction = this.root.querySelector<HTMLElement>('[data-v206-interior-go-map]');
+    const missionAction = this.root.querySelector<HTMLElement>('[data-v206-interior-go-mission]');
+    const inventoryAction = this.root.querySelector<HTMLElement>('[data-v206-interior-go-inventory]');
     if (!panel || !image || !title || !body || !action) return;
     image.src = interior.image;
     image.alt = interior.title;
     title.textContent = interior.title;
     body.textContent = overrideBody ?? interior.body;
+    if (portrait) {
+      portrait.src = interior.portrait;
+      portrait.alt = interior.title;
+    }
+    if (status) status.innerHTML = interior.status.map((item) => `<span>${item}</span>`).join('');
     action.toggleAttribute('hidden', !interior.fishing);
+    mapAction?.toggleAttribute('hidden', !interior.map);
+    missionAction?.toggleAttribute('hidden', !interior.mission);
+    inventoryAction?.toggleAttribute('hidden', !interior.inventory);
     panel.classList.add('open');
     panel.setAttribute('aria-hidden', 'false');
     this.showGuide(interior.title, overrideBody ?? interior.body);
