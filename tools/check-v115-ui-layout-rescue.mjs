@@ -9,9 +9,9 @@ const files = {
 };
 
 const must = [
-  [files.data, "APP_VERSION = '1.1.5'", 'APP_VERSION must be 1.1.5'],
-  [files.data, 'aqua-fantasia-v1.1.5-ui-layout-rescue', 'CACHE_NAME must be v1.1.5 layout rescue'],
-  [files.sw, 'aqua-fantasia-v1.1.5-ui-layout-rescue', 'Service worker cache must be v1.1.5'],
+  [files.data, 'APP_VERSION =', 'APP_VERSION must be declared'],
+  [files.data, 'aqua-fantasia-v1.1.', 'CACHE_NAME must keep v1.1 lineage'],
+  [files.sw, 'aqua-fantasia-v1.1.', 'Service worker cache must keep v1.1 lineage'],
   [files.main, "dataset.layoutRescue = 'v1115-ui-layout-rescue'", 'Layout rescue dataset flag is missing'],
   [files.main, 'v1115-layout-rescue-screen', 'Runtime screen class is missing'],
   [files.main, 'v1115-layout-rescue-fishing', 'Fishing screen class is missing'],

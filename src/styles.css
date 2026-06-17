@@ -11738,3 +11738,609 @@ html[data-layout-rescue="v1115-ui-layout-rescue"] .fishing-screen .catch-result-
     min-height: 42px !important;
   }
 }
+
+/* v1.1.6 UI BOUNDS POLISH
+   Final viewport guard over v1.1.5 rescue: no menu/root swipe transform may move the screen,
+   bottom navigation is inset-fixed again, and every runtime menu gets one predictable scroll box.
+   PNG/WebP 2.5D assets and Pixi/WebGL fishing runtime remain intact. */
+:root {
+  --v116-nav-height: clamp(64px, 8.9svh, 74px);
+  --v116-nav-gap: 5px;
+  --v116-edge-x: clamp(7px, 2.4vw, 12px);
+  --v116-top-y: max(10px, calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 7px));
+  --v116-content-bottom: calc(var(--v116-nav-height) + var(--v116-nav-gap) + env(safe-area-inset-bottom) + 18px);
+  --v115-nav-height: var(--v116-nav-height);
+  --v115-nav-gap: var(--v116-nav-gap);
+  --v115-screen-x: var(--v116-edge-x);
+  --v115-screen-top: var(--v116-top-y);
+  --v115-content-bottom: var(--v116-content-bottom);
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"],
+html[data-ui-bounds="v1116-ui-bounds-polish"] body,
+html[data-ui-bounds="v1116-ui-bounds-polish"] #app {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-width: 0 !important;
+  height: var(--portrait-height, 100dvh) !important;
+  max-height: var(--portrait-height, 100dvh) !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] #app {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  translate: none !important;
+  contain: size layout paint style !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] :is(.game-screen,.runtime-menu-screen,.fishing-screen,.login-screen) {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-width: 0 !important;
+  height: var(--portrait-height, 100dvh) !important;
+  max-height: var(--portrait-height, 100dvh) !important;
+  margin: 0 !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  translate: none !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen.v1116-ui-bounds-screen,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen.scroll-screen {
+  padding: var(--v116-top-y) var(--v116-edge-x) var(--v116-content-bottom) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: contain !important;
+  overscroll-behavior-x: none !important;
+  touch-action: pan-y !important;
+  scroll-padding-top: var(--v116-top-y) !important;
+  scroll-padding-bottom: var(--v116-content-bottom) !important;
+  contain: layout paint style !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen.swipe-route-peek,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen.swipe-route-out,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen.swipe-route-peek .runtime-content,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen.swipe-route-peek .runtime-hud,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen.swipe-route-out .runtime-content,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen.swipe-route-out .runtime-hud {
+  transform: none !important;
+  translate: none !important;
+  opacity: 1 !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen .runtime-3d-bg,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .fishing-3d-ambient {
+  left: 0 !important;
+  right: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  overflow: hidden !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen .runtime-hud,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen .runtime-content {
+  width: min(100%, 500px) !important;
+  max-width: calc(100vw - (var(--v116-edge-x) * 2)) !important;
+  min-width: 0 !important;
+  margin-inline: auto !important;
+  transform: none !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen .runtime-content {
+  padding: clamp(7px, 2.2vw, 11px) 0 10px !important;
+  gap: clamp(8px, 2.3vw, 12px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] :is(.runtime-hud,.runtime-title,.runtime-title > *, .runtime-wallet,.runtime-content,.runtime-hero-card,.runtime-panel,.runtime-menu-card,.runtime-item-card,.runtime-dex-card,.gear-card,.shop-card,.mission-card,.ranking-panel,.ranking-summary,.ranking-live-card,.ranking-stats-grid > div,.rank-user,.rank-score) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-hud {
+  grid-template-columns: clamp(28px, 7.7vw, 36px) minmax(0, 1fr) minmax(58px, 82px) !important;
+  align-items: center !important;
+  gap: clamp(4px, 1.5vw, 7px) !important;
+  min-height: clamp(60px, 9.2svh, 78px) !important;
+  padding: clamp(6px, 1.9vw, 9px) !important;
+  border-radius: 19px !important;
+  clip-path: inset(0 round 19px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-hud-mascot {
+  width: clamp(28px, 7.7vw, 36px) !important;
+  height: clamp(28px, 7.7vw, 36px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-title strong {
+  display: block !important;
+  max-width: 100% !important;
+  font-size: clamp(16px, 4.85vw, 24px) !important;
+  line-height: 1.03 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-title em {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  white-space: normal !important;
+  font-size: clamp(8.8px, 2.45vw, 11.2px) !important;
+  line-height: 1.2 !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-wallet {
+  width: 100% !important;
+  max-width: 82px !important;
+  gap: 2px !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-wallet span {
+  min-width: 0 !important;
+  min-height: 22px !important;
+  padding: 2px 5px !important;
+  font-size: clamp(8.5px, 2.45vw, 10.8px) !important;
+  justify-content: flex-end !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-wallet img {
+  width: clamp(13px, 3.7vw, 18px) !important;
+  height: clamp(13px, 3.7vw, 18px) !important;
+  flex: 0 0 auto !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-hero-card {
+  grid-template-columns: clamp(38px, 10.8vw, 58px) minmax(0,1fr) minmax(56px, 76px) !important;
+  gap: clamp(5px, 1.9vw, 8px) !important;
+  min-height: clamp(78px, 13.2svh, 110px) !important;
+  padding: clamp(7px, 2.2vw, 11px) !important;
+  border-radius: 21px !important;
+  clip-path: inset(0 round 21px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-hero-card > img {
+  width: clamp(38px, 10.8vw, 58px) !important;
+  height: clamp(38px, 10.8vw, 58px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-hero-card h2,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-panel-title strong {
+  font-size: clamp(17px, 5vw, 25px) !important;
+  line-height: 1.03 !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-hero-card p,
+html[data-ui-bounds="v1116-ui-bounds-polish"] :is(.runtime-menu-card span,.runtime-item-card span,.runtime-item-card small,.gear-card span,.shop-card small,.mission-card p,.mission-state,.ranking-note) {
+  font-size: clamp(9.3px, 2.65vw, 11.8px) !important;
+  line-height: 1.22 !important;
+  overflow-wrap: anywhere !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] :is(.runtime-btn,.image-btn,.compact-cta,.compact-cost-btn,.shop-price,.price-badge,.mission-card .runtime-btn) {
+  min-width: 0 !important;
+  min-height: clamp(32px, 8.2vw, 40px) !important;
+  padding: 4px 7px !important;
+  font-size: clamp(9.5px, 2.65vw, 12px) !important;
+  line-height: 1.04 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] :is(.runtime-item-grid,.runtime-dex-grid,.runtime-region-grid,.runtime-quick-grid,.v108-shop-grid) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: clamp(7px, 2.1vw, 10px) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] :is(.runtime-card-list,.shop-list,.mission-list,.gear-grid) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  gap: clamp(7px, 2.1vw, 10px) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-region-grid .region-card {
+  min-height: clamp(92px, 22svh, 126px) !important;
+  padding: 7px !important;
+  border-radius: 18px !important;
+  clip-path: inset(0 round 18px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-region-grid .region-card strong {
+  margin-top: clamp(43px, 10.6svh, 60px) !important;
+  font-size: clamp(11px, 3.1vw, 14px) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-region-grid .region-card span {
+  font-size: clamp(8.2px, 2.35vw, 10px) !important;
+  line-height: 1.15 !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] :is(.runtime-item-card,.runtime-dex-card) {
+  min-height: clamp(112px, 23svh, 158px) !important;
+  padding: 7px !important;
+  border-radius: 19px !important;
+  clip-path: inset(0 round 19px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] :is(.runtime-item-card,.runtime-dex-card) img {
+  height: clamp(50px, 12.5svh, 78px) !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .gear-card,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-card-list .gear-card {
+  grid-template-columns: clamp(34px, 9.6vw, 46px) minmax(0, 1fr) minmax(48px, 68px) !important;
+  gap: 6px !important;
+  min-height: clamp(68px, 13svh, 88px) !important;
+  padding: 7px !important;
+  border-radius: 18px !important;
+  clip-path: inset(0 round 18px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .shop-card,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-shop-card.shop-card,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .v108-shop-card.shop-card {
+  grid-template-columns: clamp(32px, 9.2vw, 43px) minmax(0, 1fr) minmax(46px, 62px) !important;
+  gap: 6px !important;
+  min-height: clamp(76px, 14svh, 94px) !important;
+  padding: 7px !important;
+  border-radius: 18px !important;
+  clip-path: inset(0 round 18px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] :is(.shop-card > img,.gear-card > img) {
+  width: clamp(32px, 9.2vw, 46px) !important;
+  height: clamp(32px, 9.2vw, 46px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .v108-mission-card,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .mission-card {
+  grid-template-columns: minmax(0, 1fr) minmax(48px, 66px) !important;
+  gap: 6px !important;
+  min-height: clamp(78px, 15svh, 104px) !important;
+  padding: 7px !important;
+  border-radius: 18px !important;
+  clip-path: inset(0 round 18px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .ranking-panel {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 8px !important;
+  border-radius: 19px !important;
+  clip-path: inset(0 round 19px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .v108-rank-row {
+  grid-template-columns: 21px minmax(0, 1fr) minmax(30px, .50fr) minmax(38px, .58fr) minmax(44px, .64fr) !important;
+  min-width: 0 !important;
+  gap: 3px !important;
+  padding: 4px !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .v108-rank-row :is(strong,span,em,i,b) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  font-size: clamp(7.6px, 2vw, 9.2px) !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .bottom-nav.v840-bottom-nav,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .bottom-nav.fixed-root-nav,
+html[data-ui-bounds="v1116-ui-bounds-polish"] html.portrait-only-game .bottom-nav.v840-bottom-nav {
+  position: fixed !important;
+  left: max(4px, env(safe-area-inset-left)) !important;
+  right: max(4px, env(safe-area-inset-right)) !important;
+  top: auto !important;
+  bottom: calc(var(--v116-nav-gap) + env(safe-area-inset-bottom)) !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: var(--v116-nav-height) !important;
+  min-height: 0 !important;
+  max-height: 74px !important;
+  margin: 0 !important;
+  transform: none !important;
+  translate: none !important;
+  display: grid !important;
+  grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 2px !important;
+  padding: 4px 4px 5px !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  contain: layout paint style !important;
+  z-index: 420 !important;
+  pointer-events: auto !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .bottom-nav.v840-bottom-nav button {
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) auto !important;
+  place-items: center !important;
+  align-content: center !important;
+  gap: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 2px 0 2px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  transform: none !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .bottom-nav.v840-bottom-nav button.active,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .bottom-nav.v840-bottom-nav button:active {
+  transform: none !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .bottom-nav.v840-bottom-nav button img {
+  width: clamp(22px, 6.15vw, 31px) !important;
+  height: clamp(22px, 6.15vw, 31px) !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  margin: 0 !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .bottom-nav.v840-bottom-nav button span {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  font-size: clamp(6.8px, 1.88vw, 8.7px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.06em !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .bottom-nav.v840-bottom-nav button.active::before {
+  inset: 4px 3px 5px !important;
+  border-radius: 11px !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen.v1116-ui-bounds-fishing,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .game-screen.fishing-screen.locked-screen {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: var(--portrait-height, 100dvh) !important;
+  max-height: var(--portrait-height, 100dvh) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  touch-action: none !important;
+  contain: layout paint style !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .fishing-stage,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .pixi-layer,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .pixi-layer canvas,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .fallback-scene {
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .fishing-hud.v840-fishing-hud {
+  left: var(--v116-edge-x) !important;
+  right: var(--v116-edge-x) !important;
+  top: var(--v116-top-y) !important;
+  width: auto !important;
+  max-width: none !important;
+  min-height: 38px !important;
+  grid-template-columns: minmax(80px, 1fr) minmax(50px, .55fr) minmax(38px, .42fr) !important;
+  gap: 4px !important;
+  padding: 4px !important;
+  border-radius: 14px !important;
+  z-index: 420 !important;
+  overflow: hidden !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .fishing-hud .hud-chip {
+  min-width: 0 !important;
+  min-height: 30px !important;
+  padding: 3px 5px !important;
+  border-radius: 11px !important;
+  overflow: hidden !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .fishing-hud .hud-chip img {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 auto !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .fishing-hud .hud-chip :is(strong,span) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  font-size: clamp(8px, 2.4vw, 11.5px) !important;
+  line-height: 1.06 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .recent-catch-strip {
+  left: var(--v116-edge-x) !important;
+  right: var(--v116-edge-x) !important;
+  bottom: calc(var(--v116-nav-height) + var(--v116-nav-gap) + env(safe-area-inset-bottom) + 5px) !important;
+  width: auto !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  max-height: 58px !important;
+  padding: 5px 7px !important;
+  border-radius: 15px !important;
+  z-index: 410 !important;
+  overflow: hidden !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .recent-title { display: none !important; }
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .recent-cards {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 4px !important;
+  margin: 0 !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .recent-card {
+  grid-template-columns: clamp(24px, 7vw, 31px) minmax(0,1fr) auto !important;
+  gap: 3px !important;
+  min-height: 34px !important;
+  max-height: 42px !important;
+  padding: 2px 4px !important;
+  border-radius: 11px !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .recent-card img {
+  width: clamp(24px, 7vw, 31px) !important;
+  height: clamp(24px, 7vw, 31px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .recent-card span,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .recent-card em {
+  font-size: clamp(7.4px, 2vw, 9px) !important;
+  line-height: 1 !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .recent-empty {
+  height: 46px !important;
+  padding: 0 4px !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .recent-empty strong { font-size: 12px !important; }
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .recent-empty span {
+  font-size: 9.2px !important;
+  line-height: 1.15 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .v840-stage-ui .cast-button {
+  left: 50% !important;
+  right: auto !important;
+  bottom: calc(var(--v116-nav-height) + var(--v116-nav-gap) + env(safe-area-inset-bottom) + clamp(70px, 11.5svh, 92px)) !important;
+  width: min(178px, 50vw) !important;
+  min-width: 0 !important;
+  height: 44px !important;
+  min-height: 42px !important;
+  border-radius: 20px !important;
+  transform: translateX(-50%) !important;
+  z-index: 430 !important;
+  overflow: hidden !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .v840-stage-ui .cast-button:active {
+  transform: translateX(-50%) scale(.985) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .v840-stage-ui .cast-button strong {
+  font-size: clamp(13px, 3.7vw, 16px) !important;
+  white-space: nowrap !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .v840-stage-ui .cast-button .cast-icon {
+  width: 26px !important;
+  height: 26px !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] body[data-screen="fishing"] .fishing-screen .v840-reel-panel.reel-panel,
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .v840-reel-panel.reel-panel {
+  left: var(--v116-edge-x) !important;
+  right: var(--v116-edge-x) !important;
+  bottom: calc(var(--v116-nav-height) + var(--v116-nav-gap) + env(safe-area-inset-bottom) + clamp(54px, 8.4svh, 72px)) !important;
+  width: auto !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  padding: 8px 10px 9px !important;
+  border-radius: 17px !important;
+  z-index: 440 !important;
+  overflow: hidden !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .v840-reel-panel.reel-panel > img {
+  max-height: 46px !important;
+  width: min(250px, 72%) !important;
+  object-fit: contain !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .tension-track { height: 14px !important; }
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .safe-progress { height: 8px !important; }
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .hold-pad {
+  min-height: 36px !important;
+  font-size: clamp(12px, 3.4vw, 15px) !important;
+  border-radius: 16px !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .v840-reel-panel p {
+  font-size: clamp(9px, 2.4vw, 11px) !important;
+  line-height: 1.15 !important;
+  margin-top: 4px !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .combo-badge:not(.hidden) {
+  left: auto !important;
+  right: var(--v116-edge-x) !important;
+  top: calc(var(--v116-top-y) + 42px) !important;
+  bottom: auto !important;
+  max-width: min(132px, 38vw) !important;
+  z-index: 445 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .catch-result-card {
+  width: min(306px, calc(100vw - 24px)) !important;
+  max-width: calc(100vw - 24px) !important;
+  max-height: calc(var(--portrait-height, 100dvh) - var(--v116-nav-height) - env(safe-area-inset-bottom) - 36px) !important;
+  overflow: hidden auto !important;
+  top: 47% !important;
+  z-index: 460 !important;
+  padding: 18px 18px 16px !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .catch-result-card img {
+  width: clamp(124px, 38vw, 158px) !important;
+  height: clamp(96px, 29vw, 124px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .catch-result-card h3 {
+  font-size: clamp(22px, 6.4vw, 31px) !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .catch-result-card > div {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+}
+html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .catch-result-card button {
+  min-width: 0 !important;
+  min-height: 42px !important;
+  font-size: clamp(11px, 3vw, 13px) !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+@media (max-width: 360px) {
+  :root {
+    --v116-nav-height: clamp(58px, 8.6svh, 66px);
+    --v116-nav-gap: 4px;
+    --v116-edge-x: 6px;
+  }
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-hud { grid-template-columns: 26px minmax(0,1fr) minmax(52px,68px) !important; }
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-hud-mascot { width: 26px !important; height: 26px !important; }
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-hero-card { grid-template-columns: minmax(0,1fr) minmax(52px,68px) !important; }
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-hero-card > img { display: none !important; }
+  html[data-ui-bounds="v1116-ui-bounds-polish"] :is(.runtime-item-grid,.runtime-dex-grid,.runtime-region-grid,.runtime-quick-grid) { gap: 6px !important; }
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .bottom-nav.v840-bottom-nav {
+    left: 3px !important;
+    right: 3px !important;
+    padding: 3px 3px 4px !important;
+    gap: 1px !important;
+    border-radius: 15px !important;
+  }
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .bottom-nav.v840-bottom-nav button img {
+    width: clamp(19px, 5.8vw, 26px) !important;
+    height: clamp(19px, 5.8vw, 26px) !important;
+  }
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .bottom-nav.v840-bottom-nav button span { font-size: clamp(6.2px, 1.78vw, 7.7px) !important; }
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .recent-catch-strip { max-height: 54px !important; }
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .v840-stage-ui .cast-button { width: min(158px, 48vw) !important; height: 40px !important; min-height: 38px !important; }
+}
+@media (min-width: 540px) and (orientation: portrait) {
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .bottom-nav.v840-bottom-nav {
+    left: 50% !important;
+    right: auto !important;
+    width: min(500px, calc(100vw - 14px)) !important;
+    transform: translateX(-50%) !important;
+  }
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen .runtime-hud,
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .runtime-menu-screen .runtime-content {
+    max-width: 500px !important;
+  }
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .recent-catch-strip,
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .fishing-hud.v840-fishing-hud {
+    left: 50% !important;
+    right: auto !important;
+    width: min(500px, calc(100vw - 20px)) !important;
+    transform: translateX(-50%) !important;
+  }
+  html[data-ui-bounds="v1116-ui-bounds-polish"] .fishing-screen .v840-reel-panel.reel-panel {
+    left: 50% !important;
+    right: auto !important;
+    width: min(420px, calc(100vw - 28px)) !important;
+    transform: translateX(-50%) !important;
+  }
+}
