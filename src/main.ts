@@ -142,6 +142,8 @@ class AquaFantasiaGame {
     document.documentElement.dataset.layoutStability = 'v1119-interaction-qa-polish';
     document.documentElement.dataset.villageFlow = 'v1110-village-flow-swipe-polish';
     document.documentElement.dataset.techPerfCompat = 'v1111-tech-perf-compat';
+    document.documentElement.dataset.contentFlowEngine = 'v1112-content-flow-engine-qa';
+    document.documentElement.dataset.detailStabilityQa = 'v11113-detail-stability-qa';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -149,6 +151,9 @@ class AquaFantasiaGame {
     this.installLayoutQaSweep();
     this.installInteractionQaPolish();
     this.installTechPerfCompatPass();
+    this.installContentFlowEngineQaPass();
+    this.installDetailStabilityQaPass();
+    this.preloadCriticalImages();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
     this.installBackNavigationGuard();
@@ -186,6 +191,7 @@ class AquaFantasiaGame {
     this.safeFill = undefined;
     this.progressNode = undefined;
     document.body.dataset.screen = this.screen;
+    document.querySelectorAll('.touch-ring, .v930-fx, .bite-callout, .action-badge').forEach((node) => node.remove());
   }
 
   private async go(screen: Screen): Promise<void> {
@@ -294,6 +300,8 @@ class AquaFantasiaGame {
   }
 
   private renderVillage(): void {
+    this.updateUnlocks();
+    saveGame(this.save);
     this.clear();
     const region = this.getRegion();
     const root = this.createRuntimeMenuScreen('village', '마을', '메인 항구에서 오늘의 조류와 수역을 확인하세요.');
@@ -338,7 +346,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -378,7 +386,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing v1112-content-flow-fishing v11113-detail-stability-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -435,6 +443,8 @@ class AquaFantasiaGame {
     this.holdPad.addEventListener('pointerdown', startHold);
     this.holdPad.addEventListener('pointerup', stopHold);
     this.holdPad.addEventListener('pointercancel', stopHold);
+    this.holdPad.addEventListener('pointerleave', stopHold);
+    this.holdPad.addEventListener('lostpointercapture', stopHold);
     try {
       await this.initPixiStage();
     } catch (error) {
@@ -477,6 +487,8 @@ class AquaFantasiaGame {
     dom.app.appendChild(nav);
     root.classList.add('has-fixed-root-nav');
     this.applyViewportSafeGuards(root, nav);
+    this.scheduleContentFlowRepair(root);
+    this.scheduleDetailStabilityRepair(root);
     nav.querySelectorAll<HTMLButtonElement>('[data-screen]').forEach((btn) => btn.addEventListener('click', () => { this.reassertImmersiveMode(); void this.go(btn.dataset.screen as Screen); }));
     if (active !== 'fishing' && active !== 'login') this.installTabSwipe(root, active as Exclude<Screen, 'login' | 'fishing'>);
   }
@@ -492,9 +504,13 @@ class AquaFantasiaGame {
     let tracking = false;
     let horizontalIntent = false;
     let lastSwipeAt = 0;
+    let verticalIntent = false;
+    let activePointerId: number | null = null;
     const reset = () => {
       tracking = false;
       horizontalIntent = false;
+      verticalIntent = false;
+      activePointerId = null;
       root.classList.remove('swipe-route-peek', 'swipe-route-out');
       root.style.removeProperty('--swipe-peek-x');
     };
@@ -503,8 +519,9 @@ class AquaFantasiaGame {
       if (!el) return true;
       return !el.closest('.bottom-nav, input, textarea, select, [data-no-swipe], .hold-pad, .reel-panel, .fishing-stage');
     };
-    const begin = (x: number, y: number, target: EventTarget | null) => {
-      if (!canStart(target)) return;
+    const begin = (x: number, y: number, target: EventTarget | null, pointerId: number | null = null, primary = true) => {
+      if (!primary || !canStart(target)) return;
+      activePointerId = pointerId;
       tracking = true;
       horizontalIntent = false;
       startX = lastX = x;
@@ -521,7 +538,12 @@ class AquaFantasiaGame {
       const dy = y - startY;
       const absX = Math.abs(dx);
       const absY = Math.abs(dy);
-      if (!horizontalIntent && absX > 18 && absX > absY * 1.35) {
+      if (!horizontalIntent && !verticalIntent && absY > 18 && absY > absX * 1.18) {
+        verticalIntent = true;
+        reset();
+        return;
+      }
+      if (!horizontalIntent && !verticalIntent && absX > 18 && absX > absY * 1.35) {
         horizontalIntent = true;
         root.classList.add('swipe-route-peek');
       }
@@ -562,20 +584,22 @@ class AquaFantasiaGame {
     // caused duplicate swipe completions on some WebViews, which made the whole
     // route feel shifted or unstable.
     if ('PointerEvent' in window) {
-      root.addEventListener('pointerdown', (ev) => begin(ev.clientX, ev.clientY, ev.target), { passive: true, capture: true });
-      root.addEventListener('pointermove', (ev) => move(ev.clientX, ev.clientY), { passive: true, capture: true });
-      root.addEventListener('pointerup', (ev) => finish(ev.clientX, ev.clientY), { passive: true, capture: true });
+      root.addEventListener('pointerdown', (ev) => begin(ev.clientX, ev.clientY, ev.target, ev.pointerId, ev.isPrimary), { passive: true, capture: true });
+      root.addEventListener('pointermove', (ev) => { if (activePointerId === null || ev.pointerId === activePointerId) move(ev.clientX, ev.clientY); }, { passive: true, capture: true });
+      root.addEventListener('pointerup', (ev) => { if (activePointerId === null || ev.pointerId === activePointerId) finish(ev.clientX, ev.clientY); }, { passive: true, capture: true });
       root.addEventListener('pointercancel', reset, { passive: true, capture: true });
       return;
     }
 
     root.addEventListener('touchstart', (ev) => {
       const t = ev.changedTouches[0];
+      if (ev.touches.length > 1) { reset(); return; }
       if (t) begin(t.clientX, t.clientY, ev.target);
     }, { passive: true, capture: true });
     root.addEventListener('touchmove', (ev) => {
       const t = ev.changedTouches[0];
       if (!t) return;
+      if (ev.touches.length > 1) { reset(); return; }
       move(t.clientX, t.clientY);
       if (horizontalIntent) ev.preventDefault();
     }, { passive: false, capture: true });
@@ -635,6 +659,8 @@ class AquaFantasiaGame {
     });
     this.stageHost.addEventListener('pointerup', () => { if (this.state === 'reeling') this.holding = false; });
     this.stageHost.addEventListener('pointercancel', () => { if (this.state === 'reeling') this.holding = false; });
+    this.stageHost.addEventListener('pointerleave', () => { if (this.state === 'reeling') this.holding = false; });
+    this.stageHost.addEventListener('lostpointercapture', () => { if (this.state === 'reeling') this.holding = false; });
     app.ticker.add(() => this.tick());
     this.state = 'idle';
   }
@@ -683,17 +709,17 @@ class AquaFantasiaGame {
     const bgScale = Math.max(w / this.bgSprite.texture.width, h / this.bgSprite.texture.height);
     this.bgSprite.scale.set(bgScale);
     this.bgSprite.position.set((w - this.bgSprite.texture.width * bgScale) / 2, (h - this.bgSprite.texture.height * bgScale) / 2);
-    const playerTargetH = Math.min(h * 0.46, w * 0.92);
+    const playerTargetH = Math.min(h * 0.39, w * 0.76);
     this.player.scale.set(playerTargetH / Math.max(1, this.player.texture.height));
     const playerScaledW = this.player.texture.width * this.player.scale.x;
-    this.player.position.set(w - playerScaledW * 0.42, h * 0.72);
-    const bobberTarget = Math.max(34, Math.min(58, w * 0.105));
+    this.player.position.set(w - playerScaledW * 0.30, h * 0.73);
+    const bobberTarget = Math.max(30, Math.min(54, w * 0.096));
     this.bobber.scale.set(bobberTarget / Math.max(1, this.bobber.texture.width));
-    this.bobber.position.set(w * 0.70, h * 0.52);
+    this.bobber.position.set(w * 0.42, h * 0.56);
     const fishTargetW = Math.min(w * 0.50, 260);
     this.catchSprite.scale.set(fishTargetW / Math.max(1, this.catchSprite.texture.width));
-    this.catchSprite.position.set(w * 0.55, h * 0.48);
-    this.biteText.position.set(w * 0.70, h * 0.34);
+    this.catchSprite.position.set(w * 0.46, h * 0.50);
+    this.biteText.position.set(w * 0.42, h * 0.36);
   }
 
   private createCastButton(): void {
@@ -883,8 +909,8 @@ class AquaFantasiaGame {
     const h = this.pixi.screen.height;
     if (this.state === 'casting') {
       const t = Math.min(1, (now - this.castStart) / 760);
-      const sx = w * 0.42, sy = h * 0.49;
-      const ex = w * 0.68, ey = h * 0.58;
+      const sx = w * 0.78, sy = h * 0.48;
+      const ex = w * 0.40, ey = h * 0.59;
       const arc = Math.sin(t * Math.PI) * h * 0.28;
       this.bobber.position.set(sx + (ex - sx) * t, sy + (ey - sy) * t - arc);
       this.bobber.rotation += 0.24;
@@ -1222,7 +1248,7 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card inventory-summary">
         <img src="./assets/v91/icons/bag.png" alt="" />
         <div><span class="runtime-eyebrow">INVENTORY</span><h2>가방</h2><p>미끼 ${this.save.gear.lureStock}개 · 구조 키트 ${this.save.lastRescueAt ? '준비됨' : '없음'}</p></div>
-        <button class="runtime-btn gold compact-cta" type="button" data-go-shop>상점</button>
+        <button class="runtime-btn cyan compact-cta" type="button" data-go-shop>상점</button>
       </section>
       <section class="runtime-item-grid">
         <article class="runtime-item-card v950-inventory-card"><em class="v950-count">x${this.save.gear.lureStock}</em><img src="./assets/v92/equipment/bait.png" alt="" /><strong>새우 미끼</strong><span>입질 대기시간을 줄여줘요</span><button class="runtime-btn cyan compact-cta" data-go-fishing>사용</button></article>
@@ -1240,7 +1266,7 @@ class AquaFantasiaGame {
     const root = this.createRuntimeMenuScreen('dex', '도감', '실제 포획 기록 기준으로 물고기 카드를 표시합니다.');
     const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
     const discovered = fishDex.filter((fish) => fish.id !== 'unknown' && ((this.save.caught[fish.id] ?? 0) > 0 || fish.rarity === 'COMMON')).length;
-    const cards = fishDex.filter((fish) => fish.id !== 'unknown').slice(0, 18).map((fish) => {
+    const cards = fishDex.filter((fish) => fish.id !== 'unknown').map((fish) => {
       const count = this.save.caught[fish.id] ?? 0;
       const open = count > 0 || fish.rarity === 'COMMON';
       return `<article class="dex-card runtime-dex-card rarity-${fish.rarity.toLowerCase()} ${open ? '' : 'locked'}"><img src="${open ? fish.img : './assets/v85/fish/fish_unknown.png'}" alt="" /><strong>${open ? fish.name : '미발견'}</strong><span>${open ? `${fish.region} · ${count}마리` : '낚시터에서 발견하세요'}</span><em>${fish.rarity}</em></article>`;
@@ -1249,7 +1275,7 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card dex-summary">
         <img src="./assets/v91/icons/dex.png" alt="" />
         <div><span class="runtime-eyebrow">FISH DEX</span><h2>도감</h2><p>발견 ${discovered}/${fishDex.length - 1}종 · 누적 ${this.totalCaught()}마리</p></div>
-        <button class="runtime-btn gold compact-cta" type="button" data-go-fishing>채우기</button>
+        <button class="runtime-btn cyan compact-cta" type="button" data-go-fishing>채우기</button>
       </section>
       <div class="v950-filter-row" aria-label="도감 필터 미리보기"><span>COMMON</span><span>RARE</span><span>EPIC</span><span>BOSS</span></div><section class="dex-grid runtime-dex-grid">${cards}</section>`;
     dom.app.appendChild(root);
@@ -1270,7 +1296,7 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card shop-summary">
         <img src="./assets/v91/icons/shop.png" alt="" />
         <div><span class="runtime-eyebrow">SHOP</span><h2>상점</h2><p>보유 골드 ${this.save.coins.toLocaleString('ko-KR')}G · 미끼 ${this.save.gear.lureStock}개</p></div>
-        <button class="runtime-btn cyan compact-cta" type="button" data-free>무료</button>
+        <button class="runtime-btn gold compact-cta" type="button" data-free>무료</button>
       </section>
       <section class="shop-list runtime-card-list v108-shop-grid">${goods.map((item, index) => `<button class="shop-card runtime-shop-card v950-shop-card v108-shop-card" type="button" data-buy="${index}"><em>${index === 0 ? '추천' : index === 3 ? '안전' : '강화'}</em><img src="${item.icon}" alt="" /><div><strong>${item.name}</strong><small>${item.desc}</small></div><span class="shop-price compact-cost-badge">${item.cost}G</span></button>`).join('')}</section>`;
     const buy = (index: number) => {
@@ -1351,12 +1377,12 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card mission-summary">
         <img src="./assets/v91/icons/mission.png" alt="" />
         <div><span class="runtime-eyebrow">MISSION</span><h2>미션</h2><p>완료 ${doneCount}/${goals.length} · 수령 가능 ${readyCount}개</p></div>
-        <button class="runtime-btn gold compact-cta" type="button" data-go-fishing>진행</button>
+        <button class="runtime-btn cyan compact-cta" type="button" data-go-fishing>진행</button>
       </section>
-      <section class="mission-list runtime-card-list v108-mission-list">${goals.slice(0, 12).map((goal) => {
+      <section class="mission-list runtime-card-list v108-mission-list">${goals.map((goal) => {
         const pct = Math.min(100, Math.round((goal.value / goal.max) * 100));
         const buttonLabel = this.save.missions[goal.id] ? '완료' : goal.value >= goal.max ? '수령' : `${goal.value}/${goal.max}`;
-        return `<article class="mission-card runtime-mission-card v950-mission-card v108-mission-card ${goal.event ? 'event' : ''} ${this.save.missions[goal.id] ? 'done' : goal.value >= goal.max ? 'ready' : ''}"><div><small>${goal.category}</small><strong>${goal.title}</strong><span>${goal.desc}</span></div><div class="v108-mission-progress" style="--p:${pct}%"><i></i><b>${pct}%</b></div><button class="runtime-btn compact-cta ${goal.value >= goal.max && !this.save.missions[goal.id] ? 'gold' : 'blue'}" data-mission="${goal.id}">${buttonLabel}</button></article>`;
+        return `<article class="mission-card runtime-mission-card v950-mission-card v108-mission-card ${goal.event ? 'event' : ''} ${this.save.missions[goal.id] ? 'done' : goal.value >= goal.max ? 'ready' : ''}"><div><small>${goal.category}</small><strong>${goal.title}</strong><span>${goal.desc}</span></div><div class="v108-mission-progress" style="--p:${pct}%"><i></i><b>${pct}%</b></div><button class="runtime-btn compact-cta ${goal.value >= goal.max && !this.save.missions[goal.id] ? 'cyan' : 'blue'}" data-mission="${goal.id}">${buttonLabel}</button></article>`;
       }).join('')}</section>`;
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { void this.go('fishing'); });
@@ -1384,7 +1410,7 @@ class AquaFantasiaGame {
       <section class="runtime-hero-card ranking-summary v108-ranking-summary">
         <img src="./assets/v91/icons/ranking.png" alt="" />
         <div><span class="runtime-eyebrow">TRAINING LEAGUE</span><h2>랭킹</h2><p>${linkedLabel} · 연습봇 포함 테스트 리그</p></div>
-        <button class="runtime-btn gold compact-cta" type="button" data-go-fishing>도전</button>
+        <button class="runtime-btn cyan compact-cta" type="button" data-go-fishing>도전</button>
       </section>
       <section class="runtime-panel ranking-panel v108-ranking-panel">
         <div class="v108-ranking-list">${rows.map((row) => `<div class="v108-rank-row ${row.me ? 'me' : ''}"><b>#${row.rank}</b><strong>${row.name}</strong><span>${row.tag}</span><em>${row.score.toLocaleString('ko-KR')}점</em><i>${row.combo}콤보 · ${row.catch}마리</i></div>`).join('')}</div>
@@ -1430,12 +1456,13 @@ class AquaFantasiaGame {
 
   private updateUnlocks(): void {
     const unlocked = new Set(this.save.unlockedRegions);
+    const uniqueCaught = Object.keys(this.save.caught).filter((id) => (this.save.caught[id] ?? 0) > 0).length;
     if (this.save.totalSuccess >= 2) unlocked.add('deep');
-    if (this.totalCaught() >= 5) unlocked.add('palace');
+    if (uniqueCaught >= 5) unlocked.add('palace');
     if (this.save.totalSuccess >= 8 || this.save.missions.stormUnlock) unlocked.add('glacier');
     if (this.save.totalSuccess >= 12 || this.save.missions.stormUnlock) unlocked.add('storm');
-    if (this.save.bestStreak >= 4 || this.totalCaught() >= 10) unlocked.add('dimension');
-    if (this.totalCaught() >= 14 || (this.save.mastery.river ?? 0) >= 6) unlocked.add('mangrove');
+    if (this.save.bestStreak >= 4 || uniqueCaught >= 10) unlocked.add('dimension');
+    if (uniqueCaught >= 14 || (this.save.mastery.river ?? 0) >= 6) unlocked.add('mangrove');
     if (this.save.bestStreak >= 6 || (this.save.mastery.dimension ?? 0) >= 4) unlocked.add('lunar');
     if (Object.values(this.save.missions).filter(Boolean).length >= 2 || this.save.totalSuccess >= 5) unlocked.add('reefFestival');
     this.save.unlockedRegions = Array.from(unlocked);
@@ -1467,6 +1494,8 @@ class AquaFantasiaGame {
     });
     this.stageHost.addEventListener('pointerup', () => { if (this.state === 'reeling') this.holding = false; });
     this.stageHost.addEventListener('pointercancel', () => { if (this.state === 'reeling') this.holding = false; });
+    this.stageHost.addEventListener('pointerleave', () => { if (this.state === 'reeling') this.holding = false; });
+    this.stageHost.addEventListener('lostpointercapture', () => { if (this.state === 'reeling') this.holding = false; });
     if (this.fallbackTicker) window.clearInterval(this.fallbackTicker);
     this.fallbackTicker = window.setInterval(() => { if (this.fallbackMode) this.tick(); }, 1000 / 30);
     this.state = 'idle';
@@ -1736,7 +1765,7 @@ class AquaFantasiaGame {
     }) as EventListener, { passive: true });
     const stopInteraction = () => {
       this.holding = false;
-      this.stageHost?.classList.remove('camera-shake');
+      this.stageHost?.classList.remove('camera-shake', 'surge-alert', 'guard-active');
     };
     window.visualViewport?.addEventListener('resize', sync, { passive: true });
     window.visualViewport?.addEventListener('scroll', sync, { passive: true });
@@ -1749,6 +1778,139 @@ class AquaFantasiaGame {
       if (document.visibilityState !== 'visible') stopInteraction();
       else sync();
     }, { passive: true });
+  }
+
+
+  private installContentFlowEngineQaPass(): void {
+    const sync = () => {
+      const metrics = applyPortraitViewportMetrics();
+      const root = document.documentElement;
+      const viewport = window.visualViewport;
+      const vw = Math.max(1, Math.floor(viewport?.width ?? window.innerWidth));
+      const vh = Math.max(1, Math.floor(viewport?.height ?? window.innerHeight));
+      const appWidth = Math.min(vw, metrics.appWidth);
+      const appHeight = Math.min(vh, metrics.appHeight);
+      root.style.setProperty('--v1112-visual-width', `${vw}px`);
+      root.style.setProperty('--v1112-visual-height', `${vh}px`);
+      root.style.setProperty('--v1112-app-width', `${appWidth}px`);
+      root.style.setProperty('--v1112-app-height', `${appHeight}px`);
+      root.classList.toggle('v1112-ultra-narrow', vw <= 360);
+      root.classList.toggle('v1112-short-height', vh <= 640);
+      root.classList.toggle('v1112-reduced-motion', window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      this.repairActiveViewportBounds();
+      this.repairInteractiveBounds();
+      this.repairFixedInteractiveBounds();
+      this.repairScrollableContentFlow();
+    };
+    sync();
+    window.visualViewport?.addEventListener('resize', sync, { passive: true });
+    window.visualViewport?.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync, { passive: true });
+    window.addEventListener('orientationchange', sync, { passive: true });
+    window.addEventListener('pageshow', sync, { passive: true });
+    document.addEventListener('visibilitychange', sync, { passive: true });
+  }
+
+  private scheduleContentFlowRepair(root?: HTMLElement): void {
+    const run = () => this.repairScrollableContentFlow(root);
+    window.requestAnimationFrame(run);
+    window.setTimeout(run, 90);
+    window.setTimeout(run, 320);
+  }
+
+  private repairScrollableContentFlow(root = dom.app.querySelector<HTMLElement>('.runtime-menu-screen')): void {
+    const nav = dom.app.querySelector<HTMLElement>('.bottom-nav');
+    const appRect = dom.app.getBoundingClientRect();
+    const navRect = nav?.getBoundingClientRect();
+    const navHeight = Math.max(0, Math.ceil(navRect?.height ?? 0));
+    const navGap = Math.max(10, Math.ceil(appRect.bottom - (navRect?.top ?? appRect.bottom)) + 10);
+    document.documentElement.style.setProperty('--v1112-nav-height', `${navHeight}px`);
+    document.documentElement.style.setProperty('--v1112-scroll-bottom-space', `${navGap}px`);
+    if (!root) return;
+    const overflow = root.scrollHeight > root.clientHeight + 4;
+    root.classList.toggle('v1112-scrollable-content', overflow);
+    root.classList.add('v1112-content-flow-ready');
+    const content = root.querySelector<HTMLElement>('.runtime-content');
+    if (content) {
+      content.classList.toggle('v1112-content-overflows', content.scrollHeight > content.clientHeight + 4 || overflow);
+    }
+  }
+
+
+  private preloadCriticalImages(): void {
+    const critical = [ASSET.homeBg, ASSET.homeBanner, ASSET.player, ASSET.float, './assets/v91/characters/chibi_fisher_face_icon.png'];
+    critical.forEach((src) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = src;
+      void img.decode?.().catch(() => undefined);
+    });
+  }
+
+  private scheduleDetailStabilityRepair(root?: HTMLElement): void {
+    const run = () => this.repairDetailStability(root);
+    window.requestAnimationFrame(run);
+    window.setTimeout(run, 120);
+    window.setTimeout(run, 420);
+  }
+
+  private repairDetailStability(root = dom.app.querySelector<HTMLElement>('.runtime-menu-screen, .fishing-screen')): void {
+    const html = document.documentElement;
+    const viewport = window.visualViewport;
+    const metrics = applyPortraitViewportMetrics();
+    const vw = Math.max(1, Math.floor(viewport?.width ?? window.innerWidth));
+    const vh = Math.max(1, Math.floor(viewport?.height ?? window.innerHeight));
+    const appWidth = Math.min(vw, metrics.appWidth);
+    const appHeight = Math.min(vh, metrics.appHeight);
+    html.style.setProperty('--v11113-visual-width', `${vw}px`);
+    html.style.setProperty('--v11113-visual-height', `${vh}px`);
+    html.style.setProperty('--v11113-visual-left', `${Math.floor(viewport?.offsetLeft ?? 0)}px`);
+    html.style.setProperty('--v11113-visual-top', `${Math.floor(viewport?.offsetTop ?? 0)}px`);
+    html.style.setProperty('--v11113-app-width', `${appWidth}px`);
+    html.style.setProperty('--v11113-app-height', `${appHeight}px`);
+    html.classList.toggle('v11113-ultra-narrow', vw <= 360);
+    html.classList.toggle('v11113-short-height', vh <= 640);
+    html.classList.toggle('v11113-keyboard-visible', vh < window.innerHeight * 0.78);
+    if (root) root.classList.add('v11113-detail-stability-ready');
+    this.repairImageFallbacks(root ?? dom.app);
+    this.repairActiveViewportBounds();
+    this.repairInteractiveBounds();
+    this.repairFixedInteractiveBounds();
+    this.repairScrollableContentFlow(root?.classList.contains('runtime-menu-screen') ? root : undefined);
+  }
+
+  private repairImageFallbacks(root: ParentNode = dom.app): void {
+    root.querySelectorAll<HTMLImageElement>('img:not([data-v11113-img-guard])').forEach((img) => {
+      img.dataset.v11113ImgGuard = 'true';
+      img.draggable = false;
+      img.decoding = img.decoding || 'async';
+      img.addEventListener('error', () => {
+        if (img.dataset.v11113FallbackApplied === 'true') return;
+        img.dataset.v11113FallbackApplied = 'true';
+        const fallback = img.closest('.dex-card, .runtime-dex-card') ? './assets/v85/fish/fish_unknown.png'
+          : img.closest('.runtime-hud, .runtime-hero-card') ? './assets/v91/characters/chibi_fisher_face_icon.png'
+          : './assets/art/fish_slot.png';
+        img.src = fallback;
+      }, { passive: true });
+    });
+  }
+
+  private installDetailStabilityQaPass(): void {
+    let raf = 0;
+    const schedule = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        this.repairDetailStability();
+      });
+    };
+    schedule();
+    window.visualViewport?.addEventListener('resize', schedule, { passive: true });
+    window.visualViewport?.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('orientationchange', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule, { passive: true });
+    document.addEventListener('visibilitychange', schedule, { passive: true });
   }
 
   private vibrate(pattern: VibratePattern): void {

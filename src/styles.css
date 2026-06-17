@@ -13333,3 +13333,438 @@ html[data-tech-perf-compat="v1111-tech-perf-compat"] .fishing-screen .catch-resu
   }
   html[data-tech-perf-compat="v1111-tech-perf-compat"] .underwater-webgl-canvas { opacity: .38 !important; }
 }
+
+/* v1.1.12 CONTENT FLOW / ENGINE QA PASS
+   Keeps the v1.1.10 supplied village background and v1.1.11 tech/perf pass,
+   while separating hard viewport bounds from legitimate vertical content scroll. */
+:root {
+  --v1112-edge-x: max(5px, env(safe-area-inset-left), env(safe-area-inset-right));
+  --v1112-nav-height: 74px;
+  --v1112-scroll-bottom-space: calc(var(--v1112-nav-height) + 28px + env(safe-area-inset-bottom));
+  --v1112-content-max: min(500px, calc(var(--v1112-app-width, var(--v1111-app-width, 100vw)) - 14px));
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] #app {
+  overflow: hidden !important;
+  width: var(--v1112-app-width, var(--v1111-app-width, min(500px, 100vw))) !important;
+  max-width: min(500px, var(--v1112-visual-width, var(--v1111-visual-width, 100vw))) !important;
+  height: var(--v1112-app-height, var(--v1111-app-height, 100dvh)) !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-menu-screen.v1112-content-flow-screen {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: var(--v1112-app-height, var(--v1111-app-height, 100dvh)) !important;
+  max-height: var(--v1112-app-height, var(--v1111-app-height, 100dvh)) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-x: none !important;
+  overscroll-behavior-y: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  padding-bottom: var(--v1112-scroll-bottom-space) !important;
+  scroll-padding-bottom: var(--v1112-scroll-bottom-space) !important;
+  transform: none !important;
+  translate: none !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-menu-screen.v1112-content-flow-screen .runtime-content {
+  width: 100% !important;
+  max-width: var(--v1112-content-max) !important;
+  min-width: 0 !important;
+  margin-inline: auto !important;
+  padding-inline: clamp(8px, 2.4vw, 14px) !important;
+  padding-bottom: var(--v1112-scroll-bottom-space) !important;
+  overflow: visible !important;
+  transform: none !important;
+  translate: none !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-menu-screen.v1112-content-flow-screen :is(.runtime-panel,.runtime-hero-card,.runtime-card-list,.runtime-region-grid,.runtime-item-grid,.runtime-dex-grid,.dex-grid,.shop-list,.mission-list,.gear-grid,.ranking-panel) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-menu-screen.v1112-content-flow-screen :is(.runtime-region-grid,.runtime-dex-grid,.dex-grid,.runtime-item-grid,.shop-list,.mission-list,.gear-grid) {
+  max-height: none !important;
+  overflow-y: visible !important;
+  padding-bottom: clamp(10px, 2.4svh, 18px) !important;
+  scroll-snap-type: none !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-menu-screen.v1112-content-flow-screen.v1112-scrollable-content::after {
+  content: '';
+  display: block;
+  height: calc(var(--v1112-nav-height) + 16px + env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-menu-screen.v1112-content-flow-screen .runtime-hud {
+  width: calc(100% - clamp(12px, 3vw, 18px)) !important;
+  max-width: var(--v1112-content-max) !important;
+  min-width: 0 !important;
+  margin-inline: auto !important;
+  transform: none !important;
+  translate: none !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .bottom-nav.v840-bottom-nav {
+  left: calc(var(--v119-visual-left, var(--runtime-visual-left, 0px)) + ((var(--v1112-visual-width, var(--v1111-visual-width, 100vw)) - var(--v1112-app-width, var(--v1111-app-width, 100vw))) / 2) + max(4px, env(safe-area-inset-left))) !important;
+  right: auto !important;
+  width: max(0px, calc(var(--v1112-app-width, var(--v1111-app-width, 100vw)) - max(4px, env(safe-area-inset-left)) - max(4px, env(safe-area-inset-right)))) !important;
+  max-width: max(0px, calc(var(--v1112-app-width, var(--v1111-app-width, 100vw)) - max(4px, env(safe-area-inset-left)) - max(4px, env(safe-area-inset-right)))) !important;
+  min-width: 0 !important;
+  transform: none !important;
+  translate: none !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .bottom-nav.v840-bottom-nav button {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .bottom-nav.v840-bottom-nav button span {
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-btn.compact-cta,
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .image-btn.compact-cost-btn,
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .shop-price.compact-cost-badge {
+  width: fit-content !important;
+  min-width: clamp(64px, 18vw, 88px) !important;
+  max-width: min(128px, 38vw) !important;
+  justify-self: end !important;
+  padding-inline: clamp(10px, 3vw, 16px) !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-btn.gold,
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .compact-cost-btn,
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .compact-cost-badge {
+  background-image: url('/assets/v92/ui/button_mid_gold.png'), linear-gradient(145deg, #fff3a4, #f8b32c 54%, #bb6b06) !important;
+  color: #5a2d00 !important;
+  text-shadow: 0 2px 0 rgba(255,255,255,.64), 0 5px 10px rgba(108,54,0,.20) !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-btn.cyan,
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-btn.blue {
+  background-image: url('/assets/v92/ui/button_mid_aqua.png'), linear-gradient(145deg, #a9fbff, #35cfff 54%, #0874b8) !important;
+  color: #00395e !important;
+  text-shadow: 0 2px 0 rgba(255,255,255,.55) !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .mission-card.runtime-mission-card {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  grid-template-areas: 'copy button' 'progress button' !important;
+  gap: 8px 10px !important;
+  min-height: 0 !important;
+  padding: clamp(11px, 3vw, 15px) !important;
+  align-items: center !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .mission-card.runtime-mission-card > div:first-child { grid-area: copy; min-width: 0 !important; }
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .mission-card.runtime-mission-card .v108-mission-progress { grid-area: progress; width: 100% !important; min-width: 0 !important; margin: 0 !important; }
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .mission-card.runtime-mission-card > button { grid-area: button; align-self: center !important; }
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .mission-card.runtime-mission-card span {
+  display: block !important;
+  margin-top: 3px !important;
+  line-height: 1.24 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .dex-grid.runtime-dex-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: clamp(8px, 2.4vw, 12px) !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .dex-card.runtime-dex-card {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .dex-card.runtime-dex-card img {
+  max-width: 100% !important;
+  object-fit: contain !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .fishing-screen.v1112-content-flow-fishing .fallback-player {
+  left: auto !important;
+  right: max(-18px, -4vw) !important;
+  bottom: 19% !important;
+  width: min(188px, 37vw) !important;
+  max-width: 42% !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .fishing-screen.v1112-content-flow-fishing .fallback-bobber {
+  left: 39% !important;
+  top: 58% !important;
+  width: min(62px, 11vw) !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .fishing-screen.v1112-content-flow-fishing .fallback-casting .fallback-bobber {
+  animation-name: fallbackCastLeftward !important;
+}
+@keyframes fallbackCastLeftward {
+  0% { transform: translate3d(38vw, -8svh, 0) scale(.78) rotate(-22deg); opacity: .65; }
+  62% { transform: translate3d(4vw, -16svh, 0) scale(1.04) rotate(18deg); opacity: 1; }
+  100% { transform: translate3d(0, 0, 0) scale(1) rotate(0); opacity: 1; }
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-menu-screen.swipe-route-peek,
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-menu-screen.swipe-route-out {
+  overflow-x: hidden !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-menu-screen.swipe-route-peek {
+  transform: none !important;
+  translate: none !important;
+}
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-menu-screen.swipe-route-peek .runtime-content,
+html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-menu-screen.swipe-route-peek .runtime-hud {
+  transform: translate3d(var(--swipe-peek-x, 0px), 0, 0) !important;
+}
+@media (max-width: 380px) {
+  html[data-content-flow-engine="v1112-content-flow-engine-qa"] .mission-card.runtime-mission-card {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: 'copy' 'progress' 'button' !important;
+  }
+  html[data-content-flow-engine="v1112-content-flow-engine-qa"] .mission-card.runtime-mission-card > button {
+    justify-self: end !important;
+    min-height: 42px !important;
+  }
+  html[data-content-flow-engine="v1112-content-flow-engine-qa"] .dex-grid.runtime-dex-grid {
+    gap: 7px !important;
+  }
+}
+@media (min-width: 540px) and (orientation: portrait) {
+  html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-menu-screen.v1112-content-flow-screen .runtime-content,
+  html[data-content-flow-engine="v1112-content-flow-engine-qa"] .runtime-menu-screen.v1112-content-flow-screen .runtime-hud {
+    max-width: min(500px, calc(var(--v1112-app-width, 500px) - 18px)) !important;
+  }
+  html[data-content-flow-engine="v1112-content-flow-engine-qa"] .dex-grid.runtime-dex-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* v1.1.13 DETAIL STABILITY QA
+   A final small-problem sweep over v1.1.12: safer vertical scroll, stronger
+   fixed UI width lock, clearer tiny labels, safer image/touch behavior, and
+   reduced swipe-vs-scroll conflict. Keeps PNG/WebP 2.5D direction. */
+:root {
+  --v11113-nav-height: clamp(58px, 8.2svh, 70px);
+  --v11113-nav-gap: 5px;
+  --v11113-edge-x: clamp(6px, 2vw, 10px);
+  --v11113-content-bottom: calc(var(--v11113-nav-height) + var(--v11113-nav-gap) + env(safe-area-inset-bottom) + 22px);
+  --v1112-scroll-bottom-space: var(--v11113-content-bottom);
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"],
+html[data-detail-stability-qa="v11113-detail-stability-qa"] body {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  -webkit-text-size-adjust: 100% !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] #app {
+  width: var(--v11113-app-width, var(--v1112-app-width, min(500px, 100vw))) !important;
+  max-width: min(500px, var(--v11113-visual-width, var(--v1112-visual-width, 100vw))) !important;
+  height: var(--v11113-app-height, var(--v1112-app-height, 100dvh)) !important;
+  max-height: var(--v11113-app-height, var(--v1112-app-height, 100dvh)) !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  contain: layout paint size !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] :is(.game-screen,.runtime-menu-screen,.fishing-screen,.login-screen) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+  translate: none !important;
+  overflow-x: hidden !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .runtime-menu-screen.v11113-detail-stability-screen {
+  height: var(--v11113-app-height, var(--v1112-app-height, 100dvh)) !important;
+  max-height: var(--v11113-app-height, var(--v1112-app-height, 100dvh)) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: contain !important;
+  touch-action: pan-y !important;
+  scroll-padding-top: max(12px, env(safe-area-inset-top)) !important;
+  scroll-padding-bottom: var(--v11113-content-bottom) !important;
+  padding-bottom: var(--v11113-content-bottom) !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .runtime-menu-screen.v11113-detail-stability-screen .runtime-content {
+  width: 100% !important;
+  max-width: min(500px, calc(100% - 0px)) !important;
+  min-width: 0 !important;
+  margin-inline: auto !important;
+  overflow: visible !important;
+  padding-bottom: var(--v11113-content-bottom) !important;
+  gap: clamp(9px, 2.2svh, 14px) !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .runtime-menu-screen.v11113-detail-stability-screen :is(.runtime-hud,.runtime-panel,.runtime-hero-card,.runtime-card-list,.runtime-region-grid,.runtime-item-grid,.runtime-dex-grid,.dex-grid,.shop-list,.mission-list,.gear-grid,.ranking-panel,.ranking-stats-grid) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .runtime-menu-screen.v11113-detail-stability-screen :is(.runtime-hero-card,.runtime-panel,.runtime-item-card,.gear-card,.shop-card,.mission-card,.runtime-dex-card,.dex-card,.region-card,.v108-rank-row) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+  contain: paint !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .runtime-menu-screen.v11113-detail-stability-screen :is(button,.runtime-btn,.image-btn,.compact-cta,.compact-cost-btn,.compact-cost-badge) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 40px !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .runtime-btn.compact-cta,
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .image-btn.compact-cost-btn,
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .shop-price.compact-cost-badge {
+  width: fit-content !important;
+  min-width: clamp(64px, 17vw, 86px) !important;
+  max-width: min(118px, 34vw) !important;
+  padding-inline: clamp(10px, 2.8vw, 15px) !important;
+  justify-self: end !important;
+  white-space: nowrap !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .runtime-hero-card {
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: clamp(8px, 2.4vw, 12px) !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .runtime-hero-card > div {
+  min-width: 0 !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .runtime-hero-card :is(h2,p,strong,span,em) {
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .mission-card.runtime-mission-card {
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  grid-template-areas: 'copy button' 'progress progress' !important;
+  align-items: center !important;
+  gap: 7px 9px !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .mission-card.runtime-mission-card .v108-mission-progress {
+  min-height: 13px !important;
+  overflow: hidden !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .shop-card.runtime-shop-card {
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  gap: 8px !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .v108-rank-row {
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] img {
+  max-width: 100%;
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] img[data-v11113-fallback-applied="true"] {
+  object-fit: contain !important;
+  opacity: .86;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .bottom-nav.v840-bottom-nav {
+  position: fixed !important;
+  left: calc(var(--v11113-visual-left, var(--v119-visual-left, 0px)) + ((var(--v11113-visual-width, var(--v1112-visual-width, 100vw)) - var(--v11113-app-width, var(--v1112-app-width, 100vw))) / 2) + max(4px, env(safe-area-inset-left))) !important;
+  right: auto !important;
+  width: max(0px, calc(var(--v11113-app-width, var(--v1112-app-width, 100vw)) - max(4px, env(safe-area-inset-left)) - max(4px, env(safe-area-inset-right)))) !important;
+  max-width: max(0px, calc(var(--v11113-app-width, var(--v1112-app-width, 100vw)) - max(4px, env(safe-area-inset-left)) - max(4px, env(safe-area-inset-right)))) !important;
+  min-width: 0 !important;
+  height: var(--v11113-nav-height) !important;
+  max-height: 70px !important;
+  bottom: calc(var(--v11113-nav-gap) + env(safe-area-inset-bottom)) !important;
+  margin: 0 !important;
+  padding: 4px 4px 5px !important;
+  grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  gap: 2px !important;
+  overflow: hidden !important;
+  transform: none !important;
+  translate: none !important;
+  box-sizing: border-box !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .bottom-nav.v840-bottom-nav button {
+  min-width: 0 !important;
+  height: 100% !important;
+  padding: 1px 0 !important;
+  overflow: hidden !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .bottom-nav.v840-bottom-nav button img {
+  width: clamp(20px, 5.8vw, 29px) !important;
+  height: clamp(20px, 5.8vw, 29px) !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .bottom-nav.v840-bottom-nav button span {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  font-size: clamp(7px, 1.75vw, 9px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.045em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .fishing-screen.v11113-detail-stability-fishing :is(.fishing-3d-ambient,.underwater-webgl-host,.underwater-webgl-canvas,.pixi-layer canvas) {
+  pointer-events: none !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .fishing-screen.v11113-detail-stability-fishing :is(.fishing-hud,.recent-catch-strip,.reel-panel,.catch-result-card,.fishing-guide-card) {
+  left: var(--v11113-edge-x) !important;
+  right: var(--v11113-edge-x) !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+  translate: none !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .fishing-screen.v11113-detail-stability-fishing .recent-catch-strip {
+  bottom: calc(var(--v11113-nav-height) + var(--v11113-nav-gap) + env(safe-area-inset-bottom) + 6px) !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .fishing-screen.v11113-detail-stability-fishing .v840-stage-ui .cast-button {
+  bottom: calc(var(--v11113-nav-height) + var(--v11113-nav-gap) + env(safe-area-inset-bottom) + clamp(62px, 10svh, 88px)) !important;
+  width: min(306px, calc(100% - 24px)) !important;
+  max-width: calc(100% - 24px) !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .fishing-screen.v11113-detail-stability-fishing .v840-reel-panel.reel-panel {
+  bottom: calc(var(--v11113-nav-height) + var(--v11113-nav-gap) + env(safe-area-inset-bottom) + clamp(48px, 7.4svh, 64px)) !important;
+  max-height: calc(var(--v11113-app-height, 100dvh) - var(--v11113-nav-height) - 92px) !important;
+  overflow: hidden auto !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] .fishing-screen.v11113-detail-stability-fishing .catch-result-card {
+  width: min(304px, calc(100% - 22px)) !important;
+  max-height: calc(var(--v11113-app-height, 100dvh) - var(--v11113-nav-height) - env(safe-area-inset-bottom) - 34px) !important;
+  overflow: hidden auto !important;
+}
+html[data-detail-stability-qa="v11113-detail-stability-qa"] #toast-root {
+  left: calc(var(--v11113-visual-left, var(--v119-visual-left, 0px)) + ((var(--v11113-visual-width, var(--v1112-visual-width, 100vw)) - var(--v11113-app-width, var(--v1112-app-width, 100vw))) / 2) + 8px) !important;
+  right: auto !important;
+  width: max(0px, calc(var(--v11113-app-width, var(--v1112-app-width, 100vw)) - 16px)) !important;
+  max-width: max(0px, calc(var(--v11113-app-width, var(--v1112-app-width, 100vw)) - 16px)) !important;
+}
+html.v11113-ultra-narrow[data-detail-stability-qa="v11113-detail-stability-qa"] {
+  --v11113-nav-height: clamp(55px, 8svh, 63px);
+  --v11113-edge-x: 5px;
+  --v11113-content-bottom: calc(var(--v11113-nav-height) + var(--v11113-nav-gap) + env(safe-area-inset-bottom) + 16px);
+}
+html.v11113-ultra-narrow[data-detail-stability-qa="v11113-detail-stability-qa"] .runtime-hero-card {
+  grid-template-columns: auto minmax(0, 1fr) !important;
+}
+html.v11113-ultra-narrow[data-detail-stability-qa="v11113-detail-stability-qa"] .runtime-hero-card > button {
+  grid-column: 2 !important;
+  justify-self: end !important;
+}
+html.v11113-ultra-narrow[data-detail-stability-qa="v11113-detail-stability-qa"] .mission-card.runtime-mission-card,
+html.v11113-ultra-narrow[data-detail-stability-qa="v11113-detail-stability-qa"] .shop-card.runtime-shop-card {
+  grid-template-columns: minmax(0, 1fr) auto !important;
+}
+html.v11113-short-height[data-detail-stability-qa="v11113-detail-stability-qa"] {
+  --v11113-nav-height: clamp(54px, 7.8svh, 62px);
+  --v11113-content-bottom: calc(var(--v11113-nav-height) + var(--v11113-nav-gap) + env(safe-area-inset-bottom) + 14px);
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-detail-stability-qa="v11113-detail-stability-qa"] :is(.runtime-menu-screen.swipe-route-peek .runtime-content,.runtime-menu-screen.swipe-route-peek .runtime-hud) {
+    transform: none !important;
+  }
+}
+@media (min-width: 540px) and (orientation: portrait) {
+  html[data-detail-stability-qa="v11113-detail-stability-qa"] .runtime-menu-screen.v11113-detail-stability-screen .runtime-content,
+  html[data-detail-stability-qa="v11113-detail-stability-qa"] .runtime-menu-screen.v11113-detail-stability-screen .runtime-hud {
+    max-width: min(500px, calc(var(--v11113-app-width, 500px) - 18px)) !important;
+  }
+}

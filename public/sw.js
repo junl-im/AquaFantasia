@@ -1,5 +1,5 @@
-// v1.1.11 keeps village flow and adds tech/perf/compat service-worker hardening.
-const CACHE_NAME = 'aqua-fantasia-v1.1.11-tech-perf-compat';
+// v1.1.13 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
+const CACHE_NAME = 'aqua-fantasia-v1.1.13-detail-stability-qa';
 const PRECACHE = [
   "./",
   "./index.html",
