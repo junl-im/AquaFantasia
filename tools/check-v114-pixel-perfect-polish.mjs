@@ -12,7 +12,7 @@ const sw = read('public/sw.js');
 const underwater = read('src/core/UnderwaterWebglLayer.ts');
 const quality = read('src/core/RuntimeQualityManager.ts');
 
-add(/^1\.1\.[4-9]$/.test(pkg.version), 'package version keeps v1.1.4+ lineage');
+add(/^1\.1\.([4-9]|[1-9][0-9]+)$/.test(pkg.version), 'package version keeps v1.1.4+ lineage');
 add(data.includes('APP_VERSION ='), 'APP_VERSION is declared');
 add(data.includes('aqua-fantasia-v1.1.'), 'cache name keeps v1.1 lineage in data');
 add(sw.includes('aqua-fantasia-v1.1.'), 'service worker cache keeps v1.1 lineage');
@@ -74,7 +74,7 @@ add(css.includes('var(--water-fx-alpha'), 'water alpha remains quality-controlle
 add(!/\.svg/i.test(main + css + data), 'no SVG/vector asset references added');
 add(existsSync('README.md'), 'README.md exists');
 add(read('README.md').includes('v1.1.4 Pixel Perfect Polish'), 'README documents v1.1.4');
-add(/v1\.1\.[4-9]/.test(read('public/offline.html')), 'offline page version badge is updated');
+add(/v1\.1\.([4-9]|[1-9][0-9]+)/.test(read('public/offline.html')), 'offline page version badge is updated');
 
 const precache = [...sw.matchAll(/"(\.\/?[^"\n]+)"/g)].map((m) => m[1]);
 const missing = [];

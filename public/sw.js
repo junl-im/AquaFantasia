@@ -1,10 +1,12 @@
-// v1.1.9 keeps previous safety policies and hardens offline fetch fallbacks.
-const CACHE_NAME = 'aqua-fantasia-v1.1.9-interaction-qa-polish';
+// v1.1.10 keeps previous safety policies and adds village flow/supplied-background caching.
+const CACHE_NAME = 'aqua-fantasia-v1.1.10-village-flow-swipe-polish';
 const PRECACHE = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./offline.html",
+  "./assets/v1110/home/village_islands_user_bg.webp",
+  "./assets/v1110/home/village_islands_user_bg.png",
   "./assets/v108/home/island_home_bg_1080x1920.webp",
   "./assets/v108/home/aqua_fantasia_banner.png",
   "./assets/v85/screens/start_screen_clean_v810.webp",

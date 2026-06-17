@@ -13043,3 +13043,212 @@ html.v119-keyboard-safe[data-layout-stability="v1119-interaction-qa-polish"] .bo
 html.v119-keyboard-safe[data-layout-stability="v1119-interaction-qa-polish"] .recent-catch-strip {
   transition: none !important;
 }
+
+/* v1.1.10 VILLAGE FLOW / SWIPE POLISH
+   Restores the requested home flow and one-step tab swipe order while keeping
+   the viewport safety layers from v1.1.5-v1.1.9. Uses the supplied PNG/WebP
+   island village background without adding SVG/vector assets. */
+:root {
+  --v1110-home-logo-h: min(21svh, 184px);
+  --v1110-home-gap: clamp(8px, 1.5svh, 12px);
+  --v1110-region-bottom-space: calc(var(--v119-nav-height, 64px) + env(safe-area-inset-bottom) + 22px);
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .runtime-menu-screen.v1110-village-flow {
+  background: #0496d7 !important;
+  padding-top: max(6px, calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 5px)) !important;
+  padding-bottom: var(--v119-content-bottom, 92px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: contain !important;
+  touch-action: pan-y !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .runtime-menu-screen.v1110-village-flow .runtime-3d-bg,
+html[data-village-flow="v1110-village-flow-swipe-polish"] .runtime-menu-screen.v1110-village-flow .runtime-3d-bg::before {
+  background-image:
+    linear-gradient(180deg, rgba(0, 161, 231, .00), rgba(0, 76, 143, .08) 50%, rgba(0, 17, 53, .36)),
+    var(--v108-home-bg) !important;
+  background-size: cover, cover !important;
+  background-position: center top, center top !important;
+  opacity: 1 !important;
+  filter: saturate(1.12) contrast(1.04) brightness(1.02) !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .runtime-menu-screen.v1110-village-flow .runtime-3d-bg::after {
+  opacity: .20 !important;
+  pointer-events: none !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .runtime-menu-screen.v1110-village-flow .runtime-content {
+  display: grid !important;
+  gap: var(--v1110-home-gap) !important;
+  width: 100% !important;
+  max-width: 500px !important;
+  min-width: 0 !important;
+  padding: 0 0 var(--v1110-region-bottom-space) !important;
+  margin: 0 auto !important;
+  overflow: visible !important;
+  transform: none !important;
+  translate: none !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-home-banner.v108-home-banner {
+  width: 100% !important;
+  max-width: 500px !important;
+  height: var(--v1110-home-logo-h) !important;
+  max-height: var(--v1110-home-logo-h) !important;
+  min-height: 0 !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  display: grid !important;
+  place-items: center !important;
+  filter: drop-shadow(0 12px 22px rgba(0, 25, 74, .30)) !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-home-banner.v108-home-banner img {
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  transform: scaleX(1.12) translateZ(0) !important;
+  transform-origin: center center !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-tide-card.runtime-hero-card {
+  order: 2 !important;
+  width: 100% !important;
+  max-width: 500px !important;
+  margin: 0 auto !important;
+  min-height: clamp(82px, 12svh, 104px) !important;
+  padding: clamp(9px, 2.5vw, 12px) clamp(10px, 2.8vw, 14px) !important;
+  grid-template-columns: clamp(42px, 10.5vw, 56px) minmax(0, 1fr) minmax(58px, auto) !important;
+  gap: clamp(7px, 2vw, 10px) !important;
+  align-items: center !important;
+  overflow: hidden !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-tide-card .tide-mascot {
+  width: clamp(42px, 10.5vw, 56px) !important;
+  height: clamp(42px, 10.5vw, 56px) !important;
+  object-fit: contain !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-tide-card h2 {
+  font-size: clamp(20px, 5.2vw, 27px) !important;
+  line-height: 1 !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-tide-card p {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  font-size: clamp(11px, 3vw, 13px) !important;
+  line-height: 1.25 !important;
+  overflow: hidden !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-tide-card .v950-mini-chips {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-tide-card .v950-mini-chips span {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  font-size: clamp(9px, 2.4vw, 11px) !important;
+  white-space: nowrap !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-tide-card .compact-cta {
+  min-width: 58px !important;
+  max-width: 78px !important;
+  width: auto !important;
+  min-height: 42px !important;
+  padding-inline: 10px !important;
+  justify-self: end !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-region-panel.runtime-panel {
+  order: 3 !important;
+  width: 100% !important;
+  max-width: 500px !important;
+  margin: 0 auto !important;
+  padding: clamp(11px, 3vw, 14px) !important;
+  max-height: none !important;
+  overflow: visible !important;
+  contain: layout paint !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-region-panel .runtime-panel-title {
+  margin-bottom: 5px !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-scroll-hint {
+  margin: 0 0 8px !important;
+  color: rgba(236, 254, 255, .92) !important;
+  font-size: clamp(10px, 2.7vw, 12px) !important;
+  font-weight: 900 !important;
+  text-shadow: 0 2px 6px rgba(0, 26, 66, .34) !important;
+  overflow: visible !important;
+  display: block !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-region-grid.runtime-region-grid.region-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: clamp(7px, 2vw, 9px) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  padding: 0 0 8px !important;
+  margin: 0 !important;
+  overflow: visible !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-region-grid .region-card {
+  min-height: clamp(82px, 12svh, 104px) !important;
+  padding: 8px !important;
+  touch-action: pan-y !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-region-grid .region-card img {
+  height: clamp(38px, 8.5svh, 52px) !important;
+  max-width: 100% !important;
+  object-fit: cover !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .runtime-menu-screen.swipe-enabled-screen {
+  touch-action: pan-y !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .runtime-menu-screen.swipe-route-peek {
+  filter: brightness(1.04) saturate(1.04) !important;
+  outline: 2px solid rgba(128, 242, 255, .22) !important;
+  outline-offset: -4px !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .runtime-menu-screen.swipe-route-out {
+  filter: brightness(1.08) saturate(1.08) !important;
+}
+html[data-village-flow="v1110-village-flow-swipe-polish"] .fishing-screen.v1119-interaction-qa-fishing .fallback-player {
+  left: auto !important;
+  right: max(-28px, -6vw) !important;
+  bottom: 20% !important;
+  width: min(214px, 42vw) !important;
+  max-width: 48% !important;
+  transform: translateZ(0) !important;
+}
+@media (max-width: 380px) {
+  :root { --v1110-home-logo-h: min(19.5svh, 166px); }
+  html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-tide-card.runtime-hero-card {
+    grid-template-columns: clamp(38px, 10vw, 48px) minmax(0, 1fr) minmax(52px, auto) !important;
+    gap: 6px !important;
+  }
+  html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-tide-card .compact-cta {
+    min-width: 52px !important;
+    max-width: 64px !important;
+    padding-inline: 8px !important;
+  }
+  html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-region-grid.runtime-region-grid.region-grid {
+    gap: 6px !important;
+  }
+  html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-region-grid .region-card {
+    min-height: 78px !important;
+    padding: 7px !important;
+  }
+}
+@media (max-height: 650px) {
+  :root { --v1110-home-logo-h: min(18svh, 150px); }
+  html[data-village-flow="v1110-village-flow-swipe-polish"] .runtime-menu-screen.v1110-village-flow .runtime-content {
+    gap: 7px !important;
+  }
+  html[data-village-flow="v1110-village-flow-swipe-polish"] .v1110-tide-card.runtime-hero-card {
+    min-height: 76px !important;
+  }
+}

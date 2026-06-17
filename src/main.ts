@@ -18,7 +18,7 @@ const ASSET = {
   slot: './assets/art/fish_slot.png',
   ripple: './assets/art/water_ripple_overlay.webp',
   caustics: './assets/art/caustic_sparkle_overlay.webp',
-  homeBg: './assets/v108/home/island_home_bg_1080x1920.webp',
+  homeBg: './assets/v1110/home/village_islands_user_bg.webp',
   homeBanner: './assets/v108/home/aqua_fantasia_banner.png',
   castButton: './assets/ui/button_cast_clean.png',
   perfect: './assets/v12/fx/particle_sparkle_cluster_ref_a.png',
@@ -140,6 +140,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.viewportSafe = 'v1117-viewport-safe-lock';
     document.documentElement.dataset.layoutQa = 'v1118-layout-qa-sweep';
     document.documentElement.dataset.layoutStability = 'v1119-interaction-qa-polish';
+    document.documentElement.dataset.villageFlow = 'v1110-village-flow-swipe-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -294,26 +295,14 @@ class AquaFantasiaGame {
     this.clear();
     const region = this.getRegion();
     const root = this.createRuntimeMenuScreen('village', '마을', '메인 항구에서 오늘의 조류와 수역을 확인하세요.');
-    root.classList.add('v108-home-main');
+    root.classList.add('v108-home-main', 'v1110-village-flow');
     root.style.setProperty('--v108-home-bg', `url("${ASSET.homeBg}")`);
     const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
     content.innerHTML = `
-      <section class="v108-home-banner" aria-label="아쿠아 판타지아 메인 배너">
+      <section class="v108-home-banner v1110-home-banner" aria-label="아쿠아 판타지아 메인 배너">
         <img src="${ASSET.homeBanner}" alt="아쿠아 판타지아 Aqua Fantasia" loading="eager" />
       </section>
-      <section class="runtime-hero-card v108-home-title" aria-label="마을 안내">
-        <img class="tide-mascot" src="./assets/v91/characters/chibi_fisher_face_icon.png" alt="" />
-        <div>
-          <span class="runtime-eyebrow">MAIN HARBOR</span>
-          <h2>마을</h2>
-          <p>오늘은 <strong>${region.name}</strong> 수역이 좋아요. 아래에서 수역을 고르고 바로 출항하세요.</p>
-        </div>
-      </section>
-      <section class="runtime-panel region-panel v108-region-panel" aria-label="수역 선택">
-        <div class="runtime-panel-title"><span>FISHING AREA</span><strong>수역 선택</strong></div>
-        <div class="region-grid runtime-region-grid">${regions.slice(0, 8).map((item) => this.regionCard(item.key)).join('')}</div>
-      </section>
-      <section class="runtime-hero-card tide-card v950-tide-card v108-tide-card" aria-label="오늘의 조류">
+      <section class="runtime-hero-card tide-card v950-tide-card v108-tide-card v1110-tide-card" aria-label="오늘의 조류">
         <img class="tide-mascot" src="./assets/v91/characters/chibi_fisher_face_icon.png" alt="" />
         <div>
           <span class="runtime-eyebrow">TODAY TIDE</span>
@@ -322,6 +311,11 @@ class AquaFantasiaGame {
           <div class="v950-mini-chips"><span>보유 ${this.save.coins.toLocaleString('ko-KR')}G</span><span>미끼 ${this.save.gear.lureStock}개</span></div>
         </div>
         <button class="runtime-btn gold v950-primary-cta compact-cta" type="button" data-go-fishing>출항</button>
+      </section>
+      <section class="runtime-panel region-panel v108-region-panel v1110-region-panel" aria-label="수역 선택">
+        <div class="runtime-panel-title"><span>FISHING AREA</span><strong>수역 선택</strong></div>
+        <p class="v1110-scroll-hint">아래로 드래그해서 모든 수역을 확인하세요.</p>
+        <div class="region-grid runtime-region-grid v1110-region-grid">${regions.map((item) => this.regionCard(item.key)).join('')}</div>
       </section>`;
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { void this.go('fishing'); });
@@ -483,7 +477,7 @@ class AquaFantasiaGame {
   }
 
   private installTabSwipe(root: HTMLElement, active: Exclude<Screen, 'login' | 'fishing'>): void {
-    const swipeOrder: Screen[] = ['village', 'fishing', 'gear', 'inventory', 'dex', 'shop', 'mission', 'ranking'];
+    const swipeOrder: Screen[] = ['village', 'gear', 'inventory', 'dex', 'shop', 'mission', 'ranking', 'fishing'];
     if ((active as Screen) === 'fishing') return;
     let startX = 0;
     let startY = 0;
@@ -502,7 +496,7 @@ class AquaFantasiaGame {
     const canStart = (target: EventTarget | null) => {
       const el = target as HTMLElement | null;
       if (!el) return true;
-      return !el.closest('.bottom-nav, input, textarea, select, [data-no-swipe], button, a, .hold-pad, .fishing-stage');
+      return !el.closest('.bottom-nav, input, textarea, select, [data-no-swipe], .hold-pad, .reel-panel, .fishing-stage');
     };
     const begin = (x: number, y: number, target: EventTarget | null) => {
       if (!canStart(target)) return;
@@ -684,9 +678,10 @@ class AquaFantasiaGame {
     const bgScale = Math.max(w / this.bgSprite.texture.width, h / this.bgSprite.texture.height);
     this.bgSprite.scale.set(bgScale);
     this.bgSprite.position.set((w - this.bgSprite.texture.width * bgScale) / 2, (h - this.bgSprite.texture.height * bgScale) / 2);
-    const playerTargetH = Math.min(h * 0.66, w * 1.34);
+    const playerTargetH = Math.min(h * 0.46, w * 0.92);
     this.player.scale.set(playerTargetH / Math.max(1, this.player.texture.height));
-    this.player.position.set(w * 0.36, h * 0.71);
+    const playerScaledW = this.player.texture.width * this.player.scale.x;
+    this.player.position.set(w - playerScaledW * 0.42, h * 0.72);
     const bobberTarget = Math.max(34, Math.min(58, w * 0.105));
     this.bobber.scale.set(bobberTarget / Math.max(1, this.bobber.texture.width));
     this.bobber.position.set(w * 0.70, h * 0.52);

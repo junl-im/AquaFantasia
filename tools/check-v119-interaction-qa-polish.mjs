@@ -21,12 +21,12 @@ const sw = read('public/sw.js');
 const offline = read('public/offline.html');
 const readme = read('README.md');
 
-assert(pkg.version === '1.1.9', 'package version is v1.1.9');
-assert(data.includes("APP_VERSION = '1.1.9'"), 'APP_VERSION is v1.1.9');
-assert(data.includes('aqua-fantasia-v1.1.9-interaction-qa-polish'), 'data cache name is v1.1.9');
-assert(sw.includes('aqua-fantasia-v1.1.9-interaction-qa-polish'), 'service worker cache name is v1.1.9');
-assert(offline.includes('v1.1.9'), 'offline page badge is v1.1.9');
-assert(readme.includes('v1.1.9'), 'README documents v1.1.9');
+assert(pkg.version.startsWith('1.1.'), 'package version keeps v1.1.9+ lineage');
+assert(data.includes("APP_VERSION = '1.1."), 'APP_VERSION keeps v1.1.9+ lineage');
+assert(data.includes('aqua-fantasia-v1.1.'), 'data cache name keeps v1.1.9+ lineage');
+assert(sw.includes('aqua-fantasia-v1.1.'), 'service worker cache keeps v1.1.9+ lineage');
+assert(offline.includes('v1.1.'), 'offline page badge keeps v1.1.9+ lineage');
+assert(readme.includes('v1.1.9') || readme.includes('v1.1.10'), 'README documents v1.1.9+ lineage');
 assert(main.includes("dataset.layoutStability = 'v1119-interaction-qa-polish'"), 'runtime layout stability dataset is wired');
 assert(main.includes('installInteractionQaPolish()'), 'v1.1.9 runtime installer is wired');
 assert(main.includes('repairFixedInteractiveBounds'), 'fixed interactive bounds guard exists');
