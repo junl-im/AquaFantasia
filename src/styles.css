@@ -12620,3 +12620,217 @@ html[data-viewport-safe="v1117-viewport-safe-lock"] #toast-root {
     translate: none !important;
   }
 }
+
+/* v1.1.8 LAYOUT QA SWEEP
+   Conservative repair layer over v1.1.7: fixes stale version artifacts, swaps
+   risky viewport-width math to measured app/visual viewport variables, and
+   tightens menu/card/fishing bounds without changing the PNG/WebP 2.5D art path. */
+:root {
+  --v118-nav-height: clamp(58px, 8.2svh, 70px);
+  --v118-nav-gap: 5px;
+  --v118-edge-x: clamp(5px, 1.9vw, 10px);
+  --v118-content-bottom: calc(var(--v118-nav-height) + var(--v118-nav-gap) + env(safe-area-inset-bottom) + 20px);
+  --v117-nav-height: var(--v118-nav-height);
+  --v117-nav-gap: var(--v118-nav-gap);
+  --v117-edge-x: var(--v118-edge-x);
+  --v117-content-bottom: var(--v118-content-bottom);
+}
+html[data-layout-qa="v1118-layout-qa-sweep"],
+html[data-layout-qa="v1118-layout-qa-sweep"] body {
+  width: var(--v118-visual-width, var(--viewport-width, 100vw)) !important;
+  max-width: var(--v118-visual-width, var(--viewport-width, 100vw)) !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] #app {
+  width: var(--v118-app-width, var(--v117-app-width, var(--app-width, min(500px, 100vw)))) !important;
+  max-width: min(500px, var(--v118-visual-width, var(--viewport-width, 100vw))) !important;
+  min-width: 0 !important;
+  height: var(--v118-app-height, var(--portrait-height, 100dvh)) !important;
+  max-height: var(--v118-app-height, var(--portrait-height, 100dvh)) !important;
+  overflow: hidden !important;
+  transform: none !important;
+  translate: none !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] :is(.game-screen,.login-screen,.runtime-menu-screen,.fishing-screen) {
+  inline-size: 100% !important;
+  max-inline-size: 100% !important;
+  min-inline-size: 0 !important;
+  block-size: var(--v118-app-height, var(--portrait-height, 100dvh)) !important;
+  max-block-size: var(--v118-app-height, var(--portrait-height, 100dvh)) !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+  translate: none !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen.v1118-layout-qa-screen {
+  padding: var(--v117-top-y) var(--v118-edge-x) var(--v118-content-bottom) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-y: contain !important;
+  overscroll-behavior-x: none !important;
+  scroll-padding-bottom: var(--v118-content-bottom) !important;
+  touch-action: pan-y !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen.v1118-layout-qa-screen :is(.runtime-hud,.runtime-content,.runtime-panel,.runtime-hero-card,.v108-home-banner,.ranking-panel,.ranking-summary,.ranking-stats-grid,.runtime-card-list,.runtime-region-grid,.runtime-item-grid,.runtime-dex-grid,.runtime-quick-grid,.shop-list,.mission-list,.gear-grid,.dex-grid) {
+  width: 100% !important;
+  max-width: min(500px, 100%) !important;
+  min-width: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+  translate: none !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen.v1118-layout-qa-screen .runtime-content {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: clamp(8px, 2svh, 12px) !important;
+  padding-bottom: 6px !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen.v1118-layout-qa-screen :is(.runtime-panel,.runtime-hero-card,.runtime-item-card,.gear-card,.shop-card,.mission-card,.runtime-dex-card,.dex-card,.region-card,.ranking-live-card,.ranking-stats-grid > div) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen.v1118-layout-qa-screen :is(.runtime-title,.runtime-title > *, .runtime-wallet,.runtime-wallet span,.runtime-panel-title,.runtime-panel-title > *, .rank-user,.rank-score,.rank-user > *, .rank-score > *, .gear-card > div,.shop-card > div,.mission-card > div,.runtime-item-card > *, .dex-card > *, .region-card > *) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen.v1118-layout-qa-screen .runtime-hud {
+  grid-template-columns: clamp(30px, 8.8vw, 42px) minmax(0, 1fr) minmax(58px, 78px) !important;
+  gap: clamp(5px, 1.6vw, 8px) !important;
+  padding-inline: clamp(8px, 2.2vw, 12px) !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .bottom-nav.v840-bottom-nav,
+html[data-layout-qa="v1118-layout-qa-sweep"] .bottom-nav.fixed-root-nav,
+html[data-layout-qa="v1118-layout-qa-sweep"] .bottom-nav.v1118-nav-safe,
+html.v118-interactive-bounds-emergency[data-layout-qa="v1118-layout-qa-sweep"] .bottom-nav.v840-bottom-nav {
+  position: fixed !important;
+  left: max(4px, calc((var(--v118-visual-width, var(--viewport-width, 100vw)) - var(--v118-app-width, var(--app-width, 100vw))) / 2 + env(safe-area-inset-left))) !important;
+  right: max(4px, calc((var(--v118-visual-width, var(--viewport-width, 100vw)) - var(--v118-app-width, var(--app-width, 100vw))) / 2 + env(safe-area-inset-right))) !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: var(--v118-nav-height) !important;
+  max-height: 70px !important;
+  margin: 0 !important;
+  padding: 4px 4px 5px !important;
+  grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  gap: 2px !important;
+  transform: none !important;
+  translate: none !important;
+  overflow: hidden !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .bottom-nav.v840-bottom-nav button {
+  min-width: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 1px 0 !important;
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  justify-items: center !important;
+  overflow: hidden !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .bottom-nav.v840-bottom-nav button img {
+  width: clamp(20px, 5.6vw, 29px) !important;
+  height: clamp(20px, 5.6vw, 29px) !important;
+  object-fit: contain !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .bottom-nav.v840-bottom-nav button span {
+  width: 100% !important;
+  max-width: 100% !important;
+  font-size: clamp(6px, 1.65vw, 8px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.07em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  text-align: center !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen :is(.swipe-route-peek,.swipe-route-out),
+html[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen.swipe-route-peek,
+html[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen.swipe-route-out,
+html[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen.swipe-route-peek *,
+html[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen.swipe-route-out * {
+  transform: none !important;
+  translate: none !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .fishing-screen.v1118-layout-qa-fishing {
+  padding: 0 !important;
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .fishing-screen.v1118-layout-qa-fishing :is(.fishing-hud.v840-fishing-hud,.recent-catch-strip,.reel-panel,.fishing-guide-card) {
+  left: var(--v118-edge-x) !important;
+  right: var(--v118-edge-x) !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  transform: none !important;
+  translate: none !important;
+  overflow: hidden !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .fishing-screen.v1118-layout-qa-fishing .recent-catch-strip {
+  bottom: calc(var(--v118-nav-height) + var(--v118-nav-gap) + env(safe-area-inset-bottom) + 4px) !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .fishing-screen.v1118-layout-qa-fishing .v840-stage-ui .cast-button {
+  bottom: calc(var(--v118-nav-height) + var(--v118-nav-gap) + env(safe-area-inset-bottom) + clamp(58px, 9.6svh, 82px)) !important;
+  width: min(314px, calc(100% - 24px)) !important;
+  max-width: calc(100% - 24px) !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .fishing-screen.v1118-layout-qa-fishing .v840-reel-panel.reel-panel {
+  bottom: calc(var(--v118-nav-height) + var(--v118-nav-gap) + env(safe-area-inset-bottom) + clamp(48px, 7.6svh, 64px)) !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] .fishing-screen.v1118-layout-qa-fishing .catch-result-card {
+  width: min(300px, calc(100% - 22px)) !important;
+  max-width: calc(100% - 22px) !important;
+  max-height: calc(var(--v118-app-height, var(--portrait-height, 100dvh)) - var(--v118-nav-height) - env(safe-area-inset-bottom) - 34px) !important;
+  overflow: hidden auto !important;
+}
+html[data-layout-qa="v1118-layout-qa-sweep"] #toast-root {
+  left: max(8px, calc((var(--v118-visual-width, var(--viewport-width, 100vw)) - var(--v118-app-width, var(--app-width, 100vw))) / 2 + 8px)) !important;
+  right: max(8px, calc((var(--v118-visual-width, var(--viewport-width, 100vw)) - var(--v118-app-width, var(--app-width, 100vw))) / 2 + 8px)) !important;
+}
+html.v118-compact-menu[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen.v1118-layout-qa-screen .runtime-hud {
+  grid-template-columns: clamp(28px, 8vw, 36px) minmax(0, 1fr) minmax(50px, 64px) !important;
+  min-height: 58px !important;
+}
+html.v118-ultra-narrow[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen.v1118-layout-qa-screen {
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+}
+html.v118-ultra-narrow[data-layout-qa="v1118-layout-qa-sweep"] .runtime-card-list .gear-card {
+  grid-template-columns: 38px minmax(0, 1fr) minmax(46px, 58px) !important;
+  gap: 5px !important;
+  padding: 8px !important;
+}
+html.v118-ultra-narrow[data-layout-qa="v1118-layout-qa-sweep"] .runtime-card-list .shop-card {
+  grid-template-columns: 34px minmax(0, 1fr) minmax(46px, 56px) !important;
+  gap: 5px !important;
+  padding: 8px !important;
+}
+html.v118-ultra-narrow[data-layout-qa="v1118-layout-qa-sweep"] .runtime-card-list .mission-card {
+  grid-template-columns: minmax(0, 1fr) minmax(44px, 56px) !important;
+  gap: 5px !important;
+  padding: 8px !important;
+}
+html.v118-ultra-narrow[data-layout-qa="v1118-layout-qa-sweep"] .runtime-menu-screen.v1118-layout-qa-screen :is(.gear-card img,.shop-card img) {
+  width: 36px !important;
+  height: 36px !important;
+}
+html.v118-ultra-narrow[data-layout-qa="v1118-layout-qa-sweep"] .bottom-nav.v840-bottom-nav {
+  left: max(3px, calc((var(--v118-visual-width, var(--viewport-width, 100vw)) - var(--v118-app-width, var(--app-width, 100vw))) / 2 + env(safe-area-inset-left))) !important;
+  right: max(3px, calc((var(--v118-visual-width, var(--viewport-width, 100vw)) - var(--v118-app-width, var(--app-width, 100vw))) / 2 + env(safe-area-inset-right))) !important;
+  padding: 3px 3px 4px !important;
+  gap: 1px !important;
+}
+html.v118-short-height[data-layout-qa="v1118-layout-qa-sweep"] {
+  --v118-nav-height: clamp(54px, 8.2svh, 62px);
+  --v118-content-bottom: calc(var(--v118-nav-height) + var(--v118-nav-gap) + env(safe-area-inset-bottom) + 14px);
+}

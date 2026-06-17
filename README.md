@@ -1,51 +1,54 @@
-# AquaFantasia v1.1.7 Viewport Safe Lock
+# AquaFantasia v1.1.8 Layout QA Sweep
 
-모바일 웹 낚시 게임 AquaFantasia의 v1.1.7 레이아웃 안전 보강 패치입니다. v1.1.6에서 화면 경계 가드를 넣었지만, 일부 실제 기기/브라우저에서 `100vw`, 태블릿 세로 보정, fixed 하단바 기준이 다시 엇갈릴 수 있는 위험이 남아 있었습니다. 이번 패치는 신규 기능보다 **최하단 메뉴바, 메뉴별 UI, 낚시 HUD가 실제 앱 화면 밖으로 나가지 않게 하는 것**을 최우선으로 잡았습니다.
+모바일 웹 낚시 게임 AquaFantasia의 v1.1.8 레이아웃 QA 보강 패치입니다. v1.1.7에서 viewport 기준을 잠근 뒤에도 실제 기기에서 남을 수 있는 작은 흔들림을 다시 점검했고, 하단 8칸 메뉴바와 각 메뉴 UI가 화면 밖으로 나가지 않도록 한 겹 더 보수적으로 고정했습니다.
 
-## 이번 패치 핵심
+이번 패치는 새 기능 추가보다 안정화가 우선입니다. v1.1.1 안전 UI 정책, v1.1.2 Premium 2.5D 엔진, v1.1.3 Micro Detail Polish, v1.1.4 Pixel Perfect Polish, v1.1.4 설치 Hotfix, v1.1.5 Layout Rescue, v1.1.6 UI Bounds Polish, v1.1.7 Viewport Safe Lock을 유지합니다.
 
-- `v1117-viewport-safe-lock` 최종 viewport 안전 레이어를 추가했습니다.
-- v1.1.6의 `100vw` 강제 기준 위에 실제 `portrait-width`/앱 케이지 기준을 다시 덮어, 화면이 넓은 브라우저·인앱 브라우저·태블릿 세로에서도 하단바가 앱 밖으로 벌어지지 않게 했습니다.
-- v1.1.6의 540px 이상 세로 화면 보정에서 다시 들어갈 수 있던 `left:50% + translateX(-50%)` 중심 정렬을 v1.1.7에서 `left/right auto-width` 방식으로 재고정했습니다.
-- 하단 8칸 메뉴바는 앱 폭 기준으로 inset 계산을 다시 적용하고, 런타임에서 실제 bounding box가 앱 밖으로 나가면 즉시 `v117-nav-bounds-emergency` 보정이 걸리도록 했습니다.
-- 메뉴 화면 루트, HUD, 콘텐츠, 카드, 버튼, 리스트, 랭킹 패널을 `width:100%`, `max-width:500px`, `overflow-x:hidden`, `min-width:0` 기준으로 다시 정리했습니다.
-- 스와이프 화면 전환 중 `swipe-route-peek/out` 클래스가 화면 전체나 내부 콘텐츠를 밀지 않도록 v1.1.7 레이어에서도 재차 차단했습니다.
-- 낚시 화면 HUD, 최근 포획, 릴 패널, 캐스팅 버튼, 결과 카드가 하단 메뉴바와 겹치거나 앱 화면 밖으로 나가지 않도록 다시 묶었습니다.
-- `#toast-root`도 앱 폭 기준으로 보정해 토스트가 화면 가장자리 밖으로 튀는 상황을 줄였습니다.
-- v1.1.4 Pixel Perfect Polish와 v1.1.4 설치 Hotfix의 `@protobufjs/*` 수정, v1.1.5 Layout Rescue, v1.1.6 UI Bounds Polish를 유지합니다.
-- SVG/벡터 신규 자산은 추가하지 않았고 PNG/WebP 기반 2.5D/3D 렌더 스타일을 유지했습니다.
-- 문서는 계속 `README.md` 하나만 유지합니다.
+## 핵심 유지 정책
 
-## 유지된 안전 정책
+- README.md 단일 문서 정책 유지
+- GitHub Actions 설치 Hotfix 유지
+- 신규 SVG/벡터 자산 추가 없음
+- PNG/WebP 기반 2.5D/3D 렌더링 방향 유지
+- 낚시 화면 스와이프 이동 비활성화 유지
+- 하단 메뉴바 8칸 고정 유지
+- RuntimeQualityManager와 WebGL/HTML fallback 안전 정책 유지
 
-- 하단 메뉴바 8칸 고정
-- 낚시 화면 스와이프 이동 비활성화
-- 카드/테두리 내부 배경 fill 보강 유지
-- 상점/미션/랭킹/장비/가방/도감 텍스트 containment 유지
-- RuntimeQualityManager, WebGL 품질 티어, Pixi DPR 상한 유지
-- 서비스워커 프리캐시 실패 방지 유지
-- GitHub Pages / Vite build 구조 유지
+## v1.1.8에서 다시 점검하고 고친 부분
 
-## 검증 명령
+- v1.1.7 패치에서 누락되어 있던 오프라인 페이지 버전 표기 불일치 수정
+- README 버전/캐시 설명을 v1.1.8 기준으로 정리
+- PWA / service worker 캐시 버전 갱신
+- 기존 v1.1.7 검증 스크립트가 새 버전에서 막히지 않도록 lineage 검증으로 보정
+- `100vw` 직접 계산 의존도를 줄이고, 런타임에서 측정한 visual viewport / app width 기준을 추가
+- 하단 메뉴바 left/right 계산을 `--v118-visual-width`와 `--v118-app-width` 기준으로 재보정
+- 메뉴 루트, HUD, 콘텐츠, 카드, 랭킹 패널, 목록 그리드의 `min-width`, `max-width`, `overflow-x` 재정리
+- 초소형 화면과 짧은 높이 화면용 별도 guard 추가
+- 낚시 HUD, 최근 포획, 릴 패널, 캐스팅 버튼, 결과 카드가 하단 메뉴바와 겹치지 않도록 재보강
+- 런타임에서 주요 인터랙션 UI가 앱 밖으로 나가면 emergency class를 붙이는 bounds 감지 추가
+
+## 개발 / 검증
 
 ```bash
-npm install
+npm ci --ignore-scripts --no-audit --progress=false
 npm run validate
+npm run runtime:check
+npm run audit
 npm run typecheck
 npm run build
-npm run audit
 node --check public/sw.js
 ```
 
-## 배포 구조
+## 적용 후 확인 순서
 
-- GitHub Pages / Vite build 유지
-- Firebase Spark 기준 구조 유지
-- PWA / service worker 캐시 버전: `aqua-fantasia-v1.1.7-viewport-safe-lock`
-- 세로 고정 정책 유지
-- Kakao/인앱 브라우저 회전 방지 정책 유지
-- 하단 8칸 메뉴바 화면 내 고정 정책 유지
+1. 마을 화면에서 하단 메뉴바 8칸이 모두 화면 안에 있는지 확인합니다.
+2. 마을, 낚시, 장비, 가방, 도감, 상점, 미션, 랭킹을 차례대로 눌러 카드/버튼/텍스트가 밖으로 나가지 않는지 확인합니다.
+3. 낚시 화면에서 HUD, 최근 포획, 캐스팅 버튼, 릴 패널, 결과 카드가 하단 메뉴바와 겹치지 않는지 확인합니다.
+4. 360px급 작은 화면, 390px급 일반 폰, 430px급 큰 폰, 태블릿 세로 화면에서 한 번씩 확인합니다.
 
-## 실제 모바일 확인 순서
+## 배포 메모
 
-v1.1.7 적용 후 360px, 390px, 430px, 540px 이상 세로 화면에서 마을, 낚시, 장비, 가방, 도감, 상점, 미션, 랭킹을 순서대로 눌러 확인하세요. 특히 하단 메뉴바가 앱 폭 밖으로 밀리지 않는지, 각 메뉴 카드가 좌우로 튀지 않는지, 낚시 HUD와 결과 카드가 하단바에 가리지 않는지 먼저 확인하면 됩니다.
+- 앱 버전: `1.1.8`
+- PWA / service worker 캐시 버전: `aqua-fantasia-v1.1.8-layout-qa-sweep`
+- 패치 형태: 기존 프로젝트 루트에 덮어쓰기
+- `node_modules`와 `dist`는 패치 ZIP에서 제외

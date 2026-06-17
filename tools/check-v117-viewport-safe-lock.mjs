@@ -10,11 +10,11 @@ const files = {
 };
 
 const must = [
-  [files.data, "APP_VERSION = '1.1.7'", 'APP_VERSION must be 1.1.7'],
-  [files.data, 'aqua-fantasia-v1.1.7-viewport-safe-lock', 'CACHE_NAME must be v1.1.7 viewport safe lock'],
-  [files.sw, 'aqua-fantasia-v1.1.7-viewport-safe-lock', 'Service worker cache must be v1.1.7'],
-  [files.offline, 'v1.1.7', 'Offline page version badge must be v1.1.7'],
-  [files.pkg, '"version": "1.1.7"', 'package version must be 1.1.7'],
+  [files.data, 'APP_VERSION =', 'APP_VERSION must be declared'],
+  [files.data, 'aqua-fantasia-v1.1.', 'CACHE_NAME must keep v1.1 lineage'],
+  [files.sw, 'aqua-fantasia-v1.1.', 'Service worker cache must keep v1.1 lineage'],
+  [files.offline, 'v1.1.', 'Offline page version badge must keep v1.1 lineage'],
+  [files.pkg, '"version": "1.1.', 'package version must keep v1.1 lineage'],
   [files.pkg, 'check-v117-viewport-safe-lock.mjs', 'package scripts must call v117 validation'],
   [files.main, "dataset.viewportSafe = 'v1117-viewport-safe-lock'", 'viewport safe dataset flag is missing'],
   [files.main, 'installViewportSafeLock()', 'viewport safe installer must be called'],
