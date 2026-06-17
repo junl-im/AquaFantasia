@@ -248,9 +248,9 @@ const CAMERA_PAD = 280;
 
 const TILE_TEXTURES: Record<VillageTileKind, string[]> = {
   grass: ['./assets/v207/tiles/grass_tile.png', './assets/v207/tiles/grass_flower_tile.png'],
-  sand: ['./assets/v207/tiles/sand_tile.png', './assets/v207/tiles/sand_shell_tile.png'],
+  sand: ['./assets/v207/tiles/sand_tile.png', './assets/v207/tiles/sand_shell_tile.png', './assets/v207/tiles/sand_path_tile.png'],
   sea: ['./assets/v207/tiles/water_tile.png'],
-  stone: ['./assets/v207/tiles/stone_tile.png', './assets/v207/tiles/stone_cracked_tile.png'],
+  stone: ['./assets/v207/tiles/stone_tile.png', './assets/v207/tiles/stone_cracked_tile.png', './assets/v207/tiles/grass_path_tile.png', './assets/v207/tiles/curved_path_tile.png'],
   wood: ['./assets/v207/tiles/beach_path_tile.png'],
   plaza: ['./assets/v207/tiles/plaza_tile.png', './assets/v207/tiles/plaza_shell_tile.png'],
 };

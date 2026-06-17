@@ -168,7 +168,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.detailStabilityQa = 'v11113-detail-stability-qa';
     document.documentElement.dataset.buttonStyleQa = 'v11114-button-style-hotfix';
     document.documentElement.dataset.foundationFrameRescue = 'v11115-foundation-frame-rescue';
-    document.documentElement.dataset.villagePolish = 'v207-layout-tile-bugfix';
+    document.documentElement.dataset.villagePolish = 'v208-right-bottom-menu-assets';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -332,7 +332,7 @@ class AquaFantasiaGame {
     saveGame(this.save);
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen locked-screen';
+    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen locked-screen';
     root.classList.add('v108-home-main', 'v1110-village-flow');
     root.dataset.legacyVillageFlow = 'v1110-home-banner v1110-tide-card before v1110-region-panel';
     root.innerHTML = `
@@ -353,7 +353,7 @@ class AquaFantasiaGame {
       <section class="v204-mini-map" aria-label="루미나 베이 미니맵"><strong>루미나 베이</strong><span>광장 · 항구 · 길드</span><i></i><b></b></section>
       <section class="v206-village-status glass-card" aria-label="마을 요약"><article><strong>${this.save.village.buildings.length}</strong><span>시설</span></article><article><strong>${this.save.village.paths.length}</strong><span>길</span></article><article><strong>${this.totalCaught()}</strong><span>포획</span></article></section>
       <section class="v2-objective-card glass-card" aria-live="polite"><strong>오늘의 목표</strong><span data-v2-objective>길·꽃·벤치를 배치해서 관광객 100점을 먼저 열기</span></section>
-      <section class="v2-village-guide glass-card" aria-live="polite"><strong>첫 마을</strong><span>좌측 조이스틱 이동 · 탭 이동 · 우측 메뉴 · +/− 캐릭터 시점 줌</span></section>
+      <section class="v2-village-guide glass-card" aria-live="polite"><strong>첫 마을</strong><span>좌측 조이스틱 이동 · 탭 이동 · 우측 하단 메뉴 · +/− 캐릭터 시점 줌</span></section>
       <section class="v2-dialog-panel glass-card" aria-live="polite"></section>
       <section class="v203-interior-panel v206-interior-panel" aria-live="polite" aria-hidden="true">
         <div class="v203-interior-backdrop" data-v203-interior-close></div>
@@ -459,7 +459,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v206-menu-detail-screen v207-menu-safe-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen v11115-foundation-frame-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v206-menu-detail-screen v207-menu-safe-screen v208-right-dock-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen v11115-foundation-frame-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -603,8 +603,8 @@ class AquaFantasiaGame {
     dom.app.querySelector('.bottom-nav')?.remove();
     const nav = document.createElement('nav');
     const v13 = false;
-    nav.className = 'bottom-nav glass-card premium-bottom-nav fixed-root-nav v840-bottom-nav';
-    nav.setAttribute('aria-label', '하단 메뉴');
+    nav.className = 'bottom-nav premium-bottom-nav fixed-root-nav v840-bottom-nav v208-right-dock-nav';
+    nav.setAttribute('aria-label', '우측 하단 메뉴');
     nav.setAttribute('data-fixed-root', 'true');
     nav.innerHTML = navItems.map(({ screen, icon, label }) => {
       if (v13) return `<button class="${screen === active ? 'active' : ''}" data-screen="${screen}" aria-label="${label}"><span>${label}</span></button>`;
@@ -1928,6 +1928,21 @@ class AquaFantasiaGame {
 
   private repairBottomNavBounds(nav: HTMLElement): void {
     nav.classList.add('v1117-nav-safe', 'v1118-nav-safe', 'v1119-nav-safe');
+    if (nav.classList.contains('v208-right-dock-nav')) {
+      nav.style.setProperty('left', 'auto', 'important');
+      nav.style.setProperty('right', 'calc(max(10px, env(safe-area-inset-right)) + var(--v119-visual-left, 0px))', 'important');
+      nav.style.setProperty('bottom', 'calc(max(10px, env(safe-area-inset-bottom)) + var(--v119-edge-bottom, 0px))', 'important');
+      nav.style.setProperty('width', 'auto', 'important');
+      nav.style.setProperty('max-width', 'calc(100vw - 18px)', 'important');
+      nav.style.setProperty('min-width', '0', 'important');
+      nav.style.setProperty('margin', '0', 'important');
+      nav.style.setProperty('transform', 'none', 'important');
+      nav.style.setProperty('translate', 'none', 'important');
+      nav.style.setProperty('overflow', 'visible', 'important');
+      document.documentElement.classList.remove('v117-nav-bounds-emergency');
+      nav.classList.remove('v1117-nav-repaired');
+      return;
+    }
     const appRect = dom.app.getBoundingClientRect();
     const rect = nav.getBoundingClientRect();
     const tooWide = rect.width > appRect.width + 1 || rect.left < appRect.left - 1 || rect.right > appRect.right + 1;

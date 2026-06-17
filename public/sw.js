@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.7-layout-tile-bugfix';
+const CACHE_NAME = 'aqua-fantasia-v2.0.8-right-bottom-menu-assets';
 const PRECACHE = [
   "./",
   "./index.html",
