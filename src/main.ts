@@ -137,9 +137,11 @@ class AquaFantasiaGame {
     document.documentElement.dataset.pixelPolish = 'v1114-pixel-perfect-polish';
     document.documentElement.dataset.layoutRescue = 'v1115-ui-layout-rescue';
     document.documentElement.dataset.uiBounds = 'v1116-ui-bounds-polish';
+    document.documentElement.dataset.viewportSafe = 'v1117-viewport-safe-lock';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
+    this.installViewportSafeLock();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
     this.installBackNavigationGuard();
@@ -336,7 +338,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -373,7 +375,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -471,6 +473,7 @@ class AquaFantasiaGame {
     }).join('');
     dom.app.appendChild(nav);
     root.classList.add('has-fixed-root-nav');
+    this.applyViewportSafeGuards(root, nav);
     nav.querySelectorAll<HTMLButtonElement>('[data-screen]').forEach((btn) => btn.addEventListener('click', () => { this.reassertImmersiveMode(); void this.go(btn.dataset.screen as Screen); }));
     if (active !== 'fishing' && active !== 'login') this.installTabSwipe(root, active as Exclude<Screen, 'login' | 'fishing'>);
   }
@@ -1524,6 +1527,83 @@ class AquaFantasiaGame {
     applyPortraitViewportMetrics();
     window.setTimeout(() => applyPortraitViewportMetrics(), 80);
     window.setTimeout(() => applyPortraitViewportMetrics(), 360);
+  }
+
+  private installViewportSafeLock(): void {
+    const sync = () => {
+      const metrics = applyPortraitViewportMetrics();
+      const root = document.documentElement;
+      const vw = Math.max(1, Math.floor(window.visualViewport?.width ?? window.innerWidth));
+      const vh = Math.max(1, Math.floor(window.visualViewport?.height ?? window.innerHeight));
+      root.style.setProperty('--v117-viewport-width', `${vw}px`);
+      root.style.setProperty('--v117-viewport-height', `${vh}px`);
+      root.style.setProperty('--v117-app-width', `${Math.min(vw, metrics.appWidth)}px`);
+      root.style.setProperty('--v117-app-height', `${Math.min(vh, metrics.appHeight)}px`);
+      root.classList.toggle('v117-ultra-narrow', vw <= 360);
+      root.classList.toggle('v117-tablet-portrait', vw >= 540 && vh >= vw);
+      this.repairActiveViewportBounds();
+    };
+    sync();
+    window.visualViewport?.addEventListener('resize', sync, { passive: true });
+    window.visualViewport?.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync, { passive: true });
+    window.addEventListener('orientationchange', sync, { passive: true });
+    window.addEventListener('pageshow', sync, { passive: true });
+  }
+
+  private applyViewportSafeGuards(root: HTMLElement, nav?: HTMLElement): void {
+    root.classList.add('v1117-viewport-safe-screen');
+    const repair = () => {
+      this.repairScreenBounds(root);
+      if (nav) this.repairBottomNavBounds(nav);
+    };
+    window.requestAnimationFrame(repair);
+    window.setTimeout(repair, 80);
+    window.setTimeout(repair, 260);
+  }
+
+  private repairActiveViewportBounds(): void {
+    const screen = dom.app.querySelector<HTMLElement>('.game-screen, .login-screen');
+    const nav = dom.app.querySelector<HTMLElement>('.bottom-nav');
+    if (screen) this.repairScreenBounds(screen);
+    if (nav) this.repairBottomNavBounds(nav);
+  }
+
+  private repairScreenBounds(root: HTMLElement): void {
+    const appRect = dom.app.getBoundingClientRect();
+    const rect = root.getBoundingClientRect();
+    const tooWide = rect.width > appRect.width + 1 || rect.left < appRect.left - 1 || rect.right > appRect.right + 1;
+    root.classList.toggle('v1117-bounds-repaired', tooWide);
+    if (!tooWide) return;
+    root.style.setProperty('width', '100%', 'important');
+    root.style.setProperty('max-width', '100%', 'important');
+    root.style.setProperty('min-width', '0', 'important');
+    root.style.setProperty('left', '0', 'important');
+    root.style.setProperty('right', '0', 'important');
+    root.style.setProperty('margin-left', '0', 'important');
+    root.style.setProperty('margin-right', '0', 'important');
+    root.style.setProperty('overflow-x', 'hidden', 'important');
+    root.style.setProperty('transform', 'none', 'important');
+    root.style.setProperty('translate', 'none', 'important');
+  }
+
+  private repairBottomNavBounds(nav: HTMLElement): void {
+    nav.classList.add('v1117-nav-safe');
+    const appRect = dom.app.getBoundingClientRect();
+    const rect = nav.getBoundingClientRect();
+    const tooWide = rect.width > appRect.width + 1 || rect.left < appRect.left - 1 || rect.right > appRect.right + 1;
+    document.documentElement.classList.toggle('v117-nav-bounds-emergency', tooWide);
+    nav.classList.toggle('v1117-nav-repaired', tooWide);
+    if (!tooWide) return;
+    nav.style.setProperty('left', 'max(4px, calc((100vw - var(--v117-app-width, 100vw)) / 2 + env(safe-area-inset-left)))', 'important');
+    nav.style.setProperty('right', 'max(4px, calc((100vw - var(--v117-app-width, 100vw)) / 2 + env(safe-area-inset-right)))', 'important');
+    nav.style.setProperty('width', 'auto', 'important');
+    nav.style.setProperty('max-width', 'none', 'important');
+    nav.style.setProperty('min-width', '0', 'important');
+    nav.style.setProperty('margin', '0', 'important');
+    nav.style.setProperty('transform', 'none', 'important');
+    nav.style.setProperty('translate', 'none', 'important');
+    nav.style.setProperty('overflow', 'hidden', 'important');
   }
 
   private vibrate(pattern: VibratePattern): void {

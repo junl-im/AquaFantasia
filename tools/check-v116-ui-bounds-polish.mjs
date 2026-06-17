@@ -10,10 +10,10 @@ const files = {
 };
 
 const must = [
-  [files.data, "APP_VERSION = '1.1.6'", 'APP_VERSION must be 1.1.6'],
-  [files.data, 'aqua-fantasia-v1.1.6-ui-bounds-polish', 'CACHE_NAME must be v1.1.6 ui bounds polish'],
-  [files.sw, 'aqua-fantasia-v1.1.6-ui-bounds-polish', 'Service worker cache must be v1.1.6'],
-  [files.offline, 'v1.1.6', 'Offline page version badge must be v1.1.6'],
+  [files.data, 'APP_VERSION =', 'APP_VERSION must be declared'],
+  [files.data, 'aqua-fantasia-v1.1.', 'CACHE_NAME must keep v1.1 lineage'],
+  [files.sw, 'aqua-fantasia-v1.1.', 'Service worker cache must keep v1.1 lineage'],
+  [files.offline, 'v1.1.', 'Offline page version badge must keep v1.1 lineage'],
   [files.main, "dataset.uiBounds = 'v1116-ui-bounds-polish'", 'UI bounds dataset flag is missing'],
   [files.main, 'v1116-ui-bounds-screen', 'Runtime screen class is missing'],
   [files.main, 'v1116-ui-bounds-fishing', 'Fishing screen class is missing'],

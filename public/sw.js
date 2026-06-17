@@ -1,5 +1,5 @@
-// v1.1.4 keeps v1.1.1-v1.1.3 safety policies and refreshes the offline cache.
-const CACHE_NAME = 'aqua-fantasia-v1.1.6-ui-bounds-polish';
+// v1.1.7 keeps previous safety policies and refreshes the offline cache.
+const CACHE_NAME = 'aqua-fantasia-v1.1.7-viewport-safe-lock';
 const PRECACHE = [
   "./",
   "./index.html",
