@@ -15199,7 +15199,7 @@ html.is-hostile-inapp .bottom-nav.v840-bottom-nav,
 }
 
 /* v2.0.4 Menu UI Asset Integration: HUD, inventory, quest board, world map, mini map */
-html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-hud {
+html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-hud {
   left: max(12px, env(safe-area-inset-left)) !important;
   right: max(72px, env(safe-area-inset-right) + 66px) !important;
   top: max(8px, env(safe-area-inset-top)) !important;
@@ -15214,7 +15214,7 @@ html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-f
   backdrop-filter: none !important;
 }
 
-html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-hud-mascot {
+html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-hud-mascot {
   position: absolute !important;
   left: 5px !important;
   bottom: 2px !important;
@@ -15224,26 +15224,26 @@ html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-f
   filter: drop-shadow(0 8px 10px rgba(17, 70, 97, .18));
 }
 
-html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-title strong {
+html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-title strong {
   font-size: 19px !important;
   color: #1f5870 !important;
   letter-spacing: -.03em !important;
 }
 
-html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-title em,
-html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-title span {
+html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-title em,
+html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-title span {
   color: #457083 !important;
   font-size: 10.5px !important;
   font-weight: 1000 !important;
 }
 
-html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-wallet {
+html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-wallet {
   display: grid !important;
   grid-auto-flow: column !important;
   gap: 5px !important;
 }
 
-html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-wallet span {
+html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-wallet span {
   min-height: 25px !important;
   padding: 3px 7px !important;
   border-radius: 999px !important;
@@ -15252,13 +15252,13 @@ html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-f
   box-shadow: inset 0 1px 0 rgba(255,255,255,.8) !important;
 }
 
-html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-wallet img {
+html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-wallet img {
   width: 18px !important;
   height: 18px !important;
   object-fit: contain !important;
 }
 
-html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-content {
+html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-content {
   padding-top: calc(max(92px, env(safe-area-inset-top) + 88px)) !important;
   padding-right: max(74px, env(safe-area-inset-right) + 68px) !important;
 }
@@ -15467,15 +15467,15 @@ html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-f
 }
 
 @media (max-width: 390px), (max-height: 760px) {
-  html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-hud {
+  html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-hud {
     min-height: 64px !important;
     padding-left: 62px !important;
   }
-  html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-hud-mascot {
+  html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-hud-mascot {
     width: 60px !important;
     height: 60px !important;
   }
-  html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-content {
+  html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) .runtime-menu-screen.v204-asset-ui-screen .runtime-content {
     padding-top: calc(max(78px, env(safe-area-inset-top) + 78px)) !important;
   }
   .v204-inventory-grid { grid-template-columns: 1fr; }
@@ -15487,10 +15487,10 @@ html:is([data-village-polish="v204-menu-ui-assets"],[data-village-polish="v205-f
 }
 
 /* v2.0.5 Fishing Minigame Asset Integration: generated fishing UI/VFX sheet connected to actual play loop. */
-html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) body[data-screen="fishing"] .fishing-screen.v205-fishing-asset-screen {
+html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) body[data-screen="fishing"] .fishing-screen.v205-fishing-asset-screen {
   background: #043859 !important;
 }
-html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) body[data-screen="fishing"] .fishing-hud.v205-fishing-hud {
+html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) body[data-screen="fishing"] .fishing-hud.v205-fishing-hud {
   left: 10px !important;
   right: 10px !important;
   top: calc(8px + env(safe-area-inset-top)) !important;
@@ -15503,23 +15503,23 @@ html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polis
   border: 0 !important;
   box-shadow: 0 10px 22px rgba(0, 43, 78, .24) !important;
 }
-html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) body[data-screen="fishing"] .fishing-hud .hud-chip {
+html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) body[data-screen="fishing"] .fishing-hud .hud-chip {
   min-height: 38px !important;
   padding: 6px 8px !important;
   border-radius: 16px !important;
   background: rgba(255,255,255,.62) !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.82), 0 4px 10px rgba(0,50,88,.10) !important;
 }
-html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) body[data-screen="fishing"] .fishing-hud .hud-chip strong {
+html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) body[data-screen="fishing"] .fishing-hud .hud-chip strong {
   color: #174d66 !important;
   font-size: 12px !important;
   text-shadow: none !important;
 }
-html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) body[data-screen="fishing"] .fishing-hud .hud-chip span {
+html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) body[data-screen="fishing"] .fishing-hud .hud-chip span {
   color: #4b7485 !important;
   font-size: 9px !important;
 }
-html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) body[data-screen="fishing"] .fishing-hud .hud-chip img {
+html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) body[data-screen="fishing"] .fishing-hud .hud-chip img {
   width: 26px !important;
   height: 26px !important;
   object-fit: contain !important;
@@ -15787,9 +15787,9 @@ html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polis
 .catch-result-card.v930-result button:last-child { background: url('/assets/v205/fishing/badge_blue.png') center/100% 100% no-repeat, linear-gradient(180deg,#a9f8ff,#54baf5) !important; }
 .v205-fishing-asset-screen .fishing-stage.casting-mode .v205-fish-shadow { opacity: .18; }
 .v205-fishing-asset-screen .fishing-stage.reeling-mode .v205-guide-card { opacity: 0 !important; }
-html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) body[data-screen="fishing"] .bottom-nav { display: none !important; }
+html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) body[data-screen="fishing"] .bottom-nav { display: none !important; }
 @media (max-width: 430px) {
-  html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"]) body[data-screen="fishing"] .fishing-hud.v205-fishing-hud { min-height: 50px !important; grid-template-columns: minmax(0,1fr) auto auto !important; }
+  html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) body[data-screen="fishing"] .fishing-hud.v205-fishing-hud { min-height: 50px !important; grid-template-columns: minmax(0,1fr) auto auto !important; }
   .fishing-loadout-strip { left: 6px; bottom: calc(94px + env(safe-area-inset-bottom)); }
   .fishing-loadout-strip div { width: 54px; min-height: 69px; }
   .fishing-loadout-strip img { width: 52px; height: 52px; }
@@ -15807,7 +15807,7 @@ html:is([data-village-polish="v205-fishing-minigame-assets"],[data-village-polis
 
 
 /* v2.0.6 Interior & Menu Detail Asset Integration: deeper inventory, quest, map, and building interior panels. */
-html[data-village-polish="v206-interior-menu-detail-assets"] .runtime-menu-screen.v206-menu-detail-screen .runtime-content {
+html:is([data-village-polish="v206-interior-menu-detail-assets"],[data-village-polish="v207-layout-tile-bugfix"]) .runtime-menu-screen.v206-menu-detail-screen .runtime-content {
   gap: 12px !important;
 }
 
@@ -16009,4 +16009,235 @@ html[data-village-polish="v206-interior-menu-detail-assets"] .runtime-menu-scree
   .v206-interior-header { grid-template-columns: 60px minmax(0,1fr); }
   .v206-interior-portrait { width: 62px; height: 62px; }
   .v206-interior-status { grid-template-columns: 1fr; }
+}
+
+/* v2.0.7 Layout, Fishing Gauge, Login Gap, Tile Asset Bugfix */
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen {
+  overflow: hidden !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen .runtime-content {
+  position: relative !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: var(--app-height, 100dvh) !important;
+  max-height: var(--app-height, 100dvh) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  padding-top: calc(max(86px, env(safe-area-inset-top) + 82px)) !important;
+  padding-left: max(12px, env(safe-area-inset-left)) !important;
+  padding-right: max(78px, env(safe-area-inset-right) + 72px) !important;
+  padding-bottom: calc(18px + env(safe-area-inset-bottom)) !important;
+  gap: 10px !important;
+  scroll-padding-bottom: calc(18px + env(safe-area-inset-bottom)) !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen .runtime-content > * {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen .runtime-hero-card,
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen .v204-window-card {
+  overflow: hidden !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen .runtime-hero-card {
+  display: grid !important;
+  grid-template-columns: 54px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 15px 13px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen .runtime-hero-card > img {
+  width: 52px !important;
+  height: 52px !important;
+  object-fit: contain !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen .runtime-hero-card .runtime-btn {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  min-height: 42px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen .runtime-title,
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen .runtime-hero-card div,
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen article,
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen p,
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen span,
+html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen strong {
+  min-width: 0 !important;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v206-route-ready,
+html[data-village-polish="v207-layout-tile-bugfix"] .v206-inventory-dashboard {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  padding: 12px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v204-inventory-grid,
+html[data-village-polish="v207-layout-tile-bugfix"] .v206-quest-npc-board {
+  grid-template-columns: 1fr !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v206-quest-npc-board article {
+  grid-template-columns: 54px minmax(0,1fr) !important;
+  justify-items: start !important;
+  text-align: left !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v206-quest-npc-board img {
+  grid-row: span 2 !important;
+  width: 54px !important;
+  height: 54px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v204-slot-card {
+  min-height: 132px !important;
+  padding: 12px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v204-slot-card > img {
+  width: 42px !important;
+  height: 42px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .mission-card.runtime-mission-card,
+html[data-village-polish="v207-layout-tile-bugfix"] .v204-quest-card {
+  display: grid !important;
+  grid-template-columns: minmax(0,1fr) !important;
+  gap: 8px !important;
+  padding: 12px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .mission-card.runtime-mission-card .runtime-btn {
+  width: 100% !important;
+  min-height: 38px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v206-map-detail {
+  grid-template-columns: 1fr !important;
+  gap: 8px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v206-map-detail button {
+  grid-column: 1 !important;
+  grid-row: auto !important;
+  width: 100% !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v203-interior-panel.open {
+  display: grid !important;
+  place-items: center !important;
+  padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left)) !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v206-interior-card {
+  width: min(420px, calc(100vw - 16px)) !important;
+  max-height: calc(var(--app-height, 100dvh) - 20px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  padding: 10px 10px 12px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v206-interior-card .v203-interior-image {
+  display: block !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  height: clamp(190px, 34vh, 300px) !important;
+  object-fit: cover !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v206-interior-status {
+  grid-template-columns: 1fr !important;
+  gap: 5px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v206-interior-actions {
+  grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+  gap: 7px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v206-interior-actions button {
+  min-height: 40px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] body[data-screen="fishing"] .bottom-nav {
+  display: none !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] body[data-screen="fishing"] .reel-panel.v205-reel-panel {
+  position: fixed !important;
+  left: max(8px, env(safe-area-inset-left)) !important;
+  right: max(8px, env(safe-area-inset-right)) !important;
+  bottom: calc(8px + env(safe-area-inset-bottom)) !important;
+  top: auto !important;
+  z-index: 80 !important;
+  width: auto !important;
+  max-width: 420px !important;
+  margin: 0 auto !important;
+  max-height: min(48vh, 350px) !important;
+  overflow: hidden !important;
+  padding: 8px 10px 10px !important;
+  border-radius: 24px !important;
+  transform: none !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v205-reel-panel > img.v205-horizontal-gauge {
+  width: min(286px, 76vw) !important;
+  max-height: 54px !important;
+  object-fit: contain !important;
+  margin: -18px auto -30px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v205-reel-grid {
+  grid-template-columns: 42px minmax(0,1fr) !important;
+  gap: 7px !important;
+  align-items: center !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v205-vertical-gauge {
+  width: 40px !important;
+  height: clamp(132px, 22vh, 176px) !important;
+  object-fit: fill !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v205-reel-control {
+  padding-top: 20px !important;
+  min-width: 0 !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v205-reel-panel .hold-pad {
+  min-height: 54px !important;
+  font-size: 15px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v205-reel-panel p {
+  margin-top: 4px !important;
+  font-size: 10px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .fishing-loadout-strip {
+  bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .start-art-screen .hit-server {
+  top: 67.2% !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .start-art-screen .hit-keep.v11115-keep-toggle,
+html[data-village-polish="v207-layout-tile-bugfix"] .start-art-screen .hit-keep {
+  left: 25.5% !important;
+  top: 78.4% !important;
+  width: 49% !important;
+  height: 4.9% !important;
+  padding: 0 12px !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .start-art-screen .hit-keep .keep-text {
+  font-size: clamp(11px, 3.1vw, 14px) !important;
+}
+html[data-village-polish="v207-layout-tile-bugfix"] .v207-layout-bugfix-screen .v2-village-stage canvas {
+  image-rendering: auto;
+}
+@media (max-width: 380px), (max-height: 700px) {
+  html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen .runtime-hud {
+    min-height: 62px !important;
+    padding-left: 64px !important;
+  }
+  html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen .runtime-hud-mascot {
+    width: 60px !important;
+    height: 60px !important;
+  }
+  html[data-village-polish="v207-layout-tile-bugfix"] .runtime-menu-screen.v207-menu-safe-screen .runtime-content {
+    padding-top: calc(max(74px, env(safe-area-inset-top) + 70px)) !important;
+  }
+  html[data-village-polish="v207-layout-tile-bugfix"] .v206-interior-card .v203-interior-image {
+    height: clamp(150px, 28vh, 220px) !important;
+  }
+  html[data-village-polish="v207-layout-tile-bugfix"] body[data-screen="fishing"] .reel-panel.v205-reel-panel {
+    max-height: min(52vh, 320px) !important;
+    padding: 7px 8px 8px !important;
+  }
+  html[data-village-polish="v207-layout-tile-bugfix"] .v205-reel-grid {
+    grid-template-columns: 34px minmax(0,1fr) !important;
+  }
+  html[data-village-polish="v207-layout-tile-bugfix"] .v205-vertical-gauge {
+    width: 32px !important;
+    height: 136px !important;
+  }
 }

@@ -246,6 +246,22 @@ const INTERIOR_ASSETS: Partial<Record<VillageBuildingType, { title: string; imag
 
 const CAMERA_PAD = 280;
 
+const TILE_TEXTURES: Record<VillageTileKind, string[]> = {
+  grass: ['./assets/v207/tiles/grass_tile.png', './assets/v207/tiles/grass_flower_tile.png'],
+  sand: ['./assets/v207/tiles/sand_tile.png', './assets/v207/tiles/sand_shell_tile.png'],
+  sea: ['./assets/v207/tiles/water_tile.png'],
+  stone: ['./assets/v207/tiles/stone_tile.png', './assets/v207/tiles/stone_cracked_tile.png'],
+  wood: ['./assets/v207/tiles/beach_path_tile.png'],
+  plaza: ['./assets/v207/tiles/plaza_tile.png', './assets/v207/tiles/plaza_shell_tile.png'],
+};
+
+function pickTileTexture(kind: VillageTileKind, x: number, y: number): string | undefined {
+  const list = TILE_TEXTURES[kind];
+  if (!list?.length) return undefined;
+  const index = Math.abs((x * 31 + y * 17 + x * y * 3) % list.length);
+  return list[index];
+}
+
 const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'lighthouse', x: 6, y: 5, blocks: true, scale: 1.06 },
   { kind: 'tree', x: 4, y: 10, blocks: true }, { kind: 'tree', x: 8, y: 8, blocks: true },
@@ -497,6 +513,7 @@ export class VillageWorld {
     const urls = Array.from(new Set([
       ...Object.values(BUILD_DEFS).map((def) => def.texture).filter((url): url is string => Boolean(url)),
       ...Object.values(ACTOR_TEXTURES),
+      ...Object.values(TILE_TEXTURES).flat(),
     ]));
     try {
       const result = await Assets.load(urls);
@@ -533,7 +550,13 @@ export class VillageWorld {
         const p = isoToWorld(x, y);
         const c = this.tileColor(kind);
         this.tileLayer.poly([p.x, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y, p.x + TILE_W, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y + TILE_H]);
-        this.tileLayer.fill({ color: c, alpha: kind === 'sea' ? 0.92 : 0.98 });
+        const textureUrl = pickTileTexture(kind, x, y);
+        const texture = textureUrl ? this.textures.get(textureUrl) : undefined;
+        if (texture) {
+          this.tileLayer.fill({ texture, color: 0xffffff, alpha: kind === 'sea' ? 0.9 : 0.98 });
+        } else {
+          this.tileLayer.fill({ color: c, alpha: kind === 'sea' ? 0.92 : 0.98 });
+        }
         this.tileLayer.stroke({ color: this.tileStroke(kind), alpha: 0.34, width: 1 });
         if (kind === 'sea') {
           this.tileLayer.poly([p.x + 10, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y + 7, p.x + TILE_W - 10, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y + TILE_H - 7]);
@@ -933,7 +956,7 @@ export class VillageWorld {
     }
     this.player.node.position.set(this.player.x, this.player.y);
     this.player.node.zIndex = this.player.tileY * 20 + 16;
-    if (Math.abs(dx) > 0.2) this.player.node.scale.x = dx < 0 ? -1 : 1;
+    if (Math.abs(dx) > 0.2) this.setActorFacing(this.player, dx);
   }
 
   private handlePointerTap(ev: PointerEvent): void {
@@ -1193,7 +1216,14 @@ export class VillageWorld {
     }
     actor.node.position.set(actor.x, actor.y);
     actor.node.zIndex = actor.tileY * 20 + 16;
-    actor.node.scale.x = dx < -1 ? -1 : 1;
+    if (Math.abs(dx) > 1) this.setActorFacing(actor, dx);
+  }
+
+  private setActorFacing(actor: Actor, dx: number): void {
+    const direction = dx < 0 ? -1 : 1;
+    const bodyScaleX = Math.abs(actor.body.scale.x || 1);
+    actor.body.scale.x = bodyScaleX * direction;
+    actor.label.scale.x = 1;
   }
 
   private assignNpcTarget(npc: Actor): void {

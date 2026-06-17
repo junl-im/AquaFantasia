@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.6-interior-menu-detail-assets';
+const CACHE_NAME = 'aqua-fantasia-v2.0.7-layout-tile-bugfix';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -48,6 +48,14 @@ const PRECACHE = [
   "./assets/v22/generated/06_Building_Interior_Fish_Market.png",
   "./assets/v22/generated/07_Building_Interior_Fishing_Guild.png",
   "./assets/v22/generated/08_Building_Interior_Harbor_Office.png",
+  "./assets/v207/tiles/grass_tile.png",
+  "./assets/v207/tiles/grass_flower_tile.png",
+  "./assets/v207/tiles/sand_tile.png",
+  "./assets/v207/tiles/sand_shell_tile.png",
+  "./assets/v207/tiles/stone_tile.png",
+  "./assets/v207/tiles/plaza_tile.png",
+  "./assets/v207/tiles/plaza_shell_tile.png",
+  "./assets/v207/tiles/water_tile.png",
   "./assets/v108/home/island_home_bg_1080x1920.webp",
   "./assets/v108/home/aqua_fantasia_banner.png",
   "./assets/v85/screens/start_screen_clean_v810.webp",
