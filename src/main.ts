@@ -148,6 +148,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.detailStabilityQa = 'v11113-detail-stability-qa';
     document.documentElement.dataset.buttonStyleQa = 'v11114-button-style-hotfix';
     document.documentElement.dataset.foundationFrameRescue = 'v11115-foundation-frame-rescue';
+    document.documentElement.dataset.villagePolish = 'v22-joystick-ui-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -310,7 +311,7 @@ class AquaFantasiaGame {
     saveGame(this.save);
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen village-world-screen v2-village-screen locked-screen';
+    root.className = 'game-screen village-world-screen v2-village-screen v22-joystick-ui-screen locked-screen';
     root.classList.add('v108-home-main', 'v1110-village-flow');
     root.dataset.legacyVillageFlow = 'v1110-home-banner v1110-tide-card before v1110-region-panel';
     root.innerHTML = `
@@ -318,7 +319,7 @@ class AquaFantasiaGame {
       <img class="v2-village-art-bg" src="./assets/v2/village/background/aquafantasia_first_village_town_square_9x16.png" alt="" aria-hidden="true" />
       <img class="v11115-village-bg-img v2-legacy-bg-img" src="${ASSET.homeBg}" alt="" aria-hidden="true" data-fallback="./assets/v1110/home/village_islands_user_bg.png" />
       <header class="v2-village-hud glass-card" aria-label="마을 상태">
-        <div class="v2-profile-chip"><span data-v2-level>Lv.${this.save.village.level}</span><strong>아쿠아 마을</strong><em>살아있는 첫 섬</em></div>
+        <div class="v2-profile-chip"><span data-v2-level>Lv.${this.save.village.level}</span><strong>루미나 베이</strong><em>살아있는 첫 섬마을</em></div>
         <div class="v2-wallet-row">
           <span>골드 <strong data-v2-gold>${this.save.coins.toLocaleString('ko-KR')}</strong></span>
           <span>마을기금 <strong data-v2-fund>${this.save.village.fund.toLocaleString('ko-KR')}</strong></span>
@@ -328,9 +329,11 @@ class AquaFantasiaGame {
         <div class="v2-milestone-line" aria-label="관광객 해금 단계"></div>
       </header>
       <section class="v2-village-stage" data-village-stage aria-label="40 x 40 타일 마을맵"></section>
-      <section class="v2-village-guide glass-card" aria-live="polite"><strong>첫 마을</strong><span>터치 이동 · 드래그 이동 · 줌 지원 · NPC와 건물 상호작용</span></section>
+      <section class="v2-objective-card glass-card" aria-live="polite"><strong>오늘의 목표</strong><span data-v2-objective>길·꽃·벤치를 배치해서 관광객 100점을 먼저 열기</span></section>
+      <section class="v2-village-guide glass-card" aria-live="polite"><strong>첫 마을</strong><span>좌측 조이스틱 이동 · 탭 이동 · 우측 메뉴 · +/− 캐릭터 시점 줌</span></section>
       <section class="v2-dialog-panel glass-card" aria-live="polite"></section>
-      <aside class="v2-build-tray glass-card" aria-label="건물 설치 모드">
+      <div class="v2-build-backdrop" data-village-build-close aria-hidden="true"></div>
+      <aside class="v2-build-tray glass-card" aria-label="건물 설치 모드" role="dialog" aria-modal="true">
         <div class="v2-build-title"><strong>설치모드</strong><button type="button" data-village-build-close>닫기</button></div>
         <div class="v2-build-grid">
           <button type="button" data-build-type="path"><strong>돌길</strong><span>8G · 속도/관광</span></button>
@@ -347,7 +350,12 @@ class AquaFantasiaGame {
         <button type="button" data-village-zoom-in aria-label="확대">＋</button>
         <button type="button" data-village-zoom-out aria-label="축소">－</button>
         <button type="button" data-village-center aria-label="플레이어 위치로 이동">◎</button>
+        <button type="button" data-village-build-open aria-label="건설 메뉴 열기">건설</button>
         <button type="button" data-village-fishing aria-label="항구 출항">출항</button>
+      </div>
+      <div class="v2-joystick" data-village-joystick data-no-swipe aria-label="이동 조이스틱">
+        <div class="v2-joystick-base"><div class="v2-joystick-knob" data-village-joystick-knob></div></div>
+        <span>MOVE</span>
       </div>`;
     dom.app.appendChild(root);
     root.querySelector<HTMLImageElement>('.v11115-village-bg-img')?.addEventListener('error', (ev) => {
@@ -549,7 +557,7 @@ class AquaFantasiaGame {
     this.scheduleContentFlowRepair(root);
     this.scheduleDetailStabilityRepair(root);
     nav.querySelectorAll<HTMLButtonElement>('[data-screen]').forEach((btn) => btn.addEventListener('click', () => { this.reassertImmersiveMode(); void this.go(btn.dataset.screen as Screen); }));
-    if (active !== 'fishing' && active !== 'login') this.installTabSwipe(root, active as Exclude<Screen, 'login' | 'fishing'>);
+    // v2.2: swipe tab routing is intentionally disabled. Village drag, joystick, and pinch zoom now own horizontal gestures.
   }
 
   private installTabSwipe(root: HTMLElement, active: Exclude<Screen, 'login' | 'fishing'>): void {

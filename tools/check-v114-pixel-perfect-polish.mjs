@@ -37,7 +37,7 @@ add(main.includes('syncCatchSpriteTexture'), 'active fish texture sync exists');
 add(main.includes('tickFallback(now, dt)'), 'HTML fallback reeling loop is wired');
 add(main.includes('fallbackTicker'), 'fallback ticker cleanup exists');
 add(main.includes('syncFishingHud()'), 'fishing HUD live sync exists');
-add(main.includes("if (active !== 'fishing'"), 'fishing remains excluded from tab swipe');
+add(main.includes('swipe tab routing is intentionally disabled') || main.includes("if (active !== 'fishing'"), 'fishing remains excluded from tab swipe or swipe is fully disabled');
 add(main.includes('Pointer Events. Installing both pointer and touch handlers'), 'duplicate swipe guard still exists');
 add(main.includes('recommendedDprCap()'), 'Pixi DPR cap uses runtime quality');
 

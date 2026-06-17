@@ -58,14 +58,10 @@ export const fishDex: FishInfo[] = [
 ];
 
 export const navItems: Array<{ screen: Exclude<SaveData['screen'], 'login'>; icon: string; label: string }> = [
-  { screen: 'village', icon: './assets/v91/icons/village.png', label: '마을' },
-  { screen: 'gear', icon: './assets/v91/icons/gear.png', label: '장비' },
-  { screen: 'inventory', icon: './assets/v91/icons/bag.png', label: '가방' },
-  { screen: 'dex', icon: './assets/v91/icons/dex.png', label: '도감' },
-  { screen: 'shop', icon: './assets/v91/icons/shop.png', label: '상점' },
-  { screen: 'mission', icon: './assets/v91/icons/mission.png', label: '미션' },
-  { screen: 'ranking', icon: './assets/v91/icons/ranking.png', label: '랭킹' },
-  { screen: 'fishing', icon: './assets/v91/icons/fishing.png', label: '낚시' },
+  { screen: 'inventory', icon: './assets/v22/icons/nav_bag.png', label: '가방' },
+  { screen: 'mission', icon: './assets/v22/icons/nav_quest.png', label: '퀘스트' },
+  { screen: 'fishing', icon: './assets/v22/icons/nav_map.png', label: '지도' },
+  { screen: 'village', icon: './assets/v22/icons/nav_village.png', label: '마을' },
 ];
 
 export function defaultSave(): SaveData {
@@ -93,10 +89,10 @@ export function defaultSave(): SaveData {
       unlockedSize: 40,
       buildings: [
         { id: 'b_fountain_0', type: 'fountain', x: 19, y: 19, w: 2, h: 2, builtAt: 0 },
-        { id: 'b_market_0', type: 'market', x: 13, y: 21, w: 4, h: 4, builtAt: 0 },
-        { id: 'b_guild_0', type: 'guild', x: 24, y: 21, w: 4, h: 4, builtAt: 0 },
-        { id: 'b_inn_0', type: 'inn', x: 18, y: 12, w: 4, h: 4, builtAt: 0 },
-        { id: 'b_harbor_0', type: 'harbor', x: 18, y: 31, w: 4, h: 4, builtAt: 0 },
+        { id: 'b_market_0', type: 'market', x: 14, y: 22, w: 3, h: 3, builtAt: 0 },
+        { id: 'b_guild_0', type: 'guild', x: 25, y: 22, w: 3, h: 3, builtAt: 0 },
+        { id: 'b_inn_0', type: 'inn', x: 19, y: 12, w: 3, h: 3, builtAt: 0 },
+        { id: 'b_harbor_0', type: 'harbor', x: 19, y: 31, w: 3, h: 3, builtAt: 0 },
       ],
       paths: [],
       tourists: 0,

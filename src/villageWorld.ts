@@ -4,7 +4,11 @@ import type { SaveData, VillageBuildingSave, VillageBuildingType, VillageTileKin
 const MAP_SIZE = 40;
 const TILE_W = 80;
 const TILE_H = 40;
-const BASE_SCALE = 0.92;
+const BASE_SCALE = 0.86;
+const BUILDING_VISUAL_SCALE = 0.74;
+const PLAYER_WALK_SPEED = 1.85;
+const NPC_WALK_SPEED_MIN = 0.48;
+const NPC_WALK_SPEED_RANGE = 0.24;
 const WORLD_ORIGIN_X = MAP_SIZE * TILE_W * 0.5;
 const WORLD_ORIGIN_Y = 120;
 
@@ -43,6 +47,18 @@ type PointerTrack = {
   moved: boolean;
 };
 
+type PointerPoint = { x: number; y: number };
+
+type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse';
+
+type Decoration = {
+  kind: DecoKind;
+  x: number;
+  y: number;
+  blocks?: boolean;
+  scale?: number;
+};
+
 type Actor = {
   id: string;
   role: WorldNpcRole | 'player';
@@ -54,7 +70,7 @@ type Actor = {
   speed: number;
   path: Array<[number, number]>;
   node: Container;
-  body: Graphics;
+  body: Graphics | Sprite;
   label: Text;
   mood: string;
   talk: string[];
@@ -65,7 +81,7 @@ const BUILD_DEFS: Record<VillageBuildingType, BuildDefinition> = {
   house: {
     type: 'house',
     label: '주민 집',
-    size: [3, 3],
+    size: [2, 2],
     cost: 180,
     score: 70,
     texture: './assets/v2/village/buildings/building_fisherman_house.png',
@@ -75,7 +91,7 @@ const BUILD_DEFS: Record<VillageBuildingType, BuildDefinition> = {
   market: {
     type: 'market',
     label: '어시장',
-    size: [4, 4],
+    size: [3, 3],
     cost: 360,
     score: 130,
     texture: './assets/v2/village/buildings/building_fish_market.png',
@@ -85,7 +101,7 @@ const BUILD_DEFS: Record<VillageBuildingType, BuildDefinition> = {
   inn: {
     type: 'inn',
     label: '여관',
-    size: [4, 4],
+    size: [3, 3],
     cost: 420,
     score: 150,
     texture: './assets/v2/village/buildings/building_village_inn.png',
@@ -95,7 +111,7 @@ const BUILD_DEFS: Record<VillageBuildingType, BuildDefinition> = {
   guild: {
     type: 'guild',
     label: '낚시 길드',
-    size: [4, 4],
+    size: [3, 3],
     cost: 400,
     score: 140,
     texture: './assets/v2/village/buildings/building_fishing_guild.png',
@@ -105,7 +121,7 @@ const BUILD_DEFS: Record<VillageBuildingType, BuildDefinition> = {
   harbor: {
     type: 'harbor',
     label: '항구 사무소',
-    size: [4, 4],
+    size: [3, 3],
     cost: 0,
     score: 120,
     texture: './assets/v2/village/buildings/building_harbor_office.png',
@@ -115,7 +131,7 @@ const BUILD_DEFS: Record<VillageBuildingType, BuildDefinition> = {
   warehouse: {
     type: 'warehouse',
     label: '창고',
-    size: [3, 3],
+    size: [2, 2],
     cost: 300,
     score: 100,
     texture: './assets/v2/village/buildings/building_storage_warehouse.png',
@@ -125,7 +141,7 @@ const BUILD_DEFS: Record<VillageBuildingType, BuildDefinition> = {
   aquarium: {
     type: 'aquarium',
     label: '수족관',
-    size: [4, 4],
+    size: [3, 3],
     cost: 620,
     score: 210,
     texture: './assets/v2/village/buildings/building_aquarium.png',
@@ -170,6 +186,35 @@ const DAY_TALK: Record<WorldNpcRole, string[]> = {
   vip: ['이 정도면 고급 휴양섬이 될 가능성이 있군요.', '수족관이 생기면 다시 방문하겠습니다.', '길과 광장 동선이 아주 중요합니다.'],
 };
 
+
+const ACTOR_TEXTURES: Record<Actor['role'], string> = {
+  player: './assets/v22/characters/player_sd_front.png',
+  chief: './assets/v22/characters/npc_chief.png',
+  merchant: './assets/v22/characters/npc_merchant.png',
+  guild: './assets/v22/characters/npc_guild.png',
+  captain: './assets/v22/characters/npc_captain.png',
+  tourist: './assets/v22/characters/npc_tourist.png',
+  vip: './assets/v22/characters/npc_vip.png',
+};
+
+const CAMERA_PAD = 280;
+
+const VILLAGE_DECORATIONS: Decoration[] = [
+  { kind: 'lighthouse', x: 6, y: 5, blocks: true, scale: 1.06 },
+  { kind: 'tree', x: 4, y: 10, blocks: true }, { kind: 'tree', x: 8, y: 8, blocks: true },
+  { kind: 'tree', x: 31, y: 9, blocks: true }, { kind: 'tree', x: 34, y: 14, blocks: true },
+  { kind: 'palm', x: 6, y: 33, blocks: true }, { kind: 'palm', x: 31, y: 33, blocks: true },
+  { kind: 'rock', x: 3, y: 28, blocks: true, scale: .9 }, { kind: 'rock', x: 36, y: 27, blocks: true, scale: .88 },
+  { kind: 'lamp', x: 17, y: 18 }, { kind: 'lamp', x: 22, y: 18 }, { kind: 'lamp', x: 17, y: 23 }, { kind: 'lamp', x: 22, y: 23 },
+  { kind: 'bench', x: 16, y: 20 }, { kind: 'bench', x: 23, y: 20 },
+  { kind: 'flowerBed', x: 15, y: 17 }, { kind: 'flowerBed', x: 24, y: 17 }, { kind: 'flowerBed', x: 15, y: 24 }, { kind: 'flowerBed', x: 24, y: 24 },
+  { kind: 'flag', x: 18, y: 16 }, { kind: 'flag', x: 21, y: 16 },
+  { kind: 'dock', x: 19, y: 33 }, { kind: 'dock', x: 20, y: 33 }, { kind: 'dock', x: 21, y: 33 },
+  { kind: 'dock', x: 19, y: 34 }, { kind: 'dock', x: 20, y: 34 }, { kind: 'dock', x: 21, y: 34 },
+  { kind: 'crate', x: 15, y: 30 }, { kind: 'crate', x: 25, y: 30 },
+  { kind: 'buoy', x: 17, y: 34 }, { kind: 'buoy', x: 23, y: 34 },
+];
+
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
@@ -200,10 +245,10 @@ function centerOfTile(x: number, y: number): { x: number; y: number } {
 function createDefaultBuildings(): VillageBuildingSave[] {
   return [
     { id: 'b_fountain_0', type: 'fountain', x: 19, y: 19, w: 2, h: 2, builtAt: Date.now() },
-    { id: 'b_market_0', type: 'market', x: 13, y: 21, w: 4, h: 4, builtAt: Date.now() },
-    { id: 'b_guild_0', type: 'guild', x: 24, y: 21, w: 4, h: 4, builtAt: Date.now() },
-    { id: 'b_inn_0', type: 'inn', x: 18, y: 12, w: 4, h: 4, builtAt: Date.now() },
-    { id: 'b_harbor_0', type: 'harbor', x: 18, y: 31, w: 4, h: 4, builtAt: Date.now() },
+    { id: 'b_market_0', type: 'market', x: 14, y: 22, w: 3, h: 3, builtAt: Date.now() },
+    { id: 'b_guild_0', type: 'guild', x: 25, y: 22, w: 3, h: 3, builtAt: Date.now() },
+    { id: 'b_inn_0', type: 'inn', x: 19, y: 12, w: 3, h: 3, builtAt: Date.now() },
+    { id: 'b_harbor_0', type: 'harbor', x: 19, y: 31, w: 3, h: 3, builtAt: Date.now() },
   ];
 }
 
@@ -218,7 +263,9 @@ export class VillageWorld {
   private world = new Container();
   private tileLayer = new Graphics();
   private buildingLayer = new Container();
+  private decorationLayer = new Container();
   private actorLayer = new Container();
+  private markerLayer = new Container();
   private previewLayer = new Container();
   private textures = new Map<string, Texture>();
   private tileKinds = new Map<string, VillageTileKind>();
@@ -228,11 +275,18 @@ export class VillageWorld {
   private npcs: Actor[] = [];
   private camera = { x: 0, y: 0, scale: BASE_SCALE };
   private pointer?: PointerTrack;
+  private activePointers = new Map<number, PointerPoint>();
+  private pinchDistance = 0;
+  private pinchScale = BASE_SCALE;
   private selectedBuild: VillageBuildingType | null = null;
+  private buildTrayOpen = false;
+  private cameraFollowUntil = 0;
   private hoverTile: { x: number; y: number } | null = null;
   private lastDialogAt = 0;
   private lastPassiveIncomeAt = 0;
   private destroyed = false;
+  private joystick = { x: 0, y: 0, active: false, pointerId: null as number | null };
+  private joystickKnob?: HTMLElement;
   private readonly resizeHandler = () => this.resize();
 
   constructor(options: VillageWorldOptions) {
@@ -259,13 +313,22 @@ export class VillageWorld {
     this.stageHost.appendChild(app.canvas);
     this.world.sortableChildren = true;
     this.buildingLayer.sortableChildren = true;
+    this.decorationLayer.sortableChildren = true;
     this.actorLayer.sortableChildren = true;
+    this.markerLayer.sortableChildren = true;
+    this.tileLayer.zIndex = 0;
+    this.buildingLayer.zIndex = 20;
+    this.decorationLayer.zIndex = 24;
+    this.actorLayer.zIndex = 30;
+    this.markerLayer.zIndex = 44;
+    this.previewLayer.zIndex = 50;
     app.stage.addChild(this.world);
-    this.world.addChild(this.tileLayer, this.buildingLayer, this.actorLayer, this.previewLayer);
+    this.world.addChild(this.tileLayer, this.buildingLayer, this.decorationLayer, this.actorLayer, this.markerLayer, this.previewLayer);
     this.generateTiles();
     await this.loadTextures();
     this.renderTiles();
     this.renderBuildings();
+    this.renderDecorations();
     this.spawnActors();
     this.bindStageInput();
     this.bindUi();
@@ -273,7 +336,7 @@ export class VillageWorld {
     window.addEventListener('resize', this.resizeHandler, { passive: true });
     app.ticker.add((ticker: { deltaMS: number }) => this.tick(ticker.deltaMS));
     this.syncHud();
-    this.showGuide('마을 입장 완료', '빈 바닥을 터치하면 캐릭터가 이동합니다. 건물/NPC 근처를 터치하면 상호작용합니다.');
+    this.showGuide('마을 입장 완료', '좌측 조이스틱으로 천천히 이동하고, 빈 바닥 터치로도 이동할 수 있습니다.');
   }
 
   destroy(): void {
@@ -285,7 +348,9 @@ export class VillageWorld {
 
   setBuildMode(type: VillageBuildingType | null): void {
     this.selectedBuild = type;
+    if (type) this.buildTrayOpen = true;
     this.root.classList.toggle('v2-build-active', Boolean(type));
+    this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
     this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => {
       node.classList.toggle('active', node.dataset.buildType === type);
     });
@@ -296,8 +361,24 @@ export class VillageWorld {
     }
   }
 
-  zoom(delta: number): void {
-    this.camera.scale = clamp(this.camera.scale + delta, 0.55, 1.65);
+  setBuildTrayOpen(open: boolean): void {
+    this.buildTrayOpen = open;
+    this.root.classList.toggle('v2-build-tray-open', open);
+    if (!open) {
+      this.selectedBuild = null;
+      this.root.classList.remove('v2-build-active');
+      this.previewLayer.removeChildren();
+      this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
+    }
+  }
+
+  zoom(delta: number, focusPlayer = true): void {
+    const nextScale = clamp(this.camera.scale + delta, 0.48, 1.82);
+    this.camera.scale = nextScale;
+    if (focusPlayer && this.player && this.app) {
+      this.camera.x = this.app.screen.width / 2 - this.player.x * nextScale;
+      this.camera.y = this.app.screen.height * 0.56 - this.player.y * nextScale;
+    }
     this.applyCamera();
   }
 
@@ -327,6 +408,21 @@ export class VillageWorld {
     }
     if (!Array.isArray(this.save.village.paths)) this.save.village.paths = [];
     if (!this.save.village.unlockedSize) this.save.village.unlockedSize = 40;
+    const compactDefaults: Record<string, { x: number; y: number; w: number; h: number }> = {
+      b_market_0: { x: 14, y: 22, w: 3, h: 3 },
+      b_guild_0: { x: 25, y: 22, w: 3, h: 3 },
+      b_inn_0: { x: 19, y: 12, w: 3, h: 3 },
+      b_harbor_0: { x: 19, y: 31, w: 3, h: 3 },
+    };
+    let resized = false;
+    for (const building of this.save.village.buildings) {
+      const compact = compactDefaults[building.id];
+      if (compact && (building.x !== compact.x || building.y !== compact.y || building.w !== compact.w || building.h !== compact.h)) {
+        Object.assign(building, compact);
+        resized = true;
+      }
+    }
+    if (resized) this.onSave();
   }
 
   private generateTiles(): void {
@@ -351,7 +447,10 @@ export class VillageWorld {
   }
 
   private async loadTextures(): Promise<void> {
-    const urls = Array.from(new Set(Object.values(BUILD_DEFS).map((def) => def.texture).filter((url): url is string => Boolean(url))));
+    const urls = Array.from(new Set([
+      ...Object.values(BUILD_DEFS).map((def) => def.texture).filter((url): url is string => Boolean(url)),
+      ...Object.values(ACTOR_TEXTURES),
+    ]));
     try {
       const result = await Assets.load(urls);
       for (const url of urls) {
@@ -409,9 +508,9 @@ export class VillageWorld {
       if (def.texture && this.textures.has(def.texture)) {
         const sprite = new Sprite(this.textures.get(def.texture)!);
         sprite.anchor.set(0.5, 1);
-        const targetW = Math.max(130, building.w * TILE_W * 1.12);
+        const targetW = Math.max(96, building.w * TILE_W * BUILDING_VISUAL_SCALE);
         sprite.scale.set(targetW / Math.max(1, sprite.texture.width));
-        sprite.position.set(center.x, center.y + TILE_H * 0.88);
+        sprite.position.set(center.x, center.y + TILE_H * 0.62);
         container.addChild(sprite);
       } else {
         const g = this.createPropGraphic(def.type, building.w, building.h);
@@ -420,10 +519,10 @@ export class VillageWorld {
       }
       const label = new Text({
         text: def.label,
-        style: { fontFamily: 'Arial', fontSize: 18, fontWeight: '800', fill: 0x315064, stroke: { color: 0xffffff, width: 4 } },
+        style: { fontFamily: 'Arial', fontSize: 14, fontWeight: '800', fill: 0x315064, stroke: { color: 0xffffff, width: 3 } },
       });
       label.anchor.set(0.5);
-      label.position.set(center.x, center.y + TILE_H * 0.75);
+      label.position.set(center.x, center.y + TILE_H * 0.54);
       container.addChild(label);
       this.buildingLayer.addChild(container);
     }
@@ -450,12 +549,88 @@ export class VillageWorld {
     return g;
   }
 
+  private renderDecorations(): void {
+    this.decorationLayer.removeChildren();
+    for (const deco of VILLAGE_DECORATIONS) {
+      const p = centerOfTile(deco.x, deco.y);
+      const item = this.createDecorationGraphic(deco.kind, deco.scale ?? 1);
+      item.position.set(p.x, p.y + TILE_H * 0.48);
+      item.zIndex = deco.y * 20 + 10;
+      this.decorationLayer.addChild(item);
+    }
+  }
+
+  private createDecorationGraphic(kind: DecoKind, scale: number): Container {
+    const c = new Container();
+    c.scale.set(scale);
+    const g = new Graphics();
+    if (kind === 'tree' || kind === 'palm') {
+      const trunk = kind === 'palm' ? 0xc99664 : 0x9b7048;
+      g.roundRect(-7, -44, 14, 46, 7).fill({ color: trunk, alpha: 0.96 }).stroke({ color: 0xffffff, alpha: 0.22, width: 2 });
+      if (kind === 'palm') {
+        for (let i = 0; i < 6; i += 1) {
+          const a = -Math.PI / 2 + (i - 2.5) * 0.42;
+          g.ellipse(Math.cos(a) * 28, -58 + Math.sin(a) * 11, 34, 10).fill({ color: 0x42b96e, alpha: 0.96 }).stroke({ color: 0xeaffdf, alpha: 0.22, width: 2 });
+        }
+      } else {
+        g.circle(-17, -56, 28).fill({ color: 0x66bd72, alpha: 0.98 });
+        g.circle(15, -59, 30).fill({ color: 0x73ca78, alpha: 0.98 });
+        g.circle(0, -82, 27).fill({ color: 0x8cd66f, alpha: 0.98 });
+        g.stroke({ color: 0xffffff, alpha: 0.16, width: 3 });
+      }
+    } else if (kind === 'lamp') {
+      g.roundRect(-4, -56, 8, 58, 4).fill({ color: 0x5d7b82, alpha: 0.9 });
+      g.circle(0, -64, 15).fill({ color: 0xfff2a4, alpha: 0.9 }).stroke({ color: 0xffffff, alpha: 0.8, width: 3 });
+      g.circle(0, -64, 25).fill({ color: 0xfff0a0, alpha: 0.16 });
+    } else if (kind === 'bench') {
+      g.roundRect(-30, -18, 60, 12, 6).fill({ color: 0xb87d4b, alpha: 0.95 }).stroke({ color: 0xffffff, alpha: 0.24, width: 2 });
+      g.roundRect(-27, -2, 54, 10, 5).fill({ color: 0xce935a, alpha: 0.95 });
+      g.roundRect(-24, 8, 8, 18, 4).fill({ color: 0x6e7778, alpha: 0.88 });
+      g.roundRect(16, 8, 8, 18, 4).fill({ color: 0x6e7778, alpha: 0.88 });
+    } else if (kind === 'dock') {
+      g.poly([-40, 18, 0, -2, 40, 18, 0, 38]).fill({ color: 0xb98655, alpha: 0.92 }).stroke({ color: 0xffe2b4, alpha: 0.38, width: 2 });
+      for (let i = -22; i <= 22; i += 22) g.moveTo(i - 16, 26).lineTo(i + 16, 10).stroke({ color: 0x8d603d, alpha: 0.45, width: 2 });
+    } else if (kind === 'crate') {
+      g.roundRect(-20, -25, 40, 34, 7).fill({ color: 0xb77b45, alpha: 0.94 }).stroke({ color: 0xffe3b5, alpha: 0.28, width: 3 });
+      g.moveTo(-18, -4).lineTo(18, -22).moveTo(-18, -22).lineTo(18, -4).stroke({ color: 0x875635, alpha: 0.52, width: 3 });
+    } else if (kind === 'buoy') {
+      g.ellipse(0, -12, 15, 22).fill({ color: 0xff6c5e, alpha: 0.95 }).stroke({ color: 0xffffff, alpha: 0.75, width: 5 });
+      g.roundRect(-11, -15, 22, 8, 4).fill({ color: 0xffffff, alpha: 0.88 });
+    } else if (kind === 'flag') {
+      g.roundRect(-3, -58, 6, 62, 3).fill({ color: 0x637b82, alpha: 0.92 });
+      g.poly([3, -58, 36, -49, 3, -38]).fill({ color: 0x56cfff, alpha: 0.95 }).stroke({ color: 0xffffff, alpha: 0.38, width: 2 });
+    } else if (kind === 'rock') {
+      g.ellipse(0, -10, 28, 20).fill({ color: 0x9eaaa8, alpha: 0.96 }).stroke({ color: 0xffffff, alpha: 0.32, width: 3 });
+      g.ellipse(-12, -17, 18, 12).fill({ color: 0xbac4c1, alpha: 0.82 });
+    } else if (kind === 'flowerBed') {
+      g.ellipse(0, 2, 31, 14).fill({ color: 0x6ab76f, alpha: 0.48 });
+      for (let i = 0; i < 9; i += 1) {
+        const x = -22 + i * 5.5;
+        const y = -7 + (i % 3) * 5;
+        g.circle(x, y, 4.2).fill({ color: i % 2 ? 0xff8fc5 : 0xffdf75, alpha: 0.96 });
+      }
+    } else if (kind === 'lighthouse') {
+      g.ellipse(0, 6, 42, 18).fill({ color: 0x294b55, alpha: 0.18 });
+      g.roundRect(-18, -96, 36, 98, 12).fill({ color: 0xfff7e4, alpha: 0.98 }).stroke({ color: 0x75d4ff, alpha: 0.72, width: 5 });
+      g.roundRect(-24, -112, 48, 24, 10).fill({ color: 0x4ab8e8, alpha: 0.96 }).stroke({ color: 0xffffff, alpha: 0.62, width: 4 });
+      g.circle(0, -101, 13).fill({ color: 0xfff1a6, alpha: 0.96 });
+      g.poly([-30, -114, 0, -140, 30, -114]).fill({ color: 0x2c99d0, alpha: 0.96 });
+      g.roundRect(-14, -58, 28, 8, 4).fill({ color: 0x7ad5ff, alpha: 0.7 });
+      g.roundRect(-12, -30, 24, 8, 4).fill({ color: 0x7ad5ff, alpha: 0.7 });
+    }
+    c.addChild(g);
+    return c;
+  }
+
   private rebuildCollision(): void {
     this.blockedTiles.clear();
     for (let y = 0; y < MAP_SIZE; y += 1) {
       for (let x = 0; x < MAP_SIZE; x += 1) {
         if (this.tileKinds.get(tileKey(x, y)) === 'sea') this.blockedTiles.add(tileKey(x, y));
       }
+    }
+    for (const deco of VILLAGE_DECORATIONS) {
+      if (deco.blocks) this.blockedTiles.add(tileKey(deco.x, deco.y));
     }
     for (const b of this.save.village.buildings) {
       if (b.type === 'flower' || b.type === 'fountain') continue;
@@ -494,15 +669,30 @@ export class VillageWorld {
     const node = new Container();
     node.zIndex = tileY * 20 + 16;
     const shadow = new Graphics();
-    shadow.ellipse(0, 10, 18, 8).fill({ color: 0x294b55, alpha: 0.26 });
-    const body = new Graphics();
-    body.circle(0, -15, 18).fill({ color, alpha: 1 }).stroke({ color: 0xffffff, width: 4, alpha: 0.92 });
-    body.circle(-6, -19, 2.8).fill({ color: 0x274659, alpha: 1 });
-    body.circle(6, -19, 2.8).fill({ color: 0x274659, alpha: 1 });
-    body.roundRect(-10, -4, 20, 24, 10).fill({ color: role === 'player' ? 0x0f83d3 : 0xffffff, alpha: role === 'player' ? 0.92 : 0.7 });
-    const label = new Text({ text: name, style: { fontFamily: 'Arial', fontSize: 17, fontWeight: '900', fill: 0x254157, stroke: { color: 0xffffff, width: 5 } } });
+    shadow.ellipse(0, 10, role === 'player' ? 20 : 17, role === 'player' ? 8 : 7).fill({ color: 0x294b55, alpha: 0.24 });
+
+    let body: Graphics | Sprite;
+    const textureUrl = ACTOR_TEXTURES[role];
+    const texture = this.textures.get(textureUrl);
+    if (texture) {
+      const sprite = new Sprite(texture);
+      sprite.anchor.set(0.5, 1);
+      const targetH = role === 'player' ? 86 : 74;
+      sprite.scale.set(targetH / Math.max(1, sprite.texture.height));
+      sprite.position.set(0, 13);
+      body = sprite;
+    } else {
+      const g = new Graphics();
+      g.circle(0, -15, 18).fill({ color, alpha: 1 }).stroke({ color: 0xffffff, width: 4, alpha: 0.92 });
+      g.circle(-6, -19, 2.8).fill({ color: 0x274659, alpha: 1 });
+      g.circle(6, -19, 2.8).fill({ color: 0x274659, alpha: 1 });
+      g.roundRect(-10, -4, 20, 24, 10).fill({ color: role === 'player' ? 0x0f83d3 : 0xffffff, alpha: role === 'player' ? 0.92 : 0.7 });
+      body = g;
+    }
+
+    const label = new Text({ text: name, style: { fontFamily: 'Arial', fontSize: 14, fontWeight: '900', fill: 0x254157, stroke: { color: 0xffffff, width: 4 } } });
     label.anchor.set(0.5);
-    label.position.set(0, -54);
+    label.position.set(0, role === 'player' ? -86 : -74);
     node.addChild(shadow, body, label);
     node.position.set(p.x, p.y);
     return {
@@ -513,14 +703,14 @@ export class VillageWorld {
       tileY,
       x: p.x,
       y: p.y,
-      speed: role === 'player' ? 4.3 : 1.05 + Math.random() * 0.35,
+      speed: role === 'player' ? PLAYER_WALK_SPEED : NPC_WALK_SPEED_MIN + Math.random() * NPC_WALK_SPEED_RANGE,
       path: [],
       node,
       body,
       label,
       mood,
       talk: role === 'player' ? [] : DAY_TALK[role as WorldNpcRole] ?? DAY_TALK.tourist,
-      targetTimer: 800 + Math.random() * 2500,
+      targetTimer: 1400 + Math.random() * 3200,
     };
   }
 
@@ -529,10 +719,22 @@ export class VillageWorld {
     const canvas = this.app.canvas;
     canvas.style.touchAction = 'none';
     canvas.addEventListener('pointerdown', (ev: PointerEvent) => {
-      this.pointer = { startX: ev.clientX, startY: ev.clientY, lastX: ev.clientX, lastY: ev.clientY, moved: false };
+      this.activePointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
       canvas.setPointerCapture?.(ev.pointerId);
+      if (this.activePointers.size >= 2) {
+        this.pointer = undefined;
+        this.pinchDistance = this.pointerDistance();
+        this.pinchScale = this.camera.scale;
+        return;
+      }
+      this.pointer = { startX: ev.clientX, startY: ev.clientY, lastX: ev.clientX, lastY: ev.clientY, moved: false };
     });
     canvas.addEventListener('pointermove', (ev: PointerEvent) => {
+      if (this.activePointers.has(ev.pointerId)) this.activePointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+      if (this.activePointers.size >= 2) {
+        this.updatePinchZoom();
+        return;
+      }
       if (!this.pointer) return;
       const dx = ev.clientX - this.pointer.lastX;
       const dy = ev.clientY - this.pointer.lastY;
@@ -543,45 +745,158 @@ export class VillageWorld {
       if (this.pointer.moved && !this.selectedBuild) {
         this.camera.x += dx;
         this.camera.y += dy;
+        this.cameraFollowUntil = 0;
         this.applyCamera();
       }
       if (this.selectedBuild) this.updatePreviewFromPointer(ev);
     });
     canvas.addEventListener('pointerup', (ev: PointerEvent) => {
       const track = this.pointer;
+      this.activePointers.delete(ev.pointerId);
+      this.pinchDistance = this.activePointers.size >= 2 ? this.pointerDistance() : 0;
       this.pointer = undefined;
       canvas.releasePointerCapture?.(ev.pointerId);
-      if (!track) return;
+      if (!track || this.activePointers.size > 0) return;
       if (!track.moved || this.selectedBuild) this.handlePointerTap(ev);
     });
-    canvas.addEventListener('pointercancel', () => { this.pointer = undefined; });
+    canvas.addEventListener('pointercancel', (ev: PointerEvent) => {
+      this.activePointers.delete(ev.pointerId);
+      this.pointer = undefined;
+      this.pinchDistance = 0;
+    });
     canvas.addEventListener('wheel', (ev: WheelEvent) => {
       ev.preventDefault();
-      this.zoom(ev.deltaY > 0 ? -0.08 : 0.08);
+      this.zoom(ev.deltaY > 0 ? -0.08 : 0.08, false);
     }, { passive: false });
+  }
+
+  private pointerDistance(): number {
+    const points = Array.from(this.activePointers.values()).slice(0, 2);
+    if (points.length < 2) return 0;
+    return Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
+  }
+
+  private updatePinchZoom(): void {
+    const distance = this.pointerDistance();
+    if (distance <= 8) return;
+    if (this.pinchDistance <= 0) {
+      this.pinchDistance = distance;
+      this.pinchScale = this.camera.scale;
+      return;
+    }
+    this.camera.scale = clamp(this.pinchScale * (distance / this.pinchDistance), 0.55, 1.65);
+    this.cameraFollowUntil = 0;
+    this.applyCamera();
   }
 
   private bindUi(): void {
     this.root.querySelectorAll<HTMLButtonElement>('[data-build-type]').forEach((button) => {
       button.addEventListener('click', () => {
         const type = button.dataset.buildType as VillageBuildingType;
-        this.setBuildMode(this.selectedBuild === type ? null : type);
+        if (this.selectedBuild === type) {
+          this.setBuildMode(null);
+          this.setBuildTrayOpen(true);
+          return;
+        }
+        this.setBuildMode(type);
       });
     });
-    this.root.querySelector<HTMLButtonElement>('[data-village-zoom-in]')?.addEventListener('click', () => this.zoom(0.12));
-    this.root.querySelector<HTMLButtonElement>('[data-village-zoom-out]')?.addEventListener('click', () => this.zoom(-0.12));
-    this.root.querySelector<HTMLButtonElement>('[data-village-center]')?.addEventListener('click', () => this.centerCameraOnPlayer());
-    this.root.querySelector<HTMLButtonElement>('[data-village-build-close]')?.addEventListener('click', () => this.setBuildMode(null));
+    this.root.querySelector<HTMLButtonElement>('[data-village-zoom-in]')?.addEventListener('click', () => this.zoom(0.11, true));
+    this.root.querySelector<HTMLButtonElement>('[data-village-zoom-out]')?.addEventListener('click', () => this.zoom(-0.11, true));
+    this.root.querySelector<HTMLButtonElement>('[data-village-center]')?.addEventListener('click', () => { this.cameraFollowUntil = performance.now() + 1200; this.centerCameraOnPlayer(); });
+    this.root.querySelector<HTMLButtonElement>('[data-village-build-open]')?.addEventListener('click', () => this.setBuildTrayOpen(!this.buildTrayOpen));
+    this.root.querySelectorAll<HTMLElement>('[data-village-build-close]').forEach((node) => node.addEventListener('click', () => this.setBuildTrayOpen(false)));
+    this.bindJoystick();
     this.root.querySelector<HTMLButtonElement>('[data-village-fishing]')?.addEventListener('click', () => this.onGoFishing());
+  }
+
+  private bindJoystick(): void {
+    const stick = this.root.querySelector<HTMLElement>('[data-village-joystick]');
+    const knob = this.root.querySelector<HTMLElement>('[data-village-joystick-knob]');
+    if (!stick || !knob) return;
+    this.joystickKnob = knob;
+    const radius = 46;
+    const update = (ev: PointerEvent) => {
+      const rect = stick.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = ev.clientX - cx;
+      const dy = ev.clientY - cy;
+      const length = Math.hypot(dx, dy);
+      const limited = Math.min(radius, length);
+      const nx = length > 0 ? dx / length : 0;
+      const ny = length > 0 ? dy / length : 0;
+      knob.style.transform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
+      const strength = Math.min(1, length / radius);
+      this.joystick.x = nx * strength;
+      this.joystick.y = ny * strength;
+      this.joystick.active = strength > 0.08;
+      if (this.joystick.active) {
+        this.cameraFollowUntil = performance.now() + 800;
+        if (this.player) this.player.path = [];
+      }
+    };
+    const reset = () => {
+      this.joystick = { x: 0, y: 0, active: false, pointerId: null };
+      knob.style.transform = 'translate(-50%, -50%)';
+    };
+    stick.addEventListener('pointerdown', (ev) => {
+      ev.preventDefault();
+      this.joystick.pointerId = ev.pointerId;
+      stick.setPointerCapture?.(ev.pointerId);
+      update(ev);
+    });
+    stick.addEventListener('pointermove', (ev) => {
+      if (this.joystick.pointerId !== ev.pointerId) return;
+      ev.preventDefault();
+      update(ev);
+    });
+    stick.addEventListener('pointerup', (ev) => {
+      if (this.joystick.pointerId !== ev.pointerId) return;
+      stick.releasePointerCapture?.(ev.pointerId);
+      reset();
+    });
+    stick.addEventListener('pointercancel', reset);
+  }
+
+  private movePlayerByJoystick(deltaMs: number): void {
+    if (!this.player || !this.joystick.active) return;
+    const magnitude = Math.hypot(this.joystick.x, this.joystick.y);
+    if (magnitude <= 0.08) return;
+    const key = tileKey(this.player.tileX, this.player.tileY);
+    const pathBoost = this.pathTiles.has(key) ? 1.12 : 1;
+    const step = this.player.speed * pathBoost * Math.max(0.75, deltaMs / 16.67) * clamp(magnitude, 0.25, 1);
+    const tryMove = (dx: number, dy: number): boolean => {
+      const nx = this.player!.x + dx;
+      const ny = this.player!.y + dy;
+      const tile = worldToTile(nx, ny);
+      if (!this.isWalkable(tile.x, tile.y)) return false;
+      this.player!.x = nx;
+      this.player!.y = ny;
+      this.player!.tileX = tile.x;
+      this.player!.tileY = tile.y;
+      return true;
+    };
+    const dx = this.joystick.x * step;
+    const dy = this.joystick.y * step;
+    if (!tryMove(dx, dy)) {
+      if (!tryMove(dx, 0)) tryMove(0, dy);
+    }
+    this.player.node.position.set(this.player.x, this.player.y);
+    this.player.node.zIndex = this.player.tileY * 20 + 16;
+    if (Math.abs(dx) > 0.2) this.player.node.scale.x = dx < 0 ? -1 : 1;
   }
 
   private handlePointerTap(ev: PointerEvent): void {
     const tile = this.tileFromPointer(ev);
     if (!this.inBounds(tile.x, tile.y)) return;
     if (this.selectedBuild) {
+      const def = BUILD_DEFS[this.selectedBuild];
+      this.showTileMarker(tile.x, tile.y, this.canPlace(tile.x, tile.y, def) ? 0x35f08a : 0xff4747);
       this.tryPlace(tile.x, tile.y, this.selectedBuild);
       return;
     }
+    this.showTileMarker(tile.x, tile.y, 0x6bdcff);
     const npc = this.findNpcNear(tile.x, tile.y);
     if (npc) {
       this.movePlayerNear(tile.x, tile.y);
@@ -750,10 +1065,12 @@ export class VillageWorld {
       return;
     }
     this.player.path = path;
+    this.cameraFollowUntil = performance.now() + Math.min(2800, 600 + path.length * 90);
   }
 
   private tick(deltaMs: number): void {
     if (!this.app || this.destroyed) return;
+    this.movePlayerByJoystick(deltaMs);
     this.updateActor(this.player, deltaMs);
     for (const npc of this.npcs) {
       npc.targetTimer -= deltaMs;
@@ -764,6 +1081,7 @@ export class VillageWorld {
       this.updateActor(npc, deltaMs);
     }
     this.actorLayer.sortChildren();
+    this.softFollowPlayer(deltaMs);
     const now = performance.now();
     if (now - this.lastPassiveIncomeAt > 12000) {
       this.lastPassiveIncomeAt = now;
@@ -779,7 +1097,7 @@ export class VillageWorld {
     const dy = target.y - actor.y;
     const dist = Math.hypot(dx, dy);
     const key = tileKey(actor.tileX, actor.tileY);
-    const pathBoost = this.pathTiles.has(key) ? 1.55 : 1;
+    const pathBoost = this.pathTiles.has(key) ? 1.18 : 1;
     const step = actor.speed * pathBoost * Math.max(0.8, deltaMs / 16.67);
     if (dist <= step) {
       actor.x = target.x;
@@ -842,6 +1160,13 @@ export class VillageWorld {
       hud.querySelector<HTMLElement>('[data-v2-level]')!.textContent = `Lv.${this.save.village.level}`;
       hud.querySelector<HTMLElement>('[data-v2-tourists]')!.textContent = String(this.save.village.tourists);
     }
+    const objective = this.root.querySelector<HTMLElement>('[data-v2-objective]');
+    if (objective) {
+      if (score < 100) objective.textContent = '길·꽃·벤치를 배치해서 관광객 100점을 먼저 열기';
+      else if (score < 500) objective.textContent = '어시장 정산과 창고 건설로 관광버스 500점 도달';
+      else if (score < 1000) objective.textContent = '수족관·여관 업그레이드 준비로 VIP 1000점 도전';
+      else objective.textContent = 'VIP 관광을 유지하며 다음 섬 개척 준비';
+    }
     const milestones = this.root.querySelector<HTMLElement>('.v2-milestone-line');
     if (milestones) {
       milestones.innerHTML = `<span class="${score >= 100 ? 'on' : ''}">100 관광객</span><span class="${score >= 500 ? 'on' : ''}">500 관광버스</span><span class="${score >= 1000 ? 'on' : ''}">1000 VIP</span>`;
@@ -862,7 +1187,7 @@ export class VillageWorld {
     const target = tileKey(tx, ty);
     const queue: Array<[number, number]> = [[sx, sy]];
     const came = new Map<string, string | null>([[start, null]]);
-    const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
     for (let index = 0; index < queue.length; index += 1) {
       const [x, y] = queue[index];
       if (tileKey(x, y) === target) break;
@@ -887,8 +1212,45 @@ export class VillageWorld {
   }
 
   private applyCamera(): void {
+    this.clampCamera();
     this.world.position.set(this.camera.x, this.camera.y);
     this.world.scale.set(this.camera.scale);
+  }
+
+  private clampCamera(): void {
+    if (!this.app) return;
+    const scale = this.camera.scale;
+    const maxX = CAMERA_PAD * scale;
+    const minX = this.app.screen.width - (MAP_SIZE * TILE_W + CAMERA_PAD) * scale;
+    const maxY = Math.max(70, CAMERA_PAD * 0.42 * scale);
+    const minY = this.app.screen.height - (WORLD_ORIGIN_Y + MAP_SIZE * TILE_H + CAMERA_PAD) * scale;
+    if (minX < maxX) this.camera.x = clamp(this.camera.x, minX, maxX);
+    if (minY < maxY) this.camera.y = clamp(this.camera.y, minY, maxY);
+  }
+
+  private softFollowPlayer(deltaMs: number): void {
+    if (!this.player || !this.app) return;
+    if (performance.now() > this.cameraFollowUntil && this.player.path.length === 0) return;
+    const targetX = this.app.screen.width / 2 - this.player.x * this.camera.scale;
+    const targetY = this.app.screen.height * 0.54 - this.player.y * this.camera.scale;
+    const blend = clamp(deltaMs / 260, 0.035, 0.16);
+    this.camera.x += (targetX - this.camera.x) * blend;
+    this.camera.y += (targetY - this.camera.y) * blend;
+    this.applyCamera();
+  }
+
+  private showTileMarker(x: number, y: number, color: number): void {
+    this.markerLayer.removeChildren();
+    const p = isoToWorld(x, y);
+    const g = new Graphics();
+    g.poly([p.x, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y, p.x + TILE_W, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y + TILE_H]);
+    g.fill({ color, alpha: 0.28 });
+    g.stroke({ color: 0xffffff, alpha: 0.9, width: 3 });
+    g.zIndex = 9999;
+    this.markerLayer.addChild(g);
+    window.setTimeout(() => {
+      if (!this.destroyed && g.parent) g.parent.removeChild(g);
+    }, 460);
   }
 
   private resize(): void {

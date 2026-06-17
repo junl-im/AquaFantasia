@@ -102,3 +102,11 @@ node --check public/sw.js
 - v1.1.13 Detail Stability QA
 - v1.1.14 Button Style Hotfix
 - v1.1.15 Foundation Frame Rescue
+
+## v2.1 Lumina Village Polish Notes
+
+The v2 village overhaul now includes a polished first-village pass: Lumina Bay naming, a collapsible build tray, objective tracker, mobile pinch zoom, tap tile feedback, soft camera follow, camera bounds, and generated village decoration layer. The supplied object/NPC/tilemap sheets are staged under `public/assets/v2/village/` for the next sprite slicing pass.
+
+## v2.2 Mobile RPG Controls Polish Notes
+
+The v2 village world now uses mobile RPG-style controls: horizontal swipe tab routing is disabled, the top HUD is compact, the old bottom menu is replaced by a right-side four-button menu, a left-bottom analog joystick is added, build mode opens as a popup from a small Build button, player/NPC movement is slower, buildings render smaller, +/− zoom buttons refocus on the player, and supplied SD character/icon/generated asset packs are staged under `public/assets/v22/`.

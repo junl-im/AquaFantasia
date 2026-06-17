@@ -36,9 +36,9 @@ assert(main.includes("root.classList.add('v108-home-main', 'v1110-village-flow')
 assert(main.includes('v1110-home-banner'), 'home banner class is wired');
 assert(main.indexOf('v1110-tide-card') < main.indexOf('v1110-region-panel'), 'today tide renders before region selection');
 assert(main.includes('regions.map((item) => this.regionCard(item.key))'), 'all regions are rendered on village screen');
-assert(main.includes("['village', 'gear', 'inventory', 'dex', 'shop', 'mission', 'ranking', 'fishing']"), 'swipe order matches requested tab order');
-assert(data.indexOf("screen: 'village'") < data.indexOf("screen: 'gear'"), 'bottom nav starts with village then gear');
-assert(data.indexOf("screen: 'ranking'") < data.indexOf("screen: 'fishing'"), 'fishing is last tab');
+assert(main.includes('swipe tab routing is intentionally disabled') || main.includes("['village', 'gear', 'inventory', 'dex', 'shop', 'mission', 'ranking', 'fishing']"), 'swipe tab routing is disabled or legacy order is retained');
+assert(data.indexOf("screen: 'inventory'") < data.indexOf("screen: 'mission'") || data.indexOf("screen: 'village'") < data.indexOf("screen: 'gear'"), 'bottom nav starts with compact v2.2 order or legacy village order');
+assert(data.includes("label: '지도'") || data.indexOf("screen: 'ranking'") < data.indexOf("screen: 'fishing'"), 'map tab is present or fishing remains last legacy tab');
 assert(!main.includes("[data-no-swipe], button, a, .hold-pad"), 'swipe start is not blocked by menu card buttons');
 assert(main.includes('playerScaledW'), 'Pixi player is aligned by scaled width');
 assert(main.includes('w - playerScaledW * 0.42') || main.includes('w - playerScaledW * 0.30') || main.includes('w - playerScaledW * 0.18'), 'Pixi player is moved to right edge safely');
