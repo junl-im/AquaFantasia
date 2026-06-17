@@ -1,0 +1,38 @@
+import { readFileSync, existsSync } from 'node:fs';
+const read = (p) => readFileSync(p, 'utf8');
+const checks = [];
+const add = (ok, msg) => checks.push({ ok, msg });
+const pkg = JSON.parse(read('package.json'));
+const data = read('src/data.ts');
+const main = read('src/main.ts');
+const css = read('src/styles.css');
+const sw = read('public/sw.js');
+add(pkg.version === '1.0.8', 'package version is 1.0.8');
+add(data.includes("APP_VERSION = '1.0.8'"), 'APP_VERSION is 1.0.8');
+add(data.includes('aqua-fantasia-v1.0.8-home-shop-mission-polish'), 'cache name updated in data');
+add(sw.includes('aqua-fantasia-v1.0.8-home-shop-mission-polish'), 'service worker cache updated');
+add(main.includes("v108-home-shop-mission-polish"), 'visual polish marker is v108');
+add(main.includes('ASSET.homeBg') && main.includes('ASSET.homeBanner'), 'home background and banner are wired');
+add(main.includes('v108-home-main'), 'village home layout class exists');
+add(!main.includes('runtime-quick-grid'), 'large village quick buttons removed');
+add(main.includes('v108-shop-grid'), 'shop uses compact two-column grid');
+add(main.includes('v108-mission-progress'), 'mission custom progress gauge exists');
+add(main.includes('v108-ranking-list') && main.includes('연습봇'), 'ranking includes compact practice bot rows');
+add(main.includes("root.addEventListener('touchstart'") && main.includes("root.addEventListener('pointerdown'"), 'swipe navigation has touch and pointer support');
+add(main.includes("if (active !== 'fishing'"), 'fishing remains excluded from swipe navigation');
+add(css.includes('v1.0.8 HOME / SHOP / MISSION / SWIPE POLISH'), 'v108 CSS block exists');
+add(css.includes('--v108-nav-height'), 'v108 nav height variable exists');
+add(css.includes('.v108-home-banner'), 'home banner CSS exists');
+add(css.includes('.v108-shop-card'), 'shop compact card CSS exists');
+add(css.includes('.v108-mission-progress'), 'mission gauge CSS exists');
+add(css.includes('.v108-rank-row'), 'ranking row CSS exists');
+add(existsSync('public/assets/v108/home/island_home_bg_1080x1920.webp'), 'new home background exists');
+add(existsSync('public/assets/v108/home/aqua_fantasia_banner.png'), 'new home banner exists');
+add(existsSync('README.md'), 'README.md exists');
+const failed = checks.filter((c) => !c.ok);
+for (const check of checks) console.log(`${check.ok ? 'PASS' : 'FAIL'} ${check.msg}`);
+if (failed.length) {
+  console.error(`v1.0.8 validation failed: ${failed.length} issue(s)`);
+  process.exit(1);
+}
+console.log('v1.0.8 home/shop/mission polish checks passed.');

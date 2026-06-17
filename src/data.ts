@@ -86,5 +86,21 @@ export function defaultSave(): SaveData {
     unlockedRegions: ['lake', 'river', 'harbor'],
     mastery: {},
     lastRescueAt: 0,
+    village: {
+      level: 1,
+      fund: 0,
+      development: 0,
+      unlockedSize: 40,
+      buildings: [
+        { id: 'b_fountain_0', type: 'fountain', x: 19, y: 19, w: 2, h: 2, builtAt: 0 },
+        { id: 'b_market_0', type: 'market', x: 13, y: 21, w: 4, h: 4, builtAt: 0 },
+        { id: 'b_guild_0', type: 'guild', x: 24, y: 21, w: 4, h: 4, builtAt: 0 },
+        { id: 'b_inn_0', type: 'inn', x: 18, y: 12, w: 4, h: 4, builtAt: 0 },
+        { id: 'b_harbor_0', type: 'harbor', x: 18, y: 31, w: 4, h: 4, builtAt: 0 },
+      ],
+      paths: [],
+      tourists: 0,
+      autoIncome: 0,
+    },
   };
 }

@@ -3,6 +3,31 @@ export type FishingState = 'idle' | 'casting' | 'waiting' | 'bite' | 'reeling' |
 export type RegionKey = 'lake' | 'river' | 'harbor' | 'deep' | 'palace' | 'dimension' | 'glacier' | 'storm' | 'mangrove' | 'lunar' | 'reefFestival';
 export type Rarity = 'COMMON' | 'RARE' | 'EPIC' | 'BOSS';
 
+export type VillageTileKind = 'grass' | 'sand' | 'sea' | 'stone' | 'wood' | 'plaza';
+export type VillageBuildingType = 'house' | 'market' | 'inn' | 'guild' | 'harbor' | 'warehouse' | 'aquarium' | 'fountain' | 'flower' | 'path';
+
+export interface VillageBuildingSave {
+  id: string;
+  type: VillageBuildingType;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  builtAt: number;
+}
+
+export interface VillageSave {
+  level: number;
+  fund: number;
+  development: number;
+  unlockedSize: 20 | 30 | 40 | 60 | 80 | number;
+  buildings: VillageBuildingSave[];
+  paths: string[];
+  tourists: number;
+  autoIncome: number;
+}
+
+
 export interface RegionInfo {
   key: RegionKey;
   name: string;
@@ -50,6 +75,7 @@ export interface SaveData {
   unlockedRegions: RegionKey[];
   mastery: Record<string, number>;
   lastRescueAt: number;
+  village: VillageSave;
 }
 
 export interface ToastOptions {

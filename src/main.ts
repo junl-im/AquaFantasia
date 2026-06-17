@@ -8,6 +8,7 @@ import { ToastManager } from './toast';
 import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPortraitLock } from './core/PortraitGuard';
 import { UnderwaterWebglLayer, type UnderwaterLayerMood } from './core/UnderwaterWebglLayer';
 import { RuntimeQualityManager, type RuntimeQualityTier } from './core/RuntimeQualityManager';
+import { VillageWorld } from './villageWorld';
 
 const ASSET = {
   loginBg: './assets/v85/screens/start_screen_clean_v810.webp',
@@ -121,6 +122,7 @@ class AquaFantasiaGame {
   private readonly lockedOrientation: 'portrait-primary' = 'portrait-primary';
   private webglLayers: UnderwaterWebglLayer[] = [];
   private readonly quality = new RuntimeQualityManager();
+  private villageWorld?: VillageWorld;
 
   async boot(): Promise<void> {
     this.quality.start();
@@ -171,6 +173,8 @@ class AquaFantasiaGame {
     if (this.fallbackTicker) { window.clearInterval(this.fallbackTicker); this.fallbackTicker = 0; }
     window.removeEventListener('resize', this.resizePixiHandler);
     this.holding = false;
+    this.villageWorld?.destroy();
+    this.villageWorld = undefined;
     if (this.pixi) {
       this.pixi.destroy(true, { children: true, texture: false });
       this.pixi = undefined;
@@ -305,49 +309,95 @@ class AquaFantasiaGame {
     this.updateUnlocks();
     saveGame(this.save);
     this.clear();
-    const region = this.getRegion();
-    const root = this.createRuntimeMenuScreen('village', '마을', '메인 항구에서 오늘의 조류와 수역을 확인하세요.');
+    const root = document.createElement('main');
+    root.className = 'game-screen village-world-screen v2-village-screen locked-screen';
     root.classList.add('v108-home-main', 'v1110-village-flow');
-    root.style.setProperty('--v108-home-bg', `url("${ASSET.homeBg}")`);
-    root.style.setProperty('--v11115-village-bg', `url("${ASSET.homeBg}")`);
-    root.insertAdjacentHTML('afterbegin', `<img class="v11115-village-bg-img" src="${ASSET.homeBg}" alt="" aria-hidden="true" data-fallback="./assets/v1110/home/village_islands_user_bg.png" />`);
-    const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
-    content.innerHTML = `
-      <section class="v108-home-banner v1110-home-banner" aria-label="아쿠아 판타지아 메인 배너">
-        <img src="${ASSET.homeBanner}" alt="아쿠아 판타지아 Aqua Fantasia" loading="eager" />
-      </section>
-      <section class="runtime-hero-card tide-card v950-tide-card v108-tide-card v1110-tide-card" aria-label="오늘의 조류">
-        <img class="tide-mascot" src="./assets/v91/characters/chibi_fisher_face_icon.png" alt="" />
-        <div>
-          <span class="runtime-eyebrow">TODAY TIDE</span>
-          <h2>오늘의 조류</h2>
-          <p><strong>${region.name}</strong> · ${region.tide}<br>${region.subtitle}</p>
-          <div class="v950-mini-chips"><span>보유 ${this.save.coins.toLocaleString('ko-KR')}G</span><span>미끼 ${this.save.gear.lureStock}개</span></div>
+    root.dataset.legacyVillageFlow = 'v1110-home-banner v1110-tide-card before v1110-region-panel';
+    root.innerHTML = `
+      <div class="v2-village-bg" aria-hidden="true"></div>
+      <img class="v2-village-art-bg" src="./assets/v2/village/background/aquafantasia_first_village_town_square_9x16.png" alt="" aria-hidden="true" />
+      <img class="v11115-village-bg-img v2-legacy-bg-img" src="${ASSET.homeBg}" alt="" aria-hidden="true" data-fallback="./assets/v1110/home/village_islands_user_bg.png" />
+      <header class="v2-village-hud glass-card" aria-label="마을 상태">
+        <div class="v2-profile-chip"><span data-v2-level>Lv.${this.save.village.level}</span><strong>아쿠아 마을</strong><em>살아있는 첫 섬</em></div>
+        <div class="v2-wallet-row">
+          <span>골드 <strong data-v2-gold>${this.save.coins.toLocaleString('ko-KR')}</strong></span>
+          <span>마을기금 <strong data-v2-fund>${this.save.village.fund.toLocaleString('ko-KR')}</strong></span>
+          <span>발전도 <strong data-v2-dev>${this.save.village.development}</strong></span>
+          <span>관광객 <strong data-v2-tourists>${this.save.village.tourists}</strong></span>
         </div>
-        <button class="runtime-btn gold v950-primary-cta compact-cta" type="button" data-go-fishing>출항</button>
-      </section>
-      <section class="runtime-panel region-panel v108-region-panel v1110-region-panel" aria-label="수역 선택">
-        <div class="runtime-panel-title"><span>FISHING AREA</span><strong>수역 선택</strong></div>
-        <p class="v1110-scroll-hint">아래로 드래그해서 모든 수역을 확인하세요.</p>
-        <div class="region-grid runtime-region-grid v1110-region-grid">${regions.map((item) => this.regionCard(item.key)).join('')}</div>
-      </section>`;
+        <div class="v2-milestone-line" aria-label="관광객 해금 단계"></div>
+      </header>
+      <section class="v2-village-stage" data-village-stage aria-label="40 x 40 타일 마을맵"></section>
+      <section class="v2-village-guide glass-card" aria-live="polite"><strong>첫 마을</strong><span>터치 이동 · 드래그 이동 · 줌 지원 · NPC와 건물 상호작용</span></section>
+      <section class="v2-dialog-panel glass-card" aria-live="polite"></section>
+      <aside class="v2-build-tray glass-card" aria-label="건물 설치 모드">
+        <div class="v2-build-title"><strong>설치모드</strong><button type="button" data-village-build-close>닫기</button></div>
+        <div class="v2-build-grid">
+          <button type="button" data-build-type="path"><strong>돌길</strong><span>8G · 속도/관광</span></button>
+          <button type="button" data-build-type="flower"><strong>꽃밭</strong><span>25G · 분위기</span></button>
+          <button type="button" data-build-type="house"><strong>주민 집</strong><span>180G · 주민</span></button>
+          <button type="button" data-build-type="warehouse"><strong>창고</strong><span>300G · 자동보관</span></button>
+          <button type="button" data-build-type="market"><strong>어시장</strong><span>360G · 자동판매</span></button>
+          <button type="button" data-build-type="inn"><strong>여관</strong><span>420G · 관광</span></button>
+          <button type="button" data-build-type="guild"><strong>낚시 길드</strong><span>400G · 퀘스트</span></button>
+          <button type="button" data-build-type="aquarium"><strong>수족관</strong><span>620G · 도감/관광</span></button>
+        </div>
+      </aside>
+      <div class="v2-world-controls" aria-label="마을 조작">
+        <button type="button" data-village-zoom-in aria-label="확대">＋</button>
+        <button type="button" data-village-zoom-out aria-label="축소">－</button>
+        <button type="button" data-village-center aria-label="플레이어 위치로 이동">◎</button>
+        <button type="button" data-village-fishing aria-label="항구 출항">출항</button>
+      </div>`;
+    dom.app.appendChild(root);
     root.querySelector<HTMLImageElement>('.v11115-village-bg-img')?.addEventListener('error', (ev) => {
       const img = ev.currentTarget as HTMLImageElement | null;
       const fallback = img?.dataset.fallback;
       if (img && fallback && img.src !== new URL(fallback, window.location.href).href) img.src = fallback;
     }, { once: true });
+    this.mountBottomNav(root, 'village');
+    const stage = root.querySelector<HTMLElement>('[data-village-stage]')!;
+    this.villageWorld = new VillageWorld({
+      root,
+      stageHost: stage,
+      save: this.save,
+      onSave: () => saveGame(this.save),
+      onGoFishing: () => { void this.go('fishing'); },
+      onToast: (toast) => this.toast.show(toast),
+    });
+    void this.villageWorld.init().catch((error) => {
+      console.warn('[AquaFantasia] village world failed', error);
+      this.toast.show({ type: 'normal', title: '마을 로딩 실패', message: '기존 메뉴 화면으로 복구합니다.' });
+      this.renderVillageFallback();
+    });
+  }
+
+  private renderVillageFallback(): void {
+    const root = this.createRuntimeMenuScreen('village', '마을', '메인 항구에서 오늘의 조류와 수역을 확인하세요.');
+    const region = this.getRegion();
+    const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
+    content.innerHTML = `
+      <section class="runtime-hero-card tide-card" aria-label="오늘의 조류">
+        <img class="tide-mascot" src="./assets/v91/characters/chibi_fisher_face_icon.png" alt="" />
+        <div>
+          <span class="runtime-eyebrow">TODAY TIDE</span>
+          <h2>오늘의 조류</h2>
+          <p><strong>${region.name}</strong> · ${region.tide}<br>${region.subtitle}</p>
+        </div>
+        <button class="runtime-btn gold compact-cta" type="button" data-go-fishing>출항</button>
+      </section>
+      <section class="runtime-panel region-panel" aria-label="수역 선택">
+        <div class="runtime-panel-title"><span>FISHING AREA</span><strong>수역 선택</strong></div>
+        <div class="region-grid runtime-region-grid">${regions.map((item) => this.regionCard(item.key)).join('')}</div>
+      </section>`;
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { void this.go('fishing'); });
     root.querySelectorAll<HTMLButtonElement>('[data-region]').forEach((btn) => btn.addEventListener('click', () => {
       const key = btn.dataset.region as RegionKey;
-      if (!this.isRegionUnlocked(key)) {
-        const item = regions.find((r) => r.key === key);
-        this.toast.show({ type: 'normal', title: '잠긴 수역', message: item?.unlockHint ?? '조건을 달성하면 열립니다.', actionScreen: 'mission' });
-        return;
-      }
+      if (!this.isRegionUnlocked(key)) return;
       this.save.region = key;
       saveGame(this.save);
-      this.renderVillage();
+      this.renderVillageFallback();
     }));
     this.mountBottomNav(root, 'village');
   }

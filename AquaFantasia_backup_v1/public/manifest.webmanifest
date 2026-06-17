@@ -1,0 +1,29 @@
+{
+  "name": "아쿠아 판타지아",
+  "short_name": "아쿠아판타지아",
+  "description": "세로 전용 2.5D 모바일 캐주얼 낚시 게임",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": [
+    "fullscreen",
+    "standalone",
+    "minimal-ui",
+    "browser"
+  ],
+  "orientation": "portrait-primary",
+  "background_color": "#031827",
+  "theme_color": "#031827",
+  "icons": [
+    {
+      "src": "./assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import { APP_VERSION, defaultSave, regions } from './data';
-import type { RegionKey, SaveData, Screen } from './types';
+import type { RegionKey, SaveData, Screen, VillageBuildingSave, VillageBuildingType } from './types';
 
 const KEY = 'aqua-fantasia-save-v650';
 const LEGACY_KEYS = ['aqua-fantasia-save-v640', 'aqua-fantasia-save-v630', 'aqua-fantasia-save-v620'];
@@ -17,6 +17,35 @@ function sanitizeRecord(value: unknown): Record<string, number> {
   return Object.fromEntries(Object.entries(value as Record<string, unknown>)
     .filter(([key]) => /^[a-zA-Z0-9_-]+$/.test(key))
     .map(([key, count]) => [key, finiteNumber(count, 0)]));
+}
+
+
+const VALID_VILLAGE_BUILDINGS = new Set<VillageBuildingType>(['house', 'market', 'inn', 'guild', 'harbor', 'warehouse', 'aquarium', 'fountain', 'flower', 'path']);
+
+function sanitizeVillageBuildings(value: unknown, fallback: VillageBuildingSave[]): VillageBuildingSave[] {
+  if (!Array.isArray(value)) return fallback;
+  const buildings = value
+    .filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === 'object' && !Array.isArray(item))
+    .map((item, index): VillageBuildingSave | null => {
+      const type = item.type as VillageBuildingType;
+      if (!VALID_VILLAGE_BUILDINGS.has(type) || type === 'path') return null;
+      return {
+        id: typeof item.id === 'string' && /^[a-zA-Z0-9_-]+$/.test(item.id) ? item.id : `b_${type}_${index}`,
+        type,
+        x: finiteNumber(item.x, 20, 0, 79),
+        y: finiteNumber(item.y, 20, 0, 79),
+        w: finiteNumber(item.w, 1, 1, 8),
+        h: finiteNumber(item.h, 1, 1, 8),
+        builtAt: finiteNumber(item.builtAt, 0, 0),
+      };
+    })
+    .filter((item): item is VillageBuildingSave => Boolean(item));
+  return buildings.length ? buildings : fallback;
+}
+
+function sanitizeVillagePaths(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return Array.from(new Set(value.filter((item): item is string => typeof item === 'string' && /^\d{1,2},\d{1,2}$/.test(item)))).slice(0, 6400);
 }
 
 function sanitizeMissions(value: unknown): Record<string, boolean> {
@@ -42,6 +71,18 @@ function normalizeSave(parsed: Partial<SaveData>): SaveData {
     ? parsed.unlockedRegions.filter((key): key is RegionKey => VALID_REGIONS.has(key as RegionKey))
     : [];
   const unlockedRegions = Array.from(new Set<RegionKey>([...base.unlockedRegions, ...unlocked]));
+  const village = {
+    ...base.village,
+    ...(parsed.village && typeof parsed.village === 'object' && !Array.isArray(parsed.village) ? parsed.village : {}),
+    level: finiteNumber(parsed.village?.level, base.village.level, 1, 99),
+    fund: finiteNumber(parsed.village?.fund, base.village.fund, 0),
+    development: finiteNumber(parsed.village?.development, base.village.development, 0),
+    unlockedSize: finiteNumber(parsed.village?.unlockedSize, base.village.unlockedSize, 20, 80),
+    buildings: sanitizeVillageBuildings(parsed.village?.buildings, base.village.buildings),
+    paths: sanitizeVillagePaths(parsed.village?.paths),
+    tourists: finiteNumber(parsed.village?.tourists, 0, 0, 999),
+    autoIncome: finiteNumber(parsed.village?.autoIncome, 0, 0),
+  };
   return {
     ...base,
     ...parsed,
@@ -61,6 +102,7 @@ function normalizeSave(parsed: Partial<SaveData>): SaveData {
     unlockedRegions,
     mastery: sanitizeRecord(parsed.mastery),
     lastRescueAt: finiteNumber(parsed.lastRescueAt, 0, 0),
+    village,
   };
 }
 
