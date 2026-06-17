@@ -16423,3 +16423,241 @@ html[data-village-polish="v208-right-bottom-menu-assets"] .v207-layout-bugfix-sc
     max-width: calc(100vw - 148px) !important;
   }
 }
+
+/* v2.0.9 Asset QA Polish: applied extracted object assets + final safe layout sweep */
+:root {
+  --v209-dock-button: clamp(68px, 17.4vw, 78px);
+  --v209-dock-icon: clamp(44px, 11vw, 52px);
+  --v209-dock-gap: clamp(7px, 2vw, 10px);
+  --v209-safe-side: max(10px, env(safe-area-inset-left));
+}
+html[data-village-polish="v209-asset-qa-polish"] body:not([data-screen="fishing"]) .bottom-nav.v208-right-dock-nav,
+html[data-village-polish="v209-asset-qa-polish"] body:not([data-screen="fishing"]) .bottom-nav.v840-bottom-nav.v208-right-dock-nav,
+html.portrait-only-game[data-village-polish="v209-asset-qa-polish"] body:not([data-screen="fishing"]) .bottom-nav.v840-bottom-nav.v208-right-dock-nav.fixed-root-nav {
+  position: fixed !important;
+  left: auto !important;
+  right: max(10px, env(safe-area-inset-right)) !important;
+  bottom: max(10px, env(safe-area-inset-bottom)) !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: calc(100vw - 18px) !important;
+  height: auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, var(--v209-dock-button)) !important;
+  grid-auto-rows: var(--v209-dock-button) !important;
+  gap: var(--v209-dock-gap) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  overflow: visible !important;
+  transform: none !important;
+  translate: none !important;
+  z-index: 96 !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .bottom-nav.v208-right-dock-nav::before,
+html[data-village-polish="v209-asset-qa-polish"] .bottom-nav.v208-right-dock-nav::after { content: none !important; display: none !important; }
+html[data-village-polish="v209-asset-qa-polish"] .bottom-nav.v208-right-dock-nav button {
+  position: relative !important;
+  width: var(--v209-dock-button) !important;
+  height: var(--v209-dock-button) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  gap: 0 !important;
+  padding: 7px 5px 6px !important;
+  border: 0 !important;
+  border-radius: 24px !important;
+  background:
+    radial-gradient(circle at 38% 18%, rgba(255,255,255,.86), rgba(141,236,255,.38) 36%, rgba(33,122,194,.78) 79%),
+    linear-gradient(160deg, rgba(255,255,255,.68), rgba(52,177,229,.76)) !important;
+  box-shadow: 0 12px 24px rgba(0,28,72,.28), inset 0 2px 0 rgba(255,255,255,.60), inset 0 -4px 10px rgba(0,43,92,.20) !important;
+  color: #edfdff !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  transform: translateZ(0) !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .bottom-nav.v208-right-dock-nav button.active {
+  background:
+    radial-gradient(circle at 40% 18%, rgba(255,255,255,.90), rgba(255,245,160,.52) 35%, rgba(71,216,255,.82) 80%),
+    linear-gradient(160deg, rgba(255,246,171,.78), rgba(58,188,239,.74)) !important;
+  color: #fff8b5 !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 16px 28px rgba(0,29,77,.31), 0 0 0 2px rgba(255,245,160,.45), inset 0 2px 0 rgba(255,255,255,.62) !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .bottom-nav.v208-right-dock-nav button img {
+  width: var(--v209-dock-icon) !important;
+  height: var(--v209-dock-icon) !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  margin: -2px 0 0 !important;
+  filter: drop-shadow(0 5px 6px rgba(0,18,58,.33)) saturate(1.23) contrast(1.12) brightness(1.04) !important;
+  z-index: 1 !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .bottom-nav.v208-right-dock-nav button.active img { transform: translateY(-1px) scale(1.08) !important; }
+html[data-village-polish="v209-asset-qa-polish"] .bottom-nav.v208-right-dock-nav button span {
+  width: 100% !important;
+  margin-top: -4px !important;
+  font-size: clamp(9px, 2.4vw, 10.8px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.055em !important;
+  color: rgba(242,253,255,.96) !important;
+  text-shadow: 0 2px 3px rgba(0,33,76,.62) !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  z-index: 1 !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] body[data-screen="fishing"] .bottom-nav.v208-right-dock-nav { display: none !important; }
+html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .runtime-content {
+  width: min(720px, calc(100vw - 14px)) !important;
+  max-width: min(720px, calc(100vw - 14px)) !important;
+  margin-inline: auto !important;
+  padding-top: calc(max(80px, env(safe-area-inset-top) + 74px)) !important;
+  padding-left: 7px !important;
+  padding-right: 7px !important;
+  padding-bottom: calc(var(--v209-dock-button) * 2 + var(--v209-dock-gap) + 34px + env(safe-area-inset-bottom)) !important;
+  overflow-x: hidden !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .runtime-content > *,
+html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .runtime-hero-card,
+html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .v204-window-card,
+html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .runtime-panel {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: hidden !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .runtime-hero-card {
+  display: grid !important;
+  grid-template-columns: 58px minmax(0,1fr) auto !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 14px 12px !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .runtime-hero-card > img { width: 54px !important; height: 54px !important; object-fit: contain !important; }
+html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .runtime-hero-card h2,
+html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .runtime-hero-card p,
+html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .runtime-hero-card span,
+html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .mission-card,
+html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .runtime-item-card {
+  min-width: 0 !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .v206-inventory-dashboard,
+html[data-village-polish="v209-asset-qa-polish"] .v206-route-ready {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .v204-inventory-grid,
+html[data-village-polish="v209-asset-qa-polish"] .v206-inventory-grid,
+html[data-village-polish="v209-asset-qa-polish"] .mission-list.runtime-card-list,
+html[data-village-polish="v209-asset-qa-polish"] .v204-full-quest-list {
+  grid-template-columns: 1fr !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .v2-build-tray {
+  width: min(430px, calc(100vw - 20px)) !important;
+  max-height: min(74dvh, 640px) !important;
+  overflow: auto !important;
+  overscroll-behavior: contain !important;
+  padding-bottom: max(14px, env(safe-area-inset-bottom)) !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .v2-build-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 9px !important; }
+html[data-village-polish="v209-asset-qa-polish"] .v2-build-grid button {
+  min-height: 104px !important;
+  display: grid !important;
+  grid-template-rows: 48px auto auto !important;
+  place-items: center !important;
+  gap: 3px !important;
+  padding: 9px 6px 8px !important;
+  overflow: hidden !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .v2-build-grid button img {
+  width: 58px !important;
+  height: 48px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 5px 6px rgba(0,24,55,.28)) !important;
+  pointer-events: none !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .v2-build-grid button strong,
+html[data-village-polish="v209-asset-qa-polish"] .v2-build-grid button span { min-width: 0 !important; max-width: 100% !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
+html[data-village-polish="v209-asset-qa-polish"] .v203-interior-panel.open { padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)) !important; }
+html[data-village-polish="v209-asset-qa-polish"] .v203-interior-card.v206-interior-card {
+  width: min(710px, calc(100vw - 20px)) !important;
+  max-height: min(88dvh, 760px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .v203-interior-card .v203-interior-image { height: clamp(168px, 33dvh, 270px) !important; object-fit: cover !important; }
+html[data-village-polish="v209-asset-qa-polish"] .v206-interior-actions { display: grid !important; grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 8px !important; }
+html[data-village-polish="v209-asset-qa-polish"] .v206-interior-actions button { min-width: 0 !important; min-height: 42px !important; }
+html[data-village-polish="v209-asset-qa-polish"] body[data-screen="fishing"] .reel-panel.v205-reel-panel {
+  left: 50% !important;
+  right: auto !important;
+  bottom: calc(82px + env(safe-area-inset-bottom)) !important;
+  width: min(414px, calc(100vw - 18px)) !important;
+  max-height: min(50dvh, 324px) !important;
+  transform: translateX(-50%) !important;
+  overflow: hidden !important;
+  padding: 7px 8px 8px !important;
+}
+html[data-village-polish="v209-asset-qa-polish"] .v205-reel-grid { grid-template-columns: 34px minmax(0,1fr) !important; gap: 7px !important; }
+html[data-village-polish="v209-asset-qa-polish"] .v205-vertical-gauge { width: 32px !important; height: 136px !important; }
+html[data-village-polish="v209-asset-qa-polish"] .v205-reel-panel .hold-pad { min-height: 52px !important; }
+html[data-village-polish="v209-asset-qa-polish"] .v205-reel-panel p { margin: 5px 0 0 !important; font-size: 11px !important; }
+html[data-village-polish="v209-asset-qa-polish"] .v2-village-stage canvas { image-rendering: auto !important; filter: saturate(1.06) contrast(1.03) !important; }
+html[data-village-polish="v209-asset-qa-polish"] .v2-world-controls { top: calc(max(8px, env(safe-area-inset-top)) + 8px) !important; right: max(8px, env(safe-area-inset-right)) !important; }
+html[data-village-polish="v209-asset-qa-polish"] .v2-village-guide { bottom: calc(var(--v209-dock-button) * 2 + var(--v209-dock-gap) + 22px + env(safe-area-inset-bottom)) !important; right: max(10px, env(safe-area-inset-right)) !important; max-width: min(280px, calc(100vw - 150px)) !important; }
+html[data-village-polish="v209-asset-qa-polish"] .v2-objective-card { bottom: calc(var(--v209-dock-button) * 2 + var(--v209-dock-gap) + 22px + env(safe-area-inset-bottom)) !important; left: max(10px, env(safe-area-inset-left)) !important; right: auto !important; max-width: min(300px, calc(100vw - 166px)) !important; }
+html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen::after {
+  content: '';
+  position: fixed;
+  right: calc(var(--v209-dock-button) * 2 + 24px);
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  width: 108px;
+  height: 74px;
+  pointer-events: none;
+  background: url('/assets/v209/props/shell_garden.png') center/contain no-repeat;
+  opacity: .86;
+  filter: drop-shadow(0 12px 14px rgba(0,31,68,.24));
+  z-index: 17;
+}
+html[data-village-polish="v209-asset-qa-polish"] .v206-quest-npc-board,
+html[data-village-polish="v209-asset-qa-polish"] .v204-map-shell,
+html[data-village-polish="v209-asset-qa-polish"] .v204-inventory-shell { position: relative !important; }
+html[data-village-polish="v209-asset-qa-polish"] .v206-quest-npc-board::after {
+  content: '';
+  position: absolute;
+  right: 8px;
+  bottom: -10px;
+  width: 88px;
+  height: 74px;
+  pointer-events: none;
+  background: url('/assets/v209/props/notice_board.png') center/contain no-repeat;
+  opacity: .76;
+}
+html[data-village-polish="v209-asset-qa-polish"] .v204-map-shell::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  bottom: -18px;
+  width: 118px;
+  height: 90px;
+  pointer-events: none;
+  background: url('/assets/v209/props/dock_platform.png') center/contain no-repeat;
+  opacity: .82;
+}
+@media (max-width: 390px) {
+  :root { --v209-dock-button: 62px; --v209-dock-icon: 40px; --v209-dock-gap: 7px; }
+  html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .runtime-hero-card { grid-template-columns: 48px minmax(0,1fr) !important; }
+  html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen .runtime-hero-card .runtime-btn { grid-column: 1 / -1 !important; width: 100% !important; }
+  html[data-village-polish="v209-asset-qa-polish"] .runtime-menu-screen.v209-asset-qa-screen::after { display: none !important; }
+  html[data-village-polish="v209-asset-qa-polish"] .v2-village-guide,
+  html[data-village-polish="v209-asset-qa-polish"] .v2-objective-card { max-width: calc(100vw - 148px) !important; }
+}

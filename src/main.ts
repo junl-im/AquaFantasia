@@ -168,7 +168,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.detailStabilityQa = 'v11113-detail-stability-qa';
     document.documentElement.dataset.buttonStyleQa = 'v11114-button-style-hotfix';
     document.documentElement.dataset.foundationFrameRescue = 'v11115-foundation-frame-rescue';
-    document.documentElement.dataset.villagePolish = 'v208-right-bottom-menu-assets';
+    document.documentElement.dataset.villagePolish = 'v209-asset-qa-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -332,7 +332,7 @@ class AquaFantasiaGame {
     saveGame(this.save);
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen locked-screen';
+    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen v209-asset-qa-screen locked-screen';
     root.classList.add('v108-home-main', 'v1110-village-flow');
     root.dataset.legacyVillageFlow = 'v1110-home-banner v1110-tide-card before v1110-region-panel';
     root.innerHTML = `
@@ -379,14 +379,14 @@ class AquaFantasiaGame {
       <aside class="v2-build-tray glass-card" aria-label="건물 설치 모드" role="dialog" aria-modal="true">
         <div class="v2-build-title"><strong>설치모드</strong><button type="button" data-village-build-close>닫기</button></div>
         <div class="v2-build-grid">
-          <button type="button" data-build-type="path"><strong>돌길</strong><span>8G · 속도/관광</span></button>
-          <button type="button" data-build-type="flower"><strong>꽃밭</strong><span>25G · 분위기</span></button>
-          <button type="button" data-build-type="house"><strong>주민 집</strong><span>180G · 주민</span></button>
-          <button type="button" data-build-type="warehouse"><strong>창고</strong><span>300G · 자동보관</span></button>
-          <button type="button" data-build-type="market"><strong>어시장</strong><span>360G · 자동판매</span></button>
-          <button type="button" data-build-type="inn"><strong>여관</strong><span>420G · 관광</span></button>
-          <button type="button" data-build-type="guild"><strong>낚시 길드</strong><span>400G · 퀘스트</span></button>
-          <button type="button" data-build-type="aquarium"><strong>수족관</strong><span>620G · 도감/관광</span></button>
+          <button type="button" data-build-type="path"><img src="./assets/v207/tiles/stone_tile.png" alt="" /><strong>돌길</strong><span>8G · 속도/관광</span></button>
+          <button type="button" data-build-type="flower"><img src="./assets/v209/props/shell_garden.png" alt="" /><strong>꽃밭</strong><span>25G · 분위기</span></button>
+          <button type="button" data-build-type="house"><img src="./assets/v2/village/buildings/building_fisherman_house.png" alt="" /><strong>주민 집</strong><span>180G · 주민</span></button>
+          <button type="button" data-build-type="warehouse"><img src="./assets/v2/village/buildings/building_storage_warehouse.png" alt="" /><strong>창고</strong><span>300G · 자동보관</span></button>
+          <button type="button" data-build-type="market"><img src="./assets/v2/village/buildings/building_fish_market.png" alt="" /><strong>어시장</strong><span>360G · 자동판매</span></button>
+          <button type="button" data-build-type="inn"><img src="./assets/v2/village/buildings/building_village_inn.png" alt="" /><strong>여관</strong><span>420G · 관광</span></button>
+          <button type="button" data-build-type="guild"><img src="./assets/v2/village/buildings/building_fishing_guild.png" alt="" /><strong>낚시 길드</strong><span>400G · 퀘스트</span></button>
+          <button type="button" data-build-type="aquarium"><img src="./assets/v2/village/buildings/building_aquarium.png" alt="" /><strong>수족관</strong><span>620G · 도감/관광</span></button>
         </div>
       </aside>
       <div class="v2-world-controls" aria-label="마을 조작">
@@ -459,7 +459,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v206-menu-detail-screen v207-menu-safe-screen v208-right-dock-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen v11115-foundation-frame-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v206-menu-detail-screen v207-menu-safe-screen v208-right-dock-screen v209-asset-qa-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen v11115-foundation-frame-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -499,7 +499,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v205-fishing-asset-screen v207-fishing-safe-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing v1112-content-flow-fishing v11113-detail-stability-fishing v11114-button-style-fishing v11115-foundation-frame-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v205-fishing-asset-screen v207-fishing-safe-screen v209-fishing-qa-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing v1112-content-flow-fishing v11113-detail-stability-fishing v11114-button-style-fishing v11115-foundation-frame-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;

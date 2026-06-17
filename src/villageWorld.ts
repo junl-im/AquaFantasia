@@ -255,6 +255,45 @@ const TILE_TEXTURES: Record<VillageTileKind, string[]> = {
   plaza: ['./assets/v207/tiles/plaza_tile.png', './assets/v207/tiles/plaza_shell_tile.png'],
 };
 
+
+const DECO_TEXTURES: Partial<Record<DecoKind, string>> = {
+  tree: './assets/v209/props/palm_cluster.png',
+  palm: './assets/v209/props/palm_tree.png',
+  lamp: './assets/v209/props/crystal_lamp.png',
+  bench: './assets/v209/props/bench.png',
+  crate: './assets/v209/props/crate_stack.png',
+  buoy: './assets/v209/props/net_buoys.png',
+  dock: './assets/v209/props/dock_platform.png',
+  flag: './assets/v209/props/flag_blue.png',
+  rock: './assets/v209/props/shell_rocks.png',
+  flowerBed: './assets/v209/props/flower_box.png',
+  lighthouse: './assets/v209/props/crystal_pillar.png',
+};
+
+const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
+  tree: 150,
+  palm: 160,
+  lamp: 128,
+  bench: 74,
+  crate: 86,
+  buoy: 70,
+  dock: 86,
+  flag: 128,
+  rock: 66,
+  flowerBed: 64,
+  lighthouse: 176,
+};
+
+const BUILD_PROP_TEXTURES: Partial<Record<VillageBuildingType, string>> = {
+  fountain: './assets/v209/props/fountain_asset.png',
+  flower: './assets/v209/props/shell_garden.png',
+};
+
+const BUILD_PROP_TARGET_HEIGHT: Partial<Record<VillageBuildingType, number>> = {
+  fountain: 104,
+  flower: 58,
+};
+
 function pickTileTexture(kind: VillageTileKind, x: number, y: number): string | undefined {
   const list = TILE_TEXTURES[kind];
   if (!list?.length) return undefined;
@@ -514,6 +553,8 @@ export class VillageWorld {
       ...Object.values(BUILD_DEFS).map((def) => def.texture).filter((url): url is string => Boolean(url)),
       ...Object.values(ACTOR_TEXTURES),
       ...Object.values(TILE_TEXTURES).flat(),
+      ...Object.values(DECO_TEXTURES).filter((url): url is string => Boolean(url)),
+      ...Object.values(BUILD_PROP_TEXTURES).filter((url): url is string => Boolean(url)),
     ]));
     try {
       const result = await Assets.load(urls);
@@ -598,7 +639,19 @@ export class VillageWorld {
     }
   }
 
-  private createPropGraphic(type: VillageBuildingType, w: number, h: number): Graphics {
+  private createPropGraphic(type: VillageBuildingType, w: number, h: number): Container {
+    const textureUrl = BUILD_PROP_TEXTURES[type];
+    const texture = textureUrl ? this.textures.get(textureUrl) : undefined;
+    if (texture) {
+      const c = new Container();
+      const sprite = new Sprite(texture);
+      sprite.anchor.set(0.5, 1);
+      const targetH = BUILD_PROP_TARGET_HEIGHT[type] ?? Math.max(54, h * TILE_H);
+      sprite.scale.set(targetH / Math.max(1, sprite.texture.height));
+      sprite.position.set(0, TILE_H * 0.34);
+      c.addChild(sprite);
+      return c;
+    }
     const g = new Graphics();
     if (type === 'fountain') {
       g.circle(0, -14, 42).fill({ color: 0x9ee8ff, alpha: 0.96 }).stroke({ color: 0xffffff, width: 8, alpha: 0.8 });
@@ -633,6 +686,19 @@ export class VillageWorld {
   private createDecorationGraphic(kind: DecoKind, scale: number): Container {
     const c = new Container();
     c.scale.set(scale);
+    const textureUrl = DECO_TEXTURES[kind];
+    const texture = textureUrl ? this.textures.get(textureUrl) : undefined;
+    if (texture) {
+      const shadow = new Graphics();
+      const targetH = DECO_TARGET_HEIGHT[kind] ?? 90;
+      const sprite = new Sprite(texture);
+      sprite.anchor.set(0.5, 1);
+      sprite.scale.set(targetH / Math.max(1, sprite.texture.height));
+      sprite.position.set(0, TILE_H * 0.55);
+      shadow.ellipse(0, TILE_H * 0.48, Math.max(18, Math.min(54, sprite.texture.width * sprite.scale.x * 0.33)), 10).fill({ color: 0x294b55, alpha: 0.18 });
+      c.addChild(shadow, sprite);
+      return c;
+    }
     const g = new Graphics();
     if (kind === 'tree' || kind === 'palm') {
       const trunk = kind === 'palm' ? 0xc99664 : 0x9b7048;
