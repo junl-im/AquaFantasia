@@ -13885,3 +13885,309 @@ html.v11113-ultra-narrow[data-button-style-qa="v11114-button-style-hotfix"] .run
   padding-inline: 8px !important;
   font-size: 9.8px !important;
 }
+
+/* v1.1.15 FOUNDATION FRAME RESCUE
+   Structural pass before adding more content: the supplied village image is forced
+   into the village screen as a real image layer, login keep text/checkbox are
+   sharpened, aquatic frame corners are unified, mission drift is reset, and
+   fishing FX are clipped to the playfield with a right-character -> left-cast path. */
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] {
+  --v11115-app-width: var(--v11113-app-width, var(--v1112-app-width, min(500px, 100vw)));
+  --v11115-app-height: var(--v11113-app-height, var(--v1112-app-height, 100dvh));
+  --v11115-frame-radius: clamp(22px, 6vw, 34px);
+  --v11115-card-pad: clamp(12px, 3.2vw, 17px);
+  --v11115-safe-bottom: var(--v11113-content-bottom, calc(74px + env(safe-area-inset-bottom) + 20px));
+}
+
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .start-art-screen .start-design-surface {
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  font-synthesis-weight: none;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .hit-keep.v11115-keep-toggle {
+  left: 18.5% !important;
+  top: 74.1% !important;
+  width: 63% !important;
+  height: 5.9% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: clamp(8px, 2.2vw, 12px) !important;
+  padding: 0 clamp(12px, 3vw, 18px) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, rgba(5, 70, 118, .72), rgba(2, 32, 72, .86)) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.24), 0 8px 16px rgba(0,21,58,.32) !important;
+  border: 1px solid rgba(185, 248, 255, .42) !important;
+  color: #fff !important;
+  text-shadow: 0 2px 0 rgba(0, 48, 86, .78), 0 0 10px rgba(68, 222, 255, .44) !important;
+  isolation: isolate !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .hit-keep.v11115-keep-toggle .keep-text {
+  display: block !important;
+  color: #fff !important;
+  font-weight: 1000 !important;
+  font-size: clamp(12px, 3.25vw, 16px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.035em !important;
+  white-space: nowrap !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .hit-keep.v11115-keep-toggle .keep-indicator {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 clamp(22px, 6vw, 29px) !important;
+  width: clamp(22px, 6vw, 29px) !important;
+  height: clamp(22px, 6vw, 29px) !important;
+  border-radius: 8px !important;
+  background: linear-gradient(180deg, #f7ffff, #87efff 58%, #188dcc) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.82), 0 4px 8px rgba(0, 28, 62, .38) !important;
+  border: 2px solid rgba(255,255,255,.82) !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .hit-keep.v11115-keep-toggle.checked .keep-indicator::after {
+  content: '';
+  width: 54%;
+  height: 30%;
+  border-left: 4px solid #043c61;
+  border-bottom: 4px solid #043c61;
+  transform: rotate(-45deg) translateY(-1px);
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.62));
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .hit-keep.v11115-keep-toggle.checked {
+  background: linear-gradient(180deg, rgba(57, 218, 255, .80), rgba(5, 95, 155, .90)) !important;
+}
+
+/* Village first screen: real supplied background image layer, not only a CSS var. */
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .runtime-menu-screen.v108-home-main,
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .runtime-menu-screen.v1110-village-flow {
+  background: #0098d7 !important;
+  isolation: isolate !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .runtime-menu-screen.v108-home-main .v11115-village-bg-img {
+  position: fixed !important;
+  inset: 0 !important;
+  width: var(--v11115-app-width) !important;
+  height: var(--v11115-app-height) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  z-index: -3 !important;
+  pointer-events: none !important;
+  opacity: 1 !important;
+  filter: saturate(1.08) contrast(1.02) brightness(1.02) !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .runtime-menu-screen.v108-home-main::before {
+  content: '' !important;
+  position: fixed !important;
+  inset: 0 !important;
+  width: var(--v11115-app-width) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: -2 !important;
+  pointer-events: none !important;
+  background: linear-gradient(180deg, rgba(0, 113, 199, .04), rgba(0, 18, 54, .18) 72%, rgba(0, 11, 34, .42)) !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .runtime-menu-screen.v108-home-main .runtime-3d-bg {
+  background-image: linear-gradient(180deg, rgba(0, 144, 215, .02), rgba(0, 12, 36, .26)), var(--v11115-village-bg), url('/assets/v1110/home/village_islands_user_bg.png') !important;
+  background-size: cover, cover, cover !important;
+  background-position: center top, center top, center top !important;
+  opacity: .92 !important;
+  z-index: -4 !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .runtime-menu-screen.v108-home-main .runtime-content {
+  padding-top: max(8px, env(safe-area-inset-top)) !important;
+  gap: clamp(8px, 1.9svh, 13px) !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .v108-home-banner.v1110-home-banner {
+  width: calc(100% + 12px) !important;
+  max-width: calc(var(--v11115-app-width) - 4px) !important;
+  margin: 0 -6px clamp(1px, .5svh, 4px) !important;
+  min-height: clamp(106px, 17.5svh, 170px) !important;
+  display: grid !important;
+  place-items: center !important;
+  overflow: visible !important;
+  filter: drop-shadow(0 13px 20px rgba(0, 22, 70, .30)) !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .v108-home-banner.v1110-home-banner img {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: clamp(104px, 17.5svh, 170px) !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  transform: scaleX(1.08) scaleY(1.04) !important;
+  transform-origin: center !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .v108-tide-card.runtime-hero-card {
+  order: 2 !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .v108-region-panel.runtime-panel {
+  order: 3 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding-bottom: var(--v11115-card-pad) !important;
+}
+
+/* Aquatic frame corner rescue: rounder 2.5D PNG frame with inner text breathing room. */
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .runtime-menu-screen.v11115-foundation-frame-screen :is(.runtime-hud,.runtime-hero-card,.runtime-panel,.runtime-item-card,.gear-card,.shop-card,.mission-card,.runtime-dex-card,.dex-card,.ranking-panel,.ranking-stats-grid > div,.game-dialog-card,.catch-result-card) {
+  border: 0 !important;
+  border-radius: var(--v11115-frame-radius) !important;
+  clip-path: inset(0 round var(--v11115-frame-radius)) !important;
+  background-image: url('/assets/v3d_underwater/ui/frames/panel_medium_aqua.png'), linear-gradient(180deg, rgba(143, 239, 255, .96), rgba(12, 116, 188, .96)) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  box-shadow: 0 16px 30px rgba(0, 30, 70, .25), inset 0 2px 0 rgba(255,255,255,.16) !important;
+  padding: var(--v11115-card-pad) !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .runtime-menu-screen.v11115-foundation-frame-screen :is(.runtime-hero-card,.runtime-panel,.runtime-item-card,.gear-card,.shop-card,.mission-card,.runtime-dex-card,.dex-card,.ranking-panel) :is(h2,strong,p,span,small,em,div) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .runtime-menu-screen.v11115-foundation-frame-screen :is(.runtime-hero-card,.runtime-panel,.runtime-item-card,.gear-card,.shop-card,.mission-card,.runtime-dex-card,.dex-card,.ranking-panel) :is(p,span,small,em) {
+  padding-inline: 1px !important;
+  line-height: 1.26 !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .runtime-menu-screen.v11115-foundation-frame-screen :is(.runtime-panel-title,.v950-card-main,.shop-card div,.mission-card > div,.rank-user) {
+  padding-inline: clamp(2px, .7vw, 5px) !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .runtime-menu-screen.v11115-foundation-frame-screen .runtime-content {
+  padding-bottom: calc(var(--v11115-safe-bottom) + 10px) !important;
+  overflow: visible !important;
+}
+
+/* Mission tab drift reset: compact, readable, scrollable, no sideways push. */
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .mission-screen.v11115-foundation-frame-screen .runtime-content,
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .mission-screen.v11115-foundation-frame-screen .mission-list {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 auto !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  box-sizing: border-box !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .mission-screen.v11115-foundation-frame-screen .mission-card.runtime-mission-card {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  grid-template-areas: 'copy button' 'progress progress' !important;
+  align-items: center !important;
+  gap: clamp(6px, 1.8vw, 9px) clamp(7px, 2vw, 10px) !important;
+  min-height: auto !important;
+  padding: clamp(11px, 3vw, 15px) !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .mission-screen.v11115-foundation-frame-screen .mission-card.runtime-mission-card > div:first-child { grid-area: copy !important; }
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .mission-screen.v11115-foundation-frame-screen .mission-card.runtime-mission-card > button { grid-area: button !important; }
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .mission-screen.v11115-foundation-frame-screen .mission-card.runtime-mission-card .v108-mission-progress {
+  grid-area: progress !important;
+  margin-top: 1px !important;
+  height: 15px !important;
+  min-height: 15px !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .mission-screen.v11115-foundation-frame-screen .mission-card.runtime-mission-card strong {
+  font-size: clamp(13px, 3.45vw, 16px) !important;
+  line-height: 1.12 !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .mission-screen.v11115-foundation-frame-screen .mission-card.runtime-mission-card span {
+  display: block !important;
+  font-size: clamp(10.5px, 2.7vw, 12px) !important;
+  line-height: 1.22 !important;
+  margin-top: 2px !important;
+  -webkit-line-clamp: 2 !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .mission-screen.v11115-foundation-frame-screen .mission-card.runtime-mission-card .btn-aqua-action {
+  min-width: clamp(54px, 14vw, 72px) !important;
+  max-width: min(86px, 24vw) !important;
+}
+
+/* Fishing playfield and FX: clip everything to the stage and make the cast travel from right character to left water. */
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing,
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .fishing-stage,
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .pixi-layer,
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .stage-ui,
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .fallback-scene {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+  contain: paint !important;
+  clip-path: inset(0 round 0) !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .fishing-stage > * {
+  max-width: 100% !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .v930-fx,
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .splash-ring,
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .bite-callout,
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .action-badge {
+  max-width: calc(100% - 16px) !important;
+  max-height: calc(100% - 16px) !important;
+  pointer-events: none !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .cast-trail-cute {
+  left: 32% !important;
+  top: 44% !important;
+  width: min(42%, 210px) !important;
+  height: min(24%, 150px) !important;
+  transform-origin: 100% 70% !important;
+  animation-name: v11115CastTrailLeft !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .cast-trail-cute::before,
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .cast-trail-cute::after {
+  transform: scaleX(-1) rotate(17deg) !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .cast-trail-cute i:nth-child(1){ left: 86% !important; top: 64% !important; }
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .cast-trail-cute i:nth-child(2){ left: 66% !important; top: 44% !important; }
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .cast-trail-cute i:nth-child(3){ left: 46% !important; top: 25% !important; }
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .cast-trail-cute i:nth-child(4){ left: 26% !important; top: 24% !important; }
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .cast-trail-cute i:nth-child(5){ left: 10% !important; top: 46% !important; }
+@keyframes v11115CastTrailLeft {
+  0% { opacity: 0; transform: translate3d(22%, 8%, 0) rotate(-4deg) scale(.78); }
+  36% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(-8%, -5%, 0) rotate(-10deg) scale(1.02); }
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .v11115-left-splash.splash-ring,
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .v930-splash.splash-ring {
+  left: 34% !important;
+  top: 58% !important;
+  width: min(168px, 38vw) !important;
+  height: min(168px, 38vw) !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .fallback-player {
+  left: auto !important;
+  right: max(-26px, -6vw) !important;
+  bottom: 18% !important;
+  width: min(176px, 34vw) !important;
+  max-width: 39% !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .fallback-bobber {
+  left: 34% !important;
+  top: 58% !important;
+  width: min(58px, 10vw) !important;
+}
+html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .fishing-screen.v11115-foundation-frame-fishing .fallback-casting .fallback-bobber {
+  animation: v11115FallbackCastLeft .82s cubic-bezier(.2,.8,.2,1) both !important;
+}
+@keyframes v11115FallbackCastLeft {
+  0% { left: 82%; top: 51%; transform: scale(.78) rotate(-24deg); opacity: .62; }
+  58% { left: 50%; top: 34%; transform: scale(1.06) rotate(16deg); opacity: 1; }
+  100% { left: 34%; top: 58%; transform: scale(1) rotate(0); opacity: 1; }
+}
+
+@media (max-width: 380px) {
+  html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .v108-home-banner.v1110-home-banner {
+    width: calc(100% + 8px) !important;
+    margin-inline: -4px !important;
+    min-height: clamp(94px, 15.5svh, 142px) !important;
+  }
+  html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .v108-home-banner.v1110-home-banner img {
+    height: clamp(92px, 15.5svh, 142px) !important;
+    transform: scaleX(1.05) scaleY(1.03) !important;
+  }
+  html[data-foundation-frame-rescue="v11115-foundation-frame-rescue"] .hit-keep.v11115-keep-toggle {
+    left: 16.5% !important;
+    width: 67% !important;
+  }
+}

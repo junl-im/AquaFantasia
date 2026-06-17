@@ -41,7 +41,7 @@ assert(data.indexOf("screen: 'village'") < data.indexOf("screen: 'gear'"), 'bott
 assert(data.indexOf("screen: 'ranking'") < data.indexOf("screen: 'fishing'"), 'fishing is last tab');
 assert(!main.includes("[data-no-swipe], button, a, .hold-pad"), 'swipe start is not blocked by menu card buttons');
 assert(main.includes('playerScaledW'), 'Pixi player is aligned by scaled width');
-assert(main.includes('w - playerScaledW * 0.42') || main.includes('w - playerScaledW * 0.30'), 'Pixi player is moved to right edge safely');
+assert(main.includes('w - playerScaledW * 0.42') || main.includes('w - playerScaledW * 0.30') || main.includes('w - playerScaledW * 0.18'), 'Pixi player is moved to right edge safely');
 assert(css.includes('v1.1.10 VILLAGE FLOW / SWIPE POLISH'), 'v1.1.10 CSS block exists');
 assert(css.includes('data-village-flow="v1110-village-flow-swipe-polish"'), 'v1.1.10 CSS dataset selectors exist');
 assert(/\.v1110-home-banner[\s\S]*?height:\s*var\(--v1110-home-logo-h\)[\s\S]*?transform:\s*scaleX\(1\.12\)/m.test(css), 'home logo fills width without increasing vertical height');

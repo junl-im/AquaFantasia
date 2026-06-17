@@ -39,8 +39,8 @@ assert(!main.includes('goals.slice(0, 12)'), 'mission list is not truncated to 1
 assert(!main.includes(".slice(0, 18).map((fish)"), 'dex list is not truncated to 18 cards');
 assert(main.includes('const uniqueCaught = Object.keys(this.save.caught)'), 'unlock logic uses unique catch count');
 assert(main.includes('uniqueCaught >= 5') && main.includes('uniqueCaught >= 10') && main.includes('uniqueCaught >= 14'), 'late region unlocks use unique catch gates');
-assert(main.includes('const sx = w * 0.78') && main.includes('const ex = w * 0.40'), 'Pixi cast path throws from right to left');
-assert(main.includes('h * 0.39') && main.includes('w - playerScaledW * 0.30'), 'Pixi fisher is smaller and right anchored');
+assert((main.includes('const sx = w * 0.78') && main.includes('const ex = w * 0.40')) || (main.includes('const sx = w * 0.82') && main.includes('const ex = w * 0.34')), 'Pixi cast path throws from right to left');
+assert((main.includes('h * 0.39') && main.includes('w - playerScaledW * 0.30')) || (main.includes('h * 0.34') && main.includes('w - playerScaledW * 0.18')), 'Pixi fisher is smaller and right anchored');
 assert(css.includes('v1.1.12 CONTENT FLOW / ENGINE QA PASS'), 'v1.1.12 CSS block exists');
 assert(css.includes('data-content-flow-engine="v1112-content-flow-engine-qa"'), 'v1.1.12 CSS dataset selectors exist');
 assert(css.includes('--v1112-scroll-bottom-space'), 'dynamic scroll bottom spacing variable exists');

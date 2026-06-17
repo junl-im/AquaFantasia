@@ -145,6 +145,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.contentFlowEngine = 'v1112-content-flow-engine-qa';
     document.documentElement.dataset.detailStabilityQa = 'v11113-detail-stability-qa';
     document.documentElement.dataset.buttonStyleQa = 'v11114-button-style-hotfix';
+    document.documentElement.dataset.foundationFrameRescue = 'v11115-foundation-frame-rescue';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -233,7 +234,7 @@ class AquaFantasiaGame {
         <button class="start-hotspot hit-depart" data-action="guest" aria-label="낚시터로 출항"></button>
         <button class="start-hotspot hit-new" data-action="new" aria-label="처음부터 새 게임"></button>
         <button class="start-hotspot hit-server" data-action="server" aria-label="익명 서버연동"></button>
-        <button class="start-hotspot hit-keep v810-keep-button" data-action="keep" aria-label="이 기기에서 로그인 유지" aria-pressed="false"><span class="keep-indicator" aria-hidden="true"></span><span class="keep-text">이 기기에서 로그인 유지</span></button>
+        <button class="start-hotspot hit-keep v810-keep-button v11115-keep-toggle" data-action="keep" aria-label="이 기기에서 로그인 유지" aria-pressed="false"><span class="keep-indicator" aria-hidden="true"></span><span class="keep-text">이 기기에서 로그인 유지</span></button>
         <div class="login-touch-shine" aria-hidden="true"></div>
       </div>`;
     dom.app.appendChild(shell);
@@ -308,6 +309,8 @@ class AquaFantasiaGame {
     const root = this.createRuntimeMenuScreen('village', '마을', '메인 항구에서 오늘의 조류와 수역을 확인하세요.');
     root.classList.add('v108-home-main', 'v1110-village-flow');
     root.style.setProperty('--v108-home-bg', `url("${ASSET.homeBg}")`);
+    root.style.setProperty('--v11115-village-bg', `url("${ASSET.homeBg}")`);
+    root.insertAdjacentHTML('afterbegin', `<img class="v11115-village-bg-img" src="${ASSET.homeBg}" alt="" aria-hidden="true" data-fallback="./assets/v1110/home/village_islands_user_bg.png" />`);
     const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
     content.innerHTML = `
       <section class="v108-home-banner v1110-home-banner" aria-label="아쿠아 판타지아 메인 배너">
@@ -328,6 +331,11 @@ class AquaFantasiaGame {
         <p class="v1110-scroll-hint">아래로 드래그해서 모든 수역을 확인하세요.</p>
         <div class="region-grid runtime-region-grid v1110-region-grid">${regions.map((item) => this.regionCard(item.key)).join('')}</div>
       </section>`;
+    root.querySelector<HTMLImageElement>('.v11115-village-bg-img')?.addEventListener('error', (ev) => {
+      const img = ev.currentTarget as HTMLImageElement | null;
+      const fallback = img?.dataset.fallback;
+      if (img && fallback && img.src !== new URL(fallback, window.location.href).href) img.src = fallback;
+    }, { once: true });
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { void this.go('fishing'); });
     root.querySelectorAll<HTMLButtonElement>('[data-region]').forEach((btn) => btn.addEventListener('click', () => {
@@ -347,7 +355,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen v11115-foundation-frame-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -387,7 +395,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing v1112-content-flow-fishing v11113-detail-stability-fishing v11114-button-style-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing v1112-content-flow-fishing v11113-detail-stability-fishing v11114-button-style-fishing v11115-foundation-frame-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -710,17 +718,17 @@ class AquaFantasiaGame {
     const bgScale = Math.max(w / this.bgSprite.texture.width, h / this.bgSprite.texture.height);
     this.bgSprite.scale.set(bgScale);
     this.bgSprite.position.set((w - this.bgSprite.texture.width * bgScale) / 2, (h - this.bgSprite.texture.height * bgScale) / 2);
-    const playerTargetH = Math.min(h * 0.39, w * 0.76);
+    const playerTargetH = Math.min(h * 0.34, w * 0.60);
     this.player.scale.set(playerTargetH / Math.max(1, this.player.texture.height));
     const playerScaledW = this.player.texture.width * this.player.scale.x;
-    this.player.position.set(w - playerScaledW * 0.30, h * 0.73);
-    const bobberTarget = Math.max(30, Math.min(54, w * 0.096));
+    this.player.position.set(w - playerScaledW * 0.18, h * 0.735);
+    const bobberTarget = Math.max(28, Math.min(50, w * 0.09));
     this.bobber.scale.set(bobberTarget / Math.max(1, this.bobber.texture.width));
-    this.bobber.position.set(w * 0.42, h * 0.56);
+    this.bobber.position.set(w * 0.34, h * 0.57);
     const fishTargetW = Math.min(w * 0.50, 260);
     this.catchSprite.scale.set(fishTargetW / Math.max(1, this.catchSprite.texture.width));
-    this.catchSprite.position.set(w * 0.46, h * 0.50);
-    this.biteText.position.set(w * 0.42, h * 0.36);
+    this.catchSprite.position.set(w * 0.38, h * 0.51);
+    this.biteText.position.set(w * 0.34, h * 0.36);
   }
 
   private createCastButton(): void {
@@ -910,8 +918,8 @@ class AquaFantasiaGame {
     const h = this.pixi.screen.height;
     if (this.state === 'casting') {
       const t = Math.min(1, (now - this.castStart) / 760);
-      const sx = w * 0.78, sy = h * 0.48;
-      const ex = w * 0.40, ey = h * 0.59;
+      const sx = w * 0.82, sy = h * 0.52;
+      const ex = w * 0.34, ey = h * 0.58;
       const arc = Math.sin(t * Math.PI) * h * 0.28;
       this.bobber.position.set(sx + (ex - sx) * t, sy + (ey - sy) * t - arc);
       this.bobber.rotation += 0.24;
@@ -1025,7 +1033,7 @@ class AquaFantasiaGame {
 
   private spawnSplash(): void {
     const splash = document.createElement('div');
-    splash.className = 'splash-ring v930-splash';
+    splash.className = 'splash-ring v930-splash v11115-left-splash';
     this.stageHost?.appendChild(splash);
     window.setTimeout(() => splash.remove(), 760);
   }
@@ -1487,7 +1495,7 @@ class AquaFantasiaGame {
     this.fallbackMode = true;
     const region = this.getRegion();
     this.activeFish = this.pickFish();
-    this.pixiLayer.innerHTML = `<div class="fallback-scene" style="background-image:url('${region.bg}')"><img class="fallback-player" src="${ASSET.player}" alt="" /><img class="fallback-bobber" src="${ASSET.float}" alt="" /><div class="fallback-bite">!</div></div>`;
+    this.pixiLayer.innerHTML = `<div class="fallback-scene v11115-left-cast-scene" style="background-image:url('${region.bg}')"><img class="fallback-player" src="${ASSET.player}" alt="" /><img class="fallback-bobber" src="${ASSET.float}" alt="" /><div class="fallback-bite">!</div></div>`;
     this.createCastButton();
     this.stageHost.addEventListener('pointerdown', (ev) => {
       if (this.state === 'bite') this.startReeling();
@@ -1524,7 +1532,7 @@ class AquaFantasiaGame {
     this.stageHost?.classList.add('fallback-casting');
     this.setHint('찌가 수면으로 날아갑니다');
     window.setTimeout(() => this.castBtn?.classList.add('hidden'), 260);
-    window.setTimeout(() => { this.spawnSplash(); this.scheduleBite(); }, 820);
+    window.setTimeout(() => { this.stageHost?.classList.remove('fallback-casting'); this.spawnSplash(); this.scheduleBite(); }, 820);
   }
 
   private hasWebGL(): boolean {
@@ -1839,7 +1847,7 @@ class AquaFantasiaGame {
 
 
   private preloadCriticalImages(): void {
-    const critical = [ASSET.homeBg, ASSET.homeBanner, ASSET.player, ASSET.float, './assets/v91/characters/chibi_fisher_face_icon.png'];
+    const critical = [ASSET.homeBg, './assets/v1110/home/village_islands_user_bg.webp', './assets/v1110/home/village_islands_user_bg.png', ASSET.homeBanner, ASSET.player, ASSET.float, './assets/v91/characters/chibi_fisher_face_icon.png'];
     critical.forEach((src) => {
       const img = new Image();
       img.decoding = 'async';
