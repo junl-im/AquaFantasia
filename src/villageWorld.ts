@@ -49,7 +49,7 @@ type PointerTrack = {
 
 type PointerPoint = { x: number; y: number };
 
-type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse';
+type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse' | 'stall' | 'pottedPalm' | 'barrels' | 'coral' | 'crystal' | 'banner' | 'woodFence' | 'ropeFence' | 'bollard' | 'stairs' | 'bridge' | 'stoneWall' | 'arch' | 'questBoard' | 'statue';
 
 type Decoration = {
   kind: DecoKind;
@@ -268,6 +268,21 @@ const DECO_TEXTURES: Partial<Record<DecoKind, string>> = {
   rock: './assets/v209/props/shell_rocks.png',
   flowerBed: './assets/v209/props/flower_box.png',
   lighthouse: './assets/v209/props/crystal_pillar.png',
+  stall: './assets/v209/props/seaside_stall.png',
+  pottedPalm: './assets/v209/props/potted_palm.png',
+  barrels: './assets/v209/props/barrels.png',
+  coral: './assets/v209/props/coral_cluster.png',
+  crystal: './assets/v209/props/crystal_pillar.png',
+  banner: './assets/v209/props/banner_stone.png',
+  woodFence: './assets/v209/props/wood_fence.png',
+  ropeFence: './assets/v209/props/rope_fence.png',
+  bollard: './assets/v209/props/harbor_bollard.png',
+  stairs: './assets/v209/props/stone_stairs.png',
+  bridge: './assets/v209/props/wood_bridge.png',
+  stoneWall: './assets/v209/props/stone_wall.png',
+  arch: './assets/v209/props/crystal_arch.png',
+  questBoard: './assets/v209/props/quest_board_large.png',
+  statue: './assets/v209/props/crystal_statue.png',
 };
 
 const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
@@ -282,6 +297,21 @@ const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
   rock: 66,
   flowerBed: 64,
   lighthouse: 176,
+  stall: 112,
+  pottedPalm: 98,
+  barrels: 72,
+  coral: 76,
+  crystal: 136,
+  banner: 112,
+  woodFence: 62,
+  ropeFence: 56,
+  bollard: 54,
+  stairs: 74,
+  bridge: 96,
+  stoneWall: 86,
+  arch: 172,
+  questBoard: 116,
+  statue: 148,
 };
 
 const BUILD_PROP_TEXTURES: Partial<Record<VillageBuildingType, string>> = {
@@ -315,6 +345,27 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'dock', x: 19, y: 34 }, { kind: 'dock', x: 20, y: 34 }, { kind: 'dock', x: 21, y: 34 },
   { kind: 'crate', x: 15, y: 30 }, { kind: 'crate', x: 25, y: 30 },
   { kind: 'buoy', x: 17, y: 34 }, { kind: 'buoy', x: 23, y: 34 },
+  { kind: 'stall', x: 11, y: 22, blocks: true, scale: .86 },
+  { kind: 'questBoard', x: 29, y: 23, blocks: true, scale: .9 },
+  { kind: 'pottedPalm', x: 10, y: 14, blocks: true, scale: .95 },
+  { kind: 'pottedPalm', x: 30, y: 14, blocks: true, scale: .95 },
+  { kind: 'barrels', x: 13, y: 30, blocks: true, scale: .92 },
+  { kind: 'barrels', x: 27, y: 31, blocks: true, scale: .9 },
+  { kind: 'coral', x: 11, y: 34, blocks: true, scale: .9 },
+  { kind: 'coral', x: 29, y: 34, blocks: true, scale: .88 },
+  { kind: 'crystal', x: 12, y: 16, blocks: true, scale: .72 },
+  { kind: 'crystal', x: 27, y: 16, blocks: true, scale: .72 },
+  { kind: 'banner', x: 18, y: 13, blocks: true, scale: .82 },
+  { kind: 'banner', x: 22, y: 13, blocks: true, scale: .82 },
+  { kind: 'woodFence', x: 7, y: 13, scale: .8 }, { kind: 'woodFence', x: 8, y: 13, scale: .8 },
+  { kind: 'woodFence', x: 32, y: 13, scale: .8 }, { kind: 'woodFence', x: 33, y: 13, scale: .8 },
+  { kind: 'ropeFence', x: 16, y: 32, scale: .86 }, { kind: 'ropeFence', x: 24, y: 32, scale: .86 },
+  { kind: 'bollard', x: 18, y: 32, blocks: true }, { kind: 'bollard', x: 22, y: 32, blocks: true },
+  { kind: 'stairs', x: 20, y: 25, scale: .82 },
+  { kind: 'bridge', x: 20, y: 35, blocks: true, scale: .92 },
+  { kind: 'stoneWall', x: 5, y: 12, blocks: true, scale: .82 }, { kind: 'stoneWall', x: 35, y: 12, blocks: true, scale: .82 },
+  { kind: 'arch', x: 20, y: 12, blocks: true, scale: .82 },
+  { kind: 'statue', x: 20, y: 17, blocks: true, scale: .72 },
 ];
 
 function clamp(value: number, min: number, max: number): number {
@@ -1286,7 +1337,7 @@ export class VillageWorld {
   }
 
   private setActorFacing(actor: Actor, dx: number): void {
-    const direction = dx < 0 ? -1 : 1;
+    const direction = dx < 0 ? 1 : -1;
     const bodyScaleX = Math.abs(actor.body.scale.x || 1);
     actor.body.scale.x = bodyScaleX * direction;
     actor.label.scale.x = 1;
