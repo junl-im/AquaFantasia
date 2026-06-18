@@ -6,11 +6,11 @@ const fail = (msg) => { console.error(`[v2031-final-screen-audit] ${msg}`); proc
 const has = (file, needle, msg) => { if (!read(file).includes(needle)) fail(msg); };
 
 const pkg = JSON.parse(read('package.json'));
-if (pkg.version !== '2.0.31') fail('package.json version must be 2.0.31');
-has('src/data.ts', "APP_VERSION = '2.0.31'", 'APP_VERSION must be 2.0.31');
-has('src/data.ts', 'aqua-fantasia-v2.0.31-pixel-perfect-audit', 'cache name must be v2.0.31 pixel-perfect lineage');
-has('public/offline.html', 'v2.0.31', 'offline badge must be v2.0.31');
-has('public/sw.js', 'aqua-fantasia-v2.0.31-pixel-perfect-audit', 'service worker cache must be v2.0.31 pixel-perfect lineage');
+if (!/^2\.0\.(3[1-9]|[4-9][0-9])$/.test(pkg.version)) fail('package.json version must preserve v2.0.31+ final screen audit lineage');
+if (!/APP_VERSION = '2\.0\.(3[1-9]|[4-9][0-9])'/.test(read('src/data.ts'))) fail('APP_VERSION must preserve v2.0.31+ lineage');
+if (!/aqua-fantasia-v2\.0\.(3[1-9]|[4-9][0-9])-/.test(read('src/data.ts'))) fail('cache name must preserve v2.0.31+ lineage');
+if (!/v2\.0\.(3[1-9]|[4-9][0-9])/.test(read('public/offline.html'))) fail('offline badge must preserve v2.0.31+ lineage');
+if (!/aqua-fantasia-v2\.0\.(3[1-9]|[4-9][0-9])-/.test(read('public/sw.js'))) fail('service worker cache must preserve v2.0.31+ lineage');
 
 const main = read('src/main.ts');
 const world = read('src/villageWorld.ts');
@@ -63,4 +63,4 @@ for (const forbidden of ['packages.applied-caas', 'applied-caas-gateway', '10.19
   if (read('package-lock.json').includes(forbidden)) fail(`package-lock contains forbidden registry token ${forbidden}`);
 }
 
-console.log('[AquaFantasia] v2.0.31 final screen audit validation passed.');
+console.log('[AquaFantasia] v2.0.31+ final screen audit validation passed.');

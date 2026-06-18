@@ -704,6 +704,8 @@ export class VillageWorld {
   private activePointers = new Map<number, PointerPoint>();
   private pinchDistance = 0;
   private pinchScale = BASE_SCALE;
+  private pinchCenterScreen: PointerPoint | null = null;
+  private pinchCenterWorld: PointerPoint | null = null;
   private selectedBuild: VillageBuildingType | null = null;
   private buildTrayOpen = false;
   private cameraFollowUntil = 0;
@@ -1281,8 +1283,7 @@ export class VillageWorld {
       canvas.setPointerCapture?.(ev.pointerId);
       if (this.activePointers.size >= 2) {
         this.pointer = undefined;
-        this.pinchDistance = this.pointerDistance();
-        this.pinchScale = this.camera.scale;
+        this.beginPinchZoom();
         return;
       }
       this.pointer = { startX: ev.clientX, startY: ev.clientY, lastX: ev.clientX, lastY: ev.clientY, moved: false };
@@ -1312,7 +1313,8 @@ export class VillageWorld {
     canvas.addEventListener('pointerup', (ev: PointerEvent) => {
       const track = this.pointer;
       this.activePointers.delete(ev.pointerId);
-      this.pinchDistance = this.activePointers.size >= 2 ? this.pointerDistance() : 0;
+      if (this.activePointers.size >= 2) this.beginPinchZoom();
+      else { this.pinchDistance = 0; this.pinchCenterScreen = null; this.pinchCenterWorld = null; }
       this.pointer = undefined;
       canvas.releasePointerCapture?.(ev.pointerId);
       if (!track || this.activePointers.size > 0) return;
@@ -1322,6 +1324,8 @@ export class VillageWorld {
       this.activePointers.delete(ev.pointerId);
       this.pointer = undefined;
       this.pinchDistance = 0;
+      this.pinchCenterScreen = null;
+      this.pinchCenterWorld = null;
     });
     canvas.addEventListener('wheel', (ev: WheelEvent) => {
       ev.preventDefault();
@@ -1335,15 +1339,39 @@ export class VillageWorld {
     return Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
   }
 
+  private pointerCenter(): PointerPoint | null {
+    const points = Array.from(this.activePointers.values()).slice(0, 2);
+    if (points.length < 2) return null;
+    return { x: (points[0].x + points[1].x) / 2, y: (points[0].y + points[1].y) / 2 };
+  }
+
+  private screenToWorld(point: PointerPoint, scale = this.camera.scale): PointerPoint {
+    return { x: (point.x - this.camera.x) / scale, y: (point.y - this.camera.y) / scale };
+  }
+
+  private beginPinchZoom(): void {
+    const center = this.pointerCenter();
+    if (!center) return;
+    this.pinchDistance = this.pointerDistance();
+    this.pinchScale = this.camera.scale;
+    this.pinchCenterScreen = center;
+    this.pinchCenterWorld = this.screenToWorld(center, this.camera.scale);
+  }
+
   private updatePinchZoom(): void {
     const distance = this.pointerDistance();
     if (distance <= 8) return;
-    if (this.pinchDistance <= 0) {
-      this.pinchDistance = distance;
-      this.pinchScale = this.camera.scale;
+    if (this.pinchDistance <= 0 || !this.pinchCenterWorld) {
+      this.beginPinchZoom();
       return;
     }
-    this.camera.scale = clamp(this.pinchScale * (distance / this.pinchDistance), 0.55, 1.65);
+    const center = this.pointerCenter() ?? this.pinchCenterScreen;
+    const nextScale = clamp(this.pinchScale * (distance / this.pinchDistance), 0.55, 1.65);
+    this.camera.scale = nextScale;
+    if (center) {
+      this.camera.x = center.x - this.pinchCenterWorld.x * nextScale;
+      this.camera.y = center.y - this.pinchCenterWorld.y * nextScale;
+    }
     this.cameraFollowUntil = 0;
     this.applyCamera();
   }
