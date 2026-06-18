@@ -531,6 +531,22 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'tropicalTree', x: 32, y: 29, blocks: true, scale: .72 },
   { kind: 'palmAlt', x: 4, y: 34, blocks: true, scale: .72 },
   { kind: 'palmAlt', x: 36, y: 33, blocks: true, scale: .7 },
+  // v2.0.20: refine existing SD ocean fantasy props without widening the main walk corridor.
+  { kind: 'seagull', x: 8, y: 34, scale: .58 },
+  { kind: 'flyingSeagull', x: 33, y: 32, scale: .52 },
+  { kind: 'shoreFoam', x: 5, y: 36, scale: .58 },
+  { kind: 'waterRing', x: 17, y: 36, scale: .50 },
+  { kind: 'waterRing', x: 28, y: 36, scale: .50 },
+  { kind: 'sparkles', x: 18, y: 19, scale: .38 },
+  { kind: 'sparkles', x: 22, y: 19, scale: .38 },
+  { kind: 'goldLantern', x: 14, y: 18, scale: .46 },
+  { kind: 'goldLantern', x: 26, y: 18, scale: .46 },
+  { kind: 'ropeFence', x: 12, y: 31, scale: .68 },
+  { kind: 'ropeFence', x: 28, y: 31, scale: .68 },
+  { kind: 'flowerBed', x: 13, y: 18, scale: .74 },
+  { kind: 'flowerBed', x: 27, y: 18, scale: .74 },
+  { kind: 'crystal', x: 18, y: 26, scale: .48 },
+  { kind: 'crystal', x: 22, y: 26, scale: .48 },
 ];
 
 function clamp(value: number, min: number, max: number): number {

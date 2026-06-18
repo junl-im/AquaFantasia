@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.19-fishing-stability-polish';
+const CACHE_NAME = 'aqua-fantasia-v2.0.20-asset-refinement-polish';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -78,6 +78,18 @@ const PRECACHE = [
   "./assets/v2012/props/shore_foam.png",
   "./assets/v2012/props/water_ring.png",
   "./assets/v2012/props/fish_shadow_mid.png",
+  "./assets/v205/fishing/wave_splash.png",
+  "./assets/v205/fishing/crystal_sparkle.png",
+  "./assets/v205/fishing/fish_shadow_common.png",
+  "./assets/v3d_underwater/ui/frames/panel_medium_aqua.png",
+  "./assets/v3d_underwater/ui/frames/card_aqua.png",
+  "./assets/v3d_underwater/ui/frames/hud_capsule_aqua.png",
+  "./assets/v3d_underwater/ui/frames/progress_frame_aqua.png",
+  "./assets/v3d_underwater/ui/buttons/button_small_aqua_normal.png",
+  "./assets/v3d_underwater/ui/buttons/button_wide_aqua_normal.png",
+  "./assets/v3d_underwater/textures/particles/bubble_ring.png",
+  "./assets/v3d_underwater/textures/particles/pearl_flash.png",
+  "./assets/v3d_underwater/textures/particles/splash_aqua.png",
   "./assets/v2012/props/sparkles.png",
   "./assets/v2012/props/butterfly_pink.png",
   "./assets/v2012/props/butterfly_blue.png",
