@@ -256,7 +256,7 @@ const PORTRAIT_ASSETS: Record<Actor['role'], string> = {
 const INTERIOR_ASSETS: Partial<Record<VillageBuildingType, { title: string; image: string; body: string; portrait: string; status: string[]; fishing?: boolean; mission?: boolean; map?: boolean; inventory?: boolean }>> = {
   inn: {
     title: '여관 내부',
-    image: './assets/v22/generated/05_Building_Interior_Inn.png',
+    image: './assets/v2025/interiors/interior_05_Building_Interior_Inn_source_crop_16_256.png',
     body: '따뜻한 조명과 조개 장식이 있는 루미나 베이 여관입니다. 여관 의뢰와 관광객 체류 보너스가 연결됩니다.',
     portrait: './assets/v203/portraits/innkeeper_happy.png',
     status: ['체류 보너스 +15%', '관광 만족도 상승', '여관 의뢰 준비'],
@@ -264,7 +264,7 @@ const INTERIOR_ASSETS: Partial<Record<VillageBuildingType, { title: string; imag
   },
   market: {
     title: '어시장 내부',
-    image: './assets/v22/generated/06_Building_Interior_Fish_Market.png',
+    image: './assets/v2025/interiors/interior_06_Building_Interior_Fish_Market_source_crop_16_256.png',
     body: '오늘 잡은 물고기를 정산하고 마을 기금을 늘리는 자동 판매 거점입니다.',
     portrait: './assets/v203/portraits/merchant_happy.png',
     status: ['자동 판매 정산', '마을 기금 적립', '물고기 납품 의뢰'],
@@ -272,7 +272,7 @@ const INTERIOR_ASSETS: Partial<Record<VillageBuildingType, { title: string; imag
   },
   guild: {
     title: '낚시 길드 내부',
-    image: './assets/v22/generated/07_Building_Interior_Fishing_Guild.png',
+    image: './assets/v2025/interiors/interior_07_Building_Interior_Fishing_Guild_source_crop_16_256.png',
     body: '낚시 의뢰, 희귀 어종 정보, 새 수역 개척 퀘스트가 붙을 길드 홀입니다.',
     portrait: './assets/v203/portraits/guild_happy.png',
     status: ['추천 의뢰 갱신', '희귀 어종 정보', '수역 개척 조건'],
@@ -280,7 +280,7 @@ const INTERIOR_ASSETS: Partial<Record<VillageBuildingType, { title: string; imag
   },
   harbor: {
     title: '항구 사무소 내부',
-    image: './assets/v22/generated/08_Building_Interior_Harbor_Office.png',
+    image: './assets/v2025/interiors/interior_08_Building_Interior_Harbor_Office_source_crop_16_256.png',
     body: '선장과 항로를 확인하는 출항 준비실입니다. 출항하기를 누르면 낚시 화면으로 이동합니다.',
     portrait: './assets/v203/portraits/captain_happy.png',
     status: ['월드맵 항로 확인', '출항 가능', '잠긴 수역 조건 안내'],
@@ -492,12 +492,12 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'stoneWall', x: 5, y: 12, blocks: true, scale: .82 }, { kind: 'stoneWall', x: 35, y: 12, blocks: true, scale: .82 },
   { kind: 'arch', x: 20, y: 12, blocks: true, scale: .82 },
   { kind: 'statue', x: 20, y: 17, blocks: true, scale: .72 },
-  { kind: 'cherryTree', x: 13, y: 12, blocks: true, scale: .58 },
-  { kind: 'mapleTree', x: 27, y: 12, blocks: true, scale: .58 },
-  { kind: 'pineTree', x: 2, y: 16, blocks: true, scale: .76 },
-  { kind: 'crystalTree', x: 37, y: 18, blocks: true, scale: .72 },
-  { kind: 'flowerTree', x: 10, y: 28, blocks: true, scale: .54 },
-  { kind: 'cypressTree', x: 34, y: 25, blocks: true, scale: .74 },
+  { kind: 'cherryTree', x: 14, y: 13, blocks: true, scale: .46 },
+  { kind: 'mapleTree', x: 26, y: 13, blocks: true, scale: .46 },
+  { kind: 'pineTree', x: 4, y: 17, blocks: true, scale: .56 },
+  { kind: 'crystalTree', x: 34, y: 20, blocks: true, scale: .54 },
+  { kind: 'flowerTree', x: 12, y: 27, scale: .42 },
+  { kind: 'cypressTree', x: 32, y: 25, blocks: true, scale: .52 },
   { kind: 'dog', x: 17, y: 26, scale: .78 },
   { kind: 'sleepingDog', x: 8, y: 25, scale: .72 },
   { kind: 'cat', x: 24, y: 21, scale: .64 },
@@ -594,6 +594,13 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'ropeWall', x: 11, y: 31, scale: .44 },
   { kind: 'ropeWall', x: 29, y: 31, scale: .44 },
   { kind: 'questBoard', x: 31, y: 22, scale: .50 },
+  // v2.0.26: curated premium details. Keep large pink/edge trees small and move new props into safe side pockets.
+  { kind: 'flowerBed', x: 8, y: 21, scale: .36 },
+  { kind: 'flowerBed', x: 32, y: 21, scale: .36 },
+  { kind: 'crystal', x: 9, y: 23, scale: .34 },
+  { kind: 'crystal', x: 31, y: 23, scale: .34 },
+  { kind: 'wideStairs', x: 20, y: 26, scale: .46 },
+  { kind: 'bridgeAsset', x: 20, y: 35, scale: .44 },
 ];
 
 function clamp(value: number, min: number, max: number): number {
