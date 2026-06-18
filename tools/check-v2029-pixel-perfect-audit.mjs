@@ -3,13 +3,15 @@ const root = process.cwd();
 const read = (file) => readFileSync(`${root}/${file}`, 'utf8');
 const fail = (message) => { throw new Error(message); };
 const pkg = JSON.parse(read('package.json'));
-const version = '2.0.29';
-if (pkg.version !== version) fail(`package version mismatch: ${pkg.version}`);
+const baseVersion = '2.0.29';
+const version = pkg.version;
+const [major = 0, minor = 0, patch = 0] = version.split('.').map(Number);
+if (major !== 2 || minor !== 0 || patch < 29) fail(`package version must be >= 2.0.29: ${pkg.version}`);
 if (!pkg.scripts.validate.includes('check-v2029-pixel-perfect-audit')) fail('validate script must include v2.0.29 pixel-perfect checker');
 for (const [file, token] of [
   ['src/data.ts', `APP_VERSION = '${version}'`],
-  ['src/data.ts', 'aqua-fantasia-v2.0.29-pixel-perfect-audit'],
-  ['public/sw.js', 'aqua-fantasia-v2.0.29-pixel-perfect-audit'],
+  ['src/data.ts', `aqua-fantasia-v${version}-pixel-perfect-audit`],
+  ['public/sw.js', `aqua-fantasia-v${version}-pixel-perfect-audit`],
   ['public/offline.html', `v${version}`],
   ['README.md', `# AquaFantasia v${version}`],
   ['README.md', `## v${version} 변경사항`],

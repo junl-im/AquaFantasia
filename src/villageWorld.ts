@@ -760,6 +760,7 @@ export class VillageWorld {
     this.syncHud();
     this.root.classList.add('v2029-village-polish-ready');
     this.root.dataset.v2029VillageAudit = 'object-npc-build-stable';
+    this.root.dataset.v2030VillageAudit = 'moving-npc-clean-objects';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 천천히 이동하고, 빈 바닥 터치로도 이동할 수 있습니다.');
   }
 
@@ -1180,9 +1181,14 @@ export class VillageWorld {
     if (score >= 1000) baseNpcs.push(['vip', 'VIP', 22, 23, 0xb895ff, '만족']);
     for (const [role, name, x, y, color, mood] of baseNpcs) {
       const actor = this.createActor(`npc_${role}_${x}_${y}`, role, name, x, y, color, mood);
+      actor.targetTimer = 180 + Math.random() * 620;
       this.npcs.push(actor);
       this.actorLayer.addChild(actor.node);
     }
+    window.setTimeout(() => {
+      if (this.destroyed) return;
+      this.npcs.forEach((npc) => { if (npc.path.length === 0) this.assignNpcTarget(npc); });
+    }, 450);
   }
 
   private actorTextureUrl(role: Actor['role'], direction: ActorDirection): string {
@@ -1249,7 +1255,7 @@ export class VillageWorld {
       mood,
       walkPhase: 0,
       talk: role === 'player' ? [] : DAY_TALK[role as WorldNpcRole] ?? DAY_TALK.tourist,
-      targetTimer: 1400 + Math.random() * 3200,
+      targetTimer: role === 'player' ? 0 : 260 + Math.random() * 900,
       pauseTimer: 0,
       desiredTile: undefined,
     };
@@ -1730,12 +1736,18 @@ export class VillageWorld {
 
   private ensureNpcHealth(): void {
     const now = performance.now();
-    if (now - this.lastNpcHealthCheckAt < 4500) return;
+    if (now - this.lastNpcHealthCheckAt < 2600) return;
     this.lastNpcHealthCheckAt = now;
     const visibleCount = this.npcs.filter((npc) => npc.node.parent === this.actorLayer && this.inBounds(npc.tileX, npc.tileY)).length;
-    if (visibleCount >= 4) return;
-    this.spawnActors();
-    this.showGuide('주민 동선 복구', 'NPC 동선이 꼬여 보이면 자동으로 안전 위치에 다시 배치합니다.');
+    if (visibleCount < 4) {
+      this.spawnActors();
+      return;
+    }
+    for (const npc of this.npcs) {
+      if (npc.path.length === 0 && npc.pauseTimer <= 0) {
+        npc.targetTimer = Math.min(npc.targetTimer, 120);
+      }
+    }
   }
 
   private animateActorWalk(actor: Actor, movementAmount: number, deltaMs: number): void {
@@ -1828,6 +1840,7 @@ export class VillageWorld {
     else if (hour < 19) targets = [[26, 25], [23, 22], [20, 28], [25, 27], [22, 24], [19, 30]];
     else targets = [[18, 15], [20, 29], [13, 24], [22, 16], [17, 27], [21, 31]];
     if (npc.role === 'captain') targets = [[20, 31], [20, 29], [21, 33], [22, 32], [19, 30]];
+    if (npc.role === 'tourist') targets = [[17, 23], [19, 24], [22, 23], [24, 26], [18, 27], [14, 25], [21, 20], [26, 25]];
     const shuffled = targets
       .map((target) => ({ target, weight: Math.random() + (this.isNpcTileReserved(target[0], target[1], npc) ? 1.5 : 0) }))
       .sort((a, b) => a.weight - b.weight)

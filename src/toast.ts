@@ -60,6 +60,6 @@ export class ToastManager {
       close();
     });
 
-    window.setTimeout(close, options.actionScreen ? 7000 : 4200);
+    window.setTimeout(close, 2000);
   }
 }
