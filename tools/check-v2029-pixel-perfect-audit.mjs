@@ -10,8 +10,8 @@ if (major !== 2 || minor !== 0 || patch < 29) fail(`package version must be >= 2
 if (!pkg.scripts.validate.includes('check-v2029-pixel-perfect-audit')) fail('validate script must include v2.0.29 pixel-perfect checker');
 for (const [file, token] of [
   ['src/data.ts', `APP_VERSION = '${version}'`],
-  ['src/data.ts', `aqua-fantasia-v${version}-pixel-perfect-audit`],
-  ['public/sw.js', `aqua-fantasia-v${version}-pixel-perfect-audit`],
+  ['src/data.ts', `aqua-fantasia-v${version}-`],
+  ['public/sw.js', `aqua-fantasia-v${version}-`],
   ['public/offline.html', `v${version}`],
   ['README.md', `# AquaFantasia v${version}`],
   ['README.md', `## v${version} 변경사항`],

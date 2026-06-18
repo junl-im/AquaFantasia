@@ -13,11 +13,11 @@ const sw = read('public/sw.js');
 const offline = read('public/offline.html');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.33', 'package.json version must be 2.0.33');
-must(data.includes("APP_VERSION = '2.0.33'"), 'APP_VERSION must be 2.0.33');
-must(data.includes('aqua-fantasia-v2.0.33-pixel-perfect-audit'), 'CACHE_NAME must be v2.0.33 pixel-perfect cache');
-must(sw.includes('aqua-fantasia-v2.0.33-pixel-perfect-audit'), 'service worker cache must be v2.0.33 pixel-perfect cache');
-must(offline.includes('v2.0.33'), 'offline badge must mention v2.0.33');
+must(/^2\.0\.(3[3-9]|[4-9][0-9])$/.test(pkg.version), 'package.json version must preserve v2.0.33+ fishing/UI direction lineage');
+must(/APP_VERSION = '2\.0\.(3[3-9]|[4-9][0-9])'/.test(data), 'APP_VERSION must preserve v2.0.33+ lineage');
+must(/aqua-fantasia-v2\.0\.(3[3-9]|[4-9][0-9])-/.test(data), 'CACHE_NAME must preserve v2.0.33+ lineage');
+must(/aqua-fantasia-v2\.0\.(3[3-9]|[4-9][0-9])-/.test(sw), 'service worker cache must preserve v2.0.33+ lineage');
+must(/v2\.0\.(3[3-9]|[4-9][0-9])/.test(offline), 'offline badge must preserve v2.0.33+ lineage');
 
 for (const token of [
   "dataset.v2033FishingUiAudit = 'v2033-fishing-ui-direction-dialog-audit'",
