@@ -755,7 +755,10 @@ export class VillageWorld {
     this.previewLayer.removeChildren();
     if (type) {
       const def = BUILD_DEFS[type];
-      this.showGuide('설치 모드', `${def.label} 선택됨 · 바닥을 드래그해 초록/빨강 프리뷰 확인 후 손을 떼어 설치 · 건설 버튼으로 취소`);
+      const previewX = this.player ? clamp(this.player.tileX + 1, 1, MAP_SIZE - def.size[0] - 1) : 20;
+      const previewY = this.player ? clamp(this.player.tileY, 1, MAP_SIZE - def.size[1] - 1) : 29;
+      this.updateBuildPreviewAtTile(previewX, previewY);
+      this.showGuide('설치 모드', `${def.label} 선택됨 · 반투명 프리뷰가 잡혔습니다. 원하는 바닥으로 이동 후 터치하면 설치됩니다. 건설 버튼으로 취소`);
     }
   }
 
@@ -1138,7 +1141,7 @@ export class VillageWorld {
       ['captain', '선장', 21, 31, 0x7dd0c5, '피곤'],
     ];
     const score = this.calculateDevelopment();
-    if (score >= 100) baseNpcs.push(['tourist', '관광객', 17, 23, 0xffbee8, '감탄']);
+    baseNpcs.push(['tourist', '관광객', 17, 23, 0xffbee8, '감탄']);
     if (score >= 500) baseNpcs.push(['tourist', '관광객', 23, 18, 0xffbee8, '여행']);
     if (score >= 1000) baseNpcs.push(['vip', 'VIP', 22, 23, 0xb895ff, '만족']);
     for (const [role, name, x, y, color, mood] of baseNpcs) {
@@ -1431,26 +1434,30 @@ export class VillageWorld {
   }
 
   private updatePreviewFromPointer(ev: PointerEvent): void {
-    if (!this.selectedBuild) return;
     const tile = this.tileFromPointer(ev);
-    if (this.hoverTile?.x === tile.x && this.hoverTile?.y === tile.y) return;
-    this.hoverTile = tile;
+    this.updateBuildPreviewAtTile(tile.x, tile.y);
+  }
+
+  private updateBuildPreviewAtTile(x: number, y: number): void {
+    if (!this.selectedBuild) return;
+    if (this.hoverTile?.x === x && this.hoverTile?.y === y) return;
+    this.hoverTile = { x, y };
     this.previewLayer.removeChildren();
-    if (!this.inBounds(tile.x, tile.y)) return;
+    if (!this.inBounds(x, y)) return;
     const def = BUILD_DEFS[this.selectedBuild];
-    const ok = this.canPlace(tile.x, tile.y, def);
+    const ok = this.canPlace(x, y, def);
     const g = new Graphics();
-    for (let y = tile.y; y < tile.y + def.size[1]; y += 1) {
-      for (let x = tile.x; x < tile.x + def.size[0]; x += 1) {
-        const p = isoToWorld(x, y);
+    for (let yy = y; yy < y + def.size[1]; yy += 1) {
+      for (let xx = x; xx < x + def.size[0]; xx += 1) {
+        const p = isoToWorld(xx, yy);
         g.poly([p.x, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y, p.x + TILE_W, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y + TILE_H]);
         g.fill({ color: ok ? 0x35f08a : 0xff4747, alpha: 0.18 });
         g.stroke({ color: ok ? 0xb8fff0 : 0xffd0d0, alpha: 0.62, width: 1.5 });
-        const overlay = this.createBuildPreviewTileSprite(x, y, ok);
+        const overlay = this.createBuildPreviewTileSprite(xx, yy, ok);
         if (overlay) this.previewLayer.addChild(overlay);
       }
     }
-    const ghost = this.createBuildGhost(def, tile.x, tile.y, ok);
+    const ghost = this.createBuildGhost(def, x, y, ok);
     g.zIndex = 99998;
     this.previewLayer.addChild(g);
     if (ghost) this.previewLayer.addChild(ghost);

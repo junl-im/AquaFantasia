@@ -19837,3 +19837,409 @@ html[data-wide-stability-guard="v2026-wide-ui-audit"] #toast-root .toast-item {
   html[data-wide-stability-guard="v2026-wide-ui-audit"] body[data-screen="fishing"] .cast-button.v2026-stable-cast-button { width: min(168px, 44vw) !important; height: 43px !important; }
   html[data-wide-stability-guard="v2026-wide-ui-audit"] body[data-screen="fishing"] .reel-panel.v205-reel-panel { max-height: min(30dvh, 198px) !important; }
 }
+
+/* v2.0.27 Root-cause UI repair pass
+   Purpose: remove practical influence of stale v840/v890/version-scoped UI rules by using
+   simplified aqua-tone components, topmost modal layers, and screen-stable dock/menu/build bounds. */
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] {
+  --v2027-aqua-ink: #05384f;
+  --v2027-aqua-soft: rgba(237, 255, 254, .96);
+  --v2027-aqua-line: rgba(62, 202, 226, .32);
+  --v2027-dock-button: clamp(52px, 12.8vw, 58px);
+  --v2027-dock-icon: clamp(34px, 8.4vw, 40px);
+  --v2027-dock-gap: 3px;
+  --v2027-dock-right: max(10px, env(safe-area-inset-right));
+  --v2027-dock-bottom: calc(max(12px, env(safe-area-inset-bottom)) + 4px);
+  --v2027-dock-safe: calc(var(--v2027-dock-bottom) + var(--v2027-dock-button) * 2 + var(--v2027-dock-gap));
+  --v2027-hud-safe-right: calc(var(--v2027-dock-right) + var(--v2027-dock-button) + 8px);
+}
+
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .start-art-screen .hit-server {
+  top: 66.5% !important;
+  height: 4.65% !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .start-art-screen .hit-keep {
+  left: 32% !important;
+  top: 79.7% !important;
+  width: 36% !important;
+  max-width: 36% !important;
+  height: 3.95% !important;
+  min-height: 29px !important;
+  padding: 0 7px !important;
+  gap: 4px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .start-art-screen .hit-keep .keep-text {
+  font-size: clamp(9.8px, 2.45vw, 12px) !important;
+  letter-spacing: -.075em !important;
+  color: #f9ffff !important;
+  text-shadow: 0 2px 4px rgba(0, 36, 58, .45) !important;
+}
+
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .bottom-nav.v2027-aqua-dock-nav,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .bottom-nav.v2027-aqua-dock-nav,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="village"] .bottom-nav.v2027-aqua-dock-nav,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .bottom-nav[data-dock-guard="v2027-home-fishing-identical-dock"] {
+  display: grid !important;
+  position: fixed !important;
+  left: auto !important;
+  right: var(--v2027-dock-right) !important;
+  bottom: var(--v2027-dock-bottom) !important;
+  width: auto !important;
+  height: auto !important;
+  grid-template-columns: repeat(3, var(--v2027-dock-button)) !important;
+  grid-template-rows: repeat(2, var(--v2027-dock-button)) !important;
+  gap: var(--v2027-dock-gap) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  transform: none !important;
+  z-index: 260 !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .bottom-nav.v2027-aqua-dock-nav::before,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .bottom-nav.v2027-aqua-dock-nav::after { display: none !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .bottom-nav.v2027-aqua-dock-nav button {
+  pointer-events: auto !important;
+  width: var(--v2027-dock-button) !important;
+  height: var(--v2027-dock-button) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 2px !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 16px !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .bottom-nav.v2027-aqua-dock-nav button[data-screen="village"] { grid-column: 3 !important; grid-row: 1 !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .bottom-nav.v2027-aqua-dock-nav button[data-screen="inventory"] { grid-column: 1 !important; grid-row: 2 !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .bottom-nav.v2027-aqua-dock-nav button[data-screen="mission"] { grid-column: 2 !important; grid-row: 2 !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .bottom-nav.v2027-aqua-dock-nav button[data-screen="map"] { grid-column: 3 !important; grid-row: 2 !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .bottom-nav.v2027-aqua-dock-nav button img {
+  width: var(--v2027-dock-icon) !important;
+  height: var(--v2027-dock-icon) !important;
+  object-fit: contain !important;
+  display: block !important;
+  filter: drop-shadow(0 5px 7px rgba(0, 35, 64, .34)) saturate(1.05) !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .bottom-nav.v2027-aqua-dock-nav button span {
+  color: #ffffff !important;
+  font-size: clamp(8.5px, 2.1vw, 10.5px) !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+  margin-top: -4px !important;
+  text-shadow: 0 2px 4px rgba(0, 32, 54, .76), 0 0 2px rgba(0, 20, 40, .85) !important;
+}
+
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .village-world-screen.v2027-village-root-repair-screen .v2-village-hud {
+  right: var(--v2027-hud-safe-right) !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 6px) !important;
+  max-width: calc(100vw - var(--v2027-hud-safe-right) - max(10px, env(safe-area-inset-left))) !important;
+  min-height: 58px !important;
+  background: linear-gradient(145deg, rgba(246, 255, 255, .96), rgba(89, 214, 231, .72)) !important;
+  border: 1px solid var(--v2027-aqua-line) !important;
+  box-shadow: 0 12px 28px rgba(0, 58, 90, .16) !important;
+  color: var(--v2027-aqua-ink) !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .village-world-screen .v2-profile-chip,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .village-world-screen .v2-profile-chip * {
+  color: var(--v2027-aqua-ink) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.62) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .village-world-screen .v2017-character-card {
+  z-index: 620 !important;
+  background: linear-gradient(145deg, rgba(248,255,255,.98), rgba(119,226,238,.82)) !important;
+  border: 0 !important;
+  box-shadow: 0 22px 42px rgba(0, 40, 70, .22) !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2017-character-panel.open { z-index: 610 !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2017-character-head span,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2017-character-note { display: none !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2017-character-backdrop { background: rgba(4, 52, 76, .16) !important; }
+
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .village-world-screen.v2027-village-root-repair-screen .v2-world-controls {
+  right: calc(var(--v2027-dock-right) + 2px) !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 8px) !important;
+  width: var(--v2027-dock-button) !important;
+  gap: 4px !important;
+  z-index: 230 !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .village-world-screen .v2-world-controls button {
+  width: var(--v2027-dock-button) !important;
+  min-height: 36px !important;
+  height: auto !important;
+  padding: 4px 3px !important;
+  border-radius: 15px !important;
+  font-size: clamp(10px, 2.25vw, 12px) !important;
+  color: #fff !important;
+  text-shadow: 0 2px 4px rgba(0,34,58,.62) !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .village-world-screen .v2-world-controls button img { width: 22px !important; height: 22px !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .village-world-screen.v2-build-tray-open .v2-world-controls,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .village-world-screen .v2017-character-panel.open ~ .v2-world-controls {
+  opacity: .35 !important;
+  pointer-events: none !important;
+  z-index: 160 !important;
+}
+
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2027-village-loading {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 560 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 24px !important;
+  background: radial-gradient(circle at 50% 42%, rgba(177,255,247,.38), transparent 30%), linear-gradient(180deg, rgba(8, 78, 108, .28), rgba(2, 34, 58, .52)) !important;
+  backdrop-filter: blur(6px) !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2027-village-loading > div {
+  width: min(360px, calc(100vw - 48px)) !important;
+  min-height: 112px !important;
+  display: grid !important;
+  gap: 8px !important;
+  place-items: center !important;
+  padding: 22px 20px !important;
+  border-radius: 28px !important;
+  background: linear-gradient(145deg, rgba(244,255,255,.96), rgba(87,217,235,.82)) !important;
+  color: var(--v2027-aqua-ink) !important;
+  box-shadow: 0 24px 48px rgba(0, 35, 63, .28) !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2027-village-loading strong { font-size: 19px !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2027-village-loading span { font-size: 13px !important; opacity: .82 !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2027-village-loading i {
+  width: 92px !important;
+  height: 8px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(90deg, transparent, #fff, transparent) !important;
+  animation: v2027-loading-shimmer 1.15s ease-in-out infinite !important;
+}
+@keyframes v2027-loading-shimmer { 0% { transform: translateX(-24px); opacity: .35; } 50% { opacity: .95; } 100% { transform: translateX(24px); opacity: .35; } }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .village-world-screen:not(.v2027-village-ready) .v2-village-stage { opacity: .001 !important; }
+
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .fishing-hud {
+  left: max(10px, env(safe-area-inset-left)) !important;
+  right: var(--v2027-hud-safe-right) !important;
+  top: calc(max(7px, env(safe-area-inset-top)) + 5px) !important;
+  min-height: 52px !important;
+  padding: 7px 9px !important;
+  background: linear-gradient(145deg, rgba(244,255,255,.96), rgba(86,215,231,.76)) !important;
+  border: 1px solid var(--v2027-aqua-line) !important;
+  color: var(--v2027-aqua-ink) !important;
+  z-index: 190 !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .fishing-guide-card {
+  position: fixed !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: var(--v2027-hud-safe-right) !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 66px) !important;
+  min-height: 46px !important;
+  padding: 8px 12px !important;
+  border-radius: 20px !important;
+  background: linear-gradient(145deg, rgba(241,255,252,.97), rgba(119,229,225,.78)) !important;
+  color: var(--v2027-aqua-ink) !important;
+  z-index: 178 !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .recent-catch-strip {
+  position: fixed !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: var(--v2027-hud-safe-right) !important;
+  top: auto !important;
+  bottom: calc(var(--v2027-dock-safe) + 58px) !important;
+  height: 44px !important;
+  min-height: 0 !important;
+  max-height: 44px !important;
+  padding: 5px 9px !important;
+  border-radius: 18px !important;
+  background: rgba(237,255,254,.88) !important;
+  border: 1px solid rgba(84, 213, 226, .28) !important;
+  box-shadow: 0 10px 22px rgba(0,48,72,.16) !important;
+  overflow: hidden !important;
+  z-index: 166 !important;
+  transform: none !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .recent-title { display: none !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .recent-cards { display: flex !important; gap: 6px !important; overflow: hidden !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .recent-card { height: 32px !important; min-width: 0 !important; padding: 2px 6px !important; color: var(--v2027-aqua-ink) !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .recent-card img { width: 25px !important; height: 25px !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .fishing-screen.fishing-phase-reeling .recent-catch-strip,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .fishing-screen.fishing-phase-success .recent-catch-strip,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .fishing-screen.fishing-phase-fail .recent-catch-strip { display: none !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .cast-button.v2026-stable-cast-button {
+  width: min(166px, 43vw) !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  bottom: calc(var(--v2027-dock-safe) + 10px) !important;
+  padding: 4px 10px !important;
+  border-radius: 19px !important;
+  background: linear-gradient(145deg, #e7fffa, #49d3de) !important;
+  animation: none !important;
+  filter: drop-shadow(0 10px 14px rgba(0,49,88,.22)) !important;
+  z-index: 167 !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .cast-button.v2026-stable-cast-button strong { font-size: clamp(12.5px, 3vw, 14.5px) !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .cast-button.v2026-stable-cast-button .cast-icon { width: 20px !important; height: 20px !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .reel-panel.v205-reel-panel,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .v840-reel-panel.reel-panel {
+  position: fixed !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: var(--v2027-hud-safe-right) !important;
+  bottom: calc(var(--v2027-dock-safe) + 8px) !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  max-height: min(31dvh, 206px) !important;
+  padding: 7px 8px !important;
+  overflow: hidden !important;
+  transform: none !important;
+  z-index: 230 !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .v205-reel-grid { grid-template-columns: 24px minmax(0, 1fr) !important; gap: 6px !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .v205-vertical-gauge { width: 24px !important; height: clamp(78px, 11.5dvh, 104px) !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .hold-pad { min-height: 36px !important; font-size: clamp(12px, 3vw, 14px) !important; }
+
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .runtime-menu-screen.v2027-menu-content-repair-screen {
+  padding: calc(max(8px, env(safe-area-inset-top)) + 8px) max(10px, env(safe-area-inset-right)) 0 max(10px, env(safe-area-inset-left)) !important;
+  overflow-y: auto !important;
+  background: linear-gradient(180deg, #bdf8ff 0%, #dffcf4 48%, #fff1ce 100%) !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .runtime-menu-screen.v2027-menu-content-repair-screen .v2020-menu-deco,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .runtime-menu-screen.v2027-menu-content-repair-screen .v2021-menu-deco,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .runtime-menu-screen.v2027-menu-content-repair-screen .v2025-menu-deco,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .runtime-menu-screen.v2027-menu-content-repair-screen .runtime-bg-character { display: none !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2027-menu-accent { position: fixed !important; pointer-events: none !important; z-index: 1 !important; opacity: .18 !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2027-menu-accent-bubble { width: 120px !important; right: -30px !important; top: 112px !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2027-menu-accent-coral { width: 110px !important; left: -28px !important; bottom: 128px !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .runtime-menu-screen.v2027-menu-content-repair-screen .runtime-hud {
+  position: relative !important;
+  z-index: 30 !important;
+  width: min(100%, 520px) !important;
+  min-height: 68px !important;
+  margin: 0 auto 10px !important;
+  background: linear-gradient(145deg, rgba(249,255,255,.96), rgba(95,218,235,.72)) !important;
+  border: 1px solid var(--v2027-aqua-line) !important;
+  color: var(--v2027-aqua-ink) !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .runtime-menu-screen.v2027-menu-content-repair-screen .runtime-title strong,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .runtime-menu-screen.v2027-menu-content-repair-screen .runtime-title em,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .runtime-menu-screen.v2027-menu-content-repair-screen .runtime-title span,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .runtime-menu-screen.v2027-menu-content-repair-screen .runtime-wallet span { color: var(--v2027-aqua-ink) !important; text-shadow: 0 1px 0 rgba(255,255,255,.55) !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .runtime-menu-screen.v2027-menu-content-repair-screen .runtime-content {
+  position: relative !important;
+  z-index: 30 !important;
+  width: min(100%, 520px) !important;
+  margin: 0 auto !important;
+  display: grid !important;
+  gap: 10px !important;
+  min-height: 0 !important;
+  padding: 0 0 calc(var(--v2027-dock-safe) + 28px) !important;
+  background: transparent !important;
+  background-image: none !important;
+  color: var(--v2027-aqua-ink) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .runtime-menu-screen.v2027-menu-content-repair-screen .runtime-content > * {
+  transform: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  content-visibility: visible !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .runtime-menu-screen.v2027-menu-content-repair-screen :is(.runtime-hero-card,.v204-window-card,.runtime-panel,.runtime-item-card,.mission-card,.region-card,.shop-card,.gear-card) {
+  background: linear-gradient(145deg, rgba(249,255,255,.95), rgba(119,226,238,.66)) !important;
+  border: 1px solid rgba(76, 206, 224, .28) !important;
+  box-shadow: 0 12px 28px rgba(0, 56, 88, .13) !important;
+  color: var(--v2027-aqua-ink) !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2026-page-health-panel { display: none !important; }
+
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2-build-backdrop {
+  z-index: 460 !important;
+  background: rgba(4, 48, 68, .20) !important;
+  backdrop-filter: blur(3px) !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2-build-tray {
+  z-index: 480 !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: calc(max(10px, env(safe-area-inset-bottom)) + 10px) !important;
+  transform: translateX(-50%) !important;
+  width: min(560px, calc(100vw - 18px)) !important;
+  max-height: min(84dvh, 760px) !important;
+  min-height: min(560px, calc(100dvh - 96px)) !important;
+  padding: 14px 13px calc(max(16px, env(safe-area-inset-bottom)) + 16px) !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  background: linear-gradient(145deg, rgba(248,255,255,.98), rgba(108,218,236,.86)) !important;
+  border: 0 !important;
+  box-shadow: 0 22px 48px rgba(0, 42, 74, .26) !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .village-world-screen.v2-build-active .v2-build-tray:not(.force-open) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateX(-50%) translateY(20px) scale(.98) !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2-build-tray-open .v2-build-tray {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2-build-title {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 3 !important;
+  background: linear-gradient(145deg, rgba(251,255,255,.96), rgba(94,210,232,.78)) !important;
+  border-radius: 20px !important;
+  padding: 10px 12px !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2018-build-help { margin: 10px 2px !important; color: rgba(5, 56, 79, .82) !important; line-height: 1.35 !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2-build-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; padding-bottom: 14px !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2-build-grid button { min-height: 104px !important; padding: 10px 8px !important; border-radius: 20px !important; }
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2-build-grid button img { width: 48px !important; height: 42px !important; object-fit: contain !important; }
+
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] #toast-root {
+  top: calc(max(8px, env(safe-area-inset-top)) + 88px) !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: var(--v2027-hud-safe-right) !important;
+  display: grid !important;
+  justify-items: stretch !important;
+  gap: 8px !important;
+  z-index: 540 !important;
+  pointer-events: none !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] #toast-root .toast,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] #toast-root .toast-item {
+  width: min(360px, 100%) !important;
+  min-height: 46px !important;
+  padding: 9px 14px !important;
+  border: 0 !important;
+  border-radius: 21px !important;
+  background: linear-gradient(145deg, rgba(248,255,255,.97), rgba(102,219,235,.84)) !important;
+  color: var(--v2027-aqua-ink) !important;
+  box-shadow: 0 12px 26px rgba(0, 45, 73, .18) !important;
+  pointer-events: auto !important;
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] #toast-root .toast strong,
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] #toast-root .toast span { color: var(--v2027-aqua-ink) !important; text-shadow: 0 1px 0 rgba(255,255,255,.58) !important; }
+
+@media (max-width: 390px), (max-height: 720px) {
+  html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] { --v2027-dock-button: clamp(49px, 12.3vw, 54px); --v2027-dock-icon: clamp(31px, 7.8vw, 36px); }
+  html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] body[data-screen="fishing"] .recent-catch-strip { display: none !important; }
+  html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2-build-tray { min-height: min(500px, calc(100dvh - 72px)) !important; max-height: calc(100dvh - 36px) !important; }
+}
+html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2-build-tray-open .v2-build-tray { transform: translateX(-50%) !important; }

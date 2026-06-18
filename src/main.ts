@@ -220,6 +220,8 @@ class AquaFantasiaGame {
     document.documentElement.dataset.menuDockGuard = 'v2025-dock-same-every-screen';
     document.documentElement.dataset.assetMegaPatch = 'v2025-premium-asset-mega-pass';
     document.documentElement.dataset.assetCuration = 'v2026-curated-asset-pass';
+    document.documentElement.dataset.uiRootCauseRepair = 'v2027-ui-root-cause-repair';
+    document.documentElement.dataset.aquaToneReset = 'v2027-aqua-tone-reset';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -424,11 +426,12 @@ class AquaFantasiaGame {
     saveGame(this.save);
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen v209-asset-qa-screen v2010-village-clean-screen v2011-dock-safe-screen v2012-world-asset-screen v2013-world-safe-screen v2014-clean-village-screen v2016-world-stability-screen v2017-direction-ui-screen v2018-build-ux-screen v2020-village-asset-screen v2021-village-asset-screen v2022-hud-control-screen v2023-premium-village-screen v2024-village-object-repair-screen v2026-wide-stability-screen locked-screen';
+    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen v209-asset-qa-screen v2010-village-clean-screen v2011-dock-safe-screen v2012-world-asset-screen v2013-world-safe-screen v2014-clean-village-screen v2016-world-stability-screen v2017-direction-ui-screen v2018-build-ux-screen v2020-village-asset-screen v2021-village-asset-screen v2022-hud-control-screen v2023-premium-village-screen v2024-village-object-repair-screen v2026-wide-stability-screen v2027-village-root-repair-screen locked-screen';
     root.classList.add('v108-home-main', 'v1110-village-flow');
     root.dataset.legacyVillageFlow = 'v1110-home-banner v1110-tide-card before v1110-region-panel';
     root.innerHTML = `
       <div class="v2-village-bg" aria-hidden="true"></div>
+      <section class="v2027-village-loading" aria-live="polite"><div><strong>루미나 베이 접속 중</strong><span>타일과 주민을 불러오는 중입니다...</span><i></i></div></section>
       <header class="v2-village-hud glass-card" aria-label="마을 상태">
         <button class="v2-profile-chip v2017-profile-button" type="button" data-v2017-profile aria-haspopup="dialog" aria-label="캐릭터 정보 열기"><span data-v2-level>마을 Lv.${this.save.village.level}</span><strong>나</strong><em>플레이어 Lv.${this.playerLevel()} · 클릭해서 열기</em></button>
         <div class="v2-wallet-row">
@@ -509,6 +512,7 @@ class AquaFantasiaGame {
         <button type="button" data-village-zoom-out aria-label="축소">－</button>
         <button type="button" data-village-center aria-label="플레이어 위치로 이동">◎</button>
         <button type="button" data-village-build-open aria-label="건설 메뉴 열기"><img src="./assets/v22/icons/nav_build.png" alt="" />건설</button>
+        <button type="button" data-village-shop aria-label="상점 열기"><img src="./assets/v92/icons/shop.png" alt="" />상점</button>
         <button type="button" data-village-fishing aria-label="항구 출항"><img src="./assets/v22/icons/nav_fishing.png" alt="" />출항</button>
       </div>
       <div class="v2-joystick" data-village-joystick data-no-swipe aria-label="이동 조이스틱">
@@ -526,7 +530,12 @@ class AquaFantasiaGame {
       onGoFishing: () => { void this.go('fishing'); },
       onToast: (toast) => this.toast.show(toast),
     });
-    void this.villageWorld.init().catch((error) => {
+    void this.villageWorld.init().then(() => {
+      root.classList.add('v2027-village-ready');
+      root.querySelector<HTMLElement>('.v2027-village-loading')?.remove();
+    }).catch((error) => {
+      root.classList.add('v2027-village-ready');
+      root.querySelector<HTMLElement>('.v2027-village-loading')?.remove();
       console.warn('[AquaFantasia] village world failed', error);
       this.toast.show({ type: 'normal', title: '마을 로딩 실패', message: '기존 메뉴 화면으로 복구합니다.' });
       this.renderVillageFallback();
@@ -547,6 +556,7 @@ class AquaFantasiaGame {
     root.querySelectorAll<HTMLElement>('[data-v2017-character-close]').forEach((node) => node.addEventListener('click', closeCharacterPanel));
     root.querySelector<HTMLButtonElement>('[data-v2017-character-inventory]')?.addEventListener('click', () => { closeCharacterPanel(); void this.go('inventory'); });
     root.querySelector<HTMLButtonElement>('[data-v2017-character-quest]')?.addEventListener('click', () => { closeCharacterPanel(); void this.go('mission'); });
+    root.querySelector<HTMLButtonElement>('[data-village-shop]')?.addEventListener('click', () => { void this.go('shop'); });
   }
 
   private renderVillageFallback(): void {
@@ -582,20 +592,15 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v206-menu-detail-screen v207-menu-safe-screen v208-right-dock-screen v209-asset-qa-screen v2010-menu-full-screen v2011-menu-dock-screen v2012-menu-asset-screen v2013-menu-safe-screen v2014-menu-scroll-screen v2016-menu-stability-screen v2017-menu-readability-screen v2017-quest-scroll-screen v2018-menu-drag-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen v11115-foundation-frame-screen v2020-menu-asset-screen v2021-menu-asset-screen v2022-menu-dock-screen v2023-premium-menu-screen v2024-menu-content-repair-screen v2026-menu-stability-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v206-menu-detail-screen v207-menu-safe-screen v208-right-dock-screen v209-asset-qa-screen v2010-menu-full-screen v2011-menu-dock-screen v2012-menu-asset-screen v2013-menu-safe-screen v2014-menu-scroll-screen v2016-menu-stability-screen v2017-menu-readability-screen v2017-quest-scroll-screen v2018-menu-drag-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen v11115-foundation-frame-screen v2020-menu-asset-screen v2021-menu-asset-screen v2022-menu-dock-screen v2023-premium-menu-screen v2024-menu-content-repair-screen v2026-menu-stability-screen v2027-menu-content-repair-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
+    root.dataset.v2027MenuRepair = 'true';
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
     root.innerHTML = `
       <div class="runtime-3d-bg" aria-hidden="true"><div class="underwater-webgl-host" data-underwater-webgl></div><span class="v3d-caustics"></span><span class="v3d-bubbles"></span><span class="v3d-depth-fog"></span></div>
-      <img class="v2020-menu-deco v2020-menu-panel-deco" src="${ASSET.uiPanelAqua}" alt="" aria-hidden="true" loading="eager" />
-      <img class="v2020-menu-deco v2020-menu-card-deco" src="${ASSET.uiCardAqua}" alt="" aria-hidden="true" loading="eager" />
-      <img class="v2021-menu-deco v2021-menu-bubble-soft" src="${ASSET.uiBubbleSoft}" alt="" aria-hidden="true" loading="lazy" />
-      <img class="v2021-menu-deco v2021-menu-coral-branch" src="${ASSET.uiCoralBranch}" alt="" aria-hidden="true" loading="lazy" />
-      <img class="v2021-menu-deco v2021-menu-kelp-leaf" src="${ASSET.uiKelpLeaf}" alt="" aria-hidden="true" loading="lazy" />
-      <img class="v2025-menu-deco v2025-menu-page-bg v2025-menu-page-inventory" src="${ASSET.v2025InventoryPage}" alt="" aria-hidden="true" loading="lazy" />
-      <img class="v2025-menu-deco v2025-menu-page-bg v2025-menu-page-quest" src="${ASSET.v2025QuestPage}" alt="" aria-hidden="true" loading="lazy" />
-      <img class="v2025-menu-deco v2025-menu-page-bg v2025-menu-page-map" src="${ASSET.v2025WorldMapPage}" alt="" aria-hidden="true" loading="lazy" />
+      <img class="v2027-menu-accent v2027-menu-accent-bubble" src="${ASSET.uiBubbleSoft}" alt="" aria-hidden="true" loading="lazy" />
+      <img class="v2027-menu-accent v2027-menu-accent-coral" src="${ASSET.uiCoralBranch}" alt="" aria-hidden="true" loading="lazy" />
       <img class="runtime-bg-character" src="${ASSET.player}" alt="" aria-hidden="true" loading="eager" />
       <header class="runtime-hud" aria-label="플레이어 HUD">
         <img class="runtime-hud-mascot" src="./assets/v203/portraits/player_happy.png" alt="" />
@@ -672,7 +677,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v2019-fishing-stability-screen v2020-fishing-asset-screen v2021-fishing-asset-screen v2022-fishing-ui-screen v2023-premium-fishing-screen v2024-fishing-menu-repair-screen v205-fishing-asset-screen v207-fishing-safe-screen v209-fishing-qa-screen v2010-fishing-safe-screen v2011-fishing-safe-screen v2012-fishing-safe-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing v1112-content-flow-fishing v11113-detail-stability-fishing v11114-button-style-fishing v11115-foundation-frame-fishing v2026-fishing-stability-screen locked-screen';
+    root.className = 'game-screen fishing-screen v2019-fishing-stability-screen v2020-fishing-asset-screen v2021-fishing-asset-screen v2022-fishing-ui-screen v2023-premium-fishing-screen v2024-fishing-menu-repair-screen v205-fishing-asset-screen v207-fishing-safe-screen v209-fishing-qa-screen v2010-fishing-safe-screen v2011-fishing-safe-screen v2012-fishing-safe-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing v1112-content-flow-fishing v11113-detail-stability-fishing v11114-button-style-fishing v11115-foundation-frame-fishing v2026-fishing-stability-screen v2027-fishing-root-repair-screen locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -790,11 +795,11 @@ class AquaFantasiaGame {
     dom.app.querySelector('.bottom-nav')?.remove();
     const nav = document.createElement('nav');
     const v13 = false;
-    nav.className = 'bottom-nav premium-bottom-nav fixed-root-nav v840-bottom-nav v208-right-dock-nav v2010-right-dock-nav v2011-wing-dock-nav v2013-wing-dock-nav v2014-ghost-dock-nav v2016-safe-dock-nav v2026-unified-dock-nav';
+    nav.className = 'bottom-nav fixed-root-nav v2016-safe-dock-nav v2026-unified-dock-nav v2027-aqua-dock-nav';
     nav.setAttribute('aria-label', '우측 하단 메뉴');
     nav.setAttribute('data-fixed-root', 'true');
     nav.dataset.menuDock = 'right-bottom-wing-v2016';
-    nav.dataset.dockGuard = 'v2026-home-fishing-same-dock';
+    nav.dataset.dockGuard = 'v2027-home-fishing-identical-dock';
     const dockInlineStyles: Array<[string, string]> = [
       ['position', 'fixed'], ['left', 'auto'], ['right', 'var(--v2016-dock-right, var(--v2014-dock-right, max(10px, env(safe-area-inset-right))))'],
       ['bottom', 'var(--v2016-dock-bottom, var(--v2014-dock-bottom, calc(max(14px, env(safe-area-inset-bottom)) + 6px)))'], ['width', 'auto'], ['height', 'auto'],
