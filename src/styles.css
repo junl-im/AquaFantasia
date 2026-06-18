@@ -17196,3 +17196,191 @@ html.is-hostile-inapp body:not([data-screen="fishing"]):not([data-screen="login"
   :root { --v2013-dock-button: 49px; --v2013-dock-icon: 30px; --v2013-dock-gap: 4px; --v2013-dock-bottom: calc(max(20px, env(safe-area-inset-bottom)) + 10px); }
   .bottom-nav.v2013-wing-dock-nav button { border-radius: 15px !important; }
 }
+
+/* v2.0.14 Background/dock/scroll polish
+   Removes the old painted village background under Pixi tiles, makes the right-bottom dock truly borderless,
+   gives every menu screen safe scrolling, left-aligns page buttons away from the dock, and fixes build tray drag scroll. */
+:root {
+  --v2014-dock-button: clamp(44px, 11.2vw, 50px);
+  --v2014-dock-icon: clamp(27px, 7.1vw, 32px);
+  --v2014-dock-gap: clamp(3px, 1vw, 5px);
+  --v2014-dock-right: max(10px, env(safe-area-inset-right));
+  --v2014-dock-bottom: calc(max(12px, env(safe-area-inset-bottom)) + 6px);
+  --v2014-dock-width: calc(var(--v2014-dock-button) * 3 + var(--v2014-dock-gap) * 2);
+  --v2014-dock-height: calc(var(--v2014-dock-button) * 2 + var(--v2014-dock-gap));
+  --v2014-dock-safe-bottom: calc(var(--v2014-dock-height) + var(--v2014-dock-bottom) + 24px);
+  --v2014-dock-safe-right: calc(var(--v2014-dock-width) + var(--v2014-dock-right) + 18px);
+}
+.village-world-screen.v2014-clean-village-screen .v2-village-art-bg,
+.village-world-screen.v2014-clean-village-screen img.v2-village-art-bg,
+.village-world-screen.v2014-clean-village-screen .v2-legacy-bg-img,
+.village-world-screen.v2014-clean-village-screen .v11115-village-bg-img {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  content-visibility: hidden !important;
+}
+.village-world-screen.v2014-clean-village-screen {
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255,255,255,.38), transparent 35%),
+    linear-gradient(180deg, #8eeaff 0%, #57c9eb 42%, #41b6d7 100%) !important;
+}
+.village-world-screen.v2014-clean-village-screen .v2-village-bg {
+  background:
+    radial-gradient(circle at 50% 20%, rgba(255,255,255,.34), transparent 32%),
+    linear-gradient(180deg, rgba(126,224,255,.58), rgba(33,148,201,.34)) !important;
+  opacity: .36 !important;
+  filter: none !important;
+}
+.village-world-screen.v2014-clean-village-screen .v2-village-stage {
+  inset: 0 !important;
+  background: transparent !important;
+  z-index: 3 !important;
+}
+body:not([data-screen="fishing"]):not([data-screen="login"]) .bottom-nav.v2014-ghost-dock-nav,
+html.portrait-only-game body:not([data-screen="fishing"]):not([data-screen="login"]) .bottom-nav.v2014-ghost-dock-nav.fixed-root-nav,
+html.is-kakao-inapp body:not([data-screen="fishing"]):not([data-screen="login"]) .bottom-nav.v2014-ghost-dock-nav.fixed-root-nav,
+html.is-hostile-inapp body:not([data-screen="fishing"]):not([data-screen="login"]) .bottom-nav.v2014-ghost-dock-nav.fixed-root-nav {
+  position: fixed !important;
+  left: auto !important;
+  right: var(--v2014-dock-right) !important;
+  bottom: var(--v2014-dock-bottom) !important;
+  width: var(--v2014-dock-width) !important;
+  height: var(--v2014-dock-height) !important;
+  min-width: 0 !important;
+  max-width: calc(100vw - 20px) !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, var(--v2014-dock-button)) !important;
+  grid-template-rows: repeat(2, var(--v2014-dock-button)) !important;
+  gap: var(--v2014-dock-gap) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+  transform: none !important;
+  translate: none !important;
+  z-index: 145 !important;
+}
+.bottom-nav.v2014-ghost-dock-nav::before,
+.bottom-nav.v2014-ghost-dock-nav::after { content: none !important; display: none !important; }
+.bottom-nav.v2014-ghost-dock-nav button {
+  width: var(--v2014-dock-button) !important;
+  height: var(--v2014-dock-button) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 2px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  display: grid !important;
+  place-items: center !important;
+  gap: 0 !important;
+  overflow: visible !important;
+  pointer-events: auto !important;
+}
+.bottom-nav.v2014-ghost-dock-nav button[data-screen="inventory"] { grid-column: 1 !important; grid-row: 2 !important; }
+.bottom-nav.v2014-ghost-dock-nav button[data-screen="mission"] { grid-column: 2 !important; grid-row: 2 !important; }
+.bottom-nav.v2014-ghost-dock-nav button[data-screen="map"] { grid-column: 3 !important; grid-row: 2 !important; }
+.bottom-nav.v2014-ghost-dock-nav button[data-screen="village"] { grid-column: 3 !important; grid-row: 1 !important; }
+.bottom-nav.v2014-ghost-dock-nav button img {
+  width: var(--v2014-dock-icon) !important;
+  height: var(--v2014-dock-icon) !important;
+  object-fit: contain !important;
+  margin: 0 !important;
+  filter: drop-shadow(0 4px 6px rgba(0, 25, 64, .36)) saturate(1.16) brightness(1.05) !important;
+}
+.bottom-nav.v2014-ghost-dock-nav button span {
+  font-size: clamp(6.8px, 1.72vw, 8px) !important;
+  line-height: .95 !important;
+  margin-top: -2px !important;
+  padding: 1px 3px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(5, 50, 90, .42) !important;
+  box-shadow: none !important;
+  white-space: nowrap !important;
+  color: rgba(248,253,255,.96) !important;
+  text-shadow: 0 1px 2px rgba(0, 25, 61, .52) !important;
+}
+.bottom-nav.v2014-ghost-dock-nav button.active img {
+  transform: translateY(-1px) scale(1.08) !important;
+  filter: drop-shadow(0 0 8px rgba(119,238,255,.84)) drop-shadow(0 4px 7px rgba(0, 25, 64, .34)) saturate(1.26) brightness(1.12) !important;
+}
+.bottom-nav.v2014-ghost-dock-nav button.active span { background: rgba(38, 112, 160, .58) !important; color: #fff7b4 !important; }
+.runtime-menu-screen.v2014-menu-scroll-screen,
+.runtime-menu-screen.v2014-menu-scroll-screen.scroll-screen {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-y: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  padding-bottom: var(--v2014-dock-safe-bottom) !important;
+  scroll-padding-bottom: var(--v2014-dock-safe-bottom) !important;
+}
+.runtime-menu-screen.v2014-menu-scroll-screen .runtime-content {
+  width: min(100%, 560px) !important;
+  max-width: calc(100vw - 20px) !important;
+  padding-left: max(10px, env(safe-area-inset-left)) !important;
+  padding-right: max(10px, env(safe-area-inset-right)) !important;
+  padding-bottom: calc(var(--v2014-dock-safe-bottom) + 36px) !important;
+  margin: 0 auto !important;
+  overflow: visible !important;
+  scroll-padding-bottom: calc(var(--v2014-dock-safe-bottom) + 36px) !important;
+}
+.runtime-menu-screen.v2014-menu-scroll-screen :is(.runtime-hero-card,.runtime-panel,.v204-window-card,.v204-map-shell,.v204-inventory-shell,.v206-quest-board,.v206-catch-ledger,.mission-list,.runtime-card-list,.runtime-region-grid,.region-panel) {
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.runtime-menu-screen.v2014-menu-scroll-screen :is(.runtime-btn,.compact-cta,.btn-aqua-action,.btn-gold-cost) {
+  align-self: flex-start !important;
+  justify-self: start !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  max-width: min(260px, calc(100vw - var(--v2014-dock-safe-right) - 24px)) !important;
+}
+.runtime-menu-screen.v2014-menu-scroll-screen :is(.runtime-card-list,.mission-list) :is(.runtime-btn,.compact-cta,.btn-aqua-action,.btn-gold-cost) {
+  max-width: min(148px, 42vw) !important;
+}
+.runtime-menu-screen.v2014-menu-scroll-screen .runtime-content > :last-child {
+  margin-bottom: calc(var(--v2014-dock-safe-bottom) + 22px) !important;
+}
+.village-world-screen.v2014-clean-village-screen .v2-build-tray {
+  max-height: min(74dvh, 650px) !important;
+  overflow: hidden !important;
+  touch-action: pan-y !important;
+}
+.village-world-screen.v2014-clean-village-screen .v2-build-grid {
+  max-height: min(56dvh, 500px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  padding-right: 5px !important;
+  scroll-padding-bottom: 36px !important;
+}
+.village-world-screen.v2014-clean-village-screen .v2-build-grid button { touch-action: manipulation !important; }
+.village-world-screen.v2014-clean-village-screen :is(.v2-world-controls,.v2-objective-card,.v2-village-guide,.v206-village-status,.v2-dialog-panel,.v203-interior-panel) {
+  max-width: calc(100vw - 22px) !important;
+}
+@media (max-width: 390px) {
+  :root { --v2014-dock-button: 44px; --v2014-dock-icon: 27px; --v2014-dock-gap: 3px; --v2014-dock-bottom: calc(max(12px, env(safe-area-inset-bottom)) + 5px); }
+  .bottom-nav.v2014-ghost-dock-nav button span { font-size: 6.7px !important; }
+}

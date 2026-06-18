@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.13-direction-dock-collision-fix';
+const CACHE_NAME = 'aqua-fantasia-v2.0.14-background-dock-scroll-polish';
 const PRECACHE = [
   "./",
   "./index.html",

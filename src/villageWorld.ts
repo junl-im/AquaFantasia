@@ -51,7 +51,7 @@ type PointerTrack = {
 
 type PointerPoint = { x: number; y: number };
 
-type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse' | 'stall' | 'pottedPalm' | 'barrels' | 'coral' | 'crystal' | 'banner' | 'woodFence' | 'ropeFence' | 'bollard' | 'stairs' | 'bridge' | 'stoneWall' | 'arch' | 'questBoard' | 'statue' | 'cherryTree' | 'mapleTree' | 'pineTree' | 'crystalTree' | 'flowerTree' | 'cypressTree' | 'dog' | 'sleepingDog' | 'cat' | 'walkingCat' | 'seagull' | 'flyingSeagull' | 'duck' | 'swimmingDuck' | 'butterflyBlue' | 'butterflyPink' | 'petals' | 'sparkles' | 'waterRing' | 'shoreFoam' | 'splash' | 'steam' | 'cookingPot' | 'goldLantern' | 'fishShadowSmall' | 'fishShadowMid' | 'fishShadowBig';
+type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse' | 'stall' | 'pottedPalm' | 'barrels' | 'coral' | 'crystal' | 'banner' | 'woodFence' | 'ropeFence' | 'bollard' | 'stairs' | 'bridge' | 'stoneWall' | 'arch' | 'questBoard' | 'statue' | 'cherryTree' | 'mapleTree' | 'pineTree' | 'crystalTree' | 'flowerTree' | 'cypressTree' | 'dog' | 'sleepingDog' | 'cat' | 'walkingCat' | 'seagull' | 'flyingSeagull' | 'duck' | 'swimmingDuck' | 'butterflyBlue' | 'butterflyPink' | 'petals' | 'sparkles' | 'waterRing' | 'shoreFoam' | 'splash' | 'steam' | 'cookingPot' | 'goldLantern' | 'fishShadowSmall' | 'fishShadowMid' | 'fishShadowBig' | 'woodSign' | 'ropeWall' | 'stoneCorner' | 'stoneCurve' | 'wideStairs' | 'ropeCorner';
 
 type Decoration = {
   kind: DecoKind;
@@ -203,7 +203,7 @@ const ACTOR_TEXTURES: Record<Actor['role'], string> = {
 const ACTOR_DIRECTIONS: ActorDirection[] = ['south', 'southeast', 'east', 'northeast', 'north', 'northwest', 'west', 'southwest'];
 
 const ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
-  // v2.0.13: the supplied 8-direction sheet is visually opposite to the runtime
+  // v2.0.13/v2.0.14: the supplied 8-direction sheet is visually opposite to the runtime
   // screen movement in the current isometric camera, so texture lookup is corrected
   // without changing actual movement/pathfinding.
   south: 'north',
@@ -339,6 +339,12 @@ const DECO_TEXTURES: Partial<Record<DecoKind, string>> = {
   fishShadowSmall: './assets/v2012/props/fish_shadow_small.png',
   fishShadowMid: './assets/v2012/props/fish_shadow_mid.png',
   fishShadowBig: './assets/v2012/props/fish_shadow_big.png',
+  woodSign: './assets/v209/props/wood_sign.png',
+  ropeWall: './assets/v209/props/rope_wall.png',
+  stoneCorner: './assets/v209/props/stone_corner.png',
+  stoneCurve: './assets/v209/props/stone_curve.png',
+  wideStairs: './assets/v209/props/stair_wide.png',
+  ropeCorner: './assets/v209/props/rope_corner.png',
 };
 
 const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
@@ -372,6 +378,7 @@ const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
   dog: 66, sleepingDog: 48, cat: 62, walkingCat: 58, seagull: 60, flyingSeagull: 72, duck: 58, swimmingDuck: 74,
   butterflyBlue: 48, butterflyPink: 44, petals: 64, sparkles: 60, waterRing: 72, shoreFoam: 96, splash: 102, steam: 94, cookingPot: 72, goldLantern: 90,
   fishShadowSmall: 44, fishShadowMid: 50, fishShadowBig: 58,
+  woodSign: 78, ropeWall: 64, stoneCorner: 58, stoneCurve: 58, wideStairs: 74, ropeCorner: 56,
 };
 
 const BUILD_PROP_TEXTURES: Partial<Record<VillageBuildingType, string>> = {
@@ -465,6 +472,17 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'fishShadowSmall', x: 14, y: 36, scale: .62 },
   { kind: 'fishShadowMid', x: 19, y: 36, scale: .62 },
   { kind: 'fishShadowBig', x: 29, y: 36, scale: .62 },
+  { kind: 'woodSign', x: 13, y: 21, scale: .72 },
+  { kind: 'woodSign', x: 27, y: 21, scale: .72 },
+  { kind: 'ropeWall', x: 14, y: 32, scale: .72 },
+  { kind: 'ropeWall', x: 26, y: 32, scale: .72 },
+  { kind: 'ropeCorner', x: 15, y: 32, scale: .7 },
+  { kind: 'ropeCorner', x: 25, y: 32, scale: .7 },
+  { kind: 'stoneCorner', x: 17, y: 14, scale: .72 },
+  { kind: 'stoneCorner', x: 23, y: 14, scale: .72 },
+  { kind: 'stoneCurve', x: 15, y: 21, scale: .72 },
+  { kind: 'stoneCurve', x: 25, y: 21, scale: .72 },
+  { kind: 'wideStairs', x: 20, y: 24, scale: .7 },
 ];
 
 function clamp(value: number, min: number, max: number): number {

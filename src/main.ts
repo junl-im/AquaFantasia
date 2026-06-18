@@ -332,12 +332,11 @@ class AquaFantasiaGame {
     saveGame(this.save);
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen v209-asset-qa-screen v2010-village-clean-screen v2011-dock-safe-screen v2012-world-asset-screen v2013-world-safe-screen locked-screen';
+    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen v209-asset-qa-screen v2010-village-clean-screen v2011-dock-safe-screen v2012-world-asset-screen v2013-world-safe-screen v2014-clean-village-screen locked-screen';
     root.classList.add('v108-home-main', 'v1110-village-flow');
     root.dataset.legacyVillageFlow = 'v1110-home-banner v1110-tide-card before v1110-region-panel';
     root.innerHTML = `
       <div class="v2-village-bg" aria-hidden="true"></div>
-      <img class="v2-village-art-bg" src="./assets/v2/village/background/aquafantasia_first_village_town_square_9x16.png" alt="" aria-hidden="true" />
       <header class="v2-village-hud glass-card" aria-label="마을 상태">
         <div class="v2-profile-chip"><span data-v2-level>Lv.${this.save.village.level}</span><strong>루미나 베이</strong><em>살아있는 첫 섬마을</em></div>
         <div class="v2-wallet-row">
@@ -453,7 +452,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v206-menu-detail-screen v207-menu-safe-screen v208-right-dock-screen v209-asset-qa-screen v2010-menu-full-screen v2011-menu-dock-screen v2012-menu-asset-screen v2013-menu-safe-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen v11115-foundation-frame-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v206-menu-detail-screen v207-menu-safe-screen v208-right-dock-screen v209-asset-qa-screen v2010-menu-full-screen v2011-menu-dock-screen v2012-menu-asset-screen v2013-menu-safe-screen v2014-menu-scroll-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen v11115-foundation-frame-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -597,19 +596,19 @@ class AquaFantasiaGame {
     dom.app.querySelector('.bottom-nav')?.remove();
     const nav = document.createElement('nav');
     const v13 = false;
-    nav.className = 'bottom-nav premium-bottom-nav fixed-root-nav v840-bottom-nav v208-right-dock-nav v2010-right-dock-nav v2011-wing-dock-nav v2013-wing-dock-nav';
+    nav.className = 'bottom-nav premium-bottom-nav fixed-root-nav v840-bottom-nav v208-right-dock-nav v2010-right-dock-nav v2011-wing-dock-nav v2013-wing-dock-nav v2014-ghost-dock-nav';
     nav.setAttribute('aria-label', '우측 하단 메뉴');
     nav.setAttribute('data-fixed-root', 'true');
-    nav.dataset.menuDock = 'right-bottom-wing-v2013';
+    nav.dataset.menuDock = 'right-bottom-wing-v2014';
     const dockInlineStyles: Array<[string, string]> = [
       ['position', 'fixed'], ['left', 'auto'], ['right', 'max(10px, env(safe-area-inset-right))'],
-      ['bottom', 'calc(max(18px, env(safe-area-inset-bottom)) + 8px)'], ['width', 'auto'], ['height', 'auto'],
-      ['min-width', '0'], ['max-width', 'calc(100vw - 18px)'], ['display', 'grid'],
-      ['grid-template-columns', 'repeat(3, var(--v2013-dock-button, var(--v2011-dock-button, 56px)))'],
-      ['grid-template-rows', 'repeat(2, var(--v2013-dock-button, var(--v2011-dock-button, 56px)))'], ['gap', 'var(--v2013-dock-gap, var(--v2011-dock-gap, 5px))'],
+      ['bottom', 'calc(max(14px, env(safe-area-inset-bottom)) + 6px)'], ['width', 'auto'], ['height', 'auto'],
+      ['min-width', '0'], ['max-width', 'calc(100vw - 16px)'], ['display', 'grid'],
+      ['grid-template-columns', 'repeat(3, var(--v2014-dock-button, var(--v2013-dock-button, 50px)))'],
+      ['grid-template-rows', 'repeat(2, var(--v2014-dock-button, var(--v2013-dock-button, 50px)))'], ['gap', 'var(--v2014-dock-gap, var(--v2013-dock-gap, 4px))'],
       ['padding', '0'], ['margin', '0'], ['border', '0'], ['border-radius', '0'],
       ['background', 'transparent'], ['background-image', 'none'], ['box-shadow', 'none'],
-      ['filter', 'none'], ['overflow', 'visible'], ['transform', 'none'], ['translate', 'none'], ['z-index', '120'],
+      ['filter', 'none'], ['overflow', 'visible'], ['transform', 'none'], ['translate', 'none'], ['pointer-events', 'none'], ['z-index', '120'],
     ];
     dockInlineStyles.forEach(([key, value]) => nav.style.setProperty(key, value, 'important'));
     nav.innerHTML = navItems.map(({ screen, icon, label }) => {
@@ -1936,19 +1935,19 @@ class AquaFantasiaGame {
     nav.classList.add('v1117-nav-safe', 'v1118-nav-safe', 'v1119-nav-safe');
     if (nav.classList.contains('v208-right-dock-nav')) {
       nav.style.setProperty('left', 'auto', 'important');
-      nav.style.setProperty('right', 'var(--v2013-dock-right, max(12px, env(safe-area-inset-right)))', 'important');
-      nav.style.setProperty('bottom', 'var(--v2013-dock-bottom, calc(max(18px, env(safe-area-inset-bottom)) + 8px))', 'important');
+      nav.style.setProperty('right', 'var(--v2014-dock-right, var(--v2013-dock-right, max(10px, env(safe-area-inset-right))))', 'important');
+      nav.style.setProperty('bottom', 'var(--v2014-dock-bottom, var(--v2013-dock-bottom, calc(max(14px, env(safe-area-inset-bottom)) + 6px)))', 'important');
       nav.style.setProperty('width', 'auto', 'important');
-      nav.style.setProperty('max-width', 'calc(100vw - 18px)', 'important');
+      nav.style.setProperty('max-width', 'calc(100vw - 16px)', 'important');
       nav.style.setProperty('min-width', '0', 'important');
       nav.style.setProperty('margin', '0', 'important');
       nav.style.setProperty('transform', 'none', 'important');
       nav.style.setProperty('translate', 'none', 'important');
       nav.style.setProperty('overflow', 'visible', 'important');
       nav.style.setProperty('display', 'grid', 'important');
-      nav.style.setProperty('grid-template-columns', 'repeat(3, var(--v2013-dock-button, var(--v2011-dock-button, 56px)))', 'important');
-      nav.style.setProperty('grid-template-rows', 'repeat(2, var(--v2013-dock-button, var(--v2011-dock-button, 56px)))', 'important');
-      nav.style.setProperty('gap', 'var(--v2013-dock-gap, var(--v2011-dock-gap, 5px))', 'important');
+      nav.style.setProperty('grid-template-columns', 'repeat(3, var(--v2014-dock-button, var(--v2013-dock-button, 50px)))', 'important');
+      nav.style.setProperty('grid-template-rows', 'repeat(2, var(--v2014-dock-button, var(--v2013-dock-button, 50px)))', 'important');
+      nav.style.setProperty('gap', 'var(--v2014-dock-gap, var(--v2013-dock-gap, 4px))', 'important');
       nav.style.setProperty('padding', '0', 'important');
       nav.style.setProperty('background', 'transparent', 'important');
       nav.style.setProperty('background-image', 'none', 'important');
