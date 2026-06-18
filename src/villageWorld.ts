@@ -195,13 +195,13 @@ const DAY_TALK: Record<WorldNpcRole, string[]> = {
 
 
 const ACTOR_TEXTURES: Record<Actor['role'], string> = {
-  player: './assets/v2012/characters/player_south.png',
-  chief: './assets/v2012/characters/chief_south.png',
-  merchant: './assets/v2012/characters/merchant_south.png',
-  guild: './assets/v2012/characters/guild_south.png',
-  captain: './assets/v2012/characters/captain_south.png',
-  tourist: './assets/v2012/characters/tourist_south.png',
-  vip: './assets/v2012/characters/vip_south.png',
+  player: './assets/v2023/characters/player_south.png',
+  chief: './assets/v2023/characters/chief_south.png',
+  merchant: './assets/v2023/characters/merchant_south.png',
+  guild: './assets/v2023/characters/guild_south.png',
+  captain: './assets/v2023/characters/captain_south.png',
+  tourist: './assets/v2023/characters/tourist_south.png',
+  vip: './assets/v2023/characters/vip_south.png',
 };
 
 const ACTOR_DIRECTIONS: ActorDirection[] = ['south', 'southeast', 'east', 'northeast', 'north', 'northwest', 'west', 'southwest'];
@@ -233,13 +233,13 @@ const ACTOR_DIRECTION_QA_VECTORS: Array<{ movement: ActorDirection; dx: number; 
 
 
 const ACTOR_DIRECTION_TEXTURES: Record<Actor['role'], Record<ActorDirection, string>> = {
-  player: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/player_${direction}.png`])) as Record<ActorDirection, string>,
-  chief: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/chief_${direction}.png`])) as Record<ActorDirection, string>,
-  merchant: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/merchant_${direction}.png`])) as Record<ActorDirection, string>,
-  guild: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/guild_${direction}.png`])) as Record<ActorDirection, string>,
-  captain: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/captain_${direction}.png`])) as Record<ActorDirection, string>,
-  tourist: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/tourist_${direction}.png`])) as Record<ActorDirection, string>,
-  vip: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/vip_${direction}.png`])) as Record<ActorDirection, string>,
+  player: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/player_${direction}.png`])) as Record<ActorDirection, string>,
+  chief: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/chief_${direction}.png`])) as Record<ActorDirection, string>,
+  merchant: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/merchant_${direction}.png`])) as Record<ActorDirection, string>,
+  guild: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/guild_${direction}.png`])) as Record<ActorDirection, string>,
+  captain: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/captain_${direction}.png`])) as Record<ActorDirection, string>,
+  tourist: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/tourist_${direction}.png`])) as Record<ActorDirection, string>,
+  vip: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/vip_${direction}.png`])) as Record<ActorDirection, string>,
 };
 
 
@@ -292,43 +292,43 @@ const INTERIOR_ASSETS: Partial<Record<VillageBuildingType, { title: string; imag
 const CAMERA_PAD = 280;
 
 const TILE_TEXTURES: Record<VillageTileKind, string[]> = {
-  grass: ['./assets/v207/tiles/grass_tile.png', './assets/v207/tiles/grass_flower_tile.png'],
-  sand: ['./assets/v207/tiles/sand_tile.png', './assets/v207/tiles/sand_shell_tile.png', './assets/v207/tiles/sand_path_tile.png'],
-  sea: ['./assets/v207/tiles/water_tile.png'],
-  stone: ['./assets/v207/tiles/stone_tile.png', './assets/v207/tiles/stone_cracked_tile.png', './assets/v207/tiles/grass_path_tile.png', './assets/v207/tiles/curved_path_tile.png'],
+  grass: ['./assets/v2023/tiles/grass_tile_0.png', './assets/v2023/tiles/grass_flower_tile_0.png', './assets/v207/tiles/grass_tile.png'],
+  sand: ['./assets/v2023/tiles/sand_tile_0.png', './assets/v2023/tiles/sand_shell_tile_0.png', './assets/v207/tiles/sand_path_tile.png'],
+  sea: ['./assets/v2023/tiles/water_tile_0.png', './assets/v207/tiles/water_tile.png'],
+  stone: ['./assets/v2023/tiles/stone_tile_0.png', './assets/v207/tiles/stone_cracked_tile.png', './assets/v207/tiles/grass_path_tile.png', './assets/v207/tiles/curved_path_tile.png'],
   wood: ['./assets/v207/tiles/beach_path_tile.png'],
-  plaza: ['./assets/v207/tiles/plaza_tile.png', './assets/v207/tiles/plaza_shell_tile.png'],
+  plaza: ['./assets/v2023/tiles/plaza_tile_0.png', './assets/v2023/tiles/plaza_shell_tile_0.png', './assets/v207/tiles/plaza_tile.png'],
 };
 
 
 const DECO_TEXTURES: Partial<Record<DecoKind, string>> = {
-  tree: './assets/v209/props/palm_cluster.png',
-  palm: './assets/v209/props/palm_tree.png',
+  tree: './assets/v2023/props/palm_cluster.png',
+  palm: './assets/v2023/props/palm_tree.png',
   tropicalTree: './assets/v2012/props/tree_tropical.png',
   palmAlt: './assets/v2012/props/tree_palm_alt.png',
   lamp: './assets/v209/props/crystal_lamp.png',
-  bench: './assets/v209/props/bench.png',
-  crate: './assets/v209/props/crate_stack.png',
+  bench: './assets/v2023/props/bench.png',
+  crate: './assets/v2023/props/crate_stack.png',
   buoy: './assets/v209/props/net_buoys.png',
-  dock: './assets/v209/props/dock_platform.png',
-  flag: './assets/v209/props/flag_blue.png',
+  dock: './assets/v2023/props/dock_platform.png',
+  flag: './assets/v2023/props/flag_blue.png',
   rock: './assets/v209/props/shell_rocks.png',
-  flowerBed: './assets/v209/props/flower_box.png',
+  flowerBed: './assets/v2023/props/flower_box.png',
   lighthouse: './assets/v209/props/crystal_pillar.png',
-  stall: './assets/v209/props/seaside_stall.png',
+  stall: './assets/v2023/props/seaside_stall.png',
   pottedPalm: './assets/v209/props/potted_palm.png',
-  barrels: './assets/v209/props/barrels.png',
-  coral: './assets/v209/props/coral_cluster.png',
-  crystal: './assets/v209/props/crystal_pillar.png',
+  barrels: './assets/v2023/props/barrels.png',
+  coral: './assets/v2023/props/coral_cluster.png',
+  crystal: './assets/v2023/props/crystal_pillar.png',
   banner: './assets/v209/props/banner_stone.png',
   woodFence: './assets/v209/props/wood_fence.png',
-  ropeFence: './assets/v209/props/rope_fence.png',
+  ropeFence: './assets/v2023/props/rope_fence.png',
   bollard: './assets/v209/props/harbor_bollard.png',
   stairs: './assets/v209/props/stone_stairs.png',
   bridge: './assets/v209/props/wood_bridge.png',
   stoneWall: './assets/v209/props/stone_wall.png',
   arch: './assets/v209/props/crystal_arch.png',
-  questBoard: './assets/v209/props/quest_board_large.png',
+  questBoard: './assets/v2023/props/quest_board_large.png',
   statue: './assets/v209/props/crystal_statue.png',
   cherryTree: './assets/v2012/props/tree_cherry.png',
   mapleTree: './assets/v2012/props/tree_maple.png',
@@ -358,14 +358,14 @@ const DECO_TEXTURES: Partial<Record<DecoKind, string>> = {
   fishShadowMid: './assets/v2012/props/fish_shadow_mid.png',
   fishShadowBig: './assets/v2012/props/fish_shadow_big.png',
   woodSign: './assets/v209/props/wood_sign.png',
-  ropeWall: './assets/v209/props/rope_wall.png',
+  ropeWall: './assets/v2023/props/rope_wall.png',
   stoneCorner: './assets/v209/props/stone_corner.png',
   stoneCurve: './assets/v209/props/stone_curve.png',
   wideStairs: './assets/v209/props/stair_wide.png',
   ropeCorner: './assets/v209/props/rope_corner.png',
-  noticeBoard: './assets/v209/props/notice_board.png',
-  plazaStairs: './assets/v209/props/plaza_stairs.png',
-  bridgeAsset: './assets/v209/props/bridge_asset.png',
+  noticeBoard: './assets/v2023/props/notice_board.png',
+  plazaStairs: './assets/v2023/props/plaza_stairs.png',
+  bridgeAsset: './assets/v2023/props/bridge_asset.png',
 };
 
 const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
@@ -406,13 +406,20 @@ const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
 };
 
 const BUILD_PROP_TEXTURES: Partial<Record<VillageBuildingType, string>> = {
-  fountain: './assets/v209/props/fountain_asset.png',
+  fountain: './assets/v2023/props/fountain_asset.png',
   flower: './assets/v209/props/shell_garden.png',
 };
 
 const BUILD_PROP_TARGET_HEIGHT: Partial<Record<VillageBuildingType, number>> = {
   fountain: 104,
   flower: 58,
+};
+
+const BUILD_PREVIEW_TEXTURES = {
+  valid: './assets/v2023/build/preview_valid_tile.png',
+  invalid: './assets/v2023/build/preview_invalid_tile.png',
+  pulse: './assets/v2023/build/preview_selected_pulse.png',
+  blueprint: './assets/v2023/build/preview_blueprint_placement.png',
 };
 
 const CRITICAL_DECO_KINDS: DecoKind[] = [
@@ -560,6 +567,21 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'fishShadowBig', x: 32, y: 36, scale: .46 },
   { kind: 'goldLantern', x: 18, y: 24, scale: .38 },
   { kind: 'goldLantern', x: 22, y: 24, scale: .38 },
+  // v2.0.23: premium matched harbor/beach props, placed mostly as nonblocking ambience.
+  { kind: 'bench', x: 12, y: 20, scale: .62 },
+  { kind: 'bench', x: 28, y: 20, scale: .62 },
+  { kind: 'crate', x: 16, y: 31, scale: .58 },
+  { kind: 'barrels', x: 24, y: 31, scale: .58 },
+  { kind: 'coral', x: 7, y: 34, scale: .56 },
+  { kind: 'coral', x: 33, y: 34, scale: .56 },
+  { kind: 'flowerBed', x: 18, y: 16, scale: .52 },
+  { kind: 'flowerBed', x: 22, y: 16, scale: .52 },
+  { kind: 'ropeFence', x: 10, y: 32, scale: .58 },
+  { kind: 'ropeFence', x: 30, y: 32, scale: .58 },
+  { kind: 'noticeBoard', x: 20, y: 21, scale: .58 },
+  { kind: 'plazaStairs', x: 20, y: 24, scale: .56 },
+  { kind: 'dock', x: 18, y: 34, scale: .62 },
+  { kind: 'dock', x: 22, y: 34, scale: .62 },
 ];
 
 function clamp(value: number, min: number, max: number): number {
@@ -666,6 +688,7 @@ export class VillageWorld {
     this.labelLayer.sortableChildren = true;
     this.actorLayer.sortableChildren = true;
     this.markerLayer.sortableChildren = true;
+    this.previewLayer.sortableChildren = true;
     this.tileLayer.zIndex = 0;
     this.buildingLayer.zIndex = 20;
     this.decorationLayer.zIndex = 24;
@@ -811,6 +834,7 @@ export class VillageWorld {
       ...Object.values(TILE_TEXTURES).flat(),
       ...Object.values(DECO_TEXTURES),
       ...Object.values(BUILD_PROP_TEXTURES),
+      ...Object.values(BUILD_PREVIEW_TEXTURES),
     ]);
   }
 
@@ -822,6 +846,7 @@ export class VillageWorld {
       ...Object.values(ACTOR_TEXTURES),
       ...Object.values(ACTOR_DIRECTION_TEXTURES.player),
       ...CRITICAL_DECO_KINDS.map((kind) => DECO_TEXTURES[kind]),
+      ...Object.values(BUILD_PREVIEW_TEXTURES),
     ]);
   }
 
@@ -1400,16 +1425,33 @@ export class VillageWorld {
       for (let x = tile.x; x < tile.x + def.size[0]; x += 1) {
         const p = isoToWorld(x, y);
         g.poly([p.x, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y, p.x + TILE_W, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y + TILE_H]);
-        g.fill({ color: ok ? 0x35f08a : 0xff4747, alpha: 0.42 });
-        g.stroke({ color: 0xffffff, alpha: 0.82, width: 2 });
+        g.fill({ color: ok ? 0x35f08a : 0xff4747, alpha: 0.18 });
+        g.stroke({ color: ok ? 0xb8fff0 : 0xffd0d0, alpha: 0.62, width: 1.5 });
+        const overlay = this.createBuildPreviewTileSprite(x, y, ok);
+        if (overlay) this.previewLayer.addChild(overlay);
       }
     }
     const ghost = this.createBuildGhost(def, tile.x, tile.y, ok);
-    g.zIndex = 99999;
+    g.zIndex = 99998;
     this.previewLayer.addChild(g);
     if (ghost) this.previewLayer.addChild(ghost);
   }
 
+
+  private createBuildPreviewTileSprite(x: number, y: number, ok: boolean): Sprite | undefined {
+    const url = ok ? BUILD_PREVIEW_TEXTURES.valid : BUILD_PREVIEW_TEXTURES.invalid;
+    const texture = this.textures.get(url);
+    if (!texture) return undefined;
+    const p = isoToWorld(x, y);
+    const sprite = new Sprite(texture);
+    sprite.anchor.set(0.5, 0.72);
+    const targetW = TILE_W * 1.42;
+    sprite.scale.set(targetW / Math.max(1, texture.width));
+    sprite.position.set(p.x + TILE_W / 2, p.y + TILE_H * 0.74);
+    sprite.alpha = ok ? 0.82 : 0.88;
+    sprite.zIndex = 99999;
+    return sprite;
+  }
 
   private createBuildGhost(def: BuildDefinition, x: number, y: number, ok: boolean): Container | undefined {
     if (def.kind === 'path') return undefined;

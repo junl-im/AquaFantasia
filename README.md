@@ -1,4 +1,4 @@
-# AquaFantasia v2.0.22
+# AquaFantasia v2.0.23
 
 고퀄리티 SD 해양 판타지 RPG 방향으로 전환 중인 PixiJS 기반 모바일 세로형 웹게임입니다. 현재 목표는 메뉴형 낚시 게임에서 벗어나, 플레이어가 직접 루미나 베이 마을을 돌아다니고 NPC, 건물, 항구, 건설 시스템을 자연스럽게 이용하는 첫 마을 RPG 기반을 완성하는 것입니다.
 
@@ -10,6 +10,21 @@
 - 조작: 좌측 가상 조이스틱, 터치 이동, 우측 간소 메뉴, 캐릭터 시점 확대/축소
 - 배포: GitHub Pages 가능 구조
 - 저장: 로컬 저장 우선, Firebase 연동 준비 구조 유지
+
+## v2.0.23 변경사항
+
+- 새로 제공된 `AquaFantasia_extra_assets_v2026_premium_matched`, `character_8direction_rebuilt`, `AquaFantasia_SD_premium_2026_source_derived` 에셋을 전부 무작정 교체하지 않고 화면별로 선별 적용했습니다.
+- 캐릭터 8방향 rebuilt 에셋을 `public/assets/v2023/characters`에 분리 반영하고, 기존 반전 보정 없이 `west=왼쪽`, `east=오른쪽`, `north/south/대각=파일명 기준` 매핑을 유지했습니다.
+- 루미나 베이 타일을 새 SD 섬 타일 일부로 교체해 풀/모래/바다/석재/광장 질감을 더 부드럽게 만들었습니다. 기존 원화 배경 이미지는 계속 사용하지 않습니다.
+- 항구/해변 소품 중 벤치, 상자, 통, 부두, 깃발, 산호, 꽃상자, 게시판, 계단, 야자, 퀘스트 보드, 밧줄 울타리를 새 premium/source prop으로 교체했습니다.
+- 새 장식은 대부분 비충돌 배치로 추가해 보행/건설 동선이 과하게 막히지 않도록 유지했습니다.
+- 건설 프리뷰에 새 valid/invalid tile highlight 이미지를 적용해 초록/빨강 판정이 더 명확하게 보이도록 했습니다. 기존 반투명 건물 프리뷰와 터치 설치 흐름은 유지했습니다.
+- 가방/퀘스트/지도/건설 화면에 새 premium UI frame, page background, item slot, primary button 이미지를 CSS 레이어로 얹어 화면별 분위기를 다르게 정리했습니다.
+- 월드맵에는 새 tropical island UI-safe 배경을 낮은 opacity로 적용해 기존 섬 버튼/항로 선택 기능을 유지하면서 배경만 고급화했습니다.
+- 알림/HUD/카드류는 새 프레임을 사용하되 글자 그림자와 stroke를 유지해 밝은 UI에서 한글이 묻히지 않게 했습니다.
+- service worker precache에 실제로 연결한 v2023 캐릭터, UI, 건설 프리뷰, 소품, 타일, 월드맵 에셋을 추가했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.23`으로 동기화했습니다.
+- README.md만 수정했으며 별도 `*_NOTES.md` 파일은 만들지 않았습니다.
 
 ## v2.0.22 변경사항
 

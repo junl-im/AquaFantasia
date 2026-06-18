@@ -18787,3 +18787,136 @@ html[data-version="2.0.22"][data-ui-fix="v2022-hud-fishing-ai-polish"] .village-
     min-height: 68px !important;
   }
 }
+
+/* v2.0.23 premium matched asset pass
+   Selectively applies user-provided premium SD ocean fantasy assets without changing the right-bottom menu contract. */
+html[data-premium-assets="v2023-premium-matched-assets"] {
+  --v2023-ui-card: url('/assets/v2023/ui/card_inventory_aqua.png');
+  --v2023-ui-panel: url('/assets/v2023/ui/panel_large_aqua.png');
+  --v2023-ui-modal: url('/assets/v2023/ui/modal_tall_aqua.png');
+  --v2023-ui-toast: url('/assets/v2023/ui/toast_banner_aqua.png');
+  --v2023-ui-hud: url('/assets/v2023/ui/hud_capsule_aqua.png');
+  --v2023-btn-aqua: url('/assets/v2023/ui/inventory_primary_button.png');
+  --v2023-btn-quest: url('/assets/v2023/ui/quest_primary_button.png');
+  --v2023-btn-map: url('/assets/v2023/ui/worldmap_primary_button.png');
+  --v2023-slot-inventory: url('/assets/v2023/ui/inventory_item_slot.png');
+  --v2023-slot-quest: url('/assets/v2023/ui/quest_item_slot.png');
+  --v2023-slot-map: url('/assets/v2023/ui/worldmap_item_slot.png');
+  --v2023-slot-build: url('/assets/v2023/ui/build_item_slot.png');
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .runtime-menu-screen::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .18;
+  background: radial-gradient(circle at 24% 18%, rgba(255,255,255,.55), transparent 34%), radial-gradient(circle at 82% 70%, rgba(52,221,244,.22), transparent 36%);
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .runtime-hud,
+html[data-premium-assets="v2023-premium-matched-assets"] .fishing-hud .hud-chip,
+html[data-premium-assets="v2023-premium-matched-assets"] .v2-top-hud {
+  background-image: var(--v2023-ui-hud), linear-gradient(145deg, rgba(226,253,255,.94), rgba(67,201,235,.82)) !important;
+  background-size: 100% 100%, cover !important;
+  border: 0 !important;
+  box-shadow: 0 12px 22px rgba(0,38,84,.15) !important;
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .runtime-panel,
+html[data-premium-assets="v2023-premium-matched-assets"] .runtime-hero-card,
+html[data-premium-assets="v2023-premium-matched-assets"] .v204-window-card,
+html[data-premium-assets="v2023-premium-matched-assets"] .v206-route-ready,
+html[data-premium-assets="v2023-premium-matched-assets"] .v206-inventory-dashboard {
+  background-image: var(--v2023-ui-panel), linear-gradient(145deg, rgba(233,255,255,.94), rgba(73,197,229,.54)) !important;
+  background-size: 100% 100%, cover !important;
+  border: 0 !important;
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .inventory-screen .runtime-content,
+html[data-premium-assets="v2023-premium-matched-assets"] .mission-screen .runtime-content,
+html[data-premium-assets="v2023-premium-matched-assets"] .map-screen .runtime-content {
+  border-radius: 30px;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 100% auto;
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .inventory-screen .runtime-content { background-image: url('/assets/v2023/ui/inventory_page_bg.png'); }
+html[data-premium-assets="v2023-premium-matched-assets"] .mission-screen .runtime-content { background-image: url('/assets/v2023/ui/quest_page_bg.png'); }
+html[data-premium-assets="v2023-premium-matched-assets"] .map-screen .runtime-content { background-image: url('/assets/v2023/ui/worldmap_page_bg.png'); }
+html[data-premium-assets="v2023-premium-matched-assets"] .runtime-item-card,
+html[data-premium-assets="v2023-premium-matched-assets"] .v204-slot-card,
+html[data-premium-assets="v2023-premium-matched-assets"] .v206-inventory-dashboard article,
+html[data-premium-assets="v2023-premium-matched-assets"] .v206-route-ready article {
+  background-image: var(--v2023-slot-inventory), linear-gradient(145deg, rgba(255,255,255,.92), rgba(112,220,240,.34)) !important;
+  background-size: 100% 100%, cover !important;
+  border: 0 !important;
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .mission-card,
+html[data-premium-assets="v2023-premium-matched-assets"] .v204-quest-card {
+  background-image: var(--v2023-slot-quest), linear-gradient(145deg, rgba(255,255,255,.91), rgba(160,126,238,.28)) !important;
+  background-size: 100% 100%, cover !important;
+  border: 0 !important;
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .v204-island,
+html[data-premium-assets="v2023-premium-matched-assets"] .v206-map-detail {
+  background-image: var(--v2023-slot-map), linear-gradient(145deg, rgba(255,255,255,.91), rgba(255,173,130,.26)) !important;
+  background-size: 100% 100%, cover !important;
+  border: 0 !important;
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .runtime-btn.cyan,
+html[data-premium-assets="v2023-premium-matched-assets"] .btn-aqua-action {
+  background-image: var(--v2023-btn-aqua), linear-gradient(180deg, #62e6ff, #0988c8) !important;
+  background-size: 100% 100%, cover !important;
+  border: 0 !important;
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .mission-screen .runtime-btn.cyan,
+html[data-premium-assets="v2023-premium-matched-assets"] .mission-screen .btn-aqua-action {
+  background-image: var(--v2023-btn-quest), linear-gradient(180deg, #cbb4ff, #7160d8) !important;
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .map-screen .runtime-btn.cyan,
+html[data-premium-assets="v2023-premium-matched-assets"] .map-screen .btn-aqua-action {
+  background-image: var(--v2023-btn-map), linear-gradient(180deg, #ffd2b8, #ed8661) !important;
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .v2-build-tray {
+  background-image: url('/assets/v2023/ui/build_page_bg.png'), var(--v2023-ui-modal), linear-gradient(145deg, rgba(235,247,255,.97), rgba(20,94,150,.84)) !important;
+  background-size: 100% auto, 100% 100%, cover !important;
+  background-repeat: no-repeat !important;
+  border: 0 !important;
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .v2-build-grid button {
+  background-image: var(--v2023-slot-build), linear-gradient(145deg, rgba(255,255,255,.92), rgba(67,111,180,.36)) !important;
+  background-size: 100% 100%, cover !important;
+  border: 0 !important;
+}
+html[data-premium-assets="v2023-premium-matched-assets"] #toast-root .toast,
+html[data-premium-assets="v2023-premium-matched-assets"] #toast-root .toast-item {
+  background-image: var(--v2023-ui-toast), linear-gradient(145deg, rgba(235,255,255,.96), rgba(53,199,228,.78)) !important;
+  background-size: 100% 100%, cover !important;
+  border: 0 !important;
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .v2023-world-map-ocean {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .v2023-world-map-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .56;
+  pointer-events: none;
+  z-index: -1;
+  filter: saturate(1.08) brightness(1.02);
+}
+html[data-premium-assets="v2023-premium-matched-assets"] .v204-route-line { opacity: .65 !important; }
+html[data-premium-assets="v2023-premium-matched-assets"] .v2-build-title strong,
+html[data-premium-assets="v2023-premium-matched-assets"] .runtime-eyebrow,
+html[data-premium-assets="v2023-premium-matched-assets"] .runtime-hero-card h2,
+html[data-premium-assets="v2023-premium-matched-assets"] .mission-card strong,
+html[data-premium-assets="v2023-premium-matched-assets"] .runtime-item-card strong {
+  text-shadow: 0 2px 0 rgba(255,255,255,.85), 0 3px 10px rgba(0,38,72,.22) !important;
+}
+@media (max-width: 420px) {
+  html[data-premium-assets="v2023-premium-matched-assets"] .runtime-content { background-size: 112% auto; }
+  html[data-premium-assets="v2023-premium-matched-assets"] .v2-build-grid button { min-height: 86px !important; }
+}
