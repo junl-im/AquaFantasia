@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.15-ci-registry-handoff';
+const CACHE_NAME = 'aqua-fantasia-v2.0.16-screen-stability-polish';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -72,6 +72,8 @@ const PRECACHE = [
   "./assets/v2012/props/tree_cherry.png",
   "./assets/v2012/props/tree_maple.png",
   "./assets/v2012/props/tree_pine.png",
+  "./assets/v2012/props/tree_tropical.png",
+  "./assets/v2012/props/tree_palm_alt.png",
   "./assets/v2012/props/big_splash.png",
   "./assets/v2012/props/shore_foam.png",
   "./assets/v108/home/island_home_bg_1080x1920.webp",

@@ -42,7 +42,15 @@ jobs:
           node -e "const fs=require('fs'); const lock=fs.readFileSync('package-lock.json','utf8'); const bad=['applied-caas','artifactory','internal.api.openai','10.192.']; const hit=bad.find((token)=>lock.includes(token)); if(hit){ console.error('Forbidden internal registry token in package-lock:', hit); process.exit(1); } console.log('package-lock registry check passed');"
 
       - name: Install
-        run: npm run ci:install
+        run: |
+          set +e
+          npm run ci:install 2>&1 | tee npm-install.log
+          status=${PIPESTATUS[0]}
+          if grep -E 'packages\.applied-caas|applied-caas-gateway|10\.192\.' npm-install.log; then
+            echo 'Forbidden internal registry token appeared in npm install log'
+            exit 1
+          fi
+          exit $status
 
       - name: Static validate
         run: npm run validate

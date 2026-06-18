@@ -1,4 +1,4 @@
-# AquaFantasia v2.0.15
+# AquaFantasia v2.0.16
 
 고퀄리티 SD 해양 판타지 RPG 방향으로 전환 중인 PixiJS 기반 모바일 세로형 웹게임입니다. 현재 목표는 메뉴형 낚시 게임에서 벗어나, 플레이어가 직접 루미나 베이 마을을 돌아다니고 NPC, 건물, 항구, 건설 시스템을 자연스럽게 이용하는 첫 마을 RPG 기반을 완성하는 것입니다.
 
@@ -10,6 +10,54 @@
 - 조작: 좌측 가상 조이스틱, 터치 이동, 우측 간소 메뉴, 캐릭터 시점 확대/축소
 - 배포: GitHub Pages 가능 구조
 - 저장: 로컬 저장 우선, Firebase 연동 준비 구조 유지
+
+## v2.0.16 변경사항
+
+- validate-and-deploy 재확인 및 설치 로그 방어 강화
+  - v2.0.15 적용 후 GitHub Actions의 최신 공개 `validate-and-deploy` run이 성공 상태인지 먼저 확인
+  - 공개 화면에서는 run 성공 여부까지 확인 가능하지만, job 로그 상세 본문은 GitHub 로그인 화면으로 보호되어 Install 로그 문자열은 로컬 검증과 workflow guard로 보강
+  - `Install` 단계가 `npm run ci:install 2>&1 | tee npm-install.log`로 설치 로그를 남기도록 수정
+  - 설치 로그에 `packages.applied-caas`, `applied-caas-gateway`, `10.192.`가 나타나면 즉시 실패하도록 추가 방어
+  - `.npmrc`, `ci:install`, `package-lock.json`의 공용 npm registry 고정 정책 유지
+
+- 우측 최하단 메뉴 도크 안정화
+  - 메뉴 도크 구조는 계속 `마을` 상단 1개 + `가방 / 퀘스트 / 지도` 하단 3개 구조 유지
+  - `v2016-safe-dock-nav`와 `right-bottom-wing-v2016` 기준을 추가해 도크가 화면 밖으로 잘리지 않도록 보정
+  - 도크 전체 테두리, 큰 프레임, 빈칸 배경, 버튼처럼 보이는 투명 박스를 다시 차단
+  - 마을 아이콘 좌측 빈칸은 실제 버튼이 없는 투명 영역으로 유지
+  - 작은 화면에서는 버튼과 간격을 자동 축소해 세로 모바일 화면의 안전 영역을 확보
+
+- 메뉴 페이지 겹침/스크롤 보정
+  - 가방, 퀘스트, 지도, 마을 화면에 `v2016-menu-stability-screen` 하단 안전 패딩을 추가
+  - 메뉴 카드와 주요 CTA 버튼이 우측 하단 메뉴 도크 밑으로 깔리지 않도록 폭과 하단 여백을 재조정
+  - 모바일 드래그 스크롤을 명시 유지해 하단 내용까지 손가락으로 넘길 수 있게 정리
+
+- 마을 화면 원화 배경 재차단
+  - `v2016-world-stability-screen` 기준으로 마을 뒤에 예전 원화 배경이 보일 가능성을 CSS와 HTML 양쪽에서 다시 차단
+  - `aquafantasia_first_village_town_square_9x16.png` 계열 배경 이미지는 마을 타일맵 뒤에 붙지 않도록 검증
+  - 마을은 계속 PixiJS 타일맵, 오브젝트, 장식 에셋 기반으로 표시
+
+- 캐릭터 방향 재검증 안전장치 추가
+  - v2.0.13에서 보정한 `ACTOR_DIRECTION_TEXTURE_FIX`를 유지
+  - 8방향 이동 벡터와 실제 표시 텍스처 매핑을 확인하는 `ACTOR_DIRECTION_QA_VECTORS`와 `actorDirectionQaPasses` 검사를 추가
+  - 위/아래/좌/우 이동 및 대각 이동에서 현재 이소메트릭 카메라 기준 보정이 유지되는지 런타임 경고로 확인 가능
+  - 캐릭터 이름표는 계속 `scale.x = 1`로 고정해 절대 뒤집히지 않도록 유지
+
+- 루미나 베이 오브젝트 밀도 보강
+  - `tree_tropical.png`, `tree_palm_alt.png` 열대 나무 에셋을 마을 장식 목록에 추가
+  - 항구/해변 외곽과 마을 진입부에 나무 장식을 추가 배치
+  - service worker precache에도 신규 나무 에셋을 포함해 오프라인 캐시 누락을 방지
+
+- 건설 시스템 흐름 유지 검증
+  - 건설 버튼 -> 건설 팝업 -> 건물 선택 -> 팝업 닫힘 -> 반투명 프리뷰 -> 초록/빨강 설치 판정 -> 터치 설치 흐름은 유지
+  - 건설 목록 `v2-build-grid`에는 모바일 드래그 스크롤 보정을 계속 적용
+  - 설치 충돌 판정과 보행 충돌 판정 분리 방향을 유지
+
+- 버전과 검증 갱신
+  - `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.16`으로 통일
+  - `npm run validate`는 v2.0.16 화면 안정화, 캐릭터 방향 QA, registry 방어, README-only 규칙을 함께 확인
+  - 루트 문서는 계속 `README.md` 하나만 유지
+  - 별도 `*_NOTES.md`는 생성하지 않음
 
 ## v2.0.15 변경사항
 

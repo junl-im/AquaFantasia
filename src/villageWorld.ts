@@ -51,7 +51,7 @@ type PointerTrack = {
 
 type PointerPoint = { x: number; y: number };
 
-type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse' | 'stall' | 'pottedPalm' | 'barrels' | 'coral' | 'crystal' | 'banner' | 'woodFence' | 'ropeFence' | 'bollard' | 'stairs' | 'bridge' | 'stoneWall' | 'arch' | 'questBoard' | 'statue' | 'cherryTree' | 'mapleTree' | 'pineTree' | 'crystalTree' | 'flowerTree' | 'cypressTree' | 'dog' | 'sleepingDog' | 'cat' | 'walkingCat' | 'seagull' | 'flyingSeagull' | 'duck' | 'swimmingDuck' | 'butterflyBlue' | 'butterflyPink' | 'petals' | 'sparkles' | 'waterRing' | 'shoreFoam' | 'splash' | 'steam' | 'cookingPot' | 'goldLantern' | 'fishShadowSmall' | 'fishShadowMid' | 'fishShadowBig' | 'woodSign' | 'ropeWall' | 'stoneCorner' | 'stoneCurve' | 'wideStairs' | 'ropeCorner';
+type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse' | 'stall' | 'pottedPalm' | 'barrels' | 'coral' | 'crystal' | 'banner' | 'woodFence' | 'ropeFence' | 'bollard' | 'stairs' | 'bridge' | 'tropicalTree' | 'palmAlt' | 'stoneWall' | 'arch' | 'questBoard' | 'statue' | 'cherryTree' | 'mapleTree' | 'pineTree' | 'crystalTree' | 'flowerTree' | 'cypressTree' | 'dog' | 'sleepingDog' | 'cat' | 'walkingCat' | 'seagull' | 'flyingSeagull' | 'duck' | 'swimmingDuck' | 'butterflyBlue' | 'butterflyPink' | 'petals' | 'sparkles' | 'waterRing' | 'shoreFoam' | 'splash' | 'steam' | 'cookingPot' | 'goldLantern' | 'fishShadowSmall' | 'fishShadowMid' | 'fishShadowBig' | 'woodSign' | 'ropeWall' | 'stoneCorner' | 'stoneCurve' | 'wideStairs' | 'ropeCorner';
 
 type Decoration = {
   kind: DecoKind;
@@ -216,6 +216,18 @@ const ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
   southwest: 'northeast',
 };
 
+const ACTOR_DIRECTION_QA_VECTORS: Array<{ movement: ActorDirection; dx: number; dy: number; texture: ActorDirection }> = [
+  { movement: 'north', dx: 0, dy: -1, texture: 'south' },
+  { movement: 'south', dx: 0, dy: 1, texture: 'north' },
+  { movement: 'west', dx: -1, dy: 0, texture: 'east' },
+  { movement: 'east', dx: 1, dy: 0, texture: 'west' },
+  { movement: 'northwest', dx: -1, dy: -1, texture: 'southeast' },
+  { movement: 'northeast', dx: 1, dy: -1, texture: 'southwest' },
+  { movement: 'southwest', dx: -1, dy: 1, texture: 'northeast' },
+  { movement: 'southeast', dx: 1, dy: 1, texture: 'northwest' },
+];
+
+
 const ACTOR_DIRECTION_TEXTURES: Record<Actor['role'], Record<ActorDirection, string>> = {
   player: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/player_${direction}.png`])) as Record<ActorDirection, string>,
   chief: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/chief_${direction}.png`])) as Record<ActorDirection, string>,
@@ -288,6 +300,8 @@ const TILE_TEXTURES: Record<VillageTileKind, string[]> = {
 const DECO_TEXTURES: Partial<Record<DecoKind, string>> = {
   tree: './assets/v209/props/palm_cluster.png',
   palm: './assets/v209/props/palm_tree.png',
+  tropicalTree: './assets/v2012/props/tree_tropical.png',
+  palmAlt: './assets/v2012/props/tree_palm_alt.png',
   lamp: './assets/v209/props/crystal_lamp.png',
   bench: './assets/v209/props/bench.png',
   crate: './assets/v209/props/crate_stack.png',
@@ -350,6 +364,8 @@ const DECO_TEXTURES: Partial<Record<DecoKind, string>> = {
 const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
   tree: 150,
   palm: 160,
+  tropicalTree: 166,
+  palmAlt: 160,
   lamp: 128,
   bench: 74,
   crate: 86,
@@ -409,6 +425,11 @@ function actorDirectionFromVector(dx: number, dy: number): ActorDirection {
   if (dx < 0 && dy >= 0) return 'southwest';
   return 'northwest';
 }
+
+function actorDirectionQaPasses(): boolean {
+  return ACTOR_DIRECTION_QA_VECTORS.every(({ movement, dx, dy, texture }) => actorDirectionFromVector(dx, dy) === movement && ACTOR_DIRECTION_TEXTURE_FIX[movement] === texture);
+}
+
 
 const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'lighthouse', x: 6, y: 5, blocks: true, scale: 1.06 },
@@ -483,6 +504,10 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'stoneCurve', x: 15, y: 21, scale: .72 },
   { kind: 'stoneCurve', x: 25, y: 21, scale: .72 },
   { kind: 'wideStairs', x: 20, y: 24, scale: .7 },
+  { kind: 'tropicalTree', x: 9, y: 31, blocks: true, scale: .74 },
+  { kind: 'tropicalTree', x: 32, y: 29, blocks: true, scale: .72 },
+  { kind: 'palmAlt', x: 4, y: 34, blocks: true, scale: .72 },
+  { kind: 'palmAlt', x: 36, y: 33, blocks: true, scale: .7 },
 ];
 
 function clamp(value: number, min: number, max: number): number {
@@ -600,6 +625,7 @@ export class VillageWorld {
     this.world.addChild(this.tileLayer, this.buildingLayer, this.decorationLayer, this.labelLayer, this.actorLayer, this.markerLayer, this.previewLayer);
     this.generateTiles();
     await this.loadTextures();
+    if (!actorDirectionQaPasses()) console.warn('[AquaFantasia] actor direction QA mapping mismatch');
     this.renderTiles();
     this.renderBuildings();
     this.renderDecorations();
