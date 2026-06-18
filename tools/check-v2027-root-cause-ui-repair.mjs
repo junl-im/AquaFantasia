@@ -21,12 +21,12 @@ for (const token of [
   "dataset.uiRootCauseRepair = 'v2027-ui-root-cause-repair'",
   "dataset.aquaToneReset = 'v2027-aqua-tone-reset'",
   'v2027-aqua-dock-nav',
-  "nav.dataset.dockGuard = 'v2027-home-fishing-identical-dock'",
   'data-village-shop',
   'v2027-village-loading',
   'v2027-menu-content-repair-screen',
   'v2027-fishing-root-repair-screen',
 ]) if (!main.includes(token)) fail(`src/main.ts missing ${token}`);
+if (!main.includes("nav.dataset.dockGuard = 'v2027-home-fishing-identical-dock'") && !main.includes("nav.dataset.dockGuard = 'v2029-home-fishing-menu-identical-dock'")) fail('src/main.ts missing home/fishing identical dock guard token');
 if (main.includes('v840-bottom-nav')) fail('mountBottomNav must not carry stale v840-bottom-nav class');
 if (main.includes('v208-right-dock-nav v2010-right-dock-nav')) fail('mountBottomNav still carries old right dock class chain');
 const css = read('src/styles.css');

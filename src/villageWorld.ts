@@ -492,12 +492,12 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'stoneWall', x: 5, y: 12, blocks: true, scale: .82 }, { kind: 'stoneWall', x: 35, y: 12, blocks: true, scale: .82 },
   { kind: 'arch', x: 20, y: 12, blocks: true, scale: .82 },
   { kind: 'statue', x: 20, y: 17, blocks: true, scale: .72 },
-  { kind: 'cherryTree', x: 13, y: 15, blocks: true, scale: .34 },
-  { kind: 'mapleTree', x: 27, y: 15, blocks: true, scale: .34 },
-  { kind: 'pineTree', x: 6, y: 18, blocks: true, scale: .38 },
-  { kind: 'crystalTree', x: 32, y: 22, blocks: true, scale: .38 },
-  { kind: 'flowerTree', x: 13, y: 26, scale: .30 },
-  { kind: 'cypressTree', x: 31, y: 26, blocks: true, scale: .36 },
+  { kind: 'cherryTree', x: 15, y: 16, blocks: true, scale: .24 },
+  { kind: 'mapleTree', x: 25, y: 16, blocks: true, scale: .24 },
+  { kind: 'pineTree', x: 7, y: 18, blocks: true, scale: .30 },
+  { kind: 'crystalTree', x: 31, y: 23, blocks: true, scale: .30 },
+  { kind: 'flowerTree', x: 14, y: 26, scale: .22 },
+  { kind: 'cypressTree', x: 30, y: 26, blocks: true, scale: .28 },
   { kind: 'dog', x: 17, y: 26, scale: .78 },
   { kind: 'sleepingDog', x: 8, y: 25, scale: .72 },
   { kind: 'cat', x: 24, y: 21, scale: .64 },
@@ -612,6 +612,23 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'butterflyPink', x: 26, y: 16, scale: .24 },
 ];
 
+const V2029_HIDDEN_DECORATION_KEYS = new Set([
+  'noticeBoard:18,21', 'noticeBoard:22,21',
+  'plazaStairs:18,24', 'plazaStairs:22,24',
+  'bridgeAsset:18,35', 'bridgeAsset:22,35',
+  'dock:18,34', 'dock:22,34',
+  'ropeWall:14,32', 'ropeWall:26,32',
+]);
+
+function decorationAuditKey(deco: Decoration): string {
+  return `${deco.kind}:${deco.x},${deco.y}`;
+}
+
+function shouldUseDecoration(deco: Decoration): boolean {
+  // v2.0.29: hide duplicated large props that made the village feel cluttered or half-cut.
+  return !V2029_HIDDEN_DECORATION_KEYS.has(decorationAuditKey(deco));
+}
+
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
@@ -683,6 +700,7 @@ export class VillageWorld {
   private hoverTile: { x: number; y: number } | null = null;
   private lastDialogAt = 0;
   private lastPassiveIncomeAt = 0;
+  private lastNpcHealthCheckAt = 0;
   private destroyed = false;
   private joystick = { x: 0, y: 0, active: false, pointerId: null as number | null };
   private joystickKnob?: HTMLElement;
@@ -740,6 +758,8 @@ export class VillageWorld {
     window.addEventListener('resize', this.resizeHandler, { passive: true });
     app.ticker.add((ticker: { deltaMS: number }) => this.tick(ticker.deltaMS));
     this.syncHud();
+    this.root.classList.add('v2029-village-polish-ready');
+    this.root.dataset.v2029VillageAudit = 'object-npc-build-stable';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 천천히 이동하고, 빈 바닥 터치로도 이동할 수 있습니다.');
   }
 
@@ -1025,6 +1045,7 @@ export class VillageWorld {
   private renderDecorations(): void {
     this.decorationLayer.removeChildren();
     for (const deco of VILLAGE_DECORATIONS) {
+      if (!shouldUseDecoration(deco)) continue;
       const p = centerOfTile(deco.x, deco.y);
       const item = this.createDecorationGraphic(deco.kind, deco.scale ?? 1);
       item.position.set(p.x, p.y + TILE_H * 0.48);
@@ -1121,6 +1142,7 @@ export class VillageWorld {
       }
     }
     for (const deco of VILLAGE_DECORATIONS) {
+      if (!shouldUseDecoration(deco)) continue;
       if (deco.blocks) {
         const key = tileKey(deco.x, deco.y);
         this.blockedTiles.add(key);
@@ -1688,6 +1710,7 @@ export class VillageWorld {
     if (!this.app || this.destroyed) return;
     this.movePlayerByJoystick(deltaMs);
     this.updateActor(this.player, deltaMs);
+    this.ensureNpcHealth();
     for (const npc of this.npcs) {
       npc.targetTimer -= deltaMs;
       if (npc.targetTimer <= 0 && npc.path.length === 0) {
@@ -1703,6 +1726,16 @@ export class VillageWorld {
       this.lastPassiveIncomeAt = now;
       this.applyPassiveIncome();
     }
+  }
+
+  private ensureNpcHealth(): void {
+    const now = performance.now();
+    if (now - this.lastNpcHealthCheckAt < 4500) return;
+    this.lastNpcHealthCheckAt = now;
+    const visibleCount = this.npcs.filter((npc) => npc.node.parent === this.actorLayer && this.inBounds(npc.tileX, npc.tileY)).length;
+    if (visibleCount >= 4) return;
+    this.spawnActors();
+    this.showGuide('주민 동선 복구', 'NPC 동선이 꼬여 보이면 자동으로 안전 위치에 다시 배치합니다.');
   }
 
   private animateActorWalk(actor: Actor, movementAmount: number, deltaMs: number): void {

@@ -3,16 +3,16 @@ const root = process.cwd();
 const read = (file) => readFileSync(`${root}/${file}`, 'utf8');
 const fail = (message) => { throw new Error(message); };
 const pkg = JSON.parse(read('package.json'));
-const version = '2.0.28';
-if (pkg.version !== version) fail(`package version mismatch: ${pkg.version}`);
+if (!/^2\.0\.(2[8-9]|[3-9]\d)$/.test(pkg.version)) fail(`package version must preserve v2.0.28+ zero-defect checker: ${pkg.version}`);
+const version = pkg.version;
 if (!pkg.scripts.validate.includes('check-v2028-zero-defect-ui-audit')) fail('validate script must include v2.0.28 zero-defect checker');
 for (const [file, token] of [
   ['src/data.ts', `APP_VERSION = '${version}'`],
-  ['src/data.ts', 'aqua-fantasia-v2.0.28-zero-defect-ui-audit'],
-  ['public/sw.js', 'aqua-fantasia-v2.0.28-zero-defect-ui-audit'],
-  ['public/offline.html', 'v2.0.28'],
-  ['README.md', '# AquaFantasia v2.0.28'],
-  ['README.md', '## v2.0.28 변경사항'],
+  ['src/data.ts', `aqua-fantasia-v${version}-`],
+  ['public/sw.js', `aqua-fantasia-v${version}-`],
+  ['public/offline.html', `v${version}`],
+  ['README.md', `# AquaFantasia v${version}`],
+  ['README.md', `## v${version} 변경사항`],
 ]) if (!read(file).includes(token)) fail(`${file} missing ${token}`);
 const main = read('src/main.ts');
 for (const token of [
@@ -54,7 +54,6 @@ if (block.includes('html[data-version="2.0.28"]')) fail('v2.0.28 guard must not 
 const world = read('src/villageWorld.ts');
 for (const token of [
   'cherryTree: 132',
-  "{ kind: 'flowerTree', x: 13, y: 26, scale: .30 }",
   "baseNpcs.push(['tourist', '관광객', 23, 24",
   "data-v2028-build-preview-active",
   "data-v2028-build-tray-open",
@@ -62,6 +61,7 @@ for (const token of [
   "east: 'east'",
   'actor.label.scale.set(1, 1)',
 ]) if (!world.includes(token)) fail(`src/villageWorld.ts missing ${token}`);
+if (!world.includes("{ kind: 'flowerTree', x: 13, y: 26, scale: .30 }") && !world.includes("{ kind: 'flowerTree', x: 14, y: 26, scale: .22 }")) fail('src/villageWorld.ts missing flowerTree safe placement token');
 if (world.includes('this.previewLayer.removeChildren();\n    this.previewLayer.removeChildren();')) fail('duplicate preview clear remains');
 for (const token of ['packages.applied-caas', 'applied-caas-gateway', 'internal.api.openai', '10.192.']) {
   if (read('package-lock.json').includes(token)) fail(`package-lock contains forbidden token ${token}`);
