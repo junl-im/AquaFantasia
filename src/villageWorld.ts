@@ -397,7 +397,7 @@ const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
   arch: 172,
   questBoard: 116,
   statue: 148,
-  cherryTree: 168, mapleTree: 168, pineTree: 176, crystalTree: 176, flowerTree: 164, cypressTree: 174,
+  cherryTree: 132, mapleTree: 132, pineTree: 152, crystalTree: 148, flowerTree: 128, cypressTree: 150,
   dog: 66, sleepingDog: 48, cat: 62, walkingCat: 58, seagull: 60, flyingSeagull: 72, duck: 58, swimmingDuck: 74,
   butterflyBlue: 48, butterflyPink: 44, petals: 64, sparkles: 60, waterRing: 72, shoreFoam: 96, splash: 102, steam: 94, cookingPot: 72, goldLantern: 90,
   fishShadowSmall: 44, fishShadowMid: 50, fishShadowBig: 58,
@@ -492,12 +492,12 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'stoneWall', x: 5, y: 12, blocks: true, scale: .82 }, { kind: 'stoneWall', x: 35, y: 12, blocks: true, scale: .82 },
   { kind: 'arch', x: 20, y: 12, blocks: true, scale: .82 },
   { kind: 'statue', x: 20, y: 17, blocks: true, scale: .72 },
-  { kind: 'cherryTree', x: 14, y: 13, blocks: true, scale: .46 },
-  { kind: 'mapleTree', x: 26, y: 13, blocks: true, scale: .46 },
-  { kind: 'pineTree', x: 4, y: 17, blocks: true, scale: .56 },
-  { kind: 'crystalTree', x: 34, y: 20, blocks: true, scale: .54 },
-  { kind: 'flowerTree', x: 12, y: 27, scale: .42 },
-  { kind: 'cypressTree', x: 32, y: 25, blocks: true, scale: .52 },
+  { kind: 'cherryTree', x: 13, y: 15, blocks: true, scale: .34 },
+  { kind: 'mapleTree', x: 27, y: 15, blocks: true, scale: .34 },
+  { kind: 'pineTree', x: 6, y: 18, blocks: true, scale: .38 },
+  { kind: 'crystalTree', x: 32, y: 22, blocks: true, scale: .38 },
+  { kind: 'flowerTree', x: 13, y: 26, scale: .30 },
+  { kind: 'cypressTree', x: 31, y: 26, blocks: true, scale: .36 },
   { kind: 'dog', x: 17, y: 26, scale: .78 },
   { kind: 'sleepingDog', x: 8, y: 25, scale: .72 },
   { kind: 'cat', x: 24, y: 21, scale: .64 },
@@ -601,6 +601,15 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'crystal', x: 31, y: 23, scale: .34 },
   { kind: 'wideStairs', x: 20, y: 26, scale: .46 },
   { kind: 'bridgeAsset', x: 20, y: 35, scale: .44 },
+  // v2.0.28: zero-defect object audit. Only small nonblocking aqua-tone details in safe pockets.
+  { kind: 'shoreFoam', x: 6, y: 35, scale: .34 },
+  { kind: 'shoreFoam', x: 34, y: 35, scale: .34 },
+  { kind: 'sparkles', x: 16, y: 22, scale: .28 },
+  { kind: 'sparkles', x: 24, y: 22, scale: .28 },
+  { kind: 'goldLantern', x: 12, y: 19, scale: .30 },
+  { kind: 'goldLantern', x: 28, y: 19, scale: .30 },
+  { kind: 'butterflyBlue', x: 14, y: 16, scale: .24 },
+  { kind: 'butterflyPink', x: 26, y: 16, scale: .24 },
 ];
 
 function clamp(value: number, min: number, max: number): number {
@@ -749,6 +758,7 @@ export class VillageWorld {
     }
     this.root.classList.toggle('v2-build-active', Boolean(type));
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
+    this.root.toggleAttribute('data-v2028-build-preview-active', Boolean(type));
     this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => {
       node.classList.toggle('active', node.dataset.buildType === type);
     });
@@ -765,6 +775,7 @@ export class VillageWorld {
   setBuildTrayOpen(open: boolean, keepSelection = false): void {
     this.buildTrayOpen = open;
     this.root.classList.toggle('v2-build-tray-open', open);
+    this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open && !keepSelection) {
       this.selectedBuild = null;
       this.hoverTile = null;
@@ -1142,6 +1153,7 @@ export class VillageWorld {
     ];
     const score = this.calculateDevelopment();
     baseNpcs.push(['tourist', '관광객', 17, 23, 0xffbee8, '감탄']);
+    baseNpcs.push(['tourist', '관광객', 23, 24, 0xffd6a5, '산책']);
     if (score >= 500) baseNpcs.push(['tourist', '관광객', 23, 18, 0xffbee8, '여행']);
     if (score >= 1000) baseNpcs.push(['vip', 'VIP', 22, 23, 0xb895ff, '만족']);
     for (const [role, name, x, y, color, mood] of baseNpcs) {
@@ -1797,6 +1809,9 @@ export class VillageWorld {
       }
     }
     npc.desiredTile = undefined;
+    const fallback: Array<[number, number]> = [[npc.tileX + 1, npc.tileY], [npc.tileX - 1, npc.tileY], [npc.tileX, npc.tileY + 1], [npc.tileX, npc.tileY - 1]];
+    const step = fallback.find(([x, y]) => this.isWalkable(x, y) && !this.isNpcTileReserved(x, y, npc));
+    if (step) npc.path = [step];
   }
 
   private isNpcTileReserved(x: number, y: number, actor: Actor): boolean {

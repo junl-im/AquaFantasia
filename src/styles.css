@@ -20243,3 +20243,375 @@ html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] #toast-root .toast 
   html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2-build-tray { min-height: min(500px, calc(100dvh - 72px)) !important; max-height: calc(100dvh - 36px) !important; }
 }
 html[data-ui-root-cause-repair="v2027-ui-root-cause-repair"] .v2-build-tray-open .v2-build-tray { transform: translateX(-50%) !important; }
+
+/* v2.0.28 Zero-defect UI audit and legacy quarantine pass.
+   Root cause guard: current screens must not depend on old v840/v890 page classes. */
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] {
+  --v2028-aqua-ink: #084b63;
+  --v2028-aqua-deep: #073f5b;
+  --v2028-aqua-line: rgba(71, 203, 224, .32);
+  --v2028-dock-button: clamp(52px, 12.8vw, 58px);
+  --v2028-dock-icon: clamp(32px, 7.9vw, 38px);
+  --v2028-dock-gap: 5px;
+  --v2028-dock-right: max(10px, env(safe-area-inset-right));
+  --v2028-dock-bottom: calc(max(12px, env(safe-area-inset-bottom)) + 4px);
+  --v2028-dock-safe: calc((var(--v2028-dock-button) * 2) + var(--v2028-dock-gap) + var(--v2028-dock-bottom));
+  --v2028-control-w: clamp(48px, 11.7vw, 54px);
+  --v2028-control-gap: 4px;
+  --v2028-control-right: max(10px, env(safe-area-inset-right));
+  --v2028-hud-safe-right: calc(var(--v2028-control-right) + var(--v2028-control-w) + 8px);
+}
+
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="login"] .start-art-screen .hit-keep.v2025-keep-button {
+  left: 31% !important;
+  top: 79.15% !important;
+  width: 37% !important;
+  height: 4.05% !important;
+  min-width: 0 !important;
+  padding: 0 7px !important;
+  gap: 4px !important;
+  border-radius: 999px !important;
+  background-size: 100% 100% !important;
+  overflow: hidden !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="login"] .start-art-screen .hit-server.v2025-server-button {
+  top: 65.95% !important;
+  height: 4.85% !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="login"] .start-art-screen .hit-keep .keep-text {
+  color: #fff !important;
+  font-size: clamp(10px, 2.45vw, 12px) !important;
+  letter-spacing: -.07em !important;
+  white-space: nowrap !important;
+}
+
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .bottom-nav.v2027-aqua-dock-nav,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .bottom-nav.v2027-aqua-dock-nav,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="village"] .bottom-nav.v2027-aqua-dock-nav,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .runtime-menu-screen .bottom-nav.v2027-aqua-dock-nav {
+  position: fixed !important;
+  left: auto !important;
+  right: var(--v2028-dock-right) !important;
+  bottom: var(--v2028-dock-bottom) !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  max-width: calc(100vw - 16px) !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, var(--v2028-dock-button)) !important;
+  grid-template-rows: repeat(2, var(--v2028-dock-button)) !important;
+  gap: var(--v2028-dock-gap) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  transform: none !important;
+  z-index: 360 !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .bottom-nav.v2027-aqua-dock-nav::before,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .bottom-nav.v2027-aqua-dock-nav::after { display: none !important; content: none !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .bottom-nav.v2027-aqua-dock-nav button {
+  pointer-events: auto !important;
+  width: var(--v2028-dock-button) !important;
+  height: var(--v2028-dock-button) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 2px !important;
+  gap: 0 !important;
+  border: 0 !important;
+  border-radius: 17px !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: #fff !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .bottom-nav.v2027-aqua-dock-nav button[data-screen="village"] { grid-column: 3 !important; grid-row: 1 !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .bottom-nav.v2027-aqua-dock-nav button[data-screen="inventory"] { grid-column: 1 !important; grid-row: 2 !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .bottom-nav.v2027-aqua-dock-nav button[data-screen="mission"] { grid-column: 2 !important; grid-row: 2 !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .bottom-nav.v2027-aqua-dock-nav button[data-screen="map"] { grid-column: 3 !important; grid-row: 2 !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .bottom-nav.v2027-aqua-dock-nav button img {
+  width: var(--v2028-dock-icon) !important;
+  height: var(--v2028-dock-icon) !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 4px 7px rgba(0,36,58,.36)) saturate(1.05) !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .bottom-nav.v2027-aqua-dock-nav button span {
+  color: #ffffff !important;
+  font-size: clamp(8.7px, 2.1vw, 10.3px) !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+  margin-top: -4px !important;
+  text-shadow: 0 2px 5px rgba(0,31,52,.82), 0 0 2px rgba(0,17,34,.9) !important;
+}
+
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen .v2-village-hud {
+  left: max(10px, env(safe-area-inset-left)) !important;
+  right: var(--v2028-hud-safe-right) !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 6px) !important;
+  min-height: 56px !important;
+  max-width: none !important;
+  background: linear-gradient(145deg, rgba(250,255,255,.97), rgba(93,216,232,.70)) !important;
+  border: 1px solid var(--v2028-aqua-line) !important;
+  box-shadow: 0 10px 24px rgba(0,58,90,.14) !important;
+  color: var(--v2028-aqua-ink) !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen .v2-profile-chip,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen .v2-profile-chip * { color: var(--v2028-aqua-ink) !important; background: transparent !important; box-shadow: none !important; text-shadow: 0 1px 0 rgba(255,255,255,.62) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen .v2-world-controls {
+  right: var(--v2028-control-right) !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 8px) !important;
+  width: var(--v2028-control-w) !important;
+  display: grid !important;
+  gap: var(--v2028-control-gap) !important;
+  z-index: 340 !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen .v2-world-controls button {
+  width: var(--v2028-control-w) !important;
+  min-height: 34px !important;
+  height: auto !important;
+  padding: 3px 2px !important;
+  border-radius: 14px !important;
+  font-size: clamp(10px, 2.15vw, 11.7px) !important;
+  color: #fff !important;
+  text-shadow: 0 2px 4px rgba(0,34,58,.68) !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen .v2-world-controls button img { width: 20px !important; height: 20px !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen.v2-build-tray-open .v2-world-controls,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen.v2-build-active .v2-world-controls { opacity: .22 !important; pointer-events: none !important; z-index: 180 !important; }
+
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .fishing-screen.v2028-fishing-zero-overlap-screen {
+  overflow: hidden !important;
+  background: radial-gradient(circle at 50% 18%, rgba(159,247,247,.22), transparent 34%), linear-gradient(180deg, #87e3f4 0%, #4fb6d7 48%, #1b6fa5 100%) !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .v2028-fishing-stage.fishing-stage {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .v2028-fishing-hud.fishing-hud {
+  left: max(10px, env(safe-area-inset-left)) !important;
+  right: calc(var(--v2028-dock-right) + var(--v2028-dock-button) + 12px) !important;
+  top: calc(max(7px, env(safe-area-inset-top)) + 5px) !important;
+  min-height: 50px !important;
+  padding: 7px 9px !important;
+  border-radius: 20px !important;
+  background: linear-gradient(145deg, rgba(250,255,255,.96), rgba(106,223,235,.74)) !important;
+  border: 1px solid var(--v2028-aqua-line) !important;
+  box-shadow: 0 10px 22px rgba(0,54,82,.15) !important;
+  color: var(--v2028-aqua-ink) !important;
+  z-index: 210 !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .fishing-guide-card {
+  position: fixed !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: calc(var(--v2028-dock-right) + var(--v2028-dock-button) + 12px) !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 62px) !important;
+  min-height: 44px !important;
+  padding: 8px 12px !important;
+  border-radius: 20px !important;
+  background: linear-gradient(145deg, rgba(250,255,255,.97), rgba(112,229,225,.74)) !important;
+  color: var(--v2028-aqua-ink) !important;
+  box-shadow: 0 10px 22px rgba(0,54,82,.13) !important;
+  z-index: 198 !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .fishing-guide-card strong,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .fishing-guide-card span,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .fishing-hud strong,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .fishing-hud span { color: var(--v2028-aqua-ink) !important; text-shadow: 0 1px 0 rgba(255,255,255,.65) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .recent-catch-strip {
+  position: fixed !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: calc(var(--v2028-dock-right) + var(--v2028-dock-button) + 12px) !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 114px) !important;
+  bottom: auto !important;
+  height: 42px !important;
+  max-height: 42px !important;
+  min-height: 0 !important;
+  padding: 5px 9px !important;
+  border-radius: 18px !important;
+  background: rgba(244,255,255,.90) !important;
+  border: 1px solid rgba(78,207,222,.24) !important;
+  box-shadow: 0 8px 18px rgba(0,48,72,.12) !important;
+  overflow: hidden !important;
+  z-index: 188 !important;
+  transform: none !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .fishing-screen.fishing-phase-reeling .recent-catch-strip,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .fishing-screen.fishing-phase-success .recent-catch-strip,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .fishing-screen.fishing-phase-fail .recent-catch-strip { display: none !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .recent-title { display: none !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .recent-cards { display: flex !important; align-items: center !important; gap: 6px !important; min-width: 0 !important; overflow: hidden !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .recent-card { min-width: 0 !important; height: 31px !important; padding: 3px 7px !important; border-radius: 14px !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .recent-card img { width: 24px !important; height: 24px !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .recent-card span { max-width: 76px !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; color: var(--v2028-aqua-ink) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .v2028-stage-ui.stage-ui .cast-button,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .cast-button.v2026-stable-cast-button {
+  position: fixed !important;
+  left: max(14px, env(safe-area-inset-left)) !important;
+  right: calc(var(--v2028-dock-right) + var(--v2028-dock-button) * 3 + var(--v2028-dock-gap) * 2 + 18px) !important;
+  bottom: calc(var(--v2028-dock-bottom) + 12px) !important;
+  width: auto !important;
+  max-width: 230px !important;
+  height: 52px !important;
+  min-height: 52px !important;
+  padding: 5px 12px !important;
+  border-radius: 22px !important;
+  animation: none !important;
+  transform: none !important;
+  z-index: 214 !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .cast-button.v2026-stable-cast-button strong { font-size: clamp(12px, 2.9vw, 14px) !important; color: #fff !important; text-shadow: 0 2px 4px rgba(0,34,58,.72) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .cast-button.v2026-stable-cast-button .cast-icon { width: 19px !important; height: 19px !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .v2028-reel-panel.reel-panel,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .reel-panel.v205-reel-panel {
+  position: fixed !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: calc(var(--v2028-dock-right) + var(--v2028-dock-button) * 3 + var(--v2028-dock-gap) * 2 + 18px) !important;
+  bottom: calc(var(--v2028-dock-bottom) + 10px) !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  max-height: min(34dvh, 218px) !important;
+  padding: 8px 9px !important;
+  overflow: hidden !important;
+  transform: none !important;
+  z-index: 260 !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .v205-reel-grid { grid-template-columns: 24px minmax(0, 1fr) !important; gap: 7px !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .v205-horizontal-gauge { max-height: 28px !important; width: min(240px, 92%) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .v205-vertical-gauge { width: 24px !important; height: clamp(82px, 12dvh, 112px) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .hold-pad { min-height: 37px !important; font-size: clamp(12px, 2.9vw, 14px) !important; }
+
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .runtime-menu-screen.v2028-menu-aqua-reset-screen {
+  padding: calc(max(8px, env(safe-area-inset-top)) + 8px) max(10px, env(safe-area-inset-right)) 0 max(10px, env(safe-area-inset-left)) !important;
+  overflow-y: auto !important;
+  background: linear-gradient(180deg, #c9fbff 0%, #e7fff7 50%, #fff2d3 100%) !important;
+  color: var(--v2028-aqua-ink) !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .runtime-menu-screen.v2028-menu-aqua-reset-screen .runtime-3d-bg,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .runtime-menu-screen.v2028-menu-aqua-reset-screen .v2027-menu-accent,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .runtime-menu-screen.v2028-menu-aqua-reset-screen .runtime-bg-character,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .runtime-menu-screen.v2028-menu-aqua-reset-screen .v2026-page-health-panel { display: none !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .runtime-menu-screen.v2028-menu-aqua-reset-screen .runtime-hud {
+  position: relative !important;
+  z-index: 30 !important;
+  width: min(100%, 520px) !important;
+  min-height: 64px !important;
+  margin: 0 auto 8px !important;
+  background: linear-gradient(145deg, rgba(250,255,255,.97), rgba(97,220,236,.70)) !important;
+  border: 1px solid var(--v2028-aqua-line) !important;
+  box-shadow: 0 10px 24px rgba(0,56,84,.13) !important;
+  color: var(--v2028-aqua-ink) !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .runtime-menu-screen.v2028-menu-aqua-reset-screen .runtime-content {
+  position: relative !important;
+  z-index: 30 !important;
+  width: min(100%, 520px) !important;
+  margin: 0 auto !important;
+  padding: 0 0 calc(var(--v2028-dock-safe) + 32px) !important;
+  display: grid !important;
+  gap: 10px !important;
+  background: transparent !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .runtime-menu-screen.v2028-menu-aqua-reset-screen .runtime-content > * {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  content-visibility: visible !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .runtime-menu-screen.v2028-menu-aqua-reset-screen :is(.runtime-hero-card,.runtime-panel,.runtime-item-card,.mission-card,.region-card,.shop-card,.gear-card,.dex-card,.v204-window-card) {
+  background: linear-gradient(145deg, rgba(250,255,255,.96), rgba(119,226,238,.62)) !important;
+  border: 1px solid rgba(76,206,224,.25) !important;
+  box-shadow: 0 10px 24px rgba(0,56,88,.12) !important;
+  color: var(--v2028-aqua-ink) !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .runtime-menu-screen.v2028-menu-aqua-reset-screen :is(strong,h2,p,span,small,em) { color: var(--v2028-aqua-ink) !important; text-shadow: 0 1px 0 rgba(255,255,255,.58) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .runtime-menu-screen.v2028-menu-aqua-reset-screen .runtime-btn,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .runtime-menu-screen.v2028-menu-aqua-reset-screen button.runtime-btn { color: #fff !important; text-shadow: 0 2px 4px rgba(0,35,60,.65) !important; }
+
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2-build-backdrop { z-index: 760 !important; background: rgba(5, 48, 68, .20) !important; backdrop-filter: blur(3px) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2-build-tray {
+  z-index: 780 !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: calc(max(8px, env(safe-area-inset-bottom)) + 8px) !important;
+  transform: translateX(-50%) !important;
+  width: min(580px, calc(100vw - 14px)) !important;
+  height: min(88dvh, 820px) !important;
+  max-height: calc(100dvh - max(18px, env(safe-area-inset-top)) - max(12px, env(safe-area-inset-bottom)) - 10px) !important;
+  min-height: min(610px, calc(100dvh - 34px)) !important;
+  padding: 13px 12px calc(max(14px, env(safe-area-inset-bottom)) + 16px) !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  background: linear-gradient(145deg, rgba(250,255,255,.98), rgba(105,220,236,.84)) !important;
+  border: 1px solid rgba(92,218,232,.28) !important;
+  box-shadow: 0 22px 50px rgba(0,42,74,.26) !important;
+  color: var(--v2028-aqua-ink) !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen.v2-build-active .v2-build-tray:not(.force-open) { opacity: 0 !important; pointer-events: none !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen.v2-build-tray-open .v2-build-tray { opacity: 1 !important; pointer-events: auto !important; transform: translateX(-50%) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2-build-title { position: sticky !important; top: 0 !important; z-index: 3 !important; border-radius: 19px !important; padding: 9px 11px !important; background: linear-gradient(145deg, rgba(253,255,255,.96), rgba(107,222,235,.75)) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2018-build-help { margin: 9px 2px !important; font-size: clamp(12px, 2.8vw, 14px) !important; color: rgba(5,56,79,.84) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2-build-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 9px !important; padding-bottom: 14px !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2-build-grid button { min-height: 112px !important; padding: 10px 8px !important; border-radius: 19px !important; color: var(--v2028-aqua-ink) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2-build-grid button img { width: 52px !important; height: 45px !important; object-fit: contain !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2-build-grid button strong,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2-build-grid button span { color: var(--v2028-aqua-ink) !important; text-shadow: 0 1px 0 rgba(255,255,255,.6) !important; }
+
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2017-character-panel.open { z-index: 820 !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2017-character-card { z-index: 830 !important; background: linear-gradient(145deg, rgba(250,255,255,.98), rgba(116,226,239,.78)) !important; border: 1px solid rgba(80,208,224,.22) !important; box-shadow: 0 18px 38px rgba(0,45,76,.20) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2017-character-head span,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2017-character-note { display: none !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2017-character-backdrop { background: rgba(4,52,76,.12) !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] #toast-root {
+  top: calc(max(8px, env(safe-area-inset-top)) + 82px) !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: var(--v2028-hud-safe-right) !important;
+  z-index: 840 !important;
+  display: grid !important;
+  justify-items: stretch !important;
+  pointer-events: none !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] #toast-root .toast,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] #toast-root .toast-item {
+  width: min(320px, 100%) !important;
+  min-height: 44px !important;
+  padding: 8px 13px !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(82, 211, 226, .24) !important;
+  background: linear-gradient(145deg, rgba(250,255,255,.97), rgba(108,222,236,.82)) !important;
+  box-shadow: 0 10px 22px rgba(0,45,73,.16) !important;
+  color: var(--v2028-aqua-ink) !important;
+  pointer-events: auto !important;
+}
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] #toast-root .toast strong,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] #toast-root .toast span { color: var(--v2028-aqua-ink) !important; text-shadow: 0 1px 0 rgba(255,255,255,.58) !important; }
+
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2027-village-loading { z-index: 860 !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2027-village-loading > div::before { content: '접속 로딩중'; display: inline-block; font-weight: 1000; font-size: 11px; letter-spacing: .12em; color: rgba(7, 75, 99, .68); }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen:not(.v2027-village-ready) .v2-village-stage,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen:not(.v2027-village-ready) .bottom-nav,
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen:not(.v2027-village-ready) .v2-world-controls { opacity: 0 !important; pointer-events: none !important; }
+html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .village-world-screen.v2027-village-ready .v2-village-stage { animation: v2028-village-pop-in .28s ease both; }
+@keyframes v2028-village-pop-in { from { opacity: 0; filter: blur(6px); transform: scale(.992); } to { opacity: 1; filter: blur(0); transform: scale(1); } }
+
+@media (max-width: 390px), (max-height: 720px) {
+  html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] { --v2028-dock-button: clamp(49px, 12.1vw, 53px); --v2028-dock-icon: clamp(30px, 7.6vw, 35px); --v2028-control-w: clamp(45px, 11.2vw, 50px); }
+  html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .recent-catch-strip { display: none !important; }
+  html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .fishing-guide-card { top: calc(max(8px, env(safe-area-inset-top)) + 58px) !important; }
+  html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] body[data-screen="fishing"] .cast-button.v2026-stable-cast-button { max-width: 200px !important; height: 48px !important; min-height: 48px !important; }
+  html[data-zero-defect-ui-audit="v2028-zero-defect-ui-audit"] .v2-build-tray { min-height: calc(100dvh - 28px) !important; height: calc(100dvh - 28px) !important; max-height: calc(100dvh - 28px) !important; }
+}

@@ -222,6 +222,8 @@ class AquaFantasiaGame {
     document.documentElement.dataset.assetCuration = 'v2026-curated-asset-pass';
     document.documentElement.dataset.uiRootCauseRepair = 'v2027-ui-root-cause-repair';
     document.documentElement.dataset.aquaToneReset = 'v2027-aqua-tone-reset';
+    document.documentElement.dataset.zeroDefectUiAudit = 'v2028-zero-defect-ui-audit';
+    document.documentElement.dataset.legacyCssQuarantine = 'v2028-legacy-css-quarantine';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -592,9 +594,10 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v206-menu-detail-screen v207-menu-safe-screen v208-right-dock-screen v209-asset-qa-screen v2010-menu-full-screen v2011-menu-dock-screen v2012-menu-asset-screen v2013-menu-safe-screen v2014-menu-scroll-screen v2016-menu-stability-screen v2017-menu-readability-screen v2017-quest-scroll-screen v2018-menu-drag-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen v11115-foundation-frame-screen v2020-menu-asset-screen v2021-menu-asset-screen v2022-menu-dock-screen v2023-premium-menu-screen v2024-menu-content-repair-screen v2026-menu-stability-screen v2027-menu-content-repair-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.dataset.v2027MenuRepair = 'true';
+    root.dataset.v2028MenuAudit = 'simple-aqua-readable-content';
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
     root.innerHTML = `
@@ -677,15 +680,16 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v2019-fishing-stability-screen v2020-fishing-asset-screen v2021-fishing-asset-screen v2022-fishing-ui-screen v2023-premium-fishing-screen v2024-fishing-menu-repair-screen v205-fishing-asset-screen v207-fishing-safe-screen v209-fishing-qa-screen v2010-fishing-safe-screen v2011-fishing-safe-screen v2012-fishing-safe-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing v1112-content-flow-fishing v11113-detail-stability-fishing v11114-button-style-fishing v11115-foundation-frame-fishing v2026-fishing-stability-screen v2027-fishing-root-repair-screen locked-screen';
+    root.className = 'game-screen fishing-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
     root.style.setProperty('--v101-water-bg', `url("${v101FishingBg}")`);
     root.innerHTML = `
       <span id="fishingHint" class="sr-only">낚시 시작 버튼으로 캐스팅하세요.</span>
+      <span class="v2028-fishing-safe-grid" aria-hidden="true"></span>
       <div class="fishing-3d-ambient" aria-hidden="true"><div class="underwater-webgl-host" data-underwater-webgl></div><span class="v3d-caustics"></span><span class="v3d-bubbles"></span><span class="v3d-depth-fog"></span></div>
-      <div class="fishing-stage v840-fishing-stage" id="fishingStage">
+      <div class="fishing-stage v2028-fishing-stage" id="fishingStage">
         <div class="pixi-layer"></div>
         <div class="water-overlay"></div>
         <div class="caustic-overlay"></div>
@@ -705,12 +709,12 @@ class AquaFantasiaGame {
         <img class="v2021-fishing-prop v2021-warning-pulse" src="${ASSET.uiWarningPulse}" alt="" aria-hidden="true" />
         <div class="fishing-guide-card v205-guide-card" aria-hidden="true"><strong>낚시 준비</strong><span data-fishing-tip>찌를 던지고 물었다!가 뜨면 화면을 눌러 당기세요.</span></div>
       </div>
-      <div class="fishing-hud v840-fishing-hud v205-fishing-hud" aria-label="플레이어 정보">
+      <div class="fishing-hud v205-fishing-hud v2028-fishing-hud" aria-label="플레이어 정보">
         <div class="hud-chip region" data-hud-region><strong>${region.name}</strong><span>${region.tide}</span></div>
         <div class="hud-chip" data-hud-coins><img src="./assets/v92/icons/coin.png" alt="" /><strong>${this.save.coins.toLocaleString('ko-KR')}</strong></div>
         <div class="hud-chip" data-hud-lures><img src="./assets/v205/fishing/slot_bait.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
       </div>
-      <div class="stage-ui v840-stage-ui"></div><div class="cute-action-layer" aria-hidden="true"></div>
+      <div class="stage-ui v2028-stage-ui"></div><div class="cute-action-layer" aria-hidden="true"></div>
       <aside class="fishing-loadout-strip" aria-label="낚시 장비">
         <div><img src="${ASSET.fishingSlotRod}" alt="" /><span>로드 Lv.${this.save.gear.rodLevel}</span></div>
         <div><img src="${ASSET.fishingSlotBait}" alt="" /><span>미끼 ${this.save.gear.lureStock}</span></div>
@@ -719,7 +723,7 @@ class AquaFantasiaGame {
       <section class="recent-catch-strip v205-recent-catch" aria-label="최근 포획">
         ${this.recentCatchMarkup()}
       </section>
-      <div class="reel-panel glass-card hidden v840-reel-panel v205-reel-panel" id="reelPanel">
+      <div class="reel-panel glass-card hidden v205-reel-panel v2028-reel-panel" id="reelPanel">
         <img class="v2020-reel-panel-frame" src="${ASSET.uiPanelAqua}" alt="" aria-hidden="true" />
         <img class="v2021-reel-tooltip-frame" src="${ASSET.uiTooltipAqua}" alt="" aria-hidden="true" />
         <img class="v205-horizontal-gauge" src="${ASSET.fishingGaugeHorizontal}" alt="장력 게이지" />
@@ -1595,7 +1599,6 @@ class AquaFantasiaGame {
         <div><span class="runtime-eyebrow">OCEAN ROUTE</span><h2>지도</h2><p>현재 목적지 ${activeRegion.name} · 열린 수역 ${unlockedCount}/${regions.length}</p></div>
         <button class="runtime-btn gold compact-cta btn-gold-cost" type="button" data-go-fishing>출항</button>
       </section>
-      <section class="v2026-page-health-panel v204-window-card" aria-label="지도 화면 상태"><strong>항로 안정화</strong><span>잠긴 수역은 조건을 보여주고, 열린 수역은 바로 출항할 수 있습니다.</span></section>
       <section class="v206-route-ready v204-window-card" aria-label="출항 준비 현황">
         <article><strong>${this.save.gear.lureStock}</strong><span>미끼</span></article>
         <article><strong>Lv.${this.save.gear.rodLevel}</strong><span>로드</span></article>
@@ -1685,7 +1688,6 @@ class AquaFantasiaGame {
         <div><span class="runtime-eyebrow">OCEAN BAG</span><h2>가방</h2><p>미끼 ${this.save.gear.lureStock}개 · 누적 포획 ${totalCaught}마리 · 희귀 기록 ${rareCaught}종</p></div>
         <button class="runtime-btn cyan compact-cta btn-aqua-action" type="button" data-go-map>지도</button>
       </section>
-      <section class="v2026-page-health-panel v204-window-card" aria-label="가방 화면 상태"><strong>출항 준비 요약</strong><span>미끼·포획·의뢰 보상·수역 해금을 한 화면에서 확인합니다.</span></section>
       <section class="v206-inventory-dashboard v204-window-card" aria-label="가방 요약">
         <article><img src="./assets/v205/fishing/slot_bait.png" alt="" /><strong>${this.save.gear.lureStock}</strong><span>출항 미끼</span></article>
         <article><img src="./assets/v205/fishing/treasure_chest.png" alt="" /><strong>${Object.values(this.save.missions).filter(Boolean).length}</strong><span>수령 의뢰</span></article>
@@ -1830,7 +1832,6 @@ class AquaFantasiaGame {
         <div><span class="runtime-eyebrow">VILLAGE QUEST</span><h2>퀘스트</h2><p>완료 ${doneCount}/${goals.length} · 수령 가능 ${readyCount}개 · 마을 성장과 연결</p></div>
         <button class="runtime-btn cyan compact-cta btn-aqua-action" type="button" data-go-map>진행</button>
       </section>
-      <section class="v2026-page-health-panel v204-window-card" aria-label="퀘스트 화면 상태"><strong>진행도 보강</strong><span>추천 의뢰와 전체 의뢰가 아래로 이어지며 모바일 드래그 스크롤을 지원합니다.</span></section>
       <section class="v206-quest-npc-board v204-window-card" aria-label="NPC 의뢰 보드">
         <article><img src="./assets/v203/portraits/chief_happy.png" alt="" /><strong>촌장</strong><span>마을 발전도와 시설 건설</span></article>
         <article><img src="./assets/v203/portraits/guild_happy.png" alt="" /><strong>낚시 길드</strong><span>성공 횟수와 도감 발견</span></article>

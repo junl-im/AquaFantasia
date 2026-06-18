@@ -3,16 +3,16 @@ const root = process.cwd();
 const read = (file) => readFileSync(`${root}/${file}`, 'utf8');
 const fail = (message) => { throw new Error(message); };
 const pkg = JSON.parse(read('package.json'));
-const version = '2.0.27';
-if (pkg.version !== version) fail(`package version mismatch: ${pkg.version}`);
-if (!pkg.scripts.validate.includes('check-v2027-root-cause-ui-repair')) fail('validate script must include v2.0.27 root-cause checker');
+if (!/^2\.0\.(2[7-9]|[3-9]\d)$/.test(pkg.version)) fail(`package version must preserve v2.0.27+ root-cause checker: ${pkg.version}`);
+const version = pkg.version;
+if (!pkg.scripts.validate.includes('check-v2027-root-cause-ui-repair')) fail('validate script must include v2.0.27+ root-cause checker');
 for (const [file, token] of [
-  ['src/data.ts', "APP_VERSION = '2.0.27'"],
-  ['src/data.ts', 'aqua-fantasia-v2.0.27-ui-root-cause-repair'],
-  ['public/sw.js', 'aqua-fantasia-v2.0.27-ui-root-cause-repair'],
-  ['public/offline.html', 'v2.0.27'],
-  ['README.md', '# AquaFantasia v2.0.27'],
-  ['README.md', '## v2.0.27 변경사항'],
+  ['src/data.ts', `APP_VERSION = '${version}'`],
+  ['src/data.ts', `aqua-fantasia-v${version}-`],
+  ['public/sw.js', `aqua-fantasia-v${version}-`],
+  ['public/offline.html', `v${version}`],
+  ['README.md', `# AquaFantasia v${version}`],
+  ['README.md', `## v${version} 변경사항`],
 ]) {
   if (!read(file).includes(token)) fail(`${file} missing ${token}`);
 }
