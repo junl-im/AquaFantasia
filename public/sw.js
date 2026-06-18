@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.36-fishing-gauge-result-repair';
+const CACHE_NAME = 'aqua-fantasia-v2.0.37-fishing-spacing-menu-polish';
 const PRECACHE = [
   "./",
   "./index.html",

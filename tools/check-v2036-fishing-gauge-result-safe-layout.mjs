@@ -6,8 +6,8 @@ const data = fs.readFileSync('src/data.ts', 'utf8');
 const lock = fs.readFileSync('package-lock.json', 'utf8');
 
 const required = [
-  [data, "APP_VERSION = '2.0.36'", 'APP_VERSION 2.0.36'],
-  [data, 'aqua-fantasia-v2.0.36-fishing-gauge-result-repair', 'cache 2.0.36'],
+  [data, /APP_VERSION = '2\.0\.(3[6-9]|[4-9][0-9])'/.test(data), 'APP_VERSION 2.0.36+'],
+  [data, /aqua-fantasia-v2\.0\.(3[6-9]|[4-9][0-9])-/.test(data), 'cache 2.0.36+'],
   [main, "dataset.v2036FishingGaugeRepair = 'v2036-fishing-gauge-result-safe-layout'", 'v2036 dataset'],
   [main, 'v2036-fishing-gauge-safe-screen', 'v2036 fishing screen class'],
   [main, 'v2036-fishing-stage', 'v2036 fishing stage class'],
@@ -26,6 +26,7 @@ const required = [
 ];
 
 for (const [haystack, needle, label] of required) {
+  if (typeof needle === 'boolean') { if (!needle) { console.error(`[v2036] missing ${label}`); process.exit(1); } continue; }
   if (!haystack.includes(needle)) {
     console.error(`[v2036] missing ${label}: ${needle}`);
     process.exit(1);
