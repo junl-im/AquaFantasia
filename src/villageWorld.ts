@@ -80,6 +80,8 @@ type Actor = {
   walkPhase: number;
   talk: string[];
   targetTimer: number;
+  pauseTimer: number;
+  desiredTile?: string;
 };
 
 const BUILD_DEFS: Record<VillageBuildingType, BuildDefinition> = {
@@ -547,6 +549,17 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'flowerBed', x: 27, y: 18, scale: .74 },
   { kind: 'crystal', x: 18, y: 26, scale: .48 },
   { kind: 'crystal', x: 22, y: 26, scale: .48 },
+  // v2.0.21: extra nonblocking ambience; keep walk/build corridors open.
+  { kind: 'butterflyBlue', x: 10, y: 18, scale: .34 },
+  { kind: 'butterflyPink', x: 30, y: 18, scale: .34 },
+  { kind: 'petals', x: 16, y: 15, scale: .42 },
+  { kind: 'petals', x: 24, y: 15, scale: .42 },
+  { kind: 'shoreFoam', x: 13, y: 36, scale: .46 },
+  { kind: 'shoreFoam', x: 33, y: 35, scale: .44 },
+  { kind: 'fishShadowSmall', x: 10, y: 36, scale: .48 },
+  { kind: 'fishShadowBig', x: 32, y: 36, scale: .46 },
+  { kind: 'goldLantern', x: 18, y: 24, scale: .38 },
+  { kind: 'goldLantern', x: 22, y: 24, scale: .38 },
 ];
 
 function clamp(value: number, min: number, max: number): number {
@@ -1156,6 +1169,8 @@ export class VillageWorld {
       walkPhase: 0,
       talk: role === 'player' ? [] : DAY_TALK[role as WorldNpcRole] ?? DAY_TALK.tourist,
       targetTimer: 1400 + Math.random() * 3200,
+      pauseTimer: 0,
+      desiredTile: undefined,
     };
   }
 
@@ -1597,7 +1612,7 @@ export class VillageWorld {
       npc.targetTimer -= deltaMs;
       if (npc.targetTimer <= 0 && npc.path.length === 0) {
         this.assignNpcTarget(npc);
-        npc.targetTimer = 2600 + Math.random() * 5200;
+        npc.targetTimer = 3000 + Math.random() * 5600;
       }
       this.updateActor(npc, deltaMs);
     }
@@ -1638,6 +1653,19 @@ export class VillageWorld {
       return;
     }
     const [tx, ty] = actor.path[0];
+    if (actor.role !== 'player' && this.isNpcTileReserved(tx, ty, actor)) {
+      actor.pauseTimer = Math.max(actor.pauseTimer, 180 + Math.random() * 260);
+      actor.pauseTimer -= deltaMs;
+      this.animateActorWalk(actor, 0, deltaMs);
+      if (actor.pauseTimer <= 0 && actor.path.length > 2) {
+        const last = actor.path[actor.path.length - 1];
+        const reroute = this.findPath(actor.tileX, actor.tileY, last[0], last[1], actor);
+        if (reroute.length) actor.path = reroute;
+        actor.pauseTimer = 260 + Math.random() * 420;
+      }
+      return;
+    }
+    actor.pauseTimer = 0;
     const target = centerOfTile(tx, ty);
     const dx = target.x - actor.x;
     const dy = target.y - actor.y;
@@ -1651,6 +1679,7 @@ export class VillageWorld {
       actor.tileX = tx;
       actor.tileY = ty;
       actor.path.shift();
+      if (actor.path.length === 0) actor.desiredTile = undefined;
     } else {
       actor.x += (dx / dist) * step;
       actor.y += (dy / dist) * step;
@@ -1677,16 +1706,58 @@ export class VillageWorld {
   }
 
   private assignNpcTarget(npc: Actor): void {
+    // v2.0.22: lightweight NPC reservation AI. Residents pick less crowded targets,
+    // reserve their next/goal tile, and briefly yield instead of stacking on one route.
     const hour = new Date().getHours();
     let targets: Array<[number, number]>;
-    if (hour < 11) targets = [[19, 18], [20, 19], [21, 20], [18, 22]];
-    else if (hour < 15) targets = [[14, 25], [16, 24], [18, 20]];
-    else if (hour < 19) targets = [[26, 25], [23, 22], [20, 28]];
-    else targets = [[18, 15], [20, 29], [13, 24]];
-    if (npc.role === 'captain') targets = [[20, 31], [20, 29], [21, 33]];
-    const target = targets[Math.floor(Math.random() * targets.length)];
-    const path = this.findPath(npc.tileX, npc.tileY, target[0], target[1]);
-    if (path.length) npc.path = path;
+    if (hour < 11) targets = [[19, 18], [20, 19], [21, 20], [18, 22], [17, 21], [22, 18]];
+    else if (hour < 15) targets = [[14, 25], [16, 24], [18, 20], [13, 27], [17, 26], [20, 22]];
+    else if (hour < 19) targets = [[26, 25], [23, 22], [20, 28], [25, 27], [22, 24], [19, 30]];
+    else targets = [[18, 15], [20, 29], [13, 24], [22, 16], [17, 27], [21, 31]];
+    if (npc.role === 'captain') targets = [[20, 31], [20, 29], [21, 33], [22, 32], [19, 30]];
+    const shuffled = targets
+      .map((target) => ({ target, weight: Math.random() + (this.isNpcTileReserved(target[0], target[1], npc) ? 1.5 : 0) }))
+      .sort((a, b) => a.weight - b.weight)
+      .map((item) => item.target);
+    for (const target of shuffled) {
+      if (this.isNpcTileReserved(target[0], target[1], npc)) continue;
+      const path = this.findPath(npc.tileX, npc.tileY, target[0], target[1], npc);
+      if (path.length) {
+        npc.path = this.trimNpcCrowdedStart(path, npc);
+        npc.desiredTile = tileKey(target[0], target[1]);
+        return;
+      }
+    }
+    npc.desiredTile = undefined;
+  }
+
+  private isNpcTileReserved(x: number, y: number, actor: Actor): boolean {
+    const key = tileKey(x, y);
+    if (this.player && this.player !== actor) {
+      if (tileKey(this.player.tileX, this.player.tileY) === key) return true;
+      const next = this.player.path[0];
+      if (next && tileKey(next[0], next[1]) === key) return true;
+    }
+    return this.npcs.some((other) => {
+      if (other === actor) return false;
+      if (tileKey(other.tileX, other.tileY) === key) return true;
+      if (other.desiredTile === key) return true;
+      const next = other.path[0];
+      return Boolean(next && tileKey(next[0], next[1]) === key);
+    });
+  }
+
+  private trimNpcCrowdedStart(path: Array<[number, number]>, actor: Actor): Array<[number, number]> {
+    if (path.length <= 1) return path;
+    const [firstX, firstY] = path[0];
+    if (!this.isNpcTileReserved(firstX, firstY, actor)) return path;
+    const alternatives: Array<[number, number]> = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]];
+    for (const [dx, dy] of alternatives) {
+      const nx = actor.tileX + dx;
+      const ny = actor.tileY + dy;
+      if (this.isWalkable(nx, ny) && !this.isNpcTileReserved(nx, ny, actor)) return [[nx, ny], ...path.slice(1)];
+    }
+    return path;
   }
 
   private applyPassiveIncome(): void {
@@ -1743,7 +1814,7 @@ export class VillageWorld {
     return x >= 0 && y >= 0 && x < MAP_SIZE && y < MAP_SIZE;
   }
 
-  private findPath(sx: number, sy: number, tx: number, ty: number): Array<[number, number]> {
+  private findPath(sx: number, sy: number, tx: number, ty: number, actor?: Actor): Array<[number, number]> {
     if (!this.isWalkable(tx, ty)) return [];
     const start = tileKey(sx, sy);
     const target = tileKey(tx, ty);
@@ -1758,6 +1829,7 @@ export class VillageWorld {
         const ny = y + dy;
         const key = tileKey(nx, ny);
         if (!this.isWalkable(nx, ny) || came.has(key)) continue;
+        if (actor && actor.role !== 'player' && key !== target && this.isNpcTileReserved(nx, ny, actor)) continue;
         came.set(key, tileKey(x, y));
         queue.push([nx, ny]);
       }
