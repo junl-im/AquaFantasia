@@ -17844,3 +17844,156 @@ html[data-version="2.0.17"] .start-art-screen .hit-keep.v11115-keep-toggle .keep
 .runtime-menu-screen.v2017-quest-scroll-screen.mission-screen .mission-card {
   touch-action: pan-y !important;
 }
+
+/* v2.0.18 Build/asset polish
+   Fixes: start keep-login spacing under server button, construction preview/cancel UX,
+   separated placement/walk collision, stronger menu drag scroll, and denser Lumina Bay details. */
+html[data-version="2.0.18"] .start-art-screen .hit-server {
+  top: 66.4% !important;
+}
+html[data-version="2.0.18"] .start-art-screen .hit-keep.v810-keep-button.v11115-keep-toggle,
+html[data-version="2.0.18"] .start-art-screen .hit-keep.v810-keep-button,
+html[data-version="2.0.18"] .start-art-screen .hit-keep.v11115-keep-toggle {
+  left: 29.4% !important;
+  top: 78.6% !important;
+  width: 41.2% !important;
+  height: 4.35% !important;
+  min-height: 31px !important;
+  padding: 0 8px !important;
+  gap: 5px !important;
+  border-radius: 999px !important;
+}
+html[data-version="2.0.18"] .start-art-screen .hit-keep.v810-keep-button .keep-text,
+html[data-version="2.0.18"] .start-art-screen .hit-keep.v11115-keep-toggle .keep-text {
+  font-size: clamp(10px, 2.72vw, 13px) !important;
+  letter-spacing: -0.06em !important;
+}
+html[data-version="2.0.18"] .start-art-screen .hit-keep.v810-keep-button .keep-indicator,
+html[data-version="2.0.18"] .start-art-screen .hit-keep.v11115-keep-toggle .keep-indicator {
+  width: clamp(17px, 4.8vw, 21px) !important;
+  height: clamp(17px, 4.8vw, 21px) !important;
+  min-width: clamp(17px, 4.8vw, 21px) !important;
+  flex-basis: clamp(17px, 4.8vw, 21px) !important;
+}
+.village-world-screen.v2018-build-ux-screen .v2-world-controls {
+  right: max(10px, env(safe-area-inset-right)) !important;
+  top: 42.2% !important;
+  gap: 6px !important;
+  padding: 6px !important;
+  border-radius: 22px !important;
+}
+.village-world-screen.v2018-build-ux-screen .v2-world-controls button {
+  min-width: 42px !important;
+  width: 42px !important;
+  min-height: 36px !important;
+  height: 36px !important;
+  border-radius: 15px !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  padding: 2px 4px !important;
+}
+.village-world-screen.v2018-build-ux-screen .v2-world-controls [data-village-build-open],
+.village-world-screen.v2018-build-ux-screen .v2-world-controls [data-village-fishing] {
+  min-height: 40px !important;
+  height: 40px !important;
+  font-size: 10px !important;
+  gap: 1px !important;
+}
+.village-world-screen.v2018-build-ux-screen .v2-world-controls button img {
+  width: 19px !important;
+  height: 19px !important;
+}
+.village-world-screen.v2018-build-ux-screen.v2-build-active .v2-world-controls [data-village-build-open] {
+  background: linear-gradient(180deg, #ffeb94, #ff9d57) !important;
+  color: #542700 !important;
+  box-shadow: 0 10px 22px rgba(110, 46, 0, .24), inset 0 2px 0 rgba(255,255,255,.66) !important;
+}
+.village-world-screen.v2018-build-ux-screen.v2-build-active .v2-world-controls [data-village-build-open]::after {
+  content: '취소' !important;
+  display: block !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+  margin-top: 1px !important;
+}
+.village-world-screen.v2018-build-ux-screen .v2018-build-help {
+  margin: 0 0 8px !important;
+  padding: 8px 10px !important;
+  border-radius: 16px !important;
+  background: rgba(255,255,255,.48) !important;
+  color: #05344d !important;
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.65) !important;
+}
+.village-world-screen.v2018-build-ux-screen .v2-build-tray {
+  max-height: min(64dvh, 640px) !important;
+  overflow: hidden !important;
+}
+.village-world-screen.v2018-build-ux-screen .v2-build-grid {
+  max-height: min(44dvh, 430px) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  padding-bottom: 12px !important;
+}
+.village-world-screen.v2018-build-ux-screen .v2-build-grid button {
+  min-height: 62px !important;
+  touch-action: pan-y manipulation !important;
+}
+:root {
+  --v2016-dock-button: clamp(49px, 12.4vw, 57px);
+  --v2016-dock-icon: clamp(32px, 8.3vw, 38px);
+  --v2016-dock-gap: clamp(3px, 1vw, 5px);
+}
+.bottom-nav.v2016-safe-dock-nav button img,
+.bottom-nav.v2011-wing-dock-nav button img {
+  width: var(--v2016-dock-icon) !important;
+  height: var(--v2016-dock-icon) !important;
+}
+.runtime-menu-screen.v2018-menu-drag-screen,
+.runtime-menu-screen.v2018-menu-drag-screen.scroll-screen {
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  height: var(--portrait-height, 100dvh) !important;
+  min-height: var(--portrait-height, 100dvh) !important;
+  touch-action: pan-y !important;
+  overscroll-behavior-y: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  scroll-padding-bottom: calc(var(--v2016-dock-safe-bottom, 132px) + 96px) !important;
+}
+.runtime-menu-screen.v2018-menu-drag-screen .runtime-content {
+  min-height: calc(var(--portrait-height, 100dvh) + 120px) !important;
+  padding-bottom: calc(var(--v2016-dock-safe-bottom, 132px) + 132px) !important;
+  touch-action: pan-y !important;
+}
+.runtime-menu-screen.v2018-menu-drag-screen :is(.mission-card,.runtime-card-list,.v204-quest-board,.v206-quest-board,.v204-full-quest-list,.v206-full-quest-list,.runtime-panel,.runtime-hero-card) {
+  touch-action: pan-y !important;
+}
+.runtime-menu-screen.v2018-menu-drag-screen :is(button,.runtime-btn,.compact-cta,.btn-aqua-action) {
+  touch-action: pan-y manipulation !important;
+}
+.runtime-menu-screen.v2018-menu-drag-screen[data-v2018-dragging="true"] :is(button,.runtime-btn,.compact-cta,.btn-aqua-action) {
+  pointer-events: none !important;
+}
+.runtime-menu-screen.v2018-menu-drag-screen :is(.runtime-hero-card,.runtime-panel,.runtime-menu-card,.runtime-item-card,.gear-card,.shop-card,.mission-card,.v204-window-card,.v204-map-shell,.v204-inventory-shell,.v206-quest-board,.v206-catch-ledger) {
+  text-shadow: 0 1px 0 rgba(255,255,255,.54) !important;
+}
+.runtime-menu-screen.v2018-menu-drag-screen :is(.runtime-hero-card h2,.runtime-panel-title strong,.runtime-menu-card strong,.runtime-item-card strong,.gear-card strong,.shop-card strong,.mission-card strong,.v204-board-title strong) {
+  -webkit-text-stroke: .28px rgba(0, 24, 48, .22) !important;
+}
+@media (max-width: 430px) {
+  html[data-version="2.0.18"] .start-art-screen .hit-keep.v810-keep-button,
+  html[data-version="2.0.18"] .start-art-screen .hit-keep.v11115-keep-toggle {
+    left: 28.2% !important;
+    width: 43.6% !important;
+    top: 79.0% !important;
+  }
+  .village-world-screen.v2018-build-ux-screen .v2-world-controls button {
+    min-width: 40px !important;
+    width: 40px !important;
+    min-height: 34px !important;
+    height: 34px !important;
+  }
+}

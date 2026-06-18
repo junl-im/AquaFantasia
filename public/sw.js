@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.17-direction-ui-polish';
+const CACHE_NAME = 'aqua-fantasia-v2.0.18-build-asset-polish';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -76,6 +76,13 @@ const PRECACHE = [
   "./assets/v2012/props/tree_palm_alt.png",
   "./assets/v2012/props/big_splash.png",
   "./assets/v2012/props/shore_foam.png",
+  "./assets/v2012/props/water_ring.png",
+  "./assets/v2012/props/sparkles.png",
+  "./assets/v2012/props/butterfly_pink.png",
+  "./assets/v2012/props/butterfly_blue.png",
+  "./assets/v209/props/bridge_asset.png",
+  "./assets/v209/props/plaza_stairs.png",
+  "./assets/v209/props/notice_board.png",
   "./assets/v108/home/island_home_bg_1080x1920.webp",
   "./assets/v108/home/aqua_fantasia_banner.png",
   "./assets/v85/screens/start_screen_clean_v810.webp",

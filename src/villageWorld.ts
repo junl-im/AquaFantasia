@@ -51,7 +51,7 @@ type PointerTrack = {
 
 type PointerPoint = { x: number; y: number };
 
-type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse' | 'stall' | 'pottedPalm' | 'barrels' | 'coral' | 'crystal' | 'banner' | 'woodFence' | 'ropeFence' | 'bollard' | 'stairs' | 'bridge' | 'tropicalTree' | 'palmAlt' | 'stoneWall' | 'arch' | 'questBoard' | 'statue' | 'cherryTree' | 'mapleTree' | 'pineTree' | 'crystalTree' | 'flowerTree' | 'cypressTree' | 'dog' | 'sleepingDog' | 'cat' | 'walkingCat' | 'seagull' | 'flyingSeagull' | 'duck' | 'swimmingDuck' | 'butterflyBlue' | 'butterflyPink' | 'petals' | 'sparkles' | 'waterRing' | 'shoreFoam' | 'splash' | 'steam' | 'cookingPot' | 'goldLantern' | 'fishShadowSmall' | 'fishShadowMid' | 'fishShadowBig' | 'woodSign' | 'ropeWall' | 'stoneCorner' | 'stoneCurve' | 'wideStairs' | 'ropeCorner';
+type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse' | 'stall' | 'pottedPalm' | 'barrels' | 'coral' | 'crystal' | 'banner' | 'woodFence' | 'ropeFence' | 'bollard' | 'stairs' | 'bridge' | 'tropicalTree' | 'palmAlt' | 'stoneWall' | 'arch' | 'questBoard' | 'statue' | 'cherryTree' | 'mapleTree' | 'pineTree' | 'crystalTree' | 'flowerTree' | 'cypressTree' | 'dog' | 'sleepingDog' | 'cat' | 'walkingCat' | 'seagull' | 'flyingSeagull' | 'duck' | 'swimmingDuck' | 'butterflyBlue' | 'butterflyPink' | 'petals' | 'sparkles' | 'waterRing' | 'shoreFoam' | 'splash' | 'steam' | 'cookingPot' | 'goldLantern' | 'fishShadowSmall' | 'fishShadowMid' | 'fishShadowBig' | 'woodSign' | 'ropeWall' | 'stoneCorner' | 'stoneCurve' | 'wideStairs' | 'ropeCorner' | 'noticeBoard' | 'plazaStairs' | 'bridgeAsset';
 
 type Decoration = {
   kind: DecoKind;
@@ -361,6 +361,9 @@ const DECO_TEXTURES: Partial<Record<DecoKind, string>> = {
   stoneCurve: './assets/v209/props/stone_curve.png',
   wideStairs: './assets/v209/props/stair_wide.png',
   ropeCorner: './assets/v209/props/rope_corner.png',
+  noticeBoard: './assets/v209/props/notice_board.png',
+  plazaStairs: './assets/v209/props/plaza_stairs.png',
+  bridgeAsset: './assets/v209/props/bridge_asset.png',
 };
 
 const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
@@ -397,6 +400,7 @@ const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
   butterflyBlue: 48, butterflyPink: 44, petals: 64, sparkles: 60, waterRing: 72, shoreFoam: 96, splash: 102, steam: 94, cookingPot: 72, goldLantern: 90,
   fishShadowSmall: 44, fishShadowMid: 50, fishShadowBig: 58,
   woodSign: 78, ropeWall: 64, stoneCorner: 58, stoneCurve: 58, wideStairs: 74, ropeCorner: 56,
+  noticeBoard: 92, plazaStairs: 82, bridgeAsset: 98,
 };
 
 const BUILD_PROP_TEXTURES: Partial<Record<VillageBuildingType, string>> = {
@@ -413,6 +417,7 @@ const CRITICAL_DECO_KINDS: DecoKind[] = [
   'tree', 'palm', 'tropicalTree', 'palmAlt', 'lamp', 'bench', 'dock', 'flag', 'rock', 'flowerBed',
   'lighthouse', 'stall', 'questBoard', 'coral', 'crystal', 'banner', 'woodFence', 'ropeFence',
   'bollard', 'stairs', 'bridge', 'woodSign', 'ropeWall', 'stoneCorner', 'stoneCurve', 'wideStairs', 'ropeCorner',
+  'noticeBoard', 'plazaStairs', 'bridgeAsset',
 ];
 
 function uniqueUrls(urls: Array<string | undefined>): string[] {
@@ -516,6 +521,12 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'stoneCurve', x: 15, y: 21, scale: .72 },
   { kind: 'stoneCurve', x: 25, y: 21, scale: .72 },
   { kind: 'wideStairs', x: 20, y: 24, scale: .7 },
+  { kind: 'noticeBoard', x: 18, y: 21, scale: .66 },
+  { kind: 'noticeBoard', x: 22, y: 21, scale: .66 },
+  { kind: 'plazaStairs', x: 18, y: 24, scale: .62 },
+  { kind: 'plazaStairs', x: 22, y: 24, scale: .62 },
+  { kind: 'bridgeAsset', x: 18, y: 35, blocks: true, scale: .62 },
+  { kind: 'bridgeAsset', x: 22, y: 35, blocks: true, scale: .62 },
   { kind: 'tropicalTree', x: 9, y: 31, blocks: true, scale: .74 },
   { kind: 'tropicalTree', x: 32, y: 29, blocks: true, scale: .72 },
   { kind: 'palmAlt', x: 4, y: 34, blocks: true, scale: .72 },
@@ -673,7 +684,7 @@ export class VillageWorld {
     this.previewLayer.removeChildren();
     if (type) {
       const def = BUILD_DEFS[type];
-      this.showGuide('설치 모드', `${def.label} 선택됨 · ${def.description}`);
+      this.showGuide('설치 모드', `${def.label} 선택됨 · 바닥을 드래그해 초록/빨강 프리뷰 확인 후 손을 떼어 설치 · 건설 버튼으로 취소`);
     }
   }
 
@@ -1030,13 +1041,13 @@ export class VillageWorld {
       }
     }
     for (const b of this.save.village.buildings) {
-      if (b.type === 'flower' || b.type === 'fountain') continue;
+      const isSoftProp = b.type === 'flower' || b.type === 'fountain';
       const walkBlockH = Math.max(1, b.h - (b.h > 1 ? BUILDING_COLLISION_FRONT_TRIM : 0));
       for (let yy = b.y; yy < b.y + b.h; yy += 1) {
         for (let xx = b.x; xx < b.x + b.w; xx += 1) {
           const key = tileKey(xx, yy);
           this.occupiedTiles.add(key);
-          if (yy < b.y + walkBlockH) this.blockedTiles.add(key);
+          if (!isSoftProp && yy < b.y + walkBlockH) this.blockedTiles.add(key);
         }
       }
     }
@@ -1146,6 +1157,7 @@ export class VillageWorld {
         return;
       }
       this.pointer = { startX: ev.clientX, startY: ev.clientY, lastX: ev.clientX, lastY: ev.clientY, moved: false };
+      if (this.selectedBuild) this.updatePreviewFromPointer(ev);
     });
     canvas.addEventListener('pointermove', (ev: PointerEvent) => {
       if (this.activePointers.has(ev.pointerId)) this.activePointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
@@ -1223,7 +1235,15 @@ export class VillageWorld {
     this.root.querySelector<HTMLButtonElement>('[data-village-zoom-in]')?.addEventListener('click', () => this.zoom(0.11, true));
     this.root.querySelector<HTMLButtonElement>('[data-village-zoom-out]')?.addEventListener('click', () => this.zoom(-0.11, true));
     this.root.querySelector<HTMLButtonElement>('[data-village-center]')?.addEventListener('click', () => { this.cameraFollowUntil = performance.now() + 1200; this.centerCameraOnPlayer(); });
-    this.root.querySelector<HTMLButtonElement>('[data-village-build-open]')?.addEventListener('click', () => this.setBuildTrayOpen(!this.buildTrayOpen));
+    this.root.querySelector<HTMLButtonElement>('[data-village-build-open]')?.addEventListener('click', () => {
+      if (this.selectedBuild) {
+        this.setBuildMode(null);
+        this.setBuildTrayOpen(false);
+        this.showGuide('설치 취소', '건설 버튼을 다시 누르면 건물 목록을 열 수 있습니다.');
+        return;
+      }
+      this.setBuildTrayOpen(!this.buildTrayOpen);
+    });
     this.root.querySelectorAll<HTMLElement>('[data-village-build-close]').forEach((node) => node.addEventListener('click', () => this.setBuildTrayOpen(false)));
     this.bindJoystick();
     this.root.querySelector<HTMLButtonElement>('[data-village-fishing]')?.addEventListener('click', () => this.onGoFishing());
@@ -1583,12 +1603,16 @@ export class VillageWorld {
     if (actor.body instanceof Sprite) {
       actor.body.position.y = 14 + bob;
       actor.body.rotation = sway;
+      const targetH = actor.role === 'player' ? 90 : 80;
+      const base = targetH / Math.max(1, actor.body.texture.height);
+      const stretch = walking ? Math.sin(actor.walkPhase * 2) * 0.018 : 0;
+      actor.body.scale.set(base * (1 + stretch), base * (1 - stretch * 0.5));
     } else {
       actor.body.rotation = sway;
     }
     const shadowPulse = walking ? 1 + Math.abs(Math.sin(actor.walkPhase)) * 0.08 : 1;
     actor.shadow.scale.set(shadowPulse, 1 / shadowPulse);
-    actor.label.scale.x = 1;
+    actor.label.scale.set(1, 1);
   }
 
   private updateActor(actor: Actor | undefined, deltaMs: number): void {
@@ -1633,7 +1657,7 @@ export class VillageWorld {
       const bodyScaleX = Math.abs(actor.body.scale.x || 1);
       actor.body.scale.x = bodyScaleX * fallbackDirection;
     }
-    actor.label.scale.x = 1;
+    actor.label.scale.set(1, 1);
   }
 
   private assignNpcTarget(npc: Actor): void {
