@@ -6,6 +6,7 @@ const TILE_W = 80;
 const TILE_H = 40;
 const BASE_SCALE = 0.86;
 const BUILDING_VISUAL_SCALE = 0.74;
+const BUILDING_COLLISION_FRONT_TRIM = 1;
 const PLAYER_WALK_SPEED = 1.85;
 const NPC_WALK_SPEED_MIN = 0.48;
 const NPC_WALK_SPEED_RANGE = 0.24;
@@ -15,6 +16,7 @@ const WORLD_ORIGIN_Y = 120;
 type ToastKind = 'normal' | 'mission' | 'dex' | 'shop' | 'fishing' | 'reward';
 
 type WorldNpcRole = 'chief' | 'merchant' | 'guild' | 'captain' | 'tourist' | 'vip';
+type ActorDirection = 'south' | 'southeast' | 'east' | 'northeast' | 'north' | 'northwest' | 'west' | 'southwest';
 
 type BuildDefinition = {
   type: VillageBuildingType;
@@ -49,7 +51,7 @@ type PointerTrack = {
 
 type PointerPoint = { x: number; y: number };
 
-type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse' | 'stall' | 'pottedPalm' | 'barrels' | 'coral' | 'crystal' | 'banner' | 'woodFence' | 'ropeFence' | 'bollard' | 'stairs' | 'bridge' | 'stoneWall' | 'arch' | 'questBoard' | 'statue';
+type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse' | 'stall' | 'pottedPalm' | 'barrels' | 'coral' | 'crystal' | 'banner' | 'woodFence' | 'ropeFence' | 'bollard' | 'stairs' | 'bridge' | 'stoneWall' | 'arch' | 'questBoard' | 'statue' | 'cherryTree' | 'mapleTree' | 'pineTree' | 'crystalTree' | 'flowerTree' | 'cypressTree' | 'dog' | 'sleepingDog' | 'cat' | 'walkingCat' | 'seagull' | 'flyingSeagull' | 'duck' | 'swimmingDuck' | 'butterflyBlue' | 'butterflyPink' | 'petals' | 'sparkles' | 'waterRing' | 'shoreFoam' | 'splash' | 'steam' | 'cookingPot' | 'goldLantern' | 'fishShadowSmall' | 'fishShadowMid' | 'fishShadowBig';
 
 type Decoration = {
   kind: DecoKind;
@@ -72,6 +74,7 @@ type Actor = {
   node: Container;
   body: Graphics | Sprite;
   label: Text;
+  direction: ActorDirection;
   mood: string;
   talk: string[];
   targetTimer: number;
@@ -188,13 +191,39 @@ const DAY_TALK: Record<WorldNpcRole, string[]> = {
 
 
 const ACTOR_TEXTURES: Record<Actor['role'], string> = {
-  player: './assets/v22/characters/player_sd_front.png',
-  chief: './assets/v22/characters/npc_chief.png',
-  merchant: './assets/v22/characters/npc_merchant.png',
-  guild: './assets/v22/characters/npc_guild.png',
-  captain: './assets/v22/characters/npc_captain.png',
-  tourist: './assets/v22/characters/npc_tourist.png',
-  vip: './assets/v22/characters/npc_vip.png',
+  player: './assets/v2012/characters/player_south.png',
+  chief: './assets/v2012/characters/chief_south.png',
+  merchant: './assets/v2012/characters/merchant_south.png',
+  guild: './assets/v2012/characters/guild_south.png',
+  captain: './assets/v2012/characters/captain_south.png',
+  tourist: './assets/v2012/characters/tourist_south.png',
+  vip: './assets/v2012/characters/vip_south.png',
+};
+
+const ACTOR_DIRECTIONS: ActorDirection[] = ['south', 'southeast', 'east', 'northeast', 'north', 'northwest', 'west', 'southwest'];
+
+const ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
+  // v2.0.13: the supplied 8-direction sheet is visually opposite to the runtime
+  // screen movement in the current isometric camera, so texture lookup is corrected
+  // without changing actual movement/pathfinding.
+  south: 'north',
+  southeast: 'northwest',
+  east: 'west',
+  northeast: 'southwest',
+  north: 'south',
+  northwest: 'southeast',
+  west: 'east',
+  southwest: 'northeast',
+};
+
+const ACTOR_DIRECTION_TEXTURES: Record<Actor['role'], Record<ActorDirection, string>> = {
+  player: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/player_${direction}.png`])) as Record<ActorDirection, string>,
+  chief: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/chief_${direction}.png`])) as Record<ActorDirection, string>,
+  merchant: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/merchant_${direction}.png`])) as Record<ActorDirection, string>,
+  guild: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/guild_${direction}.png`])) as Record<ActorDirection, string>,
+  captain: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/captain_${direction}.png`])) as Record<ActorDirection, string>,
+  tourist: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/tourist_${direction}.png`])) as Record<ActorDirection, string>,
+  vip: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2012/characters/vip_${direction}.png`])) as Record<ActorDirection, string>,
 };
 
 
@@ -283,6 +312,33 @@ const DECO_TEXTURES: Partial<Record<DecoKind, string>> = {
   arch: './assets/v209/props/crystal_arch.png',
   questBoard: './assets/v209/props/quest_board_large.png',
   statue: './assets/v209/props/crystal_statue.png',
+  cherryTree: './assets/v2012/props/tree_cherry.png',
+  mapleTree: './assets/v2012/props/tree_maple.png',
+  pineTree: './assets/v2012/props/tree_pine.png',
+  crystalTree: './assets/v2012/props/tree_blue_crystal.png',
+  flowerTree: './assets/v2012/props/tree_flower.png',
+  cypressTree: './assets/v2012/props/tree_cypress.png',
+  dog: './assets/v2012/props/dog_stand.png',
+  sleepingDog: './assets/v2012/props/dog_sleep.png',
+  cat: './assets/v2012/props/cat_sit.png',
+  walkingCat: './assets/v2012/props/cat_walk.png',
+  seagull: './assets/v2012/props/seagull_stand.png',
+  flyingSeagull: './assets/v2012/props/seagull_fly.png',
+  duck: './assets/v2012/props/duck_stand.png',
+  swimmingDuck: './assets/v2012/props/duck_swim.png',
+  butterflyBlue: './assets/v2012/props/butterfly_blue.png',
+  butterflyPink: './assets/v2012/props/butterfly_pink.png',
+  petals: './assets/v2012/props/petals.png',
+  sparkles: './assets/v2012/props/sparkles.png',
+  waterRing: './assets/v2012/props/water_ring.png',
+  shoreFoam: './assets/v2012/props/shore_foam.png',
+  splash: './assets/v2012/props/big_splash.png',
+  steam: './assets/v2012/props/steam.png',
+  cookingPot: './assets/v2012/props/cooking_pot.png',
+  goldLantern: './assets/v2012/props/gold_lantern.png',
+  fishShadowSmall: './assets/v2012/props/fish_shadow_small.png',
+  fishShadowMid: './assets/v2012/props/fish_shadow_mid.png',
+  fishShadowBig: './assets/v2012/props/fish_shadow_big.png',
 };
 
 const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
@@ -312,6 +368,10 @@ const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
   arch: 172,
   questBoard: 116,
   statue: 148,
+  cherryTree: 168, mapleTree: 168, pineTree: 176, crystalTree: 176, flowerTree: 164, cypressTree: 174,
+  dog: 66, sleepingDog: 48, cat: 62, walkingCat: 58, seagull: 60, flyingSeagull: 72, duck: 58, swimmingDuck: 74,
+  butterflyBlue: 48, butterflyPink: 44, petals: 64, sparkles: 60, waterRing: 72, shoreFoam: 96, splash: 102, steam: 94, cookingPot: 72, goldLantern: 90,
+  fishShadowSmall: 44, fishShadowMid: 50, fishShadowBig: 58,
 };
 
 const BUILD_PROP_TEXTURES: Partial<Record<VillageBuildingType, string>> = {
@@ -329,6 +389,18 @@ function pickTileTexture(kind: VillageTileKind, x: number, y: number): string | 
   if (!list?.length) return undefined;
   const index = Math.abs((x * 31 + y * 17 + x * y * 3) % list.length);
   return list[index];
+}
+
+function actorDirectionFromVector(dx: number, dy: number): ActorDirection {
+  const absX = Math.abs(dx);
+  const absY = Math.abs(dy);
+  if (absX < 0.15 && absY < 0.15) return 'south';
+  if (absY > absX * 1.38) return dy < 0 ? 'north' : 'south';
+  if (absX > absY * 1.38) return dx < 0 ? 'west' : 'east';
+  if (dx >= 0 && dy >= 0) return 'southeast';
+  if (dx >= 0 && dy < 0) return 'northeast';
+  if (dx < 0 && dy >= 0) return 'southwest';
+  return 'northwest';
 }
 
 const VILLAGE_DECORATIONS: Decoration[] = [
@@ -366,6 +438,33 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'stoneWall', x: 5, y: 12, blocks: true, scale: .82 }, { kind: 'stoneWall', x: 35, y: 12, blocks: true, scale: .82 },
   { kind: 'arch', x: 20, y: 12, blocks: true, scale: .82 },
   { kind: 'statue', x: 20, y: 17, blocks: true, scale: .72 },
+  { kind: 'cherryTree', x: 11, y: 10, blocks: true, scale: .82 },
+  { kind: 'mapleTree', x: 29, y: 10, blocks: true, scale: .82 },
+  { kind: 'pineTree', x: 2, y: 16, blocks: true, scale: .76 },
+  { kind: 'crystalTree', x: 37, y: 18, blocks: true, scale: .72 },
+  { kind: 'flowerTree', x: 12, y: 27, blocks: true, scale: .76 },
+  { kind: 'cypressTree', x: 34, y: 25, blocks: true, scale: .74 },
+  { kind: 'dog', x: 17, y: 26, scale: .78 },
+  { kind: 'sleepingDog', x: 8, y: 25, scale: .72 },
+  { kind: 'cat', x: 24, y: 21, scale: .64 },
+  { kind: 'walkingCat', x: 30, y: 26, scale: .62 },
+  { kind: 'seagull', x: 13, y: 34, scale: .66 },
+  { kind: 'flyingSeagull', x: 26, y: 33, scale: .58 },
+  { kind: 'duck', x: 15, y: 33, scale: .62 },
+  { kind: 'swimmingDuck', x: 25, y: 36, scale: .66 },
+  { kind: 'butterflyBlue', x: 13, y: 17, scale: .42 },
+  { kind: 'butterflyPink', x: 27, y: 18, scale: .42 },
+  { kind: 'petals', x: 20, y: 15, scale: .58 },
+  { kind: 'sparkles', x: 20, y: 20, scale: .50 },
+  { kind: 'waterRing', x: 23, y: 36, scale: .62 },
+  { kind: 'shoreFoam', x: 9, y: 35, scale: .66 },
+  { kind: 'splash', x: 31, y: 36, scale: .56 },
+  { kind: 'steam', x: 10, y: 24, scale: .62 },
+  { kind: 'cookingPot', x: 11, y: 24, blocks: true, scale: .62 },
+  { kind: 'goldLantern', x: 16, y: 16, scale: .56 },
+  { kind: 'fishShadowSmall', x: 14, y: 36, scale: .62 },
+  { kind: 'fishShadowMid', x: 19, y: 36, scale: .62 },
+  { kind: 'fishShadowBig', x: 29, y: 36, scale: .62 },
 ];
 
 function clamp(value: number, min: number, max: number): number {
@@ -425,6 +524,7 @@ export class VillageWorld {
   private tileKinds = new Map<string, VillageTileKind>();
   private pathTiles = new Set<string>();
   private blockedTiles = new Set<string>();
+  private occupiedTiles = new Set<string>();
   private player?: Actor;
   private npcs: Actor[] = [];
   private camera = { x: 0, y: 0, scale: BASE_SCALE };
@@ -610,6 +710,7 @@ export class VillageWorld {
     const urls = Array.from(new Set([
       ...Object.values(BUILD_DEFS).map((def) => def.texture).filter((url): url is string => Boolean(url)),
       ...Object.values(ACTOR_TEXTURES),
+      ...Object.values(ACTOR_DIRECTION_TEXTURES).flatMap((directions) => Object.values(directions)),
       ...Object.values(TILE_TEXTURES).flat(),
       ...Object.values(DECO_TEXTURES).filter((url): url is string => Boolean(url)),
       ...Object.values(BUILD_PROP_TEXTURES).filter((url): url is string => Boolean(url)),
@@ -820,19 +921,31 @@ export class VillageWorld {
 
   private rebuildCollision(): void {
     this.blockedTiles.clear();
+    this.occupiedTiles.clear();
     for (let y = 0; y < MAP_SIZE; y += 1) {
       for (let x = 0; x < MAP_SIZE; x += 1) {
-        if (this.tileKinds.get(tileKey(x, y)) === 'sea') this.blockedTiles.add(tileKey(x, y));
+        if (this.tileKinds.get(tileKey(x, y)) === 'sea') {
+          const key = tileKey(x, y);
+          this.blockedTiles.add(key);
+          this.occupiedTiles.add(key);
+        }
       }
     }
     for (const deco of VILLAGE_DECORATIONS) {
-      if (deco.blocks) this.blockedTiles.add(tileKey(deco.x, deco.y));
+      if (deco.blocks) {
+        const key = tileKey(deco.x, deco.y);
+        this.blockedTiles.add(key);
+        this.occupiedTiles.add(key);
+      }
     }
     for (const b of this.save.village.buildings) {
       if (b.type === 'flower' || b.type === 'fountain') continue;
+      const walkBlockH = Math.max(1, b.h - (b.h > 1 ? BUILDING_COLLISION_FRONT_TRIM : 0));
       for (let yy = b.y; yy < b.y + b.h; yy += 1) {
         for (let xx = b.x; xx < b.x + b.w; xx += 1) {
-          this.blockedTiles.add(tileKey(xx, yy));
+          const key = tileKey(xx, yy);
+          this.occupiedTiles.add(key);
+          if (yy < b.y + walkBlockH) this.blockedTiles.add(key);
         }
       }
     }
@@ -860,6 +973,21 @@ export class VillageWorld {
     }
   }
 
+  private actorTextureUrl(role: Actor['role'], direction: ActorDirection): string {
+    const corrected = ACTOR_DIRECTION_TEXTURE_FIX[direction] ?? direction;
+    return ACTOR_DIRECTION_TEXTURES[role]?.[corrected] ?? ACTOR_TEXTURES[role];
+  }
+
+  private applyActorTexture(actor: Actor, direction: ActorDirection): void {
+    if (!(actor.body instanceof Sprite)) return;
+    const texture = this.textures.get(this.actorTextureUrl(actor.role, direction));
+    if (!texture) return;
+    actor.body.texture = texture;
+    const targetH = actor.role === 'player' ? 90 : 80;
+    actor.body.scale.set(targetH / Math.max(1, texture.height));
+    actor.body.position.set(0, 14);
+  }
+
   private createActor(id: string, role: Actor['role'], name: string, tileX: number, tileY: number, color: number, mood: string): Actor {
     const p = centerOfTile(tileX, tileY);
     const node = new Container();
@@ -868,14 +996,14 @@ export class VillageWorld {
     shadow.ellipse(0, 10, role === 'player' ? 20 : 17, role === 'player' ? 8 : 7).fill({ color: 0x294b55, alpha: 0.24 });
 
     let body: Graphics | Sprite;
-    const textureUrl = ACTOR_TEXTURES[role];
+    const textureUrl = this.actorTextureUrl(role, 'south');
     const texture = this.textures.get(textureUrl);
     if (texture) {
       const sprite = new Sprite(texture);
       sprite.anchor.set(0.5, 1);
-      const targetH = role === 'player' ? 86 : 74;
+      const targetH = role === 'player' ? 90 : 80;
       sprite.scale.set(targetH / Math.max(1, sprite.texture.height));
-      sprite.position.set(0, 13);
+      sprite.position.set(0, 14);
       body = sprite;
     } else {
       const g = new Graphics();
@@ -904,6 +1032,7 @@ export class VillageWorld {
       node,
       body,
       label,
+      direction: 'south',
       mood,
       talk: role === 'player' ? [] : DAY_TALK[role as WorldNpcRole] ?? DAY_TALK.tourist,
       targetTimer: 1400 + Math.random() * 3200,
@@ -1083,7 +1212,7 @@ export class VillageWorld {
     }
     this.player.node.position.set(this.player.x, this.player.y);
     this.player.node.zIndex = this.player.tileY * 20 + 16;
-    if (Math.abs(dx) > 0.2) this.setActorFacing(this.player, dx);
+    if (Math.hypot(dx, dy) > 0.2) this.setActorDirection(this.player, dx, dy);
   }
 
   private handlePointerTap(ev: PointerEvent): void {
@@ -1211,6 +1340,7 @@ export class VillageWorld {
         const tile = this.tileKinds.get(key);
         if (tile === 'sea') return false;
         if (def.kind !== 'path' && this.pathTiles.has(key)) return false;
+        if (this.occupiedTiles.has(key)) return false;
         if (this.blockedTiles.has(key)) return false;
         if (def.kind === 'path' && this.pathTiles.has(key)) return false;
       }
@@ -1371,13 +1501,20 @@ export class VillageWorld {
     }
     actor.node.position.set(actor.x, actor.y);
     actor.node.zIndex = actor.tileY * 20 + 16;
-    if (Math.abs(dx) > 1) this.setActorFacing(actor, dx);
+    if (Math.hypot(dx, dy) > 1) this.setActorDirection(actor, dx, dy);
   }
 
-  private setActorFacing(actor: Actor, dx: number): void {
-    const direction = dx < 0 ? -1 : 1;
-    const bodyScaleX = Math.abs(actor.body.scale.x || 1);
-    actor.body.scale.x = bodyScaleX * direction;
+  private setActorDirection(actor: Actor, dx: number, dy: number): void {
+    const direction = actorDirectionFromVector(dx, dy);
+    if (actor.direction !== direction) {
+      actor.direction = direction;
+      this.applyActorTexture(actor, direction);
+    }
+    if (!(actor.body instanceof Sprite)) {
+      const fallbackDirection = dx < 0 ? -1 : 1;
+      const bodyScaleX = Math.abs(actor.body.scale.x || 1);
+      actor.body.scale.x = bodyScaleX * fallbackDirection;
+    }
     actor.label.scale.x = 1;
   }
 

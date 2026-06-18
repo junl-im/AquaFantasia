@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.11-dock-build-placement-polish';
+const CACHE_NAME = 'aqua-fantasia-v2.0.13-direction-dock-collision-fix';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -56,6 +56,24 @@ const PRECACHE = [
   "./assets/v207/tiles/plaza_tile.png",
   "./assets/v207/tiles/plaza_shell_tile.png",
   "./assets/v207/tiles/water_tile.png",
+  "./assets/v2012/characters/player_south.png",
+  "./assets/v2012/characters/player_north.png",
+  "./assets/v2012/characters/player_east.png",
+  "./assets/v2012/characters/player_west.png",
+  "./assets/v2012/characters/chief_south.png",
+  "./assets/v2012/characters/merchant_south.png",
+  "./assets/v2012/characters/guild_south.png",
+  "./assets/v2012/characters/captain_south.png",
+  "./assets/v2012/characters/tourist_south.png",
+  "./assets/v2012/props/dog_stand.png",
+  "./assets/v2012/props/cat_sit.png",
+  "./assets/v2012/props/seagull_stand.png",
+  "./assets/v2012/props/duck_swim.png",
+  "./assets/v2012/props/tree_cherry.png",
+  "./assets/v2012/props/tree_maple.png",
+  "./assets/v2012/props/tree_pine.png",
+  "./assets/v2012/props/big_splash.png",
+  "./assets/v2012/props/shore_foam.png",
   "./assets/v108/home/island_home_bg_1080x1920.webp",
   "./assets/v108/home/aqua_fantasia_banner.png",
   "./assets/v85/screens/start_screen_clean_v810.webp",
