@@ -229,6 +229,11 @@ const ACTOR_DIRECTION_QA_VECTORS: Array<{ movement: ActorDirection; dx: number; 
   { movement: 'northeast', dx: 1, dy: -1, texture: 'northeast' },
   { movement: 'southwest', dx: -1, dy: 1, texture: 'southwest' },
   { movement: 'southeast', dx: 1, dy: 1, texture: 'southeast' },
+  // v2.0.31: clock-direction QA. 1시/5시 입력은 축 방향이 아니라 대각 방향이어야 한다.
+  { movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northeast' },
+  { movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' },
+  { movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'northwest' },
+  { movement: 'southwest', dx: -0.5, dy: 0.866, texture: 'southwest' },
 ];
 
 
@@ -441,15 +446,20 @@ function pickTileTexture(kind: VillageTileKind, x: number, y: number): string | 
 }
 
 function actorDirectionFromVector(dx: number, dy: number): ActorDirection {
-  const absX = Math.abs(dx);
-  const absY = Math.abs(dy);
-  if (absX < 0.15 && absY < 0.15) return 'south';
-  if (absY > absX * 1.38) return dy < 0 ? 'north' : 'south';
-  if (absX > absY * 1.38) return dx < 0 ? 'west' : 'east';
-  if (dx >= 0 && dy >= 0) return 'southeast';
-  if (dx >= 0 && dy < 0) return 'northeast';
-  if (dx < 0 && dy >= 0) return 'southwest';
-  return 'northwest';
+  const length = Math.hypot(dx, dy);
+  if (length < 0.15) return 'south';
+  // v2.0.31: true 8-way angular quantization.
+  // The older axis-threshold logic collapsed 1시/5시 joystick input into north/south,
+  // so northeast/southeast could look missing even though the assets existed.
+  const degrees = ((Math.atan2(dy, dx) * 180) / Math.PI + 360) % 360;
+  if (degrees >= 337.5 || degrees < 22.5) return 'east';
+  if (degrees < 67.5) return 'southeast';
+  if (degrees < 112.5) return 'south';
+  if (degrees < 157.5) return 'southwest';
+  if (degrees < 202.5) return 'west';
+  if (degrees < 247.5) return 'northwest';
+  if (degrees < 292.5) return 'north';
+  return 'northeast';
 }
 
 function actorDirectionQaPasses(): boolean {
@@ -761,6 +771,7 @@ export class VillageWorld {
     this.root.classList.add('v2029-village-polish-ready');
     this.root.dataset.v2029VillageAudit = 'object-npc-build-stable';
     this.root.dataset.v2030VillageAudit = 'moving-npc-clean-objects';
+    this.root.dataset.v2031VillageAudit = 'npc-direction-object-final-audit';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 천천히 이동하고, 빈 바닥 터치로도 이동할 수 있습니다.');
   }
 
@@ -1181,14 +1192,14 @@ export class VillageWorld {
     if (score >= 1000) baseNpcs.push(['vip', 'VIP', 22, 23, 0xb895ff, '만족']);
     for (const [role, name, x, y, color, mood] of baseNpcs) {
       const actor = this.createActor(`npc_${role}_${x}_${y}`, role, name, x, y, color, mood);
-      actor.targetTimer = 180 + Math.random() * 620;
+      actor.targetTimer = 40 + Math.random() * 180;
       this.npcs.push(actor);
       this.actorLayer.addChild(actor.node);
     }
     window.setTimeout(() => {
       if (this.destroyed) return;
       this.npcs.forEach((npc) => { if (npc.path.length === 0) this.assignNpcTarget(npc); });
-    }, 450);
+    }, 120);
   }
 
   private actorTextureUrl(role: Actor['role'], direction: ActorDirection): string {
@@ -1721,7 +1732,7 @@ export class VillageWorld {
       npc.targetTimer -= deltaMs;
       if (npc.targetTimer <= 0 && npc.path.length === 0) {
         this.assignNpcTarget(npc);
-        npc.targetTimer = 3000 + Math.random() * 5600;
+        npc.targetTimer = 1400 + Math.random() * 2600;
       }
       this.updateActor(npc, deltaMs);
     }
@@ -1736,7 +1747,7 @@ export class VillageWorld {
 
   private ensureNpcHealth(): void {
     const now = performance.now();
-    if (now - this.lastNpcHealthCheckAt < 2600) return;
+    if (now - this.lastNpcHealthCheckAt < 1200) return;
     this.lastNpcHealthCheckAt = now;
     const visibleCount = this.npcs.filter((npc) => npc.node.parent === this.actorLayer && this.inBounds(npc.tileX, npc.tileY)).length;
     if (visibleCount < 4) {
@@ -1846,12 +1857,15 @@ export class VillageWorld {
       .sort((a, b) => a.weight - b.weight)
       .map((item) => item.target);
     for (const target of shuffled) {
-      if (this.isNpcTileReserved(target[0], target[1], npc)) continue;
-      const path = this.findPath(npc.tileX, npc.tileY, target[0], target[1], npc);
-      if (path.length) {
-        npc.path = this.trimNpcCrowdedStart(path, npc);
-        npc.desiredTile = tileKey(target[0], target[1]);
-        return;
+      const candidates: Array<[number, number]> = [target, [target[0] + 1, target[1]], [target[0] - 1, target[1]], [target[0], target[1] + 1], [target[0], target[1] - 1]];
+      for (const candidate of candidates) {
+        if (!this.isWalkable(candidate[0], candidate[1]) || this.isNpcTileReserved(candidate[0], candidate[1], npc)) continue;
+        const path = this.findPath(npc.tileX, npc.tileY, candidate[0], candidate[1], npc);
+        if (path.length) {
+          npc.path = this.trimNpcCrowdedStart(path, npc);
+          npc.desiredTile = tileKey(candidate[0], candidate[1]);
+          return;
+        }
       }
     }
     npc.desiredTile = undefined;

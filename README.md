@@ -1,4 +1,4 @@
-# AquaFantasia v2.0.30
+# AquaFantasia v2.0.31
 
 고퀄리티 SD 해양 판타지 RPG 방향으로 전환 중인 PixiJS 기반 모바일 세로형 웹게임입니다. 현재 목표는 메뉴형 낚시 게임에서 벗어나, 플레이어가 직접 루미나 베이 마을을 돌아다니고 NPC, 건물, 항구, 건설 시스템을 자연스럽게 이용하는 첫 마을 RPG 기반을 완성하는 것입니다.
 
@@ -10,6 +10,23 @@
 - 조작: 좌측 가상 조이스틱, 터치 이동, 우측 간소 메뉴, 캐릭터 시점 확대/축소
 - 배포: GitHub Pages 가능 구조
 - 저장: 로컬 저장 우선, Firebase 연동 준비 구조 유지
+
+## v2.0.31 변경사항
+
+- 8방향 캐릭터 방향 판정 중 1시/5시 입력이 `north`/`south`로 뭉개지던 문제를 각도 기반 8분할로 수정했습니다.
+  - `north-east`, `south-east` 에셋 자체는 있었지만 기존 축 우선 판정 임계값 때문에 실제 조이스틱 1시/5시 입력에서 사용되지 않는 상황이 생겼습니다.
+  - `0.5,-0.866`은 `northeast`, `0.5,0.866`은 `southeast`로 검증합니다.
+- 낚시터 화면이 왼쪽으로 밀리거나 큰 장식 오브젝트가 바다에 끼어드는 문제를 줄였습니다.
+  - fishing screen/stage/cast button/reel panel을 viewport 기준으로 재고정했습니다.
+  - 과한 낚시 장식 이미지는 렌더링에서 줄이고 작은 물결/거품만 남겼습니다.
+- 낚시 게이지 UI를 다시 보이도록 릴 패널 내부 레이아웃을 고정했습니다.
+- 우측 하단 메뉴바를 홈/낚시/메뉴 모두 같은 `v2031-identical-dock-nav` 구조로 고정하고 글씨 흰색을 유지했습니다.
+- HUD 프로필 칩의 `정보` 배지와 내 정보창의 과한 라벨/음영을 숨겼습니다.
+- 토스트는 HUD와 간격을 두는 짧은 아쿠아 배너로 유지했습니다.
+- 건설 팝업은 더 큰 세로 공간, 최상위 레이어, 건물 선택 후 반투명 프리뷰 흐름을 유지하도록 재검증했습니다.
+- NPC는 스폰 직후 더 빠르게 첫 목표를 잡고 health check 주기를 줄여 멈춰 보이는 상황을 완화했습니다.
+- `check-v2031-final-screen-audit.mjs`를 추가해 8방향 에셋, 낚시 UI, 도크, HUD, 건설 팝업, registry 오염 여부를 검증합니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.31`로 동기화했습니다.
 
 ## v2.0.30 변경사항
 
@@ -864,6 +881,21 @@ npm run build
 - v2.0.13 캐릭터 방향 보정, 우측 최하단 ㅢ형 메뉴 위치, 건설 팝업 드래그 스크롤, 건물 충돌 영역 분리가 연결되어 있는지
 
 ## 버전 기록
+
+## v2.0.31 Final Screen Audit & 8-Way Direction Repair
+
+- 1시/5시 조이스틱 입력이 `north`/`south`로 뭉개지던 8방향 판정 문제를 각도 기반 8분할로 수정했습니다.
+- `northeast`/`southeast` 및 모든 NPC 역할의 8방향 에셋 존재 여부를 검증하는 `check-v2031-final-screen-audit.mjs`를 추가했습니다.
+- 낚시터 화면 좌표가 왼쪽으로 밀리는 문제를 막기 위해 fishing screen/stage/UI/reel panel/cast button을 viewport 기준으로 재고정했습니다.
+- 낚시 바다에 과하게 큰 장식 오브젝트가 들어오던 DOM 렌더링을 줄이고 작은 물결/거품 장식만 남겼습니다.
+- 낚시 시작 버튼, 최근 포획 카드, 낚시 준비 카드, 릴 감기 게이지 패널의 위치와 z-index를 재정리했습니다.
+- 홈/낚시/메뉴 공통 우측 하단 도크를 `v2031-identical-dock-nav`로 다시 고정하고 글씨 흰색을 유지했습니다.
+- HUD 내 프로필 칩의 `정보` 배지와 캐릭터 정보창의 과한 라벨/음영을 숨겨 아쿠아 톤으로 정리했습니다.
+- 토스트는 HUD 아래 여백을 두고 짧은 아쿠아 배너로 표시되도록 최종 guard를 추가했습니다.
+- 건설 팝업은 더 큰 세로 공간, 드래그 스크롤, 최상위 레이어, 건물 선택 후 프리뷰 유지 흐름을 재검증했습니다.
+- NPC는 스폰 직후 더 빠르게 첫 목표를 배정하고 health check 주기를 줄여 멈춰 보이는 상황을 완화했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.31`로 동기화했습니다.
+- README.md만 수정했고 별도 `*_NOTES.md`는 만들지 않았습니다.
 
 - `2.0.13` Direction, Dock, Collision Bugfix
   - 8방향 캐릭터 표시 방향 재보정, 건물 보행 충돌 영역 축소
