@@ -1,4 +1,4 @@
-# AquaFantasia v2.0.18
+# AquaFantasia v2.0.19
 
 고퀄리티 SD 해양 판타지 RPG 방향으로 전환 중인 PixiJS 기반 모바일 세로형 웹게임입니다. 현재 목표는 메뉴형 낚시 게임에서 벗어나, 플레이어가 직접 루미나 베이 마을을 돌아다니고 NPC, 건물, 항구, 건설 시스템을 자연스럽게 이용하는 첫 마을 RPG 기반을 완성하는 것입니다.
 
@@ -10,6 +10,29 @@
 - 조작: 좌측 가상 조이스틱, 터치 이동, 우측 간소 메뉴, 캐릭터 시점 확대/축소
 - 배포: GitHub Pages 가능 구조
 - 저장: 로컬 저장 우선, Firebase 연동 준비 구조 유지
+
+## v2.0.19 변경사항
+
+- npm registry/설치 실패 원인 진단 보강
+  - 작업 컨테이너에서 `registry.npmjs.org` DNS 조회가 `EAI_AGAIN`으로 실패하면 패키지 코드 문제가 아니라 외부 npm registry 네트워크/DNS 접근 제한으로 판단
+  - GitHub Actions에서는 public npm registry 강제, package-lock 내부 registry 오염 검사, 설치 로그 금지 문자열 검사를 계속 유지
+  - `ci:registry:check` 스크립트와 workflow 진단 단계를 추가해, 실제 CI에서 네트워크 문제인지 lockfile 오염인지 구분하기 쉽게 함
+
+- 낚시터 찌/게이지 안정화
+  - Pixi 낚시 화면에서 캐스팅 전 찌가 미리 떠 있는 문제를 막기 위해 `idle` 상태에서는 bobber를 숨기고 캐스팅 시작 때만 표시
+  - HTML fallback 낚시 화면도 `idle/success/fail` 상태에서는 찌를 숨기고 `casting/waiting/bite/reeling` 상태에서만 보이도록 phase 클래스를 추가
+  - 낚시 게이지 패널을 화면 하단 안전 영역 안으로 고정하고, 작은 화면에서도 horizontal/vertical gauge, hold button, progress bar가 밖으로 밀리지 않도록 크기 제한
+  - 릴링 중에는 최근 포획 패널을 자동으로 숨겨 게이지와 겹치지 않게 함
+  - fallback 릴링 루프의 `const safe` 중복 선언을 제거해 TypeScript 빌드 실패 후보를 수정
+
+- 낚시터 에셋 추가 적용
+  - 기존 보유 에셋 중 물결 링, 해안 거품, 물고기 그림자, 작은 물튀김을 낚시 stage에 배치
+  - 추가 낚시 ambient 에셋을 service worker precache에 연결해 오프라인 캐시 누락을 줄임
+
+- 버전과 검증 갱신
+  - `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.19`로 통일
+  - `npm run validate`는 v2.0.19 낚시터 안정화, registry 진단, README-only 규칙, 8방향 반전 방지를 함께 확인
+  - 루트 문서는 계속 `README.md` 하나만 유지하고 별도 `*_NOTES.md`는 생성하지 않음
 
 ## v2.0.18 변경사항
 
@@ -55,7 +78,7 @@
 ## v2.0.18 이후 필요한 에셋 요청 메모
 
 - 8방향 SD 캐릭터는 파일명과 실제 바라보는 방향이 반드시 일치해야 합니다: `character_west.png`는 화면 왼쪽을 바라보고, `character_east.png`는 화면 오른쪽을 바라봐야 합니다.
-- 다음 에셋이 있으면 v2.0.19 이후 품질 향상에 바로 도움이 됩니다.
+- 다음 에셋이 있으면 v2.0.20 이후 품질 향상에 바로 도움이 됩니다.
   - 건설 프리뷰용 반투명 바닥 하이라이트 2종: 설치 가능 초록, 설치 불가 빨강, 텍스트 없음, 80x40 이소메트릭 타일 기준 PNG
   - 모바일 RPG 메뉴 패널 4종: 가방, 퀘스트, 지도, 마을용 밝은 베이지/아쿠아 UI 프레임, 9-slice 가능한 모서리, 텍스트 없음
   - 우측 조작 버튼 세트: 확대, 축소, 원점, 건설, 출항 5개 원형/캡슐 버튼, 따뜻한 해양 판타지 스타일, 텍스트 없음

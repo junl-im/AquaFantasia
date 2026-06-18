@@ -17997,3 +17997,151 @@ html[data-version="2.0.18"] .start-art-screen .hit-keep.v11115-keep-toggle .keep
     height: 34px !important;
   }
 }
+
+
+/* v2.0.19 Fishing stability polish
+   Fixes idle bobber visibility, clamps reel gauge/cast UI to the portrait viewport, and adds extra fishing ambient assets. */
+html[data-version="2.0.19"][data-fishing-polish="v2019-fishing-stability-polish"] body[data-screen="fishing"] .fishing-screen.v2019-fishing-stability-screen {
+  position: relative !important;
+  width: 100% !important;
+  height: var(--portrait-height, 100dvh) !important;
+  min-height: var(--portrait-height, 100svh) !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  background: #047ec0 !important;
+  touch-action: none !important;
+}
+html[data-version="2.0.19"][data-fishing-polish="v2019-fishing-stability-polish"] body[data-screen="fishing"] .bottom-nav.v2016-safe-dock-nav,
+html[data-version="2.0.19"][data-fishing-polish="v2019-fishing-stability-polish"] body[data-screen="fishing"] .bottom-nav.v208-right-dock-nav {
+  display: none !important;
+}
+html[data-version="2.0.19"][data-fishing-polish="v2019-fishing-stability-polish"] body[data-screen="fishing"] .fishing-stage.v840-fishing-stage {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  border-radius: 0 !important;
+  background: #047ec0 !important;
+}
+html[data-version="2.0.19"] body[data-screen="fishing"] .fishing-stage.fishing-phase-idle .fallback-bobber,
+html[data-version="2.0.19"] body[data-screen="fishing"] .fishing-stage.fishing-phase-success .fallback-bobber,
+html[data-version="2.0.19"] body[data-screen="fishing"] .fishing-stage.fishing-phase-fail .fallback-bobber {
+  display: none !important;
+  opacity: 0 !important;
+}
+html[data-version="2.0.19"] body[data-screen="fishing"] .fishing-stage.fallback-casting .fallback-bobber,
+html[data-version="2.0.19"] body[data-screen="fishing"] .fishing-stage.fishing-phase-waiting .fallback-bobber,
+html[data-version="2.0.19"] body[data-screen="fishing"] .fishing-stage.fishing-phase-bite .fallback-bobber,
+html[data-version="2.0.19"] body[data-screen="fishing"] .fishing-stage.fishing-phase-reeling .fallback-bobber {
+  display: block !important;
+  opacity: 1 !important;
+}
+html[data-version="2.0.19"] body[data-screen="fishing"] .v2019-fishing-prop {
+  position: absolute !important;
+  z-index: 9 !important;
+  pointer-events: none !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 8px 10px rgba(0, 37, 80, .20)) saturate(1.08) !important;
+  opacity: .72 !important;
+}
+html[data-version="2.0.19"] body[data-screen="fishing"] .v2019-water-ring { left: 23% !important; top: 52% !important; width: min(96px, 22vw) !important; animation: fishFloat 2.7s ease-in-out infinite; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .v2019-shore-foam { right: -4% !important; bottom: 18% !important; width: min(190px, 42vw) !important; opacity: .45 !important; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .v2019-fish-shadow { left: 12% !important; top: 43% !important; width: min(180px, 38vw) !important; opacity: .38 !important; animation: v205FishShadowDrift 9s ease-in-out infinite; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .v2019-splash-ready { right: 18% !important; top: 47% !important; width: min(90px, 20vw) !important; opacity: .38 !important; animation: fishFloat 3.2s ease-in-out infinite reverse; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .fishing-hud.v840-fishing-hud {
+  position: fixed !important;
+  left: max(8px, env(safe-area-inset-left)) !important;
+  right: max(8px, env(safe-area-inset-right)) !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + var(--viewport-offset-top, 0px)) !important;
+  width: auto !important;
+  max-width: min(430px, calc(100vw - 16px)) !important;
+  margin: 0 auto !important;
+  z-index: 96 !important;
+}
+html[data-version="2.0.19"] body[data-screen="fishing"] .fishing-guide-card {
+  top: calc(max(70px, env(safe-area-inset-top) + 68px)) !important;
+  width: min(390px, calc(100vw - 18px)) !important;
+  z-index: 82 !important;
+}
+html[data-version="2.0.19"] body[data-screen="fishing"] .recent-catch-strip {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: calc(8px + env(safe-area-inset-bottom)) !important;
+  transform: translateX(-50%) !important;
+  width: min(430px, calc(100vw - 14px)) !important;
+  height: clamp(72px, 10.5dvh, 88px) !important;
+  min-height: 72px !important;
+  max-height: 88px !important;
+  padding: 10px 12px !important;
+  z-index: 76 !important;
+  overflow: hidden !important;
+  transition: opacity .18s ease, transform .18s ease !important;
+}
+html[data-version="2.0.19"] body[data-screen="fishing"] .fishing-screen.fishing-phase-reeling .recent-catch-strip,
+html[data-version="2.0.19"] body[data-screen="fishing"] .fishing-screen.fishing-phase-success .recent-catch-strip,
+html[data-version="2.0.19"] body[data-screen="fishing"] .fishing-screen.fishing-phase-fail .recent-catch-strip {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateX(-50%) translateY(16px) !important;
+}
+html[data-version="2.0.19"] body[data-screen="fishing"] .v840-stage-ui .cast-button,
+html[data-version="2.0.19"] body[data-screen="fishing"] .cast-button {
+  position: fixed !important;
+  left: 50% !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: calc(clamp(90px, 12.4dvh, 112px) + env(safe-area-inset-bottom)) !important;
+  transform: translateX(-50%) !important;
+  width: min(318px, 78vw) !important;
+  height: clamp(64px, 8.3dvh, 76px) !important;
+  min-height: 64px !important;
+  z-index: 88 !important;
+}
+html[data-version="2.0.19"] body[data-screen="fishing"] .v840-stage-ui .cast-button.hidden { display: none !important; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .reel-panel.v205-reel-panel,
+html[data-version="2.0.19"] body[data-screen="fishing"] .v840-reel-panel.reel-panel {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+  transform: translateX(-50%) !important;
+  width: min(430px, calc(100vw - 16px)) !important;
+  max-width: calc(100vw - 16px) !important;
+  max-height: min(45dvh, 322px) !important;
+  overflow: hidden !important;
+  padding: 8px 10px 10px !important;
+  border-radius: 26px !important;
+  z-index: 112 !important;
+}
+html[data-version="2.0.19"] body[data-screen="fishing"] .reel-panel.hidden { display: none !important; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .v205-reel-panel > img.v205-horizontal-gauge {
+  width: min(300px, 78vw) !important;
+  max-height: 48px !important;
+  margin: -18px auto -28px !important;
+}
+html[data-version="2.0.19"] body[data-screen="fishing"] .v205-reel-grid { grid-template-columns: 34px minmax(0, 1fr) !important; gap: 7px !important; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .v205-vertical-gauge { width: 32px !important; height: clamp(116px, 18dvh, 142px) !important; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .v205-reel-control { padding-top: 18px !important; min-width: 0 !important; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .v205-resistance-art { width: min(230px, 62vw) !important; height: 32px !important; margin-bottom: -9px !important; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .v205-reel-panel .tension-track { height: 18px !important; width: 100% !important; margin-bottom: 6px !important; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .v205-reel-panel .safe-progress { height: 8px !important; margin: 6px 6px 5px !important; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .v205-reel-panel .surge-meter { height: 6px !important; margin: 5px 10px !important; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .v205-reel-panel .hold-pad {
+  width: 100% !important;
+  min-height: 46px !important;
+  margin-top: 6px !important;
+  font-size: clamp(14px, 3.6vw, 16px) !important;
+}
+html[data-version="2.0.19"] body[data-screen="fishing"] .v205-reel-panel p { margin: 4px 0 0 !important; font-size: 10.5px !important; line-height: 1.25 !important; }
+html[data-version="2.0.19"] body[data-screen="fishing"] .combo-badge { bottom: calc(clamp(96px, 13dvh, 118px) + env(safe-area-inset-bottom)) !important; z-index: 90 !important; }
+@media (max-width: 390px), (max-height: 680px) {
+  html[data-version="2.0.19"] body[data-screen="fishing"] .recent-catch-strip { height: 70px !important; min-height: 70px !important; padding: 8px 10px !important; }
+  html[data-version="2.0.19"] body[data-screen="fishing"] .recent-card { grid-template-columns: 30px minmax(0,1fr) auto !important; min-height: 38px !important; }
+  html[data-version="2.0.19"] body[data-screen="fishing"] .recent-card img { width: 30px !important; height: 30px !important; }
+  html[data-version="2.0.19"] body[data-screen="fishing"] .v840-stage-ui .cast-button,
+  html[data-version="2.0.19"] body[data-screen="fishing"] .cast-button { width: min(292px, 76vw) !important; height: 62px !important; min-height: 62px !important; bottom: calc(82px + env(safe-area-inset-bottom)) !important; }
+  html[data-version="2.0.19"] body[data-screen="fishing"] .reel-panel.v205-reel-panel { max-height: min(48dvh, 306px) !important; padding: 7px 8px 8px !important; }
+}

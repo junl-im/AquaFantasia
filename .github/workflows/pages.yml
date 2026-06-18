@@ -41,6 +41,9 @@ jobs:
         run: |
           node -e "const fs=require('fs'); const lock=fs.readFileSync('package-lock.json','utf8'); const bad=['applied-caas','artifactory','internal.api.openai','10.192.']; const hit=bad.find((token)=>lock.includes(token)); if(hit){ console.error('Forbidden internal registry token in package-lock:', hit); process.exit(1); } console.log('package-lock registry check passed');"
 
+      - name: NPM registry diagnostics
+        run: npm run ci:registry:check
+
       - name: Install
         run: |
           set +e

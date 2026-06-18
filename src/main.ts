@@ -41,6 +41,10 @@ const ASSET = {
   fishingCrystal: './assets/v205/fishing/crystal_sparkle.png',
   fishingAlert: './assets/v205/fishing/alert_icon.png',
   fishingDanger: './assets/v205/fishing/danger_warning.png',
+  fishingAmbientRing: './assets/v2012/props/water_ring.png',
+  fishingAmbientFoam: './assets/v2012/props/shore_foam.png',
+  fishingAmbientShadow: './assets/v2012/props/fish_shadow_mid.png',
+  fishingAmbientSplash: './assets/v2012/props/big_splash.png',
 };
 
 const V13_BG: Record<Exclude<Screen, 'login'>, string> = {
@@ -169,6 +173,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.buttonStyleQa = 'v11114-button-style-hotfix';
     document.documentElement.dataset.foundationFrameRescue = 'v11115-foundation-frame-rescue';
     document.documentElement.dataset.villagePolish = 'v2018-build-asset-polish';
+    document.documentElement.dataset.fishingPolish = 'v2019-fishing-stability-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -572,7 +577,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v205-fishing-asset-screen v207-fishing-safe-screen v209-fishing-qa-screen v2010-fishing-safe-screen v2011-fishing-safe-screen v2012-fishing-safe-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing v1112-content-flow-fishing v11113-detail-stability-fishing v11114-button-style-fishing v11115-foundation-frame-fishing locked-screen';
+    root.className = 'game-screen fishing-screen v2019-fishing-stability-screen v205-fishing-asset-screen v207-fishing-safe-screen v209-fishing-qa-screen v2010-fishing-safe-screen v2011-fishing-safe-screen v2012-fishing-safe-screen v840-fishing-screen v890-fishing-screen v930-action-screen v950-cute-fishing-screen v960-ui-readability-fishing-screen v970-nav-fishing-screen v980-water-ui-frame-fishing v101-ui-water-frame-fishing v102-ui-containment-fishing v103-ui-cleanup-fishing v104-ui-refinement-fishing v105-fishing-depth-fishing v106-swipe-nav-ui-fishing v107-clean-ui-fishing v109-clean-detail-fishing v110-micro-polish-fishing v111-layout-polish-fishing v1111-quality-engine-fishing v1112-premium-engine-fishing v1113-micro-detail-fishing v1114-pixel-polish-fishing v1115-layout-rescue-fishing v1116-ui-bounds-fishing v1117-viewport-safe-fishing v1118-layout-qa-fishing v1119-interaction-qa-fishing v1112-content-flow-fishing v11113-detail-stability-fishing v11114-button-style-fishing v11115-foundation-frame-fishing locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -586,6 +591,10 @@ class AquaFantasiaGame {
         <div class="caustic-overlay"></div>
         <img class="v205-fish-shadow v205-shadow-common" src="${ASSET.fishingShadowCommon}" alt="" aria-hidden="true" />
         <img class="v205-fish-shadow v205-shadow-large" src="${ASSET.fishingShadowLarge}" alt="" aria-hidden="true" />
+        <img class="v2019-fishing-prop v2019-water-ring" src="${ASSET.fishingAmbientRing}" alt="" aria-hidden="true" />
+        <img class="v2019-fishing-prop v2019-shore-foam" src="${ASSET.fishingAmbientFoam}" alt="" aria-hidden="true" />
+        <img class="v2019-fishing-prop v2019-fish-shadow" src="${ASSET.fishingAmbientShadow}" alt="" aria-hidden="true" />
+        <img class="v2019-fishing-prop v2019-splash-ready" src="${ASSET.fishingAmbientSplash}" alt="" aria-hidden="true" />
         <div class="fishing-guide-card v205-guide-card" aria-hidden="true"><strong>낚시 준비</strong><span data-fishing-tip>찌를 던지고 물었다!가 뜨면 화면을 눌러 당기세요.</span></div>
       </div>
       <div class="fishing-hud v840-fishing-hud v205-fishing-hud" aria-label="플레이어 정보">
@@ -852,6 +861,7 @@ class AquaFantasiaGame {
     this.biteText.zIndex = 40;
     this.player.anchor.set(0.5, 0.9);
     this.bobber.anchor.set(0.5, 0.5);
+    this.bobber.visible = false;
     this.catchSprite.anchor.set(0.5, 0.5);
     this.biteText.anchor.set(0.5);
     this.catchSprite.visible = false;
@@ -874,6 +884,7 @@ class AquaFantasiaGame {
     this.stageHost.addEventListener('lostpointercapture', () => { if (this.state === 'reeling') this.holding = false; });
     app.ticker.add(() => this.tick());
     this.state = 'idle';
+    this.setFishingPhase('idle');
   }
 
   private applyTextureFidelity(textures: unknown[]): void {
@@ -936,6 +947,16 @@ class AquaFantasiaGame {
     this.biteText.position.set(w * 0.34, h * 0.36);
   }
 
+  private setFishingPhase(phase: FishingState): void {
+    const screen = dom.app.querySelector<HTMLElement>('.fishing-screen');
+    const phases: FishingState[] = ['idle', 'casting', 'waiting', 'bite', 'reeling', 'success', 'fail'];
+    for (const item of phases) {
+      this.stageHost?.classList.toggle(`fishing-phase-${item}`, item === phase);
+      screen?.classList.toggle(`fishing-phase-${item}`, item === phase);
+    }
+    screen?.setAttribute('data-fishing-phase', phase);
+  }
+
   private createCastButton(): void {
     if (!this.uiLayer) return;
     this.uiLayer.innerHTML = `<button class="cast-button" type="button" aria-label="낚시 시작"><span class="cast-icon" aria-hidden="true"></span><strong>낚시 시작</strong></button>`;
@@ -954,7 +975,9 @@ class AquaFantasiaGame {
     this.syncFishingHud();
     this.activeFish = this.pickFish();
     void this.syncCatchSpriteTexture(this.activeFish);
+    this.bobber.visible = true;
     this.state = 'casting';
+    this.setFishingPhase('casting');
     this.stageHost?.classList.add('casting-mode');
     this.stageHost?.classList.remove('reeling-mode');
     this.castStart = performance.now();
@@ -971,6 +994,7 @@ class AquaFantasiaGame {
 
   private scheduleBite(): void {
     this.state = 'waiting';
+    this.setFishingPhase('waiting');
     this.stageHost?.classList.remove('casting-mode');
     this.stageHost?.classList.add('waiting-mode');
     this.setHint('입질을 기다리세요 · 물었다!가 뜨면 화면을 눌러 당기세요');
@@ -984,6 +1008,7 @@ class AquaFantasiaGame {
     playSound('bite');
     this.vibrate([30, 30, 20]);
     this.state = 'bite';
+    this.setFishingPhase('bite');
     if (this.biteText) this.biteText.visible = true;
     this.stageHost?.classList.remove('waiting-mode');
     this.stageHost?.classList.add('bite-mode');
@@ -999,6 +1024,7 @@ class AquaFantasiaGame {
     if (this.state !== 'bite') return;
     this.vibrate(20);
     this.state = 'reeling';
+    this.setFishingPhase('reeling');
     this.stageHost?.classList.remove('bite-mode', 'waiting-mode');
     this.stageHost?.classList.add('reeling-mode');
     this.tension = 46 + this.getRegion().difficulty * 5;
@@ -1018,6 +1044,7 @@ class AquaFantasiaGame {
   private finishCatch(success: boolean): void {
     if (this.state === 'success' || this.state === 'fail') return;
     this.state = success ? 'success' : 'fail';
+    this.setFishingPhase(this.state);
     this.holding = false;
     this.hideBiteCallout();
     this.reelPanel?.classList.add('hidden');
@@ -1102,7 +1129,7 @@ class AquaFantasiaGame {
   }
 
   private resetFishing(): void {
-    if (this.bobber) this.bobber.visible = true;
+    if (this.bobber) this.bobber.visible = false;
     if (this.catchSprite) this.catchSprite.visible = false;
     if (this.biteText) this.biteText.visible = false;
     this.hideBiteCallout();
@@ -1111,6 +1138,7 @@ class AquaFantasiaGame {
     this.stageHost?.querySelectorAll('.v930-fx, .action-badge').forEach((node) => node.remove());
     this.stageHost?.querySelector('.catch-result-card')?.remove();
     this.state = 'idle';
+    this.setFishingPhase('idle');
     this.castBtn?.classList.remove('hidden', 'pop-out');
     this.resizePixi();
     this.setHint('좋아요! 찌 던지기로 다음 물고기를 노려보세요');
@@ -1803,6 +1831,7 @@ class AquaFantasiaGame {
     if (this.fallbackTicker) window.clearInterval(this.fallbackTicker);
     this.fallbackTicker = window.setInterval(() => { if (this.fallbackMode) this.tick(); }, 1000 / 30);
     this.state = 'idle';
+    this.setFishingPhase('idle');
     this.setHint('HTML 대체 렌더로 안정 실행 중입니다');
   }
 
@@ -1817,6 +1846,7 @@ class AquaFantasiaGame {
     this.activeFish = this.pickFish();
     void this.syncCatchSpriteTexture(this.activeFish);
     this.state = 'casting';
+    this.setFishingPhase('casting');
     this.castBtn.classList.add('pop-out');
     if (this.comboNode) {
       this.comboNode.textContent = `연속 성공 x${Math.max(2, this.save.currentStreak)}`;
