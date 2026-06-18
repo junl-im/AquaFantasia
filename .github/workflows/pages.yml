@@ -3,6 +3,8 @@ name: validate-and-deploy
 on:
   push:
     branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
   workflow_dispatch:
 
 permissions:
@@ -11,36 +13,54 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
+
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          package-manager-cache: false
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Force public npm registry
+        run: |
+          npm config set registry https://registry.npmjs.org/
+          npm config set fetch-retries 5
+          npm config set fetch-retry-mintimeout 20000
+          npm config set fetch-retry-maxtimeout 120000
+          npm config get registry
+
+      - name: Guard package-lock registry
+        run: |
+          node -e "const fs=require('fs'); const lock=fs.readFileSync('package-lock.json','utf8'); const bad=['applied-caas','artifactory','internal.api.openai','10.192.']; const hit=bad.find((token)=>lock.includes(token)); if(hit){ console.error('Forbidden internal registry token in package-lock:', hit); process.exit(1); } console.log('package-lock registry check passed');"
+
       - name: Install
-        run: npm ci --ignore-scripts --no-audit --progress=false
+        run: npm run ci:install
+
       - name: Static validate
         run: npm run validate
+
       - name: Typecheck
         run: npm run typecheck
+
       - name: Build
         run: npm run build
+
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+
   deploy:
+    if: github.event_name != 'pull_request'
     needs: validate
     runs-on: ubuntu-latest
     environment:

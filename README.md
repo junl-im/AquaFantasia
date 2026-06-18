@@ -1,4 +1,4 @@
-# AquaFantasia v2.0.14
+# AquaFantasia v2.0.15
 
 고퀄리티 SD 해양 판타지 RPG 방향으로 전환 중인 PixiJS 기반 모바일 세로형 웹게임입니다. 현재 목표는 메뉴형 낚시 게임에서 벗어나, 플레이어가 직접 루미나 베이 마을을 돌아다니고 NPC, 건물, 항구, 건설 시스템을 자연스럽게 이용하는 첫 마을 RPG 기반을 완성하는 것입니다.
 
@@ -10,6 +10,45 @@
 - 조작: 좌측 가상 조이스틱, 터치 이동, 우측 간소 메뉴, 캐릭터 시점 확대/축소
 - 배포: GitHub Pages 가능 구조
 - 저장: 로컬 저장 우선, Firebase 연동 준비 구조 유지
+
+## v2.0.15 변경사항
+
+- validate-and-deploy 워크플로우 설치 실패 대응
+  - `package-lock.json`에 섞여 있던 내부 OpenAI/Artifactory 프록시 resolved URL을 공용 npm registry URL로 교체
+  - `applied-caas`, `artifactory`, `internal.api.openai`, `10.192.*` 토큰이 lockfile에 남아 있으면 검증에서 실패하도록 안전장치 추가
+  - `.npmrc`를 추가해 CI와 로컬 설치 모두 `https://registry.npmjs.org/`를 기본 registry로 사용
+  - `ci:install` 스크립트에 registry 고정과 fetch retry 옵션을 추가
+
+- GitHub Pages validate-and-deploy 안정화
+  - `.github/workflows/pages.yml`에서 `npm run ci:install`을 사용하도록 정리
+  - 설치 전 npm registry를 공용 npm으로 강제 설정
+  - 설치 전 `package-lock.json` 내부 registry 오염 여부를 먼저 검사
+  - `pull_request`에서는 validate/build까지만 수행하고 Pages 배포는 push/manual 실행에서만 수행
+
+- 다음 패치 전 필수 점검 항목 추가
+  - GitHub Actions의 `validate-and-deploy` workflow run에서 `Install`, `Static validate`, `Typecheck`, `Build`가 모두 통과하는지 확인
+  - 실패 시 먼저 `package-lock.json`에 내부 registry URL이 다시 들어갔는지 확인
+  - 새 패치 생성 시 `npm run validate`가 v2.0.15 CI registry 검사를 반드시 포함하는지 확인
+
+- 기존 플레이/UX 패치 유지
+  - v2.0.13 캐릭터 방향 반전 보정 유지
+  - v2.0.14 원화 배경 제거, 메뉴 도크 빈칸 제거, 스크롤 보정 유지
+  - 루트 문서는 계속 `README.md` 하나만 유지
+  - 별도 `*_NOTES.md`는 생성하지 않음
+
+### validate-and-deploy 확인 순서
+
+1. GitHub 저장소의 Actions 탭으로 이동
+2. `validate-and-deploy` workflow 선택
+3. 최신 run을 열고 아래 단계 확인
+   - `Force public npm registry` 통과
+   - `Guard package-lock registry` 통과
+   - `Install` 통과
+   - `Static validate` 통과
+   - `Typecheck` 통과
+   - `Build` 통과
+4. `Install`에서 `packages.applied-caas` 또는 `10.192.*`가 다시 보이면 lockfile이 오염된 것이므로 v2.0.15 패치를 다시 기준으로 사용
+
 
 
 ## v2.0.14 변경사항
