@@ -168,7 +168,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.detailStabilityQa = 'v11113-detail-stability-qa';
     document.documentElement.dataset.buttonStyleQa = 'v11114-button-style-hotfix';
     document.documentElement.dataset.foundationFrameRescue = 'v11115-foundation-frame-rescue';
-    document.documentElement.dataset.villagePolish = 'v2012-asset-character-world-polish';
+    document.documentElement.dataset.villagePolish = 'v2017-direction-ui-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -332,13 +332,13 @@ class AquaFantasiaGame {
     saveGame(this.save);
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen v209-asset-qa-screen v2010-village-clean-screen v2011-dock-safe-screen v2012-world-asset-screen v2013-world-safe-screen v2014-clean-village-screen v2016-world-stability-screen locked-screen';
+    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen v209-asset-qa-screen v2010-village-clean-screen v2011-dock-safe-screen v2012-world-asset-screen v2013-world-safe-screen v2014-clean-village-screen v2016-world-stability-screen v2017-direction-ui-screen locked-screen';
     root.classList.add('v108-home-main', 'v1110-village-flow');
     root.dataset.legacyVillageFlow = 'v1110-home-banner v1110-tide-card before v1110-region-panel';
     root.innerHTML = `
       <div class="v2-village-bg" aria-hidden="true"></div>
       <header class="v2-village-hud glass-card" aria-label="마을 상태">
-        <div class="v2-profile-chip"><span data-v2-level>Lv.${this.save.village.level}</span><strong>루미나 베이</strong><em>살아있는 첫 섬마을</em></div>
+        <button class="v2-profile-chip v2017-profile-button" type="button" data-v2017-profile aria-haspopup="dialog" aria-label="캐릭터 정보 열기"><span data-v2-level>마을 Lv.${this.save.village.level}</span><strong>나</strong><em>플레이어 Lv.${this.playerLevel()} · 클릭해서 정보 보기</em></button>
         <div class="v2-wallet-row">
           <span>골드 <strong data-v2-gold>${this.save.coins.toLocaleString('ko-KR')}</strong></span>
           <span>마을기금 <strong data-v2-fund>${this.save.village.fund.toLocaleString('ko-KR')}</strong></span>
@@ -353,6 +353,30 @@ class AquaFantasiaGame {
       <section class="v2-objective-card glass-card" aria-live="polite"><strong>오늘의 목표</strong><span data-v2-objective>길·꽃·벤치를 배치해서 관광객 100점을 먼저 열기</span></section>
       <section class="v2-village-guide glass-card" aria-live="polite"><strong>첫 마을</strong><span>좌측 조이스틱 이동 · 탭 이동 · 우측 하단 메뉴 · +/− 캐릭터 시점 줌</span></section>
       <section class="v2-dialog-panel glass-card" aria-live="polite"></section>
+      <section class="v2017-character-panel" data-v2017-character-panel aria-hidden="true" role="dialog" aria-modal="true" aria-label="캐릭터 정보">
+        <div class="v2017-character-backdrop" data-v2017-character-close></div>
+        <article class="v2017-character-card glass-card">
+          <button type="button" class="v2017-character-close" data-v2017-character-close aria-label="캐릭터 정보 닫기">×</button>
+          <div class="v2017-character-head">
+            <img src="./assets/v203/portraits/player_portrait.png" alt="" />
+            <div><span>CAPTAIN PROFILE</span><h2>나</h2><p>플레이어 Lv.${this.playerLevel()} · 루미나 베이 개척자</p></div>
+          </div>
+          <div class="v2017-character-stats">
+            <article><strong>${this.playerLevel()}</strong><span>플레이어 Lv.</span></article>
+            <article><strong>${this.save.village.level}</strong><span>마을 Lv.</span></article>
+            <article><strong>${this.totalCaught()}</strong><span>누적 포획</span></article>
+            <article><strong>${this.save.totalSuccess}</strong><span>낚시 성공</span></article>
+            <article><strong>${this.save.bestStreak}</strong><span>최고 콤보</span></article>
+            <article><strong>${this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel}</strong><span>장비 총합</span></article>
+          </div>
+          <p class="v2017-character-note">상단의 Lv 표기는 이제 마을 레벨로 명확히 표시합니다. 플레이어 레벨은 포획, 성공 횟수, 장비 성장도를 합산한 진행도 기준입니다.</p>
+          <div class="v2017-character-actions">
+            <button type="button" data-v2017-character-inventory>가방</button>
+            <button type="button" data-v2017-character-quest>퀘스트</button>
+            <button type="button" data-v2017-character-close>닫기</button>
+          </div>
+        </article>
+      </section>
       <section class="v203-interior-panel v206-interior-panel" aria-live="polite" aria-hidden="true">
         <div class="v203-interior-backdrop" data-v203-interior-close></div>
         <article class="v203-interior-card v206-interior-card glass-card">
@@ -417,6 +441,19 @@ class AquaFantasiaGame {
     root.querySelector<HTMLButtonElement>('[data-v206-interior-go-map]')?.addEventListener('click', () => { void this.go('map'); });
     root.querySelector<HTMLButtonElement>('[data-v206-interior-go-mission]')?.addEventListener('click', () => { void this.go('mission'); });
     root.querySelector<HTMLButtonElement>('[data-v206-interior-go-inventory]')?.addEventListener('click', () => { void this.go('inventory'); });
+    const characterPanel = root.querySelector<HTMLElement>('[data-v2017-character-panel]');
+    const openCharacterPanel = () => {
+      characterPanel?.classList.add('open');
+      characterPanel?.setAttribute('aria-hidden', 'false');
+    };
+    const closeCharacterPanel = () => {
+      characterPanel?.classList.remove('open');
+      characterPanel?.setAttribute('aria-hidden', 'true');
+    };
+    root.querySelector<HTMLButtonElement>('[data-v2017-profile]')?.addEventListener('click', openCharacterPanel);
+    root.querySelectorAll<HTMLElement>('[data-v2017-character-close]').forEach((node) => node.addEventListener('click', closeCharacterPanel));
+    root.querySelector<HTMLButtonElement>('[data-v2017-character-inventory]')?.addEventListener('click', () => { closeCharacterPanel(); void this.go('inventory'); });
+    root.querySelector<HTMLButtonElement>('[data-v2017-character-quest]')?.addEventListener('click', () => { closeCharacterPanel(); void this.go('mission'); });
   }
 
   private renderVillageFallback(): void {
@@ -452,7 +489,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v206-menu-detail-screen v207-menu-safe-screen v208-right-dock-screen v209-asset-qa-screen v2010-menu-full-screen v2011-menu-dock-screen v2012-menu-asset-screen v2013-menu-safe-screen v2014-menu-scroll-screen v2016-menu-stability-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen v11115-foundation-frame-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v206-menu-detail-screen v207-menu-safe-screen v208-right-dock-screen v209-asset-qa-screen v2010-menu-full-screen v2011-menu-dock-screen v2012-menu-asset-screen v2013-menu-safe-screen v2014-menu-scroll-screen v2016-menu-stability-screen v2017-menu-readability-screen v2017-quest-scroll-screen v880-runtime-screen v890-v3d-screen v950-cute-ui-screen v960-ui-readability-screen v970-nav-fishing-screen v980-water-ui-frame-screen v101-ui-water-frame-screen v102-ui-containment-screen v103-ui-cleanup-screen v104-ui-refinement-screen v105-fishing-depth-screen v106-swipe-nav-ui-screen v107-clean-ui-screen v108-home-shop-mission-screen v109-clean-detail-screen v110-micro-polish-screen v111-layout-polish-screen v1111-quality-engine-screen v1112-premium-engine-screen v1113-micro-detail-screen v1114-pixel-polish-screen v1115-layout-rescue-screen v1116-ui-bounds-screen v1117-viewport-safe-screen v1118-layout-qa-screen v1119-interaction-qa-screen v1112-content-flow-screen v11113-detail-stability-screen v11114-button-style-screen v11115-foundation-frame-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
@@ -1682,6 +1719,14 @@ class AquaFantasiaGame {
     if (this.save.bestStreak >= 6 || (this.save.mastery.dimension ?? 0) >= 4) unlocked.add('lunar');
     if (Object.values(this.save.missions).filter(Boolean).length >= 2 || this.save.totalSuccess >= 5) unlocked.add('reefFestival');
     this.save.unlockedRegions = Array.from(unlocked);
+  }
+
+  private playerLevel(): number {
+    const uniqueCaught = Object.keys(this.save.caught).filter((id) => (this.save.caught[id] ?? 0) > 0).length;
+    const totalCaught = this.totalCaught();
+    const gearTotal = this.save.gear.rodLevel + this.save.gear.reelLevel + this.save.gear.lineLevel;
+    const progress = this.save.totalSuccess * 2 + uniqueCaught * 3 + Math.floor(totalCaught / 4) + Math.max(0, gearTotal - 3);
+    return Math.max(1, Math.min(99, 1 + Math.floor(progress / 12)));
   }
 
   private totalCaught(): number {

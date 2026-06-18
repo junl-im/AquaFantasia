@@ -17581,3 +17581,266 @@ html.portrait-only-game body:not([data-screen="fishing"]):not([data-screen="logi
   .bottom-nav.v2016-safe-dock-nav button span { font-size: 6.4px !important; }
   .runtime-menu-screen.v2016-menu-stability-screen .runtime-content { max-width: calc(100vw - 16px) !important; }
 }
+
+/* v2.0.17 Direction/UI polish
+   Fixes: shorter keep-login button, faster village first paint, identity 8-direction mapping,
+   compact right controls, larger ghost dock icons, quest drag-scroll, character info panel, and high-contrast menu text. */
+html[data-version="2.0.17"] .start-art-screen .hit-server {
+  top: 67.0% !important;
+}
+html[data-version="2.0.17"] .start-art-screen .hit-keep.v810-keep-button.v11115-keep-toggle,
+html[data-version="2.0.17"] .start-art-screen .hit-keep.v810-keep-button,
+html[data-version="2.0.17"] .start-art-screen .hit-keep.v11115-keep-toggle {
+  left: 26.2% !important;
+  top: 77.35% !important;
+  width: 47.6% !important;
+  height: 4.75% !important;
+  min-height: 34px !important;
+  padding: 0 10px !important;
+  gap: 6px !important;
+  border-radius: 999px !important;
+}
+html[data-version="2.0.17"] .start-art-screen .hit-keep.v810-keep-button .keep-text,
+html[data-version="2.0.17"] .start-art-screen .hit-keep.v11115-keep-toggle .keep-text {
+  font-size: clamp(11px, 3vw, 14px) !important;
+  letter-spacing: -0.055em !important;
+}
+html[data-version="2.0.17"] .start-art-screen .hit-keep.v810-keep-button .keep-indicator,
+html[data-version="2.0.17"] .start-art-screen .hit-keep.v11115-keep-toggle .keep-indicator {
+  width: clamp(19px, 5.2vw, 23px) !important;
+  height: clamp(19px, 5.2vw, 23px) !important;
+  min-width: clamp(19px, 5.2vw, 23px) !important;
+  flex-basis: clamp(19px, 5.2vw, 23px) !important;
+}
+:root {
+  --v2016-dock-button: clamp(46px, 11.8vw, 54px);
+  --v2016-dock-icon: clamp(30px, 7.8vw, 36px);
+  --v2016-dock-gap: clamp(3px, 1vw, 5px);
+  --v2016-dock-width: calc(var(--v2016-dock-button) * 3 + var(--v2016-dock-gap) * 2);
+  --v2016-dock-height: calc(var(--v2016-dock-button) * 2 + var(--v2016-dock-gap));
+  --v2016-dock-safe-bottom: calc(var(--v2016-dock-height) + var(--v2016-dock-bottom) + 32px);
+}
+@media (max-width: 390px), (max-height: 680px) {
+  :root {
+    --v2016-dock-button: clamp(43px, 11.2vw, 48px);
+    --v2016-dock-icon: clamp(28px, 7.3vw, 32px);
+    --v2016-dock-gap: 3px;
+  }
+}
+.village-world-screen.v2017-direction-ui-screen .v2-world-controls {
+  gap: 5px !important;
+  bottom: calc(var(--v2016-dock-safe-bottom) + 14px) !important;
+  right: max(9px, env(safe-area-inset-right)) !important;
+}
+.village-world-screen.v2017-direction-ui-screen .v2-world-controls button {
+  min-width: 42px !important;
+  min-height: 38px !important;
+  padding: 4px 6px !important;
+  border-radius: 14px !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  box-shadow: 0 7px 15px rgba(35, 96, 124, 0.18), inset 0 1px 0 rgba(255,255,255,0.82) !important;
+}
+.village-world-screen.v2017-direction-ui-screen .v2-world-controls button img {
+  width: 18px !important;
+  height: 18px !important;
+  margin-bottom: 1px !important;
+}
+.village-world-screen.v2017-direction-ui-screen .v2-world-controls [data-village-build-open],
+.village-world-screen.v2017-direction-ui-screen .v2-world-controls [data-village-fishing] {
+  min-width: 50px !important;
+  min-height: 40px !important;
+  font-size: 12px !important;
+}
+.village-world-screen.v2017-direction-ui-screen .v2-profile-chip.v2017-profile-button {
+  appearance: none !important;
+  border: 0 !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  position: relative !important;
+  padding-right: 28px !important;
+  transition: transform .14s ease, filter .14s ease !important;
+}
+.village-world-screen.v2017-direction-ui-screen .v2-profile-chip.v2017-profile-button::after {
+  content: '정보' !important;
+  position: absolute !important;
+  right: 8px !important;
+  top: 8px !important;
+  padding: 3px 6px !important;
+  border-radius: 999px !important;
+  background: rgba(0, 62, 102, .34) !important;
+  color: #ffffff !important;
+  font-size: 9px !important;
+  font-weight: 1000 !important;
+  text-shadow: 0 1px 2px rgba(0, 22, 58, .55) !important;
+}
+.village-world-screen.v2017-direction-ui-screen .v2-profile-chip.v2017-profile-button:active {
+  transform: scale(.985) !important;
+  filter: brightness(1.04) !important;
+}
+.v2017-character-panel {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 90 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: max(18px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity .18s ease !important;
+}
+.v2017-character-panel.open {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+.v2017-character-backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  background: rgba(2, 22, 45, .48) !important;
+  backdrop-filter: blur(8px) saturate(1.12) !important;
+}
+.v2017-character-card {
+  position: relative !important;
+  z-index: 1 !important;
+  width: min(420px, calc(100vw - 28px)) !important;
+  max-height: min(78dvh, 640px) !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+  padding: 18px 16px 16px !important;
+  border-radius: 28px !important;
+  background: linear-gradient(150deg, rgba(238, 253, 255, .92), rgba(116, 216, 246, .82) 48%, rgba(19, 98, 155, .88)) !important;
+  color: #073a56 !important;
+  box-shadow: 0 26px 72px rgba(0, 18, 58, .44), inset 0 2px 0 rgba(255,255,255,.78) !important;
+}
+.v2017-character-close {
+  position: absolute !important;
+  right: 12px !important;
+  top: 12px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 999px !important;
+  background: rgba(4, 57, 91, .18) !important;
+  color: #073a56 !important;
+  font-weight: 1000 !important;
+}
+.v2017-character-head {
+  display: grid !important;
+  grid-template-columns: 74px 1fr !important;
+  gap: 12px !important;
+  align-items: center !important;
+  padding-right: 32px !important;
+}
+.v2017-character-head img {
+  width: 74px !important;
+  height: 74px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 8px 12px rgba(0, 30, 60, .22)) !important;
+}
+.v2017-character-head span,
+.v2017-character-note,
+.v2017-character-stats span {
+  color: rgba(5, 47, 73, .78) !important;
+  font-weight: 900 !important;
+}
+.v2017-character-head h2 {
+  margin: 2px 0 3px !important;
+  color: #063a58 !important;
+  font-size: 28px !important;
+  line-height: 1 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.65) !important;
+}
+.v2017-character-head p,
+.v2017-character-note { margin: 0 !important; line-height: 1.42 !important; }
+.v2017-character-stats {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin-top: 14px !important;
+}
+.v2017-character-stats article {
+  min-height: 62px !important;
+  padding: 9px 6px !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.52) !important;
+  border: 1px solid rgba(255,255,255,.62) !important;
+  text-align: center !important;
+}
+.v2017-character-stats strong {
+  display: block !important;
+  color: #063a58 !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+}
+.v2017-character-stats span { display: block !important; margin-top: 5px !important; font-size: 10px !important; }
+.v2017-character-note {
+  margin-top: 12px !important;
+  padding: 10px !important;
+  border-radius: 16px !important;
+  background: rgba(255,255,255,.38) !important;
+  font-size: 12px !important;
+}
+.v2017-character-actions {
+  display: flex !important;
+  gap: 8px !important;
+  margin-top: 12px !important;
+}
+.v2017-character-actions button {
+  flex: 1 1 0 !important;
+  min-height: 38px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(135deg, #ffffff, #8ceeff) !important;
+  color: #073a56 !important;
+  font-weight: 1000 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 8px 18px rgba(0, 44, 88, .16) !important;
+}
+.runtime-menu-screen.v2017-menu-readability-screen {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  touch-action: pan-y !important;
+  overscroll-behavior-y: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+.runtime-menu-screen.v2017-menu-readability-screen :is(.runtime-hero-card,.runtime-panel,.runtime-menu-card,.runtime-item-card,.gear-card,.shop-card,.mission-card,.v204-window-card,.v204-map-shell,.v204-inventory-shell,.v206-quest-board,.v206-catch-ledger) {
+  color: #063a58 !important;
+}
+.runtime-menu-screen.v2017-menu-readability-screen :is(.runtime-hero-card h2,.runtime-panel-title strong,.runtime-menu-card strong,.runtime-item-card strong,.gear-card strong,.shop-card strong,.mission-card strong,.v204-board-title strong) {
+  color: #062f4d !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.72), 0 0 3px rgba(255,255,255,.42) !important;
+}
+.runtime-menu-screen.v2017-menu-readability-screen :is(.runtime-hero-card p,.runtime-menu-card span,.runtime-item-card span,.gear-card span,.shop-card small,.mission-card span,.ranking-note,.v204-board-title span) {
+  color: rgba(4, 42, 66, .84) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.48) !important;
+}
+.runtime-menu-screen.v2017-menu-readability-screen :is(.runtime-btn,.compact-cta,.btn-aqua-action,.btn-gold-cost,.image-btn) {
+  text-shadow: 0 1px 2px rgba(0, 27, 54, .58) !important;
+  -webkit-text-stroke: .25px rgba(0, 18, 46, .35) !important;
+}
+.runtime-menu-screen.v2017-menu-readability-screen .runtime-btn.gold,
+.runtime-menu-screen.v2017-menu-readability-screen .btn-gold-cost {
+  color: #5f3200 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.65) !important;
+  -webkit-text-stroke: 0 transparent !important;
+}
+.runtime-menu-screen.v2017-quest-scroll-screen.mission-screen,
+.runtime-menu-screen.v2017-quest-scroll-screen.mission-screen.scroll-screen {
+  overflow-y: scroll !important;
+  height: var(--portrait-height, 100dvh) !important;
+  min-height: 0 !important;
+  touch-action: pan-y !important;
+  padding-bottom: calc(var(--v2016-dock-safe-bottom) + 28px) !important;
+}
+.runtime-menu-screen.v2017-quest-scroll-screen.mission-screen .runtime-content {
+  min-height: calc(var(--portrait-height, 100dvh) + 1px) !important;
+  padding-bottom: calc(var(--v2016-dock-safe-bottom) + 96px) !important;
+  touch-action: pan-y !important;
+}
+.runtime-menu-screen.v2017-quest-scroll-screen.mission-screen .v204-full-quest-list,
+.runtime-menu-screen.v2017-quest-scroll-screen.mission-screen .mission-list {
+  touch-action: pan-y !important;
+  overscroll-behavior: contain !important;
+  padding-bottom: calc(var(--v2016-dock-safe-bottom) + 48px) !important;
+}
+.runtime-menu-screen.v2017-quest-scroll-screen.mission-screen .mission-card {
+  touch-action: pan-y !important;
+}

@@ -73,9 +73,11 @@ type Actor = {
   path: Array<[number, number]>;
   node: Container;
   body: Graphics | Sprite;
+  shadow: Graphics;
   label: Text;
   direction: ActorDirection;
   mood: string;
+  walkPhase: number;
   talk: string[];
   targetTimer: number;
 };
@@ -203,28 +205,28 @@ const ACTOR_TEXTURES: Record<Actor['role'], string> = {
 const ACTOR_DIRECTIONS: ActorDirection[] = ['south', 'southeast', 'east', 'northeast', 'north', 'northwest', 'west', 'southwest'];
 
 const ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
-  // v2.0.13/v2.0.14: the supplied 8-direction sheet is visually opposite to the runtime
-  // screen movement in the current isometric camera, so texture lookup is corrected
-  // without changing actual movement/pathfinding.
-  south: 'north',
-  southeast: 'northwest',
-  east: 'west',
-  northeast: 'southwest',
-  north: 'south',
-  northwest: 'southeast',
-  west: 'east',
-  southwest: 'northeast',
+  // v2.0.17: 파일명이 실제 바라보는 방향의 기준이다.
+  // 조이스틱/이동 벡터가 west이면 player_west.png를 그대로 사용한다.
+  // 예전 opposite 보정은 좌우 반전을 반복 유발해서 완전히 제거했다.
+  south: 'south',
+  southeast: 'southeast',
+  east: 'east',
+  northeast: 'northeast',
+  north: 'north',
+  northwest: 'northwest',
+  west: 'west',
+  southwest: 'southwest',
 };
 
 const ACTOR_DIRECTION_QA_VECTORS: Array<{ movement: ActorDirection; dx: number; dy: number; texture: ActorDirection }> = [
-  { movement: 'north', dx: 0, dy: -1, texture: 'south' },
-  { movement: 'south', dx: 0, dy: 1, texture: 'north' },
-  { movement: 'west', dx: -1, dy: 0, texture: 'east' },
-  { movement: 'east', dx: 1, dy: 0, texture: 'west' },
-  { movement: 'northwest', dx: -1, dy: -1, texture: 'southeast' },
-  { movement: 'northeast', dx: 1, dy: -1, texture: 'southwest' },
-  { movement: 'southwest', dx: -1, dy: 1, texture: 'northeast' },
-  { movement: 'southeast', dx: 1, dy: 1, texture: 'northwest' },
+  { movement: 'north', dx: 0, dy: -1, texture: 'north' },
+  { movement: 'south', dx: 0, dy: 1, texture: 'south' },
+  { movement: 'west', dx: -1, dy: 0, texture: 'west' },
+  { movement: 'east', dx: 1, dy: 0, texture: 'east' },
+  { movement: 'northwest', dx: -1, dy: -1, texture: 'northwest' },
+  { movement: 'northeast', dx: 1, dy: -1, texture: 'northeast' },
+  { movement: 'southwest', dx: -1, dy: 1, texture: 'southwest' },
+  { movement: 'southeast', dx: 1, dy: 1, texture: 'southeast' },
 ];
 
 
@@ -406,6 +408,16 @@ const BUILD_PROP_TARGET_HEIGHT: Partial<Record<VillageBuildingType, number>> = {
   fountain: 104,
   flower: 58,
 };
+
+const CRITICAL_DECO_KINDS: DecoKind[] = [
+  'tree', 'palm', 'tropicalTree', 'palmAlt', 'lamp', 'bench', 'dock', 'flag', 'rock', 'flowerBed',
+  'lighthouse', 'stall', 'questBoard', 'coral', 'crystal', 'banner', 'woodFence', 'ropeFence',
+  'bollard', 'stairs', 'bridge', 'woodSign', 'ropeWall', 'stoneCorner', 'stoneCurve', 'wideStairs', 'ropeCorner',
+];
+
+function uniqueUrls(urls: Array<string | undefined>): string[] {
+  return Array.from(new Set(urls.filter((url): url is string => Boolean(url))));
+}
 
 function pickTileTexture(kind: VillageTileKind, x: number, y: number): string | undefined {
   const list = TILE_TEXTURES[kind];
@@ -624,12 +636,13 @@ export class VillageWorld {
     app.stage.addChild(this.world);
     this.world.addChild(this.tileLayer, this.buildingLayer, this.decorationLayer, this.labelLayer, this.actorLayer, this.markerLayer, this.previewLayer);
     this.generateTiles();
-    await this.loadTextures();
+    await this.loadCriticalTextures();
     if (!actorDirectionQaPasses()) console.warn('[AquaFantasia] actor direction QA mapping mismatch');
     this.renderTiles();
     this.renderBuildings();
     this.renderDecorations();
     this.spawnActors();
+    this.loadDeferredTextures();
     this.bindStageInput();
     this.bindUi();
     this.resize();
@@ -750,24 +763,58 @@ export class VillageWorld {
     }
   }
 
-  private async loadTextures(): Promise<void> {
-    const urls = Array.from(new Set([
-      ...Object.values(BUILD_DEFS).map((def) => def.texture).filter((url): url is string => Boolean(url)),
+  private allTextureUrls(): string[] {
+    return uniqueUrls([
+      ...Object.values(BUILD_DEFS).map((def) => def.texture),
       ...Object.values(ACTOR_TEXTURES),
       ...Object.values(ACTOR_DIRECTION_TEXTURES).flatMap((directions) => Object.values(directions)),
       ...Object.values(TILE_TEXTURES).flat(),
-      ...Object.values(DECO_TEXTURES).filter((url): url is string => Boolean(url)),
-      ...Object.values(BUILD_PROP_TEXTURES).filter((url): url is string => Boolean(url)),
-    ]));
+      ...Object.values(DECO_TEXTURES),
+      ...Object.values(BUILD_PROP_TEXTURES),
+    ]);
+  }
+
+  private criticalTextureUrls(): string[] {
+    return uniqueUrls([
+      ...Object.values(BUILD_DEFS).map((def) => def.texture),
+      ...Object.values(TILE_TEXTURES).flat(),
+      ...Object.values(BUILD_PROP_TEXTURES),
+      ...Object.values(ACTOR_TEXTURES),
+      ...Object.values(ACTOR_DIRECTION_TEXTURES.player),
+      ...CRITICAL_DECO_KINDS.map((kind) => DECO_TEXTURES[kind]),
+    ]);
+  }
+
+  private async loadTextureSet(urls: string[], label: string): Promise<void> {
+    const pending = urls.filter((url) => !this.textures.has(url));
+    if (!pending.length) return;
     try {
-      const result = await Assets.load(urls);
-      for (const url of urls) {
+      const result = await Assets.load(pending);
+      for (const url of pending) {
         const texture = result[url] as Texture | undefined;
         if (texture) this.textures.set(url, texture);
       }
     } catch (error) {
-      console.warn('[AquaFantasia] village texture load skipped', error);
+      console.warn(`[AquaFantasia] village ${label} texture load skipped`, error);
     }
+  }
+
+  private async loadCriticalTextures(): Promise<void> {
+    await this.loadTextureSet(this.criticalTextureUrls(), 'critical');
+  }
+
+  private loadDeferredTextures(): void {
+    const rest = this.allTextureUrls().filter((url) => !this.textures.has(url));
+    if (!rest.length) return;
+    window.setTimeout(() => {
+      void this.loadTextureSet(rest, 'deferred').then(() => {
+        if (this.destroyed) return;
+        this.renderDecorations();
+        for (const actor of [this.player, ...this.npcs]) {
+          if (actor) this.applyActorTexture(actor, actor.direction);
+        }
+      });
+    }, 80);
   }
 
   private tileColor(kind: VillageTileKind): number {
@@ -1075,9 +1122,11 @@ export class VillageWorld {
       path: [],
       node,
       body,
+      shadow,
       label,
       direction: 'south',
       mood,
+      walkPhase: 0,
       talk: role === 'player' ? [] : DAY_TALK[role as WorldNpcRole] ?? DAY_TALK.tourist,
       targetTimer: 1400 + Math.random() * 3200,
     };
@@ -1256,7 +1305,9 @@ export class VillageWorld {
     }
     this.player.node.position.set(this.player.x, this.player.y);
     this.player.node.zIndex = this.player.tileY * 20 + 16;
-    if (Math.hypot(dx, dy) > 0.2) this.setActorDirection(this.player, dx, dy);
+    const movementAmount = Math.hypot(dx, dy);
+    if (movementAmount > 0.2) this.setActorDirection(this.player, dx, dy);
+    this.animateActorWalk(this.player, movementAmount, deltaMs);
   }
 
   private handlePointerTap(ev: PointerEvent): void {
@@ -1523,8 +1574,29 @@ export class VillageWorld {
     }
   }
 
+  private animateActorWalk(actor: Actor, movementAmount: number, deltaMs: number): void {
+    const walking = movementAmount > 0.18;
+    if (walking) actor.walkPhase += deltaMs * 0.015;
+    else actor.walkPhase *= 0.72;
+    const bob = walking ? Math.sin(actor.walkPhase) * 3.2 : 0;
+    const sway = walking ? Math.sin(actor.walkPhase * 0.5) * 0.035 : 0;
+    if (actor.body instanceof Sprite) {
+      actor.body.position.y = 14 + bob;
+      actor.body.rotation = sway;
+    } else {
+      actor.body.rotation = sway;
+    }
+    const shadowPulse = walking ? 1 + Math.abs(Math.sin(actor.walkPhase)) * 0.08 : 1;
+    actor.shadow.scale.set(shadowPulse, 1 / shadowPulse);
+    actor.label.scale.x = 1;
+  }
+
   private updateActor(actor: Actor | undefined, deltaMs: number): void {
-    if (!actor || actor.path.length === 0) return;
+    if (!actor) return;
+    if (actor.path.length === 0) {
+      this.animateActorWalk(actor, 0, deltaMs);
+      return;
+    }
     const [tx, ty] = actor.path[0];
     const target = centerOfTile(tx, ty);
     const dx = target.x - actor.x;
@@ -1545,7 +1617,9 @@ export class VillageWorld {
     }
     actor.node.position.set(actor.x, actor.y);
     actor.node.zIndex = actor.tileY * 20 + 16;
-    if (Math.hypot(dx, dy) > 1) this.setActorDirection(actor, dx, dy);
+    const movementAmount = Math.hypot(dx, dy);
+    if (movementAmount > 1) this.setActorDirection(actor, dx, dy);
+    this.animateActorWalk(actor, movementAmount, deltaMs);
   }
 
   private setActorDirection(actor: Actor, dx: number, dy: number): void {
@@ -1605,7 +1679,7 @@ export class VillageWorld {
       hud.querySelector<HTMLElement>('[data-v2-gold]')!.textContent = this.save.coins.toLocaleString('ko-KR');
       hud.querySelector<HTMLElement>('[data-v2-fund]')!.textContent = this.save.village.fund.toLocaleString('ko-KR');
       hud.querySelector<HTMLElement>('[data-v2-dev]')!.textContent = `${score}`;
-      hud.querySelector<HTMLElement>('[data-v2-level]')!.textContent = `Lv.${this.save.village.level}`;
+      hud.querySelector<HTMLElement>('[data-v2-level]')!.textContent = `마을 Lv.${this.save.village.level}`;
       hud.querySelector<HTMLElement>('[data-v2-tourists]')!.textContent = String(this.save.village.tourists);
     }
     const objective = this.root.querySelector<HTMLElement>('[data-v2-objective]');
