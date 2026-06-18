@@ -11,11 +11,11 @@ const main = read('src/main.ts');
 const css = read('src/styles.css');
 const village = read('src/villageWorld.ts');
 
-must(pkg.version === '2.0.32', 'package.json version must be 2.0.32');
-must(data.includes("APP_VERSION = '2.0.32'"), 'APP_VERSION must be 2.0.32');
-must(data.includes('aqua-fantasia-v2.0.32-pixel-perfect-audit'), 'cache name must use v2.0.32 pixel-perfect lineage');
-must(read('public/sw.js').includes('aqua-fantasia-v2.0.32-pixel-perfect-audit'), 'service worker cache must use v2.0.32');
-must(read('public/offline.html').includes('v2.0.32'), 'offline badge must be v2.0.32');
+must(/^2\.0\.(3[2-9]|[4-9][0-9])$/.test(pkg.version), 'package.json version must preserve v2.0.32+ playability lineage');
+must(/APP_VERSION = '2\.0\.(3[2-9]|[4-9][0-9])'/.test(data), 'APP_VERSION must preserve v2.0.32+ playability lineage');
+must(/aqua-fantasia-v2\.0\.(3[2-9]|[4-9][0-9])-/.test(data), 'cache name must preserve v2.0.32+ lineage');
+must(/aqua-fantasia-v2\.0\.(3[2-9]|[4-9][0-9])-/.test(read('public/sw.js')), 'service worker cache must preserve v2.0.32+ lineage');
+must(/v2\.0\.(3[2-9]|[4-9][0-9])/.test(read('public/offline.html')), 'offline badge must preserve v2.0.32+ lineage');
 
 for (const token of [
   "dataset.v2032PlayabilityRepair = 'v2032-fishing-hud-dock-playable-repair'",
@@ -54,8 +54,8 @@ for (const token of [
   'this.camera.y = center.y - this.pinchCenterWorld.y * nextScale;',
 ]) must(village.includes(token), `villageWorld.ts missing pinch-center token ${token}`);
 
-must(!/html\[data-version="2\.0\.32"\]/.test(css), 'v2032 repair must not be scoped to data-version');
+must(!/html\[data-version="2\.0\.3[2-9]"\]/.test(css), 'v2032+ repair must not be scoped to data-version');
 must(!/(packages\.applied-caas|applied-caas-gateway|10\.192\.|internal\.api\.openai)/.test(lock), 'internal registry contamination found in package-lock');
 must(!/reports\//.test(lock), 'lockfile unexpectedly references reports directory');
 
-console.log('[AquaFantasia] v2.0.32 playability repair validation passed.');
+console.log('[AquaFantasia] v2.0.32+ playability repair validation passed.');
