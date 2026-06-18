@@ -13,11 +13,11 @@ const sw = read('public/sw.js');
 const offline = read('public/offline.html');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.35', 'package.json version must be 2.0.35');
-must(data.includes("APP_VERSION = '2.0.35'"), 'APP_VERSION must be 2.0.35');
-must(data.includes('aqua-fantasia-v2.0.35-direction-fishing-menu-repair'), 'CACHE_NAME must be v2.0.35 direction/fishing/menu repair cache');
-must(sw.includes('aqua-fantasia-v2.0.35-direction-fishing-menu-repair'), 'service worker cache must be v2.0.35 repair cache');
-must(offline.includes('v2.0.35'), 'offline badge must mention v2.0.35');
+must(/^2\.0\.(3[5-9]|[4-9][0-9])$/.test(pkg.version), 'package.json version must be 2.0.35 or later');
+must(/APP_VERSION = '2\.0\.(3[5-9]|[4-9][0-9])'/.test(data), 'APP_VERSION must be 2.0.35 or later');
+must(/aqua-fantasia-v2\.0\.(3[5-9]|[4-9][0-9])-/.test(data), 'CACHE_NAME must be v2.0.35 or later');
+must(/aqua-fantasia-v2\.0\.(3[5-9]|[4-9][0-9])-/.test(sw), 'service worker cache must be v2.0.35 or later');
+must(/v2\.0\.(3[5-9]|[4-9][0-9])/.test(offline), 'offline badge must mention v2.0.35 or later');
 
 for (const token of [
   "dataset.v2035FinalPolish = 'v2035-direction-fishing-menu-repair'",
@@ -65,4 +65,4 @@ must(!/html\[data-version="2\.0\.35"\]/.test(css), 'v2035 CSS must not be scoped
 for (const forbidden of ['packages.applied-caas', 'applied-caas-gateway', '10.192.', 'internal.api.openai']) {
   must(!lock.includes(forbidden), `package-lock contains forbidden registry token ${forbidden}`);
 }
-console.log('[AquaFantasia] v2.0.35 direction/fishing/menu repair validation passed.');
+console.log('[AquaFantasia] v2.0.35+ direction/fishing/menu repair validation passed.');
