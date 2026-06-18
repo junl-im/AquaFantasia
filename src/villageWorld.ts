@@ -207,18 +207,18 @@ const ACTOR_TEXTURES: Record<Actor['role'], string> = {
 const ACTOR_DIRECTIONS: ActorDirection[] = ['south', 'southeast', 'east', 'northeast', 'north', 'northwest', 'west', 'southwest'];
 
 const ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
-  // v2.0.33: 사용자가 확인한 실제 v2023 대각선 에셋 기준.
-  // 1시 입력은 northeast 이동이지만 파일 시각은 southeast 쪽이 맞고,
-  // 5시 입력은 southeast 이동이지만 파일 시각은 northeast 쪽이 맞다.
-  // 좌/우/상/하 및 7시/11시는 기존 파일명=방향 원칙을 유지한다.
+  // v2.0.35: v2023 diagonal source files are horizontally mirrored from the clock input.
+  // User QA: 1시 showed 7시 and 5시 showed 11시. The correct repair is not
+  // northeast<->southeast, but right-diagonal input -> opposite left/right file in
+  // the same north/south half. This keeps cardinal directions untouched.
   south: 'south',
-  southeast: 'northeast',
+  southeast: 'southwest',
   east: 'east',
-  northeast: 'southeast',
+  northeast: 'northwest',
   north: 'north',
-  northwest: 'northwest',
+  northwest: 'northeast',
   west: 'west',
-  southwest: 'southwest',
+  southwest: 'southeast',
 };
 
 const ACTOR_DIRECTION_QA_VECTORS: Array<{ movement: ActorDirection; dx: number; dy: number; texture: ActorDirection }> = [
@@ -226,15 +226,15 @@ const ACTOR_DIRECTION_QA_VECTORS: Array<{ movement: ActorDirection; dx: number; 
   { movement: 'south', dx: 0, dy: 1, texture: 'south' },
   { movement: 'west', dx: -1, dy: 0, texture: 'west' },
   { movement: 'east', dx: 1, dy: 0, texture: 'east' },
-  { movement: 'northwest', dx: -1, dy: -1, texture: 'northwest' },
-  { movement: 'northeast', dx: 1, dy: -1, texture: 'southeast' },
-  { movement: 'southwest', dx: -1, dy: 1, texture: 'southwest' },
-  { movement: 'southeast', dx: 1, dy: 1, texture: 'northeast' },
-  // v2.0.31: clock-direction QA. 1시/5시 입력은 축 방향이 아니라 대각 방향이어야 한다.
-  { movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'southeast' },
-  { movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'northeast' },
-  { movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'northwest' },
-  { movement: 'southwest', dx: -0.5, dy: 0.866, texture: 'southwest' },
+  { movement: 'northwest', dx: -1, dy: -1, texture: 'northeast' },
+  { movement: 'northeast', dx: 1, dy: -1, texture: 'northwest' },
+  { movement: 'southwest', dx: -1, dy: 1, texture: 'southeast' },
+  { movement: 'southeast', dx: 1, dy: 1, texture: 'southwest' },
+  // v2.0.35: clock-direction QA. 1시/5시 must stay diagonal and use the corrected visual file.
+  { movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northwest' },
+  { movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southwest' },
+  { movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'northeast' },
+  { movement: 'southwest', dx: -0.5, dy: 0.866, texture: 'southeast' },
 ];
 
 

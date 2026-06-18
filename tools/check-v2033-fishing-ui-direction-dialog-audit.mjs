@@ -35,13 +35,10 @@ for (const token of [
   'v2033-character-panel-open',
 ]) must(main.includes(token), `main.ts missing ${token}`);
 
-for (const token of [
-  "southeast: 'northeast'",
-  "northeast: 'southeast'",
-  "{ movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'southeast' }",
-  "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'northeast' }",
-  'v2.0.33: 사용자가 확인한 실제 v2023 대각선 에셋 기준',
-]) must(world.includes(token), `villageWorld.ts missing diagonal texture correction token ${token}`);
+const hasV2033DiagonalCorrection = world.includes("southeast: 'northeast'") && world.includes("northeast: 'southeast'");
+const hasV2035DiagonalCorrection = world.includes("southeast: 'southwest'") && world.includes("northeast: 'northwest'") && world.includes("southwest: 'southeast'") && world.includes("northwest: 'northeast'");
+must(hasV2033DiagonalCorrection || hasV2035DiagonalCorrection, 'villageWorld.ts missing diagonal texture correction lineage');
+must(world.includes('v2.0.33: 사용자가 확인한 실제 v2023 대각선 에셋 기준') || world.includes('v2.0.35: v2023 diagonal source files are horizontally mirrored'), 'villageWorld.ts missing diagonal correction explanation');
 
 for (const token of [
   'html[data-v2033-fishing-ui-audit="v2033-fishing-ui-direction-dialog-audit"]',

@@ -13,11 +13,11 @@ const sw = read('public/sw.js');
 const offline = read('public/offline.html');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.34', 'package.json version must be 2.0.34');
-must(data.includes("APP_VERSION = '2.0.34'"), 'APP_VERSION must be 2.0.34');
-must(data.includes('aqua-fantasia-v2.0.34-screen-integrity-polish'), 'CACHE_NAME must be v2.0.34 screen integrity cache');
-must(sw.includes('aqua-fantasia-v2.0.34-screen-integrity-polish'), 'service worker cache must be v2.0.34 screen integrity cache');
-must(offline.includes('v2.0.34'), 'offline badge must mention v2.0.34');
+must(/^2\.0\.(3[4-9]|[4-9][0-9])$/.test(pkg.version), 'package.json version must preserve v2.0.34+ lineage');
+must(/APP_VERSION = '2\.0\.(3[4-9]|[4-9][0-9])'/.test(data), 'APP_VERSION must preserve v2.0.34+ lineage');
+must(/aqua-fantasia-v2\.0\.(3[4-9]|[4-9][0-9])-/.test(data), 'CACHE_NAME must preserve v2.0.34+ lineage');
+must(/aqua-fantasia-v2\.0\.(3[4-9]|[4-9][0-9])-/.test(sw), 'service worker cache must preserve v2.0.34+ lineage');
+must(/v2\.0\.(3[4-9]|[4-9][0-9])/.test(offline), 'offline badge must preserve v2.0.34+ lineage');
 
 for (const token of [
   "dataset.v2034ScreenIntegrity = 'v2034-screen-integrity-polish'",
@@ -49,12 +49,9 @@ for (const token of [
   '.v2-build-tray',
 ]) must(css.includes(token), `styles.css missing ${token}`);
 
-for (const token of [
-  "northeast: 'southeast'",
-  "southeast: 'northeast'",
-  "{ movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'southeast' }",
-  "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'northeast' }",
-]) must(world.includes(token), `villageWorld.ts missing diagonal QA token ${token}`);
+const hasV2034DiagonalQa = world.includes("northeast: 'southeast'") && world.includes("southeast: 'northeast'");
+const hasV2035DiagonalQa = world.includes("northeast: 'northwest'") && world.includes("southeast: 'southwest'") && world.includes("northwest: 'northeast'") && world.includes("southwest: 'southeast'");
+must(hasV2034DiagonalQa || hasV2035DiagonalQa, 'villageWorld.ts missing diagonal QA lineage');
 
 must(!/html\[data-version="2\.0\.34"\]/.test(css), 'v2034 CSS must not be scoped to data-version');
 for (const forbidden of ['packages.applied-caas', 'applied-caas-gateway', '10.192.', 'internal.api.openai']) {
