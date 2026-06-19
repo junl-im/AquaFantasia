@@ -1,4 +1,4 @@
-# AquaFantasia v2.0.45
+# AquaFantasia v2.0.46
 
 AquaFantasia는 Vite + TypeScript + PixiJS 8 기반의 모바일 세로모드 SD 해양 판타지 마을 RPG입니다.
 
@@ -19,6 +19,16 @@ npm run validate
 npm run typecheck
 npm run build
 ```
+
+## v2.0.46 변경사항
+
+- 우측 상단 조작바와 우측 하단 메뉴 도크에 완전 투명 대신 얇은 아쿠아 톤 테두리/배경을 다시 적용해 버튼 묶음이 허전하게 보이지 않도록 했습니다.
+- 우측 하단 메뉴 도크를 앱 내부가 아닌 body 고정 오버레이로 마운트해 낚시 화면에서 하단 절반이 잘려 보이는 문제를 회피하도록 보강했습니다.
+- 낚시 릴링 단계에 큰 `누르는 동안 릴 감기` 버튼과 설명을 추가하고, 릴 버튼뿐 아니라 바다 화면을 누르고 있어도 장력 입력이 들어가도록 전체 낚시 화면 홀드 입력을 추가했습니다.
+- `물었다!` 콜아웃에 `릴링 시작` 버튼을 추가하고, 사용자가 놓쳐도 짧은 지연 후 릴 패널이 자동으로 뜨도록 해 멍하게 기다리다 실패하는 흐름을 줄였습니다.
+- 낚시 릴 패널 위치를 새 도크 높이 기준으로 다시 계산하고, 패널/버튼/콜아웃의 z-index와 pointer-events를 재잠금했습니다.
+- v2.0.46 전용 정적 검증 스크립트 `check-v2046-fishing-dock-reel-repair.mjs`를 추가했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge, README를 `2.0.46`으로 동기화했습니다.
 
 ## v2.0.45 변경사항
 

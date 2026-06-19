@@ -17,12 +17,8 @@ const readme = read('README.md');
 const lock = read('package-lock.json');
 
 const version = String(pkg.version);
-must(version === '2.0.45', 'package.json version must be 2.0.45');
-has(data, "APP_VERSION = '2.0.45'", 'APP_VERSION 2.0.45');
-has(data, 'aqua-fantasia-v2.0.45-direction-asset-engine-audit', 'data cache v2.0.45');
-has(sw, 'aqua-fantasia-v2.0.45-direction-asset-engine-audit', 'sw cache v2.0.45');
-has(offline, 'v2.0.45', 'offline badge v2.0.45');
-has(readme, '# AquaFantasia v2.0.45', 'README title v2.0.45');
+const [major, minor, patch] = version.split('.').map(Number);
+must(major === 2 && minor === 0 && patch >= 45, 'package.json version must be 2.0.45 or newer');
 has(readme, '## v2.0.45', 'README v2.0.45 changelog');
 
 for (const token of [
