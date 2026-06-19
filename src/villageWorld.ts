@@ -472,9 +472,9 @@ function actorDirectionQaPasses(): boolean {
 const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'lighthouse', x: 6, y: 5, blocks: true, scale: 1.06 },
   { kind: 'tree', x: 4, y: 10, blocks: true }, { kind: 'tree', x: 8, y: 8, blocks: true },
-  { kind: 'tree', x: 31, y: 9, blocks: true }, { kind: 'tree', x: 34, y: 14, blocks: true },
-  { kind: 'palm', x: 6, y: 33, blocks: true }, { kind: 'palm', x: 31, y: 33, blocks: true },
-  { kind: 'rock', x: 3, y: 28, blocks: true, scale: .9 }, { kind: 'rock', x: 36, y: 27, blocks: true, scale: .88 },
+  { kind: 'tree', x: 31, y: 9, blocks: true }, { kind: 'tree', x: 33, y: 15, blocks: false, scale: .68 },
+  { kind: 'palm', x: 8, y: 32, blocks: false, scale: .66 }, { kind: 'palm', x: 30, y: 32, blocks: false, scale: .66 },
+  { kind: 'rock', x: 5, y: 28, blocks: false, scale: .52 }, { kind: 'rock', x: 34, y: 27, blocks: false, scale: .52 },
   { kind: 'lamp', x: 17, y: 18 }, { kind: 'lamp', x: 22, y: 18 }, { kind: 'lamp', x: 17, y: 23 }, { kind: 'lamp', x: 22, y: 23 },
   { kind: 'bench', x: 16, y: 20 }, { kind: 'bench', x: 23, y: 20 },
   { kind: 'flowerBed', x: 15, y: 17 }, { kind: 'flowerBed', x: 24, y: 17 }, { kind: 'flowerBed', x: 15, y: 24 }, { kind: 'flowerBed', x: 24, y: 24 },
@@ -549,9 +549,9 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'bridgeAsset', x: 18, y: 35, blocks: true, scale: .62 },
   { kind: 'bridgeAsset', x: 22, y: 35, blocks: true, scale: .62 },
   { kind: 'tropicalTree', x: 8, y: 30, blocks: true, scale: .60 },
-  { kind: 'tropicalTree', x: 33, y: 28, blocks: true, scale: .60 },
-  { kind: 'palmAlt', x: 5, y: 33, blocks: true, scale: .58 },
-  { kind: 'palmAlt', x: 35, y: 32, blocks: true, scale: .58 },
+  { kind: 'tropicalTree', x: 32, y: 27, blocks: false, scale: .38 },
+  { kind: 'palmAlt', x: 7, y: 32, blocks: false, scale: .38 },
+  { kind: 'palmAlt', x: 33, y: 31, blocks: false, scale: .38 },
   // v2.0.20: refine existing SD ocean fantasy props without widening the main walk corridor.
   { kind: 'seagull', x: 8, y: 34, scale: .58 },
   { kind: 'flyingSeagull', x: 33, y: 32, scale: .52 },
@@ -607,6 +607,7 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'ropeWall', x: 29, y: 31, scale: .44 },
   { kind: 'questBoard', x: 31, y: 22, scale: .50 },
   // v2.0.26: curated premium details. Keep large pink/edge trees small and move new props into safe side pockets.
+  // v2.0.44: clipped edge object audit keeps large props inward, smaller, and mostly nonblocking.
   { kind: 'flowerBed', x: 8, y: 21, scale: .36 },
   { kind: 'flowerBed', x: 32, y: 21, scale: .36 },
   { kind: 'crystal', x: 9, y: 23, scale: .34 },
@@ -729,6 +730,8 @@ export class VillageWorld {
   private pinchCenterWorld: PointerPoint | null = null;
   private selectedBuild: VillageBuildingType | null = null;
   private buildTrayOpen = false;
+  private movingBuildingId: string | null = null;
+  private focusedBuildingId: string | null = null;
   private cameraFollowUntil = 0;
   private hoverTile: { x: number; y: number } | null = null;
   private lastDialogAt = 0;
@@ -805,8 +808,29 @@ export class VillageWorld {
     this.app = undefined;
   }
 
+  setPlayerName(name: string): void {
+    const next = this.normalizeWorldPlayerName(name);
+    this.save.playerName = next;
+    if (this.player) {
+      this.player.name = next;
+      this.player.label.text = next;
+      this.player.label.scale.set(1, 1);
+    }
+  }
+
+  private worldPlayerName(): string {
+    return this.normalizeWorldPlayerName(this.save.playerName);
+  }
+
+  private normalizeWorldPlayerName(name: unknown): string {
+    const raw = typeof name === 'string' ? name : '';
+    const cleaned = raw.replace(/[<>{}"'`\\]/g, '').replace(/\s+/g, ' ').trim().slice(0, 12);
+    return cleaned || '나';
+  }
+
   setBuildMode(type: VillageBuildingType | null): void {
     this.selectedBuild = type;
+    if (!type) this.movingBuildingId = null;
     if (type) {
       this.buildTrayOpen = false;
       this.hoverTile = null;
@@ -816,6 +840,7 @@ export class VillageWorld {
     this.root.toggleAttribute('data-v2028-build-preview-active', Boolean(type));
     this.root.toggleAttribute('data-v2042-build-drag-placement', Boolean(type));
     this.root.toggleAttribute('data-v2043-build-ghost-placement', Boolean(type));
+    this.root.toggleAttribute('data-v2044-build-move-placement', Boolean(type));
     this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => {
       node.classList.toggle('active', node.dataset.buildType === type);
     });
@@ -825,7 +850,8 @@ export class VillageWorld {
       const previewX = this.player ? clamp(this.player.tileX + 1, 1, MAP_SIZE - def.size[0] - 1) : 20;
       const previewY = this.player ? clamp(this.player.tileY, 1, MAP_SIZE - def.size[1] - 1) : 29;
       this.updateBuildPreviewAtTile(previewX, previewY);
-      this.showGuide('설치 모드', `${def.label} 선택됨 · 화면은 어둡게 막지 않고 건물 프리뷰만 반투명으로 따라갑니다. 원하는 곳까지 드래그한 뒤 손을 떼면 설치됩니다.`);
+      const modeTitle = this.movingBuildingId ? '건물 이동 모드' : '설치 모드';
+      this.showGuide(modeTitle, `${def.label} 선택됨 · 화면은 어둡게 막지 않고 건물 프리뷰만 반투명으로 따라갑니다. 원하는 곳까지 드래그한 뒤 손을 떼면 ${this.movingBuildingId ? '이동됩니다' : '설치됩니다'}.`);
     }
   }
 
@@ -834,6 +860,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2-build-tray-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
+      if (!keepSelection) this.movingBuildingId = null;
       this.root.removeAttribute('data-v2042-build-tray-modal');
       this.root.removeAttribute('data-v2043-build-tray-modal');
     } else {
@@ -1210,7 +1237,7 @@ export class VillageWorld {
   private spawnActors(): void {
     this.actorLayer.removeChildren();
     this.npcs = [];
-    this.player = this.createActor('player', 'player', '나', 20, 29, 0x1e9bff, '기대');
+    this.player = this.createActor('player', 'player', this.worldPlayerName(), 20, 29, 0x1e9bff, '기대');
     this.actorLayer.addChild(this.player.node);
     const baseNpcs: Array<[WorldNpcRole, string, number, number, number, string]> = [
       ['chief', '촌장', 19, 18, 0xffd36e, '행복'],
@@ -1437,6 +1464,15 @@ export class VillageWorld {
     this.root.querySelector<HTMLButtonElement>('[data-village-fishing]')?.addEventListener('click', () => this.onGoFishing());
     this.root.querySelectorAll<HTMLElement>('[data-v203-interior-close]').forEach((node) => node.addEventListener('click', () => this.closeInterior()));
     this.root.querySelector<HTMLButtonElement>('[data-v203-interior-go-fishing]')?.addEventListener('click', () => this.onGoFishing());
+    this.root.querySelector<HTMLButtonElement>('[data-v2044-interior-move]')?.addEventListener('click', () => {
+      const building = this.focusedBuildingId ? this.save.village.buildings.find((item) => item.id === this.focusedBuildingId) : undefined;
+      if (!building) {
+        this.showGuide('이동할 건물 없음', '건물을 먼저 터치한 뒤 이동을 선택하세요.');
+        return;
+      }
+      this.closeInterior();
+      this.beginMoveBuilding(building);
+    });
   }
 
   private bindJoystick(): void {
@@ -1524,10 +1560,11 @@ export class VillageWorld {
     if (this.selectedBuild) {
       const def = BUILD_DEFS[this.selectedBuild];
       const origin = this.buildOriginFromPointerTile(tile.x, tile.y, def);
-      const ok = this.canPlace(origin.x, origin.y, def);
+      const ok = this.canPlace(origin.x, origin.y, def, this.movingBuildingId);
       this.updateBuildPreviewAtTile(origin.x, origin.y, true);
       this.showTileMarker(origin.x, origin.y, ok ? 0x35f08a : 0xff4747);
-      this.tryPlace(origin.x, origin.y, this.selectedBuild);
+      if (this.movingBuildingId) this.tryMoveBuilding(origin.x, origin.y, this.movingBuildingId);
+      else this.tryPlace(origin.x, origin.y, this.selectedBuild);
       return;
     }
     this.showTileMarker(tile.x, tile.y, 0x6bdcff);
@@ -1573,7 +1610,7 @@ export class VillageWorld {
     this.hoverTile = { x, y };
     this.previewLayer.removeChildren();
     if (!this.inBounds(x, y)) return;
-    const ok = this.canPlace(x, y, def);
+    const ok = this.canPlace(x, y, def, this.movingBuildingId);
     const g = new Graphics();
     for (let yy = y; yy < y + def.size[1]; yy += 1) {
       for (let xx = x; xx < x + def.size[0]; xx += 1) {
@@ -1642,6 +1679,49 @@ export class VillageWorld {
     return worldToTile(wx, wy);
   }
 
+  private beginMoveBuilding(building: VillageBuildingSave): void {
+    const def = BUILD_DEFS[building.type];
+    if (!def || def.kind === 'path') {
+      this.showGuide('이동 불가', '길은 아직 이동 대상이 아닙니다. 건물과 장식부터 이동할 수 있어요.');
+      return;
+    }
+    this.movingBuildingId = building.id;
+    this.selectedBuild = building.type;
+    this.buildTrayOpen = false;
+    this.root.classList.add('v2044-building-move-active');
+    this.root.toggleAttribute('data-v2044-build-move-placement', true);
+    this.setBuildMode(building.type);
+    this.updateBuildPreviewAtTile(building.x, building.y, true);
+    this.showGuide('건물 이동 모드', `${def.label} 이동 중 · 원하는 위치로 드래그하고 손을 떼면 비용 없이 이전됩니다.`);
+  }
+
+  private tryMoveBuilding(x: number, y: number, id: string): void {
+    const building = this.save.village.buildings.find((item) => item.id === id);
+    if (!building) {
+      this.setBuildMode(null);
+      return;
+    }
+    const def = BUILD_DEFS[building.type];
+    if (!def || !this.canPlace(x, y, def, id)) {
+      this.showGuide('이동 불가', '건물, 나무, 바다, 길, 다른 구조물과 겹치지 않는 위치로 옮겨 주세요.');
+      return;
+    }
+    const [w, h] = def.size;
+    building.x = x;
+    building.y = y;
+    building.w = w;
+    building.h = h;
+    this.movingBuildingId = null;
+    this.focusedBuildingId = building.id;
+    this.root.classList.remove('v2044-building-move-active');
+    this.renderBuildings();
+    this.save.village.development = this.calculateDevelopment();
+    this.onSave();
+    this.syncHud();
+    this.showGuide('건물 이동 완료', `${def.label} 위치를 저장했습니다. 건물은 영구 보존되며 다시 터치해 이동할 수 있습니다.`);
+    this.setBuildMode(null);
+  }
+
   private tryPlace(x: number, y: number, type: VillageBuildingType): void {
     const def = BUILD_DEFS[type];
     if (!def) return;
@@ -1673,7 +1753,7 @@ export class VillageWorld {
     if (type !== 'path') this.setBuildMode(null);
   }
 
-  private canPlace(x: number, y: number, def: BuildDefinition): boolean {
+  private canPlace(x: number, y: number, def: BuildDefinition, ignoreBuildingId: string | null = null): boolean {
     const [w, h] = def.size;
     for (let yy = y; yy < y + h; yy += 1) {
       for (let xx = x; xx < x + w; xx += 1) {
@@ -1682,8 +1762,9 @@ export class VillageWorld {
         const tile = this.tileKinds.get(key);
         if (tile === 'sea') return false;
         if (def.kind !== 'path' && this.pathTiles.has(key)) return false;
-        if (this.occupiedTiles.has(key)) return false;
-        if (this.blockedTiles.has(key)) return false;
+        const ignoredTile = ignoreBuildingId ? this.tileBelongsToBuilding(xx, yy, ignoreBuildingId) : false;
+        if (this.occupiedTiles.has(key) && !ignoredTile) return false;
+        if (this.blockedTiles.has(key) && !ignoredTile) return false;
         if (def.kind === 'path' && this.pathTiles.has(key)) return false;
       }
     }
@@ -1694,6 +1775,11 @@ export class VillageWorld {
     return this.npcs.find((npc) => Math.abs(npc.tileX - x) + Math.abs(npc.tileY - y) <= 1);
   }
 
+  private tileBelongsToBuilding(x: number, y: number, id: string): boolean {
+    const building = this.save.village.buildings.find((item) => item.id === id);
+    return Boolean(building && x >= building.x && x < building.x + building.w && y >= building.y && y < building.y + building.h);
+  }
+
   private findBuildingNear(x: number, y: number): VillageBuildingSave | undefined {
     return this.save.village.buildings.find((b) => x >= b.x - 1 && x <= b.x + b.w && y >= b.y - 1 && y <= b.y + b.h);
   }
@@ -1701,6 +1787,7 @@ export class VillageWorld {
   private interactBuilding(building: VillageBuildingSave): void {
     const def = BUILD_DEFS[building.type];
     if (!def) return;
+    this.focusedBuildingId = building.id;
     if (building.type === 'market') {
       const caught = Object.values(this.save.caught).reduce((sum, count) => sum + count, 0);
       const bonus = Math.min(300, caught * 4 + this.save.village.buildings.length * 12);
@@ -1715,7 +1802,42 @@ export class VillageWorld {
       this.openInterior(building.type);
       return;
     }
-    this.showGuide(def.label, def.description);
+    this.openBuildingManagePanel(building);
+  }
+
+  private openBuildingManagePanel(building: VillageBuildingSave): void {
+    const def = BUILD_DEFS[building.type];
+    if (!def) return;
+    const panel = this.root.querySelector<HTMLElement>('.v203-interior-panel');
+    const image = this.root.querySelector<HTMLImageElement>('.v203-interior-image');
+    const title = this.root.querySelector<HTMLElement>('[data-v203-interior-title]');
+    const body = this.root.querySelector<HTMLElement>('[data-v203-interior-body]');
+    const action = this.root.querySelector<HTMLElement>('[data-v203-interior-go-fishing]');
+    const portrait = this.root.querySelector<HTMLImageElement>('[data-v206-interior-portrait]');
+    const status = this.root.querySelector<HTMLElement>('[data-v206-interior-status]');
+    const mapAction = this.root.querySelector<HTMLElement>('[data-v206-interior-go-map]');
+    const missionAction = this.root.querySelector<HTMLElement>('[data-v206-interior-go-mission]');
+    const inventoryAction = this.root.querySelector<HTMLElement>('[data-v206-interior-go-inventory]');
+    const moveAction = this.root.querySelector<HTMLElement>('[data-v2044-interior-move]');
+    if (!panel || !image || !title || !body) return;
+    image.src = def.texture ?? './assets/v209/props/shell_garden.png';
+    image.alt = def.label;
+    title.textContent = def.label;
+    body.textContent = `${def.description} · 이 건물은 저장된 마을 건물이며 이동 버튼으로 위치를 다시 잡을 수 있습니다.`;
+    if (portrait) { portrait.src = def.texture ?? './assets/v203/portraits/player_portrait.png'; portrait.alt = def.label; }
+    if (status) status.innerHTML = [`좌표 ${building.x},${building.y}`, `크기 ${building.w}x${building.h}`, `발전도 +${def.score}`].map((item) => `<span>${item}</span>`).join('');
+    action?.toggleAttribute('hidden', true);
+    mapAction?.toggleAttribute('hidden', true);
+    missionAction?.toggleAttribute('hidden', true);
+    inventoryAction?.toggleAttribute('hidden', true);
+    moveAction?.toggleAttribute('hidden', false);
+    panel.classList.add('open');
+    this.root.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
+    document.body.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
+    this.root.querySelector<HTMLElement>('.v2-world-controls')?.setAttribute('hidden', 'true');
+    this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
+    panel.setAttribute('aria-hidden', 'false');
+    this.showGuide(def.label, '건물 이동을 누르면 비용 없이 위치를 다시 잡을 수 있습니다.');
   }
 
   private openInterior(type: VillageBuildingType, overrideBody?: string): void {
@@ -1735,6 +1857,7 @@ export class VillageWorld {
     const mapAction = this.root.querySelector<HTMLElement>('[data-v206-interior-go-map]');
     const missionAction = this.root.querySelector<HTMLElement>('[data-v206-interior-go-mission]');
     const inventoryAction = this.root.querySelector<HTMLElement>('[data-v206-interior-go-inventory]');
+    const moveAction = this.root.querySelector<HTMLElement>('[data-v2044-interior-move]');
     if (!panel || !image || !title || !body || !action) return;
     image.src = interior.image;
     image.alt = interior.title;
@@ -1749,9 +1872,10 @@ export class VillageWorld {
     mapAction?.toggleAttribute('hidden', !interior.map);
     missionAction?.toggleAttribute('hidden', !interior.mission);
     inventoryAction?.toggleAttribute('hidden', !interior.inventory);
+    moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
-    this.root.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open');
-    document.body.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open');
+    this.root.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
+    document.body.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
     this.root.querySelector<HTMLElement>('.v2-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
     panel.setAttribute('aria-hidden', 'false');
@@ -1762,10 +1886,11 @@ export class VillageWorld {
     const panel = this.root.querySelector<HTMLElement>('.v203-interior-panel');
     if (!panel) return;
     panel.classList.remove('open');
-    this.root.classList.remove('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open');
-    document.body.classList.remove('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open');
+    this.root.classList.remove('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
+    document.body.classList.remove('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
     this.root.querySelector<HTMLElement>('.v2-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');
+    this.focusedBuildingId = null;
     panel.setAttribute('aria-hidden', 'true');
   }
 

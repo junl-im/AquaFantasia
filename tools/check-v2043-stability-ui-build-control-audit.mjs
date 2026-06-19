@@ -16,12 +16,13 @@ const readme = read('README.md');
 const lock = read('package-lock.json');
 
 const version = String(pkg.version);
-must(version === '2.0.43', 'package.json version must be 2.0.43');
-has(data, "APP_VERSION = '2.0.43'", 'APP_VERSION 2.0.43');
-has(data, 'aqua-fantasia-v2.0.43-stability-ui-build-control-audit', 'data cache v2.0.43');
-has(sw, 'aqua-fantasia-v2.0.43-stability-ui-build-control-audit', 'sw cache v2.0.43');
-has(offline, 'v2.0.43', 'offline badge v2.0.43');
-has(readme, '# AquaFantasia v2.0.43', 'README title v2.0.43');
+const [major, minor, patch] = version.split('.').map(Number);
+must(major === 2 && minor === 0 && patch >= 43, 'package.json version must be v2.0.43 or later');
+has(data, `APP_VERSION = '${version}'`, `APP_VERSION ${version}`);
+has(data, `aqua-fantasia-v${version}-`, `data cache ${version}`);
+has(sw, `aqua-fantasia-v${version}-`, `sw cache ${version}`);
+has(offline, `v${version}`, `offline badge ${version}`);
+has(readme, `# AquaFantasia v${version}`, `README title ${version}`);
 has(readme, '## v2.0.43', 'README v2.0.43 changelog');
 
 for (const token of [
@@ -46,8 +47,8 @@ for (const token of [
   'private buildOriginFromPointerTile',
   'const origin = this.buildOriginFromPointerTile(tile.x, tile.y, def)',
   'this.updateBuildPreviewAtTile(origin.x, origin.y, true)',
-  "this.root.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open')",
-  "document.body.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open')",
+  "this.root.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open'",
+  "document.body.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open'",
   "northeast: 'northwest'",
   "southeast: 'southeast'",
   "northwest: 'northeast'",
