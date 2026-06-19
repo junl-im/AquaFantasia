@@ -25340,3 +25340,308 @@ html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-directio
     height: 48px !important;
   }
 }
+
+/* v2.0.43 Stability UI/build/control audit: structural right control slots, build ghost placement, safer menu cards. */
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] {
+  --v2043-control-size: 42px;
+  --v2043-control-icon: 19px;
+  --v2043-control-label: 9px;
+  --v2043-control-gap: 2px;
+  --v2043-aqua-ink: #073f5a;
+  --v2043-aqua-line: rgba(76, 211, 235, .30);
+  --v2043-card: linear-gradient(180deg, rgba(253,255,255,.985), rgba(182,244,250,.955));
+}
+
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] #toast-root {
+  top: calc(max(10px, env(safe-area-inset-top)) + 172px) !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  width: min(500px, calc(100vw - 24px)) !important;
+  z-index: 1260 !important;
+  pointer-events: none !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] #toast-root .toast {
+  max-width: 100% !important;
+  min-height: 44px !important;
+  padding: 8px 12px !important;
+  border-radius: 18px !important;
+  background: var(--v2043-card) !important;
+  border: 1px solid var(--v2043-aqua-line) !important;
+  color: var(--v2043-aqua-ink) !important;
+  box-shadow: 0 10px 22px rgba(0, 60, 94, .14), inset 0 1px 0 rgba(255,255,255,.74) !important;
+}
+
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .village-world-screen.v2043-village-ui-screen .v2-world-controls {
+  position: fixed !important;
+  top: calc(max(10px, env(safe-area-inset-top)) + 72px) !important;
+  right: max(8px, env(safe-area-inset-right)) !important;
+  left: auto !important;
+  width: var(--v2043-control-size) !important;
+  min-width: var(--v2043-control-size) !important;
+  max-width: var(--v2043-control-size) !important;
+  display: grid !important;
+  grid-template-columns: var(--v2043-control-size) !important;
+  grid-auto-rows: var(--v2043-control-size) !important;
+  gap: var(--v2043-control-gap) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  z-index: 1180 !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .village-world-screen.v2043-village-ui-screen .v2-world-controls button {
+  width: var(--v2043-control-size) !important;
+  height: var(--v2043-control-size) !important;
+  min-width: var(--v2043-control-size) !important;
+  min-height: var(--v2043-control-size) !important;
+  max-width: var(--v2043-control-size) !important;
+  max-height: var(--v2043-control-size) !important;
+  padding: 2px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  display: grid !important;
+  grid-template-rows: 23px 11px !important;
+  align-items: center !important;
+  justify-items: center !important;
+  gap: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  background: linear-gradient(180deg, rgba(243,254,255,.86), rgba(72, 209, 232, .72)) !important;
+  background-image: linear-gradient(180deg, rgba(243,254,255,.86), rgba(72, 209, 232, .72)) !important;
+  box-shadow: 0 5px 10px rgba(0, 72, 110, .10), inset 0 1px 0 rgba(255,255,255,.70) !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  text-shadow: 0 2px 5px rgba(0, 44, 72, .66) !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  touch-action: manipulation !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .village-world-screen.v2043-village-ui-screen .v2-world-controls .v2043-control-icon {
+  width: 23px !important;
+  height: 23px !important;
+  min-width: 23px !important;
+  min-height: 23px !important;
+  max-width: 23px !important;
+  max-height: 23px !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: var(--v2043-control-icon) !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .village-world-screen.v2043-village-ui-screen .v2-world-controls .v2043-control-icon img,
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .village-world-screen.v2043-village-ui-screen .v2-world-controls .v2043-control-icon svg {
+  width: var(--v2043-control-icon) !important;
+  height: var(--v2043-control-icon) !important;
+  min-width: var(--v2043-control-icon) !important;
+  min-height: var(--v2043-control-icon) !important;
+  max-width: var(--v2043-control-icon) !important;
+  max-height: var(--v2043-control-icon) !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .village-world-screen.v2043-village-ui-screen .v2-world-controls .v2043-control-label {
+  width: 100% !important;
+  height: 11px !important;
+  display: block !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: clip !important;
+  text-align: center !important;
+  font-size: var(--v2043-control-label) !important;
+  line-height: 11px !important;
+  letter-spacing: -.04em !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  text-shadow: 0 2px 5px rgba(0, 44, 72, .72) !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] body[data-screen]:not([data-screen="village"]) .v2-world-controls,
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] body.v2043-interior-open .v2-world-controls,
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .v2-world-controls[hidden] {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .bottom-nav.v2043-identical-dock-nav {
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] body.v2043-character-panel-open .bottom-nav.v2043-identical-dock-nav,
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] body.v2043-interior-open .bottom-nav.v2043-identical-dock-nav,
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .bottom-nav.v2043-identical-dock-nav[hidden] {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .village-world-screen.v2043-village-ui-screen .v2-build-tray {
+  position: fixed !important;
+  left: 50vw !important;
+  right: auto !important;
+  top: calc(max(12px, env(safe-area-inset-top)) + 66px) !important;
+  bottom: auto !important;
+  width: min(440px, calc(100vw - 22px)) !important;
+  max-width: calc(100vw - 22px) !important;
+  max-height: calc(100dvh - max(12px, env(safe-area-inset-top)) - max(18px, env(safe-area-inset-bottom)) - 128px) !important;
+  transform: translate3d(-50%, -8px, 0) scale(.985) !important;
+  margin: 0 !important;
+  padding: 12px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  border-radius: 24px !important;
+  background: var(--v2043-card) !important;
+  border: 1px solid var(--v2043-aqua-line) !important;
+  box-shadow: 0 16px 38px rgba(0, 55, 86, .18), inset 0 1px 0 rgba(255,255,255,.76) !important;
+  z-index: 1330 !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .village-world-screen.v2043-village-ui-screen.v2-build-tray-open .v2-build-tray {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translate3d(-50%, 0, 0) scale(1) !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .village-world-screen.v2043-village-ui-screen.v2-build-active .v2-build-backdrop {
+  opacity: 0 !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  pointer-events: none !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .village-world-screen.v2043-village-ui-screen[data-v2043-build-ghost-placement] .v2-village-stage {
+  filter: none !important;
+  opacity: 1 !important;
+  cursor: copy !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .village-world-screen.v2043-village-ui-screen .v2018-build-help {
+  margin: 6px 0 10px !important;
+  padding: 8px 10px !important;
+  border-radius: 16px !important;
+  background: rgba(255,255,255,.62) !important;
+  border: 1px solid rgba(75, 207, 233, .22) !important;
+  line-height: 1.35 !important;
+}
+
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .runtime-menu-screen.v2043-menu-aqua-center-screen {
+  align-items: center !important;
+  overflow-x: hidden !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .runtime-menu-screen.v2043-menu-aqua-center-screen .runtime-hud {
+  width: min(600px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  min-width: 0 !important;
+  margin: calc(max(10px, env(safe-area-inset-top)) + 4px) auto 0 !important;
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr) !important;
+  gap: 8px !important;
+  align-items: center !important;
+  border-radius: 24px !important;
+  background: var(--v2043-card) !important;
+  border: 1px solid var(--v2043-aqua-line) !important;
+  box-shadow: 0 10px 22px rgba(0, 62, 101, .12), inset 0 1px 0 rgba(255,255,255,.72) !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .runtime-menu-screen.v2043-menu-aqua-center-screen .runtime-wallet {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .runtime-menu-screen.v2043-menu-aqua-center-screen .runtime-wallet span {
+  min-width: 0 !important;
+  min-height: 42px !important;
+  padding: 7px 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  background: rgba(255,255,255,.66) !important;
+  border: 1px solid rgba(88, 216, 238, .22) !important;
+  color: var(--v2043-aqua-ink) !important;
+  -webkit-text-fill-color: var(--v2043-aqua-ink) !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .runtime-menu-screen.v2043-menu-aqua-center-screen .runtime-content {
+  width: min(600px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  min-width: 0 !important;
+  margin: 0 auto !important;
+  padding-bottom: calc(var(--v2041-dock-stack-h, 105px) + var(--v2041-dock-bottom, 16px) + 76px) !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .runtime-menu-screen.v2043-menu-aqua-center-screen .runtime-content > * {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .runtime-menu-screen.v2043-menu-aqua-center-screen :is(.runtime-hero-card,.runtime-panel,.runtime-item-card,.mission-card,.region-card,.shop-card,.gear-card,.dex-card,.v204-window-card,.v206-inventory-dashboard article,.v206-route-ready article,.v206-quest-npc-board article,.v204-quest-board,.v206-quest-board) {
+  background: var(--v2043-card) !important;
+  border: 1px solid var(--v2043-aqua-line) !important;
+  color: var(--v2043-aqua-ink) !important;
+  box-shadow: 0 10px 22px rgba(0, 65, 96, .12), inset 0 1px 0 rgba(255,255,255,.76) !important;
+  background-image: none !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .runtime-menu-screen.v2043-menu-aqua-center-screen :is(.runtime-btn,.btn-aqua-action,button.runtime-btn,.image-btn,.btn-gold-cost) {
+  min-height: 38px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(74, 207, 233, .28) !important;
+  background-image: none !important;
+  background: linear-gradient(180deg, #5ee5f5, #1494c8) !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  text-shadow: 0 2px 5px rgba(0, 39, 68, .70) !important;
+}
+
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .v203-interior-panel.open .v203-interior-card {
+  width: min(580px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  background: var(--v2043-card) !important;
+  border: 1px solid var(--v2043-aqua-line) !important;
+  color: var(--v2043-aqua-ink) !important;
+  box-shadow: 0 16px 38px rgba(0, 58, 92, .18), inset 0 1px 0 rgba(255,255,255,.76) !important;
+}
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .v203-interior-panel.open .v203-interior-actions button,
+html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .v203-interior-panel.open .v206-interior-actions button {
+  min-height: 40px !important;
+  background: linear-gradient(180deg, #f6ffff, #51d9ef) !important;
+  border: 1px solid rgba(74, 207, 233, .28) !important;
+  border-radius: 16px !important;
+  color: var(--v2043-aqua-ink) !important;
+  -webkit-text-fill-color: var(--v2043-aqua-ink) !important;
+  background-image: none !important;
+}
+
+@media (max-width: 430px) {
+  html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] {
+    --v2043-control-size: 40px;
+    --v2043-control-icon: 18px;
+    --v2043-control-label: 8px;
+  }
+  html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] #toast-root {
+    top: calc(max(10px, env(safe-area-inset-top)) + 158px) !important;
+  }
+  html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .village-world-screen.v2043-village-ui-screen .v2-world-controls {
+    top: calc(max(10px, env(safe-area-inset-top)) + 70px) !important;
+    right: max(6px, env(safe-area-inset-right)) !important;
+  }
+  html[data-v2043-stability-ui-audit="v2043-stability-ui-build-control-audit"] .village-world-screen.v2043-village-ui-screen .v2-build-tray {
+    top: calc(max(10px, env(safe-area-inset-top)) + 56px) !important;
+    width: min(396px, calc(100vw - 18px)) !important;
+    max-height: calc(100dvh - max(10px, env(safe-area-inset-top)) - max(18px, env(safe-area-inset-bottom)) - 104px) !important;
+    padding: 10px !important;
+  }
+}

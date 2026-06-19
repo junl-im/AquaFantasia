@@ -15,12 +15,14 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.42', 'package.json version must be 2.0.42');
-has(data, "APP_VERSION = '2.0.42'", 'APP_VERSION 2.0.42');
-has(data, 'aqua-fantasia-v2.0.42-build-placement-shop-direction-polish', 'data cache v2.0.42');
-has(sw, 'aqua-fantasia-v2.0.42-build-placement-shop-direction-polish', 'sw cache v2.0.42');
-has(offline, 'v2.0.42', 'offline badge v2.0.42');
-has(readme, '# AquaFantasia v2.0.42', 'README title v2.0.42');
+const version = String(pkg.version);
+const [major, minor, patch] = version.split('.').map(Number);
+must(major === 2 && minor === 0 && patch >= 42, 'package.json version must be 2.0.42 or newer');
+has(data, `APP_VERSION = '${version}'`, `APP_VERSION ${version}`);
+has(data, `aqua-fantasia-v${version}-`, `data cache v${version}`);
+has(sw, `aqua-fantasia-v${version}-`, `sw cache v${version}`);
+has(offline, `v${version}`, `offline badge v${version}`);
+has(readme, `# AquaFantasia v${version}`, `README title v${version}`);
 has(readme, '## v2.0.42', 'README v2.0.42 changelog');
 
 for (const token of [
@@ -49,8 +51,8 @@ for (const token of [
   "{ movement: 'southwest', dx: -0.5, dy: 0.866, texture: 'southwest' }",
   'v2.0.42: the actual player PNG silhouettes were inspected in a contact sheet',
   "this.root.toggleAttribute('data-v2042-build-drag-placement', Boolean(type))",
-  "this.root.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open')",
-  "document.body.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open')",
+  "this.root.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open'",
+  "document.body.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open'",
 ]) has(world, token, `world token ${token}`);
 
 for (const token of [

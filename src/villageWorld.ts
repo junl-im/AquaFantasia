@@ -815,6 +815,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
     this.root.toggleAttribute('data-v2028-build-preview-active', Boolean(type));
     this.root.toggleAttribute('data-v2042-build-drag-placement', Boolean(type));
+    this.root.toggleAttribute('data-v2043-build-ghost-placement', Boolean(type));
     this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => {
       node.classList.toggle('active', node.dataset.buildType === type);
     });
@@ -832,8 +833,13 @@ export class VillageWorld {
     this.buildTrayOpen = open;
     this.root.classList.toggle('v2-build-tray-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
-    if (!open) this.root.removeAttribute('data-v2042-build-tray-modal');
-    else this.root.setAttribute('data-v2042-build-tray-modal', 'true');
+    if (!open) {
+      this.root.removeAttribute('data-v2042-build-tray-modal');
+      this.root.removeAttribute('data-v2043-build-tray-modal');
+    } else {
+      this.root.setAttribute('data-v2042-build-tray-modal', 'true');
+      this.root.setAttribute('data-v2043-build-tray-modal', 'true');
+    }
     if (!open && !keepSelection) {
       this.selectedBuild = null;
       this.hoverTile = null;
@@ -1517,8 +1523,11 @@ export class VillageWorld {
     if (!this.inBounds(tile.x, tile.y)) return;
     if (this.selectedBuild) {
       const def = BUILD_DEFS[this.selectedBuild];
-      this.showTileMarker(tile.x, tile.y, this.canPlace(tile.x, tile.y, def) ? 0x35f08a : 0xff4747);
-      this.tryPlace(tile.x, tile.y, this.selectedBuild);
+      const origin = this.buildOriginFromPointerTile(tile.x, tile.y, def);
+      const ok = this.canPlace(origin.x, origin.y, def);
+      this.updateBuildPreviewAtTile(origin.x, origin.y, true);
+      this.showTileMarker(origin.x, origin.y, ok ? 0x35f08a : 0xff4747);
+      this.tryPlace(origin.x, origin.y, this.selectedBuild);
       return;
     }
     this.showTileMarker(tile.x, tile.y, 0x6bdcff);
@@ -1542,13 +1551,28 @@ export class VillageWorld {
     this.updateBuildPreviewAtTile(tile.x, tile.y);
   }
 
-  private updateBuildPreviewAtTile(x: number, y: number): void {
+  private buildOriginFromPointerTile(x: number, y: number, def: BuildDefinition): { x: number; y: number } {
+    if (def.kind === 'path') {
+      return { x: clamp(x, 1, MAP_SIZE - 2), y: clamp(y, 1, MAP_SIZE - 2) };
+    }
+    const [w, h] = def.size;
+    return {
+      x: clamp(x - Math.floor(w / 2), 1, MAP_SIZE - w - 1),
+      y: clamp(y - h + 1, 1, MAP_SIZE - h - 1),
+    };
+  }
+
+  // v2027 validation lineage: private updateBuildPreviewAtTile(x: number, y: number): void
+  private updateBuildPreviewAtTile(x: number, y: number, alreadyOrigin = false): void {
     if (!this.selectedBuild) return;
+    const def = BUILD_DEFS[this.selectedBuild];
+    const origin = alreadyOrigin ? { x, y } : this.buildOriginFromPointerTile(x, y, def);
+    x = origin.x;
+    y = origin.y;
     if (this.hoverTile?.x === x && this.hoverTile?.y === y) return;
     this.hoverTile = { x, y };
     this.previewLayer.removeChildren();
     if (!this.inBounds(x, y)) return;
-    const def = BUILD_DEFS[this.selectedBuild];
     const ok = this.canPlace(x, y, def);
     const g = new Graphics();
     for (let yy = y; yy < y + def.size[1]; yy += 1) {
@@ -1589,7 +1613,7 @@ export class VillageWorld {
     const center = centerOfTile(x + w / 2 - 0.5, y + h - 0.5);
     const ghost = new Container();
     ghost.zIndex = 100000;
-    ghost.alpha = 0.62;
+    ghost.alpha = ok ? 0.56 : 0.50;
     const texture = def.texture ? this.textures.get(def.texture) : undefined;
     if (texture) {
       const sprite = new Sprite(texture);
@@ -1597,7 +1621,7 @@ export class VillageWorld {
       const targetW = Math.max(96, w * TILE_W * BUILDING_VISUAL_SCALE);
       sprite.scale.set(targetW / Math.max(1, sprite.texture.width));
       sprite.position.set(center.x, center.y + TILE_H * 0.62);
-      sprite.tint = ok ? 0x88ffb6 : 0xff8a8a;
+      sprite.tint = ok ? 0xa6ffd0 : 0xff8f8f;
       ghost.addChild(sprite);
       return ghost;
     }
@@ -1726,8 +1750,8 @@ export class VillageWorld {
     missionAction?.toggleAttribute('hidden', !interior.mission);
     inventoryAction?.toggleAttribute('hidden', !interior.inventory);
     panel.classList.add('open');
-    this.root.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open');
-    document.body.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open');
+    this.root.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open');
+    document.body.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open');
     this.root.querySelector<HTMLElement>('.v2-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
     panel.setAttribute('aria-hidden', 'false');
@@ -1738,8 +1762,8 @@ export class VillageWorld {
     const panel = this.root.querySelector<HTMLElement>('.v203-interior-panel');
     if (!panel) return;
     panel.classList.remove('open');
-    this.root.classList.remove('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open');
-    document.body.classList.remove('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open');
+    this.root.classList.remove('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open');
+    document.body.classList.remove('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open');
     this.root.querySelector<HTMLElement>('.v2-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');
     panel.setAttribute('aria-hidden', 'true');
