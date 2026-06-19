@@ -715,6 +715,12 @@ function centerOfTile(x: number, y: number): { x: number; y: number } {
   return isoToWorld(x + 0.5, y + 0.5);
 }
 
+function footprintGround(x: number, y: number, w = 1, h = 1): { x: number; y: number } {
+  // v2.0.48: buildings, ghosts, props, and actors share a bottom-center ground anchor.
+  // This keeps visual sprites on the tile footprint instead of drifting to the side/top corner.
+  return isoToWorld(x + w / 2, y + h);
+}
+
 function createDefaultBuildings(): VillageBuildingSave[] {
   return [
     { id: 'b_fountain_0', type: 'fountain', x: 19, y: 19, w: 2, h: 2, builtAt: Date.now() },
@@ -837,6 +843,7 @@ export class VillageWorld {
     this.root.dataset.v2030VillageAudit = 'moving-npc-clean-objects';
     this.root.dataset.v2031VillageAudit = 'npc-direction-object-final-audit';
     this.root.dataset.v2045VillageAudit = 'direction-asset-performance-trim';
+    this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 천천히 이동하고, 빈 바닥 터치로도 이동할 수 있습니다.');
   }
 
@@ -1094,17 +1101,17 @@ export class VillageWorld {
       if (!def) continue;
       const container = new Container();
       container.zIndex = (building.y + building.h) * 20 + 4;
-      const center = centerOfTile(building.x + building.w / 2 - 0.5, building.y + building.h - 0.5);
+      const center = footprintGround(building.x, building.y, building.w, building.h);
       if (def.texture && this.textures.has(def.texture)) {
         const sprite = new Sprite(this.textures.get(def.texture)!);
         sprite.anchor.set(0.5, 1);
         const targetW = Math.max(96, building.w * TILE_W * BUILDING_VISUAL_SCALE);
         sprite.scale.set(targetW / Math.max(1, sprite.texture.width));
-        sprite.position.set(center.x, center.y + TILE_H * 0.62);
+        sprite.position.set(center.x, center.y);
         container.addChild(sprite);
       } else {
         const g = this.createPropGraphic(def.type, building.w, building.h);
-        g.position.set(center.x, center.y + TILE_H * 0.4);
+        g.position.set(center.x, center.y);
         container.addChild(g);
       }
       const label = new Text({
@@ -1112,7 +1119,7 @@ export class VillageWorld {
         style: { fontFamily: 'Arial', fontSize: 14, fontWeight: '800', fill: 0x315064, stroke: { color: 0xffffff, width: 3 } },
       });
       label.anchor.set(0.5);
-      label.position.set(center.x, center.y + TILE_H * 0.54);
+      label.position.set(center.x, center.y + TILE_H * 0.22);
       label.zIndex = (building.y + building.h) * 20 + 19;
       this.labelLayer.addChild(label);
       this.buildingLayer.addChild(container);
@@ -1128,7 +1135,7 @@ export class VillageWorld {
       sprite.anchor.set(0.5, 1);
       const targetH = BUILD_PROP_TARGET_HEIGHT[type] ?? Math.max(54, h * TILE_H);
       sprite.scale.set(targetH / Math.max(1, sprite.texture.height));
-      sprite.position.set(0, TILE_H * 0.34);
+      sprite.position.set(0, 0);
       c.addChild(sprite);
       return c;
     }
@@ -1160,7 +1167,7 @@ export class VillageWorld {
       const p = centerOfTile(placement.x, placement.y);
       const item = this.createDecorationGraphic(deco.kind, placement.scale);
       item.eventMode = 'none';
-      item.position.set(p.x, p.y + TILE_H * 0.48);
+      item.position.set(p.x, p.y);
       item.zIndex = deco.y * 20 + 10;
       this.decorationLayer.addChild(item);
     }
@@ -1177,8 +1184,8 @@ export class VillageWorld {
       const sprite = new Sprite(texture);
       sprite.anchor.set(0.5, 1);
       sprite.scale.set(targetH / Math.max(1, sprite.texture.height));
-      sprite.position.set(0, TILE_H * 0.55);
-      shadow.ellipse(0, TILE_H * 0.48, Math.max(18, Math.min(54, sprite.texture.width * sprite.scale.x * 0.33)), 10).fill({ color: 0x294b55, alpha: 0.18 });
+      sprite.position.set(0, 0);
+      shadow.ellipse(0, 6, Math.max(18, Math.min(54, sprite.texture.width * sprite.scale.x * 0.33)), 10).fill({ color: 0x294b55, alpha: 0.18 });
       c.addChild(shadow, sprite);
       return c;
     }
@@ -1316,7 +1323,7 @@ export class VillageWorld {
     actor.body.texture = texture;
     const targetH = actor.role === 'player' ? 90 : 80;
     actor.body.scale.set(targetH / Math.max(1, texture.height));
-    actor.body.position.set(0, 14);
+    actor.body.position.set(0, 0);
   }
 
   private createActor(id: string, role: Actor['role'], name: string, tileX: number, tileY: number, color: number, mood: string): Actor {
@@ -1324,7 +1331,7 @@ export class VillageWorld {
     const node = new Container();
     node.zIndex = tileY * 20 + 16;
     const shadow = new Graphics();
-    shadow.ellipse(0, 10, role === 'player' ? 20 : 17, role === 'player' ? 8 : 7).fill({ color: 0x294b55, alpha: 0.24 });
+    shadow.ellipse(0, 5, role === 'player' ? 20 : 17, role === 'player' ? 8 : 7).fill({ color: 0x294b55, alpha: 0.24 });
 
     let body: Graphics | Sprite;
     const textureUrl = this.actorTextureUrl(role, 'south');
@@ -1334,7 +1341,7 @@ export class VillageWorld {
       sprite.anchor.set(0.5, 1);
       const targetH = role === 'player' ? 90 : 80;
       sprite.scale.set(targetH / Math.max(1, sprite.texture.height));
-      sprite.position.set(0, 14);
+      sprite.position.set(0, 0);
       body = sprite;
     } else {
       const g = new Graphics();
@@ -1347,7 +1354,7 @@ export class VillageWorld {
 
     const label = new Text({ text: name, style: { fontFamily: 'Arial', fontSize: 14, fontWeight: '900', fill: 0x254157, stroke: { color: 0xffffff, width: 4 } } });
     label.anchor.set(0.5);
-    label.position.set(0, role === 'player' ? -86 : -74);
+    label.position.set(0, role === 'player' ? -100 : -88);
     node.addChild(shadow, body, label);
     node.position.set(p.x, p.y);
     return {
@@ -1680,7 +1687,7 @@ export class VillageWorld {
     sprite.anchor.set(0.5, 0.72);
     const targetW = TILE_W * 1.42;
     sprite.scale.set(targetW / Math.max(1, texture.width));
-    sprite.position.set(p.x + TILE_W / 2, p.y + TILE_H * 0.74);
+    sprite.position.set(p.x + TILE_W / 2, p.y + TILE_H * 0.5);
     sprite.alpha = ok ? 0.82 : 0.88;
     sprite.zIndex = 99999;
     return sprite;
@@ -1689,7 +1696,7 @@ export class VillageWorld {
   private createBuildGhost(def: BuildDefinition, x: number, y: number, ok: boolean): Container | undefined {
     if (def.kind === 'path') return undefined;
     const [w, h] = def.size;
-    const center = centerOfTile(x + w / 2 - 0.5, y + h - 0.5);
+    const center = footprintGround(x, y, w, h);
     const ghost = new Container();
     ghost.zIndex = 100000;
     ghost.alpha = ok ? 0.56 : 0.50;
@@ -1699,13 +1706,13 @@ export class VillageWorld {
       sprite.anchor.set(0.5, 1);
       const targetW = Math.max(96, w * TILE_W * BUILDING_VISUAL_SCALE);
       sprite.scale.set(targetW / Math.max(1, sprite.texture.width));
-      sprite.position.set(center.x, center.y + TILE_H * 0.62);
+      sprite.position.set(center.x, center.y);
       sprite.tint = ok ? 0xa6ffd0 : 0xff8f8f;
       ghost.addChild(sprite);
       return ghost;
     }
     const graphic = this.createPropGraphic(def.type, w, h);
-    graphic.position.set(center.x, center.y + TILE_H * 0.4);
+    graphic.position.set(center.x, center.y);
     graphic.alpha = 0.72;
     ghost.addChild(graphic);
     return ghost;

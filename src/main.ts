@@ -250,6 +250,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2045DirectionAssetEngineAudit = 'v2045-direction-asset-engine-audit';
     document.documentElement.dataset.v2046FishingDockReelRepair = 'v2046-fishing-dock-reel-repair';
     document.documentElement.dataset.v2047DirectionFishingRepair = 'v2047-direction-fishing-final-repair';
+    document.documentElement.dataset.v2048DockFishingAnchorSystem = 'v2048-dock-fishing-anchor-system';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -772,7 +773,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen locked-screen';
+    root.className = 'game-screen fishing-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -781,7 +782,7 @@ class AquaFantasiaGame {
       <span id="fishingHint" class="sr-only">낚시 시작 버튼으로 캐스팅하세요.</span>
       <span class="v2028-fishing-safe-grid" aria-hidden="true"></span>
       <div class="fishing-3d-ambient" aria-hidden="true"><div class="underwater-webgl-host" data-underwater-webgl></div><span class="v3d-caustics"></span><span class="v3d-bubbles"></span><span class="v3d-depth-fog"></span></div>
-      <div class="fishing-stage v2028-fishing-stage v2030-fishing-stage v2031-fishing-stage v2032-fishing-stage v2033-fishing-stage v2034-fishing-stage v2035-fishing-stage v2036-fishing-stage v2037-fishing-stage v2038-fishing-stage v2039-fishing-stage v2040-fishing-stage v2041-fishing-stage v2042-fishing-stage v2043-fishing-stage v2044-fishing-stage v2045-fishing-stage v2046-fishing-stage v2047-fishing-stage" id="fishingStage">
+      <div class="fishing-stage v2028-fishing-stage v2030-fishing-stage v2031-fishing-stage v2032-fishing-stage v2033-fishing-stage v2034-fishing-stage v2035-fishing-stage v2036-fishing-stage v2037-fishing-stage v2038-fishing-stage v2039-fishing-stage v2040-fishing-stage v2041-fishing-stage v2042-fishing-stage v2043-fishing-stage v2044-fishing-stage v2045-fishing-stage v2046-fishing-stage v2047-fishing-stage v2048-fishing-stage" id="fishingStage">
         <div class="pixi-layer"></div>
         <div class="water-overlay"></div>
         <div class="caustic-overlay"></div>
@@ -789,9 +790,9 @@ class AquaFantasiaGame {
         <img class="v205-fish-shadow v205-shadow-large" src="${ASSET.fishingShadowLarge}" alt="" aria-hidden="true" />
         <img class="v2031-fishing-ripple" src="${ASSET.fishingAmbientRing}" alt="" aria-hidden="true" />
         <img class="v2031-fishing-foam" src="${ASSET.fishingAmbientFoam}" alt="" aria-hidden="true" />
-        <div class="fishing-guide-card v205-guide-card v2029-fishing-guide-card v2030-fishing-guide-card v2031-fishing-guide-card v2038-fishing-guide-card v2039-fishing-guide-card v2040-fishing-guide-card v2041-fishing-guide-card v2046-fishing-guide-card v2047-fishing-guide-card" aria-hidden="true"><strong>낚시 준비</strong><span data-fishing-tip>낚시 시작 → 물었다! → 화면을 누르는 동안 릴 감기</span></div>
+        <div class="fishing-guide-card v205-guide-card v2029-fishing-guide-card v2030-fishing-guide-card v2031-fishing-guide-card v2038-fishing-guide-card v2039-fishing-guide-card v2040-fishing-guide-card v2041-fishing-guide-card v2046-fishing-guide-card v2047-fishing-guide-card v2048-fishing-guide-card" aria-hidden="true"><strong>낚시 준비</strong><span data-fishing-tip>낚시 시작 → 물었다! → 화면을 누르는 동안 릴 감기</span></div>
       </div>
-      <div class="fishing-hud v205-fishing-hud v2028-fishing-hud v2029-fishing-hud v2030-fishing-hud v2031-fishing-hud v2044-fishing-hud v2032-fishing-hud v2033-fishing-hud v2034-fishing-hud v2035-fishing-hud v2036-fishing-hud v2037-fishing-hud v2038-fishing-hud v2039-fishing-hud v2040-fishing-hud v2041-fishing-hud v2043-fishing-hud v2044-fishing-hud v2047-fishing-hud" aria-label="플레이어 정보">
+      <div class="fishing-hud v205-fishing-hud v2028-fishing-hud v2029-fishing-hud v2030-fishing-hud v2031-fishing-hud v2044-fishing-hud v2032-fishing-hud v2033-fishing-hud v2034-fishing-hud v2035-fishing-hud v2036-fishing-hud v2037-fishing-hud v2038-fishing-hud v2039-fishing-hud v2040-fishing-hud v2041-fishing-hud v2043-fishing-hud v2044-fishing-hud v2047-fishing-hud v2048-fishing-hud" aria-label="플레이어 정보">
         <div class="hud-chip region" data-hud-region><strong>${region.name}</strong><span>${region.tide}</span></div>
         <div class="hud-chip" data-hud-coins><img src="./assets/v92/icons/coin.png" alt="" /><strong>${this.save.coins.toLocaleString('ko-KR')}</strong></div>
         <div class="hud-chip" data-hud-lures><img src="./assets/v205/fishing/slot_bait.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
@@ -805,7 +806,7 @@ class AquaFantasiaGame {
       <section class="recent-catch-strip v205-recent-catch v2029-recent-catch-card v2030-recent-catch-card v2031-recent-catch-card v2032-recent-catch-card v2033-recent-catch-card v2034-recent-catch-card v2035-recent-catch-card v2036-recent-catch-card v2037-recent-catch-card v2038-recent-catch-card v2039-recent-catch-card v2040-recent-catch-card" aria-label="최근 포획">
         ${this.recentCatchMarkup()}
       </section>
-      <div class="reel-panel glass-card hidden v205-reel-panel v2028-reel-panel v2029-reel-panel v2030-reel-panel v2031-reel-panel v2032-reel-panel v2033-reel-panel v2034-reel-panel v2035-reel-panel v2036-reel-panel v2037-reel-panel v2038-reel-panel v2039-reel-panel v2040-reel-panel v2041-reel-panel v2042-reel-panel v2043-reel-panel v2044-reel-panel v2045-reel-panel v2046-reel-panel v2047-reel-panel" id="reelPanel">
+      <div class="reel-panel glass-card hidden v205-reel-panel v2028-reel-panel v2029-reel-panel v2030-reel-panel v2031-reel-panel v2032-reel-panel v2033-reel-panel v2034-reel-panel v2035-reel-panel v2036-reel-panel v2037-reel-panel v2038-reel-panel v2039-reel-panel v2040-reel-panel v2041-reel-panel v2042-reel-panel v2043-reel-panel v2044-reel-panel v2045-reel-panel v2046-reel-panel v2047-reel-panel v2048-reel-panel" id="reelPanel">
         <img class="v2020-reel-panel-frame" src="${ASSET.uiPanelAqua}" alt="" aria-hidden="true" />
         <img class="v2021-reel-tooltip-frame" src="${ASSET.uiTooltipAqua}" alt="" aria-hidden="true" />
         <img class="v205-horizontal-gauge" src="${ASSET.fishingGaugeHorizontal}" alt="장력 게이지" />
@@ -817,8 +818,9 @@ class AquaFantasiaGame {
             <div class="tension-track"><span class="safe-zone"></span><span class="tension-fill"></span></div>
             <div class="safe-progress"><span></span></div>
             <div class="surge-meter"><span></span></div>
-            <button class="hold-pad v2046-hold-pad v2047-hold-pad" type="button"><strong>누르는 동안 릴 감기</strong><span>떼면 장력이 내려가요</span></button>
-            <p>버튼 또는 바다 화면을 누른 채 초록 안전지대를 3초 유지하세요.</p>
+            <div class="v2048-reel-status" data-reel-status>누르면 장력 ↑ · 떼면 장력 ↓</div>
+            <button class="hold-pad v2046-hold-pad v2047-hold-pad v2048-hold-pad" type="button"><strong>누르는 동안 릴 감기</strong><span>떼면 장력이 내려가요</span></button>
+            <p>버튼 또는 바다 화면을 누르면 게이지가 올라가고, 떼면 내려갑니다. 초록 구간에 맞춰 유지하세요.</p>
           </div>
         </div>
       </div>`;
@@ -841,16 +843,24 @@ class AquaFantasiaGame {
       this.reassertImmersiveMode();
       if (this.state !== 'reeling') return;
       this.holding = true;
+      this.reelPanel?.classList.add('is-holding');
+      this.stageHost?.classList.add('is-reel-holding');
       this.holdPad?.setPointerCapture?.(ev.pointerId);
       this.spawnTouchRing(ev.clientX, ev.clientY);
       this.vibrate(8);
     };
-    const stopHold = () => { this.holding = false; };
+    const stopHold = () => {
+      this.holding = false;
+      this.reelPanel?.classList.remove('is-holding');
+      this.stageHost?.classList.remove('is-reel-holding');
+    };
     const startPanelHold = (ev: PointerEvent) => {
       this.reassertImmersiveMode();
       if (this.state !== 'reeling') return;
       ev.preventDefault();
       this.holding = true;
+      this.reelPanel?.classList.add('is-holding');
+      this.stageHost?.classList.add('is-reel-holding');
       this.reelPanel?.setPointerCapture?.(ev.pointerId);
       this.spawnTouchRing(ev.clientX, ev.clientY);
       this.vibrate(8);
@@ -870,11 +880,17 @@ class AquaFantasiaGame {
       if (this.state !== 'reeling') return;
       ev.preventDefault();
       this.holding = true;
+      this.reelPanel?.classList.add('is-holding');
+      this.stageHost?.classList.add('is-reel-holding');
       const touch = ev.touches.item(0);
       if (touch) this.spawnTouchRing(touch.clientX, touch.clientY);
       this.vibrate(8);
     };
-    const stopTouchHold = () => { this.holding = false; };
+    const stopTouchHold = () => {
+      this.holding = false;
+      this.reelPanel?.classList.remove('is-holding');
+      this.stageHost?.classList.remove('is-reel-holding');
+    };
     this.holdPad.addEventListener('touchstart', startTouchHold, { passive: false });
     this.holdPad.addEventListener('touchend', stopTouchHold, { passive: true });
     this.holdPad.addEventListener('touchcancel', stopTouchHold, { passive: true });
@@ -885,6 +901,8 @@ class AquaFantasiaGame {
         ev.preventDefault();
         this.startReeling();
         this.holding = true;
+        this.reelPanel?.classList.add('is-holding');
+        this.stageHost?.classList.add('is-reel-holding');
         this.spawnTouchRing(ev.clientX, ev.clientY);
         this.vibrate(8);
         return;
@@ -892,11 +910,30 @@ class AquaFantasiaGame {
       if (this.state !== 'reeling') return;
       ev.preventDefault();
       this.holding = true;
+      this.reelPanel?.classList.add('is-holding');
+      this.stageHost?.classList.add('is-reel-holding');
       this.spawnTouchRing(ev.clientX, ev.clientY);
     }, { passive: false, capture: true });
     root.addEventListener('pointerup', stopHold, { passive: true, capture: true });
     root.addEventListener('pointercancel', stopHold, { passive: true, capture: true });
     root.addEventListener('lostpointercapture', stopHold, { passive: true, capture: true });
+    root.addEventListener('touchstart', (ev: TouchEvent) => {
+      const target = ev.target as HTMLElement | null;
+      if (target?.closest('.bottom-nav, .fishing-hud, .recent-catch-strip, .fishing-loadout-strip, .cast-button')) return;
+      const touch = ev.touches.item(0);
+      if (!touch) return;
+      if (this.state === 'bite') this.startReeling();
+      if (this.state !== 'reeling') return;
+      ev.preventDefault();
+      this.holding = true;
+      this.reelPanel?.classList.add('is-holding');
+      this.stageHost?.classList.add('is-reel-holding');
+      this.spawnTouchRing(touch.clientX, touch.clientY);
+      this.vibrate(8);
+    }, { passive: false, capture: true });
+    root.addEventListener('touchend', stopTouchHold, { passive: true, capture: true });
+    root.addEventListener('touchcancel', stopTouchHold, { passive: true, capture: true });
+    window.addEventListener('blur', stopHold, { passive: true });
     this.reelPanel.addEventListener('touchstart', startTouchHold, { passive: false });
     this.reelPanel.addEventListener('touchend', stopTouchHold, { passive: true });
     this.reelPanel.addEventListener('touchcancel', stopTouchHold, { passive: true });
@@ -923,7 +960,7 @@ class AquaFantasiaGame {
 
   private baseGameShell(name: string): HTMLElement {
     const root = document.createElement('main');
-    root.className = `game-screen ${name}-screen v800-screen v810-screen ${name === 'fishing' ? 'locked-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen' : 'scroll-screen'}`;
+    root.className = `game-screen ${name}-screen v800-screen v810-screen ${name === 'fishing' ? 'locked-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen' : 'scroll-screen'}`;
     root.innerHTML = `<div class="ambient-bg" aria-hidden="true"></div>`;
     return root;
   }
@@ -932,7 +969,7 @@ class AquaFantasiaGame {
     document.querySelectorAll('.bottom-nav.fixed-root-nav').forEach((node) => node.remove());
     const nav = document.createElement('nav');
     const v13 = false;
-    nav.className = 'bottom-nav fixed-root-nav v2016-safe-dock-nav v2026-unified-dock-nav v2027-aqua-dock-nav v2029-home-dock-nav v2031-identical-dock-nav v2032-identical-dock-nav v2033-identical-dock-nav v2034-identical-dock-nav v2035-identical-dock-nav v2036-identical-dock-nav v2037-identical-dock-nav v2038-identical-dock-nav v2039-identical-dock-nav v2040-identical-dock-nav v2041-identical-dock-nav v2042-identical-dock-nav v2043-identical-dock-nav v2044-identical-dock-nav v2045-identical-dock-nav v2046-identical-dock-nav v2047-identical-dock-nav';
+    nav.className = 'bottom-nav fixed-root-nav v2016-safe-dock-nav v2026-unified-dock-nav v2027-aqua-dock-nav v2029-home-dock-nav v2031-identical-dock-nav v2032-identical-dock-nav v2033-identical-dock-nav v2034-identical-dock-nav v2035-identical-dock-nav v2036-identical-dock-nav v2037-identical-dock-nav v2038-identical-dock-nav v2039-identical-dock-nav v2040-identical-dock-nav v2041-identical-dock-nav v2042-identical-dock-nav v2043-identical-dock-nav v2044-identical-dock-nav v2045-identical-dock-nav v2046-identical-dock-nav v2047-identical-dock-nav v2048-identical-dock-nav';
     nav.setAttribute('aria-label', '우측 하단 메뉴');
     nav.setAttribute('data-fixed-root', 'true');
     nav.dataset.menuDock = 'right-bottom-wing-v2016';
@@ -954,26 +991,31 @@ class AquaFantasiaGame {
     nav.dataset.v2045DockGuard = 'v2045-fishing-safe-area-dock-final';
     nav.dataset.v2046DockGuard = 'v2046-body-portal-aqua-frame-dock';
     nav.dataset.v2047DockGuard = 'v2047-fixed-visible-aqua-dock';
+    nav.dataset.v2048DockGuard = 'v2048-natural-dock-shape-no-empty-frame';
     const dockInlineStyles: Array<[string, string]> = [
-      ['position', 'fixed'], ['left', 'auto'], ['right', 'var(--v2047-dock-right, var(--v2046-dock-right, var(--v2045-dock-right, var(--v2044-dock-right, max(10px, env(safe-area-inset-right)))))'],
-      ['bottom', 'var(--v2047-dock-bottom, var(--v2046-dock-bottom, var(--v2045-dock-bottom, var(--v2044-dock-bottom, calc(max(14px, env(safe-area-inset-bottom)) + 6px))))'], ['width', 'auto'], ['height', 'auto'],
+      ['position', 'fixed'], ['left', 'auto'], ['right', 'var(--v2048-dock-right, var(--v2047-dock-right, var(--v2046-dock-right, var(--v2045-dock-right, var(--v2044-dock-right, max(10px, env(safe-area-inset-right))))))'],
+      ['bottom', 'var(--v2048-dock-bottom, var(--v2047-dock-bottom, var(--v2046-dock-bottom, var(--v2045-dock-bottom, var(--v2044-dock-bottom, calc(max(14px, env(safe-area-inset-bottom)) + 6px)))))'], ['width', 'auto'], ['height', 'auto'],
       ['min-width', '0'], ['max-width', 'calc(100vw - 16px)'], ['display', 'grid'],
-      ['grid-template-columns', 'repeat(3, var(--v2047-dock-button, var(--v2046-dock-button, var(--v2045-dock-button, var(--v2044-dock-button, 52px)))))'],
-      ['grid-template-rows', 'repeat(2, var(--v2047-dock-button, var(--v2046-dock-button, var(--v2045-dock-button, var(--v2044-dock-button, 52px)))))'], ['gap', 'var(--v2047-dock-gap, var(--v2046-dock-gap, var(--v2045-dock-gap, var(--v2044-dock-gap, 4px))))'],
-      ['padding', 'var(--v2047-dock-padding, var(--v2046-dock-padding, 5px))'], ['margin', '0'], ['border', '1px solid rgba(126, 238, 255, .30)'], ['border-radius', '20px'],
+      ['grid-template-columns', 'repeat(3, var(--v2048-dock-button, var(--v2047-dock-button, var(--v2046-dock-button, var(--v2045-dock-button, var(--v2044-dock-button, 52px))))))'],
+      ['grid-template-rows', 'repeat(2, var(--v2048-dock-button, var(--v2047-dock-button, var(--v2046-dock-button, var(--v2045-dock-button, var(--v2044-dock-button, 52px))))))'], ['gap', 'var(--v2048-dock-gap, var(--v2047-dock-gap, var(--v2046-dock-gap, var(--v2045-dock-gap, var(--v2044-dock-gap, 4px)))))'],
+      ['padding', 'var(--v2048-dock-padding, var(--v2047-dock-padding, var(--v2046-dock-padding, 5px)))'], ['margin', '0'], ['border', '1px solid rgba(126, 238, 255, .30)'], ['border-radius', '20px'],
       ['background', 'rgba(6, 85, 120, .20)'], ['background-image', 'none'], ['box-shadow', '0 8px 20px rgba(0, 55, 92, .14), inset 0 1px 0 rgba(255,255,255,.18)'],
       ['filter', 'none'], ['overflow', 'visible'], ['transform', 'none'], ['translate', 'none'], ['pointer-events', 'none'], ['z-index', '1240'],
     ];
     dockInlineStyles.forEach(([key, value]) => nav.style.setProperty(key, value, 'important'));
     if (active === 'fishing') {
-      nav.style.setProperty('bottom', 'max(112px, calc(env(safe-area-inset-bottom) + 112px))', 'important');
-      nav.style.setProperty('right', 'max(14px, env(safe-area-inset-right))', 'important');
+      nav.style.setProperty('bottom', 'var(--v2048-fishing-dock-bottom, max(22px, calc(env(safe-area-inset-bottom) + 18px)))', 'important');
+      nav.style.setProperty('right', 'max(12px, env(safe-area-inset-right))', 'important');
       nav.dataset.v2047FishingDockLift = 'forced-visible-above-bottom-edge';
+      nav.dataset.v2048FishingDock = 'body-fixed-visible-natural-bottom';
     }
-    nav.innerHTML = navItems.map(({ screen, icon, label }) => {
+    const renderDockButton = ({ screen, icon, label }: (typeof navItems)[number]) => {
       if (v13) return `<button class="${screen === active ? 'active' : ''}" data-screen="${screen}" aria-label="${label}"><span>${label}</span></button>`;
       return `<button class="${screen === active ? 'active' : ''}" data-screen="${screen}" data-dock-slot="${screen}" aria-label="${label}" data-label="${label}"><img src="${icon}" alt="" /><span>${label}</span></button>`;
-    }).join('');
+    };
+    const villageDockItem = navItems.find((item) => item.screen === 'village') ?? navItems[0];
+    const lowerDockItems = navItems.filter((item) => item.screen !== 'village');
+    nav.innerHTML = `<div class="dock-row dock-row-top">${renderDockButton(villageDockItem)}</div><div class="dock-row dock-row-bottom">${lowerDockItems.map(renderDockButton).join('')}</div>`;
     document.body.appendChild(nav);
     root.classList.add('has-fixed-root-nav');
     this.applyViewportSafeGuards(root, nav);
@@ -1147,6 +1189,8 @@ class AquaFantasiaGame {
       else if (this.state === 'bite') {
         this.startReeling();
         this.holding = true;
+        this.reelPanel?.classList.add('is-holding');
+        this.stageHost?.classList.add('is-reel-holding');
         this.spawnTouchRing(ev.clientX, ev.clientY);
       } else if (this.state === 'reeling') {
         this.holding = true;
@@ -1236,7 +1280,7 @@ class AquaFantasiaGame {
 
   private createCastButton(): void {
     if (!this.uiLayer) return;
-    this.uiLayer.innerHTML = `<button class="cast-button v2020-cast-button v2021-bait-aware-cast v2026-stable-cast-button v2029-calm-cast-button v2030-cast-button v2031-cast-button v2032-cast-button v2033-cast-button v2034-cast-button v2035-cast-button v2036-cast-button v2037-cast-button v2038-cast-button v2040-cast-button v2041-cast-button v2042-cast-button v2043-cast-button v2044-cast-button v2045-cast-button" type="button" aria-label="낚시 시작"><img class="v2020-cast-button-art" src="${ASSET.uiButtonSmallAqua}" alt="" aria-hidden="true" /><img class="v2021-cast-pill-art" src="${ASSET.uiButtonPillAqua}" alt="" aria-hidden="true" /><span class="cast-icon" aria-hidden="true"></span><strong>낚시 시작</strong></button>`;
+    this.uiLayer.innerHTML = `<button class="cast-button v2020-cast-button v2021-bait-aware-cast v2026-stable-cast-button v2029-calm-cast-button v2030-cast-button v2031-cast-button v2032-cast-button v2033-cast-button v2034-cast-button v2035-cast-button v2036-cast-button v2037-cast-button v2038-cast-button v2040-cast-button v2041-cast-button v2042-cast-button v2043-cast-button v2044-cast-button v2045-cast-button v2048-cast-button" type="button" aria-label="낚시 시작"><img class="v2020-cast-button-art" src="${ASSET.uiButtonSmallAqua}" alt="" aria-hidden="true" /><img class="v2021-cast-pill-art" src="${ASSET.uiButtonPillAqua}" alt="" aria-hidden="true" /><span class="cast-icon" aria-hidden="true"></span><strong>낚시 시작</strong></button>`;
     this.castBtn = this.uiLayer.querySelector<HTMLButtonElement>('.cast-button')!;
     this.syncCastButtonState();
     this.castBtn.addEventListener('click', () => { this.reassertImmersiveMode(); this.castLine(); });
@@ -1328,7 +1372,7 @@ class AquaFantasiaGame {
     this.setFishingPhase('reeling');
     this.stageHost?.classList.remove('bite-mode', 'waiting-mode');
     this.stageHost?.classList.add('reeling-mode');
-    this.tension = 50 + this.getRegion().difficulty * 2;
+    this.tension = 48 + this.getRegion().difficulty * 1.4;
     this.safeTimer = 0;
     this.surgeTimer = 0;
     this.perfectChain = 0;
@@ -1338,7 +1382,7 @@ class AquaFantasiaGame {
     this.hideBiteCallout();
     this.reelPanel?.classList.remove('hidden');
     this.holdPad?.removeAttribute('disabled');
-    this.setHint('릴 감기! 아래 큰 노란 버튼을 꾹 누르거나 바다 화면을 누르며 초록 안전지대를 2.4초 유지하세요');
+    this.setHint('릴 감기! 아래 큰 버튼 또는 바다 화면을 누르면 게이지가 올라가고, 떼면 내려갑니다. 초록 안전지대를 2.2초 유지하세요');
     this.updateTensionUI();
     this.spawnActionBadge('릴링!', '누르는 동안 장력이 올라가요');
   }
@@ -1348,6 +1392,8 @@ class AquaFantasiaGame {
     this.state = success ? 'success' : 'fail';
     this.setFishingPhase(this.state);
     this.holding = false;
+    this.reelPanel?.classList.remove('is-holding');
+    this.stageHost?.classList.remove('is-reel-holding');
     this.hideBiteCallout();
     this.reelPanel?.classList.add('hidden');
     this.holdPad?.setAttribute('disabled', 'true');
@@ -1437,6 +1483,8 @@ class AquaFantasiaGame {
     if (this.biteText) this.biteText.visible = false;
     this.hideBiteCallout();
     this.reelPanel?.classList.add('hidden');
+    this.reelPanel?.classList.remove('is-holding');
+    this.stageHost?.classList.remove('is-reel-holding');
     this.stageHost?.classList.remove('catch-bloom', 'fallback-casting', 'surge-alert', 'guard-active', 'casting-mode', 'waiting-mode', 'bite-mode', 'reeling-mode');
     this.stageHost?.querySelectorAll('.v930-fx, .action-badge').forEach((node) => node.remove());
     this.stageHost?.querySelector('.catch-result-card')?.remove();
@@ -1481,7 +1529,7 @@ class AquaFantasiaGame {
       this.surgeTimer += dt / 60;
       const surgeActive = this.surgeTimer > 1.25 && Math.sin(now / 520) > 0.82;
       const drift = Math.sin(now / 215) * 0.31 * regionMod * bossMod + Math.sin(now / 770) * 0.10 + (surgeActive ? Math.sin(now / 80) * 0.38 : 0);
-      this.tension += ((this.holding ? 0.52 + regionMod * 0.08 : -0.34) / gearRelief) * dt + drift * 0.72;
+      this.tension += ((this.holding ? 0.78 + regionMod * 0.08 : -0.58 - regionMod * 0.03) / gearRelief) * dt + drift * 0.38;
       if (this.bobber) {
         const pull = this.holding ? -0.18 : 0.10;
         this.bobber.x += Math.sin(now / 90) * 0.25 * dt;
@@ -1503,7 +1551,7 @@ class AquaFantasiaGame {
       this.stageHost?.classList.toggle('surge-alert', surgeActive);
       this.updateTensionUI();
       if (this.tension <= 0 || this.tension >= 100) this.finishCatch(false);
-      if (this.safeTimer >= 2.4) this.finishCatch(true);
+      if (this.safeTimer >= 2.2) this.finishCatch(true);
     }
   }
 
@@ -1516,7 +1564,7 @@ class AquaFantasiaGame {
     this.surgeTimer += dt / 60;
     const surgeActive = this.surgeTimer > 1.25 && Math.sin(now / 520) > 0.82;
     const drift = Math.sin(now / 215) * 0.28 * regionMod * bossMod + Math.sin(now / 770) * 0.10 + (surgeActive ? Math.sin(now / 84) * 0.34 : 0);
-    this.tension += ((this.holding ? 0.50 + regionMod * 0.08 : -0.32) / gearRelief) * dt + drift * 0.72;
+    this.tension += ((this.holding ? 0.76 + regionMod * 0.08 : -0.56 - regionMod * 0.03) / gearRelief) * dt + drift * 0.38;
     const zone = this.safeZone();
     const safe = this.tension >= zone.left && this.tension <= zone.right;
     const center = (zone.left + zone.right) / 2;
@@ -1532,7 +1580,7 @@ class AquaFantasiaGame {
     this.stageHost?.classList.toggle('surge-alert', surgeActive);
     this.updateTensionUI();
     if (this.tension <= 0 || this.tension >= 100) this.finishCatch(false);
-    if (this.safeTimer >= 2.4) this.finishCatch(true);
+    if (this.safeTimer >= 2.2) this.finishCatch(true);
   }
 
 
@@ -1599,7 +1647,7 @@ class AquaFantasiaGame {
     this.tensionFill.classList.toggle('perfect', value >= zone.left && value <= zone.right);
     this.safeFill.style.left = `${zone.left}%`;
     this.safeFill.style.width = `${zone.right - zone.left}%`;
-    if (this.progressNode) this.progressNode.style.width = `${Math.min(100, (this.safeTimer / 2.4) * 100)}%`;
+    if (this.progressNode) this.progressNode.style.width = `${Math.min(100, (this.safeTimer / 2.2) * 100)}%`;
     const verticalMarker = this.reelPanel?.querySelector<HTMLElement>('.v2040-vertical-marker');
     const verticalSafe = this.reelPanel?.querySelector<HTMLElement>('.v2040-vertical-safe');
     if (verticalMarker) verticalMarker.style.top = `${Math.max(3, Math.min(97, 100 - value))}%`;
@@ -1609,11 +1657,15 @@ class AquaFantasiaGame {
     }
     const surgeNode = this.reelPanel?.querySelector<HTMLSpanElement>('.surge-meter span');
     if (surgeNode) surgeNode.style.width = `${Math.min(100, this.perfectChain * 72)}%`;
+    const statusNode = this.reelPanel?.querySelector<HTMLElement>('[data-reel-status]');
+    if (statusNode) statusNode.textContent = this.holding ? '누르는 중: 장력 상승 ↑' : '손을 뗀 상태: 장력 하강 ↓';
+    this.reelPanel?.classList.toggle('is-holding', this.holding);
+    this.stageHost?.classList.toggle('is-reel-holding', this.holding);
   }
 
   private safeZone(): { left: number; right: number } {
     const masteryBonus = Math.min(4, (this.save.mastery[this.save.region] ?? 0) * 0.08);
-    const width = Math.max(24, 36 - this.getRegion().difficulty * 2.5 + this.save.gear.lineLevel * 1.8 + masteryBonus);
+    const width = Math.max(28, 40 - this.getRegion().difficulty * 2.2 + this.save.gear.lineLevel * 2.0 + masteryBonus);
     const center = 55 + Math.sin(performance.now() / 1800) * (this.activeFish.rarity === 'BOSS' ? 2.6 : 1.2);
     return { left: center - width / 2, right: center + width / 2 };
   }
@@ -1628,8 +1680,8 @@ class AquaFantasiaGame {
   private showBiteCallout(title: string): void {
     this.hideBiteCallout();
     const callout = document.createElement('div');
-    callout.className = 'bite-callout v2030-bite-callout v2041-bite-callout v2042-bite-callout v2043-bite-callout v2046-bite-callout';
-    callout.innerHTML = `<strong>${title}</strong><span>여기를 누르면 릴링 시작!</span><button type="button" class="v2046-bite-start">릴링 시작</button>`;
+    callout.className = 'bite-callout v2030-bite-callout v2041-bite-callout v2042-bite-callout v2043-bite-callout v2046-bite-callout v2048-bite-callout';
+    callout.innerHTML = `<strong>${title}</strong><span>여기를 누르면 릴링 시작!</span><button type="button" class="v2046-bite-start v2048-bite-start">릴링 시작</button>`;
     callout.addEventListener('pointerdown', (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
@@ -2159,6 +2211,8 @@ class AquaFantasiaGame {
       else if (this.state === 'bite') {
         this.startReeling();
         this.holding = true;
+        this.reelPanel?.classList.add('is-holding');
+        this.stageHost?.classList.add('is-reel-holding');
         this.spawnTouchRing(ev.clientX, ev.clientY);
       } else if (this.state === 'reeling') { this.holding = true; this.spawnTouchRing(ev.clientX, ev.clientY); }
     });
@@ -2392,8 +2446,8 @@ class AquaFantasiaGame {
     nav.classList.add('v1117-nav-safe', 'v1118-nav-safe', 'v1119-nav-safe');
     if (nav.classList.contains('v208-right-dock-nav')) {
       nav.style.setProperty('left', 'auto', 'important');
-      nav.style.setProperty('right', 'var(--v2016-dock-right, var(--v2014-dock-right, var(--v2013-dock-right, max(10px, env(safe-area-inset-right))))))', 'important');
-      nav.style.setProperty('bottom', 'var(--v2016-dock-bottom, var(--v2014-dock-bottom, var(--v2013-dock-bottom, calc(max(14px, env(safe-area-inset-bottom)) + 6px)))))', 'important');
+      nav.style.setProperty('right', 'var(--v2016-dock-right, var(--v2014-dock-right, var(--v2013-dock-right, max(10px, env(safe-area-inset-right)))))))', 'important');
+      nav.style.setProperty('bottom', 'var(--v2016-dock-bottom, var(--v2014-dock-bottom, var(--v2013-dock-bottom, calc(max(14px, env(safe-area-inset-bottom)) + 6px))))))', 'important');
       nav.style.setProperty('width', 'auto', 'important');
       nav.style.setProperty('max-width', 'calc(100vw - 16px)', 'important');
       nav.style.setProperty('min-width', '0', 'important');
@@ -2404,7 +2458,7 @@ class AquaFantasiaGame {
       nav.style.setProperty('display', 'grid', 'important');
       nav.style.setProperty('grid-template-columns', 'repeat(3, var(--v2016-dock-button, var(--v2014-dock-button, var(--v2013-dock-button, 50px))))', 'important');
       nav.style.setProperty('grid-template-rows', 'repeat(2, var(--v2016-dock-button, var(--v2014-dock-button, var(--v2013-dock-button, 50px))))', 'important');
-      nav.style.setProperty('gap', 'var(--v2016-dock-gap, var(--v2014-dock-gap, var(--v2013-dock-gap, 4px))))', 'important');
+      nav.style.setProperty('gap', 'var(--v2016-dock-gap, var(--v2014-dock-gap, var(--v2013-dock-gap, 4px)))))', 'important');
       nav.style.setProperty('padding', '0', 'important');
       nav.style.setProperty('background', 'transparent', 'important');
       nav.style.setProperty('background-image', 'none', 'important');
@@ -2423,8 +2477,8 @@ class AquaFantasiaGame {
     if (!tooWide) return;
     nav.style.setProperty('left', 'calc(var(--v119-visual-left, 0px) + ((var(--v119-visual-width, var(--v118-visual-width, 100vw)) - var(--v119-app-width, var(--v118-app-width, 100vw))) / 2) + var(--v119-edge-left, 4px))', 'important');
     nav.style.setProperty('right', 'auto', 'important');
-    nav.style.setProperty('width', 'max(0px, calc(var(--v119-app-width, var(--v118-app-width, 100vw)) - var(--v119-edge-left, 4px) - var(--v119-edge-right, 4px))))', 'important');
-    nav.style.setProperty('max-width', 'max(0px, calc(var(--v119-app-width, var(--v118-app-width, 100vw)) - var(--v119-edge-left, 4px) - var(--v119-edge-right, 4px))))', 'important');
+    nav.style.setProperty('width', 'max(0px, calc(var(--v119-app-width, var(--v118-app-width, 100vw)) - var(--v119-edge-left, 4px) - var(--v119-edge-right, 4px)))))', 'important');
+    nav.style.setProperty('max-width', 'max(0px, calc(var(--v119-app-width, var(--v118-app-width, 100vw)) - var(--v119-edge-left, 4px) - var(--v119-edge-right, 4px)))))', 'important');
     nav.style.setProperty('min-width', '0', 'important');
     nav.style.setProperty('margin', '0', 'important');
     nav.style.setProperty('transform', 'none', 'important');

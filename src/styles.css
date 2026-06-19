@@ -26279,3 +26279,197 @@ body.v2047-interior-open .bottom-nav.v2047-identical-dock-nav { display: none !i
     min-height: 64px !important;
   }
 }
+
+/* v2.0.48 Dock/fishing/anchor system: natural dock position, no empty dock cells, centered cast, explicit reel hold, bottom-ground anchors. */
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] {
+  --v2048-dock-button: clamp(46px, 10vw, 52px);
+  --v2048-dock-icon: clamp(23px, 5vw, 27px);
+  --v2048-dock-gap: 5px;
+  --v2048-dock-padding: 5px;
+  --v2048-dock-right: max(10px, env(safe-area-inset-right));
+  --v2048-dock-bottom: calc(max(8px, env(safe-area-inset-bottom)) + 8px);
+  --v2048-dock-stack-h: calc((var(--v2048-dock-button) * 2) + var(--v2048-dock-gap) + (var(--v2048-dock-padding) * 4));
+  --v2048-fishing-dock-bottom: calc(max(14px, env(safe-area-inset-bottom)) + 10px);
+  --v2048-aqua-frame: rgba(132, 240, 255, .48);
+  --v2048-aqua-frame-soft: rgba(211, 253, 255, .28);
+  --v2048-aqua-bg: linear-gradient(180deg, rgba(255,255,255,.14), rgba(7, 112, 153, .24));
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] .v2-world-controls {
+  border: 1px solid var(--v2048-aqua-frame) !important;
+  background: var(--v2048-aqua-bg) !important;
+  box-shadow: 0 10px 22px rgba(0, 55, 90, .16), inset 0 1px 0 rgba(255,255,255,.24) !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] .bottom-nav.v2048-identical-dock-nav {
+  position: fixed !important;
+  right: var(--v2048-dock-right) !important;
+  bottom: var(--v2048-dock-bottom) !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: var(--v2048-dock-gap) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+  z-index: 1500 !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] .bottom-nav.v2048-identical-dock-nav .dock-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--v2048-dock-gap) !important;
+  padding: var(--v2048-dock-padding) !important;
+  border: 1px solid var(--v2048-aqua-frame) !important;
+  border-radius: 18px !important;
+  background: var(--v2048-aqua-bg) !important;
+  box-shadow: 0 8px 18px rgba(0, 55, 92, .13), inset 0 1px 0 rgba(255,255,255,.22) !important;
+  pointer-events: none !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] .bottom-nav.v2048-identical-dock-nav .dock-row-top {
+  width: calc(var(--v2048-dock-button) + var(--v2048-dock-padding) * 2 + 2px) !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] .bottom-nav.v2048-identical-dock-nav .dock-row-bottom {
+  width: calc((var(--v2048-dock-button) * 3) + (var(--v2048-dock-gap) * 2) + (var(--v2048-dock-padding) * 2) + 2px) !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] .bottom-nav.v2048-identical-dock-nav button {
+  width: var(--v2048-dock-button) !important;
+  height: var(--v2048-dock-button) !important;
+  min-width: var(--v2048-dock-button) !important;
+  min-height: var(--v2048-dock-button) !important;
+  display: grid !important;
+  grid-template-rows: 1fr auto !important;
+  place-items: center !important;
+  gap: 1px !important;
+  border: 1px solid var(--v2048-aqua-frame-soft) !important;
+  border-radius: 15px !important;
+  background: rgba(241, 255, 255, .12) !important;
+  pointer-events: auto !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] .bottom-nav.v2048-identical-dock-nav button img {
+  width: var(--v2048-dock-icon) !important;
+  height: var(--v2048-dock-icon) !important;
+  object-fit: contain !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] .bottom-nav.v2048-identical-dock-nav button span {
+  font-size: 8px !important;
+  line-height: 1 !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  text-shadow: 0 1px 4px rgba(0, 33, 63, .82) !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] {
+  --v2048-dock-bottom: var(--v2048-fishing-dock-bottom);
+  --v2048-dock-right: max(12px, env(safe-area-inset-right));
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] .bottom-nav.v2048-identical-dock-nav {
+  right: var(--v2048-dock-right) !important;
+  bottom: var(--v2048-fishing-dock-bottom) !important;
+  max-height: none !important;
+  contain: layout paint !important;
+  transform: translateZ(0) !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] #app,
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] .fishing-screen.v2048-fishing-playable-screen {
+  overflow: visible !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] .fishing-screen.v2048-fishing-playable-screen .stage-ui {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  pointer-events: none !important;
+  z-index: 1290 !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] .cast-button.v2048-cast-button {
+  position: fixed !important;
+  left: 50vw !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: calc(var(--v2048-fishing-dock-bottom) + var(--v2048-dock-stack-h) + 18px) !important;
+  transform: translateX(-50%) !important;
+  width: min(260px, calc(100vw - 34px)) !important;
+  min-height: 62px !important;
+  border-radius: 24px !important;
+  pointer-events: auto !important;
+  z-index: 1330 !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] .cast-button.v2048-cast-button.hidden {
+  display: none !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] .fishing-screen.v2048-fishing-playable-screen .v2048-reel-panel {
+  position: fixed !important;
+  left: 50vw !important;
+  right: auto !important;
+  bottom: min(calc(var(--v2048-fishing-dock-bottom) + var(--v2048-dock-stack-h) + 22px), calc(100dvh - 318px)) !important;
+  transform: translateX(-50%) !important;
+  width: min(400px, calc(100vw - 22px)) !important;
+  max-width: calc(100vw - 22px) !important;
+  min-height: 190px !important;
+  padding: 12px !important;
+  z-index: 1640 !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] .fishing-screen.v2048-fishing-playable-screen .v2048-reel-panel.hidden {
+  display: none !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] .fishing-screen.v2048-fishing-playable-screen .v2048-hold-pad {
+  min-height: 82px !important;
+  border-radius: 22px !important;
+  animation: v2048HoldPulse 1.0s ease-in-out infinite alternate !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] .fishing-screen.v2048-fishing-playable-screen .v2048-reel-panel.is-holding .v2048-hold-pad,
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] .fishing-screen.v2048-fishing-playable-screen .v2048-hold-pad:active {
+  transform: translateY(1px) scale(.99) !important;
+  filter: brightness(1.1) saturate(1.16) !important;
+  box-shadow: 0 10px 22px rgba(255, 162, 41, .34), inset 0 2px 0 rgba(255,255,255,.78) !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] .v2048-reel-status {
+  display: block !important;
+  min-height: 24px !important;
+  padding: 5px 8px !important;
+  border-radius: 999px !important;
+  background: rgba(4, 91, 126, .12) !important;
+  color: #07536b !important;
+  -webkit-text-fill-color: #07536b !important;
+  font-size: 12px !important;
+  font-weight: 1000 !important;
+  text-align: center !important;
+  text-shadow: none !important;
+}
+html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] .v2048-reel-panel.is-holding .v2048-reel-status {
+  background: rgba(255, 205, 79, .35) !important;
+  color: #674000 !important;
+  -webkit-text-fill-color: #674000 !important;
+}
+@keyframes v2048HoldPulse {
+  from { filter: brightness(1) saturate(1); }
+  to { filter: brightness(1.08) saturate(1.15); }
+}
+@media (max-height: 740px) {
+  html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] {
+    --v2048-fishing-dock-bottom: calc(max(10px, env(safe-area-inset-bottom)) + 8px);
+  }
+  html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] .cast-button.v2048-cast-button {
+    bottom: calc(var(--v2048-fishing-dock-bottom) + var(--v2048-dock-stack-h) + 10px) !important;
+    min-height: 56px !important;
+  }
+  html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] .fishing-screen.v2048-fishing-playable-screen .v2048-reel-panel {
+    bottom: min(calc(var(--v2048-fishing-dock-bottom) + var(--v2048-dock-stack-h) + 12px), calc(100dvh - 284px)) !important;
+    min-height: 164px !important;
+    padding: 9px !important;
+  }
+  html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] body[data-screen="fishing"] .fishing-screen.v2048-fishing-playable-screen .v2048-hold-pad {
+    min-height: 68px !important;
+  }
+}

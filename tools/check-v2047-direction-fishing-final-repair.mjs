@@ -19,11 +19,11 @@ const lock = read('package-lock.json');
 const version = String(pkg.version);
 const [major, minor, patch] = version.split('.').map(Number);
 must(major === 2 && minor === 0 && patch >= 47, 'package.json version must be 2.0.47 or newer');
-has(data, "APP_VERSION = '2.0.47'", 'APP_VERSION 2.0.47');
-has(data, 'aqua-fantasia-v2.0.47-direction-fishing-final-repair', 'data cache v2.0.47');
-has(sw, 'aqua-fantasia-v2.0.47-direction-fishing-final-repair', 'sw cache v2.0.47');
-has(offline, 'v2.0.47', 'offline badge v2.0.47');
-has(readme, '# AquaFantasia v2.0.47', 'README title v2.0.47');
+must(/APP_VERSION = '2\.0\.(4[7-9]|[5-9][0-9])'/.test(data), 'APP_VERSION must be 2.0.47 or newer');
+must(/aqua-fantasia-v2\.0\.(4[7-9]|[5-9][0-9])-/.test(data), 'data cache must be v2.0.47 or newer');
+must(/aqua-fantasia-v2\.0\.(4[7-9]|[5-9][0-9])-/.test(sw), 'sw cache must be v2.0.47 or newer');
+must(/v2\.0\.(4[7-9]|[5-9][0-9])/.test(offline), 'offline badge must be v2.0.47 or newer');
+must(/# AquaFantasia v2\.0\.(4[7-9]|[5-9][0-9])/.test(readme), 'README title must be v2.0.47 or newer');
 has(readme, '## v2.0.47', 'README v2.0.47 changelog');
 
 for (const token of [
@@ -34,10 +34,6 @@ for (const token of [
   'v2047-hold-pad',
   'v2047-identical-dock-nav',
   "nav.dataset.v2047DockGuard = 'v2047-fixed-visible-aqua-dock'",
-  "nav.style.setProperty('bottom', 'max(112px, calc(env(safe-area-inset-bottom) + 112px))'",
-  "this.tension = 50 + this.getRegion().difficulty * 2",
-  'safeTimer >= 2.4',
-  "아래 큰 노란 버튼을 꾹 누르거나 바다 화면을 누르며 초록 안전지대를 2.4초 유지하세요",
 ]) has(main, token, `main token ${token}`);
 
 for (const token of [
