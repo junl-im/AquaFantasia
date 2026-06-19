@@ -15,12 +15,12 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.50', 'package.json version must be 2.0.50');
-has(data, "APP_VERSION = '2.0.50'", 'APP_VERSION 2.0.50');
-has(data, 'aqua-fantasia-v2.0.50-content-expansion-asset-polish', 'data cache v2.0.50');
-has(sw, 'aqua-fantasia-v2.0.50-content-expansion-asset-polish', 'sw cache v2.0.50');
-has(offline, 'v2.0.50', 'offline badge v2.0.50');
-has(readme, '# AquaFantasia v2.0.50', 'README title v2.0.50');
+must(/^2\.0\.(5[0-9]|[6-9][0-9])$/.test(pkg.version), 'package.json version must keep v2.0.50+ lineage');
+must(/APP_VERSION = '2\.0\.(5[0-9]|[6-9][0-9])'/.test(data), 'APP_VERSION must keep v2.0.50+ lineage');
+must(/aqua-fantasia-v2\.0\.(5[0-9]|[6-9][0-9])-/.test(data), 'data cache must keep v2.0.50+ lineage');
+must(/aqua-fantasia-v2\.0\.(5[0-9]|[6-9][0-9])-/.test(sw), 'sw cache must keep v2.0.50+ lineage');
+must(/v2\.0\.(5[0-9]|[6-9][0-9])/.test(offline), 'offline badge must keep v2.0.50+ lineage');
+must(/^# AquaFantasia v2\.0\.(5[0-9]|[6-9][0-9])/m.test(readme), 'README title must keep v2.0.50+ lineage');
 has(readme, '## v2.0.50', 'README v2.0.50 changelog');
 has(pkg.scripts.validate, 'check-v2050-content-expansion-asset-polish.mjs', 'v2050 validate hook');
 

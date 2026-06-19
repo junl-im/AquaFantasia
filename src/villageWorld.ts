@@ -783,6 +783,7 @@ export class VillageWorld {
   private lastDialogAt = 0;
   private lastPassiveIncomeAt = 0;
   private lastNpcHealthCheckAt = 0;
+  private motionClock = 0;
   private destroyed = false;
   private joystick = { x: 0, y: 0, active: false, pointerId: null as number | null };
   private joystickKnob?: HTMLElement;
@@ -859,6 +860,7 @@ export class VillageWorld {
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
     this.root.dataset.v2050ContentExpansionAssetPolish = 'calmer-assets-island-expansion-routes';
+    this.root.dataset.v2051MotionPolish = 'actor-footstep-object-motion';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 천천히 이동하고, 빈 바닥 터치로도 이동할 수 있습니다.');
   }
 
@@ -1182,6 +1184,7 @@ export class VillageWorld {
       const p = centerOfTile(placement.x, placement.y);
       const item = this.createDecorationGraphic(deco.kind, placement.scale);
       item.eventMode = 'none';
+      item.name = `deco-${deco.kind}`;
       item.position.set(p.x, p.y);
       item.zIndex = deco.y * 20 + 10;
       this.decorationLayer.addChild(item);
@@ -2011,6 +2014,7 @@ export class VillageWorld {
       this.updateActor(npc, deltaMs);
     }
     this.actorLayer.sortChildren();
+    this.animateDecorationLayer(deltaMs);
     this.softFollowPlayer(deltaMs);
     const now = performance.now();
     if (now - this.lastPassiveIncomeAt > 12000) {
@@ -2035,13 +2039,35 @@ export class VillageWorld {
     }
   }
 
+  private animateDecorationLayer(deltaMs: number): void {
+    this.motionClock += deltaMs;
+    const t = this.motionClock / 1000;
+    for (let i = 0; i < this.decorationLayer.children.length; i += 1) {
+      const item = this.decorationLayer.children[i] as Container;
+      const name = item.name ?? '';
+      if (/waterRing|shoreFoam|splash|fishShadow|duck/i.test(name)) {
+        const wave = Math.sin(t * 1.7 + i * 0.63);
+        item.alpha = 0.72 + wave * 0.18;
+        item.rotation = Math.sin(t * 0.9 + i) * 0.01;
+      } else if (/seagull|butterfly|petals|sparkles/i.test(name)) {
+        item.y += Math.sin(t * 2.4 + i) * 0.10;
+        item.rotation = Math.sin(t * 1.9 + i) * 0.045;
+        item.alpha = 0.78 + Math.sin(t * 3.0 + i) * 0.16;
+      } else if (/flag|banner|lamp|steam|tree|palm|flower/i.test(name)) {
+        item.rotation = Math.sin(t * 1.2 + i * 0.41) * 0.018;
+      }
+    }
+  }
+
   private animateActorWalk(actor: Actor, movementAmount: number, deltaMs: number): void {
     const walking = movementAmount > 0.18;
     if (walking) actor.walkPhase += deltaMs * 0.015;
     else actor.walkPhase *= 0.72;
-    const bob = walking ? Math.sin(actor.walkPhase) * 3.2 : 0;
-    const sway = walking ? Math.sin(actor.walkPhase * 0.5) * 0.035 : 0;
+    const bob = walking ? Math.sin(actor.walkPhase) * 4.2 : 0;
+    const sway = walking ? Math.sin(actor.walkPhase * 0.5) * 0.052 : 0;
+    const stepSide = walking ? Math.sin(actor.walkPhase * 2) * 1.8 : 0;
     if (actor.body instanceof Sprite) {
+      actor.body.position.x = stepSide;
       actor.body.position.y = 14 + bob;
       actor.body.rotation = sway;
       const targetH = actor.role === 'player' ? 90 : 80;
