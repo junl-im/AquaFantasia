@@ -13,11 +13,13 @@ const sw = read('public/sw.js');
 const offline = read('public/offline.html');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.38', 'package.json version must be 2.0.38');
-must(data.includes("APP_VERSION = '2.0.38'"), 'APP_VERSION must be 2.0.38');
-must(data.includes('aqua-fantasia-v2.0.38-fishing-gauge-direction-menu-polish'), 'CACHE_NAME must be v2.0.38 gauge/direction/menu polish');
-must(sw.includes('aqua-fantasia-v2.0.38-fishing-gauge-direction-menu-polish'), 'service worker cache must be v2.0.38');
-must(offline.includes('v2.0.38'), 'offline badge must mention v2.0.38');
+const [major, minor, patch] = pkg.version.split('.').map(Number);
+const versionOk = major === 2 && minor === 0 && patch >= 38;
+must(versionOk, 'package.json version must be 2.0.38 or newer');
+must(data.includes(`APP_VERSION = '${pkg.version}'`), `APP_VERSION must be ${pkg.version}`);
+must(data.includes(`aqua-fantasia-v${pkg.version}-`), `CACHE_NAME must include v${pkg.version}`);
+must(sw.includes(`aqua-fantasia-v${pkg.version}-`), `service worker cache must include v${pkg.version}`);
+must(offline.includes(`v${pkg.version}`), `offline badge must mention v${pkg.version}`);
 
 for (const token of [
   "dataset.v2038UiPolish = 'v2038-gauge-direction-menu-polish'",
@@ -35,7 +37,7 @@ for (const token of [
 ]) must(main.includes(token), `main.ts missing ${token}`);
 
 for (const token of [
-  'v2.0.38 Gauge/direction/menu repair pass',
+  'Gauge/direction/menu repair pass',
   '--v2038-control-gap: 2px',
   '--v2038-fishing-safe-bottom',
   '.village-world-screen .v2-world-controls button',

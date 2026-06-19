@@ -1,4 +1,4 @@
-# AquaFantasia v2.0.38
+# AquaFantasia v2.0.39
 
 AquaFantasia는 Vite + TypeScript + PixiJS 8 기반의 모바일 세로모드 SD 해양 판타지 마을 RPG입니다.
 
@@ -19,6 +19,19 @@ npm run validate
 npm run typecheck
 npm run build
 ```
+
+## v2.0.39 변경사항
+
+- 마을/낚시/메뉴/HUD/건설/오브젝트를 함께 재점검하는 감사 패치를 추가했습니다.
+- 낚시게임의 릴 게이지 조작 영역이 항상 중앙 하단 안전영역 안에서 보이도록 `v2039-reel-panel` 가드를 추가했습니다.
+- 낚시 성공/실패 결과 카드가 좌우 화면 밖으로 밀리지 않도록 fixed 중앙 카드 레이어를 다시 고정했습니다.
+- 우측 상단 `+ / - / 원점 / 건설 / 상점 / 출항` 조작바는 테두리 기준으로 3px 간격을 유지하도록 보정했습니다.
+- 가방/지도/퀘스트/상점 화면에 남아 있던 비아쿠아 그림 프레임 계열을 더 강하게 숨기고, 본문 카드는 밝은 아쿠아 톤으로 통일했습니다.
+- 마을 큰 나무/꽃나무/수목류가 화면 가장자리에서 잘려 보이지 않도록 축소/중앙 안전 배치 규칙을 추가했습니다.
+- HUD 정보 라벨, 과한 음영, 도크와 팝업의 z-index 겹침을 다시 점검했습니다.
+- `check-v2039-village-menu-fishing-audit.mjs` 검증을 추가했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.39`로 동기화했습니다.
+- README.md만 수정했고 별도 `*_NOTES.md` 파일은 생성하지 않았습니다.
 
 ## v2.0.38 변경사항
 

@@ -639,6 +639,25 @@ function shouldUseDecoration(deco: Decoration): boolean {
   return !V2029_HIDDEN_DECORATION_KEYS.has(decorationAuditKey(deco));
 }
 
+const V2039_EDGE_SAFE_DECORATIONS = new Set<DecoKind>([
+  'tree', 'palm', 'tropicalTree', 'palmAlt', 'cherryTree', 'mapleTree', 'pineTree', 'crystalTree', 'flowerTree', 'cypressTree',
+  'lighthouse', 'bridgeAsset', 'wideStairs', 'bridge', 'coral', 'rock',
+]);
+
+function auditedDecorationPlacement(deco: Decoration): { x: number; y: number; scale: number } {
+  let x = deco.x;
+  let y = deco.y;
+  let scale = deco.scale ?? 1;
+  if (V2039_EDGE_SAFE_DECORATIONS.has(deco.kind)) {
+    if (x <= 5) x += 1;
+    if (x >= 35) x -= 1;
+    if (y >= 35) y -= 0.6;
+    if (deco.kind === 'tree' || deco.kind === 'palm' || deco.kind === 'lighthouse') scale = Math.min(scale, 0.88);
+    if (['tropicalTree', 'palmAlt', 'cherryTree', 'mapleTree', 'pineTree', 'crystalTree', 'flowerTree', 'cypressTree'].includes(deco.kind)) scale = Math.min(scale, 0.42);
+  }
+  return { x, y, scale };
+}
+
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
@@ -1060,8 +1079,9 @@ export class VillageWorld {
     this.decorationLayer.removeChildren();
     for (const deco of VILLAGE_DECORATIONS) {
       if (!shouldUseDecoration(deco)) continue;
-      const p = centerOfTile(deco.x, deco.y);
-      const item = this.createDecorationGraphic(deco.kind, deco.scale ?? 1);
+      const placement = auditedDecorationPlacement(deco);
+      const p = centerOfTile(placement.x, placement.y);
+      const item = this.createDecorationGraphic(deco.kind, placement.scale);
       item.position.set(p.x, p.y + TILE_H * 0.48);
       item.zIndex = deco.y * 20 + 10;
       this.decorationLayer.addChild(item);
