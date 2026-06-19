@@ -1,13 +1,13 @@
 {
   "name": "aqua-fantasia",
   "private": true,
-  "version": "2.0.39",
+  "version": "2.0.40",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build --base=./",
     "preview": "vite preview --host 0.0.0.0",
-    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v2025-persistent-regression-guard.mjs && node tools/check-v2027-root-cause-ui-repair.mjs && node tools/check-v2028-zero-defect-ui-audit.mjs && node tools/check-v2029-pixel-perfect-audit.mjs && node tools/check-v2030-no-overlap-root-repair.mjs && node tools/check-v2031-final-screen-audit.mjs && node tools/check-v2032-playability-repair.mjs && node tools/check-v2033-fishing-ui-direction-dialog-audit.mjs && node tools/check-v2034-screen-integrity-polish.mjs && node tools/check-v2035-direction-fishing-menu-repair.mjs && node tools/check-v2036-fishing-gauge-result-safe-layout.mjs && node tools/check-v2037-spacing-fishing-menu-polish.mjs && node tools/check-v2038-gauge-direction-menu-polish.mjs && node tools/check-v2039-village-menu-fishing-audit.mjs",
+    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v2025-persistent-regression-guard.mjs && node tools/check-v2027-root-cause-ui-repair.mjs && node tools/check-v2028-zero-defect-ui-audit.mjs && node tools/check-v2029-pixel-perfect-audit.mjs && node tools/check-v2030-no-overlap-root-repair.mjs && node tools/check-v2031-final-screen-audit.mjs && node tools/check-v2032-playability-repair.mjs && node tools/check-v2033-fishing-ui-direction-dialog-audit.mjs && node tools/check-v2034-screen-integrity-polish.mjs && node tools/check-v2035-direction-fishing-menu-repair.mjs && node tools/check-v2036-fishing-gauge-result-safe-layout.mjs && node tools/check-v2037-spacing-fishing-menu-polish.mjs && node tools/check-v2038-gauge-direction-menu-polish.mjs && node tools/check-v2039-village-menu-fishing-audit.mjs && node tools/check-v2040-full-screen-engine-ui-audit.mjs",
     "runtime:check": "node tools/check-v2014-background-dock-scroll-polish.mjs --runtime",
     "audit": "node tools/validate-clean.mjs && node tools/check-v2014-background-dock-scroll-polish.mjs --audit",
     "typecheck": "tsc --noEmit",

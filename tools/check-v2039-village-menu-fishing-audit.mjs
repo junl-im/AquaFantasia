@@ -13,11 +13,12 @@ const sw = read('public/sw.js');
 const offline = read('public/offline.html');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.39', 'package.json version must be 2.0.39');
-must(data.includes("APP_VERSION = '2.0.39'"), 'APP_VERSION must be 2.0.39');
-must(data.includes('aqua-fantasia-v2.0.39-village-menu-fishing-audit-polish'), 'CACHE_NAME must be v2.0.39 audit polish');
-must(sw.includes('aqua-fantasia-v2.0.39-village-menu-fishing-audit-polish'), 'service worker cache must be v2.0.39');
-must(offline.includes('v2.0.39'), 'offline badge must mention v2.0.39');
+const [major, minor, patch] = pkg.version.split('.').map(Number);
+must(major === 2 && minor === 0 && patch >= 39, 'package.json version must be 2.0.39 or newer');
+must(data.includes(`APP_VERSION = '${pkg.version}'`), `APP_VERSION must be ${pkg.version}`);
+must(data.includes(`aqua-fantasia-v${pkg.version}-`), `CACHE_NAME must include v${pkg.version}`);
+must(sw.includes(`aqua-fantasia-v${pkg.version}-`), `service worker cache must include v${pkg.version}`);
+must(offline.includes(`v${pkg.version}`), `offline badge must mention v${pkg.version}`);
 
 for (const token of [
   "dataset.v2039AuditPolish = 'v2039-village-menu-fishing-audit-polish'",
@@ -58,8 +59,8 @@ for (const token of [
   'auditedDecorationPlacement',
   "'tree', 'palm', 'tropicalTree', 'palmAlt'",
   'const placement = auditedDecorationPlacement(deco)',
-  "northeast: 'northeast'",
-  "southeast: 'southeast'",
+  "northeast: 'southwest'",
+  "southeast: 'northwest'",
 ]) must(world.includes(token), `villageWorld.ts missing ${token}`);
 
 must(!/html\[data-version="2\.0\.39"\]/.test(css), 'v2039 CSS must not be scoped to exact data-version');

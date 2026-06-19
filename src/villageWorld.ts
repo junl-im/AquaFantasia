@@ -207,17 +207,17 @@ const ACTOR_TEXTURES: Record<Actor['role'], string> = {
 const ACTOR_DIRECTIONS: ActorDirection[] = ['south', 'southeast', 'east', 'northeast', 'north', 'northwest', 'west', 'southwest'];
 
 const ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
-  // v2.0.38: the rebuilt v2023 files already encode their visual direction.
-  // Previous diagonal cross-mapping over-corrected 1시/5시 and made them read as the opposite quadrant.
-  // Keep filename = visual direction for all 8 directions, while preserving the angular input quantization below.
+  // v2.0.40: field observation showed 1시 rendered like 7시 and 5시 like 11시.
+  // The rebuilt diagonal filenames are visually reversed by 180 degrees only on diagonal poses.
+  // Keep cardinal directions unchanged, but map diagonal movement to the opposite diagonal texture.
   south: 'south',
-  southeast: 'southeast',
+  southeast: 'northwest',
   east: 'east',
-  northeast: 'northeast',
+  northeast: 'southwest',
   north: 'north',
-  northwest: 'northwest',
+  northwest: 'southeast',
   west: 'west',
-  southwest: 'southwest',
+  southwest: 'northeast',
 };
 
 const ACTOR_DIRECTION_QA_VECTORS: Array<{ movement: ActorDirection; dx: number; dy: number; texture: ActorDirection }> = [
@@ -225,15 +225,15 @@ const ACTOR_DIRECTION_QA_VECTORS: Array<{ movement: ActorDirection; dx: number; 
   { movement: 'south', dx: 0, dy: 1, texture: 'south' },
   { movement: 'west', dx: -1, dy: 0, texture: 'west' },
   { movement: 'east', dx: 1, dy: 0, texture: 'east' },
-  { movement: 'northwest', dx: -1, dy: -1, texture: 'northwest' },
-  { movement: 'northeast', dx: 1, dy: -1, texture: 'northeast' },
-  { movement: 'southwest', dx: -1, dy: 1, texture: 'southwest' },
-  { movement: 'southeast', dx: 1, dy: 1, texture: 'southeast' },
+  { movement: 'northwest', dx: -1, dy: -1, texture: 'southeast' },
+  { movement: 'northeast', dx: 1, dy: -1, texture: 'southwest' },
+  { movement: 'southwest', dx: -1, dy: 1, texture: 'northeast' },
+  { movement: 'southeast', dx: 1, dy: 1, texture: 'northwest' },
   // v2.0.38: clock-direction QA. 1시/5시 must not cross to 7시/11시 textures.
-  { movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northeast' },
-  { movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' },
-  { movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'northwest' },
-  { movement: 'southwest', dx: -0.5, dy: 0.866, texture: 'southwest' },
+  { movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'southwest' },
+  { movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'northwest' },
+  { movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'southeast' },
+  { movement: 'southwest', dx: -0.5, dy: 0.866, texture: 'northeast' },
 ];
 
 
@@ -1721,6 +1721,8 @@ export class VillageWorld {
     missionAction?.toggleAttribute('hidden', !interior.mission);
     inventoryAction?.toggleAttribute('hidden', !interior.inventory);
     panel.classList.add('open');
+    this.root.classList.add('v2040-interior-open');
+    document.body.classList.add('v2040-interior-open');
     panel.setAttribute('aria-hidden', 'false');
     this.showGuide(interior.title, overrideBody ?? interior.body);
   }
@@ -1729,6 +1731,8 @@ export class VillageWorld {
     const panel = this.root.querySelector<HTMLElement>('.v203-interior-panel');
     if (!panel) return;
     panel.classList.remove('open');
+    this.root.classList.remove('v2040-interior-open');
+    document.body.classList.remove('v2040-interior-open');
     panel.setAttribute('aria-hidden', 'true');
   }
 

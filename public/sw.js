@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.39-village-menu-fishing-audit-polish';
+const CACHE_NAME = 'aqua-fantasia-v2.0.40-full-screen-engine-ui-audit';
 const PRECACHE = [
   "./",
   "./index.html",

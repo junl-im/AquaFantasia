@@ -56,7 +56,7 @@ for (const token of [
   '.v2023-world-map-bg',
 ]) must(css.includes(token), `styles.css missing ${token}`);
 
-for (const token of [
+const hasV2038DirectDiagonal = [
   "northeast: 'northeast'",
   "southeast: 'southeast'",
   "northwest: 'northwest'",
@@ -64,7 +64,17 @@ for (const token of [
   "{ movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northeast' }",
   "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' }",
   'v2.0.38: the rebuilt v2023 files already encode their visual direction',
-]) must(world.includes(token), `villageWorld.ts missing ${token}`);
+].every((token) => world.includes(token));
+const hasV2040ObservedDiagonal = [
+  "northeast: 'southwest'",
+  "southeast: 'northwest'",
+  "northwest: 'southeast'",
+  "southwest: 'northeast'",
+  "{ movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'southwest' }",
+  "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'northwest' }",
+  'v2.0.40: field observation showed 1시 rendered like 7시 and 5시 like 11시',
+].every((token) => world.includes(token));
+must(hasV2038DirectDiagonal || hasV2040ObservedDiagonal, 'villageWorld.ts missing v2038/v2040 diagonal QA lineage');
 
 must(!/html\[data-version="2\.0\.38"\]/.test(css), 'v2038 CSS must not be scoped to data-version');
 for (const forbidden of ['packages.applied-caas', 'applied-caas-gateway', '10.192.', 'internal.api.openai']) {
