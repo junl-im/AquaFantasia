@@ -1,4 +1,4 @@
-# AquaFantasia v2.0.40
+# AquaFantasia v2.0.41
 
 AquaFantasia는 Vite + TypeScript + PixiJS 8 기반의 모바일 세로모드 SD 해양 판타지 마을 RPG입니다.
 
@@ -19,6 +19,19 @@ npm run validate
 npm run typecheck
 npm run build
 ```
+
+## v2.0.41 변경사항
+
+- Polished the right-top village control stack so every button keeps the same square size, icon box, text baseline, tiny gap, and fully transparent outer frame.
+- Kept the right-bottom menu dock layout identical across village, fishing, and menu pages, while making the outer dock frame transparent and strengthening safe-area bottom spacing.
+- Removed the HUD click-to-open copy and added an in-profile player-name editor that is stored with the save data. The profile panel no longer includes CAPTAIN PROFILE or the long explanatory note.
+- Re-centered inventory, quest, map, village, and shop runtime menu pages on the mobile viewport, widened the top wallet/status strip, and added extra bottom padding so page buttons do not collide with the dock.
+- Rebuilt the fishing reel panel as a fixed center-bottom, touch-safe DOM panel: reel gauge, hold button, panel pointer events, result card center position, cast button position, and callout/bobber-image cleanup are all guarded by v2.0.41 CSS and JS tokens.
+- Building interior panels now hide the right-top controls and right-bottom dock through both class and hidden-attribute guards, then restore them on exit.
+- Rechecked the v2023 8-direction player files and removed the diagonal cross-map: 1 o'clock uses northeast, 5 o'clock uses southeast, 7 o'clock uses southwest, and 11 o'clock uses northwest.
+- Added `check-v2041-ui-fishing-profile-polish.mjs` and relaxed the v2.0.40 audit so future v2.0.40+ patches can keep the validation lineage without forcing the old diagonal cross-map.
+- Synchronized `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge, and README to `2.0.41`.
+- README.md remains the only root Markdown file; no `*_NOTES.md` file was created.
 
 ## v2.0.40 변경사항
 

@@ -55,6 +55,12 @@ function sanitizeMissions(value: unknown): Record<string, boolean> {
     .map(([key, done]) => [key, Boolean(done)]));
 }
 
+function sanitizePlayerName(value: unknown, fallback = '\uB098'): string {
+  const raw = typeof value === 'string' ? value : '';
+  const cleaned = raw.replace(/[<>{}\"'`\\]/g, '').replace(/\s+/g, ' ').trim().slice(0, 12);
+  return cleaned || fallback;
+}
+
 function normalizeSave(parsed: Partial<SaveData>): SaveData {
   const base = defaultSave();
   const gear = {
@@ -88,6 +94,7 @@ function normalizeSave(parsed: Partial<SaveData>): SaveData {
     ...parsed,
     version: APP_VERSION,
     screen,
+    playerName: sanitizePlayerName(parsed.playerName, base.playerName),
     region: unlockedRegions.includes(region) ? region : base.region,
     coins: finiteNumber(parsed.coins, base.coins, 0),
     caught: sanitizeRecord(parsed.caught),

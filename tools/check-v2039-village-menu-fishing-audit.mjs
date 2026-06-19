@@ -59,9 +59,11 @@ for (const token of [
   'auditedDecorationPlacement',
   "'tree', 'palm', 'tropicalTree', 'palmAlt'",
   'const placement = auditedDecorationPlacement(deco)',
-  "northeast: 'southwest'",
-  "southeast: 'northwest'",
 ]) must(world.includes(token), `villageWorld.ts missing ${token}`);
+
+const hasObservedCrossDiagonal = world.includes("northeast: 'southwest'") && world.includes("southeast: 'northwest'");
+const hasDirectDiagonal = world.includes("northeast: 'northeast'") && world.includes("southeast: 'southeast'") && world.includes("northwest: 'northwest'") && world.includes("southwest: 'southwest'");
+must(hasObservedCrossDiagonal || hasDirectDiagonal, 'villageWorld.ts missing v2039 diagonal QA lineage');
 
 must(!/html\[data-version="2\.0\.39"\]/.test(css), 'v2039 CSS must not be scoped to exact data-version');
 for (const forbidden of ['packages.applied-caas', 'applied-caas-gateway', '10.192.', 'internal.api.openai']) {

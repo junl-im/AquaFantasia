@@ -61,6 +61,7 @@ export interface GearState {
 export interface SaveData {
   version: string;
   screen: Screen;
+  playerName: string;
   region: RegionKey;
   coins: number;
   caught: Record<string, number>;

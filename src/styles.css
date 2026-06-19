@@ -24576,3 +24576,450 @@ html[data-v2040-full-audit-polish="v2040-full-screen-engine-ui-audit"] .village-
   html[data-v2040-full-audit-polish="v2040-full-screen-engine-ui-audit"] body[data-screen="fishing"] .v2040-vertical-gauge { height: 154px !important; min-height: 154px !important; }
   html[data-v2040-full-audit-polish="v2040-full-screen-engine-ui-audit"] body[data-screen="fishing"] .v2040-reel-panel .v205-reel-grid { min-height: 154px !important; }
 }
+
+
+/* v2.0.41 UI/fishing/profile polish: transparent controls, centered menus, touch-safe reel panel. */
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] {
+  --v2041-control-size: clamp(40px, 8.8vw, 44px);
+  --v2041-control-gap: 2px;
+  --v2041-control-icon: clamp(17px, 4vw, 20px);
+  --v2041-dock-button: clamp(44px, 9.4vw, 50px);
+  --v2041-dock-icon: clamp(23px, 5.2vw, 26px);
+  --v2041-dock-gap: 5px;
+  --v2041-dock-right: max(12px, env(safe-area-inset-right));
+  --v2041-dock-bottom: calc(max(24px, env(safe-area-inset-bottom)) + 12px);
+  --v2041-dock-stack-h: calc(var(--v2041-dock-button) * 2 + var(--v2041-dock-gap));
+  --v2041-aqua-ink: #07415b;
+  --v2041-aqua-soft: rgba(223, 251, 255, .92);
+}
+
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .village-world-screen .v2-world-controls {
+  position: fixed !important;
+  top: calc(max(10px, env(safe-area-inset-top)) + 70px) !important;
+  right: max(8px, env(safe-area-inset-right)) !important;
+  left: auto !important;
+  bottom: auto !important;
+  display: grid !important;
+  grid-auto-flow: row !important;
+  grid-template-columns: var(--v2041-control-size) !important;
+  gap: var(--v2041-control-gap) !important;
+  row-gap: var(--v2041-control-gap) !important;
+  width: var(--v2041-control-size) !important;
+  max-width: var(--v2041-control-size) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 1px solid transparent !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  z-index: 620 !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .village-world-screen .v2-world-controls > *,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .village-world-screen .v2-world-controls button,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .village-world-screen .v2-world-controls .v203-world-control-button {
+  width: var(--v2041-control-size) !important;
+  height: var(--v2041-control-size) !important;
+  min-width: var(--v2041-control-size) !important;
+  min-height: var(--v2041-control-size) !important;
+  max-width: var(--v2041-control-size) !important;
+  max-height: var(--v2041-control-size) !important;
+  box-sizing: border-box !important;
+  border: 1px solid transparent !important;
+  border-radius: 14px !important;
+  padding: 2px !important;
+  margin: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  grid-template-rows: minmax(0, 1fr) auto !important;
+  gap: 0 !important;
+  background: linear-gradient(180deg, rgba(239, 254, 255, .82), rgba(76, 210, 232, .68)) !important;
+  box-shadow: 0 6px 12px rgba(0, 80, 116, .13), inset 0 1px 0 rgba(255,255,255,.68) !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  text-shadow: 0 2px 5px rgba(0, 44, 72, .62) !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
+  overflow: hidden !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .village-world-screen .v2-world-controls button img,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .village-world-screen .v2-world-controls button svg {
+  display: block !important;
+  width: var(--v2041-control-icon) !important;
+  height: var(--v2041-control-icon) !important;
+  min-width: var(--v2041-control-icon) !important;
+  min-height: var(--v2041-control-icon) !important;
+  max-width: var(--v2041-control-icon) !important;
+  max-height: var(--v2041-control-icon) !important;
+  object-fit: contain !important;
+  transform: none !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .village-world-screen .v2-world-controls button:empty,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .village-world-screen .v2-world-controls button:not(:has(img)):not(:has(svg)) {
+  font-size: 17px !important;
+  font-weight: 1000 !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen]:not([data-screen="village"]) .v2-world-controls,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body.v2041-interior-open .v2-world-controls,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .v2-world-controls[hidden] {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .bottom-nav.v2041-identical-dock-nav {
+  position: fixed !important;
+  right: var(--v2041-dock-right) !important;
+  bottom: var(--v2041-dock-bottom) !important;
+  left: auto !important;
+  top: auto !important;
+  width: calc(var(--v2041-dock-button) * 3 + var(--v2041-dock-gap) * 2) !important;
+  max-width: calc(var(--v2041-dock-button) * 3 + var(--v2041-dock-gap) * 2) !important;
+  height: var(--v2041-dock-stack-h) !important;
+  display: grid !important;
+  grid-template-columns: var(--v2041-dock-button) var(--v2041-dock-button) var(--v2041-dock-button) !important;
+  grid-template-rows: var(--v2041-dock-button) var(--v2041-dock-button) !important;
+  gap: var(--v2041-dock-gap) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 1px solid transparent !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+  z-index: 640 !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .bottom-nav.v2041-identical-dock-nav [data-dock-slot="village"] { grid-column: 2 !important; grid-row: 1 !important; }
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .bottom-nav.v2041-identical-dock-nav [data-dock-slot="inventory"] { grid-column: 1 !important; grid-row: 2 !important; }
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .bottom-nav.v2041-identical-dock-nav [data-dock-slot="mission"] { grid-column: 2 !important; grid-row: 2 !important; }
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .bottom-nav.v2041-identical-dock-nav [data-dock-slot="map"] { grid-column: 3 !important; grid-row: 2 !important; }
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .bottom-nav.v2041-identical-dock-nav button,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .bottom-nav.v2041-identical-dock-nav a {
+  width: var(--v2041-dock-button) !important;
+  height: var(--v2041-dock-button) !important;
+  min-width: var(--v2041-dock-button) !important;
+  min-height: var(--v2041-dock-button) !important;
+  max-width: var(--v2041-dock-button) !important;
+  max-height: var(--v2041-dock-button) !important;
+  border: 1px solid transparent !important;
+  outline: 0 !important;
+  border-radius: 16px !important;
+  padding: 2px !important;
+  margin: 0 !important;
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) auto !important;
+  place-items: center !important;
+  gap: 0 !important;
+  background: linear-gradient(180deg, rgba(97, 225, 241, .88), rgba(15, 134, 189, .86)) !important;
+  box-shadow: 0 7px 13px rgba(0, 62, 100, .16), inset 0 1px 0 rgba(255,255,255,.6) !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  font-size: 10px !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+  text-shadow: 0 2px 4px rgba(0, 42, 72, .78) !important;
+  pointer-events: auto !important;
+  overflow: hidden !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .bottom-nav.v2041-identical-dock-nav img,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .bottom-nav.v2041-identical-dock-nav svg {
+  width: var(--v2041-dock-icon) !important;
+  height: var(--v2041-dock-icon) !important;
+  min-width: var(--v2041-dock-icon) !important;
+  min-height: var(--v2041-dock-icon) !important;
+  max-width: var(--v2041-dock-icon) !important;
+  max-height: var(--v2041-dock-icon) !important;
+  object-fit: contain !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body.v2041-character-panel-open .bottom-nav.v2041-identical-dock-nav,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body.v2041-interior-open .bottom-nav.v2041-identical-dock-nav,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .bottom-nav.v2041-identical-dock-nav[hidden] {
+  display: none !important;
+}
+
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .fishing-screen.v2041-fishing-playable-screen,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-fishing-stage {
+  position: fixed !important;
+  inset: 0 !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  min-width: 100vw !important;
+  min-height: 100dvh !important;
+  transform: none !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] :is(canvas,.pixi-layer,.stage-layer,.fishing-bg,.ocean-bg) {
+  pointer-events: none !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-reel-panel.hidden { display: none !important; }
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-reel-panel:not(.hidden) {
+  display: block !important;
+  position: fixed !important;
+  left: 50vw !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: calc(var(--v2041-dock-stack-h) + var(--v2041-dock-bottom) + 22px) !important;
+  width: min(420px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  min-width: 0 !important;
+  min-height: 226px !important;
+  max-height: calc(100dvh - 144px) !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  margin: 0 !important;
+  padding: 12px !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(110, 226, 244, .38) !important;
+  background: linear-gradient(180deg, rgba(246,255,255,.98), rgba(171,239,248,.94)) !important;
+  box-shadow: 0 14px 34px rgba(0, 50, 84, .25), inset 0 1px 0 rgba(255,255,255,.7) !important;
+  color: var(--v2041-aqua-ink) !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+  overflow: visible !important;
+  z-index: 1200 !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-reel-panel:not(.hidden) * {
+  pointer-events: auto !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-reel-panel .v205-reel-grid {
+  display: grid !important;
+  grid-template-columns: 74px minmax(0, 1fr) !important;
+  gap: 12px !important;
+  align-items: stretch !important;
+  min-height: 168px !important;
+  pointer-events: auto !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-reel-panel .v2040-vertical-gauge,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-reel-panel .v2038-vertical-gauge {
+  display: block !important;
+  position: relative !important;
+  width: 66px !important;
+  min-width: 66px !important;
+  height: 168px !important;
+  min-height: 168px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  background: rgba(3, 84, 116, .18) !important;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.55), inset 0 -12px 20px rgba(0,80,128,.15) !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-reel-panel .v2040-vertical-marker,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-reel-panel .v2038-vertical-marker {
+  position: absolute !important;
+  left: 6px !important;
+  right: 6px !important;
+  height: 8px !important;
+  border-radius: 999px !important;
+  transform: translateY(50%) !important;
+  background: #fff !important;
+  box-shadow: 0 2px 8px rgba(0, 42, 66, .36) !important;
+  z-index: 5 !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-reel-panel .hold-pad {
+  display: grid !important;
+  place-items: center !important;
+  width: 100% !important;
+  min-height: 54px !important;
+  border: 0 !important;
+  border-radius: 16px !important;
+  background: linear-gradient(180deg, #f6ffff, #4fd6ef) !important;
+  color: var(--v2041-aqua-ink) !important;
+  -webkit-text-fill-color: var(--v2041-aqua-ink) !important;
+  font-size: 13px !important;
+  font-weight: 1000 !important;
+  touch-action: none !important;
+  user-select: none !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-cast-button {
+  position: fixed !important;
+  left: 50vw !important;
+  right: auto !important;
+  bottom: calc(var(--v2041-dock-stack-h) + var(--v2041-dock-bottom) + 16px) !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  width: min(260px, calc(100vw - 144px)) !important;
+  min-height: 52px !important;
+  z-index: 820 !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-result-card {
+  position: fixed !important;
+  left: 50vw !important;
+  top: 50dvh !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(350px, calc(100vw - 28px)) !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  z-index: 1300 !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] :is(.v2041-action-badge,.bite-callout) {
+  position: fixed !important;
+  left: 50vw !important;
+  right: auto !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  width: min(320px, calc(100vw - 36px)) !important;
+  max-width: calc(100vw - 36px) !important;
+  text-align: center !important;
+  z-index: 1260 !important;
+  pointer-events: none !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] :is(.v2041-action-badge,.bite-callout) :is(img,picture,svg),
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] :is(.v2041-action-badge,.bite-callout)::before,
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] :is(.v2041-action-badge,.bite-callout)::after {
+  content: none !important;
+  display: none !important;
+}
+
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .runtime-menu-screen.v2041-menu-aqua-center-screen {
+  display: block !important;
+  width: 100vw !important;
+  min-width: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  background: linear-gradient(180deg, #eafbff 0%, #c8f5fb 52%, #8ee2ee 100%) !important;
+  color: var(--v2041-aqua-ink) !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .runtime-menu-screen.v2041-menu-aqua-center-screen .runtime-hud {
+  position: relative !important;
+  inset: auto !important;
+  width: min(560px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  margin: calc(max(10px, env(safe-area-inset-top)) + 4px) auto 0 !important;
+  padding: 10px !important;
+  border-radius: 24px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 8px !important;
+  background: linear-gradient(180deg, rgba(250,255,255,.96), rgba(181,241,249,.90)) !important;
+  border: 1px solid rgba(98, 217, 239, .28) !important;
+  box-shadow: 0 10px 22px rgba(0, 62, 101, .12), inset 0 1px 0 rgba(255,255,255,.7) !important;
+  clip-path: none !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .runtime-menu-screen.v2041-menu-aqua-center-screen .runtime-wallet {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .runtime-menu-screen.v2041-menu-aqua-center-screen .runtime-wallet span {
+  min-width: 0 !important;
+  min-height: 38px !important;
+  padding: 6px 9px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  border-radius: 14px !important;
+  font-size: clamp(12px, 3vw, 14px) !important;
+  line-height: 1.15 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  background: rgba(255,255,255,.58) !important;
+  color: var(--v2041-aqua-ink) !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .runtime-menu-screen.v2041-menu-aqua-center-screen .runtime-content {
+  width: min(560px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  min-width: 0 !important;
+  margin: 0 auto !important;
+  padding: 14px 0 calc(var(--v2041-dock-stack-h) + var(--v2041-dock-bottom) + 54px) !important;
+  box-sizing: border-box !important;
+  color: var(--v2041-aqua-ink) !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .runtime-menu-screen.v2041-menu-aqua-center-screen .runtime-content > * {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .runtime-menu-screen.v2041-menu-aqua-center-screen :is(.runtime-btn,.btn-aqua-action,button.runtime-btn,.btn-gold-cost) {
+  background-image: none !important;
+  border: 1px solid rgba(86, 209, 233, .28) !important;
+  border-radius: 16px !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  background: linear-gradient(180deg, #54e2f5, #148ec5) !important;
+  text-shadow: 0 2px 5px rgba(0, 35, 65, .72) !important;
+}
+
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .v2017-character-panel[aria-hidden="false"] {
+  z-index: 1500 !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .v2017-character-card {
+  background: linear-gradient(180deg, rgba(250,255,255,.98), rgba(179,241,249,.94)) !important;
+  border: 1px solid rgba(99, 220, 240, .32) !important;
+  box-shadow: 0 18px 42px rgba(0, 62, 92, .20), inset 0 1px 0 rgba(255,255,255,.75) !important;
+  color: var(--v2041-aqua-ink) !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .v2017-character-card :is(.v2017-character-title,.v2017-character-note) {
+  display: none !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .v2041-name-editor {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  gap: 8px !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin: 10px 0 12px !important;
+  padding: 8px !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.64) !important;
+  border: 1px solid rgba(97, 218, 240, .30) !important;
+  color: var(--v2041-aqua-ink) !important;
+  font-weight: 900 !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .v2041-name-editor input {
+  min-width: 0 !important;
+  height: 38px !important;
+  border: 1px solid rgba(70, 191, 219, .34) !important;
+  border-radius: 14px !important;
+  padding: 0 10px !important;
+  background: rgba(255,255,255,.9) !important;
+  color: var(--v2041-aqua-ink) !important;
+  font-weight: 900 !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .v2041-name-editor button {
+  min-width: 54px !important;
+  height: 38px !important;
+  border: 1px solid transparent !important;
+  border-radius: 14px !important;
+  background: linear-gradient(180deg, #5ee5f5, #1494c8) !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  font-weight: 1000 !important;
+  text-shadow: 0 2px 5px rgba(0, 39, 68, .70) !important;
+}
+
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .v203-interior-panel.open {
+  z-index: 1420 !important;
+}
+html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .v203-interior-panel.open .v203-interior-card {
+  margin-bottom: calc(var(--v2041-dock-stack-h) + var(--v2041-dock-bottom) + 10px) !important;
+  background: linear-gradient(180deg, rgba(250,255,255,.98), rgba(177,239,248,.94)) !important;
+  border: 1px solid rgba(91, 216, 239, .30) !important;
+  color: var(--v2041-aqua-ink) !important;
+}
+
+@media (max-width: 430px) {
+  html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] {
+    --v2041-control-size: clamp(38px, 8.6vw, 42px);
+    --v2041-dock-button: clamp(42px, 9.2vw, 48px);
+  }
+  html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-reel-panel:not(.hidden) {
+    width: min(364px, calc(100vw - 22px)) !important;
+    min-height: 212px !important;
+    padding: 10px !important;
+  }
+  html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-reel-panel .v205-reel-grid {
+    grid-template-columns: 68px minmax(0, 1fr) !important;
+    min-height: 158px !important;
+  }
+  html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] body[data-screen="fishing"] .v2041-reel-panel .v2040-vertical-gauge {
+    width: 60px !important;
+    min-width: 60px !important;
+    height: 158px !important;
+    min-height: 158px !important;
+  }
+}

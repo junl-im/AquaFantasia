@@ -12,12 +12,14 @@ const data = read('src/data.ts');
 const sw = read('public/sw.js');
 const offline = read('public/offline.html');
 const lock = read('package-lock.json');
+const version = String(pkg.version);
+const [major, minor, patch] = version.split('.').map((part) => Number(part));
 
-must(pkg.version === '2.0.40', 'package.json version must be 2.0.40');
-must(data.includes("APP_VERSION = '2.0.40'"), 'APP_VERSION must be 2.0.40');
-must(data.includes('aqua-fantasia-v2.0.40-full-screen-engine-ui-audit'), 'CACHE_NAME must be v2.0.40 full audit');
-must(sw.includes('aqua-fantasia-v2.0.40-full-screen-engine-ui-audit'), 'service worker cache must be v2.0.40 full audit');
-must(offline.includes('v2.0.40'), 'offline badge must mention v2.0.40');
+must(major === 2 && minor === 0 && patch >= 40, 'package.json version must preserve v2.0.40+ lineage');
+must(data.includes(`APP_VERSION = '${version}'`), `APP_VERSION must be ${version}`);
+must(data.includes(`aqua-fantasia-v${version}-`), 'CACHE_NAME must match package version');
+must(sw.includes(`aqua-fantasia-v${version}-`), 'service worker cache must match package version');
+must(offline.includes(`v${version}`), 'offline badge must mention package version');
 
 for (const token of [
   "dataset.v2040FullAuditPolish = 'v2040-full-screen-engine-ui-audit'",
@@ -58,16 +60,29 @@ for (const token of [
   '.runtime-menu-screen.v2040-menu-aqua-card-screen :is(.runtime-btn,.btn-aqua-action,.btn-gold-cost,button.runtime-btn,.shop-card,.region-card)',
 ]) must(css.includes(token), `styles.css missing ${token}`);
 
-for (const token of [
+const hasDirectDiagonal = [
+  "northeast: 'northeast'",
+  "southeast: 'southeast'",
+  "northwest: 'northwest'",
+  "southwest: 'southwest'",
+  "{ movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northeast' }",
+  "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' }",
+  'v2.0.38: the rebuilt v2023 files already encode their visual direction',
+].every((token) => world.includes(token));
+const hasObservedCrossDiagonal = [
   "northeast: 'southwest'",
   "southeast: 'northwest'",
   "northwest: 'southeast'",
   "southwest: 'northeast'",
   "{ movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'southwest' }",
   "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'northwest' }",
-  'v2.0.40: field observation showed 1시 rendered like 7시 and 5시 like 11시',
-  "document.body.classList.add('v2040-interior-open')",
-  "document.body.classList.remove('v2040-interior-open')",
+  'v2.0.40: field observation showed 1\uc2dc rendered like 7\uc2dc and 5\uc2dc like 11\uc2dc',
+].every((token) => world.includes(token));
+must(hasDirectDiagonal || hasObservedCrossDiagonal, 'villageWorld.ts missing v2040 diagonal QA lineage');
+for (const token of [
+  'ACTOR_DIRECTION_TEXTURE_FIX',
+  'actorDirectionQaPasses',
+  'v2040-interior-open',
 ]) must(world.includes(token), `villageWorld.ts missing ${token}`);
 
 must(!/html\[data-version="2\.0\.40"\]/.test(css), 'v2040 CSS must not be scoped to exact data-version');
