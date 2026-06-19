@@ -26473,3 +26473,190 @@ html[data-v2048-dock-fishing-anchor-system="v2048-dock-fishing-anchor-system"] .
     min-height: 68px !important;
   }
 }
+
+/* v2.0.49 Content/asset/system polish: content loop board, cleaner assets, fishing safety and growth readability. */
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] {
+  --v2049-aqua-border: rgba(155, 246, 255, .56);
+  --v2049-aqua-border-soft: rgba(223, 255, 255, .30);
+  --v2049-card-bg: linear-gradient(180deg, rgba(244, 255, 255, .86), rgba(99, 219, 238, .36) 58%, rgba(4, 95, 137, .22));
+  --v2049-card-text: #06445e;
+  --v2049-card-strong: #07314d;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-board {
+  position: fixed !important;
+  left: max(10px, env(safe-area-inset-left)) !important;
+  bottom: calc(max(10px, env(safe-area-inset-bottom)) + 74px) !important;
+  width: min(332px, calc(100vw - 206px)) !important;
+  min-width: 188px !important;
+  padding: 12px !important;
+  border: 1px solid var(--v2049-aqua-border) !important;
+  border-radius: 24px !important;
+  background: var(--v2049-card-bg) !important;
+  box-shadow: 0 13px 30px rgba(0, 84, 124, .18), inset 0 1px 0 rgba(255,255,255,.55) !important;
+  color: var(--v2049-card-text) !important;
+  z-index: 840 !important;
+  pointer-events: none !important;
+  backdrop-filter: blur(10px) saturate(1.08) !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-head span {
+  display: block !important;
+  font-size: 10px !important;
+  font-weight: 1000 !important;
+  letter-spacing: .08em !important;
+  color: #08789e !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-head strong {
+  display: block !important;
+  margin-top: 2px !important;
+  color: var(--v2049-card-strong) !important;
+  font-size: clamp(14px, 3.4vw, 18px) !important;
+  line-height: 1.08 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.52) !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-head em {
+  display: block !important;
+  margin-top: 5px !important;
+  font-style: normal !important;
+  font-size: 11px !important;
+  line-height: 1.24 !important;
+  font-weight: 850 !important;
+  color: rgba(4, 69, 93, .82) !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-meter {
+  position: relative !important;
+  height: 14px !important;
+  margin-top: 9px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.55) !important;
+  border: 1px solid rgba(47, 187, 218, .28) !important;
+  overflow: hidden !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-meter i {
+  display: block !important;
+  height: 100% !important;
+  width: var(--p, 0%) !important;
+  border-radius: inherit !important;
+  background: linear-gradient(90deg, #33d9ff, #9cffd8, #ffe78c) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.65) !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-meter b {
+  position: absolute !important;
+  inset: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 9px !important;
+  font-weight: 1000 !important;
+  color: #06425d !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.75) !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-loop {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 5px !important;
+  margin-top: 8px !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-loop article {
+  min-width: 0 !important;
+  padding: 6px 4px !important;
+  border-radius: 14px !important;
+  background: rgba(255,255,255,.43) !important;
+  border: 1px solid rgba(117, 229, 247, .26) !important;
+  text-align: center !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-loop strong {
+  display: block !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  color: #043653 !important;
+  font-size: 11px !important;
+  font-weight: 1000 !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-loop span,
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-next span {
+  display: block !important;
+  font-size: 9px !important;
+  color: rgba(3, 61, 88, .70) !important;
+  font-weight: 950 !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-next {
+  margin-top: 8px !important;
+  padding: 7px 9px !important;
+  border-radius: 16px !important;
+  background: rgba(10, 110, 153, .10) !important;
+  border: 1px dashed rgba(54, 187, 218, .38) !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-next b {
+  display: block !important;
+  margin-top: 2px !important;
+  color: #063a58 !important;
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+  font-weight: 1000 !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-income-float {
+  position: absolute !important;
+  left: 50% !important;
+  top: -8px !important;
+  transform: translate(-50%, -100%) !important;
+  padding: 6px 10px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, #fff5a4, #5ff0ff) !important;
+  color: #063550 !important;
+  font-size: 11px !important;
+  font-weight: 1000 !important;
+  box-shadow: 0 8px 20px rgba(0, 76, 120, .22) !important;
+  animation: v2049IncomeFloat 1.55s ease-out forwards !important;
+  white-space: nowrap !important;
+}
+@keyframes v2049IncomeFloat {
+  0% { opacity: 0; transform: translate(-50%, -80%) scale(.92); }
+  18% { opacity: 1; transform: translate(-50%, -118%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -172%) scale(.96); }
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .runtime-menu-screen.v2049-menu-content-screen .runtime-content {
+  gap: 14px !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-shop-summary,
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-quest-hero {
+  border: 1px solid var(--v2049-aqua-border) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.82), rgba(101, 228, 247, .34)) !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-shop-list .shop-card {
+  border: 1px solid var(--v2049-aqua-border-soft) !important;
+  box-shadow: 0 10px 22px rgba(0, 77, 116, .10), inset 0 1px 0 rgba(255,255,255,.50) !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] body[data-screen="fishing"] .fishing-screen.v2049-fishing-system-screen .v2049-hold-pad {
+  min-height: 88px !important;
+  border: 2px solid rgba(255,255,255,.55) !important;
+  box-shadow: 0 13px 30px rgba(255, 172, 42, .32), inset 0 2px 0 rgba(255,255,255,.72) !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] body[data-screen="fishing"] .fishing-screen.v2049-fishing-system-screen .v2049-reel-panel {
+  border: 1px solid rgba(139, 239, 255, .52) !important;
+  box-shadow: 0 18px 42px rgba(0, 55, 90, .24), inset 0 1px 0 rgba(255,255,255,.55) !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] body[data-screen="fishing"] .fishing-screen.v2049-fishing-system-screen.fishing-phase-reeling .v2049-fishing-guide-card {
+  opacity: 1 !important;
+  transform: translate3d(-50%, 0, 0) scale(1) !important;
+  pointer-events: none !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] body[data-screen="fishing"] .fishing-screen.v2049-fishing-system-screen.fishing-phase-reeling .v2049-fishing-guide-card strong::after {
+  content: ' · 홀드' !important;
+}
+html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .bottom-nav.v2049-identical-dock-nav .dock-row {
+  border-color: rgba(151, 245, 255, .50) !important;
+}
+@media (max-width: 430px) {
+  html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-board {
+    width: min(246px, calc(100vw - 184px)) !important;
+    padding: 9px !important;
+  }
+  html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-head em,
+  html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-next { display: none !important; }
+  html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-loop { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-height: 760px) {
+  html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"] .v2049-growth-board {
+    bottom: calc(max(8px, env(safe-area-inset-bottom)) + 62px) !important;
+  }
+}

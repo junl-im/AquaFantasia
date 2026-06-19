@@ -15,12 +15,14 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.48', 'package.json version must be 2.0.48');
-has(data, "APP_VERSION = '2.0.48'", 'APP_VERSION 2.0.48');
-has(data, 'aqua-fantasia-v2.0.48-dock-fishing-anchor-system', 'data cache v2.0.48');
-has(sw, 'aqua-fantasia-v2.0.48-dock-fishing-anchor-system', 'sw cache v2.0.48');
-has(offline, 'v2.0.48', 'offline badge v2.0.48');
-has(readme, '# AquaFantasia v2.0.48', 'README title v2.0.48');
+const version = String(pkg.version);
+const [major, minor, patch] = version.split('.').map(Number);
+must(major === 2 && minor === 0 && patch >= 48, 'package.json version must be 2.0.48 or newer');
+must(/APP_VERSION = '2\.0\.(4[8-9]|[5-9][0-9])'/.test(data), 'APP_VERSION must be 2.0.48 or newer');
+must(/aqua-fantasia-v2\.0\.(4[8-9]|[5-9][0-9])-/.test(data), 'data cache must be v2.0.48 or newer');
+must(/aqua-fantasia-v2\.0\.(4[8-9]|[5-9][0-9])-/.test(sw), 'sw cache must be v2.0.48 or newer');
+must(/v2\.0\.(4[8-9]|[5-9][0-9])/.test(offline), 'offline badge must be v2.0.48 or newer');
+must(/# AquaFantasia v2\.0\.(4[8-9]|[5-9][0-9])/.test(readme), 'README title must be v2.0.48 or newer');
 has(readme, '## v2.0.48', 'README v2.0.48 changelog');
 
 for (const token of [

@@ -651,6 +651,13 @@ const V2045_HIDDEN_DECORATION_KEYS = new Set([
   'coral:5,35', 'coral:35,35', 'bridgeAsset:20,35', 'bridge:20,35',
 ]);
 
+const V2049_HIDDEN_DECORATION_KEYS = new Set([
+  // v2.0.49: thin out duplicated harbor-edge/water details so the premium assets read cleaner and do not fight the play path.
+  'shoreFoam:6,35', 'shoreFoam:34,35', 'waterRing:23,36', 'splash:31,36',
+  'duck:15,33', 'seagull:13,34', 'flyingSeagull:26,33', 'seagull:8,34', 'flyingSeagull:33,32',
+  'dock:19,34', 'dock:20,34', 'dock:21,34', 'buoy:17,34', 'buoy:23,34',
+]);
+
 function decorationAuditKey(deco: Decoration): string {
   return `${deco.kind}:${deco.x},${deco.y}`;
 }
@@ -658,7 +665,7 @@ function decorationAuditKey(deco: Decoration): string {
 function shouldUseDecoration(deco: Decoration): boolean {
   // v2.0.29: hide duplicated large props that made the village feel cluttered or half-cut.
   const key = decorationAuditKey(deco);
-  return !V2029_HIDDEN_DECORATION_KEYS.has(key) && !V2045_HIDDEN_DECORATION_KEYS.has(key);
+  return !V2029_HIDDEN_DECORATION_KEYS.has(key) && !V2045_HIDDEN_DECORATION_KEYS.has(key) && !V2049_HIDDEN_DECORATION_KEYS.has(key);
 }
 
 const V2039_EDGE_SAFE_DECORATIONS = new Set<DecoKind>([
@@ -844,6 +851,7 @@ export class VillageWorld {
     this.root.dataset.v2031VillageAudit = 'npc-direction-object-final-audit';
     this.root.dataset.v2045VillageAudit = 'direction-asset-performance-trim';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
+    this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 천천히 이동하고, 빈 바닥 터치로도 이동할 수 있습니다.');
   }
 
@@ -2170,8 +2178,20 @@ export class VillageWorld {
     if (income <= 0) return;
     this.save.coins += income;
     this.save.village.fund += Math.floor(income * 0.35);
+    this.showPassiveIncomeFloat(income);
     this.onSave();
     this.syncHud();
+  }
+
+  private showPassiveIncomeFloat(income: number): void {
+    const board = this.root.querySelector<HTMLElement>('.v2049-growth-board');
+    if (!board || income <= 0) return;
+    board.querySelector('.v2049-income-float')?.remove();
+    const node = document.createElement('span');
+    node.className = 'v2049-income-float';
+    node.textContent = `자동수익 +${income}G`;
+    board.appendChild(node);
+    window.setTimeout(() => node.remove(), 1600);
   }
 
   private calculateDevelopment(): number {
