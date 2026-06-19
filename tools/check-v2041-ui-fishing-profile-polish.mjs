@@ -17,12 +17,13 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.41', 'package.json version must be 2.0.41');
-has(data, "APP_VERSION = '2.0.41'", 'APP_VERSION 2.0.41');
-has(data, 'aqua-fantasia-v2.0.41-ui-fishing-profile-polish', 'data cache v2.0.41');
-has(sw, 'aqua-fantasia-v2.0.41-ui-fishing-profile-polish', 'sw cache v2.0.41');
-has(offline, 'v2.0.41', 'offline badge v2.0.41');
-has(readme, '# AquaFantasia v2.0.41', 'README title v2.0.41');
+const [major, minor, patch] = pkg.version.split('.').map(Number);
+must(major === 2 && minor === 0 && patch >= 41, 'package.json version must be 2.0.41 or newer');
+has(data, `APP_VERSION = '${pkg.version}'`, `APP_VERSION ${pkg.version}`);
+has(data, `aqua-fantasia-v${pkg.version}-`, `data cache v${pkg.version}`);
+has(sw, `aqua-fantasia-v${pkg.version}-`, `sw cache v${pkg.version}`);
+has(offline, `v${pkg.version}`, `offline badge v${pkg.version}`);
+has(readme, `# AquaFantasia v${pkg.version}`, `README title v${pkg.version}`);
 has(readme, '## v2.0.41', 'README v2.0.41 changelog');
 
 for (const token of [
@@ -60,7 +61,7 @@ for (const token of [
 ]) has(storage, token, `storage token ${token}`);
 has(data, 'playerName:', 'default player name');
 
-for (const token of [
+const hasV2041DirectDiagonal = [
   "northeast: 'northeast'",
   "southeast: 'southeast'",
   "northwest: 'northwest'",
@@ -70,8 +71,23 @@ for (const token of [
   "{ movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'northwest' }",
   "{ movement: 'southwest', dx: -0.5, dy: 0.866, texture: 'southwest' }",
   'v2.0.41: use the actual v2023 file direction directly',
-  "this.root.classList.add('v2040-interior-open', 'v2041-interior-open')",
-  "document.body.classList.add('v2040-interior-open', 'v2041-interior-open')",
+].every((token) => world.includes(token));
+const hasV2042VisualDiagonal = [
+  "northeast: 'northwest'",
+  "southeast: 'southeast'",
+  "northwest: 'northeast'",
+  "southwest: 'southwest'",
+  "{ movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northwest' }",
+  "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' }",
+  "{ movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'northeast' }",
+  "{ movement: 'southwest', dx: -0.5, dy: 0.866, texture: 'southwest' }",
+  'v2.0.42: the actual player PNG silhouettes were inspected in a contact sheet',
+].every((token) => world.includes(token));
+must(hasV2041DirectDiagonal || hasV2042VisualDiagonal, 'villageWorld.ts missing v2041/v2042 diagonal QA lineage');
+
+for (const token of [
+  "this.root.classList.add('v2040-interior-open', 'v2041-interior-open'",
+  "document.body.classList.add('v2040-interior-open', 'v2041-interior-open'",
   ".v2-world-controls')?.setAttribute('hidden', 'true')",
   ".bottom-nav')?.setAttribute('hidden', 'true')",
 ]) has(world, token, `world token ${token}`);

@@ -53,7 +53,8 @@ const hasV2034DiagonalQa = world.includes("northeast: 'southeast'") && world.inc
 const hasV2035DiagonalQa = world.includes("northeast: 'northwest'") && world.includes("southeast: 'southwest'") && world.includes("northwest: 'northeast'") && world.includes("southwest: 'southeast'");
 const hasV2038DirectDiagonalQa = world.includes("northeast: 'northeast'") && world.includes("southeast: 'southeast'") && world.includes("northwest: 'northwest'") && world.includes("southwest: 'southwest'");
 const hasV2040ObservedDiagonalQa = world.includes("northeast: 'southwest'") && world.includes("southeast: 'northwest'") && world.includes("northwest: 'southeast'") && world.includes("southwest: 'northeast'");
-must(hasV2034DiagonalQa || hasV2035DiagonalQa || hasV2038DirectDiagonalQa || hasV2040ObservedDiagonalQa, 'villageWorld.ts missing diagonal QA lineage');
+const hasV2042VisualDiagonalQa = world.includes("northeast: 'northwest'") && world.includes("southeast: 'southeast'") && world.includes("northwest: 'northeast'") && world.includes("southwest: 'southwest'") && world.includes('v2.0.42: the actual player PNG silhouettes were inspected in a contact sheet');
+must(hasV2034DiagonalQa || hasV2035DiagonalQa || hasV2038DirectDiagonalQa || hasV2040ObservedDiagonalQa || hasV2042VisualDiagonalQa, 'villageWorld.ts missing diagonal QA lineage');
 
 must(!/html\[data-version="2\.0\.34"\]/.test(css), 'v2034 CSS must not be scoped to data-version');
 for (const forbidden of ['packages.applied-caas', 'applied-caas-gateway', '10.192.', 'internal.api.openai']) {

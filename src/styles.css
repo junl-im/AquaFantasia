@@ -25023,3 +25023,320 @@ html[data-v2041-ui-fishing-profile-polish="v2041-ui-fishing-profile-polish"] .v2
     min-height: 158px !important;
   }
 }
+
+/* v2.0.42 Build placement/shop/direction polish: centered build tray, transparent install mode, uniform controls, aqua shop/interiors. */
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] {
+  --v2042-control-size: clamp(42px, 8.9vw, 44px);
+  --v2042-control-gap: 2px;
+  --v2042-control-icon: clamp(18px, 4.1vw, 20px);
+  --v2042-dock-button: var(--v2041-dock-button, clamp(44px, 9.4vw, 50px));
+  --v2042-dock-gap: var(--v2041-dock-gap, 5px);
+  --v2042-aqua-ink: #073f5a;
+  --v2042-aqua-line: rgba(76, 211, 235, .30);
+  --v2042-card: linear-gradient(180deg, rgba(252,255,255,.98), rgba(183,244,250,.94));
+}
+
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] #toast-root {
+  top: calc(max(10px, env(safe-area-inset-top)) + 146px) !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  width: min(500px, calc(100vw - 24px)) !important;
+  z-index: 1240 !important;
+  gap: 7px !important;
+  justify-items: stretch !important;
+  pointer-events: none !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] #toast-root .toast {
+  min-height: 46px !important;
+  padding: 9px 13px !important;
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, rgba(250,255,255,.98), rgba(111,224,239,.86)) !important;
+  border: 1px solid rgba(85, 210, 234, .30) !important;
+  color: var(--v2042-aqua-ink) !important;
+  box-shadow: 0 10px 24px rgba(0, 60, 94, .16), inset 0 1px 0 rgba(255,255,255,.72) !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] #toast-root .toast strong,
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] #toast-root .toast span {
+  color: var(--v2042-aqua-ink) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.66) !important;
+}
+
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-world-controls {
+  width: var(--v2042-control-size) !important;
+  max-width: var(--v2042-control-size) !important;
+  grid-template-columns: var(--v2042-control-size) !important;
+  gap: var(--v2042-control-gap) !important;
+  row-gap: var(--v2042-control-gap) !important;
+  border: 0 solid transparent !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-world-controls > *,
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-world-controls button {
+  width: var(--v2042-control-size) !important;
+  height: var(--v2042-control-size) !important;
+  min-width: var(--v2042-control-size) !important;
+  min-height: var(--v2042-control-size) !important;
+  max-width: var(--v2042-control-size) !important;
+  max-height: var(--v2042-control-size) !important;
+  padding: 2px !important;
+  margin: 0 !important;
+  border: 0 solid transparent !important;
+  border-radius: 14px !important;
+  display: grid !important;
+  grid-template-rows: calc(var(--v2042-control-icon) + 1px) 10px !important;
+  place-items: center !important;
+  gap: 0 !important;
+  box-sizing: border-box !important;
+  background: linear-gradient(180deg, rgba(241,254,255,.84), rgba(71, 208, 232, .70)) !important;
+  box-shadow: 0 5px 10px rgba(0, 72, 110, .11), inset 0 1px 0 rgba(255,255,255,.68) !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  font-size: 9px !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+  text-shadow: 0 2px 5px rgba(0, 44, 72, .66) !important;
+  overflow: hidden !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-world-controls button img,
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-world-controls button svg,
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-world-controls button > span[aria-hidden="true"] {
+  width: var(--v2042-control-icon) !important;
+  height: var(--v2042-control-icon) !important;
+  min-width: var(--v2042-control-icon) !important;
+  min-height: var(--v2042-control-icon) !important;
+  max-width: var(--v2042-control-icon) !important;
+  max-height: var(--v2042-control-icon) !important;
+  display: grid !important;
+  place-items: center !important;
+  object-fit: contain !important;
+  font-size: var(--v2042-control-icon) !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-world-controls :is([data-village-zoom-in],[data-village-zoom-out],[data-village-center]) {
+  grid-template-rows: 1fr !important;
+  font-size: 0 !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] body[data-screen]:not([data-screen="village"]) .v2-world-controls,
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] body.v2042-interior-open .v2-world-controls,
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .v2-world-controls[hidden] {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .bottom-nav.v2042-identical-dock-nav {
+  border: 0 solid transparent !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-build-tray {
+  position: fixed !important;
+  left: 50vw !important;
+  right: auto !important;
+  top: calc(max(12px, env(safe-area-inset-top)) + 68px) !important;
+  bottom: auto !important;
+  width: min(430px, calc(100vw - 24px)) !important;
+  min-width: 0 !important;
+  max-width: calc(100vw - 24px) !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: calc(100dvh - max(12px, env(safe-area-inset-top)) - max(18px, env(safe-area-inset-bottom)) - 132px) !important;
+  transform: translate3d(-50%, -8px, 0) scale(.98) !important;
+  margin: 0 !important;
+  padding: 12px !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(88, 216, 238, .30) !important;
+  background: var(--v2042-card) !important;
+  box-shadow: 0 16px 38px rgba(0, 55, 86, .18), inset 0 1px 0 rgba(255,255,255,.76) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  z-index: 1320 !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen.v2-build-tray-open .v2-build-tray {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translate3d(-50%, 0, 0) scale(1) !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen.v2-build-active .v2-build-tray:not(.open) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-build-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(4, 100, 140, .02) !important;
+  backdrop-filter: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: 1310 !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen.v2-build-tray-open .v2-build-backdrop {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen.v2-build-active .v2-build-backdrop {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  background: transparent !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen.v2-build-active .v2-village-stage {
+  filter: none !important;
+  opacity: 1 !important;
+  cursor: copy !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-build-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-build-grid button {
+  min-width: 0 !important;
+  min-height: 70px !important;
+  padding: 7px !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(75, 207, 233, .28) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.90), rgba(148,233,243,.72)) !important;
+  color: var(--v2042-aqua-ink) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.72), 0 6px 12px rgba(0, 68, 105, .10) !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-build-grid button img {
+  width: 38px !important;
+  height: 38px !important;
+  object-fit: contain !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-build-title,
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2018-build-help {
+  color: var(--v2042-aqua-ink) !important;
+}
+
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .runtime-hud,
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .runtime-content {
+  width: min(590px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .runtime-wallet span {
+  min-height: 42px !important;
+  padding: 7px 10px !important;
+  gap: 6px !important;
+  font-size: clamp(12px, 3.05vw, 14px) !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .runtime-wallet img {
+  width: 20px !important;
+  height: 20px !important;
+  object-fit: contain !important;
+  flex: 0 0 auto !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen[data-runtime-screen="shop"] .runtime-content {
+  padding-bottom: calc(var(--v2041-dock-stack-h) + var(--v2041-dock-bottom) + 70px) !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .v2042-shop-summary,
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .shop-card {
+  background: var(--v2042-card) !important;
+  border: 1px solid var(--v2042-aqua-line) !important;
+  color: var(--v2042-aqua-ink) !important;
+  box-shadow: 0 10px 22px rgba(0, 65, 96, .12), inset 0 1px 0 rgba(255,255,255,.76) !important;
+  background-image: none !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .v2042-shop-list {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .shop-card {
+  display: grid !important;
+  grid-template-columns: 58px minmax(0, 1fr) minmax(64px, auto) !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-height: 84px !important;
+  padding: 11px !important;
+  border-radius: 22px !important;
+  text-align: left !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .shop-card img {
+  width: 54px !important;
+  height: 54px !important;
+  object-fit: contain !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .shop-card strong,
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .shop-card small,
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .shop-card span {
+  color: var(--v2042-aqua-ink) !important;
+  -webkit-text-fill-color: var(--v2042-aqua-ink) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.65) !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .shop-card em {
+  background: rgba(255,255,255,.70) !important;
+  color: var(--v2042-aqua-ink) !important;
+  border: 1px solid rgba(85, 210, 234, .28) !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .shop-price {
+  min-width: 58px !important;
+  min-height: 34px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 14px !important;
+  background: linear-gradient(180deg, #fff5ad, #ffc55e) !important;
+  color: #5d3100 !important;
+  -webkit-text-fill-color: #5d3100 !important;
+  text-shadow: none !important;
+}
+
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .v203-interior-panel.open .v203-interior-card {
+  width: min(560px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  max-height: calc(100dvh - max(16px, env(safe-area-inset-top)) - max(20px, env(safe-area-inset-bottom)) - 24px) !important;
+  overflow-y: auto !important;
+  border-radius: 28px !important;
+  background: var(--v2042-card) !important;
+  border: 1px solid var(--v2042-aqua-line) !important;
+  color: var(--v2042-aqua-ink) !important;
+  box-shadow: 0 16px 38px rgba(0, 58, 92, .18), inset 0 1px 0 rgba(255,255,255,.76) !important;
+}
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .v203-interior-panel.open .v203-interior-actions button,
+html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .v203-interior-panel.open .v206-interior-actions button {
+  background-image: none !important;
+  border: 1px solid rgba(74, 207, 233, .28) !important;
+  border-radius: 16px !important;
+  background: linear-gradient(180deg, #f5ffff, #50d8ef) !important;
+  color: var(--v2042-aqua-ink) !important;
+  -webkit-text-fill-color: var(--v2042-aqua-ink) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.60) !important;
+}
+
+@media (max-width: 430px) {
+  html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] {
+    --v2042-control-size: clamp(40px, 8.7vw, 42px);
+    --v2042-control-icon: clamp(17px, 4vw, 19px);
+  }
+  html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] #toast-root {
+    top: calc(max(10px, env(safe-area-inset-top)) + 138px) !important;
+  }
+  html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .village-world-screen.v2042-village-ui-screen .v2-build-tray {
+    top: calc(max(10px, env(safe-area-inset-top)) + 58px) !important;
+    width: min(390px, calc(100vw - 20px)) !important;
+    max-height: calc(100dvh - max(10px, env(safe-area-inset-top)) - max(18px, env(safe-area-inset-bottom)) - 108px) !important;
+    padding: 10px !important;
+  }
+  html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .shop-card {
+    grid-template-columns: 50px minmax(0, 1fr) minmax(56px, auto) !important;
+    min-height: 78px !important;
+    gap: 8px !important;
+  }
+  html[data-v2042-build-shop-direction-polish="v2042-build-placement-shop-direction-polish"] .runtime-menu-screen.v2042-menu-aqua-center-screen .shop-card img {
+    width: 48px !important;
+    height: 48px !important;
+  }
+}

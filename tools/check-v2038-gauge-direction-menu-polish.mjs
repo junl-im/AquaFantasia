@@ -74,7 +74,17 @@ const hasV2040ObservedDiagonal = [
   "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'northwest' }",
   'v2.0.40: field observation showed 1시 rendered like 7시 and 5시 like 11시',
 ].every((token) => world.includes(token));
-must(hasV2038DirectDiagonal || hasV2040ObservedDiagonal, 'villageWorld.ts missing v2038/v2040 diagonal QA lineage');
+
+const hasV2042VisualDiagonal = [
+  "northeast: 'northwest'",
+  "southeast: 'southeast'",
+  "northwest: 'northeast'",
+  "southwest: 'southwest'",
+  "{ movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northwest' }",
+  "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' }",
+  'v2.0.42: the actual player PNG silhouettes were inspected in a contact sheet',
+].every((token) => world.includes(token));
+must(hasV2038DirectDiagonal || hasV2040ObservedDiagonal || hasV2042VisualDiagonal, 'villageWorld.ts missing v2038/v2040/v2042 diagonal QA lineage');
 
 must(!/html\[data-version="2\.0\.38"\]/.test(css), 'v2038 CSS must not be scoped to data-version');
 for (const forbidden of ['packages.applied-caas', 'applied-caas-gateway', '10.192.', 'internal.api.openai']) {

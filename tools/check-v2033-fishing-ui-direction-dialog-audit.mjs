@@ -39,8 +39,9 @@ const hasV2033DiagonalCorrection = world.includes("southeast: 'northeast'") && w
 const hasV2035DiagonalCorrection = world.includes("southeast: 'southwest'") && world.includes("northeast: 'northwest'") && world.includes("southwest: 'southeast'") && world.includes("northwest: 'northeast'");
 const hasV2038DirectDirectionRepair = world.includes("southeast: 'southeast'") && world.includes("northeast: 'northeast'") && world.includes("southwest: 'southwest'") && world.includes("northwest: 'northwest'");
 const hasV2040ObservedDiagonalRepair = world.includes("southeast: 'northwest'") && world.includes("northeast: 'southwest'") && world.includes("southwest: 'northeast'") && world.includes("northwest: 'southeast'");
-must(hasV2033DiagonalCorrection || hasV2035DiagonalCorrection || hasV2038DirectDirectionRepair || hasV2040ObservedDiagonalRepair, 'villageWorld.ts missing diagonal texture correction lineage');
-must(world.includes('v2.0.33: 사용자가 확인한 실제 v2023 대각선 에셋 기준') || world.includes('v2.0.35: v2023 diagonal source files are horizontally mirrored') || world.includes('v2.0.38: the rebuilt v2023 files already encode their visual direction') || world.includes('v2.0.40: field observation showed 1시 rendered like 7시 and 5시 like 11시'), 'villageWorld.ts missing diagonal correction explanation');
+const hasV2042VisualDiagonalRepair = world.includes("southeast: 'southeast'") && world.includes("northeast: 'northwest'") && world.includes("southwest: 'southwest'") && world.includes("northwest: 'northeast'");
+must(hasV2033DiagonalCorrection || hasV2035DiagonalCorrection || hasV2038DirectDirectionRepair || hasV2040ObservedDiagonalRepair || hasV2042VisualDiagonalRepair, 'villageWorld.ts missing diagonal texture correction lineage');
+must(world.includes('v2.0.33: 사용자가 확인한 실제 v2023 대각선 에셋 기준') || world.includes('v2.0.35: v2023 diagonal source files are horizontally mirrored') || world.includes('v2.0.38: the rebuilt v2023 files already encode their visual direction') || world.includes('v2.0.40: field observation showed 1시 rendered like 7시 and 5시 like 11시') || world.includes('v2.0.42: the actual player PNG silhouettes were inspected in a contact sheet'), 'villageWorld.ts missing diagonal correction explanation');
 
 for (const token of [
   'html[data-v2033-fishing-ui-audit="v2033-fishing-ui-direction-dialog-audit"]',

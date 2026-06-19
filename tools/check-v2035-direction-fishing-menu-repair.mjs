@@ -59,7 +59,17 @@ const hasV2040ObservedDiagonal = [
   "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'northwest' }",
   'v2.0.40: field observation showed 1시 rendered like 7시 and 5시 like 11시',
 ].every((token) => world.includes(token));
-must(hasV2035CrossDiagonal || hasV2038DirectDiagonal || hasV2040ObservedDiagonal, 'villageWorld.ts missing v2035/v2038/v2040 diagonal repair lineage');
+
+const hasV2042VisualDiagonal = [
+  "northeast: 'northwest'",
+  "southeast: 'southeast'",
+  "northwest: 'northeast'",
+  "southwest: 'southwest'",
+  "{ movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northwest' }",
+  "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' }",
+  'v2.0.42: the actual player PNG silhouettes were inspected in a contact sheet',
+].every((token) => world.includes(token));
+must(hasV2035CrossDiagonal || hasV2038DirectDiagonal || hasV2040ObservedDiagonal || hasV2042VisualDiagonal, 'villageWorld.ts missing v2035/v2038/v2040/v2042 diagonal repair lineage');
 
 for (const token of [
   'html[data-v2035-final-polish="v2035-direction-fishing-menu-repair"]',

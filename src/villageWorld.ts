@@ -207,17 +207,17 @@ const ACTOR_TEXTURES: Record<Actor['role'], string> = {
 const ACTOR_DIRECTIONS: ActorDirection[] = ['south', 'southeast', 'east', 'northeast', 'north', 'northwest', 'west', 'southwest'];
 
 const ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
-  // v2.0.38: the rebuilt v2023 files already encode their visual direction.
-  // v2.0.40: field observation showed 1시 rendered like 7시 and 5시 like 11시; v2.0.41 rechecked the file set and removes the cross-map.
-  // v2.0.41: use the actual v2023 file direction directly.
-  // Clock input 1시 -> northeast, 5시 -> southeast, 7시 -> southwest, 11시 -> northwest.
-  // Do not reapply diagonal cross-mapping; that made 1시/5시 look reversed on devices.
+  // v2.0.38: the rebuilt v2023 files were first treated as direct direction names.
+  // v2.0.40: field observation showed 1시 rendered like 7시 and 5시 like 11시 in one test pass.
+  // v2.0.42: the actual player PNG silhouettes were inspected in a contact sheet. The upper diagonals are filename-swapped visually:
+  // 1시 input uses the visually upper-right northwest PNG, while 11시 uses the visually upper-left northeast PNG.
+  // The lower diagonals stay direct because southeast/southwest are the clearest front-right/front-left pair.
   south: 'south',
   southeast: 'southeast',
   east: 'east',
-  northeast: 'northeast',
+  northeast: 'northwest',
   north: 'north',
-  northwest: 'northwest',
+  northwest: 'northeast',
   west: 'west',
   southwest: 'southwest',
 };
@@ -227,14 +227,14 @@ const ACTOR_DIRECTION_QA_VECTORS: Array<{ movement: ActorDirection; dx: number; 
   { movement: 'south', dx: 0, dy: 1, texture: 'south' },
   { movement: 'west', dx: -1, dy: 0, texture: 'west' },
   { movement: 'east', dx: 1, dy: 0, texture: 'east' },
-  { movement: 'northwest', dx: -1, dy: -1, texture: 'northwest' },
-  { movement: 'northeast', dx: 1, dy: -1, texture: 'northeast' },
+  { movement: 'northwest', dx: -1, dy: -1, texture: 'northeast' },
+  { movement: 'northeast', dx: 1, dy: -1, texture: 'northwest' },
   { movement: 'southwest', dx: -1, dy: 1, texture: 'southwest' },
   { movement: 'southeast', dx: 1, dy: 1, texture: 'southeast' },
-  // v2.0.41: clock-direction QA must match the actual visual direction names.
-  { movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northeast' },
+  // v2.0.42: clock-direction QA follows visual PNG silhouettes, not only filenames.
+  { movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northwest' },
   { movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' },
-  { movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'northwest' },
+  { movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'northeast' },
   { movement: 'southwest', dx: -0.5, dy: 0.866, texture: 'southwest' },
 ];
 
@@ -814,6 +814,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2-build-active', Boolean(type));
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
     this.root.toggleAttribute('data-v2028-build-preview-active', Boolean(type));
+    this.root.toggleAttribute('data-v2042-build-drag-placement', Boolean(type));
     this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => {
       node.classList.toggle('active', node.dataset.buildType === type);
     });
@@ -823,7 +824,7 @@ export class VillageWorld {
       const previewX = this.player ? clamp(this.player.tileX + 1, 1, MAP_SIZE - def.size[0] - 1) : 20;
       const previewY = this.player ? clamp(this.player.tileY, 1, MAP_SIZE - def.size[1] - 1) : 29;
       this.updateBuildPreviewAtTile(previewX, previewY);
-      this.showGuide('설치 모드', `${def.label} 선택됨 · 반투명 프리뷰가 잡혔습니다. 원하는 바닥으로 이동 후 터치하면 설치됩니다. 건설 버튼으로 취소`);
+      this.showGuide('설치 모드', `${def.label} 선택됨 · 화면은 어둡게 막지 않고 건물 프리뷰만 반투명으로 따라갑니다. 원하는 곳까지 드래그한 뒤 손을 떼면 설치됩니다.`);
     }
   }
 
@@ -831,6 +832,8 @@ export class VillageWorld {
     this.buildTrayOpen = open;
     this.root.classList.toggle('v2-build-tray-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
+    if (!open) this.root.removeAttribute('data-v2042-build-tray-modal');
+    else this.root.setAttribute('data-v2042-build-tray-modal', 'true');
     if (!open && !keepSelection) {
       this.selectedBuild = null;
       this.hoverTile = null;
@@ -1552,9 +1555,9 @@ export class VillageWorld {
       for (let xx = x; xx < x + def.size[0]; xx += 1) {
         const p = isoToWorld(xx, yy);
         g.poly([p.x, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y, p.x + TILE_W, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y + TILE_H]);
-        g.fill({ color: ok ? 0x35f08a : 0xff4747, alpha: 0.18 });
-        g.stroke({ color: ok ? 0xb8fff0 : 0xffd0d0, alpha: 0.62, width: 1.5 });
-        const overlay = this.createBuildPreviewTileSprite(xx, yy, ok);
+        g.fill({ color: ok ? 0x35f08a : 0xff4747, alpha: def.kind === 'path' ? 0.18 : 0.08 });
+        g.stroke({ color: ok ? 0xb8fff0 : 0xffd0d0, alpha: def.kind === 'path' ? 0.62 : 0.78, width: def.kind === 'path' ? 1.5 : 2.4 });
+        const overlay = def.kind === 'path' ? this.createBuildPreviewTileSprite(xx, yy, ok) : undefined;
         if (overlay) this.previewLayer.addChild(overlay);
       }
     }
@@ -1723,8 +1726,8 @@ export class VillageWorld {
     missionAction?.toggleAttribute('hidden', !interior.mission);
     inventoryAction?.toggleAttribute('hidden', !interior.inventory);
     panel.classList.add('open');
-    this.root.classList.add('v2040-interior-open', 'v2041-interior-open');
-    document.body.classList.add('v2040-interior-open', 'v2041-interior-open');
+    this.root.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open');
+    document.body.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open');
     this.root.querySelector<HTMLElement>('.v2-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
     panel.setAttribute('aria-hidden', 'false');
@@ -1735,8 +1738,8 @@ export class VillageWorld {
     const panel = this.root.querySelector<HTMLElement>('.v203-interior-panel');
     if (!panel) return;
     panel.classList.remove('open');
-    this.root.classList.remove('v2040-interior-open', 'v2041-interior-open');
-    document.body.classList.remove('v2040-interior-open', 'v2041-interior-open');
+    this.root.classList.remove('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open');
+    document.body.classList.remove('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open');
     this.root.querySelector<HTMLElement>('.v2-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');
     panel.setAttribute('aria-hidden', 'true');
