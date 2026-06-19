@@ -15,12 +15,14 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.44', 'package.json version must be 2.0.44');
-has(data, "APP_VERSION = '2.0.44'", 'APP_VERSION 2.0.44');
-has(data, 'aqua-fantasia-v2.0.44-fishing-shop-village-audit', 'data cache v2.0.44');
-has(sw, 'aqua-fantasia-v2.0.44-fishing-shop-village-audit', 'sw cache v2.0.44');
-has(offline, 'v2.0.44', 'offline badge v2.0.44');
-has(readme, '# AquaFantasia v2.0.44', 'README title v2.0.44');
+const version = String(pkg.version);
+const [major, minor, patch] = version.split('.').map(Number);
+must(major === 2 && minor === 0 && patch >= 44, 'package.json version must be v2.0.44 or later');
+has(data, `APP_VERSION = '${version}'`, `APP_VERSION ${version}`);
+has(data, `aqua-fantasia-v${version}-`, `data cache ${version}`);
+has(sw, `aqua-fantasia-v${version}-`, `sw cache ${version}`);
+has(offline, `v${version}`, `offline badge ${version}`);
+has(readme, `# AquaFantasia v${version}`, `README title ${version}`);
 has(readme, '## v2.0.44', 'README v2.0.44 changelog');
 
 for (const token of [

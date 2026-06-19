@@ -1,4 +1,4 @@
-# AquaFantasia v2.0.44
+# AquaFantasia v2.0.45
 
 AquaFantasia는 Vite + TypeScript + PixiJS 8 기반의 모바일 세로모드 SD 해양 판타지 마을 RPG입니다.
 
@@ -19,6 +19,18 @@ npm run validate
 npm run typecheck
 npm run build
 ```
+
+## v2.0.45 변경사항
+
+- v2.0.44 기준으로 전체 에셋/기능/성능 회귀 가능성을 다시 점검했습니다.
+- 캐릭터 8방향 에셋은 `player/chief/merchant/guild/captain/tourist/vip` 전부 `south/southeast/east/northeast/north/northwest/west/southwest` 파일이 존재하는지 검증하도록 추가했습니다. 1시/5시 방향용 대각선 PNG는 누락이 아니라 존재하며, 현재 1시는 시각 기준 보정 매핑, 5시는 `southeast` 직접 매핑을 유지합니다.
+- 마을 장식 오브젝트 중 하단 물가/가장자리에서 반쯤 잘려 보일 수 있는 중복 물결, 물고기 그림자, 스플래시, 교량/산호 계열을 숨기거나 더 안쪽으로 클램프했습니다. 큰 나무/야자/등대/교량류는 추가 축소와 비충돌 보정을 적용했습니다.
+- 마을 Pixi 엔진은 런타임 품질값을 참고해 DPR 상한을 낮추고, 저사양/좁은 화면에서는 low-power 모드로 초기화되도록 보완했습니다. 장식 컨테이너는 이벤트 비활성화 처리해 불필요한 포인터 비용을 줄였습니다.
+- 낚시 화면은 v2.0.45 전용 safe-area 값을 추가해 우측 하단 도크를 한 번 더 위로 올리고, 릴 패널을 도크 스택 위 중앙 안전 영역에 고정했습니다. 릴 패널/버튼/결과창의 pointer-events와 z-index도 최종 우선순위로 다시 잠갔습니다.
+- 메뉴 페이지 공통 중앙 아쿠아 카드 폭을 v2.0.45 클래스에서도 유지하고, lite 품질에서는 일부 물결/버블/어류 그림자 애니메이션을 줄여 성능을 보완했습니다.
+- v2.0.45 전용 정적 검증 스크립트 `check-v2045-direction-asset-engine-audit.mjs`를 추가했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge, README를 `2.0.45`로 동기화했습니다.
+- README.md만 수정했고 별도 `*_NOTES.md` 파일은 생성하지 않았습니다.
 
 ## v2.0.44 변경사항
 

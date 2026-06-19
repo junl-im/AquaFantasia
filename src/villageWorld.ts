@@ -633,13 +633,21 @@ const V2029_HIDDEN_DECORATION_KEYS = new Set([
   'ropeWall:14,32', 'ropeWall:26,32',
 ]);
 
+const V2045_HIDDEN_DECORATION_KEYS = new Set([
+  // v2.0.45: remove repeated water-edge effects and oversized duplicate props that could appear half-cut on tall mobile screens.
+  'splash:31,36', 'swimmingDuck:25,36', 'fishShadowSmall:14,36', 'fishShadowMid:19,36', 'fishShadowBig:29,36',
+  'shoreFoam:5,36', 'waterRing:17,36', 'waterRing:28,36', 'shoreFoam:13,36', 'fishShadowSmall:10,36', 'fishShadowBig:32,36',
+  'coral:5,35', 'coral:35,35', 'bridgeAsset:20,35', 'bridge:20,35',
+]);
+
 function decorationAuditKey(deco: Decoration): string {
   return `${deco.kind}:${deco.x},${deco.y}`;
 }
 
 function shouldUseDecoration(deco: Decoration): boolean {
   // v2.0.29: hide duplicated large props that made the village feel cluttered or half-cut.
-  return !V2029_HIDDEN_DECORATION_KEYS.has(decorationAuditKey(deco));
+  const key = decorationAuditKey(deco);
+  return !V2029_HIDDEN_DECORATION_KEYS.has(key) && !V2045_HIDDEN_DECORATION_KEYS.has(key);
 }
 
 const V2039_EDGE_SAFE_DECORATIONS = new Set<DecoKind>([
@@ -652,17 +660,25 @@ function auditedDecorationPlacement(deco: Decoration): { x: number; y: number; s
   let y = deco.y;
   let scale = deco.scale ?? 1;
   if (V2039_EDGE_SAFE_DECORATIONS.has(deco.kind)) {
-    if (x <= 5) x += 1;
-    if (x >= 35) x -= 1;
-    if (y >= 35) y -= 0.6;
-    if (deco.kind === 'tree' || deco.kind === 'palm' || deco.kind === 'lighthouse') scale = Math.min(scale, 0.88);
-    if (['tropicalTree', 'palmAlt', 'cherryTree', 'mapleTree', 'pineTree', 'crystalTree', 'flowerTree', 'cypressTree'].includes(deco.kind)) scale = Math.min(scale, 0.42);
+    if (x <= 5) x += 1.25;
+    if (x >= 35) x -= 1.25;
+    if (y >= 35) y -= 1.15;
+    if (y <= 5) y += 0.75;
+    if (deco.kind === 'tree' || deco.kind === 'palm' || deco.kind === 'lighthouse') scale = Math.min(scale, 0.76);
+    if (['tropicalTree', 'palmAlt', 'cherryTree', 'mapleTree', 'pineTree', 'crystalTree', 'flowerTree', 'cypressTree'].includes(deco.kind)) scale = Math.min(scale, 0.34);
+    if (['bridgeAsset', 'bridge', 'wideStairs', 'coral', 'rock'].includes(deco.kind)) scale = Math.min(scale, 0.42);
   }
-  return { x, y, scale };
+  if (y >= 34) scale = Math.min(scale, 0.52);
+  if (x <= 4 || x >= 36) scale = Math.min(scale, 0.48);
+  return { x: clamp(x, 2.2, MAP_SIZE - 3.2), y: clamp(y, 4.2, MAP_SIZE - 5.4), scale };
 }
 
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
+}
+
+function safeIntegerTile(value: number): number {
+  return clamp(Math.round(value), 1, MAP_SIZE - 2);
 }
 
 function tileKey(x: number, y: number): string {
@@ -752,6 +768,15 @@ export class VillageWorld {
     this.ensureVillageState();
   }
 
+  private resolveVillageDprCap(): number {
+    const cssCap = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--runtime-dpr-cap'));
+    const cores = navigator.hardwareConcurrency ?? 4;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const compactViewport = Math.min(window.innerWidth, window.innerHeight) <= 420;
+    const safetyCap = reduced || compactViewport || cores <= 4 ? 1.32 : 1.75;
+    return Math.max(1, Math.min(Number.isFinite(cssCap) ? cssCap : safetyCap, safetyCap));
+  }
+
   async init(): Promise<void> {
     const app = new Application();
     await app.init({
@@ -759,10 +784,12 @@ export class VillageWorld {
       backgroundAlpha: 0,
       antialias: true,
       autoDensity: true,
-      resolution: Math.min(window.devicePixelRatio || 1, 2),
-      powerPreference: 'high-performance',
+      resolution: Math.min(window.devicePixelRatio || 1, this.resolveVillageDprCap()),
+      powerPreference: this.resolveVillageDprCap() <= 1.32 ? 'low-power' : 'high-performance',
     });
     this.app = app;
+    app.ticker.maxFPS = 60;
+    app.ticker.minFPS = 24;
     this.stageHost.appendChild(app.canvas);
     this.world.sortableChildren = true;
     this.buildingLayer.sortableChildren = true;
@@ -798,6 +825,7 @@ export class VillageWorld {
     this.root.dataset.v2029VillageAudit = 'object-npc-build-stable';
     this.root.dataset.v2030VillageAudit = 'moving-npc-clean-objects';
     this.root.dataset.v2031VillageAudit = 'npc-direction-object-final-audit';
+    this.root.dataset.v2045VillageAudit = 'direction-asset-performance-trim';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 천천히 이동하고, 빈 바닥 터치로도 이동할 수 있습니다.');
   }
 
@@ -1120,6 +1148,7 @@ export class VillageWorld {
       const placement = auditedDecorationPlacement(deco);
       const p = centerOfTile(placement.x, placement.y);
       const item = this.createDecorationGraphic(deco.kind, placement.scale);
+      item.eventMode = 'none';
       item.position.set(p.x, p.y + TILE_H * 0.48);
       item.zIndex = deco.y * 20 + 10;
       this.decorationLayer.addChild(item);
@@ -1216,9 +1245,11 @@ export class VillageWorld {
     for (const deco of VILLAGE_DECORATIONS) {
       if (!shouldUseDecoration(deco)) continue;
       if (deco.blocks) {
-        const key = tileKey(deco.x, deco.y);
-        this.blockedTiles.add(key);
+        const placement = auditedDecorationPlacement(deco);
+        const isSoftEdgeDecor = V2039_EDGE_SAFE_DECORATIONS.has(deco.kind) && (deco.x <= 6 || deco.x >= 34 || deco.y >= 33);
+        const key = tileKey(safeIntegerTile(placement.x), safeIntegerTile(placement.y));
         this.occupiedTiles.add(key);
+        if (!isSoftEdgeDecor) this.blockedTiles.add(key);
       }
     }
     for (const b of this.save.village.buildings) {
