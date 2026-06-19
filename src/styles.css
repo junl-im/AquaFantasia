@@ -26660,3 +26660,94 @@ html[data-v2049-content-asset-system-polish="v2049-content-asset-system-polish"]
     bottom: calc(max(8px, env(safe-area-inset-bottom)) + 62px) !important;
   }
 }
+
+
+/* v2.0.50 Content expansion / asset polish: island expansion board, calmer assets, dock/fishing stability lineage. */
+html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] {
+  --v2050-aqua-border: rgba(147, 242, 255, .58);
+  --v2050-aqua-bg: linear-gradient(180deg, rgba(244, 255, 255, .90), rgba(111, 231, 241, .34) 62%, rgba(8, 94, 132, .24));
+  --v2050-aqua-text: #073f5c;
+}
+html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] .v2050-expedition-board,
+html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] .v2050-expedition-card {
+  border: 1px solid var(--v2050-aqua-border) !important;
+  border-radius: 24px !important;
+  background: var(--v2050-aqua-bg) !important;
+  color: var(--v2050-aqua-text) !important;
+  box-shadow: 0 14px 32px rgba(8, 112, 151, .18), inset 0 1px 0 rgba(255,255,255,.42) !important;
+  overflow: hidden !important;
+}
+html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] .v2050-expedition-board {
+  position: fixed !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  bottom: calc(max(16px, env(safe-area-inset-bottom)) + 108px) !important;
+  width: min(330px, calc(100vw - 188px)) !important;
+  z-index: 106 !important;
+  padding: 12px !important;
+  pointer-events: none !important;
+}
+html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] .v2050-expedition-card {
+  width: min(100%, 860px) !important;
+  margin: 0 auto 12px !important;
+  padding: 14px !important;
+}
+.v2050-expedition-head { display: grid; gap: 3px; }
+.v2050-expedition-head span { font-size: 10px; font-weight: 1000; letter-spacing: .12em; color: rgba(10, 101, 137, .72); }
+.v2050-expedition-head strong { font-size: clamp(15px, 3.8vw, 20px); color: #073f5c; }
+.v2050-expedition-head em { font-style: normal; font-size: 12px; font-weight: 850; color: rgba(6, 62, 88, .80); line-height: 1.35; }
+.v2050-expedition-meter { position: relative; height: 17px; margin: 9px 0; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,.48); border: 1px solid rgba(255,255,255,.58); }
+.v2050-expedition-meter i { position: absolute; inset: 0 auto 0 0; width: var(--p, 0%); border-radius: inherit; background: linear-gradient(90deg, #5ff7db, #8ae6ff 58%, #ffe49b); }
+.v2050-expedition-meter b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 10px; color: #053951; text-shadow: 0 1px 0 rgba(255,255,255,.78); }
+.v2050-expedition-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.v2050-expedition-grid article { min-width: 0; padding: 7px 5px; border-radius: 14px; background: rgba(255,255,255,.44); border: 1px solid rgba(255,255,255,.46); text-align: center; }
+.v2050-expedition-grid strong { display: block; font-size: 12px; color: #063d5a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.v2050-expedition-grid span { display: block; margin-top: 2px; font-size: 9px; color: rgba(4, 52, 75, .70); font-weight: 900; }
+html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] .runtime-menu-screen.v2050-menu-content-screen .runtime-content {
+  gap: 13px !important;
+  padding-bottom: calc(var(--dock-safe-bottom, 114px) + 22px) !important;
+}
+html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] .v2050-shop-list .shop-card.owned {
+  opacity: .82 !important;
+  filter: saturate(.92) !important;
+}
+html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] .v2050-shop-list .shop-card.owned .shop-price {
+  background: linear-gradient(180deg, rgba(205,255,248,.95), rgba(101,216,220,.80)) !important;
+  color: #06495f !important;
+}
+html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] .bottom-nav.v2050-identical-dock-nav {
+  border-color: rgba(132, 239, 255, .42) !important;
+  background: linear-gradient(180deg, rgba(8, 100, 137, .22), rgba(2, 59, 94, .16)) !important;
+}
+html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] body[data-screen="fishing"] .bottom-nav.v2050-identical-dock-nav {
+  bottom: max(18px, calc(env(safe-area-inset-bottom) + 14px)) !important;
+}
+html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] body[data-screen="fishing"] .fishing-screen.v2050-fishing-system-screen .v2050-cast-button {
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  bottom: calc(max(18px, env(safe-area-inset-bottom)) + 116px) !important;
+}
+html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] body[data-screen="fishing"] .fishing-screen.v2050-fishing-system-screen .v2050-reel-panel {
+  bottom: calc(max(18px, env(safe-area-inset-bottom)) + 158px) !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+}
+html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] body[data-screen="fishing"] .fishing-screen.v2050-fishing-system-screen .v2050-hold-pad {
+  min-height: 84px !important;
+  border: 2px solid rgba(184, 255, 248, .78) !important;
+}
+@media (max-width: 520px) {
+  html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] .v2050-expedition-board {
+    left: max(10px, env(safe-area-inset-left)) !important;
+    right: auto !important;
+    bottom: calc(max(12px, env(safe-area-inset-bottom)) + 96px) !important;
+    width: min(238px, calc(100vw - 176px)) !important;
+    padding: 10px !important;
+  }
+  .v2050-expedition-head em { display: none; }
+  .v2050-expedition-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+}
+@media (max-height: 760px) {
+  html[data-v2050-content-expansion-asset-polish="v2050-content-expansion-asset-polish"] .v2050-expedition-board { display: none !important; }
+}

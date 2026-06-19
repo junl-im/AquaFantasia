@@ -658,6 +658,12 @@ const V2049_HIDDEN_DECORATION_KEYS = new Set([
   'dock:19,34', 'dock:20,34', 'dock:21,34', 'buoy:17,34', 'buoy:23,34',
 ]);
 
+const V2050_HIDDEN_DECORATION_KEYS = new Set([
+  // v2.0.50: keep the island playfield calmer for the content board and walking routes.
+  'goldLantern:12,19', 'goldLantern:28,19', 'sparkles:16,22', 'sparkles:24,22',
+  'butterflyBlue:14,16', 'butterflyPink:26,16', 'wideStairs:20,26',
+]);
+
 function decorationAuditKey(deco: Decoration): string {
   return `${deco.kind}:${deco.x},${deco.y}`;
 }
@@ -665,7 +671,7 @@ function decorationAuditKey(deco: Decoration): string {
 function shouldUseDecoration(deco: Decoration): boolean {
   // v2.0.29: hide duplicated large props that made the village feel cluttered or half-cut.
   const key = decorationAuditKey(deco);
-  return !V2029_HIDDEN_DECORATION_KEYS.has(key) && !V2045_HIDDEN_DECORATION_KEYS.has(key) && !V2049_HIDDEN_DECORATION_KEYS.has(key);
+  return !V2029_HIDDEN_DECORATION_KEYS.has(key) && !V2045_HIDDEN_DECORATION_KEYS.has(key) && !V2049_HIDDEN_DECORATION_KEYS.has(key) && !V2050_HIDDEN_DECORATION_KEYS.has(key);
 }
 
 const V2039_EDGE_SAFE_DECORATIONS = new Set<DecoKind>([
@@ -852,6 +858,7 @@ export class VillageWorld {
     this.root.dataset.v2045VillageAudit = 'direction-asset-performance-trim';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
+    this.root.dataset.v2050ContentExpansionAssetPolish = 'calmer-assets-island-expansion-routes';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 천천히 이동하고, 빈 바닥 터치로도 이동할 수 있습니다.');
   }
 
