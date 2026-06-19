@@ -207,18 +207,17 @@ const ACTOR_TEXTURES: Record<Actor['role'], string> = {
 const ACTOR_DIRECTIONS: ActorDirection[] = ['south', 'southeast', 'east', 'northeast', 'north', 'northwest', 'west', 'southwest'];
 
 const ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
-  // v2.0.35: v2023 diagonal source files are horizontally mirrored from the clock input.
-  // User QA: 1시 showed 7시 and 5시 showed 11시. The correct repair is not
-  // northeast<->southeast, but right-diagonal input -> opposite left/right file in
-  // the same north/south half. This keeps cardinal directions untouched.
+  // v2.0.38: the rebuilt v2023 files already encode their visual direction.
+  // Previous diagonal cross-mapping over-corrected 1시/5시 and made them read as the opposite quadrant.
+  // Keep filename = visual direction for all 8 directions, while preserving the angular input quantization below.
   south: 'south',
-  southeast: 'southwest',
+  southeast: 'southeast',
   east: 'east',
-  northeast: 'northwest',
+  northeast: 'northeast',
   north: 'north',
-  northwest: 'northeast',
+  northwest: 'northwest',
   west: 'west',
-  southwest: 'southeast',
+  southwest: 'southwest',
 };
 
 const ACTOR_DIRECTION_QA_VECTORS: Array<{ movement: ActorDirection; dx: number; dy: number; texture: ActorDirection }> = [
@@ -226,15 +225,15 @@ const ACTOR_DIRECTION_QA_VECTORS: Array<{ movement: ActorDirection; dx: number; 
   { movement: 'south', dx: 0, dy: 1, texture: 'south' },
   { movement: 'west', dx: -1, dy: 0, texture: 'west' },
   { movement: 'east', dx: 1, dy: 0, texture: 'east' },
-  { movement: 'northwest', dx: -1, dy: -1, texture: 'northeast' },
-  { movement: 'northeast', dx: 1, dy: -1, texture: 'northwest' },
-  { movement: 'southwest', dx: -1, dy: 1, texture: 'southeast' },
-  { movement: 'southeast', dx: 1, dy: 1, texture: 'southwest' },
-  // v2.0.35: clock-direction QA. 1시/5시 must stay diagonal and use the corrected visual file.
-  { movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northwest' },
-  { movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southwest' },
-  { movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'northeast' },
-  { movement: 'southwest', dx: -0.5, dy: 0.866, texture: 'southeast' },
+  { movement: 'northwest', dx: -1, dy: -1, texture: 'northwest' },
+  { movement: 'northeast', dx: 1, dy: -1, texture: 'northeast' },
+  { movement: 'southwest', dx: -1, dy: 1, texture: 'southwest' },
+  { movement: 'southeast', dx: 1, dy: 1, texture: 'southeast' },
+  // v2.0.38: clock-direction QA. 1시/5시 must not cross to 7시/11시 textures.
+  { movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northeast' },
+  { movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' },
+  { movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'northwest' },
+  { movement: 'southwest', dx: -0.5, dy: 0.866, texture: 'southwest' },
 ];
 
 

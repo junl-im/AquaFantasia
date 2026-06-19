@@ -32,7 +32,7 @@ for (const token of [
   'v2035-character-panel-open',
 ]) must(main.includes(token), `main.ts missing ${token}`);
 
-for (const token of [
+const hasV2035CrossDiagonal = [
   "northeast: 'northwest'",
   "southeast: 'southwest'",
   "northwest: 'northeast'",
@@ -40,7 +40,17 @@ for (const token of [
   "{ movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northwest' }",
   "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southwest' }",
   'v2.0.35: v2023 diagonal source files are horizontally mirrored',
-]) must(world.includes(token), `villageWorld.ts missing v2035 diagonal token ${token}`);
+].every((token) => world.includes(token));
+const hasV2038DirectDiagonal = [
+  "northeast: 'northeast'",
+  "southeast: 'southeast'",
+  "northwest: 'northwest'",
+  "southwest: 'southwest'",
+  "{ movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northeast' }",
+  "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' }",
+  'v2.0.38: the rebuilt v2023 files already encode their visual direction',
+].every((token) => world.includes(token));
+must(hasV2035CrossDiagonal || hasV2038DirectDiagonal, 'villageWorld.ts missing v2035/v2038 diagonal repair lineage');
 
 for (const token of [
   'html[data-v2035-final-polish="v2035-direction-fishing-menu-repair"]',

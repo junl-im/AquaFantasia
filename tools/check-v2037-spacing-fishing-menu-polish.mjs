@@ -12,11 +12,11 @@ const sw = read('public/sw.js');
 const offline = read('public/offline.html');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.37', 'package.json version must be 2.0.37');
-must(data.includes("APP_VERSION = '2.0.37'"), 'APP_VERSION must be 2.0.37');
-must(data.includes('aqua-fantasia-v2.0.37-fishing-spacing-menu-polish'), 'CACHE_NAME must be v2.0.37 fishing spacing polish');
-must(sw.includes('aqua-fantasia-v2.0.37-fishing-spacing-menu-polish'), 'service worker cache must be v2.0.37');
-must(offline.includes('v2.0.37'), 'offline badge must mention v2.0.37');
+must(/^2\.0\.(3[7-9]|[4-9][0-9])$/.test(pkg.version), 'package.json version must be 2.0.37 or later');
+must(/APP_VERSION = '2\.0\.(3[7-9]|[4-9][0-9])'/.test(data), 'APP_VERSION must be 2.0.37 or later');
+must(/aqua-fantasia-v2\.0\.(3[7-9]|[4-9][0-9])-/.test(data), 'CACHE_NAME must preserve v2.0.37+ lineage');
+must(/aqua-fantasia-v2\.0\.(3[7-9]|[4-9][0-9])-/.test(sw), 'service worker cache must preserve v2.0.37+ lineage');
+must(/v2\.0\.(3[7-9]|[4-9][0-9])/.test(offline), 'offline badge must preserve v2.0.37+ lineage');
 
 for (const token of [
   "dataset.v2037UiPolish = 'v2037-spacing-fishing-menu-polish'",

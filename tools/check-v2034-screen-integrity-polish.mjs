@@ -51,7 +51,8 @@ for (const token of [
 
 const hasV2034DiagonalQa = world.includes("northeast: 'southeast'") && world.includes("southeast: 'northeast'");
 const hasV2035DiagonalQa = world.includes("northeast: 'northwest'") && world.includes("southeast: 'southwest'") && world.includes("northwest: 'northeast'") && world.includes("southwest: 'southeast'");
-must(hasV2034DiagonalQa || hasV2035DiagonalQa, 'villageWorld.ts missing diagonal QA lineage');
+const hasV2038DirectDiagonalQa = world.includes("northeast: 'northeast'") && world.includes("southeast: 'southeast'") && world.includes("northwest: 'northwest'") && world.includes("southwest: 'southwest'");
+must(hasV2034DiagonalQa || hasV2035DiagonalQa || hasV2038DirectDiagonalQa, 'villageWorld.ts missing diagonal QA lineage');
 
 must(!/html\[data-version="2\.0\.34"\]/.test(css), 'v2034 CSS must not be scoped to data-version');
 for (const forbidden of ['packages.applied-caas', 'applied-caas-gateway', '10.192.', 'internal.api.openai']) {
