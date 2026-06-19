@@ -60,11 +60,12 @@ if (v2025Block.includes('html[data-version="2.0.25"] .start-art-screen .hit-keep
 if (v2025Block.includes('html[data-version="2.0.25"] body[data-screen="fishing"] .bottom-nav')) fail('fishing dock guard must not be scoped only to data-version=2.0.25');
 
 const world = read('src/villageWorld.ts');
+
+if (!world.includes('./assets/v2023/characters/player_${direction}.png') && !world.includes('./assets/v2047/characters/player_${direction}.png')) fail('world persistent token missing: v2023/v2047 player direction texture mapping');
 for (const token of [
   "west: 'west'",
   "east: 'east'",
   'actor.label.scale.set(1, 1)',
-  './assets/v2023/characters/player_${direction}.png',
   './assets/v2025/props/harbor_beach_bench_source_02_512.png',
   './assets/v2025/props/harbor_beach_quest_board_large_source_03_512.png',
 ]) {

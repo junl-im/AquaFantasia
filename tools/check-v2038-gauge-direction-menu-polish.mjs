@@ -84,7 +84,17 @@ const hasV2042VisualDiagonal = [
   "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' }",
   'v2.0.42: the actual player PNG silhouettes were inspected in a contact sheet',
 ].every((token) => world.includes(token));
-must(hasV2038DirectDiagonal || hasV2040ObservedDiagonal || hasV2042VisualDiagonal, 'villageWorld.ts missing v2038/v2040/v2042 diagonal QA lineage');
+const hasV2047ClockCorrectedDiagonal = [
+  "northeast: 'northeast'",
+  "southeast: 'southeast'",
+  "northwest: 'northwest'",
+  "southwest: 'southwest'",
+  "{ movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northeast' }",
+  "{ movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' }",
+  'v2.0.47: stop relying on ambiguous v2023 diagonal filenames',
+  './assets/v2047/characters/player_${direction}.png',
+].every((token) => world.includes(token));
+must(hasV2038DirectDiagonal || hasV2040ObservedDiagonal || hasV2042VisualDiagonal || hasV2047ClockCorrectedDiagonal, 'villageWorld.ts missing v2038/v2040/v2042/v2047 diagonal QA lineage');
 
 must(!/html\[data-version="2\.0\.38"\]/.test(css), 'v2038 CSS must not be scoped to data-version');
 for (const forbidden of ['packages.applied-caas', 'applied-caas-gateway', '10.192.', 'internal.api.openai']) {

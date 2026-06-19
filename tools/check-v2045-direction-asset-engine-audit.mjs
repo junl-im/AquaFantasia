@@ -39,11 +39,11 @@ for (const token of [
   "item.eventMode = 'none'",
   'safeIntegerTile',
   "this.root.dataset.v2045VillageAudit = 'direction-asset-performance-trim'",
-  "northeast: 'northwest'",
   "southeast: 'southeast'",
-  "northwest: 'northeast'",
   "southwest: 'southwest'",
 ]) has(world, token, `world token ${token}`);
+if (!(world.includes("northeast: 'northwest'") || world.includes("northeast: 'northeast'"))) fail('world token missing northeast visual mapping');
+if (!(world.includes("northwest: 'northeast'") || world.includes("northwest: 'northwest'"))) fail('world token missing northwest visual mapping');
 
 for (const token of [
   'v2.0.45 Direction/asset/performance audit',

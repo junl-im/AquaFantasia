@@ -1,4 +1,4 @@
-# AquaFantasia v2.0.46
+# AquaFantasia v2.0.47
 
 AquaFantasia는 Vite + TypeScript + PixiJS 8 기반의 모바일 세로모드 SD 해양 판타지 마을 RPG입니다.
 
@@ -19,6 +19,20 @@ npm run validate
 npm run typecheck
 npm run build
 ```
+
+## v2.0.47 변경사항
+
+- 캐릭터 8방향 중 1시/5시가 계속 반대로 보이는 문제를 파일명 매핑 대신 전용 시각 보정 에셋으로 처리했습니다.
+- `public/assets/v2047/characters`에 7개 역할 x 8방향, 총 56개의 clock-corrected 캐릭터 PNG를 생성했습니다.
+- 1시 방향은 오른쪽 위를 보는 후방 대각선, 5시 방향은 오른쪽 아래를 보는 전방 대각선으로 별도 PNG를 사용합니다.
+- 기존 v2023 대각선 파일명 혼동을 피하기 위해 런타임 캐릭터 텍스처 경로를 v2047 전용 폴더로 변경했습니다.
+- 낚시 화면 루트에 누락되어 있던 v2046/v2047 플레이 가능 클래스를 보강해 릴 패널 위치/버튼 스타일이 실제 적용되도록 했습니다.
+- 낚시 화면 우측 하단 도크는 body 고정 상태에서 한 번 더 강제 lift 값을 넣어 하단 잘림 회귀를 줄였습니다.
+- 릴 감기 버튼을 더 크게 보이게 하고, 안내 문구에 큰 버튼을 누르라는 내용을 명확히 추가했습니다.
+- 릴 게이지 성공 조건을 3초에서 2.4초로 완화하고 안전 구간을 넓혀 초반 낚시 실패율을 줄였습니다.
+- 우측 상단/우측 하단 메뉴바는 투명했던 상태에서 얇은 아쿠아 프레임과 은은한 배경을 다시 유지합니다.
+- v2.0.47 전용 정적 검증 스크립트 `check-v2047-direction-fishing-final-repair.mjs`를 추가했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge, README를 `2.0.47`로 동기화했습니다.
 
 ## v2.0.46 변경사항
 

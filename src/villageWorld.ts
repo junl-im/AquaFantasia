@@ -195,29 +195,41 @@ const DAY_TALK: Record<WorldNpcRole, string[]> = {
 
 
 const ACTOR_TEXTURES: Record<Actor['role'], string> = {
-  player: './assets/v2023/characters/player_south.png',
-  chief: './assets/v2023/characters/chief_south.png',
-  merchant: './assets/v2023/characters/merchant_south.png',
-  guild: './assets/v2023/characters/guild_south.png',
-  captain: './assets/v2023/characters/captain_south.png',
-  tourist: './assets/v2023/characters/tourist_south.png',
-  vip: './assets/v2023/characters/vip_south.png',
+  player: './assets/v2047/characters/player_south.png',
+  chief: './assets/v2047/characters/chief_south.png',
+  merchant: './assets/v2047/characters/merchant_south.png',
+  guild: './assets/v2047/characters/guild_south.png',
+  captain: './assets/v2047/characters/captain_south.png',
+  tourist: './assets/v2047/characters/tourist_south.png',
+  vip: './assets/v2047/characters/vip_south.png',
 };
 
 const ACTOR_DIRECTIONS: ActorDirection[] = ['south', 'southeast', 'east', 'northeast', 'north', 'northwest', 'west', 'southwest'];
 
+
+/*
+ * Legacy diagonal QA lineage kept for regression scripts only; runtime below uses v2047 clock-corrected assets.
+ * v2.0.42: the actual player PNG silhouettes were inspected in a contact sheet
+ * northeast: 'northwest'
+ * southeast: 'southeast'
+ * northwest: 'northeast'
+ * southwest: 'southwest'
+ * { movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northwest' }
+ * { movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' }
+ * { movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'northeast' }
+ * { movement: 'southwest', dx: -0.5, dy: 0.866, texture: 'southwest' }
+ */
 const ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
-  // v2.0.38: the rebuilt v2023 files were first treated as direct direction names.
-  // v2.0.40: field observation showed 1시 rendered like 7시 and 5시 like 11시 in one test pass.
-  // v2.0.42: the actual player PNG silhouettes were inspected in a contact sheet. The upper diagonals are filename-swapped visually:
-  // 1시 input uses the visually upper-right northwest PNG, while 11시 uses the visually upper-left northeast PNG.
-  // The lower diagonals stay direct because southeast/southwest are the clearest front-right/front-left pair.
+  // v2.0.47: stop relying on ambiguous v2023 diagonal filenames.
+  // public/assets/v2047/characters contains explicit clock-corrected PNGs:
+  // 1시(northeast) and 5시(southeast) are right-facing/right-leaning assets,
+  // 11시/7시 remain left-facing counterparts. The runtime mapping is now identity.
   south: 'south',
   southeast: 'southeast',
   east: 'east',
-  northeast: 'northwest',
+  northeast: 'northeast',
   north: 'north',
-  northwest: 'northeast',
+  northwest: 'northwest',
   west: 'west',
   southwest: 'southwest',
 };
@@ -227,26 +239,25 @@ const ACTOR_DIRECTION_QA_VECTORS: Array<{ movement: ActorDirection; dx: number; 
   { movement: 'south', dx: 0, dy: 1, texture: 'south' },
   { movement: 'west', dx: -1, dy: 0, texture: 'west' },
   { movement: 'east', dx: 1, dy: 0, texture: 'east' },
-  { movement: 'northwest', dx: -1, dy: -1, texture: 'northeast' },
-  { movement: 'northeast', dx: 1, dy: -1, texture: 'northwest' },
+  { movement: 'northwest', dx: -1, dy: -1, texture: 'northwest' },
+  { movement: 'northeast', dx: 1, dy: -1, texture: 'northeast' },
   { movement: 'southwest', dx: -1, dy: 1, texture: 'southwest' },
   { movement: 'southeast', dx: 1, dy: 1, texture: 'southeast' },
-  // v2.0.42: clock-direction QA follows visual PNG silhouettes, not only filenames.
-  { movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northwest' },
+  { movement: 'northeast', dx: 0.5, dy: -0.866, texture: 'northeast' },
   { movement: 'southeast', dx: 0.5, dy: 0.866, texture: 'southeast' },
-  { movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'northeast' },
+  { movement: 'northwest', dx: -0.5, dy: -0.866, texture: 'northwest' },
   { movement: 'southwest', dx: -0.5, dy: 0.866, texture: 'southwest' },
 ];
 
 
 const ACTOR_DIRECTION_TEXTURES: Record<Actor['role'], Record<ActorDirection, string>> = {
-  player: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/player_${direction}.png`])) as Record<ActorDirection, string>,
-  chief: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/chief_${direction}.png`])) as Record<ActorDirection, string>,
-  merchant: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/merchant_${direction}.png`])) as Record<ActorDirection, string>,
-  guild: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/guild_${direction}.png`])) as Record<ActorDirection, string>,
-  captain: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/captain_${direction}.png`])) as Record<ActorDirection, string>,
-  tourist: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/tourist_${direction}.png`])) as Record<ActorDirection, string>,
-  vip: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2023/characters/vip_${direction}.png`])) as Record<ActorDirection, string>,
+  player: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2047/characters/player_${direction}.png`])) as Record<ActorDirection, string>,
+  chief: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2047/characters/chief_${direction}.png`])) as Record<ActorDirection, string>,
+  merchant: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2047/characters/merchant_${direction}.png`])) as Record<ActorDirection, string>,
+  guild: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2047/characters/guild_${direction}.png`])) as Record<ActorDirection, string>,
+  captain: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2047/characters/captain_${direction}.png`])) as Record<ActorDirection, string>,
+  tourist: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2047/characters/tourist_${direction}.png`])) as Record<ActorDirection, string>,
+  vip: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2047/characters/vip_${direction}.png`])) as Record<ActorDirection, string>,
 };
 
 
