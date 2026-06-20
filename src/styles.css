@@ -27542,3 +27542,219 @@ html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .v2054-result-car
   html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] { --v2054-dock-btn: clamp(42px, 10.2vw, 48px); --v2054-dock-gap: 3px; --v2054-dock-pad: 4px; }
   html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .village-world-screen.v2054-layout-issue-village-screen .v2-village-hud { width: min(240px, calc(100vw - 110px)) !important; }
 }
+
+/* v2.0.55 playability and UI repair: loading joystick hide, loop modal close, map aqua cleanup, reel controls rebuild. */
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .village-world-screen.v2055-playability-village-screen:not(.v2027-village-ready) :is(.v2-joystick,.v2-village-controls,.v204-mini-map,.v206-village-status,.v2-objective-card,.v2-village-guide,.v2049-growth-board,.v2050-expedition-board) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .village-world-screen.v2055-playability-village-screen .v2027-village-loading {
+  z-index: 2200 !important;
+  pointer-events: auto !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .village-world-screen.v2055-playability-village-screen .v2049-growth-board.v2051-loop-mini.open,
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .village-world-screen.v2055-playability-village-screen .v2050-expedition-board.v2051-expedition-mini.open {
+  position: fixed !important;
+  left: max(10px, env(safe-area-inset-left)) !important;
+  right: max(10px, env(safe-area-inset-right)) !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 86px) !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  max-height: min(44dvh, 390px) !important;
+  padding: 12px !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(137, 238, 255, .62) !important;
+  background: linear-gradient(180deg, rgba(238, 254, 255, .96), rgba(143, 225, 239, .92)) !important;
+  box-shadow: 0 18px 52px rgba(0, 62, 91, .28), inset 0 2px 0 rgba(255,255,255,.66) !important;
+  z-index: 1500 !important;
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .village-world-screen.v2055-playability-village-screen .v2051-loop-body {
+  max-height: calc(min(44dvh, 390px) - 54px) !important;
+  overflow: auto !important;
+  padding-bottom: 8px !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-loop-close {
+  display: inline-grid !important;
+  place-items: center !important;
+  width: 100% !important;
+  min-height: 38px !important;
+  margin-top: 10px !important;
+  border: 1px solid rgba(69, 190, 220, .45) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(96,217,236,.78)) !important;
+  color: #064763 !important;
+  -webkit-text-fill-color: #064763 !important;
+  font-weight: 1000 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.66), 0 8px 18px rgba(0, 71, 105, .12) !important;
+  pointer-events: auto !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .runtime-menu-screen.v2055-map-aqua-screen .runtime-content {
+  width: min(100%, 620px) !important;
+  margin-inline: auto !important;
+  align-items: stretch !important;
+  padding-bottom: calc(92px + env(safe-area-inset-bottom)) !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .runtime-menu-screen.v2055-map-aqua-screen :is(.runtime-hero-card,.v2050-expedition-card,.v206-route-ready,.v204-map-shell,.v204-map-detail) {
+  border: 1px solid rgba(133, 239, 255, .58) !important;
+  background: linear-gradient(180deg, rgba(240, 255, 255, .96), rgba(149, 229, 243, .88)) !important;
+  box-shadow: 0 14px 34px rgba(0, 72, 104, .16), inset 0 2px 0 rgba(255,255,255,.72) !important;
+  color: #053d5a !important;
+  -webkit-text-fill-color: #053d5a !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .runtime-menu-screen.v2055-map-aqua-screen :is(.runtime-bg-character,.v2023-world-map-bg,.v2027-menu-accent,.v2025-menu-frame,.v2023-map-frame) {
+  opacity: .08 !important;
+  pointer-events: none !important;
+  filter: saturate(.8) brightness(1.08) !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .runtime-menu-screen.v2055-map-aqua-screen .v204-map-ocean {
+  border-radius: 26px !important;
+  border: 1px solid rgba(107, 217, 240, .38) !important;
+  background: radial-gradient(circle at 50% 20%, rgba(222, 255, 255, .78), rgba(84, 204, 229, .72) 66%, rgba(19, 116, 169, .72)) !important;
+  overflow: hidden !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .runtime-menu-screen.v2055-map-aqua-screen .v204-island {
+  border: 1px solid rgba(255,255,255,.66) !important;
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(119,225,240,.74)) !important;
+  box-shadow: 0 10px 22px rgba(0, 74, 112, .18), inset 0 1px 0 rgba(255,255,255,.74) !important;
+  color: #064260 !important;
+  -webkit-text-fill-color: #064260 !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] :is(.runtime-btn,.image-btn,.compact-cta,.btn-aqua-action,.btn-gold-cost,.dialog-btn,.v2017-character-actions button,.v203-interior-actions button,.v2-build-grid button) {
+  border: 1px solid rgba(112, 223, 244, .48) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(90, 214, 236, .82)) !important;
+  color: #063f5b !important;
+  -webkit-text-fill-color: #063f5b !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.66), 0 8px 18px rgba(0, 72, 105, .12) !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] body[data-screen="fishing"] .fishing-screen.v2055-fishing-reel-rebuild-screen .v2055-reel-panel {
+  left: 50vw !important;
+  top: calc(max(7px, env(safe-area-inset-top)) + 72px) !important;
+  bottom: auto !important;
+  transform: translateX(-50%) !important;
+  width: min(360px, calc(100vw - 22px)) !important;
+  max-height: 188px !important;
+  padding: 10px !important;
+  z-index: 1370 !important;
+  pointer-events: auto !important;
+  border: 1px solid rgba(126, 238, 255, .68) !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-panel.hidden { display: none !important; }
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-panel .v205-reel-control p { display: none !important; }
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-panel .tension-track { height: 34px !important; border-radius: 999px !important; }
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-panel .tension-fill { min-width: 8px !important; transition: width .08s linear, filter .08s linear !important; }
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-panel.is-holding .tension-fill,
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-console.is-winding [data-v2055-tension-bar] { filter: brightness(1.18) saturate(1.18) !important; }
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2053-reel-touch-zone { display: none !important; }
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-console {
+  position: fixed !important;
+  left: 50vw !important;
+  top: 60dvh !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(348px, calc(100vw - 22px)) !important;
+  padding: 12px !important;
+  border-radius: 28px !important;
+  border: 1px solid rgba(132, 241, 255, .70) !important;
+  background: linear-gradient(180deg, rgba(239,255,255,.97), rgba(114,220,239,.92)) !important;
+  color: #053e5b !important;
+  -webkit-text-fill-color: #053e5b !important;
+  box-shadow: 0 20px 52px rgba(0, 65, 96, .28), inset 0 2px 0 rgba(255,255,255,.70) !important;
+  z-index: 1390 !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+  user-select: none !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-console.hidden { display: none !important; }
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-meter {
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  gap: 4px 10px !important;
+  align-items: center !important;
+  margin-bottom: 10px !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-meter strong { font-size: 28px !important; font-weight: 1000 !important; line-height: 1 !important; }
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-meter span { font-size: 12px !important; font-weight: 1000 !important; }
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-meter i {
+  grid-column: 1 / -1 !important;
+  display: block !important;
+  height: 18px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  background: linear-gradient(90deg, rgba(244,106,97,.40), rgba(119,232,161,.62) 42%, rgba(119,232,161,.62) 74%, rgba(244,106,97,.40)) !important;
+  border: 1px solid rgba(255,255,255,.72) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 60, 80, .16) !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-meter b {
+  display: block !important;
+  width: 50% !important;
+  height: 100% !important;
+  border-radius: inherit !important;
+  background: linear-gradient(90deg, #44d9ff, #fff06a) !important;
+  box-shadow: 0 0 14px rgba(255, 232, 76, .52) !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-actions button {
+  display: grid !important;
+  place-items: center !important;
+  min-height: 74px !important;
+  padding: 10px 8px !important;
+  border-radius: 22px !important;
+  border: 2px solid rgba(255,255,255,.78) !important;
+  color: #043e5a !important;
+  -webkit-text-fill-color: #043e5a !important;
+  font-weight: 1000 !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-wind { background: linear-gradient(180deg, #fff7ad, #ffbd65) !important; }
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-release { background: linear-gradient(180deg, #e9ffff, #69dcec) !important; }
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-actions button strong { font-size: 18px !important; }
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-actions button span { font-size: 12px !important; }
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-console p {
+  margin: 9px 2px 0 !important;
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+  font-weight: 900 !important;
+  color: rgba(4, 61, 89, .74) !important;
+  -webkit-text-fill-color: rgba(4, 61, 89, .74) !important;
+  text-align: center !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-console.is-winding .v2055-reel-wind,
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-console.is-releasing .v2055-reel-release {
+  transform: translateY(1px) scale(.985) !important;
+  box-shadow: inset 0 3px 8px rgba(0, 60, 85, .18), 0 0 0 6px rgba(255,255,255,.24) !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-console.is-safe {
+  box-shadow: 0 20px 52px rgba(0, 65, 96, .24), 0 0 0 8px rgba(91, 236, 164, .18), inset 0 2px 0 rgba(255,255,255,.70) !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-console.is-danger {
+  animation: v2055ReelDanger .14s linear infinite alternate !important;
+}
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .catch-result-card.v2055-result-card,
+html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .catch-result-card.v2054-result-card {
+  position: fixed !important;
+  left: 50vw !important;
+  top: 50dvh !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(350px, calc(100vw - 28px)) !important;
+  max-height: min(78dvh, 560px) !important;
+  overflow: auto !important;
+  border-radius: 30px !important;
+  z-index: 1700 !important;
+}
+@keyframes v2055ReelDanger { from { transform: translate(-50%, -50%) translateX(-1px); } to { transform: translate(-50%, -50%) translateX(1px); } }
+@media (max-height: 760px) {
+  html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] body[data-screen="fishing"] .fishing-screen.v2055-fishing-reel-rebuild-screen .v2055-reel-panel { top: calc(max(6px, env(safe-area-inset-top)) + 56px) !important; max-height: 168px !important; }
+  html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-console { top: 62dvh !important; padding: 10px !important; }
+  html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-actions button { min-height: 62px !important; }
+}

@@ -14,12 +14,12 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.54', 'package.json version must be 2.0.54');
-has(data, "APP_VERSION = '2.0.54'", 'APP_VERSION 2.0.54');
-has(data, 'aqua-fantasia-v2.0.54-layout-issue-sweep', 'data cache v2.0.54');
-has(sw, 'aqua-fantasia-v2.0.54-layout-issue-sweep', 'sw cache v2.0.54');
-has(offline, 'v2.0.54', 'offline badge v2.0.54');
-has(readme, '# AquaFantasia v2.0.54', 'README title v2.0.54');
+must(/^2\.0\.(5[4-9]|[6-9][0-9])$/.test(pkg.version), 'package.json version must be v2.0.54 or later');
+must(/APP_VERSION = '2\.0\.(5[4-9]|[6-9][0-9])'/.test(data), 'APP_VERSION must be v2.0.54 or later');
+must(/aqua-fantasia-v2\.0\.(5[4-9]|[6-9][0-9])/.test(data), 'data cache must be v2.0.54 or later');
+must(/aqua-fantasia-v2\.0\.(5[4-9]|[6-9][0-9])/.test(sw), 'sw cache must be v2.0.54 or later');
+must(/v2\.0\.(5[4-9]|[6-9][0-9])/.test(offline), 'offline badge must be v2.0.54 or later');
+must(/# AquaFantasia v2\.0\.(5[4-9]|[6-9][0-9])/.test(readme), 'README title must be v2.0.54 or later');
 has(readme, '## v2.0.54', 'README v2.0.54 changelog');
 has(pkg.scripts.validate, 'check-v2054-layout-issue-sweep.mjs', 'v2054 validate hook');
 
