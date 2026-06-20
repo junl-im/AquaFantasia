@@ -28241,3 +28241,242 @@ html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-uni
 /* v2.0.60 grounded motion correction: animation must not make grounded actors/props look airborne. */
 html[data-v2060-grounded-motion-polish="no-floating-grounded-footstep-motion"] .village-world-screen.v2060-grounded-motion-village-screen { --v2060-grounded-motion: 1; }
 html[data-v2060-grounded-motion-polish="no-floating-grounded-footstep-motion"] .village-world-screen.v2060-grounded-motion-village-screen canvas { image-rendering: auto; }
+
+/* v2.0.61 loop popup/content/button audit: restore useful popup content, tame legacy button frames, and keep menu UI readable. */
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen .v2049-growth-board.v2051-loop-mini,
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen .v2050-expedition-board.v2051-expedition-mini {
+  overflow: visible !important;
+  z-index: 1550 !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2051-loop-mini,.v2051-expedition-mini):not(.open) .v2051-loop-body {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2051-loop-mini.open,.v2051-expedition-mini.open) .v2051-loop-body {
+  display: block !important;
+  visibility: visible !important;
+  position: fixed !important;
+  left: max(10px, env(safe-area-inset-left)) !important;
+  right: max(10px, env(safe-area-inset-right)) !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 86px) !important;
+  width: auto !important;
+  max-width: min(420px, calc(100vw - 20px)) !important;
+  margin-inline: auto !important;
+  max-height: min(58svh, 520px) !important;
+  padding: 52px 14px 14px !important;
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  pointer-events: auto !important;
+  border-radius: 28px !important;
+  border: 1px solid rgba(113, 226, 246, .78) !important;
+  background: linear-gradient(180deg, rgba(247, 255, 255, .98), rgba(159, 234, 245, .95)) !important;
+  box-shadow: 0 22px 54px rgba(0, 67, 101, .28), inset 0 2px 0 rgba(255,255,255,.78) !important;
+  color: #053d59 !important;
+  -webkit-text-fill-color: #053d59 !important;
+  z-index: 1700 !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen .v2061-loop-pop-title {
+  position: absolute !important;
+  top: 13px !important;
+  left: 14px !important;
+  right: 56px !important;
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  gap: 8px !important;
+  align-items: center !important;
+  min-width: 0 !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen .v2061-loop-pop-title span {
+  display: inline-grid !important;
+  place-items: center !important;
+  min-height: 24px !important;
+  padding: 4px 9px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(101,221,239,.72)) !important;
+  border: 1px solid rgba(114,224,246,.55) !important;
+  color: #06435f !important;
+  -webkit-text-fill-color: #06435f !important;
+  font-size: 11px !important;
+  font-weight: 1000 !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen .v2061-loop-pop-title strong {
+  display: block !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 15px !important;
+  font-weight: 1000 !important;
+  color: #042f4e !important;
+  -webkit-text-fill-color: #042f4e !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2051-loop-mini.open,.v2051-expedition-mini.open) .v2051-loop-body :is(.v2049-growth-head,.v2050-expedition-head) {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 4px !important;
+  margin: 0 0 9px !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2051-loop-mini.open,.v2051-expedition-mini.open) .v2051-loop-body :is(.v2049-growth-head span,.v2050-expedition-head span) {
+  display: block !important;
+  color: rgba(5, 75, 103, .68) !important;
+  -webkit-text-fill-color: rgba(5, 75, 103, .68) !important;
+  font-size: 10px !important;
+  letter-spacing: .08em !important;
+  font-weight: 1000 !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2051-loop-mini.open,.v2051-expedition-mini.open) .v2051-loop-body :is(.v2049-growth-head strong,.v2050-expedition-head strong) {
+  display: block !important;
+  font-size: 16px !important;
+  line-height: 1.1 !important;
+  color: #033b58 !important;
+  -webkit-text-fill-color: #033b58 !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2051-loop-mini.open,.v2051-expedition-mini.open) .v2051-loop-body :is(.v2049-growth-head em,.v2050-expedition-head em) {
+  display: block !important;
+  font-style: normal !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+  color: rgba(4, 58, 82, .82) !important;
+  -webkit-text-fill-color: rgba(4, 58, 82, .82) !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2051-loop-mini.open,.v2051-expedition-mini.open) .v2051-loop-body :is(.v2049-growth-meter,.v2050-expedition-meter) {
+  display: block !important;
+  height: 18px !important;
+  margin: 10px 0 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255,255,255,.72) !important;
+  background: rgba(5, 85, 113, .12) !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2051-loop-mini.open,.v2051-expedition-mini.open) .v2051-loop-body :is(.v2049-growth-meter i,.v2050-expedition-meter i) {
+  display: block !important;
+  height: 100% !important;
+  width: var(--p, 0%) !important;
+  background: linear-gradient(90deg, #5ce7ff, #76ffbd, #fff17b) !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2051-loop-mini.open,.v2051-expedition-mini.open) .v2051-loop-body :is(.v2049-growth-meter b,.v2050-expedition-meter b) {
+  display: grid !important;
+  place-items: center !important;
+  position: absolute !important;
+  inset: 0 !important;
+  color: #04384f !important;
+  -webkit-text-fill-color: #04384f !important;
+  font-size: 11px !important;
+  font-weight: 1000 !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2051-loop-mini.open,.v2051-expedition-mini.open) .v2051-loop-body :is(.v2049-growth-loop,.v2050-expedition-grid) {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin-top: 8px !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2049-growth-loop,.v2050-expedition-grid) article {
+  min-height: 54px !important;
+  padding: 8px !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.58) !important;
+  border: 1px solid rgba(107, 220, 243, .44) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.65) !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2049-growth-loop,.v2050-expedition-grid) article strong {
+  display: block !important;
+  color: #043952 !important;
+  -webkit-text-fill-color: #043952 !important;
+  font-size: 14px !important;
+  font-weight: 1000 !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2049-growth-loop,.v2050-expedition-grid) article span {
+  display: block !important;
+  margin-top: 3px !important;
+  color: rgba(4,62,86,.72) !important;
+  -webkit-text-fill-color: rgba(4,62,86,.72) !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen .v2049-growth-next {
+  display: block !important;
+  margin-top: 9px !important;
+  padding: 9px 10px !important;
+  border-radius: 18px !important;
+  background: rgba(0, 134, 170, .10) !important;
+  border: 1px solid rgba(107, 220, 243, .40) !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen .v2049-growth-next span,
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen .v2049-growth-next b {
+  display: block !important;
+  color: #06445f !important;
+  -webkit-text-fill-color: #06445f !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen .v2049-growth-next span { font-size: 10px !important; font-weight: 1000 !important; opacity: .76 !important; }
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen .v2049-growth-next b { margin-top: 3px !important; font-size: 12px !important; line-height: 1.35 !important; }
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen .v2059-loop-close,
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen .v2055-loop-close {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(111, 223, 244, .76) !important;
+  background: linear-gradient(180deg, #f8ffff, #7feaff) !important;
+  background-image: none !important;
+  color: #05415f !important;
+  -webkit-text-fill-color: #05415f !important;
+  font-size: 22px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  box-shadow: 0 8px 18px rgba(0, 72, 105, .16), inset 0 1px 0 rgba(255,255,255,.80) !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] :is(.runtime-btn,.image-btn,.compact-cta,.btn-aqua-action,.btn-gold-cost,.dialog-btn,.v2017-character-actions button,.v203-interior-actions button,.v2-build-grid button,.v2059-result-actions button,.v2057-reel-button,.bottom-nav button,.v2-world-controls button,.v2051-loop-toggle,.v2059-screen-close,.v2059-panel-close,.v2059-build-close,.v2017-character-close) {
+  background-image: none !important;
+  text-shadow: none !important;
+  border-style: solid !important;
+  border-color: rgba(104, 218, 244, .70) !important;
+  color: #06415d !important;
+  -webkit-text-fill-color: #06415d !important;
+  box-shadow: 0 9px 18px rgba(0, 67, 101, .14), inset 0 1px 0 rgba(255,255,255,.74) !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] :is(.runtime-btn,.image-btn,.compact-cta,.btn-aqua-action,.dialog-btn,.v2017-character-actions button,.v203-interior-actions button,.v2-build-grid button) {
+  min-height: 40px !important;
+  padding: 8px 13px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, rgba(250,255,255,.98), rgba(114,220,240,.90)) !important;
+  font-weight: 1000 !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .btn-gold-cost {
+  background: linear-gradient(180deg, #fff6bd, #ffc86d) !important;
+  border-color: rgba(255, 221, 128, .82) !important;
+  color: #583500 !important;
+  -webkit-text-fill-color: #583500 !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] :is(.runtime-menu-screen,.v2017-character-card,.v203-interior-card,.v2-build-panel,.catch-result-card,.v2-dialog-panel,.v2051-loop-body) {
+  outline: 0 !important;
+}
+html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .runtime-menu-screen :is(.runtime-panel,.runtime-hero-card,.v204-window-card,.v204-map-shell,.v204-map-detail,.v2050-expedition-card) {
+  border: 1px solid rgba(119, 226, 246, .62) !important;
+  background: linear-gradient(180deg, rgba(246,255,255,.96), rgba(158,231,244,.89)) !important;
+  color: #053d59 !important;
+  -webkit-text-fill-color: #053d59 !important;
+  box-shadow: 0 15px 34px rgba(0, 71, 105, .15), inset 0 2px 0 rgba(255,255,255,.70) !important;
+}
+@media (max-width: 430px) {
+  html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2051-loop-mini.open,.v2051-expedition-mini.open) .v2051-loop-body {
+    top: calc(max(8px, env(safe-area-inset-top)) + 78px) !important;
+    max-height: min(56svh, 470px) !important;
+    padding-inline: 12px !important;
+  }
+  html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .village-world-screen.v2061-loop-ui-village-screen :is(.v2049-growth-loop,.v2050-expedition-grid) article {
+    min-height: 50px !important;
+  }
+}

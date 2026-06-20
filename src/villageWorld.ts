@@ -914,6 +914,7 @@ export class VillageWorld {
     this.root.dataset.v2052TileAnchorAudit = 'tile-ground-footprint-collision-audit';
     this.root.dataset.v2056MotionTilePolish = 'pet-footstep-steam-no-drift';
     this.root.dataset.v2060GroundedMotionPolish = 'no-floating-grounded-footstep-motion';
+    this.root.dataset.v2061LoopUiButtonAudit = 'stable-grounded-world-after-loop-ui-audit';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트 기준으로 배치됩니다.');
   }
 
