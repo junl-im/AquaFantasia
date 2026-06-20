@@ -266,6 +266,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2056MotionTilePolish = 'v2056-motion-tile-polish';
     document.documentElement.dataset.v2057FishingAquaTouch = 'v2057-fishing-aqua-touch';
     document.documentElement.dataset.v2058TechModernization = 'v2058-tech-modernization-multiplayer-guard';
+    document.documentElement.dataset.v2059FishingDialogCloseUnification = 'v2059-fishing-dialog-close-unification';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -571,8 +572,8 @@ class AquaFantasiaGame {
       <section class="v204-mini-map" aria-label="루미나 베이 미니맵"><strong>루미나 베이</strong><span>광장 · 항구 · 길드</span><i></i><b></b></section>
       <section class="v206-village-status glass-card" aria-label="마을 요약"><article><strong>${this.save.village.buildings.length}</strong><span>시설</span></article><article><strong>${this.save.village.paths.length}</strong><span>길</span></article><article><strong>${this.totalCaught()}</strong><span>포획</span></article></section>
       <section class="v2-objective-card glass-card" aria-live="polite"><strong>오늘의 목표</strong><span data-v2-objective>길·꽃·벤치를 배치해서 관광객 100점을 먼저 열기</span></section>
-      <section class="v2049-growth-board v2051-loop-mini glass-card" aria-label="해양 제국 성장 보드"><button type="button" class="v2051-loop-toggle" aria-label="성장 루프 펼치기">루프</button><div class="v2051-loop-body">${this.villageGrowthBoardMarkup()}<button type="button" class="v2055-loop-close" data-v2055-loop-close>닫기</button></div></section>
-      <section class="v2050-expedition-board v2051-expedition-mini glass-card" aria-label="다른 섬 개척 준비 보드"><button type="button" class="v2051-loop-toggle" aria-label="개척 정보 펼치기">개척</button><div class="v2051-loop-body">${this.islandExpansionBoardMarkup()}<button type="button" class="v2055-loop-close" data-v2055-loop-close>닫기</button></div></section>
+      <section class="v2049-growth-board v2051-loop-mini glass-card" aria-label="해양 제국 성장 보드"><button type="button" class="v2051-loop-toggle" aria-label="성장 루프 펼치기">루프</button><div class="v2051-loop-body">${this.villageGrowthBoardMarkup()}<button type="button" class="v2055-loop-close v2059-loop-close" data-v2055-loop-close aria-label="정보 닫기">×</button></div></section>
+      <section class="v2050-expedition-board v2051-expedition-mini glass-card" aria-label="다른 섬 개척 준비 보드"><button type="button" class="v2051-loop-toggle" aria-label="개척 정보 펼치기">개척</button><div class="v2051-loop-body">${this.islandExpansionBoardMarkup()}<button type="button" class="v2055-loop-close v2059-loop-close" data-v2055-loop-close aria-label="정보 닫기">×</button></div></section>
       <section class="v2-village-guide glass-card" aria-live="polite"><strong>첫 마을</strong><span>좌측 조이스틱 이동 · 탭 이동 · 우측 하단 메뉴 · +/− 캐릭터 시점 줌</span></section>
       <section class="v2-dialog-panel glass-card" aria-live="polite"></section>
       <section class="v2017-character-panel" data-v2017-character-panel aria-hidden="true" role="dialog" aria-modal="true" aria-label="내 캐릭터">
@@ -602,6 +603,7 @@ class AquaFantasiaGame {
       <section class="v203-interior-panel v206-interior-panel" aria-live="polite" aria-hidden="true">
         <div class="v203-interior-backdrop" data-v203-interior-close></div>
         <article class="v203-interior-card v206-interior-card glass-card">
+          <button type="button" class="v2059-screen-close v2059-panel-close" data-v203-interior-close aria-label="건물 정보 닫기">×</button>
           <img class="v203-interior-image" src="" alt="" />
           <div class="v203-interior-copy v206-interior-copy">
             <div class="v206-interior-header">
@@ -622,7 +624,7 @@ class AquaFantasiaGame {
       </section>
       <div class="v2-build-backdrop" data-village-build-close aria-hidden="true"></div>
       <aside class="v2-build-tray glass-card" aria-label="건물 설치 모드" role="dialog" aria-modal="true">
-        <div class="v2-build-title"><strong>설치모드</strong><button type="button" data-village-build-close>닫기</button></div>
+        <div class="v2-build-title"><strong>설치모드</strong><button type="button" class="v2059-screen-close v2059-build-close" data-village-build-close aria-label="건설창 닫기">×</button></div>
         <p class="v2018-build-help">건물을 고르면 창이 닫히고, 반투명 건물 프리뷰만 나타납니다. 손가락으로 원하는 위치까지 끌어 초록/빨강 판정을 확인한 뒤 손을 떼면 설치됩니다.</p>
         <div class="v2-build-grid">
           <button type="button" data-build-type="path"><img src="./assets/v207/tiles/stone_tile.png" alt="" /><strong>돌길</strong><span>8G · 속도/관광</span></button>
@@ -776,7 +778,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen v2059-dialog-close-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.dataset.v2027MenuRepair = 'true';
     root.dataset.v2028MenuAudit = 'simple-aqua-readable-content';
@@ -795,6 +797,7 @@ class AquaFantasiaGame {
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
     root.innerHTML = `
       <div class="runtime-3d-bg" aria-hidden="true"><div class="underwater-webgl-host" data-underwater-webgl></div><span class="v3d-caustics"></span><span class="v3d-bubbles"></span><span class="v3d-depth-fog"></span></div>
+      ${active === 'village' ? '' : '<button type="button" class="v2059-screen-close v2059-menu-close" data-v2059-menu-close aria-label="메뉴 닫기">×</button>'}
       <img class="runtime-bg-character" src="${ASSET.player}" alt="" aria-hidden="true" loading="eager" />
       <header class="runtime-hud" aria-label="플레이어 HUD">
         <img class="runtime-hud-mascot" src="./assets/v203/portraits/player_happy.png" alt="" />
@@ -802,6 +805,7 @@ class AquaFantasiaGame {
         <div class="runtime-wallet"><span><img src="./assets/v22/icons/nav_fishing.png" alt="" />${this.save.coins.toLocaleString('ko-KR')}G</span><span><img src="./assets/v22/icons/nav_bag.png" alt="" />${this.save.gear.lureStock}</span></div>
       </header>
       <div class="runtime-content"></div>`;
+    root.querySelector<HTMLButtonElement>('[data-v2059-menu-close]')?.addEventListener('click', () => { void this.go('village'); });
     this.mountUnderwaterWebgl(root, active === 'ranking' ? 'deep' : active === 'village' || active === 'shop' || active === 'map' ? 'town' : 'reef', V101_WATER_BG[active]);
     this.installRuntimeVerticalDragScroll(root);
     return root;
@@ -871,13 +875,14 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen v2057-fishing-aqua-touch-screen v2058-tech-modernized-screen locked-screen';
+    root.className = 'game-screen fishing-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen v2057-fishing-aqua-touch-screen v2058-tech-modernized-screen v2059-fishing-dialog-screen locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
     root.style.setProperty('--v101-water-bg', `url("${v101FishingBg}")`);
     root.innerHTML = `
       <span id="fishingHint" class="sr-only">낚시 시작 버튼으로 캐스팅하세요.</span>
+      <button type="button" class="v2059-screen-close v2059-fishing-close" data-v2059-fishing-close aria-label="낚시 닫기">×</button>
       <span class="v2028-fishing-safe-grid" aria-hidden="true"></span>
       <div class="fishing-3d-ambient" aria-hidden="true"><div class="underwater-webgl-host" data-underwater-webgl></div><span class="v3d-caustics"></span><span class="v3d-bubbles"></span><span class="v3d-depth-fog"></span></div>
       <div class="fishing-stage v2028-fishing-stage v2030-fishing-stage v2031-fishing-stage v2032-fishing-stage v2033-fishing-stage v2034-fishing-stage v2035-fishing-stage v2036-fishing-stage v2037-fishing-stage v2038-fishing-stage v2039-fishing-stage v2040-fishing-stage v2041-fishing-stage v2042-fishing-stage v2043-fishing-stage v2044-fishing-stage v2045-fishing-stage v2046-fishing-stage v2047-fishing-stage v2048-fishing-stage v2049-fishing-stage v2050-fishing-stage v2053-fishing-stage v2054-fishing-stage" id="fishingStage">
@@ -951,6 +956,7 @@ class AquaFantasiaGame {
     this.reelConsole = root.querySelector<HTMLDivElement>('#reelConsole')!;
     this.comboNode = root.querySelector<HTMLDivElement>('#comboBadge')!;
     this.progressNode = root.querySelector<HTMLDivElement>('.safe-progress span')!;
+    root.querySelector<HTMLButtonElement>('[data-v2059-fishing-close]')?.addEventListener('click', () => { this.resetFishing(); void this.go('village'); });
     this.waterLayer.style.setProperty('--water-speed', `${Math.max(10, 24 / region.waterSpeed)}s`);
     const setReelInput = (active: boolean, ev?: PointerEvent | Touch) => {
       if (this.state !== 'reeling') return;
@@ -1136,6 +1142,11 @@ class AquaFantasiaGame {
 
   private mountBottomNav(root: HTMLElement, active: Screen): void {
     document.querySelectorAll('.bottom-nav.fixed-root-nav').forEach((node) => node.remove());
+    if (active !== 'village') {
+      root.dataset.v2059DockHidden = 'non-village-screen-close-x';
+      // v2.0.59 hides non-village docks; legacy v2048 fishing dock token preserved for regression lineage: var(--v2048-fishing-dock-bottom
+      return;
+    }
     const nav = document.createElement('nav');
     const v13 = false;
     nav.className = 'bottom-nav fixed-root-nav v2016-safe-dock-nav v2026-unified-dock-nav v2027-aqua-dock-nav v2029-home-dock-nav v2031-identical-dock-nav v2032-identical-dock-nav v2033-identical-dock-nav v2034-identical-dock-nav v2035-identical-dock-nav v2036-identical-dock-nav v2037-identical-dock-nav v2038-identical-dock-nav v2039-identical-dock-nav v2040-identical-dock-nav v2041-identical-dock-nav v2042-identical-dock-nav v2043-identical-dock-nav v2044-identical-dock-nav v2045-identical-dock-nav v2046-identical-dock-nav v2047-identical-dock-nav v2048-identical-dock-nav v2049-identical-dock-nav v2050-identical-dock-nav v2051-identical-dock-nav v2052-identical-dock-nav v2053-single-row-dock-nav v2054-single-row-dock-nav v2058-modern-dock-nav';
@@ -1179,12 +1190,6 @@ class AquaFantasiaGame {
       ['filter', 'none'], ['overflow', 'visible'], ['transform', 'none'], ['translate', 'none'], ['pointer-events', 'none'], ['z-index', '1240'],
     ];
     dockInlineStyles.forEach(([key, value]) => nav.style.setProperty(key, value, 'important'));
-    if (active === 'fishing') {
-      nav.style.setProperty('bottom', 'var(--v2048-fishing-dock-bottom, max(22px, calc(env(safe-area-inset-bottom) + 18px)))', 'important');
-      nav.style.setProperty('right', 'max(12px, env(safe-area-inset-right))', 'important');
-      nav.dataset.v2047FishingDockLift = 'forced-visible-above-bottom-edge';
-      nav.dataset.v2048FishingDock = 'body-fixed-visible-natural-bottom';
-    }
     const renderDockButton = ({ screen, icon, label }: (typeof navItems)[number]) => {
       if (v13) return `<button class="${screen === active ? 'active' : ''}" data-screen="${screen}" aria-label="${label}"><span>${label}</span></button>`;
       return `<button class="${screen === active ? 'active' : ''}" data-screen="${screen}" data-dock-slot="${screen}" aria-label="${label}" data-label="${label}"><img src="${icon}" alt="" /><span>${label}</span></button>`;
@@ -1604,7 +1609,7 @@ class AquaFantasiaGame {
       if (this.comboNode) { this.comboNode.textContent = `연속 성공 x${Math.max(2, this.save.currentStreak)}`; this.comboNode.classList.toggle('hidden', this.save.currentStreak < 2); }
       void this.syncCatchSpriteTexture(this.activeFish).finally(() => this.showCatchPopup(reward));
       this.spawnRewardBurst(reward);
-      this.toast.show({ type: 'dex', title: `${this.activeFish.name} 획득!`, message: `도감 카드와 보상 ${reward}G가 추가되었습니다.`, actionScreen: 'dex' });
+      // v2.0.59: result card is the single acquisition UI; avoid duplicate toast/result popups.
     } else {
       playSound('fail');
       this.save.currentStreak = 0;
@@ -1618,6 +1623,7 @@ class AquaFantasiaGame {
   }
 
   private showCatchPopup(reward: number): void {
+    document.querySelectorAll('.catch-result-card').forEach((node) => node.remove());
     if (this.fallbackMode || !this.pixi || !this.catchSprite) {
       this.stageHost?.classList.add('catch-bloom');
       window.setTimeout(() => this.showResultCard(reward), 520);
@@ -1640,8 +1646,8 @@ class AquaFantasiaGame {
       const s = Math.min(1, t * 2.4) + bounce;
       this.catchSprite.scale.set((Math.min(this.pixi.screen.width, this.pixi.screen.height) / 1120) * s);
       this.catchSprite.rotation += 0.18;
-      if (t > 1.15 && !this.stageHost?.querySelector('.catch-result-card')) this.showResultCard(reward);
-      if (t > 3.4) {
+      if (t > 0.78 && !document.querySelector('.catch-result-card')) this.showResultCard(reward);
+      if (t > 1.9) {
         this.pixi.ticker.remove(popup);
         this.stageHost?.classList.remove('catch-bloom');
       }
@@ -1650,10 +1656,11 @@ class AquaFantasiaGame {
   }
 
   private showResultCard(reward: number): void {
+    document.querySelectorAll('.catch-result-card').forEach((node) => node.remove());
     const card = document.createElement('div');
-    card.className = `catch-result-card v930-result v2021-result-card v2036-result-card v2037-result-card v2038-result-card v2039-result-card v2040-result-card v2041-result-card v2042-result-card v2043-result-card v2044-result-card v2045-result-card v2051-result-card v2053-result-card v2054-result-card v2055-result-card v2057-result-card rarity-${this.activeFish.rarity.toLowerCase()}`;
+    card.className = `catch-result-card v930-result v2021-result-card v2036-result-card v2037-result-card v2038-result-card v2039-result-card v2040-result-card v2041-result-card v2042-result-card v2043-result-card v2044-result-card v2045-result-card v2051-result-card v2053-result-card v2054-result-card v2055-result-card v2057-result-card v2059-result-card rarity-${this.activeFish.rarity.toLowerCase()}`;
     const firstCatch = (this.save.caught[this.activeFish.id] ?? 0) <= 1;
-    card.innerHTML = `<i class="result-sparkle" aria-hidden="true"></i><div class="v2057-result-ribbon">${firstCatch ? '새 도감 등록' : '포획 성공'}</div><div class="v2051-result-shell v2057-result-shell"><img class="v205-result-fish" src="${this.activeFish.img}" alt="" /><div class="v2051-result-copy v2057-result-copy"><small>${this.activeFish.rarity}</small><h3>${this.activeFish.name}</h3><span><img src="${ASSET.fishingTreasure}" alt="" />보상 ${reward}G</span><em>연속 성공 x${Math.max(1, this.save.currentStreak)} · 도감 자동 기록</em></div></div><div class="v2051-result-actions v2057-result-actions"><button data-next="fishing">계속 낚시</button><button data-next="dex">도감 보기</button></div>`;
+    card.innerHTML = `<button type="button" class="v2059-result-close" data-next="fishing" aria-label="획득창 닫기">×</button><i class="result-sparkle" aria-hidden="true"></i><div class="v2057-result-ribbon v2059-result-ribbon">${firstCatch ? '새 도감 등록' : '포획 성공'}</div><div class="v2051-result-shell v2057-result-shell v2059-result-shell"><img class="v205-result-fish" src="${this.activeFish.img}" alt="" /><div class="v2051-result-copy v2057-result-copy v2059-result-copy"><small>${this.activeFish.rarity}</small><h3>${this.activeFish.name}</h3><span><img src="${ASSET.fishingTreasure}" alt="" />${reward}G</span><em>연속 x${Math.max(1, this.save.currentStreak)} · 도감 기록</em></div></div><div class="v2051-result-actions v2057-result-actions v2059-result-actions"><button data-next="fishing">계속</button><button data-next="dex">도감</button></div>`;
     (dom.app.querySelector<HTMLElement>('.fishing-screen') ?? this.stageHost)?.appendChild(card);
     card.querySelectorAll<HTMLButtonElement>('[data-next]').forEach((btn) => btn.addEventListener('click', () => {
       const next = btn.dataset.next as Screen;
@@ -1662,11 +1669,8 @@ class AquaFantasiaGame {
       else void this.go(next);
     }));
     window.setTimeout(() => {
-      if (card.isConnected) {
-        card.remove();
-        this.resetFishing();
-      }
-    }, 5200);
+      if (card.isConnected) card.classList.add('v2059-result-idle');
+    }, 7000);
   }
 
   private resetFishing(): void {
@@ -1914,7 +1918,7 @@ class AquaFantasiaGame {
     this.hideBiteCallout();
     const callout = document.createElement('div');
     callout.className = 'bite-callout v2030-bite-callout v2041-bite-callout v2042-bite-callout v2043-bite-callout v2046-bite-callout v2048-bite-callout';
-    callout.innerHTML = `<strong>${title}</strong><span>중앙 릴 존이 뜨면 누르고 떼며 초록 구간 유지!</span><button type="button" class="v2046-bite-start v2048-bite-start">릴링 시작</button>`;
+    callout.innerHTML = `<strong>${title}</strong><span>감기/풀기 버튼으로 초록 구간 유지</span><button type="button" class="v2046-bite-start v2048-bite-start">릴링 시작</button>`;
     callout.addEventListener('pointerdown', (ev) => {
       ev.preventDefault();
       ev.stopPropagation();

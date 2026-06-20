@@ -28054,3 +28054,185 @@ html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"]
     transition-duration: .001ms !important;
   }
 }
+
+/* v2.0.59 fishing result compaction, unified close buttons, and non-village dock simplification. */
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] {
+  --v2059-aqua-card: linear-gradient(180deg, rgba(241, 255, 255, .96), rgba(162, 239, 249, .91));
+  --v2059-aqua-border: rgba(96, 213, 236, .70);
+  --v2059-aqua-text: #064663;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] body:not([data-screen="village"]) .bottom-nav.fixed-root-nav {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .v2059-screen-close {
+  position: fixed;
+  top: max(10px, calc(env(safe-area-inset-top) + 8px));
+  right: max(10px, calc(env(safe-area-inset-right) + 8px));
+  z-index: 1800;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(126, 236, 255, .76);
+  background: linear-gradient(180deg, rgba(247,255,255,.98), rgba(118,223,244,.94));
+  color: #06405c;
+  -webkit-text-fill-color: #06405c;
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 1000;
+  box-shadow: 0 12px 26px rgba(0, 75, 111, .20), inset 0 1px 0 rgba(255,255,255,.82);
+  background-image: none !important;
+  touch-action: manipulation;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .v2059-panel-close,
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .v2059-build-close,
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .v2059-loop-close,
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .v2017-character-close {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 8 !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  border-radius: 999px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(126, 236, 255, .72) !important;
+  background: linear-gradient(180deg, rgba(247,255,255,.98), rgba(118,223,244,.94)) !important;
+  background-image: none !important;
+  color: #06405c !important;
+  -webkit-text-fill-color: #06405c !important;
+  font-size: 22px !important;
+  font-weight: 1000 !important;
+  box-shadow: 0 10px 22px rgba(0, 75, 111, .18), inset 0 1px 0 rgba(255,255,255,.82) !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .v2051-loop-body {
+  position: absolute !important;
+  top: calc(100% + 8px) !important;
+  right: 0 !important;
+  width: min(310px, calc(100vw - 24px)) !important;
+  max-height: min(48svh, 420px) !important;
+  padding: 46px 12px 12px !important;
+  overflow: auto !important;
+  border-radius: 24px !important;
+  background: var(--v2059-aqua-card) !important;
+  border: 1px solid var(--v2059-aqua-border) !important;
+  color: var(--v2059-aqua-text) !important;
+  box-shadow: 0 18px 40px rgba(0, 76, 116, .22) !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .v2059-fishing-dialog-screen .reel-panel.v2057-reel-panel {
+  top: max(76px, calc(env(safe-area-inset-top) + 66px)) !important;
+  bottom: auto !important;
+  width: min(420px, calc(100vw - 28px)) !important;
+  max-height: 35svh !important;
+  padding: 12px 14px 12px !important;
+  z-index: 1150 !important;
+  overflow: visible !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .v2059-fishing-dialog-screen .v2057-reel-console {
+  left: 50% !important;
+  right: auto !important;
+  bottom: max(16px, calc(env(safe-area-inset-bottom) + 14px)) !important;
+  transform: translateX(-50%) !important;
+  width: min(420px, calc(100vw - 24px)) !important;
+  max-width: calc(100vw - 24px) !important;
+  z-index: 1280 !important;
+  padding: 12px !important;
+  border-radius: 24px !important;
+  background: linear-gradient(180deg, rgba(238,255,255,.96), rgba(86,204,232,.88)) !important;
+  border: 1px solid rgba(120, 237, 255, .72) !important;
+  box-shadow: 0 16px 34px rgba(0, 72, 108, .22), inset 0 1px 0 rgba(255,255,255,.66) !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .v2059-fishing-dialog-screen .v2057-reel-actions,
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .v2059-fishing-dialog-screen .v2055-reel-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .v2059-fishing-dialog-screen .v2057-reel-button {
+  min-height: 64px !important;
+  border-radius: 20px !important;
+  font-size: 14px !important;
+  background-image: none !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .v2059-fishing-dialog-screen .v2053-reel-touch-zone,
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .v2059-fishing-dialog-screen .hold-pad {
+  display: none !important;
+  pointer-events: none !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .catch-result-card.v2059-result-card {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(316px, calc(100vw - 34px)) !important;
+  min-height: 0 !important;
+  max-height: min(72svh, 520px) !important;
+  padding: 42px 14px 14px !important;
+  border-radius: 26px !important;
+  background: var(--v2059-aqua-card) !important;
+  background-image: none !important;
+  border: 1px solid var(--v2059-aqua-border) !important;
+  box-shadow: 0 22px 48px rgba(0, 77, 116, .25), inset 0 1px 0 rgba(255,255,255,.80) !important;
+  color: var(--v2059-aqua-text) !important;
+  z-index: 1900 !important;
+  overflow: hidden auto !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .catch-result-card.v2059-result-card .v2059-result-close {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(110, 224, 246, .75) !important;
+  background: linear-gradient(180deg, #f8ffff, #8eeeff) !important;
+  color: #06405c !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  box-shadow: 0 8px 16px rgba(0, 75, 111, .18) !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .catch-result-card.v2059-result-card .v2059-result-shell {
+  display: grid !important;
+  grid-template-columns: 104px 1fr !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .catch-result-card.v2059-result-card .v205-result-fish {
+  width: 104px !important;
+  height: 84px !important;
+  margin: 0 !important;
+  object-fit: contain !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .catch-result-card.v2059-result-card h3 {
+  font-size: clamp(20px, 5.5vw, 25px) !important;
+  margin: 2px 0 4px !important;
+  line-height: 1.04 !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .catch-result-card.v2059-result-card :is(small, span, em) {
+  color: #0a536f !important;
+  -webkit-text-fill-color: #0a536f !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .catch-result-card.v2059-result-card .v2059-result-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+  margin-top: 10px !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .catch-result-card.v2059-result-card .v2059-result-actions button {
+  min-height: 42px !important;
+  border-radius: 16px !important;
+  background-image: none !important;
+  background: linear-gradient(180deg, #f8ffff, #7ee8ff) !important;
+  color: #06405c !important;
+  -webkit-text-fill-color: #06405c !important;
+}
+html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .catch-result-card.v2059-result-card.v2059-result-idle {
+  box-shadow: 0 14px 34px rgba(0, 77, 116, .18), inset 0 1px 0 rgba(255,255,255,.72) !important;
+}
