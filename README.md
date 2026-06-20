@@ -1,4 +1,4 @@
-# AquaFantasia v2.0.59
+# AquaFantasia v2.0.60
 
 AquaFantasia는 Vite + TypeScript + PixiJS 8 기반의 모바일 세로모드 SD 해양 판타지 마을 RPG입니다.
 
@@ -19,6 +19,16 @@ npm run validate
 npm run typecheck
 npm run build
 ```
+
+## v2.0.60 변경사항
+
+- 캐릭터 발걸음 모션이 타일에서 공중부양처럼 보이던 문제를 수정했습니다. 캐릭터 본체의 발밑 앵커는 고정하고, 좌우 발 디딤/몸 기울임/미세 스쿼시만 적용합니다.
+- 고양이/강아지 움직임은 위아래 바운스가 아니라 기울어진 타일 바닥면을 따라 짧게 산책하는 방식으로 조정했습니다.
+- sleepingDog는 바닥에 붙은 상태에서 숨쉬는 스쿼시만 남기고 위치 이동을 제거했습니다.
+- cookingPot/steam 오브젝트는 본체가 위로 떠오르지 않도록 고정하고, 연기 파티클만 위로 퍼지게 수정했습니다.
+- 움직이는 오브젝트의 z-index가 프레임마다 흔들려 떠 보이는 현상을 줄이기 위해 기준 타일 y값으로 고정했습니다.
+- v2.0.60 전용 정적 검증 스크립트 `check-v2060-grounded-motion-polish.mjs`를 추가했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.60`으로 동기화했습니다.
 
 
 ## v2.0.59 변경사항

@@ -42,9 +42,14 @@ for (const token of [
   '/dog|cat|walkingCat/i.test(kindName)',
   '!/sleepingDog/i.test(kindName)',
   'item.position.set(base.x, base.y)',
-  'actor.body.position.y = bob',
   'actor.shadow.scale.set(shadowPulse, 1 / shadowPulse)',
 ]) has(world, token, `world token ${token}`);
+
+
+must(
+  world.includes('actor.body.position.y = bob') || world.includes('actor.body.position.y = 0;'),
+  'actor body Y must be explicitly managed by the motion pass'
+);
 
 must(!/item\.y \+=|item\.x \+=/.test(world), 'decoration animation must not cumulatively drift item x/y');
 for (const token of ['packages.applied-caas', 'applied-caas-gateway', '10.192.', 'internal.api.openai']) {

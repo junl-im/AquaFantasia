@@ -28236,3 +28236,8 @@ html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-uni
 html[data-v2059-fishing-dialog-close-unification="v2059-fishing-dialog-close-unification"] .catch-result-card.v2059-result-card.v2059-result-idle {
   box-shadow: 0 14px 34px rgba(0, 77, 116, .18), inset 0 1px 0 rgba(255,255,255,.72) !important;
 }
+
+
+/* v2.0.60 grounded motion correction: animation must not make grounded actors/props look airborne. */
+html[data-v2060-grounded-motion-polish="no-floating-grounded-footstep-motion"] .village-world-screen.v2060-grounded-motion-village-screen { --v2060-grounded-motion: 1; }
+html[data-v2060-grounded-motion-polish="no-floating-grounded-footstep-motion"] .village-world-screen.v2060-grounded-motion-village-screen canvas { image-rendering: auto; }

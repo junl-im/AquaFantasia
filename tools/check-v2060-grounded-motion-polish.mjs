@@ -1,0 +1,26 @@
+import { readFileSync } from 'node:fs';
+
+const village = readFileSync('src/villageWorld.ts', 'utf8');
+const main = readFileSync('src/main.ts', 'utf8');
+const styles = readFileSync('src/styles.css', 'utf8');
+const data = readFileSync('src/data.ts', 'utf8');
+
+function assert(condition, message) {
+  if (!condition) {
+    console.error(`[v2060] ${message}`);
+    process.exit(1);
+  }
+}
+
+assert(data.includes("APP_VERSION = '2.0.60'"), 'APP_VERSION must be 2.0.60.');
+assert(data.includes('aqua-fantasia-v2.0.60-grounded-motion-polish'), 'service worker cache key must be v2.0.60 grounded motion.');
+assert(village.includes("dataset.v2060GroundedMotionPolish = 'no-floating-grounded-footstep-motion'"), 'VillageWorld must expose the v2060 grounded motion marker.');
+assert(main.includes('v2060-grounded-motion-village-screen'), 'village root must include v2060 grounded motion class.');
+assert(styles.includes('v2.0.60 grounded motion correction'), 'styles must include v2.0.60 grounded motion marker.');
+assert(village.includes('actor.body.position.y = 0;'), 'actor body Y must stay anchored to the foot point.');
+assert(!village.includes('const bob = walking ? Math.abs(Math.sin(actor.walkPhase)) * -5.4 : 0;'), 'old airborne actor bob must be removed.');
+assert(!village.includes('item.position.set(base.x, base.y - Math.abs(Math.sin(phase * 1.45)) * rise);'), 'steam/cookingPot container must not lift away from the tile.');
+assert(village.includes('Only the smoke puffs drift upward'), 'steam motion must be visual puff-only, not object lift.');
+assert(village.includes('const tileSlope = groundSlide * 0.18;'), 'pet movement must follow ground-plane slope rather than vertical bobbing.');
+assert(village.includes('item.zIndex = Math.round((base.y / TILE_H) * 20 + 12);'), 'pet z-index must stay stable from base tile Y.');
+console.log('[v2060] grounded motion polish checks passed.');

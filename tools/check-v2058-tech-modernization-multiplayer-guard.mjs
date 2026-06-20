@@ -17,13 +17,13 @@ const sw = read('public/sw.js');
 const offline = read('public/offline.html');
 const readme = read('README.md');
 
-if (!/^2\.0\.(58|59)$/.test(pkg.version)) fail('package.json version must be 2.0.58 or later v2058 lineage');
-if (!/^2\.0\.(58|59)$/.test(lock.version) || !/^2\.0\.(58|59)$/.test(lock.packages?.['']?.version ?? '')) fail('package-lock.json root versions must be v2058 lineage');
-if (!/APP_VERSION = '2\.0\.(58|59)'/.test(data)) fail('APP_VERSION must be v2058 lineage');
-if (!data.includes('tech-modernization-multiplayer-guard') && !data.includes('fishing-dialog-close-unification')) fail('CACHE_NAME must keep v2058/v2059 modernization lineage');
-if (!sw.includes('tech-modernization-multiplayer-guard') && !sw.includes('fishing-dialog-close-unification')) fail('service worker cache must keep v2058/v2059 cache lineage');
-if (!/v2\.0\.(58|59)/.test(offline)) fail('offline badge must show v2058 lineage');
-if (!/^# AquaFantasia v2\.0\.(58|59)/.test(readme)) fail('README title must be v2058 lineage');
+if (!/^2\.0\.(5[8-9]|[6-9][0-9])$/.test(pkg.version)) fail('package.json version must be 2.0.58 or later v2058 lineage');
+if (!/^2\.0\.(5[8-9]|[6-9][0-9])$/.test(lock.version) || !/^2\.0\.(5[8-9]|[6-9][0-9])$/.test(lock.packages?.['']?.version ?? '')) fail('package-lock.json root versions must be v2058 lineage');
+if (!/APP_VERSION = '2\.0\.(5[8-9]|[6-9][0-9])'/.test(data)) fail('APP_VERSION must be v2058 lineage');
+if (!data.includes('tech-modernization-multiplayer-guard') && !data.includes('fishing-dialog-close-unification') && !data.includes('grounded-motion-polish')) fail('CACHE_NAME must keep v2058+ modernization lineage');
+if (!sw.includes('tech-modernization-multiplayer-guard') && !sw.includes('fishing-dialog-close-unification') && !sw.includes('grounded-motion-polish')) fail('service worker cache must keep v2058+ cache lineage');
+if (!/v2\.0\.(5[8-9]|[6-9][0-9])/.test(offline)) fail('offline badge must show v2058 lineage');
+if (!/^# AquaFantasia v2\.0\.(5[8-9]|[6-9][0-9])/.test(readme)) fail('README title must be v2058 lineage');
 if (!readme.includes('## v2.0.58 변경사항')) fail('README must include v2.0.58 changelog');
 
 for (const token of ['MultiplayerState', 'MultiplayerEvent', 'pendingEvents', 'clientId']) {

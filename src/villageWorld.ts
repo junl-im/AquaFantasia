@@ -913,6 +913,7 @@ export class VillageWorld {
     this.root.dataset.v2051MotionPolish = 'actor-footstep-object-motion';
     this.root.dataset.v2052TileAnchorAudit = 'tile-ground-footprint-collision-audit';
     this.root.dataset.v2056MotionTilePolish = 'pet-footstep-steam-no-drift';
+    this.root.dataset.v2060GroundedMotionPolish = 'no-floating-grounded-footstep-motion';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트 기준으로 배치됩니다.');
   }
 
@@ -2204,28 +2205,35 @@ export class VillageWorld {
       item.scale.set(base.scaleX, base.scaleY);
       const kindName = base.kind;
       if (/dog|cat|walkingCat/i.test(kindName) && !/sleepingDog/i.test(kindName)) {
-        const stride = liteMotion ? 4 : 13;
-        const bob = liteMotion ? 0.8 : 3.2;
-        item.position.set(base.x + Math.sin(phase * 0.65) * stride, base.y + Math.cos(phase * 1.3) * bob);
-        item.rotation = Math.sin(phase * 1.6) * (liteMotion ? 0.012 : 0.045);
-        const flip = Math.sin(phase * 0.65) < 0 ? -1 : 1;
-        item.scale.set(base.scaleX * flip, base.scaleY * (1 + Math.sin(phase * 2.4) * (liteMotion ? 0.006 : 0.018)));
-        item.zIndex = Math.round((base.y / TILE_H) * 20 + 12 + Math.sin(phase) * 2);
+        // v2.0.60: keep paws glued to the isometric tile. Motion is ground-plane pacing,
+        // not vertical bobbing, so pets no longer look like they float above the floor.
+        const stride = liteMotion ? 2.5 : 7.5;
+        const groundSlide = Math.sin(phase * 0.72) * stride;
+        const tileSlope = groundSlide * 0.18;
+        item.position.set(base.x + groundSlide, base.y + tileSlope);
+        item.rotation = Math.sin(phase * 1.45) * (liteMotion ? 0.006 : 0.018);
+        const flip = Math.sin(phase * 0.72) < 0 ? -1 : 1;
+        const footSquash = Math.abs(Math.sin(phase * 2.4)) * (liteMotion ? 0.004 : 0.010);
+        item.scale.set(base.scaleX * flip * (1 + footSquash * 0.25), base.scaleY * (1 - footSquash));
+        item.zIndex = Math.round((base.y / TILE_H) * 20 + 12);
       } else if (/sleepingDog/i.test(kindName)) {
-        item.scale.set(base.scaleX * (1 + Math.sin(phase * 1.2) * 0.008), base.scaleY * (1 - Math.sin(phase * 1.2) * 0.006));
+        // Sleeping pets breathe by squash/stretch around their anchored paws; no Y lift.
+        const breathe = Math.sin(phase * 1.1);
+        item.scale.set(base.scaleX * (1 + breathe * 0.006), base.scaleY * (1 - breathe * 0.004));
       } else if (/steam|cookingPot/i.test(kindName)) {
-        const rise = liteMotion ? 2 : 8;
-        item.position.set(base.x, base.y - Math.abs(Math.sin(phase * 1.45)) * rise);
-        item.alpha = clamp(0.56 + Math.sin(phase * 1.9) * 0.20, 0.26, 0.84);
-        item.scale.set(base.scaleX * (1 + Math.sin(phase * 1.1) * 0.035), base.scaleY * (1 + Math.cos(phase * 1.1) * 0.045));
+        // Keep the pot/fireplace itself fixed to the tile. Only the smoke puffs drift upward.
+        item.position.set(base.x, base.y);
+        item.alpha = clamp(base.alpha + Math.sin(phase * 1.9) * 0.05, 0.72, 1);
+        item.scale.set(base.scaleX, base.scaleY);
         const puffLayer = item.getChildByName('steam-puffs') as Container | null;
         if (puffLayer) {
           for (let p = 0; p < puffLayer.children.length; p += 1) {
             const puff = puffLayer.children[p] as Graphics;
-            puff.y = -18 - p * 12 - ((phase * 10 + p * 6) % 22);
-            puff.x = (p - 1.5) * 7 + Math.sin(phase * 1.8 + p) * 4;
-            puff.alpha = clamp(0.18 - p * 0.025 + Math.sin(phase * 2 + p) * 0.06, 0.04, 0.22);
-            puff.scale.set(1 + ((phase + p) % 1) * 0.32);
+            const cycle = (phase * 0.75 + p * 0.23) % 1;
+            puff.y = -18 - p * 10 - cycle * (liteMotion ? 12 : 24);
+            puff.x = (p - 1.5) * 6 + Math.sin(phase * 1.6 + p) * (liteMotion ? 1.4 : 3.2);
+            puff.alpha = clamp((1 - cycle) * 0.22, 0.03, 0.20);
+            puff.scale.set(0.85 + cycle * 0.42);
           }
         }
       } else if (/waterRing|shoreFoam|splash|fishShadow|duck/i.test(kindName)) {
@@ -2247,21 +2255,22 @@ export class VillageWorld {
     const walking = movementAmount > 0.18;
     if (walking) actor.walkPhase += deltaMs * 0.015;
     else actor.walkPhase *= 0.72;
-    const bob = walking ? Math.abs(Math.sin(actor.walkPhase)) * -5.4 : 0;
-    const sway = walking ? Math.sin(actor.walkPhase * 0.55) * 0.065 : 0;
-    const stepSide = walking ? Math.sin(actor.walkPhase * 2.1) * 2.8 : 0;
+    // v2.0.60: grounded footstep motion. The sprite's anchor stays at the feet,
+    // so we do not raise the whole character off the tile.
+    const sway = walking ? Math.sin(actor.walkPhase * 0.55) * 0.035 : 0;
+    const stepSide = walking ? Math.sin(actor.walkPhase * 2.1) * 1.35 : 0;
     if (actor.body instanceof Sprite) {
       actor.body.position.x = stepSide;
-      actor.body.position.y = bob;
+      actor.body.position.y = 0;
       actor.body.rotation = sway;
       const targetH = actor.role === 'player' ? 90 : 80;
       const base = targetH / Math.max(1, actor.body.texture.height);
-      const stretch = walking ? Math.sin(actor.walkPhase * 2.2) * 0.028 : 0;
-      actor.body.scale.set(base * (1 + stretch), base * (1 - stretch * 0.5));
+      const stretch = walking ? Math.sin(actor.walkPhase * 2.2) * 0.012 : 0;
+      actor.body.scale.set(base * (1 + stretch * 0.35), base * (1 - stretch));
     } else {
       actor.body.rotation = sway;
     }
-    const shadowPulse = walking ? 1 + Math.abs(Math.sin(actor.walkPhase)) * 0.08 : 1;
+    const shadowPulse = walking ? 1 + Math.abs(Math.sin(actor.walkPhase)) * 0.045 : 1;
     actor.shadow.scale.set(shadowPulse, 1 / shadowPulse);
     actor.label.scale.set(1, 1);
   }

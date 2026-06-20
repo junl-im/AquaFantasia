@@ -15,13 +15,13 @@ const sw = read('public/sw.js');
 const offline = read('public/offline.html');
 const readme = read('README.md');
 
-if (pkg.version !== '2.0.59') fail('package.json version must be 2.0.59');
-if (lock.version !== '2.0.59' || lock.packages?.['']?.version !== '2.0.59') fail('package-lock.json root versions must be 2.0.59');
-if (!data.includes("APP_VERSION = '2.0.59'")) fail('APP_VERSION must be 2.0.59');
-if (!data.includes('aqua-fantasia-v2.0.59-fishing-dialog-close-unification')) fail('CACHE_NAME must use v2.0.59 cache');
-if (!sw.includes('aqua-fantasia-v2.0.59-fishing-dialog-close-unification')) fail('service worker cache must use v2.0.59 cache');
-if (!offline.includes('v2.0.59')) fail('offline badge must show v2.0.59');
-if (!readme.startsWith('# AquaFantasia v2.0.59')) fail('README title must be v2.0.59');
+if (!/^2\.0\.(59|[6-9][0-9])$/.test(pkg.version)) fail('package.json version must be 2.0.59+ lineage');
+if (!/^2\.0\.(59|[6-9][0-9])$/.test(lock.version) || !/^2\.0\.(59|[6-9][0-9])$/.test(lock.packages?.['']?.version ?? '')) fail('package-lock.json root versions must be 2.0.59+ lineage');
+if (!/APP_VERSION = '2\.0\.(59|[6-9][0-9])'/.test(data)) fail('APP_VERSION must be 2.0.59+ lineage');
+if (!data.includes('fishing-dialog-close-unification') && !data.includes('grounded-motion-polish')) fail('CACHE_NAME must keep v2.0.59+ cache lineage');
+if (!sw.includes('fishing-dialog-close-unification') && !sw.includes('grounded-motion-polish')) fail('service worker cache must keep v2.0.59+ cache lineage');
+if (!/v2\.0\.(59|[6-9][0-9])/.test(offline)) fail('offline badge must show v2.0.59+ lineage');
+if (!/^# AquaFantasia v2\.0\.(59|[6-9][0-9])/.test(readme)) fail('README title must be v2.0.59+ lineage');
 if (!readme.includes('## v2.0.59 변경사항')) fail('README must include v2.0.59 changelog');
 
 for (const token of [
