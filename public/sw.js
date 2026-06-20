@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.63-fishing-card-window-rework';
+const CACHE_NAME = 'aqua-fantasia-v2.0.64-fishing-card-window-rework-polish-audit-recovery';
 const PRECACHE = [
   "./",
   "./index.html",

@@ -28823,3 +28823,128 @@ body[data-screen="fishing"] .v2063-fishing-rework-screen .v2051-result-actions b
   body[data-screen="fishing"] .v2063-player-bar { height: 58px !important; }
   body[data-screen="fishing"] .v2063-fishing-rework-screen .v2055-reel-actions button { min-height: 66px !important; }
 }
+
+/* v2.0.64 polish audit recovery
+   Final pass for visible playability: one fishing UI source of truth, cleaner buttons, stable cards. */
+html[data-v2064-polish-audit="v2064-fishing-ui-card-button-stability-audit"] :is(.runtime-btn,.image-btn,.shop-card button,.gear-card button,.mission-card button,.village-detail-card button,.v2-build-panel button,.v2051-loop-body button,.v2059-result-actions button,.v2055-reel-actions button,.v2046-bite-start,.v2048-bite-start) {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(88, 215, 246, .62) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(166,243,255,.92) 52%, rgba(44,184,228,.88)) !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.98), rgba(166,243,255,.92) 52%, rgba(44,184,228,.88)) !important;
+  color: #05364f !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.70) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.88), 0 7px 16px rgba(0, 80, 122, .16) !important;
+  filter: none !important;
+}
+html[data-v2064-polish-audit="v2064-fishing-ui-card-button-stability-audit"] :is(.runtime-btn,.image-btn,.shop-card button,.gear-card button,.mission-card button,.village-detail-card button,.v2-build-panel button,.v2051-loop-body button,.v2059-result-actions button,.v2055-reel-actions button,.v2046-bite-start,.v2048-bite-start)::before,
+html[data-v2064-polish-audit="v2064-fishing-ui-card-button-stability-audit"] :is(.runtime-btn,.image-btn,.shop-card button,.gear-card button,.mission-card button,.village-detail-card button,.v2-build-panel button,.v2051-loop-body button,.v2059-result-actions button,.v2055-reel-actions button,.v2046-bite-start,.v2048-bite-start)::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+}
+html[data-v2064-polish-audit="v2064-fishing-ui-card-button-stability-audit"] :is(.runtime-hud,.runtime-content,.runtime-panel,.runtime-hero-card,.village-detail-card,.v2-build-panel,.v2051-loop-body,.catch-result-card,.game-dialog-card) {
+  border-color: rgba(119, 230, 255, .54) !important;
+  box-shadow: 0 18px 44px rgba(0, 64, 110, .18), inset 0 1px 0 rgba(255,255,255,.78) !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen .reel-panel {
+  top: max(104px, calc(env(safe-area-inset-top) + 88px)) !important;
+  width: min(92vw, 500px) !important;
+  max-height: 45svh !important;
+  padding: 10px !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen :is(.tension-track,.safe-progress,.surge-meter,.v2051-tension-readout,.v2048-reel-status,.v2054-reel-debug,.v205-horizontal-gauge,.v205-vertical-gauge,.v2040-vertical-gauge,.hold-pad,.v2020-reel-panel-frame,.v2021-reel-tooltip-frame,.v205-resistance-art) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen .v2063-fishing-board {
+  gap: 8px !important;
+  padding: 10px !important;
+  border-radius: 20px !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen .v2063-fish-lane {
+  height: 78px !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen .v2063-fish-target {
+  width: 18px !important;
+  height: 54px !important;
+  top: 13px !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen .v2063-player-bar {
+  width: 30px !important;
+  height: 62px !important;
+  top: 8px !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen .v2055-reel-console {
+  left: 50% !important;
+  right: auto !important;
+  bottom: max(16px, calc(env(safe-area-inset-bottom) + 12px)) !important;
+  transform: translateX(-50%) !important;
+  width: min(92vw, 500px) !important;
+  border-radius: 28px !important;
+  border: 1px solid rgba(115, 231, 255, .58) !important;
+  background: linear-gradient(180deg, rgba(239,255,255,.96), rgba(126, 225, 249, .88)) !important;
+  box-shadow: 0 16px 38px rgba(0, 60, 105, .23), inset 0 1px 0 rgba(255,255,255,.82) !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen .v2055-reel-actions {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen .v2055-reel-actions button {
+  min-height: 74px !important;
+  border-radius: 22px !important;
+  touch-action: none !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen .v2055-reel-console.v2063-overlap {
+  outline: 2px solid rgba(60, 255, 207, .75) !important;
+  box-shadow: 0 0 0 5px rgba(61, 255, 206, .15), 0 16px 38px rgba(0, 60, 105, .23) !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen .v2063-console-help {
+  padding: 7px 10px !important;
+  border-radius: 16px !important;
+  background: rgba(255,255,255,.50) !important;
+  border: 1px solid rgba(96,218,249,.28) !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen .catch-result-card.v2064-result-card {
+  position: fixed !important;
+  left: 50vw !important;
+  top: 50dvh !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(86vw, 340px) !important;
+  max-height: min(78dvh, 620px) !important;
+  overflow: auto !important;
+  padding: 12px !important;
+  border-radius: 26px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(181,244,255,.94) 62%, rgba(91,210,239,.86)) !important;
+  border: 1px solid rgba(118, 231, 255, .62) !important;
+  box-shadow: 0 22px 56px rgba(0, 60, 105, .26), inset 0 1px 0 rgba(255,255,255,.86) !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen .catch-result-card.v2064-result-card .v205-result-fish {
+  width: 76px !important;
+  height: 76px !important;
+  margin: 0 !important;
+  animation: none !important;
+}
+body[data-screen="fishing"] .v2064-fishing-polish-screen.catch-bloom,
+body[data-screen="fishing"] .v2064-fishing-polish-screen .fishing-stage.catch-bloom {
+  filter: none !important;
+  animation: none !important;
+}
+body[data-screen="fishing"] .v2064-bite-callout {
+  border: 1px solid rgba(112, 231, 255, .62) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(154,237,255,.90)) !important;
+  color: #053850 !important;
+  box-shadow: 0 18px 38px rgba(0, 69, 108, .24) !important;
+}
+body:not([data-screen="village"]) .bottom-nav.fixed-root-nav,
+body:not([data-screen="village"]) .bottom-nav {
+  display: none !important;
+}
+@media (max-height: 740px) {
+  body[data-screen="fishing"] .v2064-fishing-polish-screen .reel-panel { top: max(82px, calc(env(safe-area-inset-top) + 72px)) !important; max-height: 42svh !important; }
+  body[data-screen="fishing"] .v2064-fishing-polish-screen .v2063-fish-lane { height: 64px !important; }
+  body[data-screen="fishing"] .v2064-fishing-polish-screen .v2055-reel-actions button { min-height: 62px !important; }
+  body[data-screen="fishing"] .v2064-fishing-polish-screen .v2063-console-help { display: none !important; }
+}

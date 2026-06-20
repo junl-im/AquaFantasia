@@ -1,4 +1,4 @@
-# AquaFantasia v2.0.63
+# AquaFantasia v2.0.64
 
 AquaFantasia는 Vite + TypeScript + PixiJS 8 기반의 모바일 세로모드 SD 해양 판타지 마을 RPG입니다.
 
@@ -19,6 +19,18 @@ npm run validate
 npm run typecheck
 npm run build
 ```
+
+## v2.0.64 변경사항
+
+- v2.0.63 낚시 릴링 배틀을 유지하면서, 구버전 장력 게이지/보조 릴 버튼/이미지 프레임 잔여물이 다시 보이지 않도록 v2064 최종 우선 CSS를 추가했습니다.
+- 낚시 결과창이 비동기 애니메이션 타이밍에 다시 생성되어 깜박이거나 중복처럼 보일 수 있는 위험을 `resultCardOpen` 단일 잠금으로 보강했습니다.
+- 릴링 배틀 카드와 감기/풀기 콘솔의 시각 피드백을 더 선명하게 다듬고, 겹침 성공 상태가 콘솔 외곽에도 바로 표시되도록 개선했습니다.
+- 공통 버튼의 구버전 이미지 프레임, 상단 줄 잔상, 투명한 버튼 대비 문제를 아쿠아 그라데이션 우선 규칙으로 한 번 더 정리했습니다.
+- 메뉴/건물/루프/결과 카드 계열의 테두리와 그림자 대비를 보강해 하나의 카드가 열리는 느낌을 유지했습니다.
+- 낚시 외 화면에서 우측 하단 도크가 다시 끼어드는 회귀를 막기 위해 비마을 화면 도크 숨김 guard를 추가했습니다.
+- `showBiteCallout`의 중복 class 할당 흔적을 정리하고, v2.0.63 검증 스크립트를 이후 버전에서도 회귀 검사용으로 동작하도록 완화했습니다.
+- v2.0.64 전용 정적 검증 스크립트 `check-v2064-polish-audit-recovery.mjs`를 추가했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.64`로 동기화했습니다.
 
 ## v2.0.63 변경사항
 

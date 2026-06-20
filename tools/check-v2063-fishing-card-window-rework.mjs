@@ -13,9 +13,9 @@ function assert(condition, message) {
   }
 }
 
-assert(data.includes("APP_VERSION = '2.0.63'"), 'APP_VERSION must be 2.0.63.');
-assert(data.includes('aqua-fantasia-v2.0.63-fishing-card-window-rework'), 'CACHE_NAME must use v2.0.63 fishing-card-window key.');
-assert(sw.includes('aqua-fantasia-v2.0.63-fishing-card-window-rework'), 'service worker cache key must use v2.0.63.');
+assert(/APP_VERSION = '2\.0\.(?:6[3-9]|[7-9]\d)'/.test(data), 'APP_VERSION must be v2.0.63 or later.');
+assert(/aqua-fantasia-v2\.0\.(?:6[3-9]|[7-9]\d)-/.test(data), 'CACHE_NAME must use v2.0.63 or later key.');
+assert(/aqua-fantasia-v2\.0\.(?:6[3-9]|[7-9]\d)-/.test(sw), 'service worker cache key must use v2.0.63 or later.');
 assert(pkg.includes('check-v2063-fishing-card-window-rework.mjs'), 'validate script must include v2063 guard.');
 assert(main.includes("dataset.v2063FishingCardWindows = 'v2063-fishing-state-machine-unified-card-windows'"), 'v2063 global dataset marker missing.');
 assert(main.includes('v2063-fishing-rework-screen'), 'fishing screen must include v2063 rework class.');
