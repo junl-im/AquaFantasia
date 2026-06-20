@@ -14,13 +14,13 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.56', 'package.json version must be 2.0.56');
-has(data, "APP_VERSION = '2.0.56'", 'APP_VERSION 2.0.56');
-has(data, 'aqua-fantasia-v2.0.56-motion-tile-polish', 'data cache v2.0.56');
-has(sw, 'aqua-fantasia-v2.0.56-motion-tile-polish', 'sw cache v2.0.56');
-has(offline, 'v2.0.56', 'offline badge v2.0.56');
-has(readme, '# AquaFantasia v2.0.56', 'README title v2.0.56');
-has(readme, '## v2.0.56', 'README changelog v2.0.56');
+must(/^2\.0\.(5[6-9]|[6-9][0-9])$/.test(pkg.version), 'package.json version must preserve v2.0.56+ lineage');
+must(/APP_VERSION = '2\.0\.(5[6-9]|[6-9][0-9])'/.test(data), 'APP_VERSION must preserve v2.0.56+ lineage');
+must(/aqua-fantasia-v2\.0\.(5[6-9]|[6-9][0-9])/.test(data), 'data cache must preserve v2.0.56+ lineage');
+must(/aqua-fantasia-v2\.0\.(5[6-9]|[6-9][0-9])/.test(sw), 'sw cache must preserve v2.0.56+ lineage');
+must(/v2\.0\.(5[6-9]|[6-9][0-9])/.test(offline), 'offline badge must preserve v2.0.56+ lineage');
+has(readme, `# AquaFantasia v${pkg.version}`, 'README title current version');
+has(readme, `## v${pkg.version}`, 'README changelog current version');
 has(pkg.scripts.validate, 'check-v2056-motion-tile-polish.mjs', 'v2056 validate hook');
 
 for (const token of [

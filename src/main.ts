@@ -172,6 +172,7 @@ class AquaFantasiaGame {
   private tension = 42;
   private safeTimer = 0;
   private holding = false;
+  private reelMode: 'neutral' | 'wind' | 'release' = 'neutral';
   private biteTimeout = 0;
   private castStart = 0;
   private lastTick = performance.now();
@@ -262,6 +263,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2054LayoutIssueSweep = 'v2054-layout-issue-sweep';
     document.documentElement.dataset.v2055PlayabilityUiRepair = 'v2055-playability-ui-repair';
     document.documentElement.dataset.v2056MotionTilePolish = 'v2056-motion-tile-polish';
+    document.documentElement.dataset.v2057FishingAquaTouch = 'v2057-fishing-aqua-touch';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -287,6 +289,7 @@ class AquaFantasiaGame {
     if (this.fallbackTicker) { window.clearInterval(this.fallbackTicker); this.fallbackTicker = 0; }
     window.removeEventListener('resize', this.resizePixiHandler);
     this.holding = false;
+    this.reelMode = 'neutral';
     this.villageWorld?.destroy();
     this.villageWorld = undefined;
     if (this.pixi) {
@@ -864,7 +867,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen locked-screen';
+    root.className = 'game-screen fishing-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen v2057-fishing-aqua-touch-screen locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -881,7 +884,7 @@ class AquaFantasiaGame {
         <img class="v205-fish-shadow v205-shadow-large" src="${ASSET.fishingShadowLarge}" alt="" aria-hidden="true" />
         <img class="v2031-fishing-ripple" src="${ASSET.fishingAmbientRing}" alt="" aria-hidden="true" />
         <img class="v2031-fishing-foam" src="${ASSET.fishingAmbientFoam}" alt="" aria-hidden="true" />
-        <div class="fishing-guide-card v205-guide-card v2029-fishing-guide-card v2030-fishing-guide-card v2031-fishing-guide-card v2038-fishing-guide-card v2039-fishing-guide-card v2040-fishing-guide-card v2041-fishing-guide-card v2046-fishing-guide-card v2047-fishing-guide-card v2048-fishing-guide-card v2049-fishing-guide-card v2050-fishing-guide-card v2051-fishing-guide-card" aria-hidden="true"><strong>낚시 준비</strong><span data-fishing-tip>낚시 시작 → 물었다! → 중앙 릴 존을 눌러 장력 조절</span></div>
+        <div class="fishing-guide-card v205-guide-card v2029-fishing-guide-card v2030-fishing-guide-card v2031-fishing-guide-card v2038-fishing-guide-card v2039-fishing-guide-card v2040-fishing-guide-card v2041-fishing-guide-card v2046-fishing-guide-card v2047-fishing-guide-card v2048-fishing-guide-card v2049-fishing-guide-card v2050-fishing-guide-card v2051-fishing-guide-card" aria-hidden="true"><strong>낚시 준비</strong><span data-fishing-tip>낚시 시작 → 물었다! → 감기/풀기 버튼으로 장력 조절</span></div>
       </div>
       <div class="fishing-hud v205-fishing-hud v2028-fishing-hud v2029-fishing-hud v2030-fishing-hud v2031-fishing-hud v2044-fishing-hud v2032-fishing-hud v2033-fishing-hud v2034-fishing-hud v2035-fishing-hud v2036-fishing-hud v2037-fishing-hud v2038-fishing-hud v2039-fishing-hud v2040-fishing-hud v2041-fishing-hud v2043-fishing-hud v2044-fishing-hud v2047-fishing-hud v2048-fishing-hud v2049-fishing-hud v2050-fishing-hud" aria-label="플레이어 정보">
         <div class="hud-chip region" data-hud-region><strong>${region.name}</strong><span>${region.tide}</span></div>
@@ -897,33 +900,33 @@ class AquaFantasiaGame {
       <section class="recent-catch-strip v205-recent-catch v2029-recent-catch-card v2030-recent-catch-card v2031-recent-catch-card v2032-recent-catch-card v2033-recent-catch-card v2034-recent-catch-card v2035-recent-catch-card v2036-recent-catch-card v2037-recent-catch-card v2038-recent-catch-card v2039-recent-catch-card v2040-recent-catch-card" aria-label="최근 포획">
         ${this.recentCatchMarkup()}
       </section>
-      <div class="reel-panel glass-card hidden v205-reel-panel v2028-reel-panel v2029-reel-panel v2030-reel-panel v2031-reel-panel v2032-reel-panel v2033-reel-panel v2034-reel-panel v2035-reel-panel v2036-reel-panel v2037-reel-panel v2038-reel-panel v2039-reel-panel v2040-reel-panel v2041-reel-panel v2042-reel-panel v2043-reel-panel v2044-reel-panel v2045-reel-panel v2046-reel-panel v2047-reel-panel v2048-reel-panel v2049-reel-panel v2050-reel-panel v2051-reel-panel v2053-reel-panel v2054-reel-panel v2055-reel-panel" id="reelPanel">
+      <div class="reel-panel glass-card hidden v205-reel-panel v2028-reel-panel v2029-reel-panel v2030-reel-panel v2031-reel-panel v2032-reel-panel v2033-reel-panel v2034-reel-panel v2035-reel-panel v2036-reel-panel v2037-reel-panel v2038-reel-panel v2039-reel-panel v2040-reel-panel v2041-reel-panel v2042-reel-panel v2043-reel-panel v2044-reel-panel v2045-reel-panel v2046-reel-panel v2047-reel-panel v2048-reel-panel v2049-reel-panel v2050-reel-panel v2051-reel-panel v2053-reel-panel v2054-reel-panel v2055-reel-panel v2057-reel-panel" id="reelPanel">
         <img class="v2020-reel-panel-frame" src="${ASSET.uiPanelAqua}" alt="" aria-hidden="true" />
         <img class="v2021-reel-tooltip-frame" src="${ASSET.uiTooltipAqua}" alt="" aria-hidden="true" />
         <img class="v205-horizontal-gauge" src="${ASSET.fishingGaugeHorizontal}" alt="장력 게이지" />
         <div class="v205-reel-grid">
           <div class="v2040-vertical-gauge" aria-hidden="true"><span class="v2040-vertical-safe"></span><b class="v2040-vertical-marker"></b></div>
           <img class="v205-vertical-gauge" src="${ASSET.fishingGaugeVertical}" alt="" aria-hidden="true" />
-          <div class="v205-reel-control">
+          <div class="v205-reel-control v2057-gauge-control">
             <img class="v205-resistance-art" src="${ASSET.fishingResistanceBar}" alt="" aria-hidden="true" />
-            <div class="tension-track"><span class="safe-zone"></span><span class="tension-fill"></span></div>
+            <div class="v2057-gauge-title"><strong>장력 게이지</strong><span>초록 구간 유지</span></div><div class="tension-track v2057-tension-track"><span class="safe-zone"></span><span class="tension-fill"></span></div>
             <div class="safe-progress"><span></span></div>
             <div class="surge-meter"><span></span></div>
             <div class="v2051-tension-readout v2053-tension-readout" aria-live="polite"><strong data-tension-value>50%</strong><span data-tension-state>대기</span></div>
-            <div class="v2048-reel-status v2051-reel-status v2053-reel-status v2054-reel-status" data-reel-status>중앙 릴 존을 누르면 장력 ↑ · 떼면 장력 ↓</div>
+            <div class="v2048-reel-status v2051-reel-status v2053-reel-status v2054-reel-status v2057-reel-status" data-reel-status>감기 버튼을 누르면 장력 ↑ · 풀기 버튼을 누르면 장력 ↓</div>
             <div class="v2054-reel-debug" aria-live="polite"><b data-v2054-hold-state>대기</b><span data-v2054-tension-delta>입력 전</span></div>
             <button class="hold-pad v2046-hold-pad v2047-hold-pad v2048-hold-pad v2049-hold-pad v2050-hold-pad v2051-hold-pad v2053-hold-pad" type="button"><strong>보조 릴 버튼</strong><span>중앙 릴 존과 같은 기능</span></button>
             <p>중앙의 큰 릴 존을 누르면 게이지가 즉시 올라가고, 떼면 내려갑니다. 초록 구간에 머무르면 포획합니다.</p>
           </div>
         </div>
       </div>
-      <section class="v2055-reel-console hidden" id="reelConsole" aria-label="낚시 릴 조작 패널">
-        <div class="v2055-reel-meter"><strong data-v2055-tension-value>50%</strong><span data-v2055-tension-state>대기</span><i><b data-v2055-tension-bar></b></i></div>
+      <section class="v2055-reel-console v2057-reel-console hidden" id="reelConsole" aria-label="낚시 릴 조작 패널">
+        <div class="v2055-reel-meter v2057-reel-meter"><strong data-v2055-tension-value>50%</strong><span data-v2055-tension-state>대기</span><i><em data-v2057-safe-window></em><b data-v2055-tension-bar></b></i></div>
         <div class="v2055-reel-actions">
-          <button type="button" class="v2055-reel-wind" data-v2055-reel-wind><strong>릴 감기</strong><span>장력 ↑</span></button>
-          <button type="button" class="v2055-reel-release" data-v2055-reel-release><strong>풀기</strong><span>장력 ↓</span></button>
+          <button type="button" class="v2055-reel-wind v2057-reel-button" data-v2055-reel-wind><strong>릴 감기</strong><span>누르는 동안 장력 ↑</span></button>
+          <button type="button" class="v2055-reel-release v2057-reel-button" data-v2055-reel-release><strong>풀기</strong><span>누르는 동안 장력 ↓</span></button>
         </div>
-        <p>감기 버튼을 누르면 게이지가 올라가고, 떼면 내려갑니다. 풀기 버튼도 장력을 낮춥니다. 초록 구간을 유지하세요.</p>
+        <p>누르면 게이지가 올라가고, 떼면 내려갑니다. 풀기 버튼은 장력을 더 빠르게 낮춥니다. 초록 안전 구간을 유지하세요.</p>
       </section>
       <button class="v2053-reel-touch-zone v2054-reel-touch-zone hidden" type="button" aria-label="릴 감기 터치존"><strong>릴 감기</strong><span>누르는 동안 장력 상승</span><small>손을 떼면 자동으로 내려갑니다</small><em data-v2053-input-state>대기</em></button>`;
     dom.app.appendChild(root);
@@ -945,16 +948,32 @@ class AquaFantasiaGame {
     const setReelInput = (active: boolean, ev?: PointerEvent | Touch) => {
       if (this.state !== 'reeling') return;
       this.holding = active;
+      this.reelMode = active ? 'wind' : 'neutral';
       this.reelPanel?.classList.toggle('is-holding', active);
       this.stageHost?.classList.toggle('is-reel-holding', active);
       this.reelTouchZone?.classList.toggle('is-holding', active);
       this.reelConsole?.classList.toggle('is-winding', active);
-      this.reelConsole?.classList.toggle('is-releasing', !active);
+      this.reelConsole?.classList.toggle('is-releasing', false);
       const inputState = this.reelTouchZone?.querySelector<HTMLElement>('[data-v2053-input-state]');
       if (inputState) inputState.textContent = active ? '입력 ON' : '입력 OFF';
       if (active && ev) {
         this.spawnTouchRing(ev.clientX, ev.clientY);
         this.vibrate(this.tension >= this.safeZone().left && this.tension <= this.safeZone().right ? 5 : 10);
+      }
+      this.updateTensionUI();
+    };
+    const setReelRelease = (active: boolean, ev?: PointerEvent | Touch) => {
+      if (this.state !== 'reeling') return;
+      this.holding = false;
+      this.reelMode = active ? 'release' : 'neutral';
+      this.reelPanel?.classList.toggle('is-holding', false);
+      this.stageHost?.classList.toggle('is-reel-holding', false);
+      this.reelTouchZone?.classList.toggle('is-holding', false);
+      this.reelConsole?.classList.toggle('is-winding', false);
+      this.reelConsole?.classList.toggle('is-releasing', active);
+      if (active && ev) {
+        this.spawnTouchRing(ev.clientX, ev.clientY);
+        this.vibrate(8);
       }
       this.updateTensionUI();
     };
@@ -966,7 +985,7 @@ class AquaFantasiaGame {
       this.holdPad?.setPointerCapture?.(ev.pointerId);
     };
     const stopHold = () => {
-      if (this.state === 'reeling') setReelInput(false);
+      if (this.state === 'reeling') { setReelInput(false); this.reelMode = 'neutral'; this.updateTensionUI(); }
       else {
         this.holding = false;
         this.reelPanel?.classList.remove('is-holding');
@@ -1004,7 +1023,7 @@ class AquaFantasiaGame {
       if (touch) setReelInput(true, touch);
     };
     const stopTouchHold = () => {
-      if (this.state === 'reeling') setReelInput(false);
+      if (this.state === 'reeling') { setReelInput(false); this.reelMode = 'neutral'; this.updateTensionUI(); }
       else {
         this.holding = false;
         this.reelPanel?.classList.remove('is-holding');
@@ -1020,9 +1039,15 @@ class AquaFantasiaGame {
     this.reelTouchZone.addEventListener('touchcancel', stopTouchHold, { passive: true });
     const windButton = this.reelConsole?.querySelector<HTMLButtonElement>('[data-v2055-reel-wind]');
     const releaseButton = this.reelConsole?.querySelector<HTMLButtonElement>('[data-v2055-reel-release]');
-    const startWind = (ev: Event) => { ev.preventDefault(); this.reassertImmersiveMode(); if (this.state !== 'reeling') return; setReelInput(true); this.spawnTouchRing(window.innerWidth * 0.50, window.innerHeight * 0.64); };
-    const startRelease = (ev: Event) => { ev.preventDefault(); this.reassertImmersiveMode(); if (this.state !== 'reeling') return; setReelInput(false); this.spawnTouchRing(window.innerWidth * 0.50, window.innerHeight * 0.72); };
-    const endWind = (ev?: Event) => { ev?.preventDefault(); if (this.state === 'reeling') setReelInput(false); };
+    const eventPoint = (ev: Event): PointerEvent | Touch | undefined => {
+      if ('clientX' in ev && 'clientY' in ev) return ev as PointerEvent;
+      const touch = (ev as TouchEvent).touches?.item(0) ?? (ev as TouchEvent).changedTouches?.item(0);
+      return touch ?? undefined;
+    };
+    const startWind = (ev: Event) => { ev.preventDefault(); this.reassertImmersiveMode(); if (this.state !== 'reeling') return; setReelInput(true, eventPoint(ev)); };
+    const startRelease = (ev: Event) => { ev.preventDefault(); this.reassertImmersiveMode(); if (this.state !== 'reeling') return; setReelRelease(true, eventPoint(ev)); };
+    const endWind = (ev?: Event) => { ev?.preventDefault(); if (this.state === 'reeling') { setReelInput(false); this.reelMode = 'neutral'; this.updateTensionUI(); } };
+    const endRelease = (ev?: Event) => { ev?.preventDefault(); if (this.state === 'reeling') { setReelRelease(false); this.reelMode = 'neutral'; this.updateTensionUI(); } };
     windButton?.addEventListener('pointerdown', startWind);
     windButton?.addEventListener('pointerup', endWind);
     windButton?.addEventListener('pointercancel', endWind);
@@ -1031,10 +1056,15 @@ class AquaFantasiaGame {
     windButton?.addEventListener('touchend', endWind, { passive: false });
     windButton?.addEventListener('touchcancel', endWind, { passive: false });
     windButton?.addEventListener('mousedown', startWind);
-    window.addEventListener('mouseup', endWind, { passive: false });
     releaseButton?.addEventListener('pointerdown', startRelease);
+    releaseButton?.addEventListener('pointerup', endRelease);
+    releaseButton?.addEventListener('pointercancel', endRelease);
+    releaseButton?.addEventListener('pointerleave', endRelease);
     releaseButton?.addEventListener('touchstart', startRelease, { passive: false });
-    releaseButton?.addEventListener('click', startRelease);
+    releaseButton?.addEventListener('touchend', endRelease, { passive: false });
+    releaseButton?.addEventListener('touchcancel', endRelease, { passive: false });
+    releaseButton?.addEventListener('mousedown', startRelease);
+    window.addEventListener('mouseup', (ev) => { endWind(ev); endRelease(ev); }, { passive: false });
     root.addEventListener('pointerdown', (ev: PointerEvent) => {
       const target = ev.target as HTMLElement | null;
       if (target?.closest('.bottom-nav, .fishing-hud, .recent-catch-strip, .fishing-loadout-strip, .cast-button, .v2055-reel-console')) return;
@@ -1520,6 +1550,7 @@ class AquaFantasiaGame {
     this.routeGuardActive = false;
     this.lastReelPulseAt = 0;
     this.holding = false;
+    this.reelMode = 'neutral';
     if (this.biteText) this.biteText.visible = false;
     this.hideBiteCallout();
     this.reelPanel?.classList.remove('hidden');
@@ -1537,7 +1568,9 @@ class AquaFantasiaGame {
     this.state = success ? 'success' : 'fail';
     this.setFishingPhase(this.state);
     this.holding = false;
+    this.reelMode = 'neutral';
     this.reelPanel?.classList.remove('is-holding');
+    this.reelMode = 'neutral';
     this.stageHost?.classList.remove('is-reel-holding');
     this.hideBiteCallout();
     this.reelPanel?.classList.add('hidden');
@@ -1607,9 +1640,9 @@ class AquaFantasiaGame {
 
   private showResultCard(reward: number): void {
     const card = document.createElement('div');
-    card.className = `catch-result-card v930-result v2021-result-card v2036-result-card v2037-result-card v2038-result-card v2039-result-card v2040-result-card v2041-result-card v2042-result-card v2043-result-card v2044-result-card v2045-result-card v2051-result-card v2053-result-card v2054-result-card v2055-result-card rarity-${this.activeFish.rarity.toLowerCase()}`;
+    card.className = `catch-result-card v930-result v2021-result-card v2036-result-card v2037-result-card v2038-result-card v2039-result-card v2040-result-card v2041-result-card v2042-result-card v2043-result-card v2044-result-card v2045-result-card v2051-result-card v2053-result-card v2054-result-card v2055-result-card v2057-result-card rarity-${this.activeFish.rarity.toLowerCase()}`;
     const firstCatch = (this.save.caught[this.activeFish.id] ?? 0) <= 1;
-    card.innerHTML = `<i class="result-sparkle" aria-hidden="true"></i><img class="v2021-result-modal-frame" src="${ASSET.uiModalAqua}" alt="" aria-hidden="true" /><div class="v2051-result-shell"><img class="v205-result-fish" src="${this.activeFish.img}" alt="" /><div class="v2051-result-copy"><small>${firstCatch ? 'NEW CATCH' : this.activeFish.rarity}</small><h3>${this.activeFish.name}</h3><span><img src="${ASSET.fishingTreasure}" alt="" />${this.activeFish.rarity} · ${reward}G</span><em>연속 성공 x${Math.max(1, this.save.currentStreak)} · 도감 자동 기록</em></div></div><div class="v2051-result-actions"><button data-next="fishing">계속 낚시</button><button data-next="dex">도감 보기</button></div>`;
+    card.innerHTML = `<i class="result-sparkle" aria-hidden="true"></i><div class="v2057-result-ribbon">${firstCatch ? '새 도감 등록' : '포획 성공'}</div><div class="v2051-result-shell v2057-result-shell"><img class="v205-result-fish" src="${this.activeFish.img}" alt="" /><div class="v2051-result-copy v2057-result-copy"><small>${this.activeFish.rarity}</small><h3>${this.activeFish.name}</h3><span><img src="${ASSET.fishingTreasure}" alt="" />보상 ${reward}G</span><em>연속 성공 x${Math.max(1, this.save.currentStreak)} · 도감 자동 기록</em></div></div><div class="v2051-result-actions v2057-result-actions"><button data-next="fishing">계속 낚시</button><button data-next="dex">도감 보기</button></div>`;
     (dom.app.querySelector<HTMLElement>('.fishing-screen') ?? this.stageHost)?.appendChild(card);
     card.querySelectorAll<HTMLButtonElement>('[data-next]').forEach((btn) => btn.addEventListener('click', () => {
       const next = btn.dataset.next as Screen;
@@ -1679,7 +1712,8 @@ class AquaFantasiaGame {
       this.surgeTimer += dt / 60;
       const surgeActive = this.surgeTimer > 1.25 && Math.sin(now / 520) > 0.82;
       const drift = Math.sin(now / 215) * 0.31 * regionMod * bossMod + Math.sin(now / 770) * 0.10 + (surgeActive ? Math.sin(now / 80) * 0.38 : 0);
-      this.tension += ((this.holding ? 1.05 + regionMod * 0.10 : -0.62 - regionMod * 0.035) / gearRelief) * dt + drift * 0.28;
+      const controlForce = this.reelMode === 'wind' ? 1.04 + regionMod * 0.10 : this.reelMode === 'release' ? -1.12 - regionMod * 0.05 : -0.54 - regionMod * 0.03;
+      this.tension += (controlForce / gearRelief) * dt + drift * 0.22;
       if (this.bobber) {
         const pull = this.holding ? -0.18 : 0.10;
         this.bobber.x += Math.sin(now / 90) * 0.25 * dt;
@@ -1720,7 +1754,8 @@ class AquaFantasiaGame {
     this.surgeTimer += dt / 60;
     const surgeActive = this.surgeTimer > 1.25 && Math.sin(now / 520) > 0.82;
     const drift = Math.sin(now / 215) * 0.28 * regionMod * bossMod + Math.sin(now / 770) * 0.10 + (surgeActive ? Math.sin(now / 84) * 0.34 : 0);
-    this.tension += ((this.holding ? 1.02 + regionMod * 0.10 : -0.60 - regionMod * 0.035) / gearRelief) * dt + drift * 0.28;
+    const controlForce = this.reelMode === 'wind' ? 1.02 + regionMod * 0.10 : this.reelMode === 'release' ? -1.10 - regionMod * 0.05 : -0.52 - regionMod * 0.03;
+    this.tension += (controlForce / gearRelief) * dt + drift * 0.22;
     const zone = this.safeZone();
     const safe = this.tension >= zone.left && this.tension <= zone.right;
     const center = (zone.left + zone.right) / 2;
@@ -1805,7 +1840,7 @@ class AquaFantasiaGame {
     this.safeFill.style.left = `${zone.left}%`;
     this.safeFill.style.width = `${zone.right - zone.left}%`;
     if (this.progressNode) this.progressNode.style.width = `${Math.min(100, (this.safeTimer / 2.0) * 100)}%`;
-    const stateText = this.holding ? '입력 ON · 장력 상승' : '입력 OFF · 장력 하강';
+    const stateText = this.reelMode === 'wind' ? '릴 감기 ON · 장력 상승' : this.reelMode === 'release' ? '풀기 ON · 장력 하강' : '대기 · 자연 하강';
     const tensionValue = this.reelPanel?.querySelector<HTMLElement>('[data-tension-value]');
     const tensionState = this.reelPanel?.querySelector<HTMLElement>('[data-tension-state]');
     if (tensionValue) tensionValue.textContent = `${Math.round(value)}%`;
@@ -1826,23 +1861,25 @@ class AquaFantasiaGame {
     const surgeNode = this.reelPanel?.querySelector<HTMLSpanElement>('.surge-meter span');
     if (surgeNode) surgeNode.style.width = `${Math.min(100, this.perfectChain * 72)}%`;
     const statusNode = this.reelPanel?.querySelector<HTMLElement>('[data-reel-status]');
-    if (statusNode) statusNode.textContent = this.holding ? '입력 확인됨: 장력 상승 ↑' : '입력 OFF: 장력 하강 ↓';
+    if (statusNode) statusNode.textContent = this.reelMode === 'wind' ? '감기 입력 확인: 장력 상승 ↑' : this.reelMode === 'release' ? '풀기 입력 확인: 장력 하강 ↓' : '입력 대기: 장력 자연 하강 ↓';
     const inputState = this.reelTouchZone?.querySelector<HTMLElement>('[data-v2053-input-state]');
     if (inputState) inputState.textContent = this.holding ? '입력 ON' : '입력 OFF';
     const consoleValue = this.reelConsole?.querySelector<HTMLElement>('[data-v2055-tension-value]');
     const consoleState = this.reelConsole?.querySelector<HTMLElement>('[data-v2055-tension-state]');
     const consoleBar = this.reelConsole?.querySelector<HTMLElement>('[data-v2055-tension-bar]');
     if (consoleValue) consoleValue.textContent = `${Math.round(value)}%`;
-    if (consoleState) consoleState.textContent = safe ? `안전 유지 ${Math.min(100, Math.round((this.safeTimer / 2.0) * 100))}%` : (this.holding ? '감는 중 · 장력 상승' : '풀리는 중 · 장력 하강');
+    if (consoleState) consoleState.textContent = safe ? `안전 유지 ${Math.min(100, Math.round((this.safeTimer / 2.0) * 100))}%` : (this.reelMode === 'wind' ? '감는 중 · 장력 상승' : this.reelMode === 'release' ? '풀기 중 · 장력 하강' : '대기 · 천천히 하강');
     if (consoleBar) consoleBar.style.width = `${value}%`;
+    const safeWindow = this.reelConsole?.querySelector<HTMLElement>('[data-v2057-safe-window]');
+    if (safeWindow) { safeWindow.style.left = `${zone.left}%`; safeWindow.style.width = `${zone.right - zone.left}%`; }
     this.reelConsole?.classList.toggle('is-safe', safe);
     this.reelConsole?.classList.toggle('is-danger', value < 18 || value > 84);
-    this.reelConsole?.classList.toggle('is-winding', this.holding);
-    this.reelConsole?.classList.toggle('is-releasing', !this.holding);
+    this.reelConsole?.classList.toggle('is-winding', this.reelMode === 'wind');
+    this.reelConsole?.classList.toggle('is-releasing', this.reelMode === 'release');
     const holdState = this.reelPanel?.querySelector<HTMLElement>('[data-v2054-hold-state]');
     const deltaState = this.reelPanel?.querySelector<HTMLElement>('[data-v2054-tension-delta]');
-    if (holdState) holdState.textContent = this.holding ? '누르는 중' : '손 뗌';
-    if (deltaState) deltaState.textContent = this.holding ? '장력 상승 중 ↑' : '장력 하강 중 ↓';
+    if (holdState) holdState.textContent = this.reelMode === 'wind' ? '감기 중' : this.reelMode === 'release' ? '풀기 중' : '대기';
+    if (deltaState) deltaState.textContent = this.reelMode === 'wind' ? '장력 상승 중 ↑' : this.reelMode === 'release' ? '장력 하강 중 ↓↓' : '자연 하강 중 ↓';
     this.reelTouchZone?.classList.toggle('is-holding', this.holding);
     this.reelPanel?.classList.toggle('is-holding', this.holding);
     this.stageHost?.classList.toggle('is-reel-holding', this.holding);

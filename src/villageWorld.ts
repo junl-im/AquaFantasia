@@ -764,6 +764,11 @@ function footprintGround(x: number, y: number, w = 1, h = 1): { x: number; y: nu
   return isoToWorld(x + w / 2, y + Math.max(1, h) - BUILDING_GROUND_BACKSET);
 }
 
+function footprintBaseLeftTile(building: Pick<VillageBuildingSave, 'x' | 'y' | 'w' | 'h'>): { x: number; y: number } {
+  // v2.0.57: interaction favors the visible lower-left edge of slanted isometric assets.
+  return { x: building.x, y: building.y + Math.max(1, building.h) - 1 };
+}
+
 function tileDiamondPoints(x: number, y: number): number[] {
   const p = isoToWorld(x, y);
   return [p.x, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y, p.x + TILE_W, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y + TILE_H];
@@ -1796,7 +1801,8 @@ export class VillageWorld {
     }
     const [w, h] = def.size;
     return {
-      x: clamp(x - Math.floor(w / 2), 1, MAP_SIZE - w - 1),
+      // v2.0.57: users place large slanted assets by their lower-left foot tile.
+      x: clamp(x, 1, MAP_SIZE - w - 1),
       y: clamp(y - h + 1, 1, MAP_SIZE - h - 1),
     };
   }
@@ -1984,10 +1990,13 @@ export class VillageWorld {
   }
 
   private findBuildingNear(x: number, y: number): VillageBuildingSave | undefined {
-    return this.save.village.buildings.find((b) => {
+    const candidates = [...this.save.village.buildings].sort((a, b) => (b.y + b.h) - (a.y + a.h));
+    return candidates.find((b) => {
+      const baseLeft = footprintBaseLeftTile(b);
       const insideFootprint = x >= b.x && x < b.x + b.w && y >= b.y && y < b.y + b.h;
-      const atFrontDoor = x >= b.x && x < b.x + b.w && y === b.y + b.h;
-      return insideFootprint || atFrontDoor;
+      const lowerLeftTouch = x >= baseLeft.x - 1 && x <= baseLeft.x + Math.max(1, Math.ceil(b.w * 0.58)) && y >= baseLeft.y - 1 && y <= baseLeft.y + 1;
+      const atFrontDoor = x >= baseLeft.x && x <= baseLeft.x + Math.max(1, Math.ceil(b.w * 0.48)) && y === b.y + b.h;
+      return lowerLeftTouch || atFrontDoor || insideFootprint;
     });
   }
 
