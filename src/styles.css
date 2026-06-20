@@ -29394,3 +29394,269 @@ html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] .v2051-expe
   opacity: 1 !important;
   min-height: 156px !important;
 }
+
+/* v2.0.67 start/menu/loop card restore
+   Purpose: recover the loved start screen from global button styling, make every menu page use the same clear aqua card as character/building panels, and force loop popups to show real content plus a close X. */
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] {
+  --v2067-card-bg: linear-gradient(180deg, rgba(250, 255, 255, .992) 0%, rgba(226, 252, 255, .972) 44%, rgba(161, 232, 248, .935) 100%);
+  --v2067-card-border: rgba(83, 204, 238, .82);
+  --v2067-card-inner: rgba(255, 255, 255, .84);
+  --v2067-card-shadow: 0 20px 48px rgba(0, 67, 106, .22), 0 5px 16px rgba(0, 103, 151, .12), inset 0 1px 0 rgba(255,255,255,.94);
+  --v2067-card-ink: #053750;
+  --v2067-card-muted: rgba(4, 62, 89, .74);
+  --v2067-card-radius: 28px;
+  --v2067-btn-bg: linear-gradient(180deg, rgba(255,255,255,.99), rgba(183,247,255,.96) 54%, rgba(48,176,224,.92));
+  --v2067-btn-border: rgba(66, 198, 236, .82);
+}
+
+/* First screen recovery: global aqua button rules must never paint the reference art hotspots. */
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] body[data-screen="login"] .start-art-screen {
+  padding: 0 !important;
+  background: #0499e8 !important;
+  overflow: hidden !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] body[data-screen="login"] .start-art-screen .start-art-image {
+  content: url('/assets/screens/start_screen_clean_v750.webp') !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] body[data-screen="login"] .start-art-screen :is(.start-hotspot,.hit-depart,.hit-new,.hit-server,.hit-keep) {
+  background: rgba(255,255,255,0) !important;
+  background-image: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  text-shadow: none !important;
+  filter: none !important;
+  padding: 0 !important;
+  isolation: auto !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] body[data-screen="login"] .start-art-screen :is(.start-hotspot,.hit-depart,.hit-new,.hit-server,.hit-keep)::before,
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] body[data-screen="login"] .start-art-screen :is(.start-hotspot,.hit-depart,.hit-new,.hit-server,.hit-keep)::after {
+  content: none !important;
+  display: none !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] body[data-screen="login"] .start-art-screen .hit-keep .keep-indicator {
+  display: block !important;
+  color: transparent !important;
+  background: rgba(255,255,255,.25) !important;
+  border: 2px solid rgba(255,255,255,.64) !important;
+  box-shadow: 0 2px 8px rgba(0,54,95,.18), inset 0 1px 0 rgba(255,255,255,.38) !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] body[data-screen="login"] .start-art-screen .hit-keep.checked .keep-indicator::after {
+  content: "" !important;
+  display: block !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] body[data-screen="login"] :is(.bottom-nav,.fixed-root-nav,.v2-joystick,.v204-mini-map,.v2049-growth-board,.v2050-expedition-board,.v2-world-controls,.runtime-hud,.runtime-content) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Unified menu pages: keep the same clean aqua card language as character/building info panels. */
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] body:not([data-screen="login"]):not([data-screen="village"]) .runtime-menu-screen {
+  background: radial-gradient(circle at 50% 0%, rgba(152, 244, 255, .20), transparent 34%), linear-gradient(180deg, rgba(4, 105, 150, .22), rgba(2, 23, 45, .38)) !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .runtime-menu-screen :is(
+  .runtime-hud,
+  .runtime-content,
+  .runtime-panel,
+  .runtime-hero-card,
+  .v204-window-card,
+  .v2050-expedition-card,
+  .v206-route-ready,
+  .v206-inventory-dashboard,
+  .v206-catch-ledger,
+  .v206-quest-npc-board,
+  .ranking-panel,
+  .ranking-summary,
+  .ranking-stats-grid,
+  .region-panel,
+  .shop-list,
+  .shop-card,
+  .mission-list,
+  .mission-card,
+  .gear-grid,
+  .gear-card,
+  .dex-grid,
+  .dex-card,
+  .map-card,
+  .route-card,
+  .quick-card,
+  .village-detail-card,
+  .v2-build-panel,
+  .game-dialog-card,
+  .catch-result-card,
+  .reel-panel,
+  .v2055-reel-console,
+  .v2063-fishing-board
+) {
+  background: var(--v2067-card-bg) !important;
+  background-image: var(--v2067-card-bg) !important;
+  border: 1px solid var(--v2067-card-border) !important;
+  outline: 1px solid var(--v2067-card-inner) !important;
+  outline-offset: -3px !important;
+  border-image: none !important;
+  border-radius: var(--v2067-card-radius) !important;
+  box-shadow: var(--v2067-card-shadow) !important;
+  color: var(--v2067-card-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  filter: none !important;
+  text-shadow: none !important;
+  backdrop-filter: blur(10px) saturate(1.08) !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .runtime-menu-screen :is(
+  .runtime-content,
+  .runtime-panel,
+  .runtime-hero-card,
+  .v204-window-card,
+  .v2050-expedition-card,
+  .v206-route-ready,
+  .v206-inventory-dashboard,
+  .v206-catch-ledger,
+  .v206-quest-npc-board,
+  .ranking-panel,
+  .shop-card,
+  .mission-card,
+  .gear-card,
+  .dex-card
+)::before,
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .runtime-menu-screen :is(
+  .runtime-content,
+  .runtime-panel,
+  .runtime-hero-card,
+  .v204-window-card,
+  .v2050-expedition-card,
+  .v206-route-ready,
+  .v206-inventory-dashboard,
+  .v206-catch-ledger,
+  .v206-quest-npc-board,
+  .ranking-panel,
+  .shop-card,
+  .mission-card,
+  .gear-card,
+  .dex-card
+)::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .runtime-menu-screen :is(h1,h2,h3,h4,strong,.runtime-panel-title strong,.runtime-title strong,.shop-card strong,.mission-card strong,.gear-card strong,.dex-card strong) {
+  color: #043650 !important;
+  -webkit-text-fill-color: #043650 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.76) !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .runtime-menu-screen :is(p,span,small,em,.runtime-panel-title span,.runtime-title em,.shop-card span,.mission-card span,.gear-card span,.dex-card span) {
+  color: var(--v2067-card-muted) !important;
+  -webkit-text-fill-color: var(--v2067-card-muted) !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .runtime-menu-screen :is(button,.runtime-btn,.image-btn,.dialog-btn,.btn-aqua-action,.shop-card button,.gear-card button,.mission-card button),
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] body:not([data-screen="login"]) :is(.v2059-screen-close,.v2059-result-close,.v2055-loop-close,.v2059-loop-close,.v2059-menu-close,.v2059-fishing-close,.v2059-build-close,.v2059-panel-close) {
+  background: var(--v2067-btn-bg) !important;
+  background-image: var(--v2067-btn-bg) !important;
+  border: 1px solid var(--v2067-btn-border) !important;
+  border-image: none !important;
+  outline: 1px solid rgba(255,255,255,.72) !important;
+  outline-offset: -3px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.92), 0 8px 18px rgba(0, 88, 132, .18) !important;
+  color: #05364f !important;
+  -webkit-text-fill-color: #05364f !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.72) !important;
+  filter: none !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .runtime-menu-screen :is(button,.runtime-btn,.image-btn,.dialog-btn,.btn-aqua-action,.shop-card button,.gear-card button,.mission-card button)::before,
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .runtime-menu-screen :is(button,.runtime-btn,.image-btn,.dialog-btn,.btn-aqua-action,.shop-card button,.gear-card button,.mission-card button)::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Loop/frontier cards: force opened panels to be real readable cards, never empty black shells. */
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .village-world-screen :is(.v2051-loop-mini,.v2051-expedition-mini) {
+  pointer-events: auto !important;
+  overflow: visible !important;
+  z-index: 1500 !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .village-world-screen :is(.v2051-loop-mini,.v2051-expedition-mini) > .v2051-loop-toggle {
+  pointer-events: auto !important;
+  display: grid !important;
+  place-items: center !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .village-world-screen :is(.v2051-loop-mini,.v2051-expedition-mini):not(.open):not(.is-open) > .v2051-loop-body {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .village-world-screen :is(.v2051-loop-mini.open,.v2051-loop-mini.is-open,.v2051-expedition-mini.open,.v2051-expedition-mini.is-open) > .v2051-loop-body {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: fixed !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  top: calc(max(10px, env(safe-area-inset-top)) + 88px) !important;
+  bottom: auto !important;
+  width: auto !important;
+  max-width: min(430px, calc(100vw - 24px)) !important;
+  min-height: 180px !important;
+  max-height: min(64dvh, 560px) !important;
+  margin: 0 auto !important;
+  padding: 52px 14px 14px !important;
+  overflow: auto !important;
+  pointer-events: auto !important;
+  border-radius: 28px !important;
+  background: var(--v2067-card-bg) !important;
+  background-image: var(--v2067-card-bg) !important;
+  border: 1px solid var(--v2067-card-border) !important;
+  outline: 1px solid var(--v2067-card-inner) !important;
+  outline-offset: -3px !important;
+  box-shadow: var(--v2067-card-shadow) !important;
+  color: var(--v2067-card-ink) !important;
+  -webkit-text-fill-color: var(--v2067-card-ink) !important;
+  z-index: 1800 !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .village-world-screen :is(.v2051-loop-mini.open,.v2051-loop-mini.is-open,.v2051-expedition-mini.open,.v2051-expedition-mini.is-open) > .v2051-loop-body * {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .village-world-screen :is(.v2051-loop-mini.open,.v2051-loop-mini.is-open,.v2051-expedition-mini.open,.v2051-expedition-mini.is-open) .v2051-loop-body :is(.v2061-loop-pop-title,.v2049-growth-head,.v2050-expedition-head) {
+  display: grid !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .village-world-screen :is(.v2051-loop-mini.open,.v2051-loop-mini.is-open,.v2051-expedition-mini.open,.v2051-expedition-mini.is-open) .v2051-loop-body :is(.v2049-growth-loop,.v2050-expedition-grid) {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .village-world-screen :is(.v2051-loop-mini.open,.v2051-loop-mini.is-open,.v2051-expedition-mini.open,.v2051-expedition-mini.is-open) .v2051-loop-body :is(.v2049-growth-next,.v2049-growth-meter,.v2050-expedition-meter) {
+  display: block !important;
+}
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .village-world-screen .v2051-loop-body .v2055-loop-close,
+html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .village-world-screen .v2051-loop-body .v2059-loop-close {
+  display: grid !important;
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  z-index: 3 !important;
+}
+@media (max-width: 430px) {
+  html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .runtime-menu-screen .runtime-content {
+    border-radius: 25px !important;
+    padding: 13px !important;
+  }
+  html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore"] .village-world-screen :is(.v2051-loop-mini.open,.v2051-loop-mini.is-open,.v2051-expedition-mini.open,.v2051-expedition-mini.is-open) > .v2051-loop-body {
+    top: calc(max(8px, env(safe-area-inset-top)) + 82px) !important;
+    padding: 50px 12px 12px !important;
+  }
+}

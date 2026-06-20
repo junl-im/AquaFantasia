@@ -274,6 +274,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2064PolishAudit = 'v2064-fishing-ui-card-button-stability-audit';
     document.documentElement.dataset.v2065UnifiedCardFramePolish = 'v2065-unified-aqua-card-popup-frame-polish';
     document.documentElement.dataset.v2066RiskRegressionSweep = 'v2066-risk-regression-sweep';
+    document.documentElement.dataset.v2067StartMenuLoopCardRestore = 'v2067-start-menu-loop-card-restore';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -747,16 +748,19 @@ class AquaFantasiaGame {
       root.querySelectorAll<HTMLElement>('.v2051-loop-mini.open, .v2051-expedition-mini.open').forEach((other) => {
         if (other !== panel) {
           other.classList.remove('open');
+          other.classList.remove('is-open');
           other.querySelector<HTMLElement>('.v2051-loop-body')?.setAttribute('aria-hidden', 'true');
         }
       });
       panel.classList.toggle('open', willOpen);
+      panel.classList.toggle('is-open', willOpen);
       panel.querySelector<HTMLElement>('.v2051-loop-body')?.setAttribute('aria-hidden', String(!willOpen));
     }));
     root.querySelectorAll<HTMLButtonElement>('[data-v2055-loop-close]').forEach((btn) => btn.addEventListener('click', (ev) => {
       ev.stopPropagation();
       const panel = btn.closest<HTMLElement>('.v2051-loop-mini, .v2051-expedition-mini');
       panel?.classList.remove('open');
+      panel?.classList.remove('is-open');
       panel?.querySelector<HTMLElement>('.v2051-loop-body')?.setAttribute('aria-hidden', 'true');
     }));
     root.querySelector<HTMLButtonElement>('[data-village-shop]')?.addEventListener('click', () => { void this.go('shop'); });

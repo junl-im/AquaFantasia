@@ -1,15 +1,15 @@
-# AquaFantasia v2.0.66
+# AquaFantasia v2.0.67
 
-## v2.0.66 변경사항
+## v2.0.67 변경사항
 
-- v2.0.65 통파일 기준으로 문제 가능성, 에러 가능성, 구버전 CSS/JS 잔여, 중복 이벤트, UI 회귀 가능성을 재점검했습니다.
-- `body[data-screen="fishing"] html[...]`처럼 실제 DOM 구조에서 적용될 수 없는 잘못된 후순위 CSS 선택자를 `html[...] body[data-screen="fishing"] ...` 구조로 보정했습니다.
-- 모든 팝업/메뉴/건물/낚시 카드에 v2066 최종 아쿠아 카드 보정 레이어를 추가해 배경, 테두리, 버튼 상단 줄 잔상, 구버전 이미지 프레임 회귀 가능성을 줄였습니다.
-- 우측 하단 도크는 마을에서만 한 줄 4버튼으로 표시되고, 낚시/메뉴/로그인 화면에서는 다시 끼어들지 않도록 guard를 추가했습니다.
-- 낚시 결과창 중복 생성을 한 번 더 정리하기 위해 생성 전 기존 결과창 sweep과 `resultCardOpen` 단일 잠금 검증을 추가했습니다.
-- v2.0.66 전용 정적 검증 스크립트 `check-v2066-risk-regression-sweep.mjs`를 추가해 잘못된 CSS 선택자, 중복 `recentCatchMarkup`, 결과창 잠금, 도크 guard, README 단독 규칙, registry 오염 여부를 확인합니다.
-- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.66`으로 동기화했습니다.
-
+- v2.0.66의 전역 버튼 스타일이 첫 시작 화면의 투명 핫스팟 버튼까지 칠해 시작 화면이 이상하게 보이던 문제를 복구했습니다.
+- 시작 화면에서는 `start-hotspot` 계열 버튼을 다시 완전 투명 클릭 영역으로 고정하고, 조이스틱/도크/루프/마을 UI가 노출되지 않도록 guard를 보강했습니다.
+- 캐릭터 정보창과 건설창에서 좋았던 밝은 아쿠아 카드 톤을 기준으로, 가방/퀘스트/지도/상점/장비/도감/랭킹 등 모든 메뉴 페이지의 배경, 테두리, 내부 카드, 버튼 톤을 재정리했습니다.
+- 메뉴 페이지가 검게 보이거나 테두리/배경이 적용되지 않는 문제를 막기 위해 `runtime-content`, `v204-window-card`, 상점/퀘스트/지도/장비/도감/랭킹 카드 계열에 v2067 최종 아쿠아 카드 규칙을 추가했습니다.
+- 루프/개척 버튼을 눌렀을 때 내용과 닫기 `×`가 보이지 않던 문제를 수정했습니다. 열린 팝업에서는 진행률, 설명, 수치 카드, 다음 추천, 닫기 버튼이 강제로 보이도록 보강했습니다.
+- 루프/개척 팝업 열림 상태에 `is-open` class도 함께 부여해 기존 `open`/`is-open` 스타일 계열이 서로 어긋나지 않도록 수정했습니다.
+- v2.0.67 전용 정적 검증 스크립트 `check-v2067-start-menu-loop-card-restore.mjs`를 추가해 시작 화면 복구, 메뉴 아쿠아 카드 적용, 루프 팝업 내용/닫기 버튼, 버전 동기화, ZIP 제외 규칙을 확인합니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.67`로 동기화했습니다.
 
 AquaFantasia는 Vite + TypeScript + PixiJS 8 기반의 모바일 세로모드 SD 해양 판타지 마을 RPG입니다.
 

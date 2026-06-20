@@ -19,13 +19,13 @@ const sw = read('public/sw.js');
 const offline = read('public/offline.html');
 const readme = read('README.md');
 
-assert(pkg.includes('"version": "2.0.66"'), 'package.json version must be 2.0.66.');
-assert(lock.includes('"version": "2.0.66"'), 'package-lock.json version must be 2.0.66.');
-assert(data.includes("APP_VERSION = '2.0.66'"), 'APP_VERSION must be 2.0.66.');
-assert(data.includes('aqua-fantasia-v2.0.66-risk-regression-sweep'), 'data cache name must be v2.0.66.');
-assert(sw.includes('aqua-fantasia-v2.0.66-risk-regression-sweep'), 'service worker cache name must be v2.0.66.');
-assert(offline.includes('v2.0.66'), 'offline badge must be v2.0.66.');
-assert(readme.startsWith('# AquaFantasia v2.0.66'), 'README title must be v2.0.66.');
+assert(/"version": "2\.0\.(6[6-9]|[7-9][0-9])"/.test(pkg), 'package.json version must be v2.0.66 or later.');
+assert(/"version": "2\.0\.(6[6-9]|[7-9][0-9])"/.test(lock), 'package-lock.json version must be v2.0.66 or later.');
+assert(/APP_VERSION = '2\.0\.(6[6-9]|[7-9][0-9])'/.test(data), 'APP_VERSION must be v2.0.66 or later.');
+assert(/aqua-fantasia-v2\.0\.(6[6-9]|[7-9][0-9])-/.test(data), 'data cache name must be v2.0.66 or later.');
+assert(/aqua-fantasia-v2\.0\.(6[6-9]|[7-9][0-9])-/.test(sw), 'service worker cache name must be v2.0.66 or later.');
+assert(/v2\.0\.(6[6-9]|[7-9][0-9])/.test(offline), 'offline badge must be v2.0.66 or later.');
+assert(/^# AquaFantasia v2\.0\.(6[6-9]|[7-9][0-9])/.test(readme), 'README title must be v2.0.66 or later.');
 assert(pkg.includes('check-v2066-risk-regression-sweep.mjs'), 'validate script must include v2066 guard.');
 
 assert(main.includes("dataset.v2066RiskRegressionSweep = 'v2066-risk-regression-sweep'"), 'v2066 dataset marker missing.');

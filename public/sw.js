@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.66-risk-regression-sweep';
+const CACHE_NAME = 'aqua-fantasia-v2.0.67-start-menu-loop-card-restore';
 const PRECACHE = [
   "./",
   "./index.html",
