@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.53-hud-dock-fishing-system';
+const CACHE_NAME = 'aqua-fantasia-v2.0.54-layout-issue-sweep';
 const PRECACHE = [
   "./",
   "./index.html",

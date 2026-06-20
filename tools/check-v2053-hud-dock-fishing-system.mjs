@@ -14,12 +14,12 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.53', 'package.json version must be 2.0.53');
-has(data, "APP_VERSION = '2.0.53'", 'APP_VERSION 2.0.53');
-has(data, 'aqua-fantasia-v2.0.53-hud-dock-fishing-system', 'data cache v2.0.53');
-has(sw, 'aqua-fantasia-v2.0.53-hud-dock-fishing-system', 'sw cache v2.0.53');
-has(offline, 'v2.0.53', 'offline badge v2.0.53');
-has(readme, '# AquaFantasia v2.0.53', 'README title v2.0.53');
+must(/^2\.0\.(5[3-9]|[6-9]\d|\d{3,})$/.test(pkg.version), 'package.json version must be v2.0.53 or later');
+must(/APP_VERSION = '2\.0\.(5[3-9]|[6-9]\d|\d{3,})'/.test(data), 'APP_VERSION must be v2.0.53 or later');
+has(data, `aqua-fantasia-v${pkg.version}`, 'data cache current version');
+has(sw, `aqua-fantasia-v${pkg.version}`, 'sw cache current version');
+has(offline, `v${pkg.version}`, 'offline badge current version');
+has(readme, `# AquaFantasia v${pkg.version}`, 'README title current version');
 has(readme, '## v2.0.53', 'README v2.0.53 changelog');
 has(pkg.scripts.validate, 'check-v2053-hud-dock-fishing-system.mjs', 'v2053 validate hook');
 

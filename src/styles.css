@@ -27392,3 +27392,153 @@ html[data-v2053-hud-dock-fishing-system="v2053-hud-dock-fishing-system"] .v2053-
   }
 }
 html[data-v2053-hud-dock-fishing-system="v2053-hud-dock-fishing-system"] .bottom-nav.v2053-single-row-dock-nav .dock-row-main { display: flex !important; }
+
+/* v2.0.54 layout issue sweep: final single-row dock priority, safer HUD/loop spacing, and clearer fishing input feedback. */
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] {
+  --v2054-dock-btn: clamp(45px, 10.4vw, 53px);
+  --v2054-dock-gap: 4px;
+  --v2054-dock-pad: 5px;
+  --v2054-dock-bottom: calc(max(7px, env(safe-area-inset-bottom)) + 4px);
+}
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .bottom-nav.v2054-single-row-dock-nav,
+html.portrait-only-game[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .bottom-nav.v2054-single-row-dock-nav.fixed-root-nav {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--v2054-dock-gap) !important;
+  right: max(8px, env(safe-area-inset-right)) !important;
+  bottom: var(--v2054-dock-bottom) !important;
+  width: auto !important;
+  max-width: calc(100vw - 16px) !important;
+  height: auto !important;
+  padding: var(--v2054-dock-pad) !important;
+  border: 1px solid rgba(140, 242, 255, .54) !important;
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, rgba(9, 111, 152, .26), rgba(2, 58, 92, .18)) !important;
+  box-shadow: 0 8px 20px rgba(0, 54, 91, .13), inset 0 1px 0 rgba(255, 255, 255, .18) !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  z-index: 1240 !important;
+}
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .bottom-nav.v2054-single-row-dock-nav .dock-row,
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .bottom-nav.v2054-single-row-dock-nav .v2054-dock-row-main {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--v2054-dock-gap) !important;
+  width: auto !important;
+  max-width: none !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .bottom-nav.v2054-single-row-dock-nav :is(.dock-row-top,.dock-row-bottom),
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .bottom-nav.v2054-single-row-dock-nav .dock-row:empty,
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .bottom-nav.v2054-single-row-dock-nav :is(button,div):not([data-screen]):not(.dock-row-main):not(.v2054-dock-row-main) {
+  display: none !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .bottom-nav.v2054-single-row-dock-nav button[data-screen] {
+  display: grid !important;
+  place-items: center !important;
+  width: var(--v2054-dock-btn) !important;
+  height: var(--v2054-dock-btn) !important;
+  min-width: var(--v2054-dock-btn) !important;
+  min-height: var(--v2054-dock-btn) !important;
+  max-width: var(--v2054-dock-btn) !important;
+  max-height: var(--v2054-dock-btn) !important;
+  padding: 4px 3px 3px !important;
+  border-radius: 15px !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+}
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] body[data-screen="fishing"] .bottom-nav.v2054-single-row-dock-nav {
+  bottom: calc(max(7px, env(safe-area-inset-bottom)) + 4px) !important;
+}
+
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .village-world-screen.v2054-layout-issue-village-screen .v2-village-hud {
+  width: min(252px, calc(100vw - 118px)) !important;
+  max-height: 72px !important;
+  border-color: rgba(138, 240, 255, .60) !important;
+}
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .village-world-screen.v2054-layout-issue-village-screen .v2-wallet-row span[data-wallet="gold"] { max-width: 70px !important; }
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .village-world-screen.v2054-layout-issue-village-screen .v2-wallet-row span[data-wallet="fund"] { max-width: 64px !important; }
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .village-world-screen.v2054-layout-issue-village-screen .v2049-growth-board.v2051-loop-mini,
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .village-world-screen.v2054-layout-issue-village-screen .v2050-expedition-board.v2051-expedition-mini {
+  right: calc(max(8px, env(safe-area-inset-right)) + 51px) !important;
+  width: 52px !important;
+  min-width: 52px !important;
+  max-width: 52px !important;
+  opacity: .98 !important;
+}
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .village-world-screen.v2054-layout-issue-village-screen .v2049-growth-board.v2051-loop-mini { top: calc(max(7px, env(safe-area-inset-top)) + 2px) !important; }
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .village-world-screen.v2054-layout-issue-village-screen .v2050-expedition-board.v2051-expedition-mini { top: calc(max(7px, env(safe-area-inset-top)) + 37px) !important; }
+
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] body[data-screen="fishing"] .fishing-screen.v2054-fishing-issue-sweep-screen .v2051-cast-button {
+  bottom: calc(max(7px, env(safe-area-inset-bottom)) + var(--v2054-dock-btn) + 24px) !important;
+}
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] body[data-screen="fishing"] .fishing-screen.v2054-fishing-issue-sweep-screen .v2054-reel-panel {
+  top: calc(max(7px, env(safe-area-inset-top)) + 78px) !important;
+  width: min(360px, calc(100vw - 24px)) !important;
+  max-height: 204px !important;
+  border: 1px solid rgba(133, 241, 255, .62) !important;
+}
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .v2054-reel-panel .v2054-reel-debug {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  min-height: 24px !important;
+  padding: 4px 8px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, .58) !important;
+  border: 1px solid rgba(72, 188, 221, .30) !important;
+  color: #05435c !important;
+  font-size: 11px !important;
+  font-weight: 1000 !important;
+}
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .v2054-reel-panel .v2054-reel-debug b { color: #043d58 !important; -webkit-text-fill-color: #043d58 !important; }
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .v2054-reel-touch-zone {
+  top: 55dvh !important;
+  width: min(270px, 74vw) !important;
+  height: min(182px, 25dvh) !important;
+  min-height: 136px !important;
+  border-width: 2px !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .v2054-reel-touch-zone small {
+  display: block !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  color: rgba(3, 54, 79, .68) !important;
+  -webkit-text-fill-color: rgba(3, 54, 79, .68) !important;
+}
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .v2054-reel-touch-zone.is-holding::after {
+  content: '입력 확인' !important;
+  position: absolute !important;
+  inset: -12px !important;
+  border-radius: 40px !important;
+  border: 3px solid rgba(255, 231, 116, .62) !important;
+  pointer-events: none !important;
+  animation: v2054HoldConfirm .42s ease-in-out infinite alternate !important;
+}
+html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .v2054-result-card {
+  max-width: min(340px, calc(100vw - 26px)) !important;
+  border: 1px solid rgba(130, 238, 255, .64) !important;
+  box-shadow: 0 22px 56px rgba(0, 59, 92, .28), inset 0 2px 0 rgba(255,255,255,.62) !important;
+}
+@keyframes v2054HoldConfirm { from { opacity: .42; transform: scale(.985); } to { opacity: .92; transform: scale(1.02); } }
+@media (max-width: 390px) {
+  html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] { --v2054-dock-btn: clamp(42px, 10.2vw, 48px); --v2054-dock-gap: 3px; --v2054-dock-pad: 4px; }
+  html[data-v2054-layout-issue-sweep="v2054-layout-issue-sweep"] .village-world-screen.v2054-layout-issue-village-screen .v2-village-hud { width: min(240px, calc(100vw - 110px)) !important; }
+}
