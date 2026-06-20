@@ -1,4 +1,15 @@
-# AquaFantasia v2.0.65
+# AquaFantasia v2.0.66
+
+## v2.0.66 변경사항
+
+- v2.0.65 통파일 기준으로 문제 가능성, 에러 가능성, 구버전 CSS/JS 잔여, 중복 이벤트, UI 회귀 가능성을 재점검했습니다.
+- `body[data-screen="fishing"] html[...]`처럼 실제 DOM 구조에서 적용될 수 없는 잘못된 후순위 CSS 선택자를 `html[...] body[data-screen="fishing"] ...` 구조로 보정했습니다.
+- 모든 팝업/메뉴/건물/낚시 카드에 v2066 최종 아쿠아 카드 보정 레이어를 추가해 배경, 테두리, 버튼 상단 줄 잔상, 구버전 이미지 프레임 회귀 가능성을 줄였습니다.
+- 우측 하단 도크는 마을에서만 한 줄 4버튼으로 표시되고, 낚시/메뉴/로그인 화면에서는 다시 끼어들지 않도록 guard를 추가했습니다.
+- 낚시 결과창 중복 생성을 한 번 더 정리하기 위해 생성 전 기존 결과창 sweep과 `resultCardOpen` 단일 잠금 검증을 추가했습니다.
+- v2.0.66 전용 정적 검증 스크립트 `check-v2066-risk-regression-sweep.mjs`를 추가해 잘못된 CSS 선택자, 중복 `recentCatchMarkup`, 결과창 잠금, 도크 guard, README 단독 규칙, registry 오염 여부를 확인합니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.66`으로 동기화했습니다.
+
 
 AquaFantasia는 Vite + TypeScript + PixiJS 8 기반의 모바일 세로모드 SD 해양 판타지 마을 RPG입니다.
 

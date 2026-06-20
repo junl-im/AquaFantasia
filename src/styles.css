@@ -29191,7 +29191,7 @@ html[data-v2065-unified-card-frame-polish="v2065-unified-aqua-card-popup-frame-p
   max-height: calc(100dvh - 132px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
 }
 
-body[data-screen="fishing"] html[data-v2065-unified-card-frame-polish="v2065-unified-aqua-card-popup-frame-polish"] .runtime-content {
+html[data-v2065-unified-card-frame-polish="v2065-unified-aqua-card-popup-frame-polish"] body[data-screen="fishing"] .runtime-content {
   max-height: none !important;
 }
 
@@ -29238,4 +29238,159 @@ html[data-v2065-unified-card-frame-polish="v2065-unified-aqua-card-popup-frame-p
   html[data-v2065-unified-card-frame-polish="v2065-unified-aqua-card-popup-frame-polish"] .runtime-menu-screen .runtime-content {
     max-height: calc(100dvh - 120px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
   }
+}
+
+/* v2.0.66 risk regression sweep
+   Purpose: fix invalid late selectors, keep unified cards stable, and prevent old dock/result/button rules from leaking back in. */
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] {
+  --v2066-card-bg: linear-gradient(180deg, rgba(249, 255, 255, .99) 0%, rgba(219, 250, 255, .965) 47%, rgba(151, 229, 248, .92) 100%);
+  --v2066-card-border: rgba(74, 203, 239, .72);
+  --v2066-card-shadow: 0 18px 42px rgba(0, 68, 106, .20), 0 4px 12px rgba(0, 111, 151, .10), inset 0 1px 0 rgba(255,255,255,.92);
+  --v2066-button-bg: linear-gradient(180deg, rgba(255,255,255,.99), rgba(173,246,255,.96) 52%, rgba(33,167,220,.91));
+}
+
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] body[data-screen="fishing"] .runtime-content {
+  max-height: none !important;
+}
+
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] :is(
+  .runtime-content,
+  .runtime-panel,
+  .region-panel,
+  .ranking-panel,
+  .village-detail-card,
+  .v2-build-panel,
+  .v2051-loop-body,
+  .game-dialog-card,
+  .catch-result-card,
+  .reel-panel,
+  .v2055-reel-console,
+  .v2063-fishing-board
+) {
+  background: var(--v2066-card-bg) !important;
+  background-image: var(--v2066-card-bg) !important;
+  border: 1px solid var(--v2066-card-border) !important;
+  box-shadow: var(--v2066-card-shadow) !important;
+  background-clip: padding-box !important;
+  border-image: none !important;
+  filter: none !important;
+}
+
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] :is(
+  .runtime-content,
+  .runtime-panel,
+  .region-panel,
+  .ranking-panel,
+  .village-detail-card,
+  .v2-build-panel,
+  .v2051-loop-body,
+  .game-dialog-card,
+  .catch-result-card,
+  .reel-panel,
+  .v2055-reel-console,
+  .v2063-fishing-board,
+  .runtime-btn,
+  .image-btn,
+  .dialog-btn,
+  .btn-aqua-action,
+  .shop-card,
+  .mission-card,
+  .gear-card,
+  .dex-card
+)::before,
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] :is(
+  .runtime-content,
+  .runtime-panel,
+  .region-panel,
+  .ranking-panel,
+  .village-detail-card,
+  .v2-build-panel,
+  .v2051-loop-body,
+  .game-dialog-card,
+  .catch-result-card,
+  .reel-panel,
+  .v2055-reel-console,
+  .v2063-fishing-board,
+  .runtime-btn,
+  .image-btn,
+  .dialog-btn,
+  .btn-aqua-action,
+  .shop-card,
+  .mission-card,
+  .gear-card,
+  .dex-card
+)::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] :is(button, .runtime-btn, .image-btn, .dialog-btn, .btn-aqua-action, .v2055-reel-actions button, .v2059-result-actions button) {
+  background: var(--v2066-button-bg) !important;
+  background-image: var(--v2066-button-bg) !important;
+  border: 1px solid rgba(71, 205, 239, .76) !important;
+  border-image: none !important;
+  outline: 1px solid rgba(255,255,255,.66) !important;
+  outline-offset: -3px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.92), 0 7px 16px rgba(0, 82, 122, .16) !important;
+  color: #05364f !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.70) !important;
+  filter: none !important;
+}
+
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] body:not([data-screen="village"]) .bottom-nav.fixed-root-nav,
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] body[data-screen="fishing"] .bottom-nav.fixed-root-nav,
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] body[data-screen="login"] .bottom-nav.fixed-root-nav {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] body[data-screen="village"] .bottom-nav.fixed-root-nav {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 4px !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: calc(100vw - 16px) !important;
+}
+
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] body[data-screen="village"] .bottom-nav.fixed-root-nav .dock-row {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 4px !important;
+}
+
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] body[data-screen="village"] .bottom-nav.fixed-root-nav .dock-row:empty,
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] body[data-screen="village"] .bottom-nav.fixed-root-nav button:not([data-screen]) {
+  display: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] body[data-screen="fishing"] .catch-result-card.v2064-result-card {
+  width: min(82vw, 326px) !important;
+  max-height: min(72dvh, 520px) !important;
+  overflow: auto !important;
+  isolation: isolate !important;
+}
+
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] body[data-screen="fishing"] .v2063-fishing-board,
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] body[data-screen="fishing"] .v2055-reel-console {
+  z-index: 1280 !important;
+}
+
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] .v2051-loop-body[aria-hidden="false"],
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] .v2051-loop-mini.is-open .v2051-loop-body,
+html[data-v2066-risk-regression-sweep="v2066-risk-regression-sweep"] .v2051-expedition-mini.is-open .v2051-loop-body {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 156px !important;
 }

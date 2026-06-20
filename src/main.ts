@@ -273,6 +273,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2063FishingCardWindows = 'v2063-fishing-state-machine-unified-card-windows';
     document.documentElement.dataset.v2064PolishAudit = 'v2064-fishing-ui-card-button-stability-audit';
     document.documentElement.dataset.v2065UnifiedCardFramePolish = 'v2065-unified-aqua-card-popup-frame-polish';
+    document.documentElement.dataset.v2066RiskRegressionSweep = 'v2066-risk-regression-sweep';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -1163,7 +1164,7 @@ class AquaFantasiaGame {
 
   private baseGameShell(name: string): HTMLElement {
     const root = document.createElement('main');
-    root.className = `game-screen ${name}-screen v800-screen v810-screen ${name === 'fishing' ? 'locked-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2052-fishing-feedback-screen v2053-fishing-system-screen' : 'scroll-screen'}`;
+    root.className = `game-screen ${name}-screen v800-screen v810-screen ${name === 'fishing' ? 'locked-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2066-risk-regression-screen' : 'scroll-screen'}`;
     root.innerHTML = `<div class="ambient-bg" aria-hidden="true"></div>`;
     return root;
   }
@@ -1685,8 +1686,9 @@ class AquaFantasiaGame {
 
   private showResultCard(reward: number): void {
     document.querySelectorAll('.catch-result-card').forEach((node) => node.remove());
-    const card = document.createElement('div');
+    document.querySelectorAll('.catch-result-card.v2064-result-card, .catch-result-card.v2059-result-card').forEach((node, index) => { if (index > 0) node.remove(); });
     if (this.resultCardOpen || document.querySelector('.catch-result-card.v2064-result-card')) return;
+    const card = document.createElement('div');
     this.resultCardOpen = true;
     card.className = `catch-result-card v930-result v2064-result-card v2021-result-card v2036-result-card v2037-result-card v2038-result-card v2039-result-card v2040-result-card v2041-result-card v2042-result-card v2043-result-card v2044-result-card v2045-result-card v2051-result-card v2053-result-card v2054-result-card v2055-result-card v2057-result-card v2059-result-card rarity-${this.activeFish.rarity.toLowerCase()}`;
     const firstCatch = (this.save.caught[this.activeFish.id] ?? 0) <= 1;
