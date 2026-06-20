@@ -27758,3 +27758,6 @@ html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .catch-resu
   html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-console { top: 62dvh !important; padding: 10px !important; }
   html[data-v2055-playability-ui-repair="v2055-playability-ui-repair"] .v2055-reel-actions button { min-height: 62px !important; }
 }
+
+/* v2.0.56 motion/tile polish: visual-only pet walking, steam pulse, no-drift decoration anchors. */
+html[data-v2056-motion-tile-polish="v2056-motion-tile-polish"] .village-world-screen.v2056-motion-tile-village-screen { --v2056-motion-tile-polish: 1; }

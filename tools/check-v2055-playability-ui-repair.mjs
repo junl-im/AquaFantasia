@@ -14,13 +14,13 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.55', 'package.json version must be 2.0.55');
-has(data, "APP_VERSION = '2.0.55'", 'APP_VERSION 2.0.55');
-has(data, 'aqua-fantasia-v2.0.55-playability-ui-repair', 'data cache v2.0.55');
-has(sw, 'aqua-fantasia-v2.0.55-playability-ui-repair', 'sw cache v2.0.55');
-has(offline, 'v2.0.55', 'offline badge v2.0.55');
-has(readme, '# AquaFantasia v2.0.55', 'README title v2.0.55');
-has(readme, '## v2.0.55', 'README changelog v2.0.55');
+must(/^2\.0\.(5[5-9]|[6-9][0-9])$/.test(pkg.version), 'package.json version must preserve v2.0.55+ lineage');
+must(/APP_VERSION = '2\.0\.(5[5-9]|[6-9][0-9])'/.test(data), 'APP_VERSION must preserve v2.0.55+ lineage');
+must(/aqua-fantasia-v2\.0\.(5[5-9]|[6-9][0-9])/.test(data), 'data cache must preserve v2.0.55+ lineage');
+must(/aqua-fantasia-v2\.0\.(5[5-9]|[6-9][0-9])/.test(sw), 'sw cache must preserve v2.0.55+ lineage');
+must(/v2\.0\.(5[5-9]|[6-9][0-9])/.test(offline), 'offline badge must preserve v2.0.55+ lineage');
+has(readme, `# AquaFantasia v${pkg.version}`, 'README title current version');
+has(readme, `## v${pkg.version}`, 'README changelog current version');
 has(pkg.scripts.validate, 'check-v2055-playability-ui-repair.mjs', 'v2055 validate hook');
 
 for (const token of [
@@ -59,4 +59,4 @@ const rootMarkdown = fs.readdirSync('.').filter((name) => name.toLowerCase().end
 must(rootMarkdown.length === 1 && rootMarkdown[0] === 'README.md', 'root must contain README.md only');
 const forbiddenNotes = fs.readdirSync('.', { recursive: true }).filter((name) => /_NOTES\.md$/i.test(String(name)));
 must(forbiddenNotes.length === 0, 'must not create *_NOTES.md files');
-console.log('[AquaFantasia] v2.0.55 playability/UI repair validation passed.');
+console.log('[AquaFantasia] v2.0.55+ playability/UI repair validation passed.');

@@ -64,6 +64,17 @@ type Decoration = {
   scale?: number;
 };
 
+type DecorationMotionBase = {
+  x: number;
+  y: number;
+  scaleX: number;
+  scaleY: number;
+  alpha: number;
+  rotation: number;
+  kind: DecoKind;
+  seed: number;
+};
+
 type Actor = {
   id: string;
   role: WorldNpcRole | 'player';
@@ -700,6 +711,12 @@ function auditedDecorationPlacement(deco: Decoration): { x: number; y: number; s
   return { x: clamp(x, 2.2, MAP_SIZE - 3.2), y: clamp(y, 4.2, MAP_SIZE - 5.4), scale };
 }
 
+function iHash(value: string): number {
+  let h = 0;
+  for (let i = 0; i < value.length; i += 1) h = (h * 31 + value.charCodeAt(i)) % 9973;
+  return h;
+}
+
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
@@ -810,6 +827,7 @@ export class VillageWorld {
   private lastPassiveIncomeAt = 0;
   private lastNpcHealthCheckAt = 0;
   private motionClock = 0;
+  private decorationMotionBases = new WeakMap<Container, DecorationMotionBase>();
   private destroyed = false;
   private joystick = { x: 0, y: 0, active: false, pointerId: null as number | null };
   private joystickKnob?: HTMLElement;
@@ -889,6 +907,7 @@ export class VillageWorld {
     this.root.dataset.v2050ContentExpansionAssetPolish = 'calmer-assets-island-expansion-routes';
     this.root.dataset.v2051MotionPolish = 'actor-footstep-object-motion';
     this.root.dataset.v2052TileAnchorAudit = 'tile-ground-footprint-collision-audit';
+    this.root.dataset.v2056MotionTilePolish = 'pet-footstep-steam-no-drift';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트 기준으로 배치됩니다.');
   }
 
@@ -1272,6 +1291,7 @@ export class VillageWorld {
 
   private renderDecorations(): void {
     this.decorationLayer.removeChildren();
+    this.decorationMotionBases = new WeakMap<Container, DecorationMotionBase>();
     for (const deco of VILLAGE_DECORATIONS) {
       if (!shouldUseDecoration(deco)) continue;
       const placement = auditedDecorationPlacement(deco);
@@ -1281,6 +1301,16 @@ export class VillageWorld {
       item.name = `deco-${deco.kind}`;
       item.position.set(p.x, p.y);
       item.zIndex = Math.round(placement.y * 20 + 10);
+      this.decorationMotionBases.set(item, {
+        x: p.x,
+        y: p.y,
+        scaleX: item.scale.x,
+        scaleY: item.scale.y,
+        alpha: item.alpha,
+        rotation: item.rotation,
+        kind: deco.kind,
+        seed: (placement.x * 17.17 + placement.y * 31.31 + iHash(deco.kind)) % 97,
+      });
       this.decorationLayer.addChild(item);
     }
   }
@@ -1299,6 +1329,17 @@ export class VillageWorld {
       sprite.position.set(0, 0);
       shadow.ellipse(0, 6, Math.max(18, Math.min(54, sprite.texture.width * sprite.scale.x * 0.33)), 10).fill({ color: 0x294b55, alpha: 0.18 });
       c.addChild(shadow, sprite);
+      if (kind === 'steam' || kind === 'cookingPot') {
+        const puffLayer = new Container();
+        puffLayer.name = 'steam-puffs';
+        for (let i = 0; i < 4; i += 1) {
+          const puff = new Graphics();
+          puff.circle(0, 0, 7 + i * 2.4).fill({ color: 0xffffff, alpha: 0.18 - i * 0.025 });
+          puff.position.set((i - 1.5) * 7, -targetH * (0.55 + i * 0.09));
+          puffLayer.addChild(puff);
+        }
+        c.addChild(puffLayer);
+      }
       return c;
     }
     const g = new Graphics();
@@ -2141,19 +2182,54 @@ export class VillageWorld {
   private animateDecorationLayer(deltaMs: number): void {
     this.motionClock += deltaMs;
     const t = this.motionClock / 1000;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const liteMotion = reducedMotion || this.resolveVillageDprCap() <= 1.18;
     for (let i = 0; i < this.decorationLayer.children.length; i += 1) {
       const item = this.decorationLayer.children[i] as Container;
-      const name = item.name ?? '';
-      if (/waterRing|shoreFoam|splash|fishShadow|duck/i.test(name)) {
-        const wave = Math.sin(t * 1.7 + i * 0.63);
-        item.alpha = 0.72 + wave * 0.18;
-        item.rotation = Math.sin(t * 0.9 + i) * 0.01;
-      } else if (/seagull|butterfly|petals|sparkles/i.test(name)) {
-        item.y += Math.sin(t * 2.4 + i) * 0.10;
-        item.rotation = Math.sin(t * 1.9 + i) * 0.045;
-        item.alpha = 0.78 + Math.sin(t * 3.0 + i) * 0.16;
-      } else if (/flag|banner|lamp|steam|tree|palm|flower/i.test(name)) {
-        item.rotation = Math.sin(t * 1.2 + i * 0.41) * 0.018;
+      const base = this.decorationMotionBases.get(item);
+      if (!base) continue;
+      const phase = t + base.seed * 0.13 + i * 0.07;
+      item.position.set(base.x, base.y);
+      item.rotation = base.rotation;
+      item.alpha = base.alpha;
+      item.scale.set(base.scaleX, base.scaleY);
+      const kindName = base.kind;
+      if (/dog|cat|walkingCat/i.test(kindName) && !/sleepingDog/i.test(kindName)) {
+        const stride = liteMotion ? 4 : 13;
+        const bob = liteMotion ? 0.8 : 3.2;
+        item.position.set(base.x + Math.sin(phase * 0.65) * stride, base.y + Math.cos(phase * 1.3) * bob);
+        item.rotation = Math.sin(phase * 1.6) * (liteMotion ? 0.012 : 0.045);
+        const flip = Math.sin(phase * 0.65) < 0 ? -1 : 1;
+        item.scale.set(base.scaleX * flip, base.scaleY * (1 + Math.sin(phase * 2.4) * (liteMotion ? 0.006 : 0.018)));
+        item.zIndex = Math.round((base.y / TILE_H) * 20 + 12 + Math.sin(phase) * 2);
+      } else if (/sleepingDog/i.test(kindName)) {
+        item.scale.set(base.scaleX * (1 + Math.sin(phase * 1.2) * 0.008), base.scaleY * (1 - Math.sin(phase * 1.2) * 0.006));
+      } else if (/steam|cookingPot/i.test(kindName)) {
+        const rise = liteMotion ? 2 : 8;
+        item.position.set(base.x, base.y - Math.abs(Math.sin(phase * 1.45)) * rise);
+        item.alpha = clamp(0.56 + Math.sin(phase * 1.9) * 0.20, 0.26, 0.84);
+        item.scale.set(base.scaleX * (1 + Math.sin(phase * 1.1) * 0.035), base.scaleY * (1 + Math.cos(phase * 1.1) * 0.045));
+        const puffLayer = item.getChildByName('steam-puffs') as Container | null;
+        if (puffLayer) {
+          for (let p = 0; p < puffLayer.children.length; p += 1) {
+            const puff = puffLayer.children[p] as Graphics;
+            puff.y = -18 - p * 12 - ((phase * 10 + p * 6) % 22);
+            puff.x = (p - 1.5) * 7 + Math.sin(phase * 1.8 + p) * 4;
+            puff.alpha = clamp(0.18 - p * 0.025 + Math.sin(phase * 2 + p) * 0.06, 0.04, 0.22);
+            puff.scale.set(1 + ((phase + p) % 1) * 0.32);
+          }
+        }
+      } else if (/waterRing|shoreFoam|splash|fishShadow|duck/i.test(kindName)) {
+        const wave = Math.sin(phase * 1.7);
+        item.position.set(base.x + Math.sin(phase * 0.8) * (liteMotion ? 1.5 : 4), base.y + Math.cos(phase * 1.1) * (liteMotion ? 0.8 : 2.2));
+        item.alpha = clamp(0.72 + wave * 0.18, 0.38, 0.94);
+        item.rotation = base.rotation + Math.sin(phase * 0.9) * 0.012;
+      } else if (/seagull|butterfly|petals|sparkles/i.test(kindName)) {
+        item.position.set(base.x + Math.sin(phase * 1.35) * (liteMotion ? 4 : 10), base.y + Math.sin(phase * 2.4) * (liteMotion ? 1.6 : 4.6));
+        item.rotation = base.rotation + Math.sin(phase * 1.9) * (liteMotion ? 0.025 : 0.06);
+        item.alpha = clamp(0.78 + Math.sin(phase * 3.0) * 0.16, 0.42, 1);
+      } else if (/flag|banner|lamp|tree|palm|flower/i.test(kindName)) {
+        item.rotation = base.rotation + Math.sin(phase * 1.2) * (liteMotion ? 0.006 : 0.018);
       }
     }
   }
@@ -2162,16 +2238,16 @@ export class VillageWorld {
     const walking = movementAmount > 0.18;
     if (walking) actor.walkPhase += deltaMs * 0.015;
     else actor.walkPhase *= 0.72;
-    const bob = walking ? Math.sin(actor.walkPhase) * 4.2 : 0;
-    const sway = walking ? Math.sin(actor.walkPhase * 0.5) * 0.052 : 0;
-    const stepSide = walking ? Math.sin(actor.walkPhase * 2) * 1.8 : 0;
+    const bob = walking ? Math.abs(Math.sin(actor.walkPhase)) * -5.4 : 0;
+    const sway = walking ? Math.sin(actor.walkPhase * 0.55) * 0.065 : 0;
+    const stepSide = walking ? Math.sin(actor.walkPhase * 2.1) * 2.8 : 0;
     if (actor.body instanceof Sprite) {
       actor.body.position.x = stepSide;
-      actor.body.position.y = 14 + bob;
+      actor.body.position.y = bob;
       actor.body.rotation = sway;
       const targetH = actor.role === 'player' ? 90 : 80;
       const base = targetH / Math.max(1, actor.body.texture.height);
-      const stretch = walking ? Math.sin(actor.walkPhase * 2) * 0.018 : 0;
+      const stretch = walking ? Math.sin(actor.walkPhase * 2.2) * 0.028 : 0;
       actor.body.scale.set(base * (1 + stretch), base * (1 - stretch * 0.5));
     } else {
       actor.body.rotation = sway;
