@@ -13,9 +13,9 @@ function assert(condition, message) {
   }
 }
 
-assert(data.includes("APP_VERSION = '2.0.64'"), 'APP_VERSION must be 2.0.64.');
-assert(data.includes('aqua-fantasia-v2.0.64-fishing-card-window-rework-polish-audit-recovery'), 'CACHE_NAME must use v2.0.64 polish audit key.');
-assert(sw.includes('aqua-fantasia-v2.0.64-fishing-card-window-rework-polish-audit-recovery'), 'service worker cache key must use v2.0.64 polish audit key.');
+assert(/APP_VERSION = '2\.0\.(64|65|66|67|68|69|[7-9][0-9])'/.test(data), 'APP_VERSION must keep v2.0.64 or later lineage.');
+assert(/aqua-fantasia-v2\.0\.(64|65|66|67|68|69|[7-9][0-9])/.test(data), 'CACHE_NAME must keep v2.0.64 or later lineage.');
+assert(/aqua-fantasia-v2\.0\.(64|65|66|67|68|69|[7-9][0-9])/.test(sw), 'service worker cache key must keep v2.0.64 or later lineage.');
 assert(pkg.includes('check-v2064-polish-audit-recovery.mjs'), 'validate script must include v2064 guard.');
 assert(main.includes("dataset.v2064PolishAudit = 'v2064-fishing-ui-card-button-stability-audit'"), 'v2064 global dataset marker missing.');
 assert(main.includes('v2064-fishing-polish-screen'), 'fishing screen must include v2064 polish class.');

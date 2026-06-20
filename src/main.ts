@@ -272,6 +272,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2062GroundContactMotionAudit = 'v2062-shadow-foot-contact-motion-audit';
     document.documentElement.dataset.v2063FishingCardWindows = 'v2063-fishing-state-machine-unified-card-windows';
     document.documentElement.dataset.v2064PolishAudit = 'v2064-fishing-ui-card-button-stability-audit';
+    document.documentElement.dataset.v2065UnifiedCardFramePolish = 'v2065-unified-aqua-card-popup-frame-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
