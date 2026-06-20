@@ -28480,3 +28480,19 @@ html[data-v2061-loop-ui-button-audit="v2061-loop-popup-content-button-audit"] .r
     min-height: 50px !important;
   }
 }
+
+/* v2.0.62 shadow-foot contact motion audit: characters and pets must read as grounded, not airborne. */
+.v2062-ground-contact-village-screen canvas {
+  transform: translateZ(0);
+}
+.v2062-ground-contact-village-screen .village-world-root,
+.v2062-ground-contact-village-screen .village-stage {
+  --v2062-ground-contact: shadow-foot-contact-no-floating;
+}
+@media (prefers-reduced-motion: reduce) {
+  .v2062-ground-contact-village-screen *,
+  .v2062-ground-contact-fishing-screen * {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+  }
+}

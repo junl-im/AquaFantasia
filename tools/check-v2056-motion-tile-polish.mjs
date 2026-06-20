@@ -47,7 +47,7 @@ for (const token of [
 
 
 must(
-  world.includes('actor.body.position.y = bob') || world.includes('actor.body.position.y = 0;'),
+  world.includes('actor.body.position.y = bob') || world.includes('actor.body.position.y = 0;') || world.includes('actor.body.position.y = actor.groundOffset;'),
   'actor body Y must be explicitly managed by the motion pass'
 );
 

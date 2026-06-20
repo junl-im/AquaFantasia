@@ -88,7 +88,9 @@ type Actor = {
   node: Container;
   body: Graphics | Sprite;
   shadow: Graphics;
+  footContact: Graphics;
   label: Text;
+  groundOffset: number;
   direction: ActorDirection;
   mood: string;
   walkPhase: number;
@@ -769,6 +771,20 @@ function footprintBaseLeftTile(building: Pick<VillageBuildingSave, 'x' | 'y' | '
   return { x: building.x, y: building.y + Math.max(1, building.h) - 1 };
 }
 
+function actorSpriteGroundOffset(textureUrl: string, targetH: number): number {
+  // v2.0.62: v2023/v2047 character PNGs keep a few transparent pixels under the feet.
+  // Drop the visible feet onto the shadow instead of moving the tile anchor upward.
+  if (textureUrl.includes('/v2047/') || textureUrl.includes('/v2023/')) return Math.max(2.5, Math.min(4.5, targetH * 0.034));
+  return Math.max(0, Math.min(2, targetH * 0.012));
+}
+
+function decorationSpriteGroundOffset(kind: DecoKind, targetH: number): number {
+  // v2.0.62: small animals/props should look grounded even if the PNG has transparent bottom padding.
+  if (/dog|cat|walkingCat|sleepingDog/i.test(kind)) return Math.max(2, Math.min(4, targetH * 0.055));
+  if (/tree|palm|flowerTree|cherryTree|mapleTree|pineTree|crystalTree|cypressTree/i.test(kind)) return Math.max(1, Math.min(3, targetH * 0.018));
+  return Math.max(0, Math.min(2, targetH * 0.015));
+}
+
 function tileDiamondPoints(x: number, y: number): number[] {
   const p = isoToWorld(x, y);
   return [p.x, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y, p.x + TILE_W, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y + TILE_H];
@@ -915,6 +931,7 @@ export class VillageWorld {
     this.root.dataset.v2056MotionTilePolish = 'pet-footstep-steam-no-drift';
     this.root.dataset.v2060GroundedMotionPolish = 'no-floating-grounded-footstep-motion';
     this.root.dataset.v2061LoopUiButtonAudit = 'stable-grounded-world-after-loop-ui-audit';
+    this.root.dataset.v2062GroundContactAudit = 'shadow-foot-contact-no-floating-motion';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트 기준으로 배치됩니다.');
   }
 
@@ -1333,8 +1350,9 @@ export class VillageWorld {
       const sprite = new Sprite(texture);
       sprite.anchor.set(0.5, 1);
       sprite.scale.set(targetH / Math.max(1, sprite.texture.height));
-      sprite.position.set(0, 0);
-      shadow.ellipse(0, 6, Math.max(18, Math.min(54, sprite.texture.width * sprite.scale.x * 0.33)), 10).fill({ color: 0x294b55, alpha: 0.18 });
+      const groundOffset = decorationSpriteGroundOffset(kind, targetH);
+      sprite.position.set(0, groundOffset);
+      shadow.ellipse(0, 1, Math.max(18, Math.min(54, sprite.texture.width * sprite.scale.x * 0.34)), 8).fill({ color: 0x294b55, alpha: 0.24 });
       c.addChild(shadow, sprite);
       if (kind === 'steam' || kind === 'cookingPot') {
         const puffLayer = new Container();
@@ -1482,8 +1500,10 @@ export class VillageWorld {
     if (!texture) return;
     actor.body.texture = texture;
     const targetH = actor.role === 'player' ? 90 : 80;
-    actor.body.scale.set(targetH / Math.max(1, texture.height));
-    actor.body.position.set(0, 0);
+    const baseScale = targetH / Math.max(1, texture.height);
+    actor.body.scale.set(baseScale);
+    actor.groundOffset = actorSpriteGroundOffset(this.actorTextureUrl(actor.role, direction), targetH);
+    actor.body.position.set(0, actor.groundOffset);
   }
 
   private createActor(id: string, role: Actor['role'], name: string, tileX: number, tileY: number, color: number, mood: string): Actor {
@@ -1491,9 +1511,13 @@ export class VillageWorld {
     const node = new Container();
     node.zIndex = tileY * 20 + 16;
     const shadow = new Graphics();
-    shadow.ellipse(0, 5, role === 'player' ? 20 : 17, role === 'player' ? 8 : 7).fill({ color: 0x294b55, alpha: 0.24 });
+    shadow.ellipse(0, 1, role === 'player' ? 21 : 18, role === 'player' ? 7 : 6).fill({ color: 0x294b55, alpha: 0.30 });
+    const footContact = new Graphics();
+    footContact.ellipse(-5, -1, role === 'player' ? 5.2 : 4.4, 2.4).fill({ color: 0x123b45, alpha: 0.16 });
+    footContact.ellipse(6, -1, role === 'player' ? 5.2 : 4.4, 2.4).fill({ color: 0x123b45, alpha: 0.13 });
 
     let body: Graphics | Sprite;
+    let groundOffset = 0;
     const textureUrl = this.actorTextureUrl(role, 'south');
     const texture = this.textures.get(textureUrl);
     if (texture) {
@@ -1501,7 +1525,8 @@ export class VillageWorld {
       sprite.anchor.set(0.5, 1);
       const targetH = role === 'player' ? 90 : 80;
       sprite.scale.set(targetH / Math.max(1, sprite.texture.height));
-      sprite.position.set(0, 0);
+      groundOffset = actorSpriteGroundOffset(textureUrl, targetH);
+      sprite.position.set(0, groundOffset);
       body = sprite;
     } else {
       const g = new Graphics();
@@ -1515,7 +1540,7 @@ export class VillageWorld {
     const label = new Text({ text: name, style: { fontFamily: 'Arial', fontSize: 14, fontWeight: '900', fill: 0x254157, stroke: { color: 0xffffff, width: 4 } } });
     label.anchor.set(0.5);
     label.position.set(0, role === 'player' ? -100 : -88);
-    node.addChild(shadow, body, label);
+    node.addChild(shadow, footContact, body, label);
     node.position.set(p.x, p.y);
     return {
       id,
@@ -1530,7 +1555,9 @@ export class VillageWorld {
       node,
       body,
       shadow,
+      footContact,
       label,
+      groundOffset,
       direction: 'south',
       mood,
       walkPhase: 0,
@@ -2206,16 +2233,15 @@ export class VillageWorld {
       item.scale.set(base.scaleX, base.scaleY);
       const kindName = base.kind;
       if (/dog|cat|walkingCat/i.test(kindName) && !/sleepingDog/i.test(kindName)) {
-        // v2.0.60: keep paws glued to the isometric tile. Motion is ground-plane pacing,
-        // not vertical bobbing, so pets no longer look like they float above the floor.
-        const stride = liteMotion ? 2.5 : 7.5;
+        // v2.0.62: keep paws visually glued to the tile. Pets pace sideways only;
+        // any Y bobbing made them read as floating on the isometric floor.
+        const stride = liteMotion ? 1.5 : 4.8;
         const groundSlide = Math.sin(phase * 0.72) * stride;
-        const tileSlope = groundSlide * 0.18;
-        item.position.set(base.x + groundSlide, base.y + tileSlope);
-        item.rotation = Math.sin(phase * 1.45) * (liteMotion ? 0.006 : 0.018);
+        item.position.set(base.x + groundSlide, base.y);
+        item.rotation = Math.sin(phase * 1.45) * (liteMotion ? 0.004 : 0.012);
         const flip = Math.sin(phase * 0.72) < 0 ? -1 : 1;
-        const footSquash = Math.abs(Math.sin(phase * 2.4)) * (liteMotion ? 0.004 : 0.010);
-        item.scale.set(base.scaleX * flip * (1 + footSquash * 0.25), base.scaleY * (1 - footSquash));
+        const footSquash = Math.abs(Math.sin(phase * 2.4)) * (liteMotion ? 0.003 : 0.007);
+        item.scale.set(base.scaleX * flip * (1 + footSquash * 0.16), base.scaleY * (1 - footSquash * 0.45));
         item.zIndex = Math.round((base.y / TILE_H) * 20 + 12);
       } else if (/sleepingDog/i.test(kindName)) {
         // Sleeping pets breathe by squash/stretch around their anchored paws; no Y lift.
@@ -2262,7 +2288,7 @@ export class VillageWorld {
     const stepSide = walking ? Math.sin(actor.walkPhase * 2.1) * 1.35 : 0;
     if (actor.body instanceof Sprite) {
       actor.body.position.x = stepSide;
-      actor.body.position.y = 0;
+      actor.body.position.y = actor.groundOffset;
       actor.body.rotation = sway;
       const targetH = actor.role === 'player' ? 90 : 80;
       const base = targetH / Math.max(1, actor.body.texture.height);
@@ -2271,8 +2297,11 @@ export class VillageWorld {
     } else {
       actor.body.rotation = sway;
     }
-    const shadowPulse = walking ? 1 + Math.abs(Math.sin(actor.walkPhase)) * 0.045 : 1;
+    const step = walking ? Math.sin(actor.walkPhase * 2.1) : 0;
+    const shadowPulse = walking ? 1 + Math.abs(step) * 0.028 : 1;
     actor.shadow.scale.set(shadowPulse, 1 / shadowPulse);
+    actor.footContact.position.x = walking ? step * 0.65 : 0;
+    actor.footContact.alpha = walking ? 0.72 + Math.abs(step) * 0.20 : 0.64;
     actor.label.scale.set(1, 1);
   }
 

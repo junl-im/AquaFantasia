@@ -13,9 +13,9 @@ function assert(condition, message) {
   }
 }
 
-assert(data.includes("APP_VERSION = '2.0.61'"), 'APP_VERSION must be 2.0.61.');
-assert(data.includes('aqua-fantasia-v2.0.61-loop-ui-button-audit'), 'cache key must be v2.0.61 loop UI audit.');
-assert(sw.includes('aqua-fantasia-v2.0.61-loop-ui-button-audit'), 'service worker cache key must be v2.0.61 loop UI audit.');
+assert(/APP_VERSION = '2\.0\.(61|6[2-9]|[7-9][0-9])'/.test(data), 'APP_VERSION must preserve the v2061 loop UI lineage.');
+assert(data.includes('aqua-fantasia-v2.0.') && /loop-ui-button-audit|ground-contact-motion-audit/.test(data), 'cache key must preserve loop UI or later ground-contact lineage.');
+assert(sw.includes('aqua-fantasia-v2.0.') && /loop-ui-button-audit|ground-contact-motion-audit/.test(sw), 'service worker cache key must preserve loop UI or later ground-contact lineage.');
 assert(pkg.includes('check-v2061-loop-ui-button-audit.mjs'), 'validate script must include v2061 guard.');
 assert(main.includes("dataset.v2061LoopUiButtonAudit = 'v2061-loop-popup-content-button-audit'"), 'HTML dataset marker missing.');
 assert(main.includes('v2061-loop-ui-village-screen'), 'village root v2061 class missing.');
