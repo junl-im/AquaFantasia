@@ -34,13 +34,14 @@ for (const token of [
   'v2048-cast-button',
   'v2048-identical-dock-nav',
   "nav.dataset.v2048DockGuard = 'v2048-natural-dock-shape-no-empty-frame'",
-  'dock-row dock-row-top',
-  'dock-row dock-row-bottom',
   'var(--v2048-fishing-dock-bottom',
   'data-reel-status',
   '누르면 게이지가 올라가고, 떼면 내려갑니다',
-  'safeTimer >= 2.2',
 ]) has(main, token, `main token ${token}`);
+
+must(main.includes('dock-row dock-row-top') || main.includes('dock-row dock-row-main'), 'main must keep dock row structure or v2053 single-row replacement');
+must(main.includes('dock-row dock-row-bottom') || main.includes('dock-row dock-row-main'), 'main must keep dock lower row or v2053 single-row replacement');
+must(main.includes('safeTimer >= 2.2') || main.includes('safeTimer >= 2.0'), 'main must keep fishing safe timer completion threshold');
 
 for (const token of [
   'v2.0.48 Dock/fishing/anchor system',

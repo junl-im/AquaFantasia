@@ -15,13 +15,13 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.52', 'package.json version must be 2.0.52');
-has(data, "APP_VERSION = '2.0.52'", 'APP_VERSION 2.0.52');
-has(data, 'aqua-fantasia-v2.0.52-tile-anchor-content-audit', 'data cache v2.0.52');
-has(sw, 'aqua-fantasia-v2.0.52-tile-anchor-content-audit', 'sw cache v2.0.52');
-has(offline, 'v2.0.52', 'offline badge v2.0.52');
-has(readme, '# AquaFantasia v2.0.52', 'README title v2.0.52');
-has(readme, '## v2.0.52', 'README v2.0.52 changelog');
+must(/^2\.0\.(5[2-9]|[6-9][0-9])$/.test(pkg.version), 'package.json version must preserve v2.0.52+ lineage');
+must(/APP_VERSION = '2\.0\.(5[2-9]|[6-9][0-9])'/.test(data), 'APP_VERSION must preserve v2.0.52+ lineage');
+has(data, `aqua-fantasia-v${pkg.version}-`, 'data cache follows package version');
+has(sw, `aqua-fantasia-v${pkg.version}-`, 'sw cache follows package version');
+has(offline, `v${pkg.version}`, 'offline badge follows package version');
+has(readme, `# AquaFantasia v${pkg.version}`, 'README title follows package version');
+has(readme, '## v2.0.52', 'README retains v2.0.52 changelog');
 has(pkg.scripts.validate, 'check-v2052-tile-anchor-content-audit.mjs', 'v2052 validate hook');
 
 for (const token of [
