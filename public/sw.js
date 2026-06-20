@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.57-fishing-aqua-touch-polish';
+const CACHE_NAME = 'aqua-fantasia-v2.0.58-tech-modernization-multiplayer-guard';
 const PRECACHE = [
   "./",
   "./index.html",

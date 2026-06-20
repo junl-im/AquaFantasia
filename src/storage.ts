@@ -1,5 +1,5 @@
 import { APP_VERSION, defaultSave, regions } from './data';
-import type { RegionKey, SaveData, Screen, VillageBuildingSave, VillageBuildingType } from './types';
+import type { MultiplayerEvent, MultiplayerState, RegionKey, SaveData, Screen, VillageBuildingSave, VillageBuildingType } from './types';
 
 const KEY = 'aqua-fantasia-save-v650';
 const LEGACY_KEYS = ['aqua-fantasia-save-v640', 'aqua-fantasia-save-v630', 'aqua-fantasia-save-v620'];
@@ -53,6 +53,49 @@ function sanitizeMissions(value: unknown): Record<string, boolean> {
   return Object.fromEntries(Object.entries(value as Record<string, unknown>)
     .filter(([key]) => /^[a-zA-Z0-9_-]+$/.test(key))
     .map(([key, done]) => [key, Boolean(done)]));
+}
+
+
+function makeClientId(): string {
+  try {
+    const existing = localStorage.getItem('aqua-fantasia-client-id');
+    if (existing && /^local-[a-z0-9-]{8,64}$/.test(existing)) return existing;
+  } catch {
+    // Ignore blocked storage and still create an in-memory client id.
+  }
+  const next = `local-${Math.random().toString(36).slice(2, 10)}-${Date.now().toString(36)}`;
+  try { localStorage.setItem('aqua-fantasia-client-id', next); } catch { /* ignore private-mode storage errors */ }
+  return next;
+}
+
+function sanitizeMultiplayerEvent(value: unknown): MultiplayerEvent | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const item = value as Record<string, unknown>;
+  const type = typeof item.type === 'string' ? item.type : '';
+  if (!['save-update', 'village-action', 'fishing-result', 'shop-claim', 'profile-update'].includes(type)) return null;
+  const rawPayload = item.payload && typeof item.payload === 'object' && !Array.isArray(item.payload) ? item.payload as Record<string, unknown> : {};
+  const payload = Object.fromEntries(Object.entries(rawPayload)
+    .filter(([key, val]) => /^[a-zA-Z0-9_-]+$/.test(key) && ['string', 'number', 'boolean'].includes(typeof val))
+    .slice(0, 24)) as Record<string, string | number | boolean>;
+  return {
+    id: typeof item.id === 'string' && /^[a-zA-Z0-9_-]{8,80}$/.test(item.id) ? item.id : `evt_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
+    type: type as MultiplayerEvent['type'],
+    createdAt: finiteNumber(item.createdAt, Date.now(), 0),
+    payload,
+  };
+}
+
+function sanitizeMultiplayer(value: unknown, fallback: MultiplayerState): MultiplayerState {
+  const source = value && typeof value === 'object' && !Array.isArray(value) ? value as Partial<MultiplayerState> : {};
+  const pendingEvents = Array.isArray(source.pendingEvents)
+    ? source.pendingEvents.map(sanitizeMultiplayerEvent).filter((event): event is MultiplayerEvent => Boolean(event)).slice(-80)
+    : [];
+  return {
+    schemaVersion: 1,
+    clientId: typeof source.clientId === 'string' && /^local-[a-z0-9-]{8,64}$/.test(source.clientId) ? source.clientId : makeClientId(),
+    lastSyncAt: finiteNumber(source.lastSyncAt, fallback.lastSyncAt, 0),
+    pendingEvents,
+  };
 }
 
 function sanitizePlayerName(value: unknown, fallback = '\uB098'): string {
@@ -110,6 +153,7 @@ function normalizeSave(parsed: Partial<SaveData>): SaveData {
     mastery: sanitizeRecord(parsed.mastery),
     lastRescueAt: finiteNumber(parsed.lastRescueAt, 0, 0),
     village,
+    multiplayer: sanitizeMultiplayer(parsed.multiplayer, base.multiplayer),
   };
 }
 
@@ -125,10 +169,33 @@ export function loadSave(): SaveData {
 
 export function saveGame(save: SaveData): void {
   try {
-    localStorage.setItem(KEY, JSON.stringify({ ...save, version: APP_VERSION }));
+    const normalized = normalizeSave(save);
+    localStorage.setItem(KEY, JSON.stringify({ ...normalized, version: APP_VERSION }));
   } catch {
     // Storage may be unavailable in private mode. The game keeps running in memory.
   }
+}
+
+export function appendLocalSyncEvent(save: SaveData, event: Omit<MultiplayerEvent, 'id' | 'createdAt'>): SaveData {
+  const normalized = normalizeSave(save);
+  const nextEvent: MultiplayerEvent = {
+    id: `evt_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
+    createdAt: Date.now(),
+    type: event.type,
+    payload: event.payload,
+  };
+  normalized.multiplayer.pendingEvents = [...normalized.multiplayer.pendingEvents, nextEvent].slice(-80);
+  saveGame(normalized);
+  return normalized;
+}
+
+export function consumeLocalSyncEvents(save: SaveData): MultiplayerEvent[] {
+  const normalized = normalizeSave(save);
+  const events = [...normalized.multiplayer.pendingEvents];
+  normalized.multiplayer.pendingEvents = [];
+  normalized.multiplayer.lastSyncAt = Date.now();
+  saveGame(normalized);
+  return events;
 }
 
 export async function tryAnonymousServerLink(save: SaveData): Promise<{ ok: boolean; message: string }> {

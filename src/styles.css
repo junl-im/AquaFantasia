@@ -27974,3 +27974,83 @@ html[data-v2057-fishing-aqua-touch="v2057-fishing-aqua-touch"] body[data-screen=
   from { transform: translateX(-50%) translateX(-1px); }
   to { transform: translateX(-50%) translateX(1px); }
 }
+
+/* v2.0.58 technical modernization, legacy-frame quarantine, and multiplayer-ready guard. */
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] {
+  --v2058-aqua-button-bg: linear-gradient(180deg, rgba(244,255,255,.98), rgba(110,222,239,.94));
+  --v2058-aqua-button-border: rgba(112, 226, 248, .70);
+  --v2058-aqua-shadow: 0 10px 24px rgba(0, 72, 105, .16), inset 0 1px 0 rgba(255,255,255,.72);
+}
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] :is(.bottom-nav,.top-controls,.v2058-modern-dock-nav) {
+  contain: layout paint style;
+}
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] .bottom-nav.v2058-modern-dock-nav,
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] .bottom-nav.v840-bottom-nav.v2058-modern-dock-nav {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  grid-template-columns: none !important;
+  grid-template-rows: none !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-width: calc(100vw - 16px) !important;
+  padding: 5px !important;
+  gap: 4px !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(126,238,255,.34) !important;
+  background: rgba(6,85,120,.24) !important;
+  background-image: none !important;
+  box-shadow: 0 8px 20px rgba(0,55,92,.14), inset 0 1px 0 rgba(255,255,255,.18) !important;
+  overflow: visible !important;
+}
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] .bottom-nav.v2058-modern-dock-nav::before,
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] .bottom-nav.v2058-modern-dock-nav::after,
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] .bottom-nav.v2058-modern-dock-nav button::after {
+  display: none !important;
+  content: none !important;
+}
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] .bottom-nav.v2058-modern-dock-nav button {
+  width: 50px !important;
+  min-width: 50px !important;
+  height: 54px !important;
+  min-height: 54px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(123, 232, 252, .42) !important;
+  background: rgba(255,255,255,.10) !important;
+  background-image: none !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22) !important;
+  pointer-events: auto !important;
+}
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] .bottom-nav.v2058-modern-dock-nav button.active {
+  background: linear-gradient(180deg, rgba(242,255,255,.38), rgba(76,218,245,.24)) !important;
+  border-color: rgba(171,248,255,.68) !important;
+}
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] .bottom-nav.v2058-modern-dock-nav button img { width: 25px !important; height: 25px !important; }
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] .bottom-nav.v2058-modern-dock-nav button span { font-size: 9px !important; letter-spacing: -.04em !important; }
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] :is(.runtime-btn,.image-btn,.compact-cta,.btn-aqua-action,.dialog-btn,.v2017-character-actions button,.v203-interior-actions button,.v206-interior-actions button,.v2-build-grid button,.region-card,.shop-card button,.gear-card button,.v2057-reel-button,.v2057-result-actions button) {
+  background-image: none !important;
+  background: var(--v2058-aqua-button-bg) !important;
+  border: 1px solid var(--v2058-aqua-button-border) !important;
+  box-shadow: var(--v2058-aqua-shadow) !important;
+  color: #053e5a !important;
+  -webkit-text-fill-color: #053e5a !important;
+}
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] :is(.runtime-btn,.image-btn,.compact-cta,.btn-aqua-action,.dialog-btn,.v2017-character-actions button,.v203-interior-actions button,.v206-interior-actions button,.v2-build-grid button,.region-card,.shop-card button,.gear-card button,.v2057-reel-button,.v2057-result-actions button)::before,
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] :is(.runtime-btn,.image-btn,.compact-cta,.btn-aqua-action,.dialog-btn,.v2017-character-actions button,.v203-interior-actions button,.v206-interior-actions button,.v2-build-grid button,.region-card,.shop-card button,.gear-card button,.v2057-reel-button,.v2057-result-actions button)::after {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] body[data-screen="fishing"] .v2058-tech-modernized-screen .v2057-reel-console {
+  will-change: transform;
+  contain: layout paint style;
+}
+html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] body[data-screen="fishing"] .v2058-tech-modernized-screen .v2057-result-card {
+  backdrop-filter: blur(10px) saturate(1.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-v2058-tech-modernization="v2058-tech-modernization-multiplayer-guard"] :is(.village-world-screen *, .fishing-screen *) {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

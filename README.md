@@ -1,4 +1,4 @@
-# AquaFantasia v2.0.57
+# AquaFantasia v2.0.58
 
 AquaFantasia는 Vite + TypeScript + PixiJS 8 기반의 모바일 세로모드 SD 해양 판타지 마을 RPG입니다.
 
@@ -20,6 +20,18 @@ npm run typecheck
 npm run build
 ```
 
+
+## v2.0.58 변경사항
+
+- 예전 코드 의존/중복 이벤트/구식 이미지 버튼 프레임/도크 회귀 가능성을 중심으로 기술부채 점검 패치를 진행했습니다.
+- 낚시 화면을 반복 진입할 때 `window` 단위 `mouseup`/`blur` 이벤트가 누적될 수 있는 위험을 `AbortController` 기반으로 정리했습니다.
+- 서버 멀티 전환을 대비해 저장 데이터에 `multiplayer` 스키마, 로컬 `clientId`, 향후 동기화용 `pendingEvents` 큐를 추가했습니다.
+- 낚시 성공/실패 결과가 로컬 동기화 이벤트로 기록되도록 하여 추후 서버 업로드/멀티 랭킹/마을 방문 기록으로 확장할 기반을 마련했습니다.
+- 익명 서버연동 버튼에서 같은 토스트가 2번 뜨던 중복 호출을 제거했습니다.
+- 우측 하단 한 줄 도크와 주요 버튼에 v2.0.58 최종 아쿠아 스타일 우선 규칙을 추가해 오래된 이미지 프레임/상단 줄 잔상 의존을 더 줄였습니다.
+- `prefers-reduced-motion` 환경에서 마을/낚시 애니메이션을 최소화해 저사양·접근성 환경 성능을 보강했습니다.
+- v2.0.58 전용 정적 검증 스크립트 `check-v2058-tech-modernization-multiplayer-guard.mjs`를 추가했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.58`로 동기화했습니다.
 
 ## v2.0.57 변경사항
 

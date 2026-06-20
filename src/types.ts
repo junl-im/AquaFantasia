@@ -27,6 +27,22 @@ export interface VillageSave {
   autoIncome: number;
 }
 
+export type MultiplayerEventType = 'save-update' | 'village-action' | 'fishing-result' | 'shop-claim' | 'profile-update';
+
+export interface MultiplayerEvent {
+  id: string;
+  type: MultiplayerEventType;
+  createdAt: number;
+  payload: Record<string, string | number | boolean>;
+}
+
+export interface MultiplayerState {
+  schemaVersion: 1;
+  clientId: string;
+  lastSyncAt: number;
+  pendingEvents: MultiplayerEvent[];
+}
+
 
 export interface RegionInfo {
   key: RegionKey;
@@ -77,6 +93,7 @@ export interface SaveData {
   mastery: Record<string, number>;
   lastRescueAt: number;
   village: VillageSave;
+  multiplayer: MultiplayerState;
 }
 
 export interface ToastOptions {

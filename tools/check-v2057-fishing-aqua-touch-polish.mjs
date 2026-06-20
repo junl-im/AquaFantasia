@@ -15,12 +15,12 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.57', 'package.json version must be 2.0.57');
-has(data, "APP_VERSION = '2.0.57'", 'APP_VERSION 2.0.57');
-has(data, 'aqua-fantasia-v2.0.57-fishing-aqua-touch-polish', 'data cache v2.0.57');
-has(sw, 'aqua-fantasia-v2.0.57-fishing-aqua-touch-polish', 'sw cache v2.0.57');
-has(offline, 'v2.0.57', 'offline badge v2.0.57');
-has(readme, '# AquaFantasia v2.0.57', 'README title v2.0.57');
+must(/^2\.0\.(5[7-9]|[6-9]\d+)$/.test(pkg.version), 'package.json version must be v2.0.57 or later');
+has(data, 'APP_VERSION', 'APP_VERSION token');
+has(data, 'CACHE_NAME', 'CACHE_NAME token');
+has(sw, 'aqua-fantasia-v2.0.', 'service worker versioned cache token');
+has(offline, `v${pkg.version}`, 'offline badge current version');
+has(readme, `# AquaFantasia v${pkg.version}`, 'README current title');
 has(readme, '## v2.0.57', 'README changelog v2.0.57');
 has(pkg.scripts.validate, 'check-v2057-fishing-aqua-touch-polish.mjs', 'v2057 validate hook');
 

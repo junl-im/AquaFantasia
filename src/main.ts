@@ -2,7 +2,7 @@ import { Application, Assets, Container, Sprite, Text } from 'pixi.js';
 import './styles.css';
 import { APP_VERSION, CACHE_NAME, regions, fishDex, navItems } from './data';
 import type { FishInfo, FishingState, RegionKey, SaveData, Screen } from './types';
-import { loadSave, saveGame, tryAnonymousServerLink } from './storage';
+import { appendLocalSyncEvent, loadSave, saveGame, tryAnonymousServerLink } from './storage';
 import { initAudio, playSound } from './audio';
 import { ToastManager } from './toast';
 import { applyPortraitViewportMetrics, installPortraitCssGuards, requestHardPortraitLock } from './core/PortraitGuard';
@@ -185,6 +185,7 @@ class AquaFantasiaGame {
   private readonly lockedOrientation: 'portrait-primary' = 'portrait-primary';
   private webglLayers: UnderwaterWebglLayer[] = [];
   private readonly quality = new RuntimeQualityManager();
+  private fishingInputAbort?: AbortController;
   private villageWorld?: VillageWorld;
   private lastReelPulseAt = 0;
 
@@ -264,6 +265,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2055PlayabilityUiRepair = 'v2055-playability-ui-repair';
     document.documentElement.dataset.v2056MotionTilePolish = 'v2056-motion-tile-polish';
     document.documentElement.dataset.v2057FishingAquaTouch = 'v2057-fishing-aqua-touch';
+    document.documentElement.dataset.v2058TechModernization = 'v2058-tech-modernization-multiplayer-guard';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -286,6 +288,8 @@ class AquaFantasiaGame {
 
   private clear(): void {
     window.clearTimeout(this.biteTimeout);
+    this.fishingInputAbort?.abort();
+    this.fishingInputAbort = undefined;
     if (this.fallbackTicker) { window.clearInterval(this.fallbackTicker); this.fallbackTicker = 0; }
     window.removeEventListener('resize', this.resizePixiHandler);
     this.holding = false;
@@ -867,7 +871,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen v2057-fishing-aqua-touch-screen locked-screen';
+    root.className = 'game-screen fishing-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen v2057-fishing-aqua-touch-screen v2058-tech-modernized-screen locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
@@ -930,6 +934,9 @@ class AquaFantasiaGame {
       </section>
       <button class="v2053-reel-touch-zone v2054-reel-touch-zone hidden" type="button" aria-label="릴 감기 터치존"><strong>릴 감기</strong><span>누르는 동안 장력 상승</span><small>손을 떼면 자동으로 내려갑니다</small><em data-v2053-input-state>대기</em></button>`;
     dom.app.appendChild(root);
+    const fishingInputAbort = new AbortController();
+    this.fishingInputAbort = fishingInputAbort;
+    const fishingInputSignal = fishingInputAbort.signal;
     this.mountUnderwaterWebgl(root, 'fishing', v101FishingBg);
     this.mountBottomNav(root, 'fishing');
     this.stageHost = root.querySelector<HTMLDivElement>('#fishingStage')!;
@@ -1064,7 +1071,8 @@ class AquaFantasiaGame {
     releaseButton?.addEventListener('touchend', endRelease, { passive: false });
     releaseButton?.addEventListener('touchcancel', endRelease, { passive: false });
     releaseButton?.addEventListener('mousedown', startRelease);
-    window.addEventListener('mouseup', (ev) => { endWind(ev); endRelease(ev); }, { passive: false });
+    const stopAllReelInputs = (ev?: Event) => { endWind(ev); endRelease(ev); stopHold(); stopTouchHold(); };
+    window.addEventListener('mouseup', stopAllReelInputs, { passive: false, signal: fishingInputSignal });
     root.addEventListener('pointerdown', (ev: PointerEvent) => {
       const target = ev.target as HTMLElement | null;
       if (target?.closest('.bottom-nav, .fishing-hud, .recent-catch-strip, .fishing-loadout-strip, .cast-button, .v2055-reel-console')) return;
@@ -1093,7 +1101,7 @@ class AquaFantasiaGame {
     }, { passive: false, capture: true });
     root.addEventListener('touchend', stopTouchHold, { passive: true, capture: true });
     root.addEventListener('touchcancel', stopTouchHold, { passive: true, capture: true });
-    window.addEventListener('blur', stopHold, { passive: true });
+    window.addEventListener('blur', stopAllReelInputs, { passive: true, signal: fishingInputSignal });
     root.addEventListener('pointerout', (ev: PointerEvent) => { if (!root.contains(ev.relatedTarget as Node | null)) stopHold(); }, { passive: true, capture: true });
     this.reelPanel.addEventListener('touchstart', startTouchHold, { passive: false });
     this.reelPanel.addEventListener('touchend', stopTouchHold, { passive: true });
@@ -1130,7 +1138,7 @@ class AquaFantasiaGame {
     document.querySelectorAll('.bottom-nav.fixed-root-nav').forEach((node) => node.remove());
     const nav = document.createElement('nav');
     const v13 = false;
-    nav.className = 'bottom-nav fixed-root-nav v2016-safe-dock-nav v2026-unified-dock-nav v2027-aqua-dock-nav v2029-home-dock-nav v2031-identical-dock-nav v2032-identical-dock-nav v2033-identical-dock-nav v2034-identical-dock-nav v2035-identical-dock-nav v2036-identical-dock-nav v2037-identical-dock-nav v2038-identical-dock-nav v2039-identical-dock-nav v2040-identical-dock-nav v2041-identical-dock-nav v2042-identical-dock-nav v2043-identical-dock-nav v2044-identical-dock-nav v2045-identical-dock-nav v2046-identical-dock-nav v2047-identical-dock-nav v2048-identical-dock-nav v2049-identical-dock-nav v2050-identical-dock-nav v2051-identical-dock-nav v2052-identical-dock-nav v2053-single-row-dock-nav v2054-single-row-dock-nav';
+    nav.className = 'bottom-nav fixed-root-nav v2016-safe-dock-nav v2026-unified-dock-nav v2027-aqua-dock-nav v2029-home-dock-nav v2031-identical-dock-nav v2032-identical-dock-nav v2033-identical-dock-nav v2034-identical-dock-nav v2035-identical-dock-nav v2036-identical-dock-nav v2037-identical-dock-nav v2038-identical-dock-nav v2039-identical-dock-nav v2040-identical-dock-nav v2041-identical-dock-nav v2042-identical-dock-nav v2043-identical-dock-nav v2044-identical-dock-nav v2045-identical-dock-nav v2046-identical-dock-nav v2047-identical-dock-nav v2048-identical-dock-nav v2049-identical-dock-nav v2050-identical-dock-nav v2051-identical-dock-nav v2052-identical-dock-nav v2053-single-row-dock-nav v2054-single-row-dock-nav v2058-modern-dock-nav';
     nav.setAttribute('aria-label', '우측 하단 메뉴');
     nav.setAttribute('data-fixed-root', 'true');
     nav.dataset.menuDock = 'right-bottom-wing-v2016';
@@ -1159,6 +1167,7 @@ class AquaFantasiaGame {
     nav.dataset.v2052DockGuard = 'v2052-four-button-dock-stable-no-empty-frame';
     nav.dataset.v2053DockGuard = 'v2053-single-row-village-inventory-mission-map';
     nav.dataset.v2054DockGuard = 'v2054-single-row-four-button-no-wrap';
+    nav.dataset.v2058DockGuard = 'v2058-single-row-no-legacy-image-frame';
     const dockInlineStyles: Array<[string, string]> = [
       ['position', 'fixed'], ['left', 'auto'], ['right', 'var(--v2048-dock-right, var(--v2047-dock-right, var(--v2046-dock-right, var(--v2045-dock-right, var(--v2044-dock-right, max(10px, env(safe-area-inset-right))))))'],
       ['bottom', 'var(--v2048-dock-bottom, var(--v2047-dock-bottom, var(--v2046-dock-bottom, var(--v2045-dock-bottom, var(--v2044-dock-bottom, calc(max(14px, env(safe-area-inset-bottom)) + 6px)))))'], ['width', 'auto'], ['height', 'auto'],
@@ -1590,6 +1599,7 @@ class AquaFantasiaGame {
       this.save.bestStreak = Math.max(this.save.bestStreak, this.save.currentStreak);
       this.updateUnlocks();
       saveGame(this.save);
+      this.save = appendLocalSyncEvent(this.save, { type: 'fishing-result', payload: { fishId: this.activeFish.id, rarity: this.activeFish.rarity, reward, region: this.activeFish.regionKey, success: true } });
       this.syncFishingHud();
       if (this.comboNode) { this.comboNode.textContent = `연속 성공 x${Math.max(2, this.save.currentStreak)}`; this.comboNode.classList.toggle('hidden', this.save.currentStreak < 2); }
       void this.syncCatchSpriteTexture(this.activeFish).finally(() => this.showCatchPopup(reward));
@@ -1600,6 +1610,7 @@ class AquaFantasiaGame {
       this.save.currentStreak = 0;
       this.save.totalFail += 1;
       saveGame(this.save);
+      this.save = appendLocalSyncEvent(this.save, { type: 'fishing-result', payload: { fishId: this.activeFish.id, rarity: this.activeFish.rarity, region: this.activeFish.regionKey, success: false } });
       this.syncFishingHud();
       this.toast.show({ type: 'fishing', title: '줄이 끊어졌어요', message: '장비를 강화하면 장력이 더 안정됩니다.', actionScreen: 'gear' });
       this.resetFishing();
