@@ -27052,3 +27052,72 @@ html[data-v2051-hud-dock-fishing-motion-polish="v2051-hud-dock-fishing-motion-po
   html[data-v2051-hud-dock-fishing-motion-polish="v2051-hud-dock-fishing-motion-polish"] .v2050-expedition-board.v2051-expedition-mini { display: none !important; }
   html[data-v2051-hud-dock-fishing-motion-polish="v2051-hud-dock-fishing-motion-polish"] .v2049-growth-board.v2051-loop-mini { top: calc(max(8px, env(safe-area-inset-top)) + 82px) !important; }
 }
+
+
+/* v2.0.52 tile/anchor/content audit: restore true floor anchors, keep dock stable, and prevent loop chips from stealing joystick space. */
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] {
+  --v2052-tile-debug-aqua: rgba(126, 239, 255, .58);
+  --v2052-dock-btn: clamp(47px, 11.2vw, 55px);
+}
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .village-world-screen.v2052-tile-anchor-village-screen .v2049-growth-board.v2051-loop-mini,
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .village-world-screen.v2052-tile-anchor-village-screen .v2050-expedition-board.v2051-expedition-mini {
+  left: auto !important;
+  right: calc(max(10px, env(safe-area-inset-right)) + 64px) !important;
+  width: min(190px, calc(100vw - 188px)) !important;
+  min-width: 128px !important;
+  max-width: 210px !important;
+  height: 34px !important;
+  padding: 4px 6px !important;
+  border-radius: 18px !important;
+  opacity: .96 !important;
+  pointer-events: auto !important;
+}
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .village-world-screen.v2052-tile-anchor-village-screen .v2049-growth-board.v2051-loop-mini { top: calc(max(8px, env(safe-area-inset-top)) + 8px) !important; }
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .village-world-screen.v2052-tile-anchor-village-screen .v2050-expedition-board.v2051-expedition-mini { top: calc(max(8px, env(safe-area-inset-top)) + 46px) !important; }
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .village-world-screen.v2052-tile-anchor-village-screen :is(.v2051-loop-mini.open,.v2051-expedition-mini.open) {
+  width: min(296px, calc(100vw - 92px)) !important;
+  max-height: min(232px, calc(100dvh - 140px)) !important;
+  height: auto !important;
+  right: 72px !important;
+}
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .v2-joystick { z-index: 1245 !important; }
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .bottom-nav.v2052-identical-dock-nav,
+html.portrait-only-game[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .bottom-nav.v2052-identical-dock-nav.fixed-root-nav {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  padding: 5px !important;
+  right: max(10px, env(safe-area-inset-right)) !important;
+  bottom: calc(max(10px, env(safe-area-inset-bottom)) + 6px) !important;
+  border: 1px solid rgba(132, 239, 255, .48) !important;
+  border-radius: 20px !important;
+  background: linear-gradient(180deg, rgba(8, 104, 146, .26), rgba(2, 59, 94, .18)) !important;
+  pointer-events: none !important;
+}
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .bottom-nav.v2052-identical-dock-nav .dock-row { display: flex !important; width: auto !important; border: 0 !important; background: transparent !important; box-shadow: none !important; }
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .bottom-nav.v2052-identical-dock-nav .dock-row:empty { display: none !important; }
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .bottom-nav.v2052-identical-dock-nav button {
+  width: var(--v2052-dock-btn) !important;
+  height: var(--v2052-dock-btn) !important;
+  min-width: var(--v2052-dock-btn) !important;
+  min-height: var(--v2052-dock-btn) !important;
+  pointer-events: auto !important;
+}
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .bottom-nav.v2052-identical-dock-nav button:not([data-screen]) { display: none !important; border: 0 !important; background: transparent !important; }
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] body[data-screen="fishing"] .bottom-nav.v2052-identical-dock-nav { bottom: calc(max(12px, env(safe-area-inset-bottom)) + 10px) !important; }
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .v2052-fishing-feedback-screen .v2051-reel-panel .tension-fill { min-width: 10px !important; }
+html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .v2052-fishing-feedback-screen .v2051-hold-pad::after {
+  content: '손을 떼면 장력 ↓' !important;
+  display: block !important;
+  margin-top: 4px !important;
+  font-size: 12px !important;
+  font-weight: 1000 !important;
+  color: rgba(71, 39, 0, .76) !important;
+}
+@media (max-width: 430px) {
+  html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .village-world-screen.v2052-tile-anchor-village-screen .v2049-growth-board.v2051-loop-mini,
+  html[data-v2052-tile-anchor-content-audit="v2052-tile-anchor-content-audit"] .village-world-screen.v2052-tile-anchor-village-screen .v2050-expedition-board.v2051-expedition-mini {
+    right: calc(max(8px, env(safe-area-inset-right)) + 60px) !important;
+    width: min(176px, calc(100vw - 174px)) !important;
+  }
+}

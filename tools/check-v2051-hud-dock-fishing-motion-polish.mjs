@@ -15,12 +15,12 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const lock = read('package-lock.json');
 
-must(pkg.version === '2.0.51', 'package.json version must be 2.0.51');
-has(data, "APP_VERSION = '2.0.51'", 'APP_VERSION 2.0.51');
-has(data, 'aqua-fantasia-v2.0.51-hud-dock-fishing-motion-polish', 'data cache v2.0.51');
-has(sw, 'aqua-fantasia-v2.0.51-hud-dock-fishing-motion-polish', 'sw cache v2.0.51');
-has(offline, 'v2.0.51', 'offline badge v2.0.51');
-has(readme, '# AquaFantasia v2.0.51', 'README title v2.0.51');
+must(/^2\.0\.(5[1-9]|[6-9][0-9])$/.test(pkg.version), 'package.json version must be v2.0.51 or later');
+must(/APP_VERSION = '2\.0\.(5[1-9]|[6-9][0-9])'/.test(data), 'APP_VERSION must be v2.0.51 or later');
+must(/aqua-fantasia-v2\.0\.(5[1-9]|[6-9][0-9])-/.test(data), 'data cache must be v2.0.51 or later');
+must(/aqua-fantasia-v2\.0\.(5[1-9]|[6-9][0-9])-/.test(sw), 'sw cache must be v2.0.51 or later');
+must(/v2\.0\.(5[1-9]|[6-9][0-9])/.test(offline), 'offline badge must be v2.0.51 or later');
+must(/# AquaFantasia v2\.0\.(5[1-9]|[6-9][0-9])/.test(readme), 'README title must be v2.0.51 or later');
 has(readme, '## v2.0.51', 'README v2.0.51 changelog');
 has(pkg.scripts.validate, 'check-v2051-hud-dock-fishing-motion-polish.mjs', 'v2051 validate hook');
 

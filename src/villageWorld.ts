@@ -7,6 +7,9 @@ const TILE_H = 40;
 const BASE_SCALE = 0.86;
 const BUILDING_VISUAL_SCALE = 0.74;
 const BUILDING_COLLISION_FRONT_TRIM = 1;
+const TILE_ACTOR_GROUND_Y = 0.58;
+const TILE_DECOR_GROUND_Y = 0.66;
+const BUILDING_GROUND_BACKSET = 0.12;
 const PLAYER_WALK_SPEED = 1.85;
 const NPC_WALK_SPEED_MIN = 0.48;
 const NPC_WALK_SPEED_RANGE = 0.24;
@@ -728,10 +731,33 @@ function centerOfTile(x: number, y: number): { x: number; y: number } {
   return isoToWorld(x + 0.5, y + 0.5);
 }
 
+function actorGround(x: number, y: number): { x: number; y: number } {
+  // v2.0.52: character feet are anchored in the lower half of the diamond, not a corner.
+  return isoToWorld(x + 0.5, y + TILE_ACTOR_GROUND_Y);
+}
+
+function decorationGround(x: number, y: number): { x: number; y: number } {
+  // v2.0.52: bottom-anchored props stand on the visible ground of their tile.
+  return isoToWorld(x + 0.5, y + TILE_DECOR_GROUND_Y);
+}
+
 function footprintGround(x: number, y: number, w = 1, h = 1): { x: number; y: number } {
-  // v2.0.48: buildings, ghosts, props, and actors share a bottom-center ground anchor.
-  // This keeps visual sprites on the tile footprint instead of drifting to the side/top corner.
-  return isoToWorld(x + w / 2, y + h);
+  // v2.0.52: large buildings use bottom-center ground anchor footprint anchors with a small in-tile backset.
+  // The image can be tall, but the stored x/y/w/h remains the logical tile footprint.
+  return isoToWorld(x + w / 2, y + Math.max(1, h) - BUILDING_GROUND_BACKSET);
+}
+
+function tileDiamondPoints(x: number, y: number): number[] {
+  const p = isoToWorld(x, y);
+  return [p.x, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y, p.x + TILE_W, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y + TILE_H];
+}
+
+function footprintTileKeys(x: number, y: number, w: number, h: number): string[] {
+  const keys: string[] = [];
+  for (let yy = y; yy < y + h; yy += 1) {
+    for (let xx = x; xx < x + w; xx += 1) keys.push(tileKey(xx, yy));
+  }
+  return keys;
 }
 
 function createDefaultBuildings(): VillageBuildingSave[] {
@@ -839,6 +865,7 @@ export class VillageWorld {
     app.stage.addChild(this.world);
     this.world.addChild(this.tileLayer, this.buildingLayer, this.decorationLayer, this.labelLayer, this.actorLayer, this.markerLayer, this.previewLayer);
     this.generateTiles();
+    this.normalizeSavedBuildingFootprints();
     await this.loadCriticalTextures();
     if (!actorDirectionQaPasses()) console.warn('[AquaFantasia] actor direction QA mapping mismatch');
     this.renderTiles();
@@ -861,7 +888,8 @@ export class VillageWorld {
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
     this.root.dataset.v2050ContentExpansionAssetPolish = 'calmer-assets-island-expansion-routes';
     this.root.dataset.v2051MotionPolish = 'actor-footstep-object-motion';
-    this.showGuide('마을 입장 완료', '좌측 조이스틱으로 천천히 이동하고, 빈 바닥 터치로도 이동할 수 있습니다.');
+    this.root.dataset.v2052TileAnchorAudit = 'tile-ground-footprint-collision-audit';
+    this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트 기준으로 배치됩니다.');
   }
 
   destroy(): void {
@@ -914,7 +942,7 @@ export class VillageWorld {
       const previewY = this.player ? clamp(this.player.tileY, 1, MAP_SIZE - def.size[1] - 1) : 29;
       this.updateBuildPreviewAtTile(previewX, previewY);
       const modeTitle = this.movingBuildingId ? '건물 이동 모드' : '설치 모드';
-      this.showGuide(modeTitle, `${def.label} 선택됨 · 화면은 어둡게 막지 않고 건물 프리뷰만 반투명으로 따라갑니다. 원하는 곳까지 드래그한 뒤 손을 떼면 ${this.movingBuildingId ? '이동됩니다' : '설치됩니다'}.`);
+      this.showGuide(modeTitle, `${def.label} 선택됨 · 화면은 어둡게 막지 않고 바닥 기준 반투명 프리뷰만 따라갑니다. 초록/빨강 타일 풋프린트를 확인하고 손을 떼면 ${this.movingBuildingId ? '이동됩니다' : '설치됩니다'}.`);
     }
   }
 
@@ -990,6 +1018,53 @@ export class VillageWorld {
       }
     }
     if (resized) this.onSave();
+  }
+
+  private normalizeSavedBuildingFootprints(): void {
+    const used = new Set<string>();
+    let changed = false;
+    const fits = (x: number, y: number, w: number, h: number): boolean => {
+      if (x < 1 || y < 1 || x + w >= MAP_SIZE - 1 || y + h >= MAP_SIZE) return false;
+      for (const key of footprintTileKeys(x, y, w, h)) {
+        const [xx, yy] = key.split(',').map(Number);
+        if ((this.tileKinds.get(key) ?? 'grass') === 'sea') return false;
+        if (used.has(key)) return false;
+        if (xx <= 0 || yy <= 0 || xx >= MAP_SIZE - 1 || yy >= MAP_SIZE - 1) return false;
+      }
+      return true;
+    };
+    for (const building of this.save.village.buildings) {
+      const def = BUILD_DEFS[building.type];
+      if (!def) continue;
+      const [w, h] = def.size;
+      let x = Math.round(Number.isFinite(building.x) ? building.x : 20);
+      let y = Math.round(Number.isFinite(building.y) ? building.y : 20);
+      x = clamp(x, 1, MAP_SIZE - w - 1);
+      y = clamp(y, 1, MAP_SIZE - h - 1);
+      if (building.w !== w || building.h !== h || building.x !== x || building.y !== y) changed = true;
+      if (!fits(x, y, w, h)) {
+        let found: { x: number; y: number } | null = null;
+        for (let radius = 1; radius <= 9 && !found; radius += 1) {
+          for (let dy = -radius; dy <= radius && !found; dy += 1) {
+            for (let dx = -radius; dx <= radius && !found; dx += 1) {
+              const nx = clamp(x + dx, 1, MAP_SIZE - w - 1);
+              const ny = clamp(y + dy, 1, MAP_SIZE - h - 1);
+              if (fits(nx, ny, w, h)) found = { x: nx, y: ny };
+            }
+          }
+        }
+        if (found) { x = found.x; y = found.y; changed = true; }
+      }
+      building.x = x;
+      building.y = y;
+      building.w = w;
+      building.h = h;
+      for (const key of footprintTileKeys(x, y, w, h)) used.add(key);
+    }
+    if (changed) {
+      this.save.village.development = this.calculateDevelopment();
+      this.onSave();
+    }
   }
 
   private generateTiles(): void {
@@ -1092,7 +1167,7 @@ export class VillageWorld {
         const kind = this.tileKinds.get(tileKey(x, y)) ?? 'grass';
         const p = isoToWorld(x, y);
         const c = this.tileColor(kind);
-        this.tileLayer.poly([p.x, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y, p.x + TILE_W, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y + TILE_H]);
+        this.tileLayer.poly(tileDiamondPoints(x, y));
         const textureUrl = pickTileTexture(kind, x, y);
         const texture = textureUrl ? this.textures.get(textureUrl) : undefined;
         if (texture) {
@@ -1119,16 +1194,18 @@ export class VillageWorld {
       const container = new Container();
       container.zIndex = (building.y + building.h) * 20 + 4;
       const center = footprintGround(building.x, building.y, building.w, building.h);
+      container.position.set(center.x, center.y);
+      container.addChild(this.createFootprintBaseGraphic(building.x, building.y, building.w, building.h, def.kind));
       if (def.texture && this.textures.has(def.texture)) {
         const sprite = new Sprite(this.textures.get(def.texture)!);
         sprite.anchor.set(0.5, 1);
         const targetW = Math.max(96, building.w * TILE_W * BUILDING_VISUAL_SCALE);
         sprite.scale.set(targetW / Math.max(1, sprite.texture.width));
-        sprite.position.set(center.x, center.y);
+        sprite.position.set(0, 0);
         container.addChild(sprite);
       } else {
         const g = this.createPropGraphic(def.type, building.w, building.h);
-        g.position.set(center.x, center.y);
+        g.position.set(0, 0);
         container.addChild(g);
       }
       const label = new Text({
@@ -1141,6 +1218,23 @@ export class VillageWorld {
       this.labelLayer.addChild(label);
       this.buildingLayer.addChild(container);
     }
+  }
+
+  private createFootprintBaseGraphic(x: number, y: number, w: number, h: number, kind: BuildDefinition['kind']): Graphics {
+    const center = footprintGround(x, y, w, h);
+    const g = new Graphics();
+    const color = kind === 'path' ? 0xc9f7ff : kind === 'prop' ? 0xfff0a4 : 0x7eefff;
+    for (let yy = y; yy < y + h; yy += 1) {
+      for (let xx = x; xx < x + w; xx += 1) {
+        const points = tileDiamondPoints(xx, yy);
+        const local = points.map((value, index) => value - (index % 2 === 0 ? center.x : center.y));
+        g.poly(local);
+        g.fill({ color, alpha: kind === 'building' ? 0.055 : 0.075 });
+        g.stroke({ color: 0xffffff, alpha: 0.18, width: 1 });
+      }
+    }
+    g.zIndex = -1;
+    return g;
   }
 
   private createPropGraphic(type: VillageBuildingType, w: number, h: number): Container {
@@ -1181,12 +1275,12 @@ export class VillageWorld {
     for (const deco of VILLAGE_DECORATIONS) {
       if (!shouldUseDecoration(deco)) continue;
       const placement = auditedDecorationPlacement(deco);
-      const p = centerOfTile(placement.x, placement.y);
+      const p = decorationGround(placement.x, placement.y);
       const item = this.createDecorationGraphic(deco.kind, placement.scale);
       item.eventMode = 'none';
       item.name = `deco-${deco.kind}`;
       item.position.set(p.x, p.y);
-      item.zIndex = deco.y * 20 + 10;
+      item.zIndex = Math.round(placement.y * 20 + 10);
       this.decorationLayer.addChild(item);
     }
   }
@@ -1345,7 +1439,7 @@ export class VillageWorld {
   }
 
   private createActor(id: string, role: Actor['role'], name: string, tileX: number, tileY: number, color: number, mood: string): Actor {
-    const p = centerOfTile(tileX, tileY);
+    const p = actorGround(tileX, tileY);
     const node = new Container();
     node.zIndex = tileY * 20 + 16;
     const shadow = new Graphics();
@@ -1681,8 +1775,7 @@ export class VillageWorld {
     const g = new Graphics();
     for (let yy = y; yy < y + def.size[1]; yy += 1) {
       for (let xx = x; xx < x + def.size[0]; xx += 1) {
-        const p = isoToWorld(xx, yy);
-        g.poly([p.x, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y, p.x + TILE_W, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y + TILE_H]);
+        g.poly(tileDiamondPoints(xx, yy));
         g.fill({ color: ok ? 0x35f08a : 0xff4747, alpha: def.kind === 'path' ? 0.18 : 0.08 });
         g.stroke({ color: ok ? 0xb8fff0 : 0xffd0d0, alpha: def.kind === 'path' ? 0.62 : 0.78, width: def.kind === 'path' ? 1.5 : 2.4 });
         const overlay = def.kind === 'path' ? this.createBuildPreviewTileSprite(xx, yy, ok) : undefined;
@@ -1718,19 +1811,21 @@ export class VillageWorld {
     const ghost = new Container();
     ghost.zIndex = 100000;
     ghost.alpha = ok ? 0.56 : 0.50;
+    ghost.position.set(center.x, center.y);
+    ghost.addChild(this.createFootprintBaseGraphic(x, y, w, h, def.kind));
     const texture = def.texture ? this.textures.get(def.texture) : undefined;
     if (texture) {
       const sprite = new Sprite(texture);
       sprite.anchor.set(0.5, 1);
       const targetW = Math.max(96, w * TILE_W * BUILDING_VISUAL_SCALE);
       sprite.scale.set(targetW / Math.max(1, sprite.texture.width));
-      sprite.position.set(center.x, center.y);
+      sprite.position.set(0, 0);
       sprite.tint = ok ? 0xa6ffd0 : 0xff8f8f;
       ghost.addChild(sprite);
       return ghost;
     }
     const graphic = this.createPropGraphic(def.type, w, h);
-    graphic.position.set(center.x, center.y);
+    graphic.position.set(0, 0);
     graphic.alpha = 0.72;
     ghost.addChild(graphic);
     return ghost;
@@ -1848,7 +1943,11 @@ export class VillageWorld {
   }
 
   private findBuildingNear(x: number, y: number): VillageBuildingSave | undefined {
-    return this.save.village.buildings.find((b) => x >= b.x - 1 && x <= b.x + b.w && y >= b.y - 1 && y <= b.y + b.h);
+    return this.save.village.buildings.find((b) => {
+      const insideFootprint = x >= b.x && x < b.x + b.w && y >= b.y && y < b.y + b.h;
+      const atFrontDoor = x >= b.x && x < b.x + b.w && y === b.y + b.h;
+      return insideFootprint || atFrontDoor;
+    });
   }
 
   private interactBuilding(building: VillageBuildingSave): void {
@@ -2102,7 +2201,7 @@ export class VillageWorld {
       return;
     }
     actor.pauseTimer = 0;
-    const target = centerOfTile(tx, ty);
+    const target = actorGround(tx, ty);
     const dx = target.x - actor.x;
     const dy = target.y - actor.y;
     const dist = Math.hypot(dx, dy);
@@ -2330,9 +2429,8 @@ export class VillageWorld {
 
   private showTileMarker(x: number, y: number, color: number): void {
     this.markerLayer.removeChildren();
-    const p = isoToWorld(x, y);
     const g = new Graphics();
-    g.poly([p.x, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y, p.x + TILE_W, p.y + TILE_H / 2, p.x + TILE_W / 2, p.y + TILE_H]);
+    g.poly(tileDiamondPoints(x, y));
     g.fill({ color, alpha: 0.28 });
     g.stroke({ color: 0xffffff, alpha: 0.9, width: 3 });
     g.zIndex = 9999;
