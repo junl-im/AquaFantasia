@@ -14,9 +14,9 @@ function assert(condition, message) {
   }
 }
 
-assert(data.includes("APP_VERSION = '2.0.62'"), 'APP_VERSION must be 2.0.62.');
-assert(data.includes('aqua-fantasia-v2.0.62-ground-contact-motion-audit'), 'cache key must use the v2.0.62 ground-contact audit name.');
-assert(sw.includes('aqua-fantasia-v2.0.62-ground-contact-motion-audit'), 'service worker cache key must be v2.0.62.');
+assert(/APP_VERSION = '2\.0\.(?:6[2-9]|[7-9]\d)'/.test(data), 'APP_VERSION must be v2.0.62 or later.');
+assert(/aqua-fantasia-v2\.0\.(?:6[2-9]|[7-9]\d)-/.test(data), 'cache key must use v2.0.62 or later.');
+assert(/aqua-fantasia-v2\.0\.(?:6[2-9]|[7-9]\d)-/.test(sw), 'service worker cache key must be v2.0.62 or later.');
 assert(pkg.includes('check-v2062-ground-contact-motion-audit.mjs'), 'validate script must include v2062 guard.');
 assert(main.includes("dataset.v2062GroundContactMotionAudit = 'v2062-shadow-foot-contact-motion-audit'"), 'global v2062 dataset marker missing.');
 assert(main.includes('v2062-ground-contact-village-screen'), 'village screen must include v2062 ground-contact class.');
