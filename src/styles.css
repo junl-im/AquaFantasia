@@ -29660,3 +29660,234 @@ html[data-v2067-start-menu-loop-card-restore="v2067-start-menu-loop-card-restore
     padding: 50px 12px 12px !important;
   }
 }
+
+/* v2.0.69 conservative start screen + full menu aqua card audit
+   Keep the verified start art untouched, then apply the clean character/building-card tone to every runtime page card without global button damage. */
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] {
+  --v2069-card-bg: linear-gradient(180deg, rgba(252,255,255,.995) 0%, rgba(229,253,255,.976) 43%, rgba(161,233,249,.942) 100%);
+  --v2069-card-border: rgba(72, 203, 238, .84);
+  --v2069-card-inner: rgba(255,255,255,.88);
+  --v2069-card-shadow: 0 20px 48px rgba(0, 66, 104, .22), 0 6px 18px rgba(0, 105, 149, .12), inset 0 1px 0 rgba(255,255,255,.94);
+  --v2069-card-ink: #05364f;
+  --v2069-card-muted: rgba(5, 61, 88, .76);
+  --v2069-card-radius: 28px;
+  --v2069-btn-bg: linear-gradient(180deg, rgba(255,255,255,.99) 0%, rgba(189,248,255,.97) 54%, rgba(51,178,224,.92) 100%);
+}
+
+/* Start screen: restore the verified art path and keep every hotspot invisible. */
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] body[data-screen="login"] .start-art-screen .start-art-image {
+  content: url('/assets/v85/screens/start_screen_clean_v810.webp') !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] body[data-screen="login"] .start-art-screen :is(.start-hotspot,.hit-depart,.hit-new,.hit-server,.hit-keep) {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] body[data-screen="login"] .start-art-screen .hit-keep .keep-text {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] body[data-screen="login"] .start-art-screen .hit-keep .keep-indicator {
+  display: block !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  border-radius: 8px !important;
+  background: rgba(255,255,255,.22) !important;
+  border: 2px solid rgba(255,255,255,.68) !important;
+  box-shadow: 0 2px 8px rgba(0,54,95,.18), inset 0 1px 0 rgba(255,255,255,.38) !important;
+}
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] body[data-screen="login"] :is(.runtime-menu-screen,.runtime-hud,.runtime-content,.bottom-nav,.fixed-root-nav,.v2-joystick,.v204-mini-map,.v2049-growth-board,.v2050-expedition-board,.v2-world-controls) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Runtime pages: force the same clear aqua-card surface everywhere, including nested map/shop/quest/inventory widgets missed by older layers. */
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] body:not([data-screen="login"]):not([data-screen="village"]) .runtime-menu-screen {
+  background: radial-gradient(circle at 50% 0%, rgba(150,244,255,.22), transparent 34%), linear-gradient(180deg, rgba(7,123,166,.24), rgba(4,36,58,.34)) !important;
+}
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] .runtime-menu-screen :is(
+  .runtime-hud,
+  .runtime-content,
+  .runtime-hero-card,
+  .runtime-panel,
+  .runtime-menu-card,
+  .runtime-item-card,
+  .runtime-card-list,
+  .runtime-region-grid,
+  .runtime-dex-grid,
+  .runtime-shop-card,
+  .runtime-dex-card,
+  .v204-window-card,
+  .v204-map-shell,
+  .v206-map-shell,
+  .v204-map-ocean,
+  .v206-map-ocean,
+  .v204-map-detail,
+  .v206-map-detail,
+  .v204-island,
+  .v206-island,
+  .v206-route-ready,
+  .v206-route-ready article,
+  .v2050-expedition-card,
+  .v2050-expedition-grid article,
+  .v204-inventory-shell,
+  .v206-inventory-shell,
+  .v206-inventory-dashboard,
+  .v206-inventory-dashboard article,
+  .v206-catch-ledger,
+  .v204-slot-card,
+  .v206-quest-board,
+  .v204-quest-board,
+  .v206-quest-npc-board,
+  .v206-quest-npc-board article,
+  .v204-full-quest-list,
+  .v206-full-quest-list,
+  .shop-list,
+  .shop-card,
+  .gear-grid,
+  .gear-card,
+  .mission-list,
+  .mission-card,
+  .dex-grid,
+  .dex-card,
+  .ranking-panel,
+  .ranking-summary,
+  .ranking-live-card,
+  .ranking-stats-grid,
+  .ranking-stats-grid > div,
+  .quick-card,
+  .v950-filter-row,
+  .region-panel
+) {
+  background: var(--v2069-card-bg) !important;
+  background-image: var(--v2069-card-bg) !important;
+  border: 1px solid var(--v2069-card-border) !important;
+  outline: 1px solid var(--v2069-card-inner) !important;
+  outline-offset: -3px !important;
+  border-image: none !important;
+  border-radius: var(--v2069-card-radius) !important;
+  box-shadow: var(--v2069-card-shadow) !important;
+  color: var(--v2069-card-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  filter: none !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] .runtime-menu-screen :is(
+  .runtime-content,
+  .runtime-hero-card,
+  .runtime-panel,
+  .v204-window-card,
+  .v204-map-shell,
+  .v206-map-shell,
+  .v204-inventory-shell,
+  .v206-inventory-shell,
+  .v206-catch-ledger,
+  .v206-quest-board,
+  .v204-quest-board,
+  .v206-quest-npc-board,
+  .ranking-panel,
+  .shop-card,
+  .gear-card,
+  .mission-card,
+  .dex-card,
+  .runtime-item-card
+)::before,
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] .runtime-menu-screen :is(
+  .runtime-content,
+  .runtime-hero-card,
+  .runtime-panel,
+  .v204-window-card,
+  .v204-map-shell,
+  .v206-map-shell,
+  .v204-inventory-shell,
+  .v206-inventory-shell,
+  .v206-catch-ledger,
+  .v206-quest-board,
+  .v204-quest-board,
+  .v206-quest-npc-board,
+  .ranking-panel,
+  .shop-card,
+  .gear-card,
+  .mission-card,
+  .dex-card,
+  .runtime-item-card
+)::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] .runtime-menu-screen :is(h1,h2,h3,h4,strong,.runtime-title strong,.runtime-panel-title strong,.v206-section-title strong,.v204-board-title strong,.shop-card strong,.mission-card strong,.gear-card strong,.dex-card strong,.v204-map-detail strong) {
+  color: #043650 !important;
+  -webkit-text-fill-color: #043650 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.76) !important;
+}
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] .runtime-menu-screen :is(p,span,small,em,.runtime-title em,.runtime-panel-title span,.v206-section-title span,.shop-card span,.shop-card small,.mission-card span,.gear-card span,.dex-card span,.v204-map-detail span,.v204-map-detail p) {
+  color: var(--v2069-card-muted) !important;
+  -webkit-text-fill-color: var(--v2069-card-muted) !important;
+}
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] .runtime-menu-screen :is(button,.runtime-btn,.image-btn,.dialog-btn,.btn-aqua-action,.shop-card button,.gear-card button,.mission-card button,.v204-island,.v206-island),
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] body:not([data-screen="login"]) :is(.v2059-screen-close,.v2059-menu-close,.v2059-panel-close,.v2059-build-close,.v2059-loop-close,.v2055-loop-close,.v2017-character-close) {
+  background: var(--v2069-btn-bg) !important;
+  background-image: var(--v2069-btn-bg) !important;
+  border: 1px solid rgba(64, 198, 236, .80) !important;
+  outline: 1px solid rgba(255,255,255,.72) !important;
+  outline-offset: -3px !important;
+  border-image: none !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.92), 0 8px 18px rgba(0, 88, 132, .18) !important;
+  color: #05364f !important;
+  -webkit-text-fill-color: #05364f !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.72) !important;
+  filter: none !important;
+}
+
+/* Loop/frontier popup: readable card with real content and a visible X. */
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] .village-world-screen :is(.v2051-loop-mini.open,.v2051-loop-mini.is-open,.v2051-expedition-mini.open,.v2051-expedition-mini.is-open) > .v2051-loop-body {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  background: var(--v2069-card-bg) !important;
+  background-image: var(--v2069-card-bg) !important;
+  border: 1px solid var(--v2069-card-border) !important;
+  outline: 1px solid var(--v2069-card-inner) !important;
+  outline-offset: -3px !important;
+  border-radius: 28px !important;
+  box-shadow: var(--v2069-card-shadow) !important;
+  color: var(--v2069-card-ink) !important;
+  min-height: 190px !important;
+  max-height: min(64dvh, 560px) !important;
+}
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] .village-world-screen :is(.v2051-loop-mini.open,.v2051-loop-mini.is-open,.v2051-expedition-mini.open,.v2051-expedition-mini.is-open) > .v2051-loop-body :is(.v2061-loop-pop-title,.v2049-growth-head,.v2050-expedition-head,.v2049-growth-loop,.v2050-expedition-grid,.v2049-growth-meter,.v2050-expedition-meter,.v2049-growth-next) {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] .village-world-screen .v2051-loop-body :is(.v2055-loop-close,.v2059-loop-close) {
+  display: grid !important;
+  place-items: center !important;
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  width: 36px !important;
+  height: 36px !important;
+  z-index: 5 !important;
+}

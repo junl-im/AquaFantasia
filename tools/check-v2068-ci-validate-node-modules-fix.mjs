@@ -18,13 +18,13 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const v2067 = read('tools/check-v2067-start-menu-loop-card-restore.mjs');
 
-assert(pkg.includes('"version": "2.0.68"'), 'package.json version must be 2.0.68.');
-assert(lock.includes('"version": "2.0.68"'), 'package-lock.json version must be 2.0.68.');
-assert(data.includes("APP_VERSION = '2.0.68'"), 'APP_VERSION must be 2.0.68.');
-assert(data.includes('aqua-fantasia-v2.0.68-ci-validate-node-modules-fix'), 'data cache name must be v2.0.68.');
-assert(sw.includes('aqua-fantasia-v2.0.68-ci-validate-node-modules-fix'), 'service worker cache name must be v2.0.68.');
-assert(offline.includes('v2.0.68'), 'offline badge must be v2.0.68.');
-assert(readme.startsWith('# AquaFantasia v2.0.68'), 'README title must be v2.0.68.');
+assert(/\"version\": \"2\.0\.(6[8-9]|[7-9][0-9])\"/.test(pkg), 'package.json version must be v2.0.68 or later.');
+assert(/\"version\": \"2\.0\.(6[8-9]|[7-9][0-9])\"/.test(lock), 'package-lock.json version must be v2.0.68 or later.');
+assert(/APP_VERSION = '2\.0\.(6[8-9]|[7-9][0-9])'/.test(data), 'APP_VERSION must be v2.0.68 or later.');
+assert(/aqua-fantasia-v2\.0\.(6[8-9]|[7-9][0-9])-/.test(data), 'data cache name must be v2.0.68 or later.');
+assert(/aqua-fantasia-v2\.0\.(6[8-9]|[7-9][0-9])-/.test(sw), 'service worker cache name must be v2.0.68 or later.');
+assert(/v2\.0\.(6[8-9]|[7-9][0-9])/.test(offline), 'offline badge must be v2.0.68 or later.');
+assert(/^# AquaFantasia v2\.0\.(6[8-9]|[7-9][0-9])/.test(readme), 'README title must be v2.0.68 or later.');
 assert(pkg.includes('check-v2068-ci-validate-node-modules-fix.mjs'), 'validate script must include v2068 guard.');
 
 assert(!v2067.includes("const disallowedZipItems = ['node_modules', 'dist', 'reports'];"), 'v2067 must not fail validate just because npm ci created node_modules.');

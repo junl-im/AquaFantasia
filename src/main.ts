@@ -275,6 +275,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2065UnifiedCardFramePolish = 'v2065-unified-aqua-card-popup-frame-polish';
     document.documentElement.dataset.v2066RiskRegressionSweep = 'v2066-risk-regression-sweep';
     document.documentElement.dataset.v2067StartMenuLoopCardRestore = 'v2067-start-menu-loop-card-restore';
+    document.documentElement.dataset.v2069StartMenuCardAudit = 'v2069-start-menu-aqua-card-audit';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();

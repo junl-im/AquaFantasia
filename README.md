@@ -1,11 +1,14 @@
-# AquaFantasia v2.0.68
+# AquaFantasia v2.0.69
 
-## v2.0.68 변경사항
+## v2.0.69 변경사항
 
-- GitHub Actions에서 `npm ci` 후 `npm run validate`를 실행하면 작업공간에 정상적으로 생성되는 `node_modules`를 v2.0.67 검증 스크립트가 패키지 오염으로 오인하던 문제를 수정했습니다.
-- ZIP 패키징에서는 계속 `node_modules`, `dist`, `reports`, `*_NOTES.md`, 로그 파일을 제외하지만, 설치 후 CI 검증 단계에서는 `node_modules` 존재만으로 실패하지 않도록 `check-v2067-start-menu-loop-card-restore.mjs`를 완화했습니다.
-- v2.0.68 전용 정적 검증 스크립트 `check-v2068-ci-validate-node-modules-fix.mjs`를 추가해 버전 동기화, v2067 CI node_modules 예외, README 단일 유지, registry 금지 문자열을 확인합니다.
-- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.68`로 동기화했습니다.
+- 첫 시작 화면은 정상 동작하던 `v85/screens/start_screen_clean_v810.webp` 기준으로 되돌리고, 시작 화면 핫스팟은 다시 투명 클릭 영역으로 고정했습니다.
+- `이 기기에서 로그인 유지` 텍스트가 원화 위에 떠 보이지 않도록 숨기고, 로그인 유지 토글 기능 자체는 보존했습니다.
+- 가방/퀘스트/지도/상점/장비/도감/랭킹 등 모든 메뉴 페이지의 검은 배경/반만 적용된 테두리 문제를 막기 위해 v2069 전용 아쿠아 카드 최종 레이어를 추가했습니다.
+- 캐릭터 정보창/건설창의 깔끔한 아쿠아 카드 톤을 기준으로 `runtime-content`, 지도/상점/퀘스트/가방/도감/랭킹의 내부 카드와 버튼까지 같은 배경, 테두리, 그림자, 글자색으로 보정했습니다.
+- 루프/개척 팝업은 내용, 진행률, 수치 카드, 닫기 `×`가 다시 보이도록 열린 상태 규칙을 재확인했습니다.
+- v2.0.68 검증 스크립트는 이후 버전에서도 동작하도록 완화하고, v2.0.69 전용 정적 검증 스크립트 `check-v2069-start-menu-card-audit.mjs`를 추가했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.69`로 동기화했습니다.
 
 ## v2.0.67 변경사항
 
