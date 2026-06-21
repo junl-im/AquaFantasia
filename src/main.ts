@@ -10,6 +10,16 @@ import { UnderwaterWebglLayer, type UnderwaterLayerMood } from './core/Underwate
 import { RuntimeQualityManager, type RuntimeQualityTier } from './core/RuntimeQualityManager';
 import { VillageWorld } from './villageWorld';
 
+type FishMood = 'calm' | 'pulling' | 'burst' | 'tired' | 'escaping';
+
+const FISH_MOOD_LABEL: Record<FishMood, string> = {
+  calm: '평온',
+  pulling: '저항',
+  burst: '광폭화',
+  tired: '지침',
+  escaping: '도주 압박',
+};
+
 const ASSET = {
   loginBg: './assets/v85/screens/start_screen_clean_v810.webp',
   player: './assets/v93/characters/fisher_boat_cute_action.png',
@@ -179,6 +189,11 @@ class AquaFantasiaGame {
   private compact = false;
   private activeFish: FishInfo = fishDex[0];
   private activeFishTextureUrl = '';
+  private fishMood: FishMood = 'calm';
+  private fishStamina = 100;
+  private catchProgress = 0;
+  private escapePressure = 0;
+  private moodShiftAt = performance.now();
   private fallbackTicker = 0;
   private readonly resizePixiHandler = () => this.resizePixi();
   private immersiveRetryAt = 0;
@@ -273,6 +288,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2063FishingCardWindows = 'v2063-fishing-state-machine-unified-card-windows';
     document.documentElement.dataset.v2064PolishAudit = 'v2064-fishing-ui-card-button-stability-audit';
     document.documentElement.dataset.v2072MenuFishingLoopPolish = 'v2072-menu-card-fishing-loop-polish';
+    document.documentElement.dataset.v2073FishingCoreFeel = 'v2073-fishing-core-feel-update';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -895,7 +911,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen v2057-fishing-aqua-touch-screen v2058-tech-modernized-screen v2059-fishing-dialog-screen v2060-grounded-motion-fishing-screen v2061-loop-ui-fishing-screen v2062-ground-contact-fishing-screen v2063-fishing-rework-screen v2063-unified-card-window-screen v2064-fishing-polish-screen v2072-fishing-playable-screen locked-screen';
+    root.className = 'game-screen fishing-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen v2057-fishing-aqua-touch-screen v2058-tech-modernized-screen v2059-fishing-dialog-screen v2060-grounded-motion-fishing-screen v2061-loop-ui-fishing-screen v2062-ground-contact-fishing-screen v2063-fishing-rework-screen v2063-unified-card-window-screen v2064-fishing-polish-screen v2072-fishing-playable-screen v2073-fishing-core-feel-screen locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     // v2048 legacy validation tokens preserved: 누르면 게이지가 올라가고, 떼면 내려갑니다 · safeTimer >= 2.0
@@ -939,16 +955,21 @@ class AquaFantasiaGame {
           <img class="v205-vertical-gauge" src="${ASSET.fishingGaugeVertical}" alt="" aria-hidden="true" />
           <div class="v205-reel-control v2057-gauge-control">
             <img class="v205-resistance-art" src="${ASSET.fishingResistanceBar}" alt="" aria-hidden="true" />
-            <div class="v2057-gauge-title v2063-fishing-title"><strong>릴링 배틀</strong><span>물고기 표식 안에 내 릴을 맞추세요</span></div>
-            <section class="v2063-fishing-board" aria-label="낚시 릴링 미니게임">
-              <div class="v2063-fishing-step"><span data-v2063-phase>물고기 추적</span><strong>감기 / 풀기로 위치 맞추기</strong></div>
-              <div class="v2063-fish-lane" aria-hidden="true">
+            <div class="v2057-gauge-title v2063-fishing-title v2073-fishing-title"><strong>릴링 배틀</strong><span>텐션을 읽고 감기/풀기로 손맛을 잡으세요</span></div>
+            <section class="v2063-fishing-board v2073-fishing-board" aria-label="낚시 릴링 미니게임">
+              <div class="v2063-fishing-step v2073-fishing-step"><span data-v2063-phase>물고기 추적</span><strong data-v2073-mood>평온</strong></div>
+              <div class="v2063-fish-lane v2073-fish-lane" aria-hidden="true">
                 <span class="v2063-safe-band"></span>
                 <span class="v2063-fish-target"><em>물고기</em></span>
                 <span class="v2063-player-bar"><em>내 릴</em></span>
               </div>
+              <div class="v2073-fishing-gauges" aria-label="릴링 상태">
+                <div class="v2073-gauge-row v2073-gauge-catch"><span>포획</span><i><b data-v2073-catch-bar></b></i><strong data-v2073-catch-value>0%</strong></div>
+                <div class="v2073-gauge-row v2073-gauge-tension"><span>텐션</span><i><em data-v2073-safe-window></em><b data-v2073-tension-bar></b></i><strong data-v2073-tension-value>50%</strong></div>
+                <div class="v2073-gauge-row v2073-gauge-stamina"><span>저항</span><i><b data-v2073-stamina-bar></b></i><strong data-v2073-stamina-value>100%</strong></div>
+              </div>
               <div class="v2063-distance-row"><span>끌어오는 거리</span><i><b data-v2063-distance></b></i><strong data-v2063-progress>0%</strong></div>
-              <div class="v2063-input-row"><b data-v2063-input>대기</b><span>감기=오른쪽 · 풀기=왼쪽 · 겹치면 거리 증가</span></div>
+              <div class="v2063-input-row"><b data-v2063-input>대기</b><span>감기=포획↑/텐션↑ · 풀기=텐션↓ · 광폭화 때는 욕심 금지</span></div>
             </section>
             <div class="tension-track v2057-tension-track"><span class="safe-zone"></span><span class="tension-fill"></span></div>
             <div class="safe-progress"><span></span></div>
@@ -961,13 +982,14 @@ class AquaFantasiaGame {
           </div>
         </div>
       </div>
-      <section class="v2055-reel-console v2057-reel-console hidden" id="reelConsole" aria-label="낚시 릴 조작 패널">
+      <section class="v2055-reel-console v2057-reel-console v2073-reel-console hidden" id="reelConsole" aria-label="낚시 릴 조작 패널">
         <div class="v2055-reel-meter v2057-reel-meter"><strong data-v2055-tension-value>50%</strong><span data-v2055-tension-state>대기</span><i><em data-v2057-safe-window></em><b data-v2055-tension-bar></b></i></div>
+        <div class="v2073-console-readouts" aria-live="polite"><span data-v2073-console-mood>평온</span><span data-v2073-console-catch>포획 0%</span><span data-v2073-console-stamina>저항 100%</span></div>
         <div class="v2055-reel-actions">
-          <button type="button" class="v2055-reel-wind v2057-reel-button" data-v2055-reel-wind><strong>릴 감기</strong><span>누르는 동안 장력 ↑</span></button>
-          <button type="button" class="v2055-reel-release v2057-reel-button" data-v2055-reel-release><strong>풀기</strong><span>누르는 동안 장력 ↓</span></button>
+          <button type="button" class="v2055-reel-wind v2057-reel-button" data-v2055-reel-wind><strong>릴 감기</strong><span>포획↑ / 텐션↑</span></button>
+          <button type="button" class="v2055-reel-release v2057-reel-button" data-v2055-reel-release><strong>풀기</strong><span>텐션↓ / 도주 주의</span></button>
         </div>
-        <p class="v2063-console-help">물고기 표식과 내 릴 막대를 겹치세요. <b>감기</b>/<b>풀기</b> 입력이 즉시 색과 문구로 표시됩니다.</p>
+        <p class="v2063-console-help v2073-console-help">물고기 상태가 <b>광폭화</b>면 풀어서 버티고, <b>지침</b>이면 감아서 포획 게이지를 밀어 올리세요.</p>
       </section>
       <button class="v2053-reel-touch-zone v2054-reel-touch-zone hidden" type="button" aria-label="릴 감기 터치존"><strong>릴 감기</strong><span>누르는 동안 장력 상승</span><small>손을 떼면 자동으로 내려갑니다</small><em data-v2053-input-state>대기</em></button>`;
     dom.app.appendChild(root);
@@ -1597,6 +1619,12 @@ class AquaFantasiaGame {
     this.lastReelPulseAt = 0;
     this.holding = false;
     this.reelMode = 'neutral';
+    this.fishMood = 'calm';
+    this.fishStamina = 100;
+    this.catchProgress = 0;
+    this.escapePressure = 0;
+    this.moodShiftAt = performance.now();
+    this.stageHost?.setAttribute('data-fish-mood', this.fishMood);
     if (this.biteText) this.biteText.visible = false;
     this.hideBiteCallout();
     this.reelPanel?.classList.remove('hidden');
@@ -1604,9 +1632,9 @@ class AquaFantasiaGame {
     this.reelConsole?.classList.remove('hidden');
     this.holdPad?.removeAttribute('disabled');
     this.updateTensionUI();
-    this.setHint('감기/풀기로 내 릴 막대를 움직여 물고기 표식 안에 맞추세요. 겹치면 거리 게이지가 차오릅니다.');
+    this.setHint('감기/풀기로 텐션을 안전 구간에 유지하세요. 광폭화는 풀기, 지침은 감기가 포획 기회입니다.');
     this.updateTensionUI();
-    this.spawnActionBadge('릴링!', '물고기 표식과 내 릴 막대를 겹치세요');
+    this.spawnActionBadge('릴링!', '텐션을 읽고 물고기를 지치게 하세요');
   }
 
   private finishCatch(success: boolean): void {
@@ -1622,7 +1650,9 @@ class AquaFantasiaGame {
     this.reelPanel?.classList.add('hidden');
     this.reelTouchZone?.classList.add('hidden');
     this.reelConsole?.classList.add('hidden');
-    this.reelConsole?.classList.remove('is-winding', 'is-releasing', 'is-safe', 'is-danger', 'v2063-overlap');
+    this.reelConsole?.classList.remove('is-winding', 'is-releasing', 'is-safe', 'is-danger', 'v2063-overlap', 'mood-calm', 'mood-pulling', 'mood-burst', 'mood-tired', 'mood-escaping');
+    this.reelPanel?.classList.remove('mood-calm', 'mood-pulling', 'mood-burst', 'mood-tired', 'mood-escaping');
+    this.stageHost?.removeAttribute('data-fish-mood');
     this.reelTouchZone?.classList.remove('is-holding');
     this.holdPad?.setAttribute('disabled', 'true');
     if (success) {
@@ -1717,7 +1747,9 @@ class AquaFantasiaGame {
     this.reelPanel?.classList.add('hidden');
     this.reelTouchZone?.classList.add('hidden');
     this.reelConsole?.classList.add('hidden');
-    this.reelConsole?.classList.remove('is-winding', 'is-releasing', 'is-safe', 'is-danger', 'v2063-overlap');
+    this.reelConsole?.classList.remove('is-winding', 'is-releasing', 'is-safe', 'is-danger', 'v2063-overlap', 'mood-calm', 'mood-pulling', 'mood-burst', 'mood-tired', 'mood-escaping');
+    this.reelPanel?.classList.remove('mood-calm', 'mood-pulling', 'mood-burst', 'mood-tired', 'mood-escaping');
+    this.stageHost?.removeAttribute('data-fish-mood');
     this.reelTouchZone?.classList.remove('is-holding');
     this.reelPanel?.classList.remove('is-holding');
     this.stageHost?.classList.remove('is-reel-holding');
@@ -1726,6 +1758,10 @@ class AquaFantasiaGame {
     this.stageHost?.querySelector('.catch-result-card')?.remove();
     dom.app.querySelector('.catch-result-card')?.remove();
     this.resultCardOpen = false;
+    this.fishMood = 'calm';
+    this.fishStamina = 100;
+    this.catchProgress = 0;
+    this.escapePressure = 0;
     this.state = 'idle';
     this.setFishingPhase('idle');
     this.castBtn?.classList.remove('hidden', 'pop-out');
@@ -1760,56 +1796,71 @@ class AquaFantasiaGame {
       this.bobber.x += Math.sin(now / 620) * 0.10 * dt;
       if (this.state === 'bite') this.bobber.y += 0.22 * dt;
     } else if (this.state === 'reeling') {
-      const regionMod = this.getRegion().difficulty;
-      const gearRelief = 1 + this.save.gear.rodLevel * 0.06 + this.save.gear.reelLevel * 0.05 + this.save.gear.lineLevel * 0.05;
-      const bossMod = this.activeFish.rarity === 'BOSS' ? 1.28 : this.activeFish.rarity === 'EPIC' ? 1.13 : 1;
-      this.surgeTimer += dt / 60;
-      const surgeActive = this.surgeTimer > 1.25 && Math.sin(now / 520) > 0.82;
-      const drift = Math.sin(now / 215) * 0.31 * regionMod * bossMod + Math.sin(now / 770) * 0.10 + (surgeActive ? Math.sin(now / 80) * 0.38 : 0);
-      const controlForce = this.reelMode === 'wind' ? 1.04 + regionMod * 0.10 : this.reelMode === 'release' ? -1.12 - regionMod * 0.05 : -0.54 - regionMod * 0.03;
-      this.tension += (controlForce / gearRelief) * dt + drift * 0.22;
+      const status = this.advanceFishingBattle(now, dt);
       if (this.bobber) {
-        const pull = this.holding ? -0.18 : 0.10;
-        this.bobber.x += Math.sin(now / 90) * 0.25 * dt;
+        const pull = this.reelMode === 'wind' ? -0.18 : this.reelMode === 'release' ? 0.16 : 0.08;
+        const shake = this.fishMood === 'burst' ? 0.44 : this.fishMood === 'tired' ? 0.10 : 0.22;
+        this.bobber.x += Math.sin(now / 90) * shake * dt;
         this.bobber.y += pull * dt + Math.sin(now / 130) * 0.18 * dt;
-        this.bobber.rotation = Math.sin(now / 85) * (this.holding ? 0.28 : 0.12);
+        this.bobber.rotation = Math.sin(now / 85) * (this.fishMood === 'burst' ? 0.34 : this.holding ? 0.24 : 0.12);
       }
-      const zone = this.safeZone();
-      const safe = this.tension >= zone.left && this.tension <= zone.right;
-      const center = (zone.left + zone.right) / 2;
-      const perfect = Math.abs(this.tension - center) < Math.max(3.2, (zone.right - zone.left) * 0.18);
-      this.perfectChain = perfect ? this.perfectChain + dt / 60 : Math.max(0, this.perfectChain - dt / 45);
-      if (this.perfectChain > 1.0 && !this.routeGuardActive) {
-        this.routeGuardActive = true;
-        this.stageHost?.classList.add('guard-active');
-        this.spawnActionBadge('PERFECT!', '장력 중심을 잡았어요');
-        this.vibrate(10);
-      }
-      this.safeTimer = safe ? this.safeTimer + dt / 60 * (perfect ? 1.16 : 1) : Math.max(0, this.safeTimer - dt / 70);
-      this.stageHost?.classList.toggle('surge-alert', surgeActive);
-      const pulseGap = safe ? 520 : (this.tension < 16 || this.tension > 86 ? 170 : 320);
+      this.stageHost?.classList.toggle('surge-alert', this.fishMood === 'burst');
+      const pulseGap = status.safe ? 520 : (this.tension < 16 || this.tension > 86 || this.fishMood === 'burst' ? 170 : 320);
       if (now - this.lastReelPulseAt > pulseGap) {
         this.lastReelPulseAt = now;
-        if (safe) this.vibrate(6);
-        else if (this.tension < 16 || this.tension > 86) this.vibrate([12, 18, 18]);
+        if (status.safe) this.vibrate(6);
+        else if (this.tension < 16 || this.tension > 86 || this.fishMood === 'burst') this.vibrate([12, 18, 18]);
       }
       this.updateTensionUI();
-      if (this.tension <= 0 || this.tension >= 100) this.finishCatch(false);
-      if (this.safeTimer >= 2.8) this.finishCatch(true);
+      if (this.tension <= 0 || this.tension >= 100 || this.escapePressure >= 1) this.finishCatch(false);
+      if (this.catchProgress >= 100) this.finishCatch(true);
     }
   }
 
 
   private tickFallback(now: number, dt: number): void {
     if (this.state !== 'reeling') return;
+    const status = this.advanceFishingBattle(now, dt);
+    this.stageHost?.classList.toggle('surge-alert', this.fishMood === 'burst');
+    this.updateTensionUI();
+    if (this.tension <= 0 || this.tension >= 100 || this.escapePressure >= 1) this.finishCatch(false);
+    if (this.catchProgress >= 100) this.finishCatch(true);
+  }
+
+
+  private advanceFishingBattle(now: number, dt: number): { safe: boolean; perfect: boolean } {
     const regionMod = this.getRegion().difficulty;
     const gearRelief = 1 + this.save.gear.rodLevel * 0.06 + this.save.gear.reelLevel * 0.05 + this.save.gear.lineLevel * 0.05;
-    const bossMod = this.activeFish.rarity === 'BOSS' ? 1.28 : this.activeFish.rarity === 'EPIC' ? 1.13 : 1;
+    const rarityMod = this.activeFish.rarity === 'BOSS' ? 1.30 : this.activeFish.rarity === 'EPIC' ? 1.14 : this.activeFish.rarity === 'RARE' ? 1.06 : 1;
     this.surgeTimer += dt / 60;
-    const surgeActive = this.surgeTimer > 1.25 && Math.sin(now / 520) > 0.82;
-    const drift = Math.sin(now / 215) * 0.28 * regionMod * bossMod + Math.sin(now / 770) * 0.10 + (surgeActive ? Math.sin(now / 84) * 0.34 : 0);
-    const controlForce = this.reelMode === 'wind' ? 1.02 + regionMod * 0.10 : this.reelMode === 'release' ? -1.10 - regionMod * 0.05 : -0.52 - regionMod * 0.03;
-    this.tension += (controlForce / gearRelief) * dt + drift * 0.22;
+    const burstPulse = this.surgeTimer > 1.05 && Math.sin(now / (this.activeFish.rarity === 'BOSS' ? 430 : 540)) > 0.78;
+    const zoneBefore = this.safeZone();
+    const dangerouslyLoose = this.tension < Math.max(10, zoneBefore.left - 14);
+    const dangerouslyTight = this.tension > Math.min(92, zoneBefore.right + 16);
+    const nextMood: FishMood = dangerouslyLoose
+      ? 'escaping'
+      : (burstPulse || dangerouslyTight)
+        ? 'burst'
+        : this.fishStamina <= 34
+          ? 'tired'
+          : this.tension >= zoneBefore.left && this.tension <= zoneBefore.right
+            ? 'calm'
+            : 'pulling';
+    this.setFishMood(nextMood, now);
+
+    const moodDrift = this.fishMood === 'burst' ? 0.52 : this.fishMood === 'escaping' ? -0.34 : this.fishMood === 'tired' ? 0.10 : this.fishMood === 'pulling' ? 0.28 : 0.15;
+    const drift = Math.sin(now / 215) * moodDrift * regionMod * rarityMod + Math.sin(now / 770) * 0.10;
+    const windForce = this.fishMood === 'burst' ? 1.22 : this.fishMood === 'tired' ? 0.88 : 1.04;
+    const releaseForce = this.fishMood === 'escaping' ? -0.70 : -1.12;
+    const neutralForce = this.fishMood === 'escaping' ? -0.74 : this.fishMood === 'burst' ? 0.08 : -0.52;
+    const controlForce = this.reelMode === 'wind'
+      ? windForce + regionMod * 0.10
+      : this.reelMode === 'release'
+        ? releaseForce - regionMod * 0.05
+        : neutralForce - regionMod * 0.03;
+    this.tension += (controlForce / gearRelief) * dt + drift * 0.24;
+    this.tension = Math.max(-6, Math.min(106, this.tension));
+
     const zone = this.safeZone();
     const safe = this.tension >= zone.left && this.tension <= zone.right;
     const center = (zone.left + zone.right) / 2;
@@ -1821,11 +1872,49 @@ class AquaFantasiaGame {
       this.spawnActionBadge('PERFECT!', '장력 중심을 잡았어요');
       this.vibrate(10);
     }
-    this.safeTimer = safe ? this.safeTimer + dt / 60 * (perfect ? 1.16 : 1) : Math.max(0, this.safeTimer - dt / 70);
-    this.stageHost?.classList.toggle('surge-alert', surgeActive);
-    this.updateTensionUI();
-    if (this.tension <= 0 || this.tension >= 100) this.finishCatch(false);
-    if (this.safeTimer >= 2.8) this.finishCatch(true);
+
+    const staminaDamage = safe
+      ? (this.fishMood === 'tired' ? 13.4 : this.fishMood === 'calm' ? 10.6 : 8.5) * (perfect ? 1.22 : 1)
+      : this.reelMode === 'wind' && this.tension > zone.right
+        ? 2.2
+        : 0;
+    const staminaRecover = !safe && this.reelMode !== 'wind' && this.fishMood !== 'burst' ? 1.8 : 0;
+    this.fishStamina = Math.max(0, Math.min(100, this.fishStamina - staminaDamage * dt / 60 + staminaRecover * dt / 60));
+
+    const catchGain = safe
+      ? (this.fishMood === 'tired' ? 23 : this.fishMood === 'calm' ? 15 : 11) * (perfect ? 1.24 : 1)
+      : this.reelMode === 'wind' && this.tension < zone.right + 10
+        ? 3.2
+        : -4.8;
+    const tiredBonus = Math.max(0, 45 - this.fishStamina) * 0.010;
+    this.catchProgress = Math.max(0, Math.min(100, this.catchProgress + (catchGain + tiredBonus) * dt / 60));
+    this.safeTimer = (this.catchProgress / 100) * 2.8;
+
+    const escapeGain = this.fishMood === 'escaping' ? (this.reelMode === 'wind' ? 0.28 : 0.20) : this.tension < 12 ? 0.18 : -0.38;
+    this.escapePressure = Math.max(0, Math.min(1, this.escapePressure + escapeGain * dt / 60));
+    return { safe, perfect };
+  }
+
+  private setFishMood(mood: FishMood, now = performance.now()): void {
+    if (this.fishMood === mood) return;
+    this.fishMood = mood;
+    this.moodShiftAt = now;
+    const moodClasses = ['mood-calm', 'mood-pulling', 'mood-burst', 'mood-tired', 'mood-escaping'];
+    this.reelPanel?.classList.remove(...moodClasses);
+    this.reelConsole?.classList.remove(...moodClasses);
+    this.reelPanel?.classList.add(`mood-${mood}`);
+    this.reelConsole?.classList.add(`mood-${mood}`);
+    this.stageHost?.setAttribute('data-fish-mood', mood);
+    if (mood === 'burst') {
+      this.spawnActionBadge('광폭화!', '잠깐 풀어서 줄을 살리세요');
+      this.vibrate([16, 14, 16]);
+    } else if (mood === 'tired') {
+      this.spawnActionBadge('지쳤다!', '지금 감으면 포획이 빨라져요');
+      this.vibrate(10);
+    } else if (mood === 'escaping') {
+      this.spawnActionBadge('도주 압박!', '너무 느슨해요 · 다시 감으세요');
+      this.vibrate([10, 16, 10]);
+    }
   }
 
 
@@ -1893,12 +1982,14 @@ class AquaFantasiaGame {
     this.tensionFill.classList.toggle('perfect', value >= zone.left && value <= zone.right);
     this.safeFill.style.left = `${zone.left}%`;
     this.safeFill.style.width = `${zone.right - zone.left}%`;
-    if (this.progressNode) this.progressNode.style.width = `${Math.min(100, (this.safeTimer / 2.8) * 100)}%`;
-    const stateText = this.reelMode === 'wind' ? '릴 감기 ON · 장력 상승' : this.reelMode === 'release' ? '풀기 ON · 장력 하강' : '대기 · 자연 하강';
+    const catchPct = Math.max(0, Math.min(100, this.catchProgress));
+    const staminaPct = Math.max(0, Math.min(100, this.fishStamina));
+    if (this.progressNode) this.progressNode.style.width = `${catchPct}%`;
+    const stateText = this.reelMode === 'wind' ? '릴 감기 ON · 포획↑ 텐션↑' : this.reelMode === 'release' ? '풀기 ON · 텐션↓' : '대기 · 자연 하강';
     const tensionValue = this.reelPanel?.querySelector<HTMLElement>('[data-tension-value]');
     const tensionState = this.reelPanel?.querySelector<HTMLElement>('[data-tension-state]');
     if (tensionValue) tensionValue.textContent = `${Math.round(value)}%`;
-    if (tensionState) tensionState.textContent = safe ? `안전 구간 · ${Math.min(100, Math.round((this.safeTimer / 2.8) * 100))}%` : stateText;
+    if (tensionState) tensionState.textContent = `${FISH_MOOD_LABEL[this.fishMood]} · ${safe ? `포획 ${Math.round(catchPct)}%` : stateText}`;
     this.reelPanel?.style.setProperty('--v2051-tension', `${value}%`);
     this.reelPanel?.style.setProperty('--v2051-safe-left', `${zone.left}%`);
     this.reelPanel?.style.setProperty('--v2051-safe-right', `${zone.right}%`);
@@ -1922,7 +2013,7 @@ class AquaFantasiaGame {
     const consoleState = this.reelConsole?.querySelector<HTMLElement>('[data-v2055-tension-state]');
     const consoleBar = this.reelConsole?.querySelector<HTMLElement>('[data-v2055-tension-bar]');
     if (consoleValue) consoleValue.textContent = `${Math.round(value)}%`;
-    if (consoleState) consoleState.textContent = safe ? `안전 유지 ${Math.min(100, Math.round((this.safeTimer / 2.8) * 100))}%` : (this.reelMode === 'wind' ? '감는 중 · 장력 상승' : this.reelMode === 'release' ? '풀기 중 · 장력 하강' : '대기 · 천천히 하강');
+    if (consoleState) consoleState.textContent = safe ? `${FISH_MOOD_LABEL[this.fishMood]} · 포획 ${Math.round(catchPct)}%` : (this.reelMode === 'wind' ? '감는 중 · 장력 상승' : this.reelMode === 'release' ? '풀기 중 · 장력 하강' : '대기 · 천천히 하강');
     if (consoleBar) consoleBar.style.width = `${value}%`;
     const safeWindow = this.reelConsole?.querySelector<HTMLElement>('[data-v2057-safe-window]');
     if (safeWindow) { safeWindow.style.left = `${zone.left}%`; safeWindow.style.width = `${zone.right - zone.left}%`; }
@@ -1931,7 +2022,7 @@ class AquaFantasiaGame {
     this.reelConsole?.classList.toggle('is-winding', this.reelMode === 'wind');
     this.reelConsole?.classList.toggle('is-releasing', this.reelMode === 'release');
     const fishCenter = (zone.left + zone.right) / 2;
-    const distancePct = Math.max(0, Math.min(100, (this.safeTimer / 2.8) * 100));
+    const distancePct = catchPct;
     this.reelPanel?.style.setProperty('--v2063-player', `${value}%`);
     this.reelPanel?.style.setProperty('--v2063-fish', `${fishCenter}%`);
     this.reelPanel?.style.setProperty('--v2063-safe-left', `${zone.left}%`);
@@ -1944,9 +2035,37 @@ class AquaFantasiaGame {
     if (v2063Progress) v2063Progress.textContent = `${Math.round(distancePct)}%`;
     if (v2063Distance) v2063Distance.style.width = `${distancePct}%`;
     if (v2063Input) v2063Input.textContent = this.reelMode === 'wind' ? '감기 입력 ON' : this.reelMode === 'release' ? '풀기 입력 ON' : '손 뗌 · 자연 이동';
-    if (v2063Phase) v2063Phase.textContent = safe ? '겹침 성공 · 거리 증가' : value < zone.left ? '왼쪽 벗어남 · 감기' : '오른쪽 벗어남 · 풀기';
+    if (v2063Phase) v2063Phase.textContent = safe ? '안전 텐션 · 포획 증가' : value < zone.left ? '느슨함 · 감기 필요' : '팽팽함 · 풀기 필요';
     this.reelPanel?.classList.toggle('v2063-overlap', safe);
     this.reelConsole?.classList.toggle('v2063-overlap', safe);
+    const moodNode = this.reelPanel?.querySelector<HTMLElement>('[data-v2073-mood]');
+    const catchBar = this.reelPanel?.querySelector<HTMLElement>('[data-v2073-catch-bar]');
+    const catchValue = this.reelPanel?.querySelector<HTMLElement>('[data-v2073-catch-value]');
+    const tensionBar = this.reelPanel?.querySelector<HTMLElement>('[data-v2073-tension-bar]');
+    const tensionValue2 = this.reelPanel?.querySelector<HTMLElement>('[data-v2073-tension-value]');
+    const staminaBar = this.reelPanel?.querySelector<HTMLElement>('[data-v2073-stamina-bar]');
+    const staminaValue = this.reelPanel?.querySelector<HTMLElement>('[data-v2073-stamina-value]');
+    const safeWindow2 = this.reelPanel?.querySelector<HTMLElement>('[data-v2073-safe-window]');
+    const consoleMood = this.reelConsole?.querySelector<HTMLElement>('[data-v2073-console-mood]');
+    const consoleCatch = this.reelConsole?.querySelector<HTMLElement>('[data-v2073-console-catch]');
+    const consoleStamina = this.reelConsole?.querySelector<HTMLElement>('[data-v2073-console-stamina]');
+    if (moodNode) moodNode.textContent = FISH_MOOD_LABEL[this.fishMood];
+    if (catchBar) catchBar.style.width = `${catchPct}%`;
+    if (catchValue) catchValue.textContent = `${Math.round(catchPct)}%`;
+    if (tensionBar) tensionBar.style.width = `${value}%`;
+    if (tensionValue2) tensionValue2.textContent = `${Math.round(value)}%`;
+    if (staminaBar) staminaBar.style.width = `${staminaPct}%`;
+    if (staminaValue) staminaValue.textContent = `${Math.round(staminaPct)}%`;
+    if (safeWindow2) { safeWindow2.style.left = `${zone.left}%`; safeWindow2.style.width = `${zone.right - zone.left}%`; }
+    if (consoleMood) consoleMood.textContent = FISH_MOOD_LABEL[this.fishMood];
+    if (consoleCatch) consoleCatch.textContent = `포획 ${Math.round(catchPct)}%`;
+    if (consoleStamina) consoleStamina.textContent = `저항 ${Math.round(staminaPct)}%`;
+    const moodClasses = ['mood-calm', 'mood-pulling', 'mood-burst', 'mood-tired', 'mood-escaping'];
+    this.reelPanel?.classList.remove(...moodClasses);
+    this.reelConsole?.classList.remove(...moodClasses);
+    this.reelPanel?.classList.add(`mood-${this.fishMood}`);
+    this.reelConsole?.classList.add(`mood-${this.fishMood}`);
+    this.stageHost?.setAttribute('data-fish-mood', this.fishMood);
     const holdState = this.reelPanel?.querySelector<HTMLElement>('[data-v2054-hold-state]');
     const deltaState = this.reelPanel?.querySelector<HTMLElement>('[data-v2054-tension-delta]');
     if (holdState) holdState.textContent = this.reelMode === 'wind' ? '감기 중' : this.reelMode === 'release' ? '풀기 중' : '대기';

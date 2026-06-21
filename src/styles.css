@@ -29437,3 +29437,173 @@ html[data-v2072-menu-fishing-loop-polish="v2072-menu-card-fishing-loop-polish"] 
     display: none !important;
   }
 }
+
+/* v2.0.73 fishing core feel update
+   Adds fish mood, stamina, catch progress and safer mobile hand-control HUD.
+   Character direction logic remains owned by villageWorld.ts and is not touched here. */
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .fishing-stage {
+  top: calc(max(8px, env(safe-area-inset-top)) + 52px) !important;
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 156px) !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .reel-panel {
+  top: calc(max(10px, env(safe-area-inset-top)) + 62px) !important;
+  width: min(520px, calc(100vw - 22px)) !important;
+  max-height: min(45svh, 464px) !important;
+  padding: 10px !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-fishing-title span,
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2063-input-row span,
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-console-help {
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-fishing-board {
+  gap: 9px !important;
+  background: linear-gradient(180deg, rgba(249,255,255,.88), rgba(181,248,255,.72)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.76), 0 10px 24px rgba(0, 94, 138, .12) !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-fishing-step {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen [data-v2073-mood] {
+  flex: 0 0 auto !important;
+  min-width: 72px !important;
+  padding: 6px 9px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(18, 154, 194, .28) !important;
+  background: rgba(255,255,255,.62) !important;
+  color: #045675 !important;
+  text-align: center !important;
+  font-size: 12px !important;
+  font-weight: 1000 !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-fishing-gauges {
+  display: grid !important;
+  gap: 7px !important;
+  padding: 8px !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(66, 199, 231, .34) !important;
+  background: rgba(255,255,255,.58) !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-gauge-row {
+  display: grid !important;
+  grid-template-columns: 46px minmax(0, 1fr) 44px !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: #06445f !important;
+  font-size: 11px !important;
+  font-weight: 1000 !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-gauge-row i {
+  position: relative !important;
+  display: block !important;
+  height: 12px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  background: rgba(7, 88, 125, .14) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 63, 100, .18) !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-gauge-row b {
+  position: absolute !important;
+  inset: 0 auto 0 0 !important;
+  width: 0% !important;
+  border-radius: inherit !important;
+  transition: width .12s linear !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen [data-v2073-catch-bar] {
+  background: linear-gradient(90deg, #61e9ff, #fff1a6) !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen [data-v2073-tension-bar] {
+  background: linear-gradient(90deg, #67f5ce, #ffe47a, #ff7d8a) !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen [data-v2073-stamina-bar] {
+  background: linear-gradient(90deg, #ffc66d, #78e9ff) !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen [data-v2073-safe-window] {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 30% !important;
+  width: 40% !important;
+  border-left: 2px solid rgba(255,255,255,.86) !important;
+  border-right: 2px solid rgba(255,255,255,.86) !important;
+  background: rgba(255,255,255,.24) !important;
+  z-index: 2 !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-reel-console {
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 8px) !important;
+  width: min(520px, calc(100vw - 20px)) !important;
+  padding: 9px !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-console-readouts {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 6px !important;
+  margin: 7px 0 !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-console-readouts span {
+  min-width: 0 !important;
+  padding: 6px 5px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.64) !important;
+  color: #06445f !important;
+  text-align: center !important;
+  font-size: 10px !important;
+  font-weight: 1000 !important;
+  white-space: nowrap !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2055-reel-actions button {
+  min-height: 68px !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2055-reel-actions button span {
+  font-size: 10px !important;
+  line-height: 1.1 !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .reel-panel.mood-burst,
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-reel-console.mood-burst {
+  border-color: rgba(255, 111, 131, .72) !important;
+  box-shadow: 0 18px 46px rgba(151, 38, 70, .25), inset 0 1px 0 rgba(255,255,255,.88) !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .reel-panel.mood-tired,
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-reel-console.mood-tired {
+  border-color: rgba(255, 222, 112, .78) !important;
+  box-shadow: 0 18px 46px rgba(154, 122, 16, .18), inset 0 1px 0 rgba(255,255,255,.88) !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .reel-panel.mood-escaping,
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-reel-console.mood-escaping {
+  border-color: rgba(92, 153, 255, .74) !important;
+  box-shadow: 0 18px 46px rgba(28, 70, 158, .20), inset 0 1px 0 rgba(255,255,255,.88) !important;
+}
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen [data-fish-mood="burst"] .v2031-fishing-ripple,
+html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .fishing-stage[data-fish-mood="burst"] .v2031-fishing-ripple {
+  filter: saturate(1.35) hue-rotate(310deg) !important;
+  transform: scale(1.10) !important;
+}
+@media (max-width: 430px), (max-height: 760px) {
+  html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .reel-panel {
+    top: calc(max(8px, env(safe-area-inset-top)) + 54px) !important;
+    max-height: 42svh !important;
+  }
+  html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-fishing-gauges {
+    gap: 5px !important;
+    padding: 6px !important;
+  }
+  html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-gauge-row {
+    grid-template-columns: 40px minmax(0, 1fr) 38px !important;
+    gap: 6px !important;
+    font-size: 10px !important;
+  }
+  html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-console-readouts {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 4px !important;
+  }
+  html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2055-reel-actions button {
+    min-height: 60px !important;
+  }
+  html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-screen="fishing"] .fishing-screen.v2073-fishing-core-feel-screen .v2073-console-help {
+    display: none !important;
+  }
+}

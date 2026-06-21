@@ -12,8 +12,8 @@ const readme = read('README.md');
 const villageWorld = read('src/villageWorld.ts');
 const lockRaw = read('package-lock.json');
 
-const VERSION = '2.0.72';
-const CACHE = 'aqua-fantasia-v2.0.72-menu-card-fishing-loop-polish';
+const VERSION = pkg.version;
+const CACHE_PREFIX = `aqua-fantasia-v${VERSION}-`;
 const fail = (msg) => {
   console.error(`[v2072] ${msg}`);
   process.exit(1);
@@ -21,11 +21,12 @@ const fail = (msg) => {
 const must = (condition, msg) => { if (!condition) fail(msg); };
 const has = (source, needle, msg) => must(source.includes(needle), msg);
 
-must(pkg.version === VERSION, 'package.json version mismatch');
+must(/^2\.0\.\d+$/.test(VERSION), 'package.json version must stay on 2.0.x');
+must(Number(VERSION.split('.')[2]) >= 72, 'v2072 guard only applies to v2.0.72+ packages');
 must(lock.version === VERSION && lock.packages?.['']?.version === VERSION, 'package-lock version mismatch');
 has(data, `APP_VERSION = '${VERSION}'`, 'APP_VERSION mismatch');
-has(data, CACHE, 'src/data.ts cache version mismatch');
-has(sw, CACHE, 'service worker cache version mismatch');
+has(data, CACHE_PREFIX, 'src/data.ts cache version mismatch');
+has(sw, CACHE_PREFIX, 'service worker cache version mismatch');
 has(offline, `v${VERSION}`, 'offline badge/version mismatch');
 has(readme, `# AquaFantasia v${VERSION}`, 'README title version mismatch');
 has(readme, `## v${VERSION} 변경사항`, 'README changelog missing');
@@ -65,7 +66,7 @@ has(main, "panel.querySelector<HTMLElement>('.v2051-loop-toggle')?.setAttribute(
 has(main, "panel?.querySelector<HTMLElement>('.v2051-loop-toggle')?.setAttribute('aria-expanded', 'false')", 'loop close aria-expanded reset missing');
 
 has(main, "this.reelConsole?.classList.add('hidden')", 'reel console hide/reset missing');
-has(main, "this.reelConsole?.classList.remove('is-winding', 'is-releasing', 'is-safe', 'is-danger', 'v2063-overlap')", 'reel console state cleanup missing');
+has(main, "this.reelConsole?.classList.remove('is-winding', 'is-releasing', 'is-safe', 'is-danger', 'v2063-overlap'", 'reel console state cleanup missing');
 has(main, "nav.style.setProperty('display', 'flex', 'important')", 'bottom dock flex restore missing');
 
 has(css, 'html[data-v2072-menu-fishing-loop-polish="v2072-menu-card-fishing-loop-polish"]', 'v2072 CSS root selector missing');
