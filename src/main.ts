@@ -24,6 +24,33 @@ type CatchGrowthSettlement = {
   story: string;
 };
 
+type IslandExpansionStats = {
+  unlockedCount: number;
+  uniqueCaught: number;
+  buildingCount: number;
+  pathCount: number;
+  development: number;
+  permit: boolean;
+  readySteps: number;
+  progress: number;
+  nextText: string;
+  tierLabel: string;
+  phaseLabel: string;
+  surveyDone: boolean;
+  chartDone: boolean;
+  settled: boolean;
+};
+
+type ExpeditionRouteCandidate = {
+  key: RegionKey;
+  name: string;
+  subtitle: string;
+  requirement: string;
+  progress: number;
+  unlocked: boolean;
+  recommended: boolean;
+};
+
 const FISH_MOOD_LABEL: Record<FishMood, string> = {
   calm: '평온',
   pulling: '저항',
@@ -303,6 +330,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2073FishingCoreFeel = 'v2073-fishing-core-feel-update';
     document.documentElement.dataset.v2074CatchGrowthLoop = 'v2074-catch-growth-loop';
     document.documentElement.dataset.v2075UiExplorationPolish = 'v2075-ui-exploration-scroll-polish';
+    document.documentElement.dataset.v2076IslandExpansionRoutes = 'v2076-island-expansion-routes';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -550,13 +578,16 @@ class AquaFantasiaGame {
   }
 
 
-  private islandExpansionStats(): { unlockedCount: number; uniqueCaught: number; buildingCount: number; pathCount: number; development: number; permit: boolean; readySteps: number; progress: number; nextText: string; tierLabel: string } {
+  private islandExpansionStats(): IslandExpansionStats {
     const unlockedCount = regions.filter((item) => this.isRegionUnlocked(item.key)).length;
     const uniqueCaught = Object.keys(this.save.caught).filter((id) => (this.save.caught[id] ?? 0) > 0).length;
     const buildingCount = this.save.village.buildings.length;
     const pathCount = this.save.village.paths.length;
     const development = this.save.village.development;
     const permit = Boolean(this.save.missions['shop_route_permit']);
+    const surveyDone = Boolean(this.save.missions['expedition_survey_done']);
+    const chartDone = Boolean(this.save.missions['expedition_chart_done']);
+    const settled = Boolean(this.save.missions['expedition_second_island']);
     const checks = [development >= 1000, buildingCount >= 8, pathCount >= 16, unlockedCount >= 8, uniqueCaught >= 20, permit];
     const readySteps = checks.filter(Boolean).length;
     const progress = Math.min(100, Math.round((readySteps / checks.length) * 100));
@@ -565,9 +596,81 @@ class AquaFantasiaGame {
         : pathCount < 16 ? '돌길 16칸으로 항구-광장 동선 연결'
           : unlockedCount < 8 ? '수역 8곳 이상 해금'
             : uniqueCaught < 20 ? '도감 20종 발견으로 개척 명분 확보'
-              : permit ? '다음 대형 업데이트: 두 번째 섬 개척 준비 완료' : '상점에서 개척 항로 허가서 확보';
-    const tierLabel = progress >= 100 ? '개척 준비 완료' : progress >= 67 ? '항로 조사 중' : progress >= 34 ? '기반 확장 중' : '첫 섬 정비 중';
-    return { unlockedCount, uniqueCaught, buildingCount, pathCount, development, permit, readySteps, progress, nextText, tierLabel };
+              : permit ? '두 번째 섬 개척 실행 가능' : '상점에서 개척 항로 허가서 확보';
+    const tierLabel = settled ? '개척 완료'
+      : chartDone ? '후보지 항로 확보'
+        : surveyDone ? '항로 조사 완료'
+          : progress >= 100 ? '개척 준비 완료'
+            : progress >= 67 ? '항로 조사 중'
+              : progress >= 34 ? '기반 확장 중'
+                : '첫 섬 정비 중';
+    const phaseLabel = settled ? '두 번째 섬 개척 완료'
+      : chartDone ? '출항 후보지 선택 가능'
+        : surveyDone ? '후보지 차트 작성 필요'
+          : readySteps >= 3 ? '항로 조사 가능'
+            : '기반 성장 필요';
+    return { unlockedCount, uniqueCaught, buildingCount, pathCount, development, permit, readySteps, progress, nextText, tierLabel, phaseLabel, surveyDone, chartDone, settled };
+  }
+
+  private expeditionRouteCandidates(): ExpeditionRouteCandidate[] {
+    const uniqueCaught = Object.keys(this.save.caught).filter((id) => (this.save.caught[id] ?? 0) > 0).length;
+    const missionDone = Object.values(this.save.missions).filter(Boolean).length;
+    const routeProgress = (key: RegionKey): number => {
+      if (this.isRegionUnlocked(key)) return 100;
+      if (key === 'deep') return Math.min(100, Math.round((this.save.totalSuccess / 2) * 100));
+      if (key === 'palace') return Math.min(100, Math.round((uniqueCaught / 5) * 100));
+      if (key === 'dimension') return Math.min(100, Math.round((Math.max(this.save.bestStreak / 4, uniqueCaught / 10)) * 100));
+      if (key === 'glacier') return Math.min(100, Math.round((Math.max(this.save.totalSuccess / 8, this.save.missions.expedition_survey_done ? 0.70 : 0)) * 100));
+      if (key === 'storm') return Math.min(100, Math.round((Math.max(this.save.totalSuccess / 12, this.save.missions.expedition_chart_done ? 1 : this.save.missions.expedition_survey_done ? 0.74 : 0)) * 100));
+      if (key === 'mangrove') return Math.min(100, Math.round((Math.max(uniqueCaught / 14, (this.save.mastery.river ?? 0) / 6, this.save.missions.expedition_chart_done ? 1 : 0)) * 100));
+      if (key === 'lunar') return Math.min(100, Math.round((Math.max(this.save.bestStreak / 6, (this.save.mastery.dimension ?? 0) / 4, this.save.missions.expedition_second_island ? 1 : 0)) * 100));
+      if (key === 'reefFestival') return Math.min(100, Math.round((Math.max(missionDone / 2, this.save.totalSuccess / 5, this.save.missions.expedition_survey_done ? 1 : 0)) * 100));
+      return 0;
+    };
+    const requirements: Partial<Record<RegionKey, string>> = {
+      deep: '성공 2회',
+      palace: '도감 5종',
+      dimension: '콤보 4회 또는 도감 10종',
+      glacier: '성공 8회 또는 항로 조사',
+      storm: '성공 12회 또는 후보지 차트',
+      mangrove: '도감 14종 또는 차트 확보',
+      lunar: '콤보 6회 또는 두 번째 섬 개척',
+      reefFestival: '미션 2개 또는 항로 조사',
+    };
+    return regions
+      .filter((region) => !['lake', 'river', 'harbor'].includes(region.key))
+      .map((region) => ({
+        key: region.key,
+        name: region.name,
+        subtitle: region.subtitle,
+        requirement: requirements[region.key] ?? region.unlockHint,
+        progress: routeProgress(region.key),
+        unlocked: this.isRegionUnlocked(region.key),
+        recommended: !this.isRegionUnlocked(region.key) && routeProgress(region.key) >= 70,
+      }))
+      .sort((a, b) => Number(b.unlocked) - Number(a.unlocked) || Number(b.recommended) - Number(a.recommended) || b.progress - a.progress)
+      .slice(0, 5);
+  }
+
+  private expeditionCandidateMarkup(): string {
+    const rows = this.expeditionRouteCandidates();
+    return `<div class="v2076-expedition-candidates" aria-label="출항 후보지">${rows.map((route) => {
+      const status = route.unlocked ? '출항 가능' : route.progress >= 100 ? '해금 가능' : route.recommended ? '곧 해금' : '조사 중';
+      const button = route.unlocked ? '선택' : route.progress >= 100 ? '해금' : `${route.progress}%`;
+      return `<article class="v2076-route-card ${route.unlocked ? 'unlocked' : route.progress >= 100 ? 'ready' : route.recommended ? 'recommended' : 'locked'}"><div><strong>${route.name}</strong><span>${route.subtitle}</span><em>${route.requirement}</em></div><i style="--p:${route.progress}%"><b></b></i><button type="button" data-expedition-route="${route.key}" ${route.progress < 100 && !route.unlocked ? 'aria-disabled="true"' : ''}>${button}</button><small>${status}</small></article>`;
+    }).join('')}</div>`;
+  }
+
+  private expeditionActionsMarkup(stats: IslandExpansionStats): string {
+    const surveyReady = stats.readySteps >= 3;
+    const chartReady = stats.surveyDone && stats.permit && this.save.village.fund >= 300;
+    const settleReady = stats.progress >= 100 && stats.chartDone && this.save.village.fund >= 700;
+    const actions = [
+      { key: 'survey', title: stats.surveyDone ? '조사완료' : '항로 조사', desc: stats.surveyDone ? '후보지 차트를 준비하세요' : '3개 기준 달성 시 후보지 스캔', ready: surveyReady && !stats.surveyDone, done: stats.surveyDone },
+      { key: 'chart', title: stats.chartDone ? '차트완료' : '후보지 차트', desc: stats.chartDone ? '개척 실행 단계로 이동' : '허가서+기금 300G 필요', ready: chartReady && !stats.chartDone, done: stats.chartDone },
+      { key: 'settle', title: stats.settled ? '개척완료' : '두 번째 섬', desc: stats.settled ? '확장 항로가 열렸습니다' : '100%+기금 700G 필요', ready: settleReady && !stats.settled, done: stats.settled },
+    ];
+    return `<div class="v2076-expedition-actions" aria-label="개척 실행 버튼">${actions.map((action) => `<button type="button" data-expedition-action="${action.key}" class="${action.done ? 'done' : action.ready ? 'ready' : 'locked'}" ${action.done ? 'aria-disabled="true"' : ''}><strong>${action.title}</strong><span>${action.desc}</span></button>`).join('')}</div>`;
   }
 
   private islandExpansionBoardMarkup(): string {
@@ -586,7 +689,89 @@ class AquaFantasiaGame {
       ['마을기금', `${this.save.village.fund.toLocaleString('ko-KR')}G`],
       ['자동수익', `+${Math.max(0, this.save.village.autoIncome)}G`],
     ];
-    return `<div class="v2061-loop-pop-title"><span>개척 준비</span><strong>${stats.tierLabel}</strong></div><div class="v2050-expedition-head"><span>ISLAND EXPANSION</span><strong>${stats.tierLabel}</strong><em>${stats.nextText}</em></div><div class="v2050-expedition-meter" style="--p:${stats.progress}%"><i></i><b>${stats.progress}%</b></div><div class="v2075-expedition-loop-summary" aria-label="개척에 통합된 성장 루프">${loopRows.map(([label, value]) => `<article><strong>${value}</strong><span>${label}</span></article>`).join('')}</div><div class="v2050-expedition-grid">${rows.map(([label, value]) => `<article><strong>${value}</strong><span>${label}</span></article>`).join('')}</div>`;
+    return `<div class="v2061-loop-pop-title v2076-expedition-pop-title"><span>개척 준비</span><strong>${stats.phaseLabel}</strong></div><div class="v2050-expedition-head v2076-expedition-head"><span>ISLAND EXPANSION</span><strong>${stats.tierLabel}</strong><em>${stats.nextText}</em></div><div class="v2050-expedition-meter v2076-expedition-meter" style="--p:${stats.progress}%"><i></i><b>${stats.progress}%</b></div><div class="v2075-expedition-loop-summary" aria-label="개척에 통합된 성장 루프">${loopRows.map(([label, value]) => `<article><strong>${value}</strong><span>${label}</span></article>`).join('')}</div><div class="v2050-expedition-grid v2076-expedition-grid">${rows.map(([label, value]) => `<article><strong>${value}</strong><span>${label}</span></article>`).join('')}</div>${this.expeditionActionsMarkup(stats)}${this.expeditionCandidateMarkup()}`;
+  }
+
+  private handleExpeditionAction(action: string): void {
+    const stats = this.islandExpansionStats();
+    if (action === 'survey') {
+      if (stats.surveyDone) return;
+      if (stats.readySteps < 3) {
+        this.toast.show({ type: 'mission', title: '항로 조사 조건 부족', message: '발전도·시설·길·수역·도감·허가서 중 3개 이상을 먼저 달성하세요.', actionScreen: 'mission' });
+        return;
+      }
+      this.save.missions.expedition_survey_done = true;
+      this.save.village.development += 180;
+      this.save.village.fund += 120;
+      if (!this.save.unlockedRegions.includes('reefFestival')) this.save.unlockedRegions.push('reefFestival');
+      this.refreshVillageAutoIncome();
+      saveGame(this.save);
+      this.toast.show({ type: 'reward', title: '항로 조사 완료', message: '산호 축제섬 후보지가 열리고 마을 명성이 올랐습니다.', actionScreen: 'map' });
+      this.renderVillage();
+      return;
+    }
+    if (action === 'chart') {
+      if (stats.chartDone) return;
+      if (!stats.surveyDone || !stats.permit || this.save.village.fund < 300) {
+        this.toast.show({ type: 'mission', title: '차트 작성 조건 부족', message: '항로 조사, 개척 항로 허가서, 마을기금 300G가 필요합니다.', actionScreen: 'shop' });
+        return;
+      }
+      this.save.missions.expedition_chart_done = true;
+      this.save.village.fund = Math.max(0, this.save.village.fund - 300);
+      this.save.village.development += 260;
+      for (const key of ['mangrove', 'glacier'] as RegionKey[]) {
+        if (!this.save.unlockedRegions.includes(key)) this.save.unlockedRegions.push(key);
+      }
+      this.refreshVillageAutoIncome();
+      saveGame(this.save);
+      this.toast.show({ type: 'reward', title: '후보지 차트 완성', message: '맹그로브 미궁과 얼음 낚시터 항로가 개척 후보지로 표시됩니다.', actionScreen: 'map' });
+      this.renderVillage();
+      return;
+    }
+    if (action === 'settle') {
+      if (stats.settled) return;
+      if (stats.progress < 100 || !stats.chartDone || this.save.village.fund < 700) {
+        this.toast.show({ type: 'mission', title: '두 번째 섬 개척 조건 부족', message: '개척 100%, 후보지 차트, 마을기금 700G가 필요합니다.', actionScreen: 'mission' });
+        return;
+      }
+      this.save.missions.expedition_second_island = true;
+      this.save.village.fund = Math.max(0, this.save.village.fund - 700);
+      this.save.village.level = Math.max(this.save.village.level + 1, this.save.village.level);
+      this.save.village.development += 420;
+      for (const key of ['storm', 'lunar', 'dimension'] as RegionKey[]) {
+        if (!this.save.unlockedRegions.includes(key)) this.save.unlockedRegions.push(key);
+      }
+      this.refreshVillageAutoIncome();
+      saveGame(this.save);
+      this.toast.show({ type: 'reward', title: '두 번째 섬 개척 완료', message: '폭풍 외해·달빛 산호해·차원의 바다 항로가 개척망에 연결됐습니다.', actionScreen: 'map' });
+      this.renderVillage();
+    }
+  }
+
+  private handleExpeditionRoute(key: RegionKey): void {
+    const route = this.expeditionRouteCandidates().find((item) => item.key === key);
+    if (!route) return;
+    if (!route.unlocked && route.progress < 100) {
+      this.toast.show({ type: 'mission', title: '아직 조사 중인 후보지', message: `${route.name} · ${route.requirement} 조건을 더 채워야 합니다.`, actionScreen: 'mission' });
+      return;
+    }
+    if (!this.save.unlockedRegions.includes(key)) this.save.unlockedRegions.push(key);
+    this.save.region = key;
+    saveGame(this.save);
+    this.toast.show({ type: 'reward', title: '항로 선택 완료', message: `${route.name} 항로를 목적지로 지정했습니다.`, actionScreen: 'fishing' });
+    void this.go('map');
+  }
+
+  private bindExpeditionControls(root: HTMLElement): void {
+    root.querySelectorAll<HTMLButtonElement>('[data-expedition-action]').forEach((btn) => btn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      this.handleExpeditionAction(btn.dataset.expeditionAction ?? '');
+    }));
+    root.querySelectorAll<HTMLButtonElement>('[data-expedition-route]').forEach((btn) => btn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      const key = btn.dataset.expeditionRoute as RegionKey | undefined;
+      if (key) this.handleExpeditionRoute(key);
+    }));
   }
 
   private renderVillage(): void {
@@ -597,7 +782,7 @@ class AquaFantasiaGame {
     const playerNameHtml = this.escapeHtml(playerName);
     const expansionStats = this.islandExpansionStats();
     const root = document.createElement('main');
-    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen v209-asset-qa-screen v2010-village-clean-screen v2011-dock-safe-screen v2012-world-asset-screen v2013-world-safe-screen v2014-clean-village-screen v2016-world-stability-screen v2017-direction-ui-screen v2018-build-ux-screen v2020-village-asset-screen v2021-village-asset-screen v2022-hud-control-screen v2023-premium-village-screen v2024-village-object-repair-screen v2026-wide-stability-screen v2027-village-root-repair-screen v2039-village-object-audit-screen v2040-village-engine-audit-screen v2041-village-ui-screen v2042-village-ui-screen v2043-village-ui-screen v2044-village-ui-screen v2049-content-village-screen v2050-content-village-screen v2051-hud-loop-village-screen v2052-tile-anchor-village-screen v2053-hud-dock-village-screen v2054-layout-issue-village-screen v2055-playability-village-screen v2056-motion-tile-village-screen v2060-grounded-motion-village-screen v2061-loop-ui-village-screen v2062-ground-contact-village-screen v2063-unified-card-window-village-screen v2064-polish-audit-village-screen v2072-loop-polish-village-screen v2075-exploration-polish-village-screen locked-screen';
+    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen v209-asset-qa-screen v2010-village-clean-screen v2011-dock-safe-screen v2012-world-asset-screen v2013-world-safe-screen v2014-clean-village-screen v2016-world-stability-screen v2017-direction-ui-screen v2018-build-ux-screen v2020-village-asset-screen v2021-village-asset-screen v2022-hud-control-screen v2023-premium-village-screen v2024-village-object-repair-screen v2026-wide-stability-screen v2027-village-root-repair-screen v2039-village-object-audit-screen v2040-village-engine-audit-screen v2041-village-ui-screen v2042-village-ui-screen v2043-village-ui-screen v2044-village-ui-screen v2049-content-village-screen v2050-content-village-screen v2051-hud-loop-village-screen v2052-tile-anchor-village-screen v2053-hud-dock-village-screen v2054-layout-issue-village-screen v2055-playability-village-screen v2056-motion-tile-village-screen v2060-grounded-motion-village-screen v2061-loop-ui-village-screen v2062-ground-contact-village-screen v2063-unified-card-window-village-screen v2064-polish-audit-village-screen v2072-loop-polish-village-screen v2075-exploration-polish-village-screen v2076-expedition-route-village-screen locked-screen';
     root.classList.add('v108-home-main', 'v1110-village-flow');
     root.dataset.legacyVillageFlow = 'v1110-home-banner v1110-tide-card before v1110-region-panel';
     root.innerHTML = `
@@ -617,7 +802,7 @@ class AquaFantasiaGame {
       <section class="v204-mini-map" aria-label="루미나 베이 미니맵"><strong>루미나 베이</strong><span>광장 · 항구 · 길드</span><i></i><b></b></section>
       <section class="v206-village-status glass-card" aria-label="마을 요약"><article><strong>${this.save.village.buildings.length}</strong><span>시설</span></article><article><strong>${this.save.village.paths.length}</strong><span>길</span></article><article><strong>${this.totalCaught()}</strong><span>포획</span></article></section>
       <section class="v2-objective-card glass-card" aria-live="polite"><strong>오늘의 목표</strong><span data-v2-objective>길·꽃·벤치를 배치해서 관광객 100점을 먼저 열기</span></section>
-      <section class="v2050-expedition-board v2051-expedition-mini v2075-expedition-dock glass-card" aria-label="다른 섬 개척 준비 보드"><button type="button" class="v2051-loop-toggle v2075-expedition-toggle" aria-label="개척 정보 펼치기" aria-expanded="false"><span>개척</span><strong>${expansionStats.progress}%</strong><em>${expansionStats.tierLabel}</em></button><div class="v2051-loop-body" aria-hidden="true">${this.islandExpansionBoardMarkup()}<button type="button" class="v2055-loop-close v2059-loop-close" data-v2055-loop-close aria-label="정보 닫기">×</button></div></section>
+      <section class="v2050-expedition-board v2051-expedition-mini v2075-expedition-dock glass-card" aria-label="다른 섬 개척 준비 보드"><button type="button" class="v2051-loop-toggle v2075-expedition-toggle" aria-label="개척 정보 펼치기" aria-expanded="false"><span>개척</span><strong>${expansionStats.progress}%</strong><em>${expansionStats.phaseLabel}</em></button><div class="v2051-loop-body" aria-hidden="true">${this.islandExpansionBoardMarkup()}<button type="button" class="v2055-loop-close v2059-loop-close" data-v2055-loop-close aria-label="정보 닫기">×</button></div></section>
       <section class="v2-village-guide glass-card" aria-live="polite"><strong>첫 마을</strong><span>좌측 조이스틱 이동 · 탭 이동 · 우측 하단 메뉴 · +/− 캐릭터 시점 줌</span></section>
       <section class="v2-dialog-panel glass-card" aria-live="polite"></section>
       <section class="v2017-character-panel" data-v2017-character-panel aria-hidden="true" role="dialog" aria-modal="true" aria-label="내 캐릭터">
@@ -797,6 +982,7 @@ class AquaFantasiaGame {
       panel?.querySelector<HTMLElement>('.v2051-loop-body')?.setAttribute('aria-hidden', 'true');
       panel?.querySelector<HTMLElement>('.v2051-loop-toggle')?.setAttribute('aria-expanded', 'false');
     }));
+    this.bindExpeditionControls(root);
     root.querySelector<HTMLButtonElement>('[data-village-shop]')?.addEventListener('click', () => { void this.go('shop'); });
   }
 
@@ -833,7 +1019,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen v2059-dialog-close-screen v2063-unified-card-window-screen v2064-polish-audit-menu-screen v2072-menu-card-screen v2074-growth-loop-menu-screen v2075-scroll-polish-menu-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen v2059-dialog-close-screen v2063-unified-card-window-screen v2064-polish-audit-menu-screen v2072-menu-card-screen v2074-growth-loop-menu-screen v2075-scroll-polish-menu-screen v2076-expedition-route-menu-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.dataset.v2027MenuRepair = 'true';
     root.dataset.v2028MenuAudit = 'simple-aqua-readable-content';
@@ -851,6 +1037,7 @@ class AquaFantasiaGame {
     root.dataset.v2072MenuCard = 'character-build-style-aqua-card';
     root.dataset.v2074GrowthLoop = 'catch-sale-village-growth';
     root.dataset.v2075ScrollPolish = 'menu-drag-scroll-aqua-buttons';
+    root.dataset.v2076ExpeditionRoutes = 'route-candidates-action-buttons';
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
     root.innerHTML = `
@@ -2279,7 +2466,7 @@ class AquaFantasiaGame {
         <div><span class="runtime-eyebrow">OCEAN ROUTE</span><h2>지도</h2><p>현재 목적지 ${activeRegion.name} · 열린 수역 ${unlockedCount}/${regions.length}</p></div>
         <button class="runtime-btn gold compact-cta btn-gold-cost" type="button" data-go-fishing>출항</button>
       </section>
-      <section class="v2050-expedition-card v204-window-card" aria-label="섬 개척 체크리스트">${this.islandExpansionBoardMarkup()}</section>
+      <section class="v2050-expedition-card v2076-expedition-card v204-window-card" aria-label="섬 개척 체크리스트와 출항 후보지">${this.islandExpansionBoardMarkup()}</section>
       <section class="v206-route-ready v204-window-card v2050-route-ready" aria-label="출항 준비 현황">
         <article><strong>${this.save.gear.lureStock}</strong><span>미끼</span></article>
         <article><strong>Lv.${this.save.gear.rodLevel}</strong><span>로드</span></article>
@@ -2299,6 +2486,7 @@ class AquaFantasiaGame {
         <div class="v204-map-detail v206-map-detail"><strong>${activeRegion.name}</strong><span>${activeRegion.subtitle} · ${activeRegion.tide}</span><p>선장: 항로를 고르면 바로 낚시터로 이동합니다. 잠긴 수역은 도감, 성공 횟수, 마을 의뢰를 통해 열립니다.</p><button class="runtime-btn cyan compact-cta btn-aqua-action" data-go-fishing>선택 수역 출항</button></div>
       </section>`;
     dom.app.appendChild(root);
+    this.bindExpeditionControls(root);
     root.querySelectorAll<HTMLButtonElement>('[data-region]').forEach((btn) => btn.addEventListener('click', () => {
       const key = btn.dataset.region as RegionKey;
       if (!this.isRegionUnlocked(key)) {
@@ -2536,6 +2724,9 @@ class AquaFantasiaGame {
       { id: 'autoIncome5', category: '자동수익', title: '자동수익 5G 달성', desc: '시설과 길을 늘려 방치 수익 기반 만들기', max: 5, value: Math.min(5, autoIncome), reward: 380 },
       { id: 'expeditionPrep3', category: '개척', title: '섬 개척 준비 3단계', desc: '발전도·시설·길·수역·도감 중 3개 기준 달성', max: 3, value: Math.min(3, this.islandExpansionStats().readySteps), reward: 620, event: true },
       { id: 'routePermit', category: '개척', title: '개척 항로 허가서 확보', desc: '상점에서 항로 허가서를 확보해 다음 섬 개척 준비', max: 1, value: this.islandExpansionStats().permit ? 1 : 0, reward: 780, event: true },
+      { id: 'expeditionSurvey', category: '개척', title: '항로 조사 완료', desc: '개척 패널에서 항로 조사를 실행해 첫 후보지를 여세요', max: 1, value: this.save.missions.expedition_survey_done ? 1 : 0, reward: 720, event: true },
+      { id: 'expeditionChart', category: '개척', title: '후보지 차트 완성', desc: '허가서와 기금으로 후보지 차트를 작성하세요', max: 1, value: this.save.missions.expedition_chart_done ? 1 : 0, reward: 980, event: true },
+      { id: 'expeditionSecondIsland', category: '개척', title: '두 번째 섬 개척', desc: '개척 100%와 차트 완료 후 두 번째 섬을 여세요', max: 1, value: this.save.missions.expedition_second_island ? 1 : 0, reward: 1600, event: true },
       { id: 'unlock5', category: '수역', title: '수역 5곳 해금', desc: '도감과 미션을 진행하면 새 수역이 열립니다', max: 5, value: Math.min(5, regionUnlocked), reward: 520 },
       { id: 'unlock8', category: '수역', title: '수역 8곳 해금', desc: '후반 수역까지 항해 경로 확장', max: 8, value: Math.min(8, regionUnlocked), reward: 900 },
       { id: 'mastery10', category: '숙련', title: '수역 숙련도 10 달성', desc: '한 수역에서 꾸준히 성공하면 숙련도가 오릅니다', max: 10, value: Math.min(10, masteryMax), reward: 520 },
@@ -2750,7 +2941,9 @@ class AquaFantasiaGame {
     if (this.save.bestStreak >= 4 || uniqueCaught >= 10) unlocked.add('dimension');
     if (uniqueCaught >= 14 || (this.save.mastery.river ?? 0) >= 6) unlocked.add('mangrove');
     if (this.save.bestStreak >= 6 || (this.save.mastery.dimension ?? 0) >= 4) unlocked.add('lunar');
-    if (Object.values(this.save.missions).filter(Boolean).length >= 2 || this.save.totalSuccess >= 5) unlocked.add('reefFestival');
+    if (Object.values(this.save.missions).filter(Boolean).length >= 2 || this.save.totalSuccess >= 5 || this.save.missions.expedition_survey_done) unlocked.add('reefFestival');
+    if (this.save.missions.expedition_chart_done) { unlocked.add('mangrove'); unlocked.add('glacier'); }
+    if (this.save.missions.expedition_second_island) { unlocked.add('storm'); unlocked.add('lunar'); unlocked.add('dimension'); }
     this.save.unlockedRegions = Array.from(unlocked);
   }
 

@@ -29950,3 +29950,174 @@ html[data-v2075-ui-exploration-polish="v2075-ui-exploration-scroll-polish"] body
     max-height: min(54svh, 500px) !important;
   }
 }
+
+/* v2.0.76 island expansion route upgrade
+   Turns the single 개척 panel into an actionable route board without touching character direction code. */
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] body[data-screen="village"] .v2076-expedition-route-village-screen .v2075-expedition-toggle {
+  grid-template-columns: max-content max-content minmax(0, 1fr) !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] body[data-screen="village"] .v2076-expedition-route-village-screen .v2075-expedition-toggle em {
+  max-width: 100% !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] :is(.v2076-expedition-card,.v2051-expedition-mini.open .v2051-loop-body) .v2076-expedition-pop-title strong,
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] :is(.v2076-expedition-card,.v2051-expedition-mini.open .v2051-loop-body) .v2076-expedition-head strong {
+  color: #043a55 !important;
+  -webkit-text-fill-color: #043a55 !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-expedition-actions {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+  margin: 10px 0 9px !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-expedition-actions button {
+  min-width: 0 !important;
+  min-height: 48px !important;
+  padding: 7px 5px !important;
+  border-radius: 17px !important;
+  border: 1px solid rgba(86, 204, 236, .55) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(150,232,249,.72)) !important;
+  color: #073d59 !important;
+  -webkit-text-fill-color: #073d59 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.72), 0 8px 16px rgba(0,76,116,.12) !important;
+  text-align: center !important;
+  touch-action: manipulation !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-expedition-actions button.ready {
+  border-color: rgba(247, 190, 67, .78) !important;
+  background: linear-gradient(180deg, #fff6be, #ffd66b) !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-expedition-actions button.done {
+  opacity: .72 !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-expedition-actions button strong,
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-expedition-actions button span {
+  display: block !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-expedition-actions button strong {
+  font-size: 11px !important;
+  font-weight: 1000 !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-expedition-actions button span {
+  margin-top: 3px !important;
+  font-size: 9px !important;
+  font-weight: 850 !important;
+  opacity: .72 !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-expedition-candidates {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 8px !important;
+  margin-top: 10px !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 58px !important;
+  grid-template-areas: "copy btn" "meter status" !important;
+  align-items: center !important;
+  gap: 6px 8px !important;
+  min-width: 0 !important;
+  padding: 9px !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(95, 214, 245, .48) !important;
+  background: rgba(255,255,255,.66) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.76) !important;
+  color: #053a55 !important;
+  -webkit-text-fill-color: #053a55 !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card.ready,
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card.recommended {
+  border-color: rgba(249, 188, 67, .70) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,226,133,.58)) !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card.unlocked {
+  border-color: rgba(72, 212, 175, .64) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(154,245,222,.56)) !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card > div {
+  grid-area: copy !important;
+  min-width: 0 !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card strong,
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card span,
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card em,
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card small {
+  display: block !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-style: normal !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card strong { font-size: 12px !important; font-weight: 1000 !important; }
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card span { font-size: 10px !important; font-weight: 850 !important; opacity: .76 !important; }
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card em { margin-top: 2px !important; font-size: 9px !important; font-weight: 900 !important; opacity: .68 !important; }
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card i {
+  grid-area: meter !important;
+  display: block !important;
+  height: 8px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  background: rgba(6, 77, 112, .13) !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card i b {
+  display: block !important;
+  width: var(--p) !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  border-radius: inherit !important;
+  background: linear-gradient(90deg, #34d6f2, #ffcf5c) !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card button {
+  grid-area: btn !important;
+  width: 58px !important;
+  min-width: 58px !important;
+  min-height: 36px !important;
+  padding: 0 5px !important;
+  border-radius: 15px !important;
+  border: 1px solid rgba(28, 139, 182, .40) !important;
+  background: linear-gradient(180deg, #f5ffff, #8eeaff) !important;
+  color: #053a55 !important;
+  -webkit-text-fill-color: #053a55 !important;
+  font-size: 10px !important;
+  font-weight: 1000 !important;
+  touch-action: manipulation !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card button[aria-disabled="true"] {
+  opacity: .55 !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card small {
+  grid-area: status !important;
+  justify-self: end !important;
+  max-width: 96px !important;
+  font-size: 9px !important;
+  font-weight: 1000 !important;
+  opacity: .72 !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .runtime-menu-screen.v2076-expedition-route-menu-screen .v2076-expedition-card {
+  overflow: visible !important;
+}
+html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .runtime-menu-screen.v2076-expedition-route-menu-screen .v2076-expedition-card .v2076-expedition-candidates {
+  margin-bottom: 3px !important;
+}
+@media (max-width: 430px), (max-height: 760px) {
+  html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-expedition-actions {
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+  }
+  html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-expedition-actions button {
+    min-height: 38px !important;
+  }
+  html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card {
+    grid-template-columns: minmax(0, 1fr) 52px !important;
+    padding: 8px !important;
+  }
+  html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .v2076-route-card button {
+    width: 52px !important;
+    min-width: 52px !important;
+  }
+}

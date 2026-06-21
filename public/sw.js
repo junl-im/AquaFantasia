@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.75-exploration-ui-scroll-polish';
+const CACHE_NAME = 'aqua-fantasia-v2.0.76-island-expansion-routes';
 const PRECACHE = [
   "./",
   "./index.html",
