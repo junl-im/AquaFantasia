@@ -276,6 +276,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2066RiskRegressionSweep = 'v2066-risk-regression-sweep';
     document.documentElement.dataset.v2067StartMenuLoopCardRestore = 'v2067-start-menu-loop-card-restore';
     document.documentElement.dataset.v2069StartMenuCardAudit = 'v2069-start-menu-aqua-card-audit';
+    document.documentElement.dataset.v2070MenuPageStructureAudit = 'v2070-menu-page-structure-design-audit';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -800,7 +801,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen v2059-dialog-close-screen v2063-unified-card-window-screen v2064-polish-audit-menu-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v2070-aqua-page-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen v2059-dialog-close-screen v2063-unified-card-window-screen v2064-polish-audit-menu-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.dataset.v2027MenuRepair = 'true';
     root.dataset.v2028MenuAudit = 'simple-aqua-readable-content';
@@ -826,11 +827,43 @@ class AquaFantasiaGame {
         <div class="runtime-title"><span>AQUA FANTASIA</span><strong>${title}</strong><em>${subtitle}</em></div>
         <div class="runtime-wallet"><span><img src="./assets/v22/icons/nav_fishing.png" alt="" />${this.save.coins.toLocaleString('ko-KR')}G</span><span><img src="./assets/v22/icons/nav_bag.png" alt="" />${this.save.gear.lureStock}</span></div>
       </header>
-      <div class="runtime-content"></div>`;
+      <div class="runtime-content v2070-aqua-page-card" data-v2070-page-content></div>`;
     root.querySelector<HTMLButtonElement>('[data-v2059-menu-close]')?.addEventListener('click', () => { void this.go('village'); });
     this.mountUnderwaterWebgl(root, active === 'ranking' ? 'deep' : active === 'village' || active === 'shop' || active === 'map' ? 'town' : 'reef', V101_WATER_BG[active]);
     this.installRuntimeVerticalDragScroll(root);
+    this.installRuntimeAquaPageAudit(root, active);
     return root;
+  }
+
+
+  private installRuntimeAquaPageAudit(root: HTMLElement, active: Exclude<Screen, 'login' | 'fishing'>): void {
+    root.classList.add('v2070-aqua-page-screen');
+    root.dataset.v2070Page = active;
+    const content = root.querySelector<HTMLElement>('[data-v2070-page-content], .runtime-content');
+    if (!content) return;
+    content.classList.add('v2070-aqua-page-card');
+    const normalize = () => {
+      content.classList.add('v2070-aqua-page-card');
+      Array.from(content.children).forEach((child) => {
+        if (child instanceof HTMLElement) {
+          child.classList.add('v2070-card-section');
+          child.dataset.v2070Surface = 'section';
+        }
+      });
+      content.querySelectorAll<HTMLElement>('section, article, .runtime-hero-card, .runtime-panel, .runtime-item-card, .mission-card, .shop-card, .gear-card, .dex-card, .ranking-panel, .ranking-summary, .v204-window-card, .v204-map-shell, .v204-map-detail, .v206-map-detail, .v206-route-ready, .v206-route-ready article, .v206-inventory-dashboard, .v206-inventory-dashboard article, .v206-quest-npc-board, .v206-quest-npc-board article, .v2050-expedition-card, .v2050-expedition-grid article, .v950-filter-row, .v108-rank-row').forEach((node) => {
+        node.classList.add('v2070-aqua-surface');
+      });
+      content.querySelectorAll<HTMLElement>('button, .runtime-btn, .image-btn, .btn-aqua-action, .btn-gold-cost').forEach((node) => {
+        node.classList.add('v2070-aqua-button');
+      });
+      content.querySelectorAll<HTMLElement>('.v204-map-ocean, .v206-map-ocean').forEach((node) => {
+        node.classList.add('v2070-map-ocean-card');
+      });
+    };
+    normalize();
+    const observer = new MutationObserver(() => normalize());
+    observer.observe(content, { childList: true, subtree: true });
+    root.addEventListener('DOMNodeRemovedFromDocument', () => observer.disconnect(), { once: true });
   }
 
   private installRuntimeVerticalDragScroll(root: HTMLElement): void {

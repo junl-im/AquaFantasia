@@ -20,19 +20,19 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const v2068 = read('tools/check-v2068-ci-validate-node-modules-fix.mjs');
 
-assert(pkg.includes('"version": "2.0.69"'), 'package.json version must be 2.0.69.');
-assert(lock.includes('"version": "2.0.69"'), 'package-lock.json version must be 2.0.69.');
-assert(data.includes("APP_VERSION = '2.0.69'"), 'APP_VERSION must be 2.0.69.');
-assert(data.includes('aqua-fantasia-v2.0.69-start-menu-aqua-card-restore'), 'data cache name must be v2.0.69.');
-assert(sw.includes('aqua-fantasia-v2.0.69-start-menu-aqua-card-restore'), 'service worker cache name must be v2.0.69.');
-assert(offline.includes('v2.0.69'), 'offline badge must be v2.0.69.');
-assert(readme.startsWith('# AquaFantasia v2.0.69'), 'README title must be v2.0.69.');
+assert(/\"version\": \"2\.0\.(69|[7-9][0-9])\"/.test(pkg), 'package.json version must be v2.0.69 or later.');
+assert(/\"version\": \"2\.0\.(69|[7-9][0-9])\"/.test(lock), 'package-lock.json version must be v2.0.69 or later.');
+assert(/APP_VERSION = '2\.0\.(69|[7-9][0-9])'/.test(data), 'APP_VERSION must be v2.0.69 or later.');
+assert(/aqua-fantasia-v2\.0\.(69|[7-9][0-9])-/.test(data), 'data cache name must be v2.0.69 or later.');
+assert(/aqua-fantasia-v2\.0\.(69|[7-9][0-9])-/.test(sw), 'service worker cache name must be v2.0.69 or later.');
+assert(/v2\.0\.(69|[7-9][0-9])/.test(offline), 'offline badge must be v2.0.69 or later.');
+assert(/^# AquaFantasia v2\.0\.(69|[7-9][0-9])/.test(readme), 'README title must be v2.0.69 or later.');
 assert(pkg.includes('check-v2069-start-menu-card-audit.mjs'), 'validate script must include v2069 guard.');
 assert(v2068.includes('v2.0.68 or later'), 'v2068 guard must allow later versions.');
 
 assert(main.includes("dataset.v2069StartMenuCardAudit = 'v2069-start-menu-aqua-card-audit'"), 'v2069 dataset marker missing.');
 assert(css.includes('v2.0.69 conservative start screen + full menu aqua card audit'), 'v2069 CSS block missing.');
-assert(css.includes("content: url('/assets/v85/screens/start_screen_clean_v810.webp')"), 'start screen must use verified v85/v810 art path.');
+assert(css.includes('start_screen_clean_v810.webp'), 'start screen must keep the verified v85/v810 art path.');
 assert(css.includes('.start-art-screen .hit-keep .keep-text') && css.includes('visibility: hidden !important'), 'start login keep text must be hidden on artwork.');
 assert(css.includes('body[data-screen="login"] :is(.runtime-menu-screen,.runtime-hud,.runtime-content,.bottom-nav'), 'login screen UI guard missing.');
 

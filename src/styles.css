@@ -29891,3 +29891,186 @@ html[data-v2069-start-menu-card-audit="v2069-start-menu-aqua-card-audit"] .villa
   height: 36px !important;
   z-index: 5 !important;
 }
+
+
+/* v2.0.70 full page structure + aqua card design audit
+   Root cause: every page had different card class names and old patch layers targeted only some of them.
+   This layer uses runtime-added v2070 classes so each page gets the same clean construction/building-card surface without touching the verified start screen. */
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] {
+  --v2070-page-bg: radial-gradient(circle at 50% 0%, rgba(177, 252, 255, .28), transparent 35%), linear-gradient(180deg, rgba(13, 160, 204, .25), rgba(2, 39, 65, .36));
+  --v2070-card-bg: linear-gradient(180deg, rgba(255, 255, 255, .98) 0%, rgba(229, 255, 255, .96) 44%, rgba(174, 239, 252, .92) 100%);
+  --v2070-card-bg-soft: linear-gradient(180deg, rgba(255, 255, 255, .92), rgba(215, 251, 255, .84));
+  --v2070-card-border: rgba(76, 205, 238, .78);
+  --v2070-card-inner: rgba(255, 255, 255, .82);
+  --v2070-card-shadow: 0 18px 42px rgba(0, 65, 106, .20), 0 7px 16px rgba(0, 111, 151, .11), inset 0 1px 0 rgba(255,255,255,.95);
+  --v2070-ink: #05364f;
+  --v2070-muted: rgba(5, 61, 88, .76);
+  --v2070-radius: 30px;
+  --v2070-sub-radius: 22px;
+  --v2070-button-bg: linear-gradient(180deg, rgba(255,255,255,.99) 0%, rgba(201,250,255,.98) 52%, rgba(68,190,229,.92) 100%);
+  --v2070-gold-bg: linear-gradient(180deg, rgba(255,251,216,.99), rgba(255,213,113,.96) 55%, rgba(226,143,45,.94));
+}
+
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] body[data-screen="login"] .start-art-screen .start-art-image {
+  content: normal !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] body:not([data-screen="login"]) .runtime-menu-screen.v2070-aqua-page-screen {
+  background: var(--v2070-page-bg) !important;
+  color: var(--v2070-ink) !important;
+}
+
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen .runtime-3d-bg {
+  opacity: .16 !important;
+  filter: saturate(.92) brightness(1.08) !important;
+  pointer-events: none !important;
+}
+
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen .runtime-bg-character,
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen .v2023-world-map-bg {
+  opacity: .18 !important;
+  filter: saturate(.9) brightness(1.05) !important;
+  pointer-events: none !important;
+}
+
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen .runtime-hud,
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen .v2070-aqua-page-card {
+  width: min(948px, calc(100vw - 28px)) !important;
+  max-width: 948px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  background: var(--v2070-card-bg) !important;
+  background-image: var(--v2070-card-bg) !important;
+  border: 1px solid var(--v2070-card-border) !important;
+  outline: 1px solid var(--v2070-card-inner) !important;
+  outline-offset: -3px !important;
+  border-image: none !important;
+  border-radius: var(--v2070-radius) !important;
+  box-shadow: var(--v2070-card-shadow) !important;
+  color: var(--v2070-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen .v2070-aqua-page-card {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  min-height: 0 !important;
+  padding: clamp(14px, 3vw, 24px) !important;
+  overflow: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen :is(
+  .v2070-card-section,
+  .v2070-aqua-surface,
+  .runtime-hero-card,
+  .runtime-panel,
+  .runtime-item-card,
+  .mission-card,
+  .shop-card,
+  .gear-card,
+  .dex-card,
+  .ranking-panel,
+  .ranking-summary,
+  .ranking-stats-grid > div,
+  .v204-window-card,
+  .v204-map-shell,
+  .v204-map-detail,
+  .v206-map-detail,
+  .v206-route-ready,
+  .v206-route-ready article,
+  .v206-inventory-dashboard,
+  .v206-inventory-dashboard article,
+  .v206-quest-npc-board,
+  .v206-quest-npc-board article,
+  .v2050-expedition-card,
+  .v2050-expedition-grid article,
+  .v950-filter-row,
+  .v108-rank-row
+) {
+  background: var(--v2070-card-bg-soft) !important;
+  background-image: var(--v2070-card-bg-soft) !important;
+  border: 1px solid rgba(82, 207, 240, .68) !important;
+  outline: 1px solid rgba(255,255,255,.76) !important;
+  outline-offset: -3px !important;
+  border-image: none !important;
+  border-radius: var(--v2070-sub-radius) !important;
+  box-shadow: 0 10px 24px rgba(0, 78, 116, .13), inset 0 1px 0 rgba(255,255,255,.88) !important;
+  color: var(--v2070-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+}
+
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen :is(.v204-map-ocean,.v206-map-ocean,.v2070-map-ocean-card) {
+  background: radial-gradient(circle at 35% 24%, rgba(255,255,255,.46), transparent 30%), linear-gradient(180deg, rgba(137,235,255,.58), rgba(82,189,229,.50)) !important;
+  border: 1px solid rgba(80,203,236,.70) !important;
+  border-radius: 26px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.78), 0 10px 24px rgba(0,85,128,.14) !important;
+}
+
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen :is(.v2070-aqua-page-card,.v2070-card-section,.v2070-aqua-surface,.runtime-hud,.runtime-hero-card,.runtime-panel,.shop-card,.gear-card,.dex-card,.mission-card,.ranking-panel)::before,
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen :is(.v2070-aqua-page-card,.v2070-card-section,.v2070-aqua-surface,.runtime-hud,.runtime-hero-card,.runtime-panel,.shop-card,.gear-card,.dex-card,.mission-card,.ranking-panel)::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+}
+
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen :is(h1,h2,h3,h4,strong,b,.runtime-title strong,.runtime-panel-title strong,.v206-section-title strong,.v204-board-title strong) {
+  color: var(--v2070-ink) !important;
+  -webkit-text-fill-color: var(--v2070-ink) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.72) !important;
+}
+
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen :is(p,span,small,em,i,.runtime-title em,.runtime-panel-title span,.v206-section-title span) {
+  color: var(--v2070-muted) !important;
+  -webkit-text-fill-color: var(--v2070-muted) !important;
+  text-shadow: none !important;
+}
+
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen :is(button,.runtime-btn,.image-btn,.dialog-btn,.btn-aqua-action,.v2070-aqua-button),
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] body:not([data-screen="login"]) :is(.v2059-screen-close,.v2059-menu-close,.v2059-panel-close,.v2059-build-close,.v2059-loop-close,.v2055-loop-close,.v2017-character-close) {
+  background: var(--v2070-button-bg) !important;
+  background-image: var(--v2070-button-bg) !important;
+  border: 1px solid rgba(65, 199, 236, .82) !important;
+  outline: 1px solid rgba(255,255,255,.74) !important;
+  outline-offset: -3px !important;
+  border-image: none !important;
+  border-radius: 999px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.90), 0 8px 18px rgba(0, 86, 130, .16) !important;
+  color: #05364f !important;
+  -webkit-text-fill-color: #05364f !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.72) !important;
+  filter: none !important;
+}
+
+html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen :is(.btn-gold-cost,.shop-price,.image-btn.gold) {
+  background: var(--v2070-gold-bg) !important;
+  background-image: var(--v2070-gold-bg) !important;
+  border-color: rgba(204, 134, 35, .72) !important;
+  color: #5c3100 !important;
+  -webkit-text-fill-color: #5c3100 !important;
+}
+
+@media (max-width: 520px) {
+  html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen .runtime-hud,
+  html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen .v2070-aqua-page-card {
+    width: calc(100vw - 18px) !important;
+    border-radius: 24px !important;
+  }
+  html[data-v2070-menu-page-structure-audit="v2070-menu-page-structure-design-audit"] .runtime-menu-screen.v2070-aqua-page-screen .v2070-aqua-page-card {
+    padding: 12px !important;
+    gap: 11px !important;
+  }
+}
