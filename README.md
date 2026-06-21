@@ -1,4 +1,11 @@
-# AquaFantasia v2.0.67
+# AquaFantasia v2.0.68
+
+## v2.0.68 변경사항
+
+- GitHub Actions에서 `npm ci` 후 `npm run validate`를 실행하면 작업공간에 정상적으로 생성되는 `node_modules`를 v2.0.67 검증 스크립트가 패키지 오염으로 오인하던 문제를 수정했습니다.
+- ZIP 패키징에서는 계속 `node_modules`, `dist`, `reports`, `*_NOTES.md`, 로그 파일을 제외하지만, 설치 후 CI 검증 단계에서는 `node_modules` 존재만으로 실패하지 않도록 `check-v2067-start-menu-loop-card-restore.mjs`를 완화했습니다.
+- v2.0.68 전용 정적 검증 스크립트 `check-v2068-ci-validate-node-modules-fix.mjs`를 추가해 버전 동기화, v2067 CI node_modules 예외, README 단일 유지, registry 금지 문자열을 확인합니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge를 `2.0.68`로 동기화했습니다.
 
 ## v2.0.67 변경사항
 

@@ -19,13 +19,13 @@ const sw = read('public/sw.js');
 const offline = read('public/offline.html');
 const readme = read('README.md');
 
-assert(pkg.includes('"version": "2.0.67"'), 'package.json version must be 2.0.67.');
-assert(lock.includes('"version": "2.0.67"'), 'package-lock.json version must be 2.0.67.');
-assert(data.includes("APP_VERSION = '2.0.67'"), 'APP_VERSION must be 2.0.67.');
-assert(data.includes('aqua-fantasia-v2.0.67-start-menu-loop-card-restore'), 'data cache name must be v2.0.67.');
-assert(sw.includes('aqua-fantasia-v2.0.67-start-menu-loop-card-restore'), 'service worker cache name must be v2.0.67.');
-assert(offline.includes('v2.0.67'), 'offline badge must be v2.0.67.');
-assert(readme.startsWith('# AquaFantasia v2.0.67'), 'README title must be v2.0.67.');
+assert(/\"version\": \"2\.0\.(6[7-9]|[7-9][0-9])\"/.test(pkg), 'package.json version must be v2.0.67 or later.');
+assert(/\"version\": \"2\.0\.(6[7-9]|[7-9][0-9])\"/.test(lock), 'package-lock.json version must be v2.0.67 or later.');
+assert(/APP_VERSION = '2\.0\.(6[7-9]|[7-9][0-9])'/.test(data), 'APP_VERSION must be v2.0.67 or later.');
+assert(/aqua-fantasia-v2\.0\.(6[7-9]|[7-9][0-9])-/.test(data), 'data cache name must be v2.0.67 or later.');
+assert(/aqua-fantasia-v2\.0\.(6[7-9]|[7-9][0-9])-/.test(sw), 'service worker cache name must be v2.0.67 or later.');
+assert(/v2\.0\.(6[7-9]|[7-9][0-9])/.test(offline), 'offline badge must be v2.0.67 or later.');
+assert(/^# AquaFantasia v2\.0\.(6[7-9]|[7-9][0-9])/.test(readme), 'README title must be v2.0.67 or later.');
 assert(pkg.includes('check-v2067-start-menu-loop-card-restore.mjs'), 'validate script must include v2067 guard.');
 
 assert(main.includes("dataset.v2067StartMenuLoopCardRestore = 'v2067-start-menu-loop-card-restore'"), 'v2067 dataset marker missing.');
@@ -48,10 +48,13 @@ for (const needle of forbidden) {
   assert(!lock.includes(needle), `forbidden registry string found in lockfile: ${needle}`);
 }
 
-const disallowedZipItems = ['node_modules', 'dist', 'reports'];
-for (const item of disallowedZipItems) {
+const disallowedSourceDirs = ['dist', 'reports'];
+for (const item of disallowedSourceDirs) {
   assert(!fs.existsSync(path.join(root, item)), `${item} must not exist in packaged source.`);
 }
+// Do not fail on node_modules here: GitHub Actions runs npm ci before npm run validate,
+// so node_modules is expected in the CI workspace. ZIP packaging still excludes it and
+// v2068 verifies that validate no longer treats installed dependencies as source pollution.
 
 const markdownFiles = [];
 const walk = (dir) => {
