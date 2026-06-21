@@ -272,11 +272,6 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2062GroundContactMotionAudit = 'v2062-shadow-foot-contact-motion-audit';
     document.documentElement.dataset.v2063FishingCardWindows = 'v2063-fishing-state-machine-unified-card-windows';
     document.documentElement.dataset.v2064PolishAudit = 'v2064-fishing-ui-card-button-stability-audit';
-    document.documentElement.dataset.v2065UnifiedCardFramePolish = 'v2065-unified-aqua-card-popup-frame-polish';
-    document.documentElement.dataset.v2066RiskRegressionSweep = 'v2066-risk-regression-sweep';
-    document.documentElement.dataset.v2067StartMenuLoopCardRestore = 'v2067-start-menu-loop-card-restore';
-    document.documentElement.dataset.v2069StartMenuCardAudit = 'v2069-start-menu-aqua-card-audit';
-    document.documentElement.dataset.v2070MenuPageStructureAudit = 'v2070-menu-page-structure-design-audit';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -750,19 +745,16 @@ class AquaFantasiaGame {
       root.querySelectorAll<HTMLElement>('.v2051-loop-mini.open, .v2051-expedition-mini.open').forEach((other) => {
         if (other !== panel) {
           other.classList.remove('open');
-          other.classList.remove('is-open');
           other.querySelector<HTMLElement>('.v2051-loop-body')?.setAttribute('aria-hidden', 'true');
         }
       });
       panel.classList.toggle('open', willOpen);
-      panel.classList.toggle('is-open', willOpen);
       panel.querySelector<HTMLElement>('.v2051-loop-body')?.setAttribute('aria-hidden', String(!willOpen));
     }));
     root.querySelectorAll<HTMLButtonElement>('[data-v2055-loop-close]').forEach((btn) => btn.addEventListener('click', (ev) => {
       ev.stopPropagation();
       const panel = btn.closest<HTMLElement>('.v2051-loop-mini, .v2051-expedition-mini');
       panel?.classList.remove('open');
-      panel?.classList.remove('is-open');
       panel?.querySelector<HTMLElement>('.v2051-loop-body')?.setAttribute('aria-hidden', 'true');
     }));
     root.querySelector<HTMLButtonElement>('[data-village-shop]')?.addEventListener('click', () => { void this.go('shop'); });
@@ -801,7 +793,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v2070-aqua-page-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen v2059-dialog-close-screen v2063-unified-card-window-screen v2064-polish-audit-menu-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen v2059-dialog-close-screen v2063-unified-card-window-screen v2064-polish-audit-menu-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.dataset.v2027MenuRepair = 'true';
     root.dataset.v2028MenuAudit = 'simple-aqua-readable-content';
@@ -827,43 +819,11 @@ class AquaFantasiaGame {
         <div class="runtime-title"><span>AQUA FANTASIA</span><strong>${title}</strong><em>${subtitle}</em></div>
         <div class="runtime-wallet"><span><img src="./assets/v22/icons/nav_fishing.png" alt="" />${this.save.coins.toLocaleString('ko-KR')}G</span><span><img src="./assets/v22/icons/nav_bag.png" alt="" />${this.save.gear.lureStock}</span></div>
       </header>
-      <div class="runtime-content v2070-aqua-page-card" data-v2070-page-content></div>`;
+      <div class="runtime-content"></div>`;
     root.querySelector<HTMLButtonElement>('[data-v2059-menu-close]')?.addEventListener('click', () => { void this.go('village'); });
     this.mountUnderwaterWebgl(root, active === 'ranking' ? 'deep' : active === 'village' || active === 'shop' || active === 'map' ? 'town' : 'reef', V101_WATER_BG[active]);
     this.installRuntimeVerticalDragScroll(root);
-    this.installRuntimeAquaPageAudit(root, active);
     return root;
-  }
-
-
-  private installRuntimeAquaPageAudit(root: HTMLElement, active: Exclude<Screen, 'login' | 'fishing'>): void {
-    root.classList.add('v2070-aqua-page-screen');
-    root.dataset.v2070Page = active;
-    const content = root.querySelector<HTMLElement>('[data-v2070-page-content], .runtime-content');
-    if (!content) return;
-    content.classList.add('v2070-aqua-page-card');
-    const normalize = () => {
-      content.classList.add('v2070-aqua-page-card');
-      Array.from(content.children).forEach((child) => {
-        if (child instanceof HTMLElement) {
-          child.classList.add('v2070-card-section');
-          child.dataset.v2070Surface = 'section';
-        }
-      });
-      content.querySelectorAll<HTMLElement>('section, article, .runtime-hero-card, .runtime-panel, .runtime-item-card, .mission-card, .shop-card, .gear-card, .dex-card, .ranking-panel, .ranking-summary, .v204-window-card, .v204-map-shell, .v204-map-detail, .v206-map-detail, .v206-route-ready, .v206-route-ready article, .v206-inventory-dashboard, .v206-inventory-dashboard article, .v206-quest-npc-board, .v206-quest-npc-board article, .v2050-expedition-card, .v2050-expedition-grid article, .v950-filter-row, .v108-rank-row').forEach((node) => {
-        node.classList.add('v2070-aqua-surface');
-      });
-      content.querySelectorAll<HTMLElement>('button, .runtime-btn, .image-btn, .btn-aqua-action, .btn-gold-cost').forEach((node) => {
-        node.classList.add('v2070-aqua-button');
-      });
-      content.querySelectorAll<HTMLElement>('.v204-map-ocean, .v206-map-ocean').forEach((node) => {
-        node.classList.add('v2070-map-ocean-card');
-      });
-    };
-    normalize();
-    const observer = new MutationObserver(() => normalize());
-    observer.observe(content, { childList: true, subtree: true });
-    root.addEventListener('DOMNodeRemovedFromDocument', () => observer.disconnect(), { once: true });
   }
 
   private installRuntimeVerticalDragScroll(root: HTMLElement): void {
@@ -1202,7 +1162,7 @@ class AquaFantasiaGame {
 
   private baseGameShell(name: string): HTMLElement {
     const root = document.createElement('main');
-    root.className = `game-screen ${name}-screen v800-screen v810-screen ${name === 'fishing' ? 'locked-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2066-risk-regression-screen' : 'scroll-screen'}`;
+    root.className = `game-screen ${name}-screen v800-screen v810-screen ${name === 'fishing' ? 'locked-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2052-fishing-feedback-screen v2053-fishing-system-screen' : 'scroll-screen'}`;
     root.innerHTML = `<div class="ambient-bg" aria-hidden="true"></div>`;
     return root;
   }
@@ -1724,9 +1684,8 @@ class AquaFantasiaGame {
 
   private showResultCard(reward: number): void {
     document.querySelectorAll('.catch-result-card').forEach((node) => node.remove());
-    document.querySelectorAll('.catch-result-card.v2064-result-card, .catch-result-card.v2059-result-card').forEach((node, index) => { if (index > 0) node.remove(); });
-    if (this.resultCardOpen || document.querySelector('.catch-result-card.v2064-result-card')) return;
     const card = document.createElement('div');
+    if (this.resultCardOpen || document.querySelector('.catch-result-card.v2064-result-card')) return;
     this.resultCardOpen = true;
     card.className = `catch-result-card v930-result v2064-result-card v2021-result-card v2036-result-card v2037-result-card v2038-result-card v2039-result-card v2040-result-card v2041-result-card v2042-result-card v2043-result-card v2044-result-card v2045-result-card v2051-result-card v2053-result-card v2054-result-card v2055-result-card v2057-result-card v2059-result-card rarity-${this.activeFish.rarity.toLowerCase()}`;
     const firstCatch = (this.save.caught[this.activeFish.id] ?? 0) <= 1;

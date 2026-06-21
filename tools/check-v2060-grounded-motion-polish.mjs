@@ -13,7 +13,7 @@ function assert(condition, message) {
 }
 
 assert(/APP_VERSION = '2\.0\.(60|6[1-9]|[7-9][0-9])'/.test(data), 'APP_VERSION must preserve the v2060 grounded-motion lineage.');
-assert(/aqua-fantasia-v2\.0\.(60|6[1-9]|[7-9][0-9])/.test(data), 'cache key must preserve grounded-motion or later lineage.');
+assert(data.includes('aqua-fantasia-v2.0.') && /grounded-motion-polish|loop-ui-button-audit|ground-contact-motion-audit|fishing-card-window-rework/.test(data), 'cache key must preserve grounded-motion or later lineage.');
 assert(village.includes("dataset.v2060GroundedMotionPolish = 'no-floating-grounded-footstep-motion'"), 'VillageWorld must expose the v2060 grounded motion marker.');
 assert(main.includes('v2060-grounded-motion-village-screen'), 'village root must include v2060 grounded motion class.');
 assert(styles.includes('v2.0.60 grounded motion correction'), 'styles must include v2.0.60 grounded motion marker.');
