@@ -12,6 +12,18 @@ import { VillageWorld } from './villageWorld';
 
 type FishMood = 'calm' | 'pulling' | 'burst' | 'tired' | 'escaping';
 
+type CatchGrowthSettlement = {
+  reward: number;
+  baseReward: number;
+  marketBonus: number;
+  fund: number;
+  development: number;
+  tourists: number;
+  autoIncome: number;
+  firstCatch: boolean;
+  story: string;
+};
+
 const FISH_MOOD_LABEL: Record<FishMood, string> = {
   calm: '평온',
   pulling: '저항',
@@ -289,6 +301,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2064PolishAudit = 'v2064-fishing-ui-card-button-stability-audit';
     document.documentElement.dataset.v2072MenuFishingLoopPolish = 'v2072-menu-card-fishing-loop-polish';
     document.documentElement.dataset.v2073FishingCoreFeel = 'v2073-fishing-core-feel-update';
+    document.documentElement.dataset.v2074CatchGrowthLoop = 'v2074-catch-growth-loop';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -523,8 +536,8 @@ class AquaFantasiaGame {
           : { label: '첫 관광객 유치', value: Math.min(100, Math.round((score / 100) * 100)), desc: '꽃밭·돌길·주민 집으로 첫 마을 분위기를 잡으세요.' };
     const loop = [
       ['낚시', `${this.totalCaught()}마리`],
-      ['판매', `${this.save.coins.toLocaleString('ko-KR')}G`],
-      ['시설', `${buildingCount}채`],
+      ['자동판매', `${this.estimatedCatchLedgerValue().toLocaleString('ko-KR')}G`],
+      ['마을기금', `${this.save.village.fund.toLocaleString('ko-KR')}G`],
       ['자동수익', `+${income}G/틱`],
     ];
     return `
@@ -813,7 +826,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen v2059-dialog-close-screen v2063-unified-card-window-screen v2064-polish-audit-menu-screen v2072-menu-card-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen v2059-dialog-close-screen v2063-unified-card-window-screen v2064-polish-audit-menu-screen v2072-menu-card-screen v2074-growth-loop-menu-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.dataset.v2027MenuRepair = 'true';
     root.dataset.v2028MenuAudit = 'simple-aqua-readable-content';
@@ -829,6 +842,7 @@ class AquaFantasiaGame {
     root.dataset.v2049MenuContent = 'content-loop-cards-and-aqua-assets';
     root.dataset.v2050ContentExpansion = 'island-expansion-content-assets';
     root.dataset.v2072MenuCard = 'character-build-style-aqua-card';
+    root.dataset.v2074GrowthLoop = 'catch-sale-village-growth';
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
     root.innerHTML = `
@@ -838,7 +852,7 @@ class AquaFantasiaGame {
       <header class="runtime-hud" aria-label="플레이어 HUD">
         <img class="runtime-hud-mascot" src="./assets/v203/portraits/player_happy.png" alt="" />
         <div class="runtime-title"><span>AQUA FANTASIA</span><strong>${title}</strong><em>${subtitle}</em></div>
-        <div class="runtime-wallet"><span><img src="./assets/v22/icons/nav_fishing.png" alt="" />${this.save.coins.toLocaleString('ko-KR')}G</span><span><img src="./assets/v22/icons/nav_bag.png" alt="" />${this.save.gear.lureStock}</span></div>
+        <div class="runtime-wallet v2074-runtime-wallet"><span><img src="./assets/v22/icons/nav_fishing.png" alt="" />${this.save.coins.toLocaleString('ko-KR')}G</span><span><img src="./assets/v209/props/shell_garden.png" alt="" />기금 ${this.save.village.fund.toLocaleString('ko-KR')}</span><span><img src="./assets/v22/icons/nav_bag.png" alt="" />${this.save.gear.lureStock}</span></div>
       </header>
       <div class="runtime-content"></div>`;
     root.querySelector<HTMLButtonElement>('[data-v2059-menu-close]')?.addEventListener('click', () => { void this.go('village'); });
@@ -911,7 +925,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen v2057-fishing-aqua-touch-screen v2058-tech-modernized-screen v2059-fishing-dialog-screen v2060-grounded-motion-fishing-screen v2061-loop-ui-fishing-screen v2062-ground-contact-fishing-screen v2063-fishing-rework-screen v2063-unified-card-window-screen v2064-fishing-polish-screen v2072-fishing-playable-screen v2073-fishing-core-feel-screen locked-screen';
+    root.className = 'game-screen fishing-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen v2057-fishing-aqua-touch-screen v2058-tech-modernized-screen v2059-fishing-dialog-screen v2060-grounded-motion-fishing-screen v2061-loop-ui-fishing-screen v2062-ground-contact-fishing-screen v2063-fishing-rework-screen v2063-unified-card-window-screen v2064-fishing-polish-screen v2072-fishing-playable-screen v2073-fishing-core-feel-screen v2074-growth-loop-screen locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     // v2048 legacy validation tokens preserved: 누르면 게이지가 올라가고, 떼면 내려갑니다 · safeTimer >= 2.0
@@ -1658,20 +1672,22 @@ class AquaFantasiaGame {
     if (success) {
       playSound('success');
       this.vibrate([20, 35, 55]);
-      const reward = this.calculateReward(this.activeFish);
+      const baseReward = this.calculateReward(this.activeFish);
+      const firstCatch = (this.save.caught[this.activeFish.id] ?? 0) <= 0;
+      const settlement = this.createCatchGrowthSettlement(this.activeFish, baseReward, firstCatch);
       this.save.caught[this.activeFish.id] = (this.save.caught[this.activeFish.id] ?? 0) + 1;
       this.save.mastery[this.activeFish.regionKey] = (this.save.mastery[this.activeFish.regionKey] ?? 0) + 1;
-      this.save.coins += reward;
+      this.applyCatchGrowthSettlement(settlement);
       this.save.totalSuccess += 1;
       this.save.currentStreak += 1;
       this.save.bestStreak = Math.max(this.save.bestStreak, this.save.currentStreak);
       this.updateUnlocks();
       saveGame(this.save);
-      this.save = appendLocalSyncEvent(this.save, { type: 'fishing-result', payload: { fishId: this.activeFish.id, rarity: this.activeFish.rarity, reward, region: this.activeFish.regionKey, success: true } });
+      this.save = appendLocalSyncEvent(this.save, { type: 'fishing-result', payload: { fishId: this.activeFish.id, rarity: this.activeFish.rarity, reward: settlement.reward, fund: settlement.fund, development: settlement.development, region: this.activeFish.regionKey, success: true } });
       this.syncFishingHud();
       if (this.comboNode) { this.comboNode.textContent = `연속 성공 x${Math.max(2, this.save.currentStreak)}`; this.comboNode.classList.toggle('hidden', this.save.currentStreak < 2); }
-      void this.syncCatchSpriteTexture(this.activeFish).finally(() => this.showCatchPopup(reward));
-      this.spawnRewardBurst(reward);
+      void this.syncCatchSpriteTexture(this.activeFish).finally(() => this.showCatchPopup(settlement));
+      this.spawnRewardBurst(settlement.reward);
       // v2.0.59: result card is the single acquisition UI; avoid duplicate toast/result popups.
     } else {
       playSound('fail');
@@ -1685,11 +1701,11 @@ class AquaFantasiaGame {
     }
   }
 
-  private showCatchPopup(reward: number): void {
+  private showCatchPopup(settlement: CatchGrowthSettlement): void {
     document.querySelectorAll('.catch-result-card').forEach((node) => node.remove());
     if (this.fallbackMode || !this.pixi || !this.catchSprite) {
       this.stageHost?.classList.add('catch-bloom');
-      window.setTimeout(() => this.showResultCard(reward), 520);
+      window.setTimeout(() => this.showResultCard(settlement), 520);
       return;
     }
     this.catchSprite.visible = true;
@@ -1709,7 +1725,7 @@ class AquaFantasiaGame {
       const s = Math.min(1, t * 2.4) + bounce;
       this.catchSprite.scale.set((Math.min(this.pixi.screen.width, this.pixi.screen.height) / 1120) * s);
       this.catchSprite.rotation += 0.18;
-      if (t > 0.78 && !document.querySelector('.catch-result-card')) this.showResultCard(reward);
+      if (t > 0.78 && !document.querySelector('.catch-result-card')) this.showResultCard(settlement);
       if (t > 1.9) {
         this.pixi.ticker.remove(popup);
         this.stageHost?.classList.remove('catch-bloom');
@@ -1718,14 +1734,19 @@ class AquaFantasiaGame {
     this.pixi?.ticker.add(popup);
   }
 
-  private showResultCard(reward: number): void {
+  private showResultCard(settlement: CatchGrowthSettlement): void {
     document.querySelectorAll('.catch-result-card').forEach((node) => node.remove());
     const card = document.createElement('div');
     if (this.resultCardOpen || document.querySelector('.catch-result-card.v2064-result-card')) return;
     this.resultCardOpen = true;
     card.className = `catch-result-card v930-result v2064-result-card v2021-result-card v2036-result-card v2037-result-card v2038-result-card v2039-result-card v2040-result-card v2041-result-card v2042-result-card v2043-result-card v2044-result-card v2045-result-card v2051-result-card v2053-result-card v2054-result-card v2055-result-card v2057-result-card v2059-result-card rarity-${this.activeFish.rarity.toLowerCase()}`;
-    const firstCatch = (this.save.caught[this.activeFish.id] ?? 0) <= 1;
-    card.innerHTML = `<button type="button" class="v2059-result-close" data-next="fishing" aria-label="획득창 닫기">×</button><i class="result-sparkle" aria-hidden="true"></i><div class="v2057-result-ribbon v2059-result-ribbon">${firstCatch ? '새 도감 등록' : '포획 성공'}</div><div class="v2051-result-shell v2057-result-shell v2059-result-shell"><img class="v205-result-fish" src="${this.activeFish.img}" alt="" /><div class="v2051-result-copy v2057-result-copy v2059-result-copy"><small>${this.activeFish.rarity}</small><h3>${this.activeFish.name}</h3><span><img src="${ASSET.fishingTreasure}" alt="" />${reward}G</span><em>연속 x${Math.max(1, this.save.currentStreak)} · 도감 기록</em></div></div><div class="v2051-result-actions v2057-result-actions v2059-result-actions"><button data-next="fishing">계속</button><button data-next="dex">도감</button></div>`;
+    const impactRows = [
+      ['판매', `+${settlement.reward.toLocaleString('ko-KR')}G`],
+      ['마을기금', `+${settlement.fund.toLocaleString('ko-KR')}G`],
+      ['발전도', `+${settlement.development}`],
+      ['관광', `+${settlement.tourists}`],
+    ];
+    card.innerHTML = `<button type="button" class="v2059-result-close" data-next="fishing" aria-label="획득창 닫기">×</button><i class="result-sparkle" aria-hidden="true"></i><div class="v2057-result-ribbon v2059-result-ribbon">${settlement.firstCatch ? '새 도감 등록' : '자동 판매 완료'}</div><div class="v2051-result-shell v2057-result-shell v2059-result-shell"><img class="v205-result-fish" src="${this.activeFish.img}" alt="" /><div class="v2051-result-copy v2057-result-copy v2059-result-copy"><small>${this.activeFish.rarity}</small><h3>${this.activeFish.name}</h3><span><img src="${ASSET.fishingTreasure}" alt="" />${settlement.reward.toLocaleString('ko-KR')}G</span><em>연속 x${Math.max(1, this.save.currentStreak)} · ${settlement.story}</em></div></div><div class="v2074-result-impact">${impactRows.map(([label, value]) => `<article><strong>${value}</strong><span>${label}</span></article>`).join('')}</div><div class="v2051-result-actions v2057-result-actions v2059-result-actions v2074-result-actions"><button data-next="fishing">계속</button><button data-next="inventory">가방</button><button data-next="dex">도감</button><button data-next="village">마을</button></div>`;
     (dom.app.querySelector<HTMLElement>('.fishing-screen') ?? this.stageHost)?.appendChild(card);
     card.querySelectorAll<HTMLButtonElement>('[data-next]').forEach((btn) => btn.addEventListener('click', () => {
       const next = btn.dataset.next as Screen;
@@ -2325,10 +2346,11 @@ class AquaFantasiaGame {
     const content = root.querySelector<HTMLDivElement>('.runtime-content')!;
     const totalCaught = this.totalCaught();
     const rareCaught = Object.entries(this.save.caught).filter(([id, count]) => count > 0 && fishDex.find((fish) => fish.id === id)?.rarity !== 'COMMON').length;
+    const ledgerValue = this.estimatedCatchLedgerValue();
     content.innerHTML = `
       <section class="runtime-hero-card inventory-summary v204-window-card v204-inventory-hero v206-inventory-hero">
         <img src="./assets/v22/icons/nav_bag.png" alt="" />
-        <div><span class="runtime-eyebrow">OCEAN BAG</span><h2>가방</h2><p>미끼 ${this.save.gear.lureStock}개 · 누적 포획 ${totalCaught}마리 · 희귀 기록 ${rareCaught}종</p></div>
+        <div><span class="runtime-eyebrow">OCEAN BAG</span><h2>가방</h2><p>미끼 ${this.save.gear.lureStock}개 · 누적 포획 ${totalCaught}마리 · 자동판매 원장 ${ledgerValue.toLocaleString('ko-KR')}G</p></div>
         <button class="runtime-btn cyan compact-cta btn-aqua-action" type="button" data-go-map>지도</button>
       </section>
       <section class="v206-inventory-dashboard v204-window-card" aria-label="가방 요약">
@@ -2336,6 +2358,7 @@ class AquaFantasiaGame {
         <article><img src="./assets/v205/fishing/treasure_chest.png" alt="" /><strong>${Object.values(this.save.missions).filter(Boolean).length}</strong><span>수령 의뢰</span></article>
         <article><img src="./assets/v22/icons/nav_fishing.png" alt="" /><strong>${totalCaught}</strong><span>전체 포획</span></article>
         <article><img src="./assets/v22/icons/nav_map.png" alt="" /><strong>${this.save.unlockedRegions.length}</strong><span>열린 수역</span></article>
+        <article><img src="./assets/v209/props/shell_garden.png" alt="" /><strong>${this.save.village.fund.toLocaleString('ko-KR')}</strong><span>마을기금</span></article>
       </section>
       <section class="v204-inventory-shell v206-inventory-shell" aria-label="가방 슬롯">
         <div class="v206-section-title"><strong>장비 & 소모품</strong><span>출항 전에 확인하세요</span></div>
@@ -2349,6 +2372,10 @@ class AquaFantasiaGame {
       <section class="v206-catch-ledger v204-window-card" aria-label="최근 포획 원장">
         <div class="v206-section-title"><strong>최근 포획 원장</strong><span>많이 잡은 물고기 기준</span></div>
         ${this.recentCatchMarkup()}
+      </section>
+      <section class="v2074-sale-ledger v204-window-card" aria-label="자동 판매와 마을 성장 연결">
+        <div class="v206-section-title"><strong>자동 판매 루프</strong><span>낚시 결과가 골드·기금·발전도로 바로 이어집니다</span></div>
+        ${this.catchSaleLedgerMarkup()}
       </section>`;
     dom.app.appendChild(root);
     root.querySelectorAll<HTMLButtonElement>('[data-go-map]').forEach((btn) => btn.addEventListener('click', () => { void this.go('map'); }));
@@ -2364,7 +2391,8 @@ class AquaFantasiaGame {
     const cards = fishDex.filter((fish) => fish.id !== 'unknown').map((fish) => {
       const count = this.save.caught[fish.id] ?? 0;
       const open = count > 0 || fish.rarity === 'COMMON';
-      return `<article class="dex-card runtime-dex-card rarity-${fish.rarity.toLowerCase()} ${open ? '' : 'locked'}"><img src="${open ? fish.img : './assets/v85/fish/fish_unknown.png'}" alt="" /><strong>${open ? fish.name : '미발견'}</strong><span>${open ? `${fish.region} · ${count}마리` : '낚시터에서 발견하세요'}</span><em>${fish.rarity}</em></article>`;
+      const story = open ? this.fishStory(fish) : '아직 주민들에게 전해지지 않은 바다 이야기입니다.';
+      return `<article class="dex-card runtime-dex-card rarity-${fish.rarity.toLowerCase()} ${open ? '' : 'locked'}"><img src="${open ? fish.img : './assets/v85/fish/fish_unknown.png'}" alt="" /><strong>${open ? fish.name : '미발견'}</strong><span>${open ? `${fish.region} · ${count}마리` : '낚시터에서 발견하세요'}</span><p class="v2074-dex-story">${story}</p><em>${fish.rarity}</em></article>`;
     }).join('');
     content.innerHTML = `
       <section class="runtime-hero-card dex-summary">
@@ -2372,7 +2400,7 @@ class AquaFantasiaGame {
         <div><span class="runtime-eyebrow">FISH DEX</span><h2>도감</h2><p>발견 ${discovered}/${fishDex.length - 1}종 · 누적 ${this.totalCaught()}마리</p></div>
         <button class="runtime-btn cyan compact-cta btn-aqua-action" type="button" data-go-fishing>채우기</button>
       </section>
-      <div class="v950-filter-row" aria-label="도감 필터 미리보기"><span>COMMON</span><span>RARE</span><span>EPIC</span><span>BOSS</span></div><section class="dex-grid runtime-dex-grid">${cards}</section>`;
+      <section class="v2074-dex-growth v204-window-card"><article><strong>${this.save.village.development}</strong><span>마을 발전도</span></article><article><strong>${this.save.village.tourists}</strong><span>관광객</span></article><article><strong>${this.save.village.autoIncome}</strong><span>자동수익</span></article></section><div class="v950-filter-row" aria-label="도감 필터 미리보기"><span>COMMON</span><span>RARE</span><span>EPIC</span><span>BOSS</span></div><section class="dex-grid runtime-dex-grid">${cards}</section>`;
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { void this.go('fishing'); });
     this.mountBottomNav(root, 'dex');
@@ -2386,6 +2414,7 @@ class AquaFantasiaGame {
       { name: '물결 안정 부적', desc: '낚싯줄 Lv.+1', cost: 210, icon: './assets/v92/equipment/line.png', tag: '안정', effect: () => { this.save.gear.lineLevel += 1; } },
       { name: '비상 구조 키트', desc: '미끼 +2', cost: 260, icon: './assets/v92/equipment/tackle.png', tag: '안전', effect: () => { this.save.lastRescueAt = Date.now(); this.save.gear.lureStock += 2; } },
       { name: '마을 장식 키트', desc: '마을기금 +120', cost: 160, icon: './assets/v209/props/shell_garden.png', tag: '마을', effect: () => { this.save.village.fund += 120; this.save.village.development = Math.max(this.save.village.development, this.save.village.fund); } },
+      { name: '수족관 해설판', desc: '발전도 +80 · 관광 +1', cost: 320, icon: './assets/v2/village/buildings/building_aquarium.png', tag: '도감', effect: () => { this.save.village.development += 80; this.save.village.tourists += 1; this.refreshVillageAutoIncome(); } },
       { name: '개척 항로 허가서', desc: '다른 섬 개척 준비', cost: 850, icon: './assets/v22/icons/nav_map.png', tag: '개척', onceKey: 'shop_route_permit', effect: () => { this.save.missions.shop_route_permit = true; this.save.village.fund += 220; } },
     ];
     const todayKey = `shop_free_${new Date().toLocaleDateString('en-CA')}`;
@@ -2450,6 +2479,7 @@ class AquaFantasiaGame {
     const development = this.save.village.development;
     const tourists = this.save.village.tourists;
     const autoIncome = this.save.village.autoIncome;
+    const ledgerValue = this.estimatedCatchLedgerValue();
     const regionUnlocked = this.save.unlockedRegions.length;
     const hasClown = (this.save.caught.clown ?? 0) > 0;
     return [
@@ -2479,6 +2509,8 @@ class AquaFantasiaGame {
       { id: 'gear10', category: '장비', title: '장비 총합 Lv.10', desc: '장비 균형 강화로 안정적인 손맛 확보', max: 10, value: Math.min(10, gearTotalLevel), reward: 680 },
       { id: 'upgrade5', category: '장비', title: '장비 강화 5회', desc: '성장 루프를 체감하는 누적 미션', max: 5, value: Math.min(5, gearUpgradeCount), reward: 420 },
       { id: 'lure10', category: '상점', title: '미끼 10개 보유', desc: '입질 대기시간을 줄일 준비', max: 10, value: Math.min(10, this.save.gear.lureStock), reward: 200 },
+      { id: 'autoSale500', category: '판매', title: '자동판매 500G 달성', desc: '포획한 물고기가 자동 판매되어 마을 루프로 연결됩니다', max: 500, value: Math.min(500, ledgerValue), reward: 260 },
+      { id: 'villageFund300', category: '마을', title: '마을기금 300G 달성', desc: '판매 수익 일부가 마을기금으로 쌓입니다', max: 300, value: Math.min(300, this.save.village.fund), reward: 340 },
       { id: 'villageDev100', category: '마을', title: '발전도 100 달성', desc: '첫 관광객을 부르는 마을 기초 완성', max: 100, value: Math.min(100, development), reward: 220 },
       { id: 'villageDev500', category: '마을', title: '발전도 500 달성', desc: '관광버스가 들를 만한 해변 마을 만들기', max: 500, value: Math.min(500, development), reward: 700 },
       { id: 'build7', category: '시설', title: '시설 7채 보유', desc: '주민 집·창고·어시장·수족관으로 성장 루프 확장', max: 7, value: Math.min(7, buildingCount), reward: 420 },
@@ -2590,6 +2622,99 @@ class AquaFantasiaGame {
       if (roll <= 0) return fish;
     }
     return weighted[0];
+  }
+
+  private estimatedCatchLedgerValue(): number {
+    return Object.entries(this.save.caught).reduce((sum, [id, count]) => {
+      const fish = fishDex.find((item) => item.id === id);
+      if (!fish || count <= 0) return sum;
+      return sum + Math.round(fish.reward * count * this.getRegionDifficultyFor(fish.regionKey));
+    }, 0);
+  }
+
+  private getRegionDifficultyFor(key: RegionKey): number {
+    return regions.find((region) => region.key === key)?.difficulty ?? 1;
+  }
+
+  private buildingCount(type: string): number {
+    return this.save.village.buildings.filter((building) => building.type === type).length;
+  }
+
+  private rarityGrowthWeight(fish: FishInfo): number {
+    return fish.rarity === 'BOSS' ? 5 : fish.rarity === 'EPIC' ? 3 : fish.rarity === 'RARE' ? 2 : 1;
+  }
+
+  private fishStory(fish: FishInfo): string {
+    const prefix = fish.rarity === 'BOSS'
+      ? '마을 기록관이 봉인 문장으로 남기는 전설급 생명체입니다.'
+      : fish.rarity === 'EPIC'
+        ? '수족관에 전시하면 관광객이 오래 머무는 환상어입니다.'
+        : fish.rarity === 'RARE'
+          ? '상인과 연구원이 모두 찾는 희귀 어종입니다.'
+          : '항구 시장에서 안정적으로 거래되는 친숙한 어종입니다.';
+    return `${prefix} ${fish.region}의 ${fish.name} 기록은 섬 개척 명분과 마을 명성을 올립니다.`;
+  }
+
+  private createCatchGrowthSettlement(fish: FishInfo, baseReward: number, firstCatch: boolean): CatchGrowthSettlement {
+    const rarityWeight = this.rarityGrowthWeight(fish);
+    const marketCount = Math.max(1, this.buildingCount('market'));
+    const aquariumCount = this.buildingCount('aquarium');
+    const guildCount = this.buildingCount('guild');
+    const harborCount = this.buildingCount('harbor');
+    const marketBonus = Math.max(0, Math.round(baseReward * (0.05 + marketCount * 0.025)));
+    const fund = Math.max(3, Math.round(baseReward * 0.08) + rarityWeight * 6 + (firstCatch ? 18 : 0) + marketCount * 4);
+    const development = Math.max(2, Math.round(baseReward * 0.035) + rarityWeight * 4 + (firstCatch ? 24 : 0) + guildCount * 3 + aquariumCount * 8);
+    const tourists = firstCatch && (fish.rarity === 'EPIC' || fish.rarity === 'BOSS' || aquariumCount > 0) ? 1 : 0;
+    const autoIncome = this.projectVillageAutoIncome({ extraDevelopment: development, extraTourists: tourists });
+    return {
+      reward: baseReward + marketBonus,
+      baseReward,
+      marketBonus,
+      fund,
+      development,
+      tourists,
+      autoIncome,
+      firstCatch,
+      story: firstCatch ? '도감·판매·마을 명성 동시 반영' : '어시장 자동 판매 정산',
+    };
+  }
+
+  private projectVillageAutoIncome(delta: { extraDevelopment?: number; extraTourists?: number } = {}): number {
+    const development = this.save.village.development + (delta.extraDevelopment ?? 0);
+    const tourists = this.save.village.tourists + (delta.extraTourists ?? 0);
+    const facilityScore = this.buildingCount('market') * 2
+      + this.buildingCount('warehouse')
+      + this.buildingCount('aquarium') * 3
+      + this.buildingCount('inn') * 2
+      + this.buildingCount('harbor') * 2;
+    return Math.max(this.save.village.autoIncome, Math.floor(development / 220) + Math.floor(tourists / 2) + facilityScore);
+  }
+
+  private refreshVillageAutoIncome(): void {
+    this.save.village.autoIncome = this.projectVillageAutoIncome();
+  }
+
+  private applyCatchGrowthSettlement(settlement: CatchGrowthSettlement): void {
+    this.save.coins += settlement.reward;
+    this.save.village.fund += settlement.fund;
+    this.save.village.development += settlement.development;
+    this.save.village.tourists += settlement.tourists;
+    this.save.village.autoIncome = Math.max(this.save.village.autoIncome, settlement.autoIncome);
+  }
+
+  private catchSaleLedgerMarkup(): string {
+    const entries = Object.entries(this.save.caught)
+      .filter(([, count]) => count > 0)
+      .map(([id, count]) => ({ fish: fishDex.find((item) => item.id === id), count }))
+      .filter((item): item is { fish: FishInfo; count: number } => Boolean(item.fish))
+      .sort((a, b) => (b.fish.reward * b.count) - (a.fish.reward * a.count))
+      .slice(0, 5);
+    if (!entries.length) return `<p class="v2074-sale-empty">첫 포획 후 자동 판매 내역과 마을 기여도가 여기에 쌓입니다.</p>`;
+    return `<div class="v2074-sale-grid">${entries.map(({ fish, count }) => {
+      const value = Math.round(fish.reward * count * this.getRegionDifficultyFor(fish.regionKey));
+      const growth = Math.round(value * 0.12) + this.rarityGrowthWeight(fish) * count;
+      return `<article><img src="${fish.img}" alt="" /><div><strong>${fish.name}</strong><span>${fish.region} · x${count}</span></div><em>${value.toLocaleString('ko-KR')}G</em><small>기금/발전 +${growth}</small></article>`;
+    }).join('')}</div>`;
   }
 
   private calculateReward(fish: FishInfo): number {

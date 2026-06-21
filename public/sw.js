@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.73-fishing-core-feel-update';
+const CACHE_NAME = 'aqua-fantasia-v2.0.74-catch-growth-loop';
 const PRECACHE = [
   "./",
   "./index.html",

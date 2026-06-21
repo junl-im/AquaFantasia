@@ -46,7 +46,7 @@ for (const token of [
   if (!css.includes(token)) fail(`styles.css missing ${token}`);
 }
 if ((main.match(/this\.toast\.show\(\{ type: 'dex'/g) ?? []).length > 0) fail('success result must not also show a dex toast');
-if ((main.match(/showResultCard\(reward\)/g) ?? []).length < 2) fail('result card guards should remain in fallback and pixi paths');
+if ((main.match(/showResultCard\((reward|settlement)\)/g) ?? []).length < 2) fail('result card guards should remain in fallback and pixi paths');
 if (!main.includes("document.querySelectorAll('.catch-result-card').forEach((node) => node.remove())")) fail('result card singleton cleanup is missing');
 if (fs.readdirSync(root).filter((name) => /_NOTES\.md$/i.test(name)).length) fail('root *_NOTES.md files are not allowed');
 

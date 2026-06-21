@@ -29607,3 +29607,130 @@ html[data-v2073-fishing-core-feel="v2073-fishing-core-feel-update"] body[data-sc
     display: none !important;
   }
 }
+
+/* v2.0.74 catch growth loop
+   Connects fishing reward settlement to sale ledger, village fund, development, tourists and auto income.
+   Character direction logic remains owned by villageWorld.ts and is not touched here. */
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .runtime-menu-screen.v2074-growth-loop-menu-screen .v2074-runtime-wallet {
+  grid-template-columns: repeat(3, max-content) !important;
+  gap: 7px !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .runtime-menu-screen.v2074-growth-loop-menu-screen .v2074-runtime-wallet span {
+  min-width: 0 !important;
+  white-space: nowrap !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-sale-ledger,
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-dex-growth {
+  border: 1px solid rgba(107, 224, 255, .32) !important;
+  background: linear-gradient(180deg, rgba(247, 254, 255, .92), rgba(185, 247, 255, .66)) !important;
+  box-shadow: 0 14px 32px rgba(0, 96, 140, .12), inset 0 1px 0 rgba(255,255,255,.82) !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-sale-grid {
+  display: grid !important;
+  gap: 8px !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-sale-grid article {
+  display: grid !important;
+  grid-template-columns: 42px minmax(0, 1fr) max-content !important;
+  align-items: center !important;
+  gap: 9px !important;
+  padding: 9px !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.62) !important;
+  border: 1px solid rgba(68, 184, 223, .22) !important;
+  color: #05445f !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-sale-grid img {
+  width: 42px !important;
+  height: 42px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 8px 10px rgba(0, 90, 130, .16)) !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-sale-grid strong,
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-sale-grid em {
+  font-weight: 1000 !important;
+  color: #043b59 !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-sale-grid span,
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-sale-grid small,
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-sale-empty {
+  color: rgba(5, 62, 91, .78) !important;
+  font-weight: 900 !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-dex-growth {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 8px !important;
+  padding: 10px !important;
+  border-radius: 22px !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-dex-growth article {
+  display: grid !important;
+  place-items: center !important;
+  min-height: 54px !important;
+  border-radius: 16px !important;
+  background: rgba(255,255,255,.58) !important;
+  color: #06445f !important;
+  font-weight: 1000 !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-dex-story {
+  margin: 7px 0 0 !important;
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+  color: rgba(6, 68, 95, .82) !important;
+  font-weight: 850 !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] body[data-screen="fishing"] .fishing-screen.v2074-growth-loop-screen .catch-result-card.v2064-result-card {
+  width: min(430px, calc(100vw - 22px)) !important;
+  max-height: calc(100svh - max(24px, env(safe-area-inset-top)) - max(24px, env(safe-area-inset-bottom))) !important;
+  overflow: auto !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] body[data-screen="fishing"] .fishing-screen.v2074-growth-loop-screen .v2074-result-impact {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  margin: 8px 0 10px !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] body[data-screen="fishing"] .fishing-screen.v2074-growth-loop-screen .v2074-result-impact article {
+  display: grid !important;
+  gap: 2px !important;
+  padding: 7px 6px !important;
+  border-radius: 15px !important;
+  background: rgba(255,255,255,.64) !important;
+  border: 1px solid rgba(78, 188, 225, .24) !important;
+  color: #06445f !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] body[data-screen="fishing"] .fishing-screen.v2074-growth-loop-screen .v2074-result-impact strong {
+  font-size: 13px !important;
+  font-weight: 1000 !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] body[data-screen="fishing"] .fishing-screen.v2074-growth-loop-screen .v2074-result-impact span {
+  margin: 0 !important;
+  font-size: 10px !important;
+  color: rgba(6, 68, 95, .72) !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] body[data-screen="fishing"] .fishing-screen.v2074-growth-loop-screen .v2074-result-actions {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+}
+html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] body[data-screen="fishing"] .fishing-screen.v2074-growth-loop-screen .v2074-result-actions button {
+  min-height: 44px !important;
+  font-size: 13px !important;
+}
+@media (max-width: 430px), (max-height: 760px) {
+  html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .runtime-menu-screen.v2074-growth-loop-menu-screen .v2074-runtime-wallet {
+    grid-template-columns: repeat(2, max-content) !important;
+  }
+  html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] body[data-screen="fishing"] .fishing-screen.v2074-growth-loop-screen .catch-result-card.v2064-result-card {
+    width: min(390px, calc(100vw - 18px)) !important;
+  }
+  html[data-v2074-catch-growth-loop="v2074-catch-growth-loop"] .v2074-dex-growth {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 5px !important;
+  }
+}

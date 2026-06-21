@@ -12,8 +12,8 @@ const readme = read('README.md');
 const villageWorld = read('src/villageWorld.ts');
 const lockRaw = read('package-lock.json');
 
-const VERSION = '2.0.73';
-const CACHE = 'aqua-fantasia-v2.0.73-fishing-core-feel-update';
+const VERSION = pkg.version;
+const CACHE_PREFIX = `aqua-fantasia-v${VERSION}-`;
 const fail = (msg) => {
   console.error(`[v2073] ${msg}`);
   process.exit(1);
@@ -21,11 +21,12 @@ const fail = (msg) => {
 const must = (condition, msg) => { if (!condition) fail(msg); };
 const has = (source, needle, msg) => must(source.includes(needle), msg);
 
-must(pkg.version === VERSION, 'package.json version mismatch');
+must(/^2\.0\.\d+$/.test(VERSION), 'package.json version must stay on 2.0.x');
+must(Number(VERSION.split('.')[2]) >= 73, 'v2073 guard only applies to v2.0.73+ packages');
 must(lock.version === VERSION && lock.packages?.['']?.version === VERSION, 'package-lock version mismatch');
 has(data, `APP_VERSION = '${VERSION}'`, 'APP_VERSION mismatch');
-has(data, CACHE, 'src/data.ts cache version mismatch');
-has(sw, CACHE, 'service worker cache version mismatch');
+has(data, CACHE_PREFIX, 'src/data.ts cache version mismatch');
+has(sw, CACHE_PREFIX, 'service worker cache version mismatch');
 has(offline, `v${VERSION}`, 'offline badge/version mismatch');
 has(readme, `# AquaFantasia v${VERSION}`, 'README title version mismatch');
 has(readme, `## v${VERSION} 변경사항`, 'README changelog missing');
