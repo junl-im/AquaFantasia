@@ -14,12 +14,13 @@ const fail = (msg) => {
   process.exit(1);
 };
 
-if (pkg.version !== '2.0.71') fail('package.json version mismatch');
-if (lock.version !== '2.0.71' || lock.packages?.['']?.version !== '2.0.71') fail('package-lock version mismatch');
-if (!data.includes("APP_VERSION = '2.0.71'")) fail('APP_VERSION mismatch');
-if (!data.includes('aqua-fantasia-v2.0.71-fishing-card-window-rework-stable-ui-recovery')) fail('data cache mismatch');
-if (!sw.includes('aqua-fantasia-v2.0.71-fishing-card-window-rework-stable-ui-recovery')) fail('service worker cache mismatch');
-if (!offline.includes('v2.0.71')) fail('offline badge mismatch');
+const versionMatch = pkg.version.match(/^2\.0\.(\d+)$/);
+if (!versionMatch || Number(versionMatch[1]) < 71) fail('package.json version must preserve v2.0.71+ lineage');
+if (lock.version !== pkg.version || lock.packages?.['']?.version !== pkg.version) fail('package-lock version mismatch');
+if (!data.includes(`APP_VERSION = '${pkg.version}'`)) fail('APP_VERSION mismatch');
+if (!data.includes(`aqua-fantasia-v${pkg.version}-`)) fail('data cache mismatch');
+if (!sw.includes(`aqua-fantasia-v${pkg.version}-`)) fail('service worker cache mismatch');
+if (!offline.includes(`v${pkg.version}`)) fail('offline badge mismatch');
 
 // Recovery rule: the broken broad v2065-v2070 global card layers must not be active in source.
 const bannedRuntimeMarkers = [
