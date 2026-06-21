@@ -387,7 +387,8 @@ const DECO_TEXTURES: Partial<Record<DecoKind, string>> = {
   splash: './assets/v2012/props/big_splash.png',
   steam: './assets/v2012/props/steam.png',
   cookingPot: './assets/v2012/props/cooking_pot.png',
-  goldLantern: './assets/v2012/props/gold_lantern.png',
+  // v2.0.78: old gold_lantern.png is a right-edge half sprite; use the complete centered crystal lamp instead.
+  goldLantern: './assets/v209/props/crystal_lamp.png',
   fishShadowSmall: './assets/v2012/props/fish_shadow_small.png',
   fishShadowMid: './assets/v2012/props/fish_shadow_mid.png',
   fishShadowBig: './assets/v2012/props/fish_shadow_big.png',

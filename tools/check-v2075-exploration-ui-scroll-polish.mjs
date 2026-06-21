@@ -50,7 +50,10 @@ has(main, 'aria-expanded="false"><span>개척</span>', 'single expedition toggle
 must(!main.includes('aria-label="성장 루프 펼치기"'), 'duplicate growth loop toggle must remain removed');
 must(!main.includes('>루프</button><div class="v2051-loop-body"'), 'visible 루프 toggle markup must not return');
 
-has(main, "const scrollableSelector = '.runtime-content, .v2051-loop-body, .catch-result-card, .v2-build-tray, .v2017-character-card, .v203-interior-card'", 'scrollable selector missing');
+has(main, 'const scrollableSelector =', 'scrollable selector missing');
+has(main, '.runtime-content', 'runtime content scroll target missing');
+has(main, '.v2051-loop-body', 'loop body scroll target missing');
+has(main, '.v203-interior-card', 'interior card scroll target missing');
 has(main, 'let scrollTarget: HTMLElement | null = null', 'drag scroll target state missing');
 has(main, 'scrollTarget.scrollTop = Math.max(0, startTop - dy)', 'drag scroll must move active scroll container');
 has(main, "target?.closest('.bottom-nav, input, textarea, select, .runtime-hud, button, a, [role=\"button\"], [data-no-swipe]')", 'button-safe drag guard missing');

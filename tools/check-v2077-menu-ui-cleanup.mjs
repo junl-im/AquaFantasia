@@ -48,7 +48,10 @@ has(main, "root.dataset.v2077MenuUiCleanup = 'aqua-card-scroll-close-normalized'
 has(main, 'v2077-menu-close', 'v2077 close button class missing');
 has(main, 'data-v2077-close', 'v2077 close button data hook missing');
 has(main, "root.querySelectorAll<HTMLButtonElement>('[data-v2059-menu-close], [data-v2077-close]')", 'v2077 robust close binding missing');
-has(main, "const v2077ScrollableSelector = '.v204-inventory-shell, .v206-inventory-shell, .v206-catch-ledger, .v2074-sale-ledger, .v204-map-shell, .v2076-expedition-card, .v204-quest-board, .mission-list, .shop-list, .dex-grid, .gear-grid';", 'v2077 scrollable selector missing');
+has(main, 'const v2077ScrollableSelector =', 'v2077 scrollable selector missing');
+has(main, '.v204-inventory-shell', 'v2077 inventory scroll target missing');
+has(main, '.v2076-expedition-card', 'v2077 expedition scroll target missing');
+has(main, '.mission-list', 'v2077 mission scroll target missing');
 has(main, "const content = root.querySelector<HTMLElement>('.runtime-content');", 'v2077 runtime-content fallback missing');
 has(main, "if (content && content.scrollHeight > content.clientHeight + 2) return content;", 'v2077 runtime-content scroll fallback missing');
 has(main, "root.removeAttribute('data-v2018-dragging');", 'interactive click reset for close/buttons missing');

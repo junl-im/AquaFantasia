@@ -30456,3 +30456,400 @@ html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fi
     padding-inline: 12px !important;
   }
 }
+
+/* v2.0.78 Aqua Card HUD/Panel Polish
+   Canonical aqua-card management layer: every menu page keeps the character-info card language,
+   HUD/content spacing is explicit, expedition bar is below the HUD but below dialogs, and village panels win z-order. */
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] {
+  --aqua-card-ink: #043a55;
+  --aqua-card-muted: rgba(4, 58, 85, .70);
+  --aqua-card-border: rgba(111, 225, 251, .64);
+  --aqua-card-surface: linear-gradient(180deg, rgba(255,255,255,.96), rgba(214,251,255,.88) 56%, rgba(144,234,250,.76));
+  --aqua-card-panel: linear-gradient(180deg, rgba(250,255,255,.98), rgba(198,247,255,.94) 64%, rgba(126,222,242,.88));
+  --aqua-card-soft: linear-gradient(180deg, rgba(255,255,255,.90), rgba(196,247,255,.76));
+  --aqua-card-shadow: 0 18px 44px rgba(0, 70, 110, .19), inset 0 1px 0 rgba(255,255,255,.86);
+  --aqua-card-radius: 30px;
+}
+
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .aqua-card-surface,
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-content :is(.runtime-hero-card,.runtime-panel,.runtime-menu-card,.runtime-item-card,.gear-card,.shop-card,.mission-card,.dex-card,.region-card,.v204-window-card,.v204-map-shell,.v204-map-detail,.v206-route-ready,.v2076-expedition-card,.v204-inventory-shell,.v206-inventory-dashboard,.v206-catch-ledger,.v2074-sale-ledger,.v204-quest-board,.v206-quest-npc-board) {
+  border: 1px solid var(--aqua-card-border) !important;
+  background: var(--aqua-card-surface) !important;
+  background-image: var(--aqua-card-surface) !important;
+  color: var(--aqua-card-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  box-shadow: var(--aqua-card-shadow) !important;
+  backdrop-filter: blur(14px) saturate(1.12) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 10px !important;
+  padding-top: max(10px, env(safe-area-inset-top)) !important;
+  padding-inline: 10px !important;
+  padding-bottom: calc(104px + max(12px, env(safe-area-inset-bottom))) !important;
+  overflow: hidden !important;
+}
+
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-hud.aqua-card-hud {
+  display: grid !important;
+  grid-template-columns: clamp(42px, 10.5vw, 54px) minmax(0, 1fr) !important;
+  grid-template-areas: "mascot title" "wallet wallet" !important;
+  align-items: center !important;
+  gap: 7px 10px !important;
+  min-height: 104px !important;
+  max-height: none !important;
+  width: min(930px, calc(100vw - 20px)) !important;
+  max-width: calc(100vw - 20px) !important;
+  margin: 0 auto !important;
+  padding: 10px 54px 10px 12px !important;
+  border-radius: 28px !important;
+  overflow: hidden !important;
+  z-index: 20 !important;
+  clip-path: none !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-hud-mascot {
+  grid-area: mascot !important;
+  width: clamp(42px, 10.5vw, 54px) !important;
+  height: clamp(42px, 10.5vw, 54px) !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 7px 10px rgba(0, 63, 104, .20)) !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-title {
+  grid-area: title !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-title strong {
+  color: var(--aqua-card-ink) !important;
+  -webkit-text-fill-color: var(--aqua-card-ink) !important;
+  font-size: clamp(22px, 5.4vw, 34px) !important;
+  line-height: 1 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.72) !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-title em {
+  max-width: 100% !important;
+  color: var(--aqua-card-muted) !important;
+  -webkit-text-fill-color: var(--aqua-card-muted) !important;
+  font-size: 11px !important;
+  line-height: 1.26 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-wallet {
+  grid-area: wallet !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 5px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-wallet span {
+  justify-content: center !important;
+  min-width: 0 !important;
+  min-height: 28px !important;
+  padding: 4px 6px !important;
+  border: 1px solid rgba(111, 225, 251, .36) !important;
+  background: rgba(255,255,255,.62) !important;
+  color: var(--aqua-card-ink) !important;
+  -webkit-text-fill-color: var(--aqua-card-ink) !important;
+  font-size: 10.5px !important;
+  font-weight: 950 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-content.aqua-card-page {
+  flex: 1 1 auto !important;
+  width: min(930px, calc(100vw - 20px)) !important;
+  max-width: calc(100vw - 20px) !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 auto !important;
+  border-radius: 30px !important;
+  padding: clamp(14px, 3.2vw, 22px) !important;
+  padding-bottom: calc(32px + max(16px, env(safe-area-inset-bottom))) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  z-index: 18 !important;
+}
+
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-content > :first-child {
+  margin-top: 0 !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-content :is(.runtime-hero-card,.runtime-panel,.v204-window-card,.v204-map-shell,.v204-quest-board,.v206-catch-ledger,.v2074-sale-ledger) {
+  border-radius: var(--aqua-card-radius) !important;
+  padding: clamp(13px, 3.4vw, 18px) !important;
+  overflow: hidden !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-content :is(.runtime-card-list,.shop-list,.mission-list,.dex-grid,.gear-grid,.v204-inventory-grid,.v206-inventory-grid,.v2074-sale-grid,.runtime-region-grid) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+  touch-action: pan-y !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen :is(.runtime-btn,.compact-cta,.btn-aqua-action,.btn-gold-cost,.mission-card button,.shop-card button,.gear-card button,.v2076-route-card button) {
+  min-height: 42px !important;
+  border-radius: 999px !important;
+  padding-inline: 12px !important;
+  font-size: 12px !important;
+  font-weight: 1000 !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .v2077-menu-close,
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .v2059-menu-close {
+  top: calc(max(10px, env(safe-area-inset-top)) + 8px) !important;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  z-index: 2600 !important;
+  width: 42px !important;
+  height: 42px !important;
+  pointer-events: auto !important;
+}
+
+/* Village HUD and expedition bar spacing. The expedition bar must sit under the HUD, not at the bottom and not above dialogs. */
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen .v2-village-hud {
+  left: max(8px, env(safe-area-inset-left)) !important;
+  top: max(7px, env(safe-area-inset-top)) !important;
+  width: min(282px, calc(100vw - 114px)) !important;
+  max-height: 78px !important;
+  padding: 7px 8px !important;
+  gap: 5px !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  z-index: 340 !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen .v2-profile-chip {
+  min-height: 31px !important;
+  padding: 4px 6px !important;
+  border-radius: 15px !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen .v2-wallet-row {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 3px !important;
+  width: 100% !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen .v2-wallet-row span {
+  min-width: 0 !important;
+  padding: 3px 5px !important;
+  font-size: 9.5px !important;
+  line-height: 1.05 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen .v2-world-controls {
+  top: max(6px, env(safe-area-inset-top)) !important;
+  right: max(8px, env(safe-area-inset-right)) !important;
+  gap: 2px !important;
+  padding: 3px !important;
+  z-index: 360 !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen .v2-world-controls button {
+  width: 39px !important;
+  min-width: 39px !important;
+  height: 39px !important;
+  min-height: 39px !important;
+  border-radius: 14px !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen .v2050-expedition-board.v2075-expedition-dock {
+  position: fixed !important;
+  left: max(10px, env(safe-area-inset-left)) !important;
+  right: auto !important;
+  top: calc(max(7px, env(safe-area-inset-top)) + 82px) !important;
+  bottom: auto !important;
+  width: min(236px, calc(100vw - 132px)) !important;
+  max-width: min(236px, calc(100vw - 132px)) !important;
+  z-index: 330 !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen .v2075-expedition-toggle {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 236px !important;
+  height: 27px !important;
+  min-height: 27px !important;
+  grid-template-columns: max-content max-content minmax(0, 1fr) !important;
+  gap: 5px !important;
+  padding: 0 9px !important;
+  font-size: 10px !important;
+  box-shadow: 0 7px 16px rgba(0, 68, 108, .13), inset 0 1px 0 rgba(255,255,255,.84) !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen .v2075-expedition-toggle em {
+  font-size: 9px !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen :is(.v2017-character-panel.open,.v203-interior-panel.open,.v2-build-tray.open,.v2-build-backdrop[aria-hidden="false"]) ~ .v2050-expedition-board,
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body:is(.v2032-character-panel-open,.v2040-interior-open,.v2041-interior-open,.v2042-interior-open,.v2043-interior-open,.v2044-interior-open) .v2078-village-ui-polish-screen .v2050-expedition-board.v2075-expedition-dock,
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen.v2-build-tray-open .v2050-expedition-board.v2075-expedition-dock {
+  opacity: .08 !important;
+  pointer-events: none !important;
+  z-index: 40 !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen .v2051-expedition-mini.open .v2051-loop-body {
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  top: calc(max(7px, env(safe-area-inset-top)) + 116px) !important;
+  bottom: auto !important;
+  width: auto !important;
+  max-width: none !important;
+  max-height: calc(100svh - max(7px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom)) - 192px) !important;
+  z-index: 820 !important;
+  border-radius: 28px !important;
+  background: var(--aqua-card-panel) !important;
+  box-shadow: 0 22px 58px rgba(0, 62, 102, .24), inset 0 2px 0 rgba(255,255,255,.86) !important;
+}
+
+/* Dialogs and building information are above the expedition bar and use the same aqua-card language as character info. */
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen .v2017-character-panel.open,
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen .v203-interior-panel.open {
+  z-index: 2800 !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen :is(.v2017-character-backdrop,.v203-interior-backdrop) {
+  background: rgba(2, 27, 50, .45) !important;
+  backdrop-filter: blur(8px) saturate(1.08) !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen :is(.v2017-character-card,.v203-interior-card) {
+  width: min(430px, calc(100vw - 22px)) !important;
+  max-width: calc(100vw - 22px) !important;
+  max-height: calc(100svh - max(20px, env(safe-area-inset-top)) - max(22px, env(safe-area-inset-bottom))) !important;
+  border-radius: 31px !important;
+  padding: 18px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  background: var(--aqua-card-panel) !important;
+  color: var(--aqua-card-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  border: 1px solid var(--aqua-card-border) !important;
+  box-shadow: 0 24px 68px rgba(0, 55, 96, .28), inset 0 2px 0 rgba(255,255,255,.86) !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen .v203-interior-card {
+  display: grid !important;
+  grid-template-columns: 112px minmax(0, 1fr) !important;
+  gap: 14px !important;
+  align-items: start !important;
+  margin-bottom: 0 !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen .v203-interior-image {
+  width: 112px !important;
+  height: 112px !important;
+  border-radius: 24px !important;
+  object-fit: cover !important;
+  background: rgba(255,255,255,.55) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.80), 0 10px 18px rgba(0, 67, 105, .14) !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen .v206-interior-header {
+  gap: 9px !important;
+  min-width: 0 !important;
+  padding: 9px !important;
+  border-radius: 22px !important;
+  background: rgba(255,255,255,.60) !important;
+  border: 1px solid rgba(111,225,251,.38) !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen .v206-interior-status {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  margin: 9px 0 !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen .v206-interior-status span {
+  min-width: 0 !important;
+  padding: 7px 8px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(111,225,251,.42) !important;
+  background: rgba(255,255,255,.64) !important;
+  color: var(--aqua-card-ink) !important;
+  -webkit-text-fill-color: var(--aqua-card-ink) !important;
+  font-size: 11px !important;
+  font-weight: 950 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen :is(.v2017-character-actions,.v203-interior-actions,.v206-interior-actions) {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen :is(.v2017-character-actions button,.v203-interior-actions button,.v206-interior-actions button) {
+  min-width: 0 !important;
+  min-height: 42px !important;
+  border-radius: 999px !important;
+  padding-inline: 10px !important;
+  border: 1px solid rgba(111,225,251,.62) !important;
+  background: linear-gradient(180deg,#f9ffff,#8eeaff) !important;
+  color: var(--aqua-card-ink) !important;
+  -webkit-text-fill-color: var(--aqua-card-ink) !important;
+  font-weight: 1000 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen :is(.v2017-character-close,.v2059-panel-close) {
+  z-index: 5 !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(180deg, #fff, #8eeaff) !important;
+  color: var(--aqua-card-ink) !important;
+  -webkit-text-fill-color: var(--aqua-card-ink) !important;
+  pointer-events: auto !important;
+}
+
+@media (max-width: 430px), (max-height: 760px) {
+  html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen {
+    gap: 8px !important;
+    padding-inline: 8px !important;
+    padding-bottom: calc(98px + max(10px, env(safe-area-inset-bottom))) !important;
+  }
+  html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-hud.aqua-card-hud {
+    width: min(930px, calc(100vw - 16px)) !important;
+    max-width: calc(100vw - 16px) !important;
+    min-height: 100px !important;
+    padding: 9px 50px 9px 10px !important;
+    border-radius: 25px !important;
+  }
+  html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .runtime-menu-screen.v2078-aqua-card-ui-screen .runtime-content.aqua-card-page {
+    width: min(930px, calc(100vw - 16px)) !important;
+    max-width: calc(100vw - 16px) !important;
+    border-radius: 26px !important;
+    padding: 12px !important;
+    padding-bottom: calc(28px + max(16px, env(safe-area-inset-bottom))) !important;
+  }
+  html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen .v2-village-hud {
+    width: min(268px, calc(100vw - 108px)) !important;
+    max-height: 78px !important;
+  }
+  html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen .v2050-expedition-board.v2075-expedition-dock {
+    top: calc(max(7px, env(safe-area-inset-top)) + 84px) !important;
+    width: min(214px, calc(100vw - 116px)) !important;
+    max-width: min(214px, calc(100vw - 116px)) !important;
+  }
+  html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] body[data-screen="village"] .v2078-village-ui-polish-screen .v2051-expedition-mini.open .v2051-loop-body {
+    top: calc(max(7px, env(safe-area-inset-top)) + 118px) !important;
+    left: max(8px, env(safe-area-inset-left)) !important;
+    right: max(8px, env(safe-area-inset-right)) !important;
+    max-height: calc(100svh - max(7px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom)) - 206px) !important;
+  }
+  html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen .v203-interior-card {
+    grid-template-columns: 1fr !important;
+  }
+  html[data-v2078-aqua-card-ui="v2078-aqua-card-hud-panel-polish"] .v2078-village-ui-polish-screen .v203-interior-image {
+    width: 100% !important;
+    height: 132px !important;
+  }
+}
