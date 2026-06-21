@@ -59,8 +59,15 @@ has(main, 'v2072-menu-card-screen', 'v2072 menu card scope class missing');
 has(main, "root.dataset.v2072MenuCard = 'character-build-style-aqua-card'", 'v2072 menu card dataset missing');
 has(main, 'v2072-fishing-playable-screen', 'v2072 fishing scope class missing');
 
-has(main, 'aria-expanded="false">루프</button><div class="v2051-loop-body" aria-hidden="true"', 'growth loop aria collapsed markup missing');
-has(main, 'aria-expanded="false">개척</button><div class="v2051-loop-body" aria-hidden="true"', 'expedition aria collapsed markup missing');
+if (Number(VERSION.split('.')[2]) >= 75) {
+  must(!main.includes('aria-label="성장 루프 펼치기"'), 'v2.0.75+ should not expose a duplicate loop toggle');
+  has(main, 'v2075-expedition-dock', 'v2.0.75+ single expedition dock missing');
+  has(main, 'v2075-expedition-loop-summary', 'v2.0.75+ growth loop summary should be folded into expedition panel');
+  has(main, 'aria-expanded="false"><span>개척</span>', 'v2.0.75+ slim expedition aria collapsed markup missing');
+} else {
+  has(main, 'aria-expanded="false">루프</button><div class="v2051-loop-body" aria-hidden="true"', 'growth loop aria collapsed markup missing');
+  has(main, 'aria-expanded="false">개척</button><div class="v2051-loop-body" aria-hidden="true"', 'expedition aria collapsed markup missing');
+}
 has(main, "other.querySelector<HTMLElement>('.v2051-loop-toggle')?.setAttribute('aria-expanded', 'false')", 'loop sibling aria-expanded reset missing');
 has(main, "panel.querySelector<HTMLElement>('.v2051-loop-toggle')?.setAttribute('aria-expanded', String(willOpen))", 'loop toggle aria-expanded update missing');
 has(main, "panel?.querySelector<HTMLElement>('.v2051-loop-toggle')?.setAttribute('aria-expanded', 'false')", 'loop close aria-expanded reset missing');

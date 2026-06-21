@@ -26,10 +26,9 @@ must(/# AquaFantasia v2\.0\.(49|[5-9][0-9])/.test(readme), 'README title must be
 has(readme, '## v2.0.49', 'README v2.0.49 changelog');
 has(pkg.scripts.validate, 'check-v2049-content-asset-system-polish.mjs', 'v2049 validate hook');
 
-for (const token of [
+const mainTokens = [
   "dataset.v2049ContentAssetSystemPolish = 'v2049-content-asset-system-polish'",
   'v2049-content-village-screen',
-  'v2049-growth-board',
   'villageGrowthBoardMarkup',
   'v2049-menu-content-screen',
   '마을 장식 키트',
@@ -39,7 +38,10 @@ for (const token of [
   'v2049-reel-panel',
   'v2049-hold-pad',
   'v2049-identical-dock-nav',
-]) has(main, token, `main token ${token}`);
+];
+if (patch >= 75) mainTokens.push('v2075-expedition-dock', 'v2075-expedition-loop-summary');
+else mainTokens.push('v2049-growth-board');
+for (const token of mainTokens) has(main, token, `main token ${token}`);
 
 for (const token of [
   'v2.0.49 Content/asset/system polish',

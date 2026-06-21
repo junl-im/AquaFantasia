@@ -302,6 +302,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2072MenuFishingLoopPolish = 'v2072-menu-card-fishing-loop-polish';
     document.documentElement.dataset.v2073FishingCoreFeel = 'v2073-fishing-core-feel-update';
     document.documentElement.dataset.v2074CatchGrowthLoop = 'v2074-catch-growth-loop';
+    document.documentElement.dataset.v2075UiExplorationPolish = 'v2075-ui-exploration-scroll-polish';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -579,7 +580,13 @@ class AquaFantasiaGame {
       ['도감', `${stats.uniqueCaught}/20`],
       ['허가서', stats.permit ? '보유' : '미보유'],
     ];
-    return `<div class="v2061-loop-pop-title"><span>개척 준비</span><strong>${stats.tierLabel}</strong></div><div class="v2050-expedition-head"><span>ISLAND EXPANSION</span><strong>${stats.tierLabel}</strong><em>${stats.nextText}</em></div><div class="v2050-expedition-meter" style="--p:${stats.progress}%"><i></i><b>${stats.progress}%</b></div><div class="v2050-expedition-grid">${rows.map(([label, value]) => `<article><strong>${value}</strong><span>${label}</span></article>`).join('')}</div>`;
+    const loopRows = [
+      ['포획', `${this.totalCaught()}마리`],
+      ['자동판매', `${this.estimatedCatchLedgerValue().toLocaleString('ko-KR')}G`],
+      ['마을기금', `${this.save.village.fund.toLocaleString('ko-KR')}G`],
+      ['자동수익', `+${Math.max(0, this.save.village.autoIncome)}G`],
+    ];
+    return `<div class="v2061-loop-pop-title"><span>개척 준비</span><strong>${stats.tierLabel}</strong></div><div class="v2050-expedition-head"><span>ISLAND EXPANSION</span><strong>${stats.tierLabel}</strong><em>${stats.nextText}</em></div><div class="v2050-expedition-meter" style="--p:${stats.progress}%"><i></i><b>${stats.progress}%</b></div><div class="v2075-expedition-loop-summary" aria-label="개척에 통합된 성장 루프">${loopRows.map(([label, value]) => `<article><strong>${value}</strong><span>${label}</span></article>`).join('')}</div><div class="v2050-expedition-grid">${rows.map(([label, value]) => `<article><strong>${value}</strong><span>${label}</span></article>`).join('')}</div>`;
   }
 
   private renderVillage(): void {
@@ -588,8 +595,9 @@ class AquaFantasiaGame {
     this.clear();
     const playerName = this.playerName();
     const playerNameHtml = this.escapeHtml(playerName);
+    const expansionStats = this.islandExpansionStats();
     const root = document.createElement('main');
-    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen v209-asset-qa-screen v2010-village-clean-screen v2011-dock-safe-screen v2012-world-asset-screen v2013-world-safe-screen v2014-clean-village-screen v2016-world-stability-screen v2017-direction-ui-screen v2018-build-ux-screen v2020-village-asset-screen v2021-village-asset-screen v2022-hud-control-screen v2023-premium-village-screen v2024-village-object-repair-screen v2026-wide-stability-screen v2027-village-root-repair-screen v2039-village-object-audit-screen v2040-village-engine-audit-screen v2041-village-ui-screen v2042-village-ui-screen v2043-village-ui-screen v2044-village-ui-screen v2049-content-village-screen v2050-content-village-screen v2051-hud-loop-village-screen v2052-tile-anchor-village-screen v2053-hud-dock-village-screen v2054-layout-issue-village-screen v2055-playability-village-screen v2056-motion-tile-village-screen v2060-grounded-motion-village-screen v2061-loop-ui-village-screen v2062-ground-contact-village-screen v2063-unified-card-window-village-screen v2064-polish-audit-village-screen v2072-loop-polish-village-screen locked-screen';
+    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen v209-asset-qa-screen v2010-village-clean-screen v2011-dock-safe-screen v2012-world-asset-screen v2013-world-safe-screen v2014-clean-village-screen v2016-world-stability-screen v2017-direction-ui-screen v2018-build-ux-screen v2020-village-asset-screen v2021-village-asset-screen v2022-hud-control-screen v2023-premium-village-screen v2024-village-object-repair-screen v2026-wide-stability-screen v2027-village-root-repair-screen v2039-village-object-audit-screen v2040-village-engine-audit-screen v2041-village-ui-screen v2042-village-ui-screen v2043-village-ui-screen v2044-village-ui-screen v2049-content-village-screen v2050-content-village-screen v2051-hud-loop-village-screen v2052-tile-anchor-village-screen v2053-hud-dock-village-screen v2054-layout-issue-village-screen v2055-playability-village-screen v2056-motion-tile-village-screen v2060-grounded-motion-village-screen v2061-loop-ui-village-screen v2062-ground-contact-village-screen v2063-unified-card-window-village-screen v2064-polish-audit-village-screen v2072-loop-polish-village-screen v2075-exploration-polish-village-screen locked-screen';
     root.classList.add('v108-home-main', 'v1110-village-flow');
     root.dataset.legacyVillageFlow = 'v1110-home-banner v1110-tide-card before v1110-region-panel';
     root.innerHTML = `
@@ -609,8 +617,7 @@ class AquaFantasiaGame {
       <section class="v204-mini-map" aria-label="루미나 베이 미니맵"><strong>루미나 베이</strong><span>광장 · 항구 · 길드</span><i></i><b></b></section>
       <section class="v206-village-status glass-card" aria-label="마을 요약"><article><strong>${this.save.village.buildings.length}</strong><span>시설</span></article><article><strong>${this.save.village.paths.length}</strong><span>길</span></article><article><strong>${this.totalCaught()}</strong><span>포획</span></article></section>
       <section class="v2-objective-card glass-card" aria-live="polite"><strong>오늘의 목표</strong><span data-v2-objective>길·꽃·벤치를 배치해서 관광객 100점을 먼저 열기</span></section>
-      <section class="v2049-growth-board v2051-loop-mini glass-card" aria-label="해양 제국 성장 보드"><button type="button" class="v2051-loop-toggle" aria-label="성장 루프 펼치기" aria-expanded="false">루프</button><div class="v2051-loop-body" aria-hidden="true">${this.villageGrowthBoardMarkup()}<button type="button" class="v2055-loop-close v2059-loop-close" data-v2055-loop-close aria-label="정보 닫기">×</button></div></section>
-      <section class="v2050-expedition-board v2051-expedition-mini glass-card" aria-label="다른 섬 개척 준비 보드"><button type="button" class="v2051-loop-toggle" aria-label="개척 정보 펼치기" aria-expanded="false">개척</button><div class="v2051-loop-body" aria-hidden="true">${this.islandExpansionBoardMarkup()}<button type="button" class="v2055-loop-close v2059-loop-close" data-v2055-loop-close aria-label="정보 닫기">×</button></div></section>
+      <section class="v2050-expedition-board v2051-expedition-mini v2075-expedition-dock glass-card" aria-label="다른 섬 개척 준비 보드"><button type="button" class="v2051-loop-toggle v2075-expedition-toggle" aria-label="개척 정보 펼치기" aria-expanded="false"><span>개척</span><strong>${expansionStats.progress}%</strong><em>${expansionStats.tierLabel}</em></button><div class="v2051-loop-body" aria-hidden="true">${this.islandExpansionBoardMarkup()}<button type="button" class="v2055-loop-close v2059-loop-close" data-v2055-loop-close aria-label="정보 닫기">×</button></div></section>
       <section class="v2-village-guide glass-card" aria-live="polite"><strong>첫 마을</strong><span>좌측 조이스틱 이동 · 탭 이동 · 우측 하단 메뉴 · +/− 캐릭터 시점 줌</span></section>
       <section class="v2-dialog-panel glass-card" aria-live="polite"></section>
       <section class="v2017-character-panel" data-v2017-character-panel aria-hidden="true" role="dialog" aria-modal="true" aria-label="내 캐릭터">
@@ -826,7 +833,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen v2059-dialog-close-screen v2063-unified-card-window-screen v2064-polish-audit-menu-screen v2072-menu-card-screen v2074-growth-loop-menu-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen v2059-dialog-close-screen v2063-unified-card-window-screen v2064-polish-audit-menu-screen v2072-menu-card-screen v2074-growth-loop-menu-screen v2075-scroll-polish-menu-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.dataset.v2027MenuRepair = 'true';
     root.dataset.v2028MenuAudit = 'simple-aqua-readable-content';
@@ -843,6 +850,7 @@ class AquaFantasiaGame {
     root.dataset.v2050ContentExpansion = 'island-expansion-content-assets';
     root.dataset.v2072MenuCard = 'character-build-style-aqua-card';
     root.dataset.v2074GrowthLoop = 'catch-sale-village-growth';
+    root.dataset.v2075ScrollPolish = 'menu-drag-scroll-aqua-buttons';
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
     root.innerHTML = `
@@ -863,35 +871,44 @@ class AquaFantasiaGame {
 
   private installRuntimeVerticalDragScroll(root: HTMLElement): void {
     let pointerId: number | null = null;
+    let scrollTarget: HTMLElement | null = null;
     let startY = 0;
     let startTop = 0;
     let moved = false;
+    const scrollableSelector = '.runtime-content, .v2051-loop-body, .catch-result-card, .v2-build-tray, .v2017-character-card, .v203-interior-card';
+    const resolveScrollTarget = (target: HTMLElement | null): HTMLElement => {
+      const candidate = target?.closest<HTMLElement>(scrollableSelector);
+      if (candidate && candidate.scrollHeight > candidate.clientHeight + 2) return candidate;
+      return root;
+    };
     const clear = () => {
       pointerId = null;
+      scrollTarget = null;
       window.setTimeout(() => root.removeAttribute('data-v2018-dragging'), 80);
     };
     root.addEventListener('pointerdown', (ev: PointerEvent) => {
       if (!ev.isPrimary) return;
       const target = ev.target as HTMLElement | null;
-      if (target?.closest('.bottom-nav, input, textarea, select, .runtime-hud')) return;
+      if (target?.closest('.bottom-nav, input, textarea, select, .runtime-hud, button, a, [role="button"], [data-no-swipe]')) return;
       pointerId = ev.pointerId;
+      scrollTarget = resolveScrollTarget(target);
       startY = ev.clientY;
-      startTop = root.scrollTop;
+      startTop = scrollTarget.scrollTop;
       moved = false;
-      root.setPointerCapture?.(ev.pointerId);
+      scrollTarget.setPointerCapture?.(ev.pointerId);
     }, { passive: true });
     root.addEventListener('pointermove', (ev: PointerEvent) => {
-      if (pointerId !== ev.pointerId) return;
+      if (pointerId !== ev.pointerId || !scrollTarget) return;
       const dy = ev.clientY - startY;
       if (Math.abs(dy) < 5 && !moved) return;
       moved = true;
       root.setAttribute('data-v2018-dragging', 'true');
-      root.scrollTop = Math.max(0, startTop - dy);
+      scrollTarget.scrollTop = Math.max(0, startTop - dy);
       ev.preventDefault();
     }, { passive: false });
     root.addEventListener('pointerup', (ev: PointerEvent) => {
       if (pointerId !== ev.pointerId) return;
-      root.releasePointerCapture?.(ev.pointerId);
+      scrollTarget?.releasePointerCapture?.(ev.pointerId);
       clear();
     });
     root.addEventListener('pointercancel', clear);

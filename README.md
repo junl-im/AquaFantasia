@@ -1,3 +1,16 @@
+# AquaFantasia v2.0.75
+
+## v2.0.75 변경사항
+
+- 마을 화면의 `루프`와 `개척` 중복 버튼을 정리해 `루프` 버튼을 제거하고, 성장 루프 수치는 `개척` 패널 안으로 통합했습니다.
+- `개척` 버튼을 HUD/우측 조작바와 겹치지 않도록 하단의 얇고 긴 소형 바 형태로 재배치했습니다.
+- 개척 패널이 좌측 화면 밖으로 밀리지 않도록 fixed center safe-area 기준으로 다시 고정하고, 패널 내부 스크롤을 보강했습니다.
+- 메뉴 페이지의 `runtime-content`와 긴 카드 영역에서 세로 드래그 스크롤이 먹지 않는 문제를 줄이도록 스크롤 타깃 감지 로직과 `touch-action: pan-y` 보강 CSS를 추가했습니다.
+- 메뉴/상점/미션/지도/개척 계열 버튼의 높이, 테두리, 터치 영역을 작고 균일한 아쿠아 버튼 기준으로 다듬었습니다.
+- `v2.0.74` 검증 스크립트는 이후 버전에서도 회귀 검사용으로 통과되도록 완화하고, `v2.0.75` 전용 검증 스크립트 `check-v2075-exploration-ui-scroll-polish.mjs`를 추가했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge, README를 `2.0.75`로 동기화했습니다.
+- 캐릭터 방향 고정 로직이 있는 `src/villageWorld.ts`는 변경하지 않았습니다.
+
 # AquaFantasia v2.0.74
 
 ## v2.0.74 변경사항
