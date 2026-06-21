@@ -30121,3 +30121,338 @@ html[data-v2076-island-expansion-routes="v2076-island-expansion-routes"] .runtim
     min-width: 52px !important;
   }
 }
+
+/* v2.0.77 full menu UI cleanup: aqua-card pages, reliable drag scrolling, safe close buttons, and HUD-under expedition bar.
+   This is a final-scoped override that quarantines older bottom-placement and legacy menu card rules without touching character direction code. */
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] {
+  --v2077-aqua-ink: #043a55;
+  --v2077-aqua-muted: rgba(4, 58, 85, .72);
+  --v2077-aqua-border: rgba(102, 220, 249, .62);
+  --v2077-aqua-card: linear-gradient(180deg, rgba(255,255,255,.94), rgba(203,249,255,.84) 58%, rgba(138,232,249,.72));
+  --v2077-aqua-soft: linear-gradient(180deg, rgba(255,255,255,.90), rgba(190,246,255,.72));
+  --v2077-aqua-btn: linear-gradient(180deg, #fbffff, #92edff);
+  --v2077-aqua-gold: linear-gradient(180deg, #fff8bd, #ffd45f);
+  --v2077-card-shadow: 0 18px 44px rgba(0, 70, 110, .18), inset 0 1px 0 rgba(255,255,255,.82);
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen {
+  color: var(--v2077-aqua-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .runtime-hud,
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .runtime-content {
+  position: relative !important;
+  z-index: 4 !important;
+  width: min(930px, calc(100vw - 22px)) !important;
+  max-width: calc(100vw - 22px) !important;
+  margin-inline: auto !important;
+  border: 1px solid var(--v2077-aqua-border) !important;
+  background: var(--v2077-aqua-card) !important;
+  background-image: var(--v2077-aqua-card) !important;
+  color: var(--v2077-aqua-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  box-shadow: var(--v2077-card-shadow) !important;
+  backdrop-filter: blur(14px) saturate(1.16) !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .runtime-hud {
+  min-height: 74px !important;
+  max-height: 92px !important;
+  border-radius: 28px !important;
+  padding: 9px 54px 9px 12px !important;
+  overflow: hidden !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .runtime-content {
+  display: grid !important;
+  align-content: start !important;
+  gap: 12px !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: calc(100svh - 124px - max(10px, env(safe-area-inset-top)) - max(12px, env(safe-area-inset-bottom))) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  scroll-behavior: auto !important;
+  border-radius: 32px !important;
+  padding: clamp(13px, 3.2vw, 24px) !important;
+  padding-bottom: calc(clamp(22px, 5vw, 38px) + max(18px, env(safe-area-inset-bottom))) !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .runtime-content :is(.runtime-hero-card,.runtime-panel,.runtime-menu-card,.runtime-item-card,.gear-card,.shop-card,.mission-card,.dex-card,.region-card,.v204-window-card,.v204-map-shell,.v204-map-detail,.v2050-expedition-card,.v206-route-ready,.v206-route-ready article,.v2074-dex-growth,.v2074-dex-growth article,.v950-filter-row,.v206-inventory-dashboard,.v206-inventory-dashboard article,.v204-inventory-shell,.v206-catch-ledger,.v2074-sale-ledger,.v204-quest-board,.v206-quest-npc-board,.v206-quest-npc-board article) {
+  border: 1px solid var(--v2077-aqua-border) !important;
+  background: var(--v2077-aqua-soft) !important;
+  background-image: var(--v2077-aqua-soft) !important;
+  color: var(--v2077-aqua-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.78), 0 10px 22px rgba(0, 80, 118, .12) !important;
+  filter: none !important;
+  outline: 0 !important;
+  text-shadow: none !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .runtime-content :is(.runtime-hero-card,.runtime-panel,.v204-window-card,.v204-map-shell,.v204-inventory-shell,.v206-catch-ledger,.v2074-sale-ledger,.v204-quest-board,.mission-list,.shop-list,.dex-grid,.gear-grid) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+  touch-action: pan-y !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen :is(h1,h2,h3,strong,span,p,small,em,b,label,input) {
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen :is(.runtime-title em,.runtime-eyebrow,.runtime-wallet span,.runtime-content small,.runtime-content p,.runtime-content em,.dex-card span,.mission-card span,.shop-card small) {
+  color: var(--v2077-aqua-muted) !important;
+  -webkit-text-fill-color: var(--v2077-aqua-muted) !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen :is(button,.runtime-btn,.image-btn,.compact-cta,.btn-aqua-action,.btn-gold-cost,.shop-card,.mission-card button,.gear-card button,.region-card,.v204-island,.v2076-route-card button) {
+  min-height: 40px !important;
+  border: 1px solid rgba(87, 213, 244, .72) !important;
+  border-radius: 999px !important;
+  background: var(--v2077-aqua-btn) !important;
+  background-image: var(--v2077-aqua-btn) !important;
+  color: #053a55 !important;
+  -webkit-text-fill-color: #053a55 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.90), 0 8px 17px rgba(0, 80, 122, .15) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.65) !important;
+  filter: none !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen :is(.btn-gold-cost,.runtime-btn.gold,.shop-price,.compact-cost-badge) {
+  background: var(--v2077-aqua-gold) !important;
+  background-image: var(--v2077-aqua-gold) !important;
+  border-color: rgba(255, 215, 105, .86) !important;
+  color: #573600 !important;
+  -webkit-text-fill-color: #573600 !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen :is(button,.runtime-btn,.image-btn,.compact-cta,.btn-aqua-action,.btn-gold-cost)::before,
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen :is(button,.runtime-btn,.image-btn,.compact-cta,.btn-aqua-action,.btn-gold-cost)::after {
+  content: none !important;
+  display: none !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .v2077-menu-close,
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .v2059-menu-close {
+  position: fixed !important;
+  top: max(12px, env(safe-area-inset-top)) !important;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  z-index: 2400 !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(93, 215, 246, .80) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(144,235,251,.90)) !important;
+  color: #053a55 !important;
+  -webkit-text-fill-color: #053a55 !important;
+  font-size: 23px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  box-shadow: 0 10px 24px rgba(0, 78, 118, .20), inset 0 1px 0 rgba(255,255,255,.86) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .inventory-screen.v2077-aqua-card-scroll-screen .runtime-content,
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .map-screen.v2077-aqua-card-scroll-screen .runtime-content,
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .mission-screen.v2077-aqua-card-scroll-screen .runtime-content,
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .shop-screen.v2077-aqua-card-scroll-screen .runtime-content,
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .dex-screen.v2077-aqua-card-scroll-screen .runtime-content {
+  cursor: grab !important;
+}
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen[data-v2018-dragging="true"] .runtime-content {
+  cursor: grabbing !important;
+}
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .inventory-screen.v2077-aqua-card-scroll-screen .runtime-content :is(.v204-inventory-shell,.v206-inventory-shell,.v206-catch-ledger,.v2074-sale-ledger,.v204-inventory-grid,.v206-inventory-grid,.v2074-sale-grid) {
+  touch-action: pan-y !important;
+  overscroll-behavior: contain !important;
+}
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .inventory-screen.v2077-aqua-card-scroll-screen .v204-inventory-grid,
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .inventory-screen.v2077-aqua-card-scroll-screen .v206-inventory-grid,
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .shop-list,
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .gear-grid,
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .dex-grid,
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .mission-list {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)) !important;
+  gap: 10px !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .runtime-content > :last-child {
+  margin-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+}
+
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] body[data-screen="village"] .v2077-expedition-hud-safe-village-screen .v2049-growth-board.v2051-loop-mini {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] body[data-screen="village"] .v2077-expedition-hud-safe-village-screen .v2050-expedition-board.v2075-expedition-dock {
+  position: fixed !important;
+  left: max(10px, env(safe-area-inset-left)) !important;
+  right: max(96px, calc(env(safe-area-inset-right) + 86px)) !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 88px) !important;
+  bottom: auto !important;
+  transform: none !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  z-index: 1500 !important;
+  pointer-events: auto !important;
+}
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] body[data-screen="village"] .v2077-expedition-hud-safe-village-screen .v2075-expedition-toggle {
+  display: grid !important;
+  grid-template-columns: max-content max-content minmax(0, 1fr) !important;
+  align-items: center !important;
+  justify-content: start !important;
+  gap: 7px !important;
+  width: 100% !important;
+  min-width: min(220px, calc(100vw - 132px)) !important;
+  max-width: 100% !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  padding: 0 11px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(117, 229, 255, .78) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(130,232,249,.88)) !important;
+  color: #053a55 !important;
+  -webkit-text-fill-color: #053a55 !important;
+  box-shadow: 0 8px 18px rgba(0, 68, 108, .14), inset 0 1px 0 rgba(255,255,255,.84) !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
+}
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] body[data-screen="village"] .v2077-expedition-hud-safe-village-screen .v2075-expedition-toggle strong {
+  padding: 3px 7px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.68) !important;
+  font-size: 10px !important;
+}
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] body[data-screen="village"] .v2077-expedition-hud-safe-village-screen .v2075-expedition-toggle em {
+  display: block !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  font-size: 10px !important;
+  font-style: normal !important;
+  opacity: .78 !important;
+}
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] body[data-screen="village"] .v2077-expedition-hud-safe-village-screen .v2051-expedition-mini.open .v2051-loop-body {
+  display: block !important;
+  visibility: visible !important;
+  position: fixed !important;
+  left: max(10px, env(safe-area-inset-left)) !important;
+  right: max(10px, env(safe-area-inset-right)) !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 124px) !important;
+  bottom: auto !important;
+  transform: none !important;
+  width: auto !important;
+  max-width: none !important;
+  max-height: calc(100svh - max(8px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom)) - 198px) !important;
+  min-height: 0 !important;
+  padding: 46px 14px 14px !important;
+  border-radius: 28px !important;
+  border: 1px solid rgba(112, 226, 251, .72) !important;
+  background: linear-gradient(180deg, rgba(249,255,255,.99), rgba(191,247,255,.95) 62%, rgba(108,218,242,.88)) !important;
+  color: #053a55 !important;
+  -webkit-text-fill-color: currentColor !important;
+  box-shadow: 0 20px 52px rgba(0, 62, 102, .24), inset 0 2px 0 rgba(255,255,255,.84) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  z-index: 2100 !important;
+  pointer-events: auto !important;
+  touch-action: pan-y !important;
+}
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] body[data-screen="village"] .v2077-expedition-hud-safe-village-screen .v2051-expedition-mini:not(.open) .v2051-loop-body {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] body[data-screen="village"] .v2077-expedition-hud-safe-village-screen .v2059-loop-close {
+  position: absolute !important;
+  top: 9px !important;
+  right: 9px !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(93, 215, 246, .78) !important;
+  background: linear-gradient(180deg, #ffffff, #8eeaff) !important;
+  color: #053a55 !important;
+  -webkit-text-fill-color: #053a55 !important;
+  font-size: 20px !important;
+  font-weight: 1000 !important;
+  z-index: 3 !important;
+  pointer-events: auto !important;
+}
+
+@media (max-width: 430px), (max-height: 760px) {
+  html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .runtime-hud {
+    width: min(930px, calc(100vw - 18px)) !important;
+    max-width: calc(100vw - 18px) !important;
+    min-height: 68px !important;
+    padding: 8px 50px 8px 10px !important;
+    border-radius: 25px !important;
+  }
+  html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] .runtime-menu-screen.v2077-aqua-card-scroll-screen .runtime-content {
+    width: min(930px, calc(100vw - 18px)) !important;
+    max-width: calc(100vw - 18px) !important;
+    max-height: calc(100svh - 112px - max(8px, env(safe-area-inset-top)) - max(10px, env(safe-area-inset-bottom))) !important;
+    border-radius: 26px !important;
+    padding: 12px !important;
+    padding-bottom: calc(28px + max(16px, env(safe-area-inset-bottom))) !important;
+  }
+  html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] body[data-screen="village"] .v2077-expedition-hud-safe-village-screen .v2050-expedition-board.v2075-expedition-dock {
+    top: calc(max(8px, env(safe-area-inset-top)) + 112px) !important;
+    left: max(10px, env(safe-area-inset-left)) !important;
+    right: max(78px, calc(env(safe-area-inset-right) + 70px)) !important;
+  }
+  html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] body[data-screen="village"] .v2077-expedition-hud-safe-village-screen .v2075-expedition-toggle {
+    height: 28px !important;
+    min-height: 28px !important;
+    gap: 5px !important;
+    padding-inline: 9px !important;
+  }
+  html[data-v2077-menu-ui-cleanup="v2077-menu-aqua-card-scroll-close-expedition-fix"] body[data-screen="village"] .v2077-expedition-hud-safe-village-screen .v2051-expedition-mini.open .v2051-loop-body {
+    top: calc(max(8px, env(safe-area-inset-top)) + 146px) !important;
+    left: max(8px, env(safe-area-inset-left)) !important;
+    right: max(8px, env(safe-area-inset-right)) !important;
+    max-height: calc(100svh - max(8px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom)) - 226px) !important;
+    padding-inline: 12px !important;
+  }
+}
