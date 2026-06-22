@@ -13,13 +13,14 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const validateScript = pkg.scripts?.validate ?? '';
 
-if (pkg.version !== '2.0.88') fail('package.json version must be 2.0.88');
+const [major, minor, patch] = pkg.version.split('.').map(Number);
+if (major !== 2 || minor !== 0 || patch < 88) fail('package.json version must be v2.0.88 or later');
 if (lock.version !== pkg.version || lock.packages?.['']?.version !== pkg.version) fail('package-lock version must match package.json');
-if (!data.includes("APP_VERSION = '2.0.88'")) fail('APP_VERSION must be 2.0.88');
-if (!data.includes('aqua-fantasia-v2.0.88-character-shell-expedition-ui')) fail('data cache name must be v2.0.88 character shell expedition UI');
-if (!sw.includes('aqua-fantasia-v2.0.88-character-shell-expedition-ui')) fail('service worker cache must be v2.0.88 character shell expedition UI');
-if (!offline.includes('v2.0.88')) fail('offline badge must mention v2.0.88');
-if (!readme.startsWith('# AquaFantasia v2.0.88')) fail('README top version must be v2.0.88');
+if (!data.includes(`APP_VERSION = '${pkg.version}'`)) fail('APP_VERSION must match package.json');
+if (!data.includes(`aqua-fantasia-v${pkg.version}`)) fail('data cache name must include current package version');
+if (!sw.includes(`aqua-fantasia-v${pkg.version}`)) fail('service worker cache must include current package version');
+if (!offline.includes(`v${pkg.version}`)) fail('offline badge must mention current package version');
+if (!readme.startsWith(`# AquaFantasia v${pkg.version}`)) fail('README top version must match package.json');
 if (!validateScript.includes('check-v2088-character-shell-expedition-ui.mjs')) fail('validate must run v2088 check');
 
 for (const token of [

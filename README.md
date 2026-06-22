@@ -1,4 +1,18 @@
-# AquaFantasia v2.0.88
+# AquaFantasia v2.0.89
+
+## v2.0.89 변경사항
+
+- UI가 계속 무너진 원인을 실제 DOM 기준으로 다시 확인했습니다. `v2059`, `v2075`, `v2081~v2088` 클래스가 같은 요소에 누적되어 닫기 버튼, 개척창, HUD, 메뉴 카드, 버튼 스킨이 과거 규칙과 충돌하는 상태였습니다.
+- `v2089-ui-hard-reset-expedition-shop-fix` 최종 셸을 추가해 HUD, 메뉴, 팝업, 닫기 버튼, 개척 UI에 실제 DOM 전용 클래스를 부여했습니다.
+- HUD 레벨 표기칸을 43px에서 66px 기준으로 넓히고, `Lv.10+` 표기가 잘리지 않도록 마을 HUD 내부 배치를 다시 고정했습니다.
+- 개척바를 HUD 바로 아래 3px 간격으로 붙이고, 화면 하단/동떨어진 위치로 밀리지 않도록 `v2089-expedition-board` 우선 규칙을 추가했습니다.
+- 개척 버튼을 누르면 버튼만 숨기고 개척 패널 본문은 중앙 아쿠아 카드로 열리도록 `v2089-expedition-open`과 `v2089-expedition-body-open` 상태를 분리했습니다.
+- 모든 메뉴/팝업 닫기 `×`를 우측 상단 원형 버튼으로 재고정하고, 건물 정보창 하단의 중복 `나가기` 닫기 버튼은 숨겼습니다.
+- 가방/지도/퀘스트/상점 메뉴 본문을 캐릭터 정보창 계열의 밝은 아쿠아 카드 + 흐릿한 외부 딤 배경으로 다시 묶었습니다.
+- 상점 버튼이 잘 안 눌리는 문제를 줄이기 위해 우측 조작바 z-index와 pointer-events를 보강하고, `data-village-shop` pointerup 캡처 fallback을 추가했습니다.
+- 버튼 위 푸른 줄/스프라이트 잔상 제거 규칙을 `v2089` 최종 셸에서 다시 고정했습니다.
+- `v2.0.89` 전용 검증 스크립트 `check-v2089-ui-hard-reset-expedition-shop-fix.mjs`를 추가하고 validate에 연결했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge, README를 `2.0.89`로 동기화했습니다.
 
 ## v2.0.88 변경사항
 

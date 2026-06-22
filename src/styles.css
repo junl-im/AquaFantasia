@@ -34328,3 +34328,478 @@ html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-
   html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .runtime-title em { display: none !important; }
   html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2088-expedition-board { width: min(166px, calc(100vw - 24px)) !important; }
 }
+
+/* v2.0.89 Hard UI reset: stop old shell collisions from moving close buttons, expedition, HUD and page content. */
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] {
+  --v2089-ink: #064158;
+  --v2089-muted: #327083;
+  --v2089-border: rgba(109, 220, 245, .58);
+  --v2089-shell: linear-gradient(180deg, rgba(255,255,255,.97) 0%, rgba(231,251,255,.92) 55%, rgba(207,245,253,.88) 100%);
+  --v2089-card: linear-gradient(180deg, rgba(255,255,255,.96), rgba(229,250,255,.90));
+  --v2089-dim: radial-gradient(circle at 50% 12%, rgba(226,253,255,.16), transparent 34%), rgba(2, 20, 34, .46);
+  --v2089-shadow: 0 20px 50px rgba(0, 52, 75, .22), inset 0 1px 0 rgba(255,255,255,.90);
+  --v2089-village-hud-w: min(318px, calc(100vw - 94px));
+  --v2089-village-hud-h: 46px;
+  --v2089-expedition-gap: 3px;
+  --v2089-close: 38px;
+}
+
+/* Village HUD: only the inner arrangement is reset; keep the aqua-card feeling. */
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2089-village-hud,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2-village-hud {
+  position: fixed !important;
+  top: calc(max(8px, env(safe-area-inset-top))) !important;
+  left: calc(max(10px, env(safe-area-inset-left))) !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: var(--v2089-village-hud-w) !important;
+  max-width: var(--v2089-village-hud-w) !important;
+  height: var(--v2089-village-hud-h) !important;
+  min-height: var(--v2089-village-hud-h) !important;
+  max-height: var(--v2089-village-hud-h) !important;
+  padding: 6px 8px !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 44 !important;
+  border-radius: 20px !important;
+  background: var(--v2089-shell) !important;
+  background-image: var(--v2089-shell) !important;
+  border: 1px solid var(--v2089-border) !important;
+  box-shadow: var(--v2089-shadow) !important;
+  transform: none !important;
+}
+
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2089-profile-chip,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2-profile-chip {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: 68px minmax(0, 1fr) !important;
+  grid-template-rows: 17px 17px !important;
+  align-items: center !important;
+  gap: 0 8px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  color: var(--v2089-ink) !important;
+}
+
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2-profile-chip span {
+  grid-row: 1 / span 2 !important;
+  width: 66px !important;
+  min-width: 66px !important;
+  height: 32px !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 6px !important;
+  border-radius: 14px !important;
+  background: linear-gradient(180deg, #ffffff, #ddf8ff) !important;
+  border: 1px solid rgba(255,255,255,.90) !important;
+  font-size: 12px !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2-profile-chip strong {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  min-width: 0 !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2-profile-chip em {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  min-width: 0 !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  color: var(--v2089-muted) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Expedition button: attach directly under the HUD, not detached at the bottom. */
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2089-expedition-board,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2050-expedition-board.v2075-expedition-dock {
+  position: fixed !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + var(--v2089-village-hud-h) + var(--v2089-expedition-gap)) !important;
+  left: calc(max(10px, env(safe-area-inset-left)) + 6px) !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(212px, calc(100vw - 112px)) !important;
+  max-width: min(212px, calc(100vw - 112px)) !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  max-height: 30px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  z-index: 43 !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2089-expedition-toggle,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2051-loop-toggle {
+  width: 100% !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  display: grid !important;
+  grid-template-columns: auto minmax(34px, 1fr) auto !important;
+  gap: 5px !important;
+  align-items: center !important;
+  padding: 4px 9px !important;
+  border-radius: 999px !important;
+  background: var(--v2089-card) !important;
+  background-image: var(--v2089-card) !important;
+  border: 1px solid var(--v2089-border) !important;
+  box-shadow: 0 8px 18px rgba(0, 68, 94, .14) !important;
+  color: var(--v2089-ink) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2051-loop-toggle span,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2051-loop-toggle strong,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2051-loop-toggle em {
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2051-loop-toggle span { font-size: 12px !important; font-weight: 1000 !important; }
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2051-loop-toggle strong { font-size: 12px !important; text-align: center !important; }
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2051-loop-toggle em { max-width: 72px !important; font-size: 9px !important; color: var(--v2089-muted) !important; }
+
+/* Expedition dialog: only hide the tiny button while open; never hide the content. */
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .village-world-screen.v2089-expedition-open::after {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 68 !important;
+  background: var(--v2089-dim) !important;
+  backdrop-filter: blur(9px) saturate(1.06) !important;
+  -webkit-backdrop-filter: blur(9px) saturate(1.06) !important;
+  pointer-events: none !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .village-world-screen.v2089-expedition-open .v2089-expedition-toggle { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2089-expedition-body {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2051-expedition-mini.open .v2089-expedition-body,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2089-expedition-body-open {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 72 !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  width: min(560px, calc(100vw - 28px)) !important;
+  max-width: min(560px, calc(100vw - 28px)) !important;
+  min-height: min(260px, calc(100svh - 72px)) !important;
+  max-height: calc(100svh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  padding: 50px 14px 16px !important;
+  border-radius: 26px !important;
+  background: var(--v2089-shell) !important;
+  background-image: var(--v2089-shell) !important;
+  border: 1px solid var(--v2089-border) !important;
+  box-shadow: var(--v2089-shadow) !important;
+  color: var(--v2089-ink) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2089-expedition-body-open > :not(.v2089-ui-close),
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2051-expedition-mini.open .v2089-expedition-body > :not(.v2089-ui-close) {
+  display: revert !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-width: 0 !important;
+  color: inherit !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2089-expedition-body-open :is(.v2075-expedition-loop-summary,.v2050-expedition-grid,.v2076-expedition-actions,.v2076-expedition-candidates) {
+  display: grid !important;
+}
+
+/* Menu pages: rebuild around the character-info style: dim backdrop, top-right X, compact HUD, one content card. */
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body:not([data-screen="fishing"]) .runtime-menu-screen.v2089-ui-hard-reset-menu-screen {
+  position: relative !important;
+  display: grid !important;
+  grid-template-rows: 48px minmax(0, 1fr) !important;
+  align-content: start !important;
+  justify-items: center !important;
+  gap: 8px !important;
+  width: 100vw !important;
+  height: 100svh !important;
+  padding: calc(max(8px, env(safe-area-inset-top)) + 2px) max(10px, env(safe-area-inset-right)) calc(76px + env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)) !important;
+  overflow: hidden !important;
+  color: var(--v2089-ink) !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body:not([data-screen="fishing"]) .runtime-menu-screen.v2089-ui-hard-reset-menu-screen::before,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body:not([data-screen="fishing"]) .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .v2088-aqua-dim {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  display: block !important;
+  background: var(--v2089-dim) !important;
+  backdrop-filter: blur(9px) saturate(1.06) !important;
+  -webkit-backdrop-filter: blur(9px) saturate(1.06) !important;
+  pointer-events: none !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen > :is(.runtime-hud,.runtime-content,.v2089-menu-close) {
+  position: relative !important;
+  z-index: 2 !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .v2089-runtime-hud,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .runtime-hud {
+  grid-row: 1 !important;
+  width: min(560px, calc(100vw - 22px)) !important;
+  max-width: min(560px, calc(100vw - 22px)) !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  display: grid !important;
+  grid-template-columns: 34px minmax(0, 1fr) !important;
+  gap: 8px !important;
+  align-items: center !important;
+  padding: 6px 54px 6px 8px !important;
+  overflow: hidden !important;
+  border-radius: 21px !important;
+  background: var(--v2089-shell) !important;
+  background-image: var(--v2089-shell) !important;
+  border: 1px solid var(--v2089-border) !important;
+  box-shadow: var(--v2089-shadow) !important;
+  transform: none !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .v2089-hud-avatar,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .runtime-hud-mascot {
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  padding: 2px !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  background: rgba(255,255,255,.72) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,.85) !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .v2089-hud-title,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .runtime-title {
+  min-width: 0 !important;
+  height: 36px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  grid-template-rows: 17px 17px !important;
+  gap: 1px 8px !important;
+  align-items: center !important;
+  overflow: hidden !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .runtime-title span,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .runtime-title strong,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .runtime-title em {
+  min-width: 0 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .runtime-title span { grid-column: 1 !important; grid-row: 1 !important; font-size: 12px !important; font-weight: 1000 !important; color: var(--v2089-muted) !important; }
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .runtime-title strong { grid-column: 1 !important; grid-row: 2 !important; font-size: 15px !important; color: var(--v2089-ink) !important; }
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .runtime-title em { grid-column: 2 !important; grid-row: 1 / span 2 !important; max-width: 88px !important; font-size: 10px !important; color: var(--v2089-muted) !important; }
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .runtime-wallet { display: none !important; }
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .v2089-menu-content,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .runtime-content {
+  grid-row: 2 !important;
+  width: min(560px, calc(100vw - 22px)) !important;
+  max-width: min(560px, calc(100vw - 22px)) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: calc(100svh - 48px - 98px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  align-content: start !important;
+  gap: 10px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  overscroll-behavior: contain !important;
+  padding: 12px !important;
+  border-radius: 25px !important;
+  background: var(--v2089-shell) !important;
+  background-image: var(--v2089-shell) !important;
+  border: 1px solid var(--v2089-border) !important;
+  box-shadow: var(--v2089-shadow) !important;
+  color: var(--v2089-ink) !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .runtime-content > *,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen :is(.runtime-hero-card,.runtime-panel,.runtime-card-list,.shop-list,.mission-list,.dex-grid,.gear-grid,.region-grid,.v204-map-shell,.v204-inventory-shell,.v206-catch-ledger,.v2074-sale-ledger) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen :is(.shop-list,.mission-list,.dex-grid,.gear-grid,.runtime-card-list,.runtime-region-grid) {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 216px), 1fr)) !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+}
+
+/* Close buttons: always top-right, never bottom-center. */
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] :is(.v2089-ui-close,.v2089-menu-close,.v2017-character-close,.v2059-panel-close,.v2059-build-close,.v2055-loop-close,.v2059-loop-close,.v2088-close-button) {
+  width: var(--v2089-close) !important;
+  height: var(--v2089-close) !important;
+  min-width: var(--v2089-close) !important;
+  min-height: var(--v2089-close) !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 999px !important;
+  font-size: 22px !important;
+  line-height: 1 !important;
+  color: var(--v2089-ink) !important;
+  -webkit-text-fill-color: var(--v2089-ink) !important;
+  background: linear-gradient(180deg, #ffffff, #dff8ff) !important;
+  background-image: linear-gradient(180deg, #ffffff, #dff8ff) !important;
+  border: 1px solid var(--v2089-border) !important;
+  box-shadow: 0 9px 18px rgba(0, 69, 98, .16) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .v2089-menu-close {
+  position: fixed !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 7px) !important;
+  right: calc(max(10px, env(safe-area-inset-right)) + 9px) !important;
+  left: auto !important;
+  bottom: auto !important;
+  z-index: 80 !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] :is(.v2017-character-card,.v203-interior-card,.v2-build-tray,.v2089-expedition-body) > .v2089-ui-close,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] :is(.v2017-character-card,.v203-interior-card,.v2-build-tray,.v2089-expedition-body) > :is(.v2017-character-close,.v2059-panel-close,.v2059-build-close,.v2055-loop-close,.v2059-loop-close) {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  left: auto !important;
+  bottom: auto !important;
+  z-index: 82 !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .v203-interior-actions [data-v203-interior-close]:not(.v2089-ui-close) { display: none !important; }
+
+/* Character/building/build panels: character-info card shell, full dim background, no cropped right edge. */
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] :is(.v2017-character-panel[aria-hidden="false"],.v203-interior-panel[aria-hidden="false"],.v203-interior-panel.open) {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100svh !important;
+  min-width: 100vw !important;
+  min-height: 100svh !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)) !important;
+  z-index: 70 !important;
+  background: var(--v2089-dim) !important;
+  backdrop-filter: blur(9px) saturate(1.06) !important;
+  -webkit-backdrop-filter: blur(9px) saturate(1.06) !important;
+  overflow: hidden !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] :is(.v2017-character-card,.v203-interior-card,.v2-build-tray) {
+  position: relative !important;
+  width: min(560px, calc(100vw - 28px)) !important;
+  max-width: min(560px, calc(100vw - 28px)) !important;
+  max-height: calc(100svh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  padding: 50px 14px 16px !important;
+  border-radius: 26px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  background: var(--v2089-shell) !important;
+  background-image: var(--v2089-shell) !important;
+  border: 1px solid var(--v2089-border) !important;
+  box-shadow: var(--v2089-shadow) !important;
+  color: var(--v2089-ink) !important;
+}
+
+/* Button and icon hit/skin repair, including shop button controls. */
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-card,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button) {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background-image: linear-gradient(180deg, #fbffff 0%, #e9fbff 100%) !important;
+  border: 1px solid rgba(88, 199, 225, .44) !important;
+  border-top-color: rgba(255,255,255,.88) !important;
+  box-shadow: 0 7px 14px rgba(0, 101, 135, .10) !important;
+  color: var(--v2089-ink) !important;
+  -webkit-text-fill-color: var(--v2089-ink) !important;
+  text-shadow: none !important;
+  outline: 0 !important;
+  overflow: hidden !important;
+  background-clip: padding-box !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-card,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button)::before,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-card,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button)::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  background: none !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2-village-controls,
+html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .village-world-screen.v2089-ui-hard-reset-village-screen [data-village-shop] {
+  z-index: 52 !important;
+  pointer-events: auto !important;
+}
+
+@media (max-width: 460px), (max-height: 720px) {
+  html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] {
+    --v2089-village-hud-w: min(298px, calc(100vw - 82px));
+    --v2089-village-hud-h: 46px;
+    --v2089-close: 36px;
+  }
+  html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] body[data-screen="village"] .village-world-screen.v2089-ui-hard-reset-village-screen .v2050-expedition-board.v2075-expedition-dock { width: min(196px, calc(100vw - 106px)) !important; }
+  html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen .runtime-title em { display: none !important; }
+  html[data-v2089-ui-hard-reset="v2089-ui-hard-reset-expedition-shop-fix"] .runtime-menu-screen.v2089-ui-hard-reset-menu-screen { gap: 6px !important; }
+}
