@@ -1011,8 +1011,12 @@ export class VillageWorld {
     }
     this.root.classList.toggle('v2-build-active', Boolean(type));
     this.root.classList.toggle('v2094-build-active', Boolean(type));
+    this.root.classList.toggle('v2097-build-active', Boolean(type));
+    this.root.classList.toggle('v2098-build-active', Boolean(type));
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2094-build-tray-open', this.buildTrayOpen);
+    this.root.classList.toggle('v2097-build-tray-open', this.buildTrayOpen);
+    this.root.classList.toggle('v2098-build-tray-open', this.buildTrayOpen);
     this.root.toggleAttribute('data-v2028-build-preview-active', Boolean(type));
     this.root.toggleAttribute('data-v2042-build-drag-placement', Boolean(type));
     this.root.toggleAttribute('data-v2043-build-ghost-placement', Boolean(type));
@@ -1035,6 +1039,8 @@ export class VillageWorld {
     this.buildTrayOpen = open;
     this.root.classList.toggle('v2-build-tray-open', open);
     this.root.classList.toggle('v2094-build-tray-open', open);
+    this.root.classList.toggle('v2097-build-tray-open', open);
+    this.root.classList.toggle('v2098-build-tray-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
       if (!keepSelection) this.movingBuildingId = null;
@@ -1049,6 +1055,8 @@ export class VillageWorld {
       this.hoverTile = null;
       this.root.classList.remove('v2-build-active');
       this.root.classList.remove('v2094-build-active');
+      this.root.classList.remove('v2097-build-active');
+      this.root.classList.remove('v2098-build-active');
       this.previewLayer.removeChildren();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
     }
@@ -1709,8 +1717,8 @@ export class VillageWorld {
     // Use a small lower-left bias only for tile selection; keep the raw world point
     // for building distance scoring so hitboxes do not drift visually.
     const biasedWorld = {
-      x: world.x - TILE_W * 0.16,
-      y: world.y + TILE_H * 0.16,
+      x: world.x - TILE_W * 0.22,
+      y: world.y + TILE_H * 0.22,
     };
     // v2080 validation lineage: const tile = nearestDiamondTile(wx, wy);
     const tile = nearestDiamondTile(biasedWorld.x, biasedWorld.y);
