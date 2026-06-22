@@ -24,7 +24,7 @@ const sw = fs.readFileSync(path.join(root, 'public/sw.js'), 'utf8');
 const offline = fs.readFileSync(path.join(root, 'public/offline.html'), 'utf8');
 const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
 const version = pkg.version;
-if (!/^2\.0\.\d+$/.test(version)) fail(`unsupported version ${version}; use 2.0.x sequence`);
+if (!/^2\.(0|1)\.\d+$/.test(version)) fail(`unsupported version ${version}; use 2.0.x or 2.1.x sequence`);
 if (!data.includes(`APP_VERSION = '${version}'`)) fail(`APP_VERSION is not ${version}`);
 const expectedCachePrefix = `aqua-fantasia-v${version}-`;
 if (!data.includes(expectedCachePrefix)) fail('CACHE_NAME mismatch in data.ts');
