@@ -16,13 +16,14 @@ const main = read('src/main.ts');
 const world = read('src/villageWorld.ts');
 const validateScript = pkg.scripts?.validate ?? '';
 
-if (pkg.version !== '2.0.83') fail('package.json version must be 2.0.83');
-if (lock.version !== '2.0.83' || lock.packages?.['']?.version !== '2.0.83') fail('package-lock version must be 2.0.83');
-if (!data.includes("APP_VERSION = '2.0.83'")) fail('APP_VERSION must be 2.0.83');
-if (!data.includes('aqua-fantasia-v2.0.83-village-hitbox-feel')) fail('data cache name must be v2.0.83');
-if (!sw.includes('aqua-fantasia-v2.0.83-village-hitbox-feel')) fail('service worker cache must be v2.0.83');
-if (!offline.includes('v2.0.83')) fail('offline badge must mention v2.0.83');
-if (!readme.startsWith('# AquaFantasia v2.0.83')) fail('README top version must be v2.0.83');
+const versionNumber = Number(pkg.version.split('.').at(-1));
+if (!pkg.version.startsWith('2.0.') || versionNumber < 83) fail('package.json version must be 2.0.83 or newer');
+if (lock.version !== pkg.version || lock.packages?.['']?.version !== pkg.version) fail('package-lock version must match package.json');
+if (!data.includes(`APP_VERSION = '${pkg.version}'`)) fail('APP_VERSION must match package.json');
+if (!data.includes(`aqua-fantasia-v${pkg.version}`)) fail('data cache name must match current version');
+if (!sw.includes(`aqua-fantasia-v${pkg.version}`)) fail('service worker cache must match current version');
+if (!offline.includes(`v${pkg.version}`)) fail('offline badge must mention current version');
+if (!readme.startsWith(`# AquaFantasia v${pkg.version}`)) fail('README top version must match current version');
 if (!validateScript.includes('check-v2083-village-hitbox-feel.mjs')) fail('validate must run v2083 check');
 
 for (const token of [

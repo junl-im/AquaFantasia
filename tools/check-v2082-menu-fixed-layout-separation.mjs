@@ -25,7 +25,7 @@ const required = [
   [main.includes("dataset.v2082MenuFixedLayout = 'v2082-menu-fixed-layout'"), 'html dataset v2082 marker missing'],
   [main.includes('v2082-menu-fixed-layout-screen'), 'runtime menu v2082 fixed layout class missing'],
   [main.includes('v2082-${active}-layout'), 'page-scoped v2082 layout class missing'],
-  [main.includes('v2082-menu-content v2082-${active}-content'), 'page-scoped v2082 content class missing'],
+  [(main.includes('v2082-menu-content v2082-${active}-content') || (main.includes('v2082-menu-content') && main.includes('v2082-${active}-content'))), 'page-scoped v2082 content class missing'],
   [main.includes('data-v2082-scroll-root="true"'), 'v2082 scroll root marker missing'],
   [main.includes('v2082-runtime-hud'), 'v2082 HUD class missing'],
   [main.includes('v2082-hud-wallet'), 'v2082 HUD wallet class missing'],

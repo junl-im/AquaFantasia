@@ -98,7 +98,7 @@ function sanitizeMultiplayer(value: unknown, fallback: MultiplayerState): Multip
   };
 }
 
-function sanitizePlayerName(value: unknown, fallback = '\uB098'): string {
+function sanitizePlayerName(value: unknown, fallback = '루미'): string {
   const raw = typeof value === 'string' ? value : '';
   const cleaned = raw.replace(/[<>{}\"'`\\]/g, '').replace(/\s+/g, ' ').trim().slice(0, 12);
   return cleaned || fallback;

@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.83-village-hitbox-feel';
+const CACHE_NAME = 'aqua-fantasia-v2.0.84-ui-shell-random-name-repair';
 const PRECACHE = [
   "./",
   "./index.html",

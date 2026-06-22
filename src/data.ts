@@ -1,7 +1,7 @@
 import type { FishInfo, RegionInfo, SaveData } from './types';
 
-export const APP_VERSION = '2.0.83';
-export const CACHE_NAME = 'aqua-fantasia-v2.0.83-village-hitbox-feel';
+export const APP_VERSION = '2.0.84';
+export const CACHE_NAME = 'aqua-fantasia-v2.0.84-ui-shell-random-name-repair';
 
 export const regions: RegionInfo[] = [
   { key: 'lake', name: '잔잔한 해변', subtitle: '첫 출항 추천 · 부드러운 파도', bg: './assets/v101/water/water_clear_calm.webp', difficulty: 1.00, waterSpeed: 0.65, color: '#54dfff', tide: '잔물결', unlockHint: '기본 해금' },
@@ -57,6 +57,12 @@ export const fishDex: FishInfo[] = [
   { id: 'unknown', name: '미발견', regionKey: 'lake', region: '???', img: './assets/v92/fish/fish_unknown.png', rarity: 'COMMON', reward: 0, weight: 0 },
 ];
 
+const RANDOM_PLAYER_NAMES = ['루미', '마린', '코랄', '피오', '나루', '아린', '블루', '미르', '세라', '라군', '하린', '유나'];
+
+function randomPlayerName(): string {
+  return RANDOM_PLAYER_NAMES[Math.floor(Math.random() * RANDOM_PLAYER_NAMES.length)] ?? '루미';
+}
+
 export const navItems: Array<{ screen: Exclude<SaveData['screen'], 'login'>; icon: string; label: string }> = [
   { screen: 'inventory', icon: './assets/v22/icons/nav_bag.png', label: '가방' },
   { screen: 'mission', icon: './assets/v22/icons/nav_quest.png', label: '퀘스트' },
@@ -68,7 +74,7 @@ export function defaultSave(): SaveData {
   return {
     version: APP_VERSION,
     screen: 'login',
-    playerName: '\uB098',
+    playerName: randomPlayerName(),
     region: 'lake',
     coins: 500,
     caught: {},
