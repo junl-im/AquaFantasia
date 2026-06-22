@@ -1,32 +1,29 @@
-# AquaFantasia v2.0.98
+# AquaFantasia v2.0.99
 
-## v2.0.98 변경사항
+## v2.0.99 변경사항
 
-이번 패치는 새 기능 추가가 아니라, `v2.0.97`에서 다시 퇴화된 UI를 정상 방향으로 되돌리는 복구 패치입니다.
+이번 패치는 GitHub Actions `npm run validate` 실패를 수정하는 **패키지 청결/백업 산출물 제거 패치**입니다. UI, 마을, 낚시 런타임 코드는 변경하지 않았습니다.
 
-- 하단 메뉴바를 구형 전체폭/8버튼 구조가 아니라 우측 아래 한줄형 `홈 / 가방 / 퀘스트 / 지도` 구조로 복구했습니다.
-- 우측 상단 조작 레일과 HUD가 서로 겹치지 않도록 HUD 폭을 줄이고, 조작 버튼 공간을 확보했습니다.
-- 우측 상단 `건설` 버튼이 눌리지 않던 원인을 수정했습니다.
-  - `VillageWorld`는 `v2094-build-tray-open`을 토글하고 있었는데, 최근 UI CSS는 `v2097-build-tray-open`만 바라보고 있었습니다.
-  - 이제 `v2094`, `v2097`, `v2098` 건설 상태가 같이 동기화되어 건설창이 정상 표시됩니다.
-- 낚시 화면은 `v2.0.86` 근처의 플레이 가능 레이아웃을 기준으로 되돌렸습니다.
-  - `v2055-fishing-reel-rebuild-screen` 등 릴 콘솔/최근 포획/장비 스트립에 필요한 클래스를 다시 붙였습니다.
-  - 최근 패치에서 숨겨졌던 낚시 장비/최근 포획 UI가 다시 보이도록 복구했습니다.
-  - 캐스팅 버튼과 릴 콘솔 위치를 하단 메뉴와 겹치지 않도록 재정리했습니다.
-- 상점 빈 화면 재발을 막기 위해 메뉴 본문에 `runtime-content`, `v2097-menu-content`, `v2098-menu-content` 호환 구조를 함께 유지했습니다.
-- 개척 버튼과 개척 본문은 기존 상태를 유지하되, HUD 바로 아래 작은 보조바로 고정했습니다.
-- 마을 터치 기준은 사용자가 찍는 좌측 아래 발판 쪽에 더 가깝게 보정했습니다.
-- `v2.0.98` 전용 검증 스크립트를 추가했습니다.
-  - `tools/check-v2098-ui-dock-fishing-build-recovery.mjs`
+- GitHub Actions에서 실패한 `AquaFantasia_backup_v1/dist/...` 잔여 산출물 문제를 수정했습니다.
+- `tools/clean-old-patch-docs.mjs`가 이제 Markdown 문서뿐 아니라 백업 폴더, `dist`, `reports`, 로그 파일, `*_NOTES.md`까지 정리합니다.
+- `tools/check-v2099-clean-package-artifacts.mjs`를 추가해 백업/빌드 산출물이 다시 패키지에 섞이면 검증에서 즉시 실패하도록 했습니다.
+- `npm run validate`를 `v2.0.99` 전용 패키지 청결 검증으로 연결했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge/version을 `v2.0.99`로 동기화했습니다.
+
+## v2.0.98 유지 내용
+
+- 하단 메뉴바는 우측 아래 한줄형 `홈 / 가방 / 퀘스트 / 지도` 구조를 유지합니다.
+- 우측 상단 조작 레일과 HUD 공간 조정, 건설 버튼 상태 동기화, 낚시 화면 복구, 상점 본문 호환 구조, 마을 터치 기준 보정은 그대로 보존합니다.
+- 캐릭터 방향 로직은 수정하지 않았습니다.
 
 ## 검증
 
 - `npm run validate` 통과
 - 통파일 ZIP 검증 통과
-- `v2.0.97` 통파일에 `v2.0.98` 패치 ZIP 덮어쓰기 검증 통과
+- `v2.0.98` 통파일에 `v2.0.99` 패치 ZIP 덮어쓰기 검증 통과
 
-## 보존
+## 패키징 규칙
 
-- 캐릭터 방향 로직은 수정하지 않았습니다.
-- `src/villageWorld.ts`는 건설창 상태 동기화와 마을 터치 기준 보정만 수정했습니다.
 - 루트 Markdown 파일은 `README.md` 하나만 유지합니다.
+- `node_modules`, `dist`, `reports`, 백업 폴더, 임시 로그, `*_NOTES.md`는 ZIP에 포함하지 않습니다.
+- 내부 registry 오염 문자열 검사를 유지합니다.
