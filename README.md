@@ -1,3 +1,20 @@
+# AquaFantasia v2.0.85
+
+## v2.0.85 변경사항
+
+- UI 응급 복구 패치입니다. 새 기능 추가나 메뉴별 고급 디자인은 중단하고, `v2077~v2084`에서 누적된 UI 복구 CSS가 서로 충돌해 모든 페이지가 다시 무너지는 원인을 먼저 정리했습니다.
+- 원인 분석: 같은 `runtime-hud`, `runtime-content`, 버튼, 아쿠아 카드에 여러 버전의 grid/flex/fixed/max-height 규칙이 동시에 적용되어 HUD가 뚱뚱해지고 메뉴 본문 폭/스크롤/카드 높이가 서로 밀렸습니다.
+- `v2085-ui-emergency-hud-menu-reset` 최종 리셋 레이어를 추가해 이전 UI 오버라이드 위에서 하나의 얇은 메뉴 셸 규칙만 우선 적용되도록 했습니다.
+- 메뉴 HUD를 얇게 줄였습니다. 메뉴 페이지 HUD는 58px 기준으로 고정하고, 정보는 `Lv · 캐릭터명 / 현재 페이지 / 루미나 베이`만 남기며 골드·기금·미끼 지표는 숨겼습니다.
+- 마을 HUD도 56px 기준의 얇은 프로필 카드로 줄였습니다. `Lv / 캐릭터명 / 루미나 베이`만 보여 주고 상세 수치는 캐릭터 정보창과 메뉴 내부에서 확인하는 방향을 유지합니다.
+- 메뉴 페이지는 `grid-template-rows: auto minmax(0, 1fr)` 구조로 다시 고정하고, 본문은 `v2085-menu-content` 단일 스크롤 루트로 정리해 상단 HUD와 본문 카드가 서로 밀고 들어가지 않도록 했습니다.
+- 가방/지도/퀘스트/상점/장비/도감/랭킹 본문 카드가 화면 폭보다 커지거나 실 내용보다 좁게 눌리는 현상을 줄이기 위해 `min-width: 0`, `max-width: 100%`, 카드 그리드 폭, overflow 규칙을 최종 레이어에서 다시 고정했습니다.
+- 버튼 위쪽 푸른 줄/잔상 문제는 이전 스프라이트 버튼과 pseudo skin이 여전히 섞이는 문제로 보고, `v2085` 레이어에서 `appearance`, `background-image`, `::before`, `::after`를 한 번 더 제거했습니다.
+- 캐릭터/건물/건설/개척 등 모달이 열렸을 때 개척바가 뒤에 같이 보이지 않도록 `v2085-modal-open` 상태까지 숨김 조건에 추가했습니다.
+- `v2.0.85` 전용 검증 스크립트 `check-v2085-ui-emergency-hud-menu-reset.mjs`를 추가하고 validate에 연결했습니다.
+- `v2.0.84` 검증 스크립트는 이후 버전에서도 회귀 검사용으로 통과되도록 현재 패키지 버전 기준 검사로 완화했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge, README를 `2.0.85`로 동기화했습니다.
+
 # AquaFantasia v2.0.84
 
 ## v2.0.84 변경사항

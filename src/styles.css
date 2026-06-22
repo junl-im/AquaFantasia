@@ -32796,3 +32796,327 @@ html[data-v2084-ui-shell-stabilize="v2084-ui-shell-start-hud-fishing-repair"] bo
     width: min(260px, calc(100vw - 108px)) !important;
   }
 }
+
+
+/* v2.0.85 UI Emergency Reset: stop accumulated menu/HUD overrides from fighting; keep character-card style but force one slim shell. */
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] {
+  --v2085-ink: #073f5c;
+  --v2085-muted: rgba(7, 63, 92, .68);
+  --v2085-panel: linear-gradient(180deg, rgba(255,255,255,.98), rgba(224,250,255,.94) 54%, rgba(178,241,252,.88));
+  --v2085-border: rgba(129, 225, 246, .62);
+  --v2085-shadow: 0 18px 42px rgba(0, 60, 96, .20), inset 0 1px 0 rgba(255,255,255,.86);
+  --v2085-dim: radial-gradient(circle at 50% 18%, rgba(231,252,255,.15), transparent 34%), rgba(3, 24, 39, .34);
+  --v2085-menu-width: min(680px, calc(100vw - max(22px, env(safe-area-inset-left)) - max(22px, env(safe-area-inset-right))));
+  --v2085-menu-gap: clamp(8px, 1.9vw, 12px);
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen {
+  position: relative !important;
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) !important;
+  align-items: stretch !important;
+  justify-items: center !important;
+  gap: var(--v2085-menu-gap) !important;
+  min-height: 100svh !important;
+  max-height: 100svh !important;
+  overflow: hidden !important;
+  padding: calc(max(8px, env(safe-area-inset-top)) + 4px) max(10px, env(safe-area-inset-left)) calc(max(12px, env(safe-area-inset-bottom)) + 84px) max(10px, env(safe-area-inset-right)) !important;
+  box-sizing: border-box !important;
+  color: var(--v2085-ink) !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen::before,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .v2084-aqua-modal-dim,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .v2082-menu-dim,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .v2081-menu-dim {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  background: var(--v2085-dim) !important;
+  backdrop-filter: blur(8px) saturate(1.05) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(1.05) !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] body[data-screen="fishing"] .runtime-menu-screen.v2085-emergency-menu-screen::before,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] body[data-screen="fishing"] .runtime-menu-screen.v2085-emergency-menu-screen .v2084-aqua-modal-dim {
+  display: none !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen > :is(.runtime-hud,.runtime-content,.v2059-menu-close,.v2084-close-button) {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .v2085-slim-runtime-hud,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .runtime-hud {
+  width: min(520px, calc(100vw - 62px)) !important;
+  max-width: min(520px, calc(100vw - 62px)) !important;
+  min-width: 0 !important;
+  height: 58px !important;
+  min-height: 58px !important;
+  max-height: 58px !important;
+  display: grid !important;
+  grid-template-columns: 40px minmax(0, 1fr) !important;
+  grid-template-rows: 1fr !important;
+  grid-template-areas: "avatar title" !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 7px 50px 7px 9px !important;
+  border-radius: 22px !important;
+  background: var(--v2085-panel) !important;
+  background-image: var(--v2085-panel) !important;
+  border: 1px solid var(--v2085-border) !important;
+  box-shadow: var(--v2085-shadow) !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .v2085-hud-avatar,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .runtime-hud-mascot {
+  grid-area: avatar !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  border-radius: 15px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: linear-gradient(180deg, #ffffff, #c8f7ff) !important;
+  border: 1px solid rgba(255,255,255,.80) !important;
+  box-shadow: none !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .runtime-hud-mascot img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  background: none !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .v2085-hud-title,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .runtime-title {
+  grid-area: title !important;
+  min-width: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  grid-template-rows: auto auto !important;
+  gap: 0 8px !important;
+  align-items: center !important;
+  text-align: left !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .runtime-title span {
+  grid-column: 1 / 2 !important;
+  font-size: 11px !important;
+  line-height: 1.12 !important;
+  color: var(--v2085-muted) !important;
+  font-weight: 900 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .runtime-title strong {
+  grid-column: 1 / 2 !important;
+  font-size: 18px !important;
+  line-height: 1.04 !important;
+  color: var(--v2085-ink) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .runtime-title em {
+  grid-column: 2 / 3 !important;
+  grid-row: 1 / span 2 !important;
+  align-self: center !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 26px !important;
+  padding: 0 9px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.52) !important;
+  color: var(--v2085-muted) !important;
+  font-size: 10.5px !important;
+  font-style: normal !important;
+  font-weight: 900 !important;
+  white-space: nowrap !important;
+  max-width: 106px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .v2085-hud-hidden-metrics,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .runtime-wallet {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .v2085-menu-content,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .runtime-content {
+  width: var(--v2085-menu-width) !important;
+  max-width: var(--v2085-menu-width) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-height: calc(100svh - max(8px, env(safe-area-inset-top)) - max(12px, env(safe-area-inset-bottom)) - 160px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 12px !important;
+  padding: 13px !important;
+  padding-bottom: calc(18px + env(safe-area-inset-bottom)) !important;
+  border-radius: 28px !important;
+  background: var(--v2085-panel) !important;
+  background-image: var(--v2085-panel) !important;
+  border: 1px solid var(--v2085-border) !important;
+  box-shadow: var(--v2085-shadow) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  overscroll-behavior: contain !important;
+  box-sizing: border-box !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .runtime-content > *,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen :is(.runtime-hero-card,.runtime-panel,.runtime-item-card,.shop-card,.mission-card,.gear-card,.dex-card,.ranking-panel,.v204-window-card,.v206-route-ready article,.v204-inventory-shell,.v204-map-shell,.v204-quest-board,.shop-list,.mission-list,.gear-grid,.dex-grid) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow-wrap: anywhere !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen :is(.runtime-card-list,.runtime-region-grid,.shop-list,.mission-list,.gear-grid,.dex-grid,.v204-inventory-grid,.v2074-sale-grid,.v2076-expedition-candidates) {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 178px), 1fr)) !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button) {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background: linear-gradient(180deg, #ffffff 0%, #d8f8ff 100%) !important;
+  background-image: linear-gradient(180deg, #ffffff 0%, #d8f8ff 100%) !important;
+  border: 1px solid rgba(255,255,255,.78) !important;
+  box-shadow: 0 7px 15px rgba(0, 110, 145, .14) !important;
+  outline: 0 !important;
+  color: #04445f !important;
+  -webkit-text-fill-color: #04445f !important;
+  text-shadow: none !important;
+  background-clip: border-box !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button)::before,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button)::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] :is(.v2059-screen-close,.v2059-menu-close,.v2077-menu-close,.v2082-menu-close,.v2084-close-button,.v2017-character-close,.v2059-panel-close,.v2059-build-close,.v2055-loop-close,.v2059-loop-close) {
+  top: max(8px, env(safe-area-inset-top)) !important;
+  right: max(8px, env(safe-area-inset-right)) !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  z-index: 980 !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .village-world-screen.v2085-emergency-village-screen .v2085-slim-village-hud,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .village-world-screen.v2085-emergency-village-screen .v2-village-hud {
+  width: min(220px, calc(100vw - 118px)) !important;
+  min-width: 0 !important;
+  height: 56px !important;
+  min-height: 56px !important;
+  max-height: 56px !important;
+  padding: 6px 8px !important;
+  border-radius: 22px !important;
+  overflow: hidden !important;
+  background: var(--v2085-panel) !important;
+  border: 1px solid var(--v2085-border) !important;
+  box-shadow: var(--v2085-shadow) !important;
+}
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .village-world-screen.v2085-emergency-village-screen .v2085-village-profile-chip,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .village-world-screen.v2085-emergency-village-screen .v2-profile-chip {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: 42px minmax(0, 1fr) !important;
+  grid-template-rows: auto auto !important;
+  gap: 0 7px !important;
+  align-items: center !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-align: left !important;
+}
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .village-world-screen.v2085-emergency-village-screen .v2-profile-chip span {
+  grid-row: 1 / span 2 !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 15px !important;
+  font-size: 11px !important;
+  background: linear-gradient(180deg, #ffffff, #c9f7ff) !important;
+  border: 1px solid rgba(255,255,255,.82) !important;
+}
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .village-world-screen.v2085-emergency-village-screen .v2-profile-chip strong {
+  font-size: 16px !important;
+  line-height: 1.04 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .village-world-screen.v2085-emergency-village-screen .v2-profile-chip em {
+  font-size: 10.5px !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  color: var(--v2085-muted) !important;
+}
+
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] body.v2085-modal-open .v2050-expedition-board.v2075-expedition-dock,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] body.v2084-popup-open .v2050-expedition-board.v2075-expedition-dock,
+html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] body:is(.v2032-character-panel-open,.v2040-interior-open,.v2041-interior-open,.v2042-interior-open,.v2043-interior-open,.v2044-interior-open) .v2050-expedition-board.v2075-expedition-dock {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+@media (max-width: 480px), (max-height: 760px) {
+  html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen {
+    padding-top: calc(max(6px, env(safe-area-inset-top)) + 3px) !important;
+    gap: 7px !important;
+  }
+  html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .runtime-hud {
+    width: min(480px, calc(100vw - 56px)) !important;
+    max-width: min(480px, calc(100vw - 56px)) !important;
+    height: 54px !important;
+    min-height: 54px !important;
+    max-height: 54px !important;
+    padding-right: 46px !important;
+  }
+  html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .runtime-title em {
+    display: none !important;
+  }
+  html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] .runtime-menu-screen.v2085-emergency-menu-screen .runtime-content {
+    max-height: calc(100svh - max(6px, env(safe-area-inset-top)) - max(10px, env(safe-area-inset-bottom)) - 148px) !important;
+    padding: 11px !important;
+  }
+}
