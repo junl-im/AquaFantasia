@@ -7,10 +7,10 @@ const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 const offline = fs.readFileSync('public/offline.html', 'utf8');
 
 const must = [
-  [pkg.version === '2.0.89', 'package.json version must be 2.0.89'],
-  [data.includes("APP_VERSION = '2.0.89'"), 'APP_VERSION must be 2.0.89'],
-  [data.includes('aqua-fantasia-v2.0.89-ui-hard-reset-expedition-shop-fix'), 'cache name must be v2.0.89 hard reset'],
-  [offline.includes('v2.0.89'), 'offline badge must be v2.0.89'],
+  [pkg.version.startsWith('2.0.') && Number(pkg.version.split('.').at(-1)) >= 89, 'package.json version must be 2.0.89 or later'],
+  [data.includes(`APP_VERSION = '${pkg.version}'`), 'APP_VERSION must match package.json'],
+  [data.includes(`aqua-fantasia-v${pkg.version}`), 'cache name must include current version'],
+  [offline.includes(`v${pkg.version}`), 'offline badge must mention current version'],
   [main.includes("dataset.v2089UiHardReset = 'v2089-ui-hard-reset-expedition-shop-fix'"), 'v2089 dataset marker missing'],
   [main.includes('v2089-ui-hard-reset-menu-screen'), 'v2089 menu root class missing'],
   [main.includes('v2089-ui-hard-reset-village-screen'), 'v2089 village root class missing'],

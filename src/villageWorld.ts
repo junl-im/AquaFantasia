@@ -970,6 +970,7 @@ export class VillageWorld {
     this.root.dataset.v2062GroundContactAudit = 'shadow-foot-contact-no-floating-motion';
     this.root.dataset.v2080TileHitboxAudit = 'canvas-local-tile-diamond-hitbox-normalized';
     this.root.dataset.v2083VillageHitboxFeel = 'world-pointer-building-footprint-score';
+    this.root.dataset.v2090BuildStateGuard = 'explicit-build-button-only';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트 기준으로 배치됩니다.');
   }
 
@@ -1754,7 +1755,9 @@ export class VillageWorld {
     this.root.querySelector<HTMLButtonElement>('[data-village-zoom-in]')?.addEventListener('click', () => this.zoom(0.11, true));
     this.root.querySelector<HTMLButtonElement>('[data-village-zoom-out]')?.addEventListener('click', () => this.zoom(-0.11, true));
     this.root.querySelector<HTMLButtonElement>('[data-village-center]')?.addEventListener('click', () => { this.cameraFollowUntil = performance.now() + 1200; this.centerCameraOnPlayer(); });
-    this.root.querySelector<HTMLButtonElement>('[data-village-build-open]')?.addEventListener('click', () => {
+    this.root.querySelector<HTMLButtonElement>('[data-village-build-open]')?.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
       if (this.selectedBuild) {
         this.setBuildMode(null);
         this.setBuildTrayOpen(false);
@@ -1763,7 +1766,11 @@ export class VillageWorld {
       }
       this.setBuildTrayOpen(!this.buildTrayOpen);
     });
-    this.root.querySelectorAll<HTMLElement>('[data-village-build-close]').forEach((node) => node.addEventListener('click', () => this.setBuildTrayOpen(false)));
+    this.root.querySelectorAll<HTMLElement>('[data-village-build-close]').forEach((node) => node.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); this.setBuildTrayOpen(false); }));
+    this.root.querySelectorAll<HTMLElement>('[data-village-build-open], [data-village-build-close], [data-build-type], [data-village-zoom-in], [data-village-zoom-out], [data-village-center], [data-village-shop], [data-village-fishing]').forEach((node) => {
+      node.addEventListener('pointerdown', (ev) => { ev.stopPropagation(); }, { capture: true });
+      node.addEventListener('pointerup', (ev) => { ev.stopPropagation(); }, { capture: true });
+    });
     this.bindJoystick();
     this.root.querySelector<HTMLButtonElement>('[data-village-fishing]')?.addEventListener('click', () => this.onGoFishing());
     this.root.querySelectorAll<HTMLElement>('[data-v203-interior-close]').forEach((node) => node.addEventListener('click', () => this.closeInterior()));

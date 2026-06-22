@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.89-ui-hard-reset-expedition-shop-fix';
+const CACHE_NAME = 'aqua-fantasia-v2.0.90-ui-debt-cleanup-build-state-guard';
 const PRECACHE = [
   "./",
   "./index.html",
