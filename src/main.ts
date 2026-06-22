@@ -257,12 +257,13 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
-    // v2.1.0 live UI policy: keep the restored dock/fishing layout and apply the aqua-card UI foundation.
+    // v2.1.1 live UI policy: keep the restored dock/fishing layout and refine the aqua-card UI foundation.
     document.documentElement.dataset.v2098UiRecovery = 'v2098-dock-fishing-build-recovery';
     document.documentElement.dataset.v2100UiStability = 'v2100-version-independent-ui-stability-root';
     document.documentElement.dataset.v210AquaUiFoundation = 'v210-aqua-card-layout-foundation';
+    document.documentElement.dataset.v211AquaUiRefinement = 'v211-aqua-ui-refinement-pass';
     this.activateV2097UiResetShell();
-    document.documentElement.classList.add('v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root');
+    document.documentElement.classList.add('v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root');
     // v2.0.92 validation lineage only: dataset.v2092UiStable = 'v2092-live-ui-canonical' activateV2092UiStableShell html.classList.add('v2092-ui-canonical-root') v2092-ui-stable-village-screen v2092-village-hud v2092-profile-chip v2092-expedition-board v2092-expedition-toggle data-v2092-expedition-toggle v2092-expedition-body data-v2092-expedition-body v2092-expedition-body-open v2092-ui-close v2092-ui-stable-menu-screen v2092-runtime-hud v2092-menu-content data-v2092-scroll-root="true" v2092-menu-close
     // v2.0.93 validation lineage only: old html dataset markers intentionally removed from live runtime. visualPolish enginePatch v2077MenuUiCleanup v2089UiHardReset v2090UiDebtCleanup v2091UiCleanup v2092UiStable
     /* v2.0.92 validation lineage only: old html dataset markers are intentionally not attached to runtime.
@@ -384,7 +385,7 @@ class AquaFantasiaGame {
 
   private activateV2097UiResetShell(): void {
     const html = document.documentElement;
-    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v2100UiStability', 'v210AquaUiFoundation']);
+    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v2100UiStability', 'v210AquaUiFoundation', 'v211AquaUiRefinement']);
     for (const key of Object.keys(html.dataset)) {
       if (keep.has(key)) continue;
       const value = html.dataset[key] ?? '';
@@ -396,8 +397,9 @@ class AquaFantasiaGame {
     html.dataset.v2098UiRecovery = 'v2098-dock-fishing-build-recovery';
     html.dataset.v2100UiStability = 'v2100-version-independent-ui-stability-root';
     html.dataset.v210AquaUiFoundation = 'v210-aqua-card-layout-foundation';
+    html.dataset.v211AquaUiRefinement = 'v211-aqua-ui-refinement-pass';
     html.classList.remove('v2092-ui-canonical-root', 'v2093-ui-canonical-root');
-    html.classList.add('v2097-ui-clean-root', 'v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root');
+    html.classList.add('v2097-ui-clean-root', 'v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root');
   }
 
   // v2.0.92 validation compatibility: dataset.v2091UiCleanup = 'v2091-live-ui-pruned' activateV2091UiCleanup delete html.dataset[key]

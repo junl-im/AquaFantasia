@@ -37705,3 +37705,389 @@ html.v210-aqua-ui-foundation-root body[data-screen="login"] .bottom-nav { displa
   html.v210-aqua-ui-foundation-root .bottom-nav.v2098-bottom-nav { gap: 3px !important; padding: 6px 5px !important; }
   html.v210-aqua-ui-foundation-root .bottom-nav.v2098-bottom-nav .v2098-nav-item img { width: 20px !important; height: 20px !important; }
 }
+
+/* v2.1.1 aqua-card UI refinement: clearer HUD, non-overlapping controls, joystick, docks and modal cards. */
+html.v211-aqua-ui-refinement-root {
+  --v211-safe-top: max(12px, env(safe-area-inset-top));
+  --v211-safe-left: max(12px, env(safe-area-inset-left));
+  --v211-safe-right: max(10px, env(safe-area-inset-right));
+  --v211-safe-bottom: max(12px, env(safe-area-inset-bottom));
+  --v211-ink: #0a526c;
+  --v211-muted: rgba(10, 82, 108, .72);
+  --v211-card: linear-gradient(180deg, rgba(255,255,255,.96), rgba(216,250,255,.90) 62%, rgba(165,238,250,.82));
+  --v211-card-strong: linear-gradient(180deg, rgba(255,255,255,.98), rgba(224,252,255,.94) 58%, rgba(157,235,248,.88));
+  --v211-panel: rgba(255,255,255,.70);
+  --v211-border: rgba(56, 177, 208, .48);
+  --v211-shadow: 0 18px 42px rgba(9, 85, 120, .18), inset 0 1px 0 rgba(255,255,255,.96);
+  --v211-blur: blur(15px) saturate(1.16);
+  --v211-toolbar-w: 106px;
+  --v211-hud-w: min(258px, calc(100vw - var(--v211-toolbar-w) - 34px));
+  --v211-dock-h: 58px;
+  --v211-dock-w: clamp(212px, 55vw, 276px);
+  --v211-joy-w: 92px;
+}
+html.v211-aqua-ui-refinement-root *,
+html.v211-aqua-ui-refinement-root *::before,
+html.v211-aqua-ui-refinement-root *::after { box-sizing: border-box !important; }
+html.v211-aqua-ui-refinement-root button,
+html.v211-aqua-ui-refinement-root [role="button"] {
+  -webkit-tap-highlight-color: transparent !important;
+  touch-action: manipulation !important;
+}
+html.v211-aqua-ui-refinement-root button::before,
+html.v211-aqua-ui-refinement-root button::after,
+html.v211-aqua-ui-refinement-root .v2098-nav-item::before,
+html.v211-aqua-ui-refinement-root .v2098-nav-item::after,
+html.v211-aqua-ui-refinement-root .v2097-world-controls button::before,
+html.v211-aqua-ui-refinement-root .v2097-world-controls button::after {
+  content: none !important;
+  display: none !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-village-screen,
+html.v211-aqua-ui-refinement-root .v2098-village-screen {
+  background:
+    radial-gradient(circle at 50% -4%, rgba(255,255,255,.62), transparent 32%),
+    radial-gradient(circle at 16% 32%, rgba(108,226,247,.22), transparent 34%),
+    linear-gradient(180deg, #cbf8fb 0%, #79dce7 54%, #42b9d0 100%) !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-village-screen::after,
+html.v211-aqua-ui-refinement-root .v2098-village-screen::after {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), transparent 40%, rgba(3,76,111,.10)) !important;
+}
+
+html.v211-aqua-ui-refinement-root .v2097-village-hud {
+  top: var(--v211-safe-top) !important;
+  left: var(--v211-safe-left) !important;
+  width: var(--v211-hud-w) !important;
+  height: 52px !important;
+  min-height: 52px !important;
+  max-height: 52px !important;
+  padding: 6px 8px !important;
+  border-radius: 25px !important;
+  color: var(--v211-ink) !important;
+  background: var(--v211-card) !important;
+  border: 1px solid var(--v211-border) !important;
+  box-shadow: var(--v211-shadow) !important;
+  backdrop-filter: var(--v211-blur) !important;
+  z-index: 760 !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-profile-chip {
+  height: 40px !important;
+  grid-template-columns: minmax(70px, max-content) minmax(0, 1fr) minmax(48px, max-content) !important;
+  gap: 6px !important;
+  padding: 0 8px !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-profile-chip span {
+  min-width: 70px !important;
+  height: 29px !important;
+  padding: 0 8px !important;
+  background: rgba(255,255,255,.78) !important;
+  border: 1px solid rgba(56,177,208,.26) !important;
+  font-size: 11px !important;
+  letter-spacing: -.035em !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-profile-chip strong {
+  font-size: 13.5px !important;
+  letter-spacing: -.035em !important;
+  color: var(--v211-ink) !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-profile-chip em {
+  min-width: 48px !important;
+  height: 25px !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 6px !important;
+  border-radius: 999px !important;
+  background: rgba(234,253,255,.70) !important;
+  border: 1px solid rgba(56,177,208,.22) !important;
+  color: var(--v211-muted) !important;
+  font-size: 10px !important;
+  letter-spacing: -.02em !important;
+}
+
+html.v211-aqua-ui-refinement-root .v2097-expedition-board {
+  top: calc(var(--v211-safe-top) + 62px) !important;
+  left: var(--v211-safe-left) !important;
+  width: min(252px, calc(100vw - var(--v211-toolbar-w) - 36px)) !important;
+  z-index: 735 !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-expedition-toggle {
+  height: 36px !important;
+  min-height: 36px !important;
+  grid-template-columns: 42px 40px minmax(0, 1fr) !important;
+  gap: 6px !important;
+  padding: 0 10px !important;
+  border-radius: 999px !important;
+  color: var(--v211-ink) !important;
+  background: var(--v211-card) !important;
+  border: 1px solid var(--v211-border) !important;
+  box-shadow: 0 12px 26px rgba(9,85,120,.15), inset 0 1px 0 rgba(255,255,255,.94) !important;
+  backdrop-filter: var(--v211-blur) !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-expedition-toggle span,
+html.v211-aqua-ui-refinement-root .v2097-expedition-toggle strong { font-size: 11.5px !important; letter-spacing: -.03em !important; }
+html.v211-aqua-ui-refinement-root .v2097-expedition-toggle em { font-size: 9.5px !important; color: var(--v211-muted) !important; }
+html.v211-aqua-ui-refinement-root .v2097-expedition-body {
+  top: calc(var(--v211-safe-top) + 106px) !important;
+  left: var(--v211-safe-left) !important;
+  right: var(--v211-safe-right) !important;
+  width: auto !important;
+  max-height: calc(100svh - var(--v211-safe-top) - var(--v211-safe-bottom) - var(--v211-dock-h) - 134px) !important;
+  padding: 52px 14px 16px !important;
+  border-radius: 30px !important;
+  background: var(--v211-card-strong) !important;
+  border: 1px solid var(--v211-border) !important;
+  box-shadow: 0 0 0 9999px rgba(33,122,152,.24), var(--v211-shadow) !important;
+  backdrop-filter: var(--v211-blur) !important;
+}
+
+html.v211-aqua-ui-refinement-root .v2097-world-controls,
+html.v211-aqua-ui-refinement-root .v2098-world-controls {
+  top: var(--v211-safe-top) !important;
+  right: var(--v211-safe-right) !important;
+  width: var(--v211-toolbar-w) !important;
+  max-height: calc(100svh - var(--v211-safe-top) - var(--v211-safe-bottom) - var(--v211-dock-h) - 10px) !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-auto-rows: 38px !important;
+  gap: 5px !important;
+  padding: 6px !important;
+  border-radius: 24px !important;
+  color: var(--v211-ink) !important;
+  background: var(--v211-card) !important;
+  border: 1px solid var(--v211-border) !important;
+  box-shadow: var(--v211-shadow) !important;
+  backdrop-filter: var(--v211-blur) !important;
+  overflow: visible !important;
+  z-index: 790 !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-world-controls button {
+  min-height: 38px !important;
+  height: 38px !important;
+  padding: 2px 1px !important;
+  border-radius: 17px !important;
+  background: var(--v211-panel) !important;
+  border: 1px solid rgba(56,177,208,.30) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.82) !important;
+  color: var(--v211-ink) !important;
+  font-size: 8.5px !important;
+  letter-spacing: -.045em !important;
+  line-height: 1 !important;
+  pointer-events: auto !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-world-controls button:active,
+html.v211-aqua-ui-refinement-root .bottom-nav.v2098-bottom-nav .v2098-nav-item:active,
+html.v211-aqua-ui-refinement-root .v2097-ui-close:active,
+html.v211-aqua-ui-refinement-root .v2097-menu-close:active { transform: translateY(1px) scale(.985) !important; }
+html.v211-aqua-ui-refinement-root .v2097-world-controls button span:first-child {
+  min-height: 16px !important;
+  font-size: 14px !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-world-controls img {
+  width: 17px !important;
+  height: 17px !important;
+  filter: drop-shadow(0 3px 5px rgba(9,85,120,.14)) !important;
+}
+html.v211-aqua-ui-refinement-root :is(.v2-build-tray-open,.v2094-build-tray-open,.v2097-build-tray-open,.v2098-build-tray-open) .v2097-world-controls {
+  opacity: .22 !important;
+  pointer-events: none !important;
+}
+
+html.v211-aqua-ui-refinement-root .v2097-joystick {
+  left: var(--v211-safe-left) !important;
+  bottom: var(--v211-safe-bottom) !important;
+  width: var(--v211-joy-w) !important;
+  height: 98px !important;
+  z-index: 780 !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-joystick-base {
+  width: 78px !important;
+  height: 78px !important;
+  background: rgba(7, 74, 99, .36) !important;
+  border: 2px solid rgba(230, 254, 255, .68) !important;
+  box-shadow: 0 13px 28px rgba(5, 76, 111, .21), inset 0 0 0 9px rgba(255,255,255,.12) !important;
+  backdrop-filter: blur(11px) saturate(1.12) !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-joystick-knob {
+  width: 42px !important;
+  height: 42px !important;
+  background: radial-gradient(circle at 34% 30%, #fff, #c4f8ff 48%, #55c2d8 100%) !important;
+}
+
+html.v211-aqua-ui-refinement-root .bottom-nav.v2098-bottom-nav {
+  right: var(--v211-safe-right) !important;
+  bottom: var(--v211-safe-bottom) !important;
+  width: var(--v211-dock-w) !important;
+  height: var(--v211-dock-h) !important;
+  min-height: var(--v211-dock-h) !important;
+  padding: 6px !important;
+  gap: 5px !important;
+  border-radius: 24px !important;
+  color: var(--v211-ink) !important;
+  background: var(--v211-card) !important;
+  border: 1px solid var(--v211-border) !important;
+  box-shadow: var(--v211-shadow) !important;
+  backdrop-filter: var(--v211-blur) !important;
+  z-index: 770 !important;
+}
+html.v211-aqua-ui-refinement-root .bottom-nav.v2098-bottom-nav .v2098-nav-item {
+  grid-template-rows: 22px 1fr !important;
+  gap: 1px !important;
+  padding: 3px 2px !important;
+  border-radius: 17px !important;
+  color: var(--v211-ink) !important;
+  background: transparent !important;
+  font-size: 9px !important;
+  letter-spacing: -.04em !important;
+}
+html.v211-aqua-ui-refinement-root .bottom-nav.v2098-bottom-nav .v2098-nav-item.active {
+  background: linear-gradient(180deg, rgba(255,255,255,.90), rgba(121,226,244,.45)) !important;
+  border: 1px solid rgba(56,177,208,.25) !important;
+}
+html.v211-aqua-ui-refinement-root .bottom-nav.v2098-bottom-nav .v2098-nav-item img {
+  width: 21px !important;
+  height: 21px !important;
+}
+html.v211-aqua-ui-refinement-root .bottom-nav.v2098-bottom-nav .v2098-nav-item span {
+  color: var(--v211-ink) !important;
+  font-size: 9px !important;
+}
+html.v211-aqua-ui-refinement-root .bottom-nav:not(.v2098-bottom-nav),
+html.v211-aqua-ui-refinement-root .fixed-root-nav,
+html.v211-aqua-ui-refinement-root .v2-village-controls,
+html.v211-aqua-ui-refinement-root .v2-joystick {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html.v211-aqua-ui-refinement-root .v2097-modal-backdrop,
+html.v211-aqua-ui-refinement-root .v2097-build-backdrop,
+html.v211-aqua-ui-refinement-root .v2097-menu-dim {
+  background: rgba(28, 113, 145, .26) !important;
+  backdrop-filter: var(--v211-blur) !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-modal-card,
+html.v211-aqua-ui-refinement-root .v2097-character-card,
+html.v211-aqua-ui-refinement-root .v2097-interior-card,
+html.v211-aqua-ui-refinement-root .v2097-build-tray,
+html.v211-aqua-ui-refinement-root .v2097-menu-content,
+html.v211-aqua-ui-refinement-root .v2098-menu-content {
+  background: var(--v211-card-strong) !important;
+  border: 1px solid var(--v211-border) !important;
+  border-radius: 30px !important;
+  box-shadow: var(--v211-shadow) !important;
+  color: var(--v211-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  backdrop-filter: var(--v211-blur) !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-character-panel,
+html.v211-aqua-ui-refinement-root .v2097-interior-panel {
+  background: rgba(28, 113, 145, .24) !important;
+  backdrop-filter: var(--v211-blur) !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-ui-close,
+html.v211-aqua-ui-refinement-root .v2097-menu-close,
+html.v211-aqua-ui-refinement-root .v2059-fishing-close {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(180deg, #ffffff, #cbf6ff) !important;
+  border: 1px solid rgba(56,177,208,.54) !important;
+  color: var(--v211-ink) !important;
+  -webkit-text-fill-color: var(--v211-ink) !important;
+  box-shadow: 0 10px 22px rgba(9,85,120,.18), inset 0 1px 0 rgba(255,255,255,.96) !important;
+}
+html.v211-aqua-ui-refinement-root .runtime-menu-screen.v2097-menu-screen {
+  background:
+    radial-gradient(circle at 50% -2%, rgba(255,255,255,.76), transparent 34%),
+    linear-gradient(180deg, #e8fdff 0%, #a5edf5 56%, #60cfe3 100%) !important;
+  grid-template-rows: 52px minmax(0, 1fr) !important;
+  padding: var(--v211-safe-top) var(--v211-safe-right) calc(var(--v211-dock-h) + var(--v211-safe-bottom) + 12px) var(--v211-safe-left) !important;
+}
+html.v211-aqua-ui-refinement-root .runtime-hud.v2097-menu-hud {
+  height: 52px !important;
+  min-height: 52px !important;
+  width: min(448px, calc(100vw - 68px)) !important;
+  border-radius: 25px !important;
+  background: var(--v211-card) !important;
+  border: 1px solid var(--v211-border) !important;
+  box-shadow: var(--v211-shadow) !important;
+}
+html.v211-aqua-ui-refinement-root .v2097-menu-content,
+html.v211-aqua-ui-refinement-root .v2098-menu-content {
+  width: min(690px, calc(100vw - 24px)) !important;
+  padding: clamp(14px, 3.2vw, 18px) !important;
+  max-height: 100% !important;
+  scrollbar-gutter: stable both-edges !important;
+}
+html.v211-aqua-ui-refinement-root :is(.runtime-hero-card,.runtime-panel,.runtime-card,.shop-card,.mission-card,.gear-card,.dex-card,.v2076-route-card,.v2076-expedition-card,.v2097-build-grid button,.runtime-btn,.btn-aqua-action) {
+  border-color: rgba(56,177,208,.34) !important;
+  background: rgba(255,255,255,.70) !important;
+  color: var(--v211-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v211-aqua-ui-refinement-root body[data-screen="login"] .bottom-nav { display: none !important; }
+html.v211-aqua-ui-refinement-root .hit-keep.v2025-keep-button {
+  min-height: 34px !important;
+  padding: 0 10px !important;
+  border-radius: 999px !important;
+  color: var(--v211-ink) !important;
+  background: rgba(255,255,255,.78) !important;
+}
+html.v211-aqua-ui-refinement-root .hit-keep.v2025-keep-button .keep-text {
+  color: var(--v211-ink) !important;
+  -webkit-text-fill-color: var(--v211-ink) !important;
+  font-size: clamp(11px, 2.8vw, 13px) !important;
+  letter-spacing: -.055em !important;
+}
+html.v211-aqua-ui-refinement-root .hit-keep.v2025-keep-button .keep-indicator {
+  flex: 0 0 21px !important;
+  width: 21px !important;
+  height: 21px !important;
+  border-color: rgba(56,177,208,.48) !important;
+}
+
+@media (max-width: 430px) {
+  html.v211-aqua-ui-refinement-root {
+    --v211-toolbar-w: 100px;
+    --v211-hud-w: min(238px, calc(100vw - var(--v211-toolbar-w) - 32px));
+    --v211-dock-w: clamp(206px, 55vw, 236px);
+    --v211-joy-w: 88px;
+  }
+  html.v211-aqua-ui-refinement-root .v2097-profile-chip { grid-template-columns: minmax(62px, max-content) minmax(0, 1fr) minmax(42px, max-content) !important; gap: 4px !important; padding: 0 6px !important; }
+  html.v211-aqua-ui-refinement-root .v2097-profile-chip span { min-width: 62px !important; font-size: 10px !important; padding: 0 6px !important; }
+  html.v211-aqua-ui-refinement-root .v2097-profile-chip strong { font-size: 12.5px !important; }
+  html.v211-aqua-ui-refinement-root .v2097-profile-chip em { min-width: 42px !important; font-size: 9.5px !important; padding: 0 5px !important; }
+  html.v211-aqua-ui-refinement-root .v2097-expedition-board { width: min(226px, calc(100vw - var(--v211-toolbar-w) - 32px)) !important; }
+  html.v211-aqua-ui-refinement-root .v2097-expedition-toggle { grid-template-columns: 38px 34px minmax(0, 1fr) !important; padding: 0 8px !important; }
+  html.v211-aqua-ui-refinement-root .v2097-world-controls { grid-auto-rows: 36px !important; gap: 4px !important; padding: 5px !important; }
+  html.v211-aqua-ui-refinement-root .v2097-world-controls button { height: 36px !important; min-height: 36px !important; font-size: 8px !important; }
+  html.v211-aqua-ui-refinement-root .v2097-joystick-base { width: 74px !important; height: 74px !important; }
+  html.v211-aqua-ui-refinement-root .v2097-joystick-knob { width: 40px !important; height: 40px !important; }
+  html.v211-aqua-ui-refinement-root .bottom-nav.v2098-bottom-nav { gap: 4px !important; padding: 6px 5px !important; }
+  html.v211-aqua-ui-refinement-root .bottom-nav.v2098-bottom-nav .v2098-nav-item img { width: 20px !important; height: 20px !important; }
+}
+@media (max-width: 360px) {
+  html.v211-aqua-ui-refinement-root {
+    --v211-toolbar-w: 96px;
+    --v211-hud-w: min(218px, calc(100vw - var(--v211-toolbar-w) - 28px));
+    --v211-dock-w: 204px;
+    --v211-joy-w: 82px;
+  }
+  html.v211-aqua-ui-refinement-root .v2097-village-hud { padding: 5px 6px !important; }
+  html.v211-aqua-ui-refinement-root .v2097-profile-chip span { min-width: 56px !important; }
+  html.v211-aqua-ui-refinement-root .v2097-profile-chip { grid-template-columns: minmax(56px, max-content) minmax(0, 1fr) minmax(39px, max-content) !important; }
+  html.v211-aqua-ui-refinement-root .v2097-expedition-board { width: min(206px, calc(100vw - var(--v211-toolbar-w) - 28px)) !important; }
+  html.v211-aqua-ui-refinement-root .v2097-joystick-base { width: 70px !important; height: 70px !important; }
+  html.v211-aqua-ui-refinement-root .v2097-joystick-knob { width: 38px !important; height: 38px !important; }
+  html.v211-aqua-ui-refinement-root .bottom-nav.v2098-bottom-nav .v2098-nav-item span { font-size: 8.5px !important; }
+}
