@@ -13,7 +13,7 @@ function assert(condition, message) {
   }
 }
 
-assert(/APP_VERSION = '2\.0\.(6[4-9]|7[0-9])'/.test(data), 'APP_VERSION must be v2.0.64 or later v2064 lineage.');
+assert(/APP_VERSION = '2\.0\.(6[4-9]|7[0-9]|8[0-9])'/.test(data), 'APP_VERSION must be v2.0.64 or later v2064 lineage.');
 const version = JSON.parse(pkg).version;
 assert(data.includes(`aqua-fantasia-v${version}-`), 'CACHE_NAME must match current package version.');
 assert(sw.includes(`aqua-fantasia-v${version}-`), 'service worker cache key must match current package version.');

@@ -757,6 +757,27 @@ function worldToTile(worldX: number, worldY: number): { x: number; y: number } {
   return { x, y };
 }
 
+function diamondHitScore(worldX: number, worldY: number, tileX: number, tileY: number): number {
+  const center = centerOfTile(tileX, tileY);
+  return Math.abs(worldX - center.x) / (TILE_W / 2) + Math.abs(worldY - center.y) / (TILE_H / 2);
+}
+
+function nearestDiamondTile(worldX: number, worldY: number): { x: number; y: number } {
+  const base = worldToTile(worldX, worldY);
+  let best = base;
+  let bestScore = diamondHitScore(worldX, worldY, base.x, base.y);
+  for (let yy = base.y - 1; yy <= base.y + 1; yy += 1) {
+    for (let xx = base.x - 1; xx <= base.x + 1; xx += 1) {
+      const score = diamondHitScore(worldX, worldY, xx, yy);
+      if (score < bestScore) {
+        best = { x: xx, y: yy };
+        bestScore = score;
+      }
+    }
+  }
+  return bestScore <= 1.08 ? best : base;
+}
+
 function centerOfTile(x: number, y: number): { x: number; y: number } {
   return isoToWorld(x + 0.5, y + 0.5);
 }
@@ -944,6 +965,7 @@ export class VillageWorld {
     this.root.dataset.v2060GroundedMotionPolish = 'no-floating-grounded-footstep-motion';
     this.root.dataset.v2061LoopUiButtonAudit = 'stable-grounded-world-after-loop-ui-audit';
     this.root.dataset.v2062GroundContactAudit = 'shadow-foot-contact-no-floating-motion';
+    this.root.dataset.v2080TileHitboxAudit = 'canvas-local-tile-diamond-hitbox-normalized';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트 기준으로 배치됩니다.');
   }
 
@@ -1922,11 +1944,14 @@ export class VillageWorld {
   private tileFromPointer(ev: PointerEvent): { x: number; y: number } {
     if (!this.app) return { x: 0, y: 0 };
     const rect = this.app.canvas.getBoundingClientRect();
-    const sx = ev.clientX - rect.left;
-    const sy = ev.clientY - rect.top;
+    const scaleX = this.app.screen.width / Math.max(1, rect.width);
+    const scaleY = this.app.screen.height / Math.max(1, rect.height);
+    const sx = (ev.clientX - rect.left) * scaleX;
+    const sy = (ev.clientY - rect.top) * scaleY;
     const wx = (sx - this.camera.x) / this.camera.scale;
     const wy = (sy - this.camera.y) / this.camera.scale;
-    return worldToTile(wx, wy);
+    const tile = nearestDiamondTile(wx, wy);
+    return { x: safeIntegerTile(tile.x), y: safeIntegerTile(tile.y) };
   }
 
   private beginMoveBuilding(building: VillageBuildingSave): void {

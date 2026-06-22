@@ -31107,3 +31107,339 @@ html[data-v2079-aqua-card-object-audit="v2079-aqua-card-object-layout-audit"] .v
     height: 120px !important;
   }
 }
+
+/* v2.0.80 Menu Page Grid / Tile Hitbox Audit
+   One managed layer for unstable menu pages: wide readable cards, non-overlapping HUD/body,
+   reliable drag-scroll targets, and corrected village expedition hierarchy. */
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen {
+  --v2080-page-gap: clamp(10px, 2.4vw, 14px);
+  --v2080-card-pad: clamp(13px, 3.2vw, 18px);
+  --v2080-bottom-safe: calc(92px + max(12px, env(safe-area-inset-bottom)));
+  padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) var(--v2080-bottom-safe) max(10px, env(safe-area-inset-left)) !important;
+  overflow: hidden !important;
+  color: var(--aqua-card-ink) !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-hud.aqua-card-hud {
+  display: grid !important;
+  grid-template-columns: clamp(40px, 10vw, 50px) minmax(0, 1fr) !important;
+  grid-template-areas: "mascot title" "wallet wallet" !important;
+  align-items: center !important;
+  gap: 7px 10px !important;
+  width: min(100%, 504px) !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  padding: 10px 12px !important;
+  border-radius: 24px !important;
+  overflow: visible !important;
+  background: var(--aqua-card-panel) !important;
+  border: 1px solid var(--aqua-card-border) !important;
+  box-shadow: 0 16px 38px rgba(0, 58, 100, .20), inset 0 2px 0 rgba(255,255,255,.86) !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-hud-mascot {
+  grid-area: mascot !important;
+  width: clamp(38px, 10vw, 50px) !important;
+  height: clamp(38px, 10vw, 50px) !important;
+  object-fit: contain !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-title {
+  grid-area: title !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-title strong {
+  font-size: clamp(20px, 5.8vw, 28px) !important;
+  line-height: 1.02 !important;
+  color: var(--aqua-card-ink) !important;
+  -webkit-text-fill-color: var(--aqua-card-ink) !important;
+  text-shadow: none !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-title span,
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-title em {
+  color: var(--aqua-card-muted) !important;
+  -webkit-text-fill-color: var(--aqua-card-muted) !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-wallet {
+  grid-area: wallet !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-wallet span {
+  justify-content: center !important;
+  min-width: 0 !important;
+  min-height: 28px !important;
+  padding: 4px 6px !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  background: rgba(255,255,255,.64) !important;
+  color: var(--aqua-card-ink) !important;
+  -webkit-text-fill-color: var(--aqua-card-ink) !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-wallet img {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 auto !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-content.v2080-scroll-stack {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--v2080-page-gap) !important;
+  width: min(100%, 504px) !important;
+  height: auto !important;
+  max-height: calc(100svh - max(10px, env(safe-area-inset-top)) - var(--v2080-bottom-safe) - 116px) !important;
+  margin-top: var(--v2080-page-gap) !important;
+  padding: var(--v2080-card-pad) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  background: var(--aqua-card-page-bg) !important;
+  border: 1px solid var(--aqua-card-border) !important;
+  box-shadow: 0 18px 42px rgba(0, 55, 96, .18), inset 0 2px 0 rgba(255,255,255,.78) !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-content.v2080-scroll-stack > * {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-content :is(.runtime-hero-card,.runtime-panel,.v204-window-card,.v204-inventory-shell,.v206-inventory-shell,.v204-map-shell,.v204-quest-board,.v206-quest-npc-board,.v2050-expedition-card,.v2076-expedition-card) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  min-height: auto !important;
+  height: auto !important;
+  padding: var(--v2080-card-pad) !important;
+  border-radius: 24px !important;
+  overflow: visible !important;
+  background: var(--aqua-card-soft) !important;
+  border: 1px solid rgba(111,225,251,.46) !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-content :is(.runtime-hero-card,.shop-summary,.inventory-summary,.mission-summary,.dex-summary,.gear-summary,.ranking-summary,.v204-map-hero) {
+  display: grid !important;
+  grid-template-columns: clamp(48px, 12vw, 62px) minmax(0, 1fr) max-content !important;
+  gap: 10px !important;
+  align-items: center !important;
+  overflow: hidden !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-content :is(.runtime-hero-card,.shop-summary,.inventory-summary,.mission-summary,.dex-summary,.gear-summary,.ranking-summary,.v204-map-hero) > div {
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-content :is(.runtime-hero-card p,.shop-summary p,.inventory-summary p,.mission-summary p,.dex-summary p,.gear-summary p,.ranking-summary p,.v204-map-hero p,.mission-card span,.runtime-item-card span,.shop-card small,.gear-card span,.dex-card span,.region-card span) {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: initial !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  text-overflow: clip !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+  line-height: 1.34 !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-content :is(.runtime-card-list,.shop-list,.mission-list,.gear-grid,.dex-grid,.v204-inventory-grid,.v206-inventory-grid,.v2074-sale-grid,.runtime-region-grid,.v2076-expedition-candidates) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  gap: 10px !important;
+  overflow: visible !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-content :is(.shop-list,.mission-list,.gear-grid,.runtime-card-list) {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-content :is(.dex-grid,.v204-inventory-grid,.v206-inventory-grid,.runtime-region-grid,.v2074-sale-grid) {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 154px), 1fr)) !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-content :is(.gear-card,.shop-card,.mission-card,.dex-card,.region-card,.runtime-item-card,.v108-rank-row,.v2076-route-card) {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 12px !important;
+  overflow: visible !important;
+  contain: none !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .shop-card {
+  display: grid !important;
+  grid-template-columns: 46px minmax(0, 1fr) max-content !important;
+  align-items: center !important;
+  gap: 9px !important;
+  text-align: left !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .shop-card em {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  justify-self: start !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .shop-card img {
+  width: 46px !important;
+  height: 46px !important;
+  object-fit: contain !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .shop-card > div,
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .mission-card > div,
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .gear-card .v950-card-main {
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .mission-card {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(76px, auto) !important;
+  gap: 9px !important;
+  align-items: center !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .mission-card .v108-mission-progress {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-item-card {
+  display: grid !important;
+  grid-template-rows: auto auto auto auto !important;
+  justify-items: center !important;
+  align-content: start !important;
+  gap: 7px !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-item-card img,
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .dex-card img,
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .gear-card img {
+  max-width: 72px !important;
+  max-height: 72px !important;
+  object-fit: contain !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen :is(button,.runtime-btn,.compact-cta,.btn-aqua-action,.btn-gold-cost,.mission-card button,.gear-card button,.v2076-route-card button) {
+  min-width: 0 !important;
+  min-height: 40px !important;
+  white-space: normal !important;
+  line-height: 1.12 !important;
+  overflow-wrap: anywhere !important;
+  touch-action: manipulation !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .v2077-menu-close {
+  position: fixed !important;
+  top: calc(max(10px, env(safe-area-inset-top)) + 6px) !important;
+  right: max(10px, env(safe-area-inset-right)) !important;
+  z-index: 3400 !important;
+  width: 42px !important;
+  height: 42px !important;
+  pointer-events: auto !important;
+}
+
+/* Village v2.0.80: expedition should never beat building dialogs, and the map hitbox now uses canvas-local diamond snapping in TS. */
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] body[data-screen="village"] .v2080-tile-hitbox-audit-screen .v2-village-hud {
+  z-index: 430 !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] body[data-screen="village"] .v2080-tile-hitbox-audit-screen .v2050-expedition-board.v2075-expedition-dock {
+  top: calc(max(7px, env(safe-area-inset-top)) + 72px) !important;
+  width: min(176px, calc(100vw - 144px)) !important;
+  max-width: min(176px, calc(100vw - 144px)) !important;
+  z-index: 210 !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] body[data-screen="village"] .v2080-tile-hitbox-audit-screen .v2075-expedition-toggle {
+  height: 24px !important;
+  min-height: 24px !important;
+  max-width: 176px !important;
+  padding: 0 8px !important;
+  font-size: 9px !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] body[data-screen="village"] .v2080-tile-hitbox-audit-screen .v2051-expedition-mini.open .v2051-loop-body {
+  left: max(10px, env(safe-area-inset-left)) !important;
+  right: max(10px, env(safe-area-inset-right)) !important;
+  top: calc(max(7px, env(safe-area-inset-top)) + 98px) !important;
+  bottom: auto !important;
+  width: auto !important;
+  max-width: none !important;
+  max-height: calc(100svh - max(7px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom)) - 176px) !important;
+  z-index: 690 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] body:is(.v2032-character-panel-open,.v2040-interior-open,.v2041-interior-open,.v2042-interior-open,.v2043-interior-open,.v2044-interior-open) .v2080-tile-hitbox-audit-screen .v2050-expedition-board.v2075-expedition-dock,
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] body[data-screen="village"] .v2080-tile-hitbox-audit-screen.v2-build-tray-open .v2050-expedition-board.v2075-expedition-dock {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .v2080-tile-hitbox-audit-screen :is(.v2017-character-panel.open,.v203-interior-panel.open) {
+  z-index: 3100 !important;
+}
+
+@media (max-width: 430px), (max-height: 760px) {
+  html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen {
+    --v2080-bottom-safe: calc(88px + max(10px, env(safe-area-inset-bottom)));
+  }
+  html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-hud.aqua-card-hud {
+    grid-template-columns: 38px minmax(0, 1fr) !important;
+    padding: 9px 10px !important;
+    gap: 6px 8px !important;
+  }
+  html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-wallet {
+    grid-template-columns: 1fr !important;
+  }
+  html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-content.v2080-scroll-stack {
+    max-height: calc(100svh - max(10px, env(safe-area-inset-top)) - var(--v2080-bottom-safe) - 154px) !important;
+  }
+  html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-content :is(.runtime-hero-card,.shop-summary,.inventory-summary,.mission-summary,.dex-summary,.gear-summary,.ranking-summary,.v204-map-hero) {
+    grid-template-columns: 44px minmax(0, 1fr) !important;
+  }
+  html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .runtime-content :is(.runtime-hero-card,.shop-summary,.inventory-summary,.mission-summary,.dex-summary,.gear-summary,.ranking-summary,.v204-map-hero) > button {
+    grid-column: 1 / -1 !important;
+    justify-self: stretch !important;
+  }
+  html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .shop-card {
+    grid-template-columns: 42px minmax(0, 1fr) !important;
+  }
+  html[data-v2080-menu-tile-audit="v2080-menu-page-grid-tile-hitbox-audit"] .runtime-menu-screen.v2080-menu-page-grid-screen .shop-price {
+    grid-column: 1 / -1 !important;
+    justify-self: stretch !important;
+  }
+}
