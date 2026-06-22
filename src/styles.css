@@ -33474,3 +33474,425 @@ html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] body:is(.v2086-modal-
     padding: 10px !important;
   }
 }
+
+/* v2.0.87 UI Stabilizer Sweep
+   Root cause: old v2077~v2086 UI recovery layers kept targeting the same HUD/menu/button/card nodes.
+   This final layer does not add a new visual feature; it isolates the active shell into one predictable layout. */
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] {
+  --v2087-ink: #04364f;
+  --v2087-muted: #34748a;
+  --v2087-shell: linear-gradient(180deg, rgba(255,255,255,.94), rgba(224,249,255,.84));
+  --v2087-border: rgba(255,255,255,.76);
+  --v2087-shadow: 0 16px 36px rgba(0, 72, 103, .17), inset 0 1px 0 rgba(255,255,255,.74);
+  --v2087-page-width: min(94vw, 560px);
+  --v2087-hud-height: 44px;
+  --v2087-close-size: 38px;
+  --v2087-gap: 8px;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100svh !important;
+  max-width: none !important;
+  max-height: none !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: var(--v2087-hud-height) minmax(0, 1fr) !important;
+  align-content: start !important;
+  justify-items: center !important;
+  gap: var(--v2087-gap) !important;
+  padding: calc(max(8px, env(safe-area-inset-top)) + 2px) max(10px, env(safe-area-inset-left)) calc(max(10px, env(safe-area-inset-bottom)) + 10px) max(10px, env(safe-area-inset-right)) !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  contain: layout paint style !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen :is(.runtime-3d-bg,.underwater-webgl-host,.v3d-caustics,.v3d-bubbles,.v3d-depth-fog,.runtime-bg-character) {
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .runtime-bg-character {
+  opacity: .10 !important;
+  max-width: 40vw !important;
+  max-height: 34svh !important;
+  object-fit: contain !important;
+  filter: saturate(.95) blur(.1px) !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .v2087-aqua-modal-dim,
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .aqua-modal-dim {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  display: block !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  background: radial-gradient(circle at 50% 14%, rgba(158,239,255,.24), rgba(3,38,61,.38) 52%, rgba(0,16,27,.55) 100%) !important;
+  backdrop-filter: blur(9px) saturate(1.05) !important;
+  -webkit-backdrop-filter: blur(9px) saturate(1.05) !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .v2087-slim-runtime-hud,
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .runtime-hud {
+  grid-row: 1 !important;
+  position: relative !important;
+  z-index: 3 !important;
+  width: var(--v2087-page-width) !important;
+  max-width: var(--v2087-page-width) !important;
+  min-width: 0 !important;
+  height: var(--v2087-hud-height) !important;
+  min-height: var(--v2087-hud-height) !important;
+  max-height: var(--v2087-hud-height) !important;
+  margin: 0 !important;
+  padding: 5px calc(var(--v2087-close-size) + 12px) 5px 7px !important;
+  display: grid !important;
+  grid-template-columns: 34px minmax(0, 1fr) !important;
+  grid-template-rows: 1fr !important;
+  align-items: center !important;
+  gap: 7px !important;
+  border-radius: 18px !important;
+  background: var(--v2087-shell) !important;
+  background-image: var(--v2087-shell) !important;
+  border: 1px solid var(--v2087-border) !important;
+  box-shadow: var(--v2087-shadow) !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .v2087-hud-avatar,
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .runtime-hud-mascot {
+  grid-column: 1 !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 13px !important;
+  background: linear-gradient(180deg, #fff, #d8f8ff) !important;
+  background-image: linear-gradient(180deg, #fff, #d8f8ff) !important;
+  border: 1px solid rgba(255,255,255,.8) !important;
+  box-shadow: 0 5px 11px rgba(0, 92, 121, .12) !important;
+  overflow: hidden !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .runtime-hud-mascot img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .v2087-hud-title,
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .runtime-title {
+  grid-column: 2 !important;
+  min-width: 0 !important;
+  height: 34px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  grid-template-rows: 14px 18px !important;
+  align-items: center !important;
+  column-gap: 7px !important;
+  overflow: hidden !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .runtime-title span {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  color: var(--v2087-muted) !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .runtime-title strong {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  color: var(--v2087-ink) !important;
+  font-size: 17px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  letter-spacing: -.02em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .runtime-title em {
+  grid-column: 2 !important;
+  grid-row: 1 / span 2 !important;
+  align-self: center !important;
+  max-width: 84px !important;
+  padding: 4px 7px !important;
+  border-radius: 999px !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  font-style: normal !important;
+  color: var(--v2087-muted) !important;
+  background: rgba(255,255,255,.58) !important;
+  border: 1px solid rgba(255,255,255,.62) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen :is(.runtime-wallet,.v2084-hud-hidden-metrics,.v2085-hud-hidden-metrics,.v2086-hud-hidden-metrics) {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .v2087-menu-content,
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .runtime-content {
+  grid-row: 2 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  width: var(--v2087-page-width) !important;
+  max-width: var(--v2087-page-width) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  border-radius: 23px !important;
+  background: var(--v2087-shell) !important;
+  background-image: var(--v2087-shell) !important;
+  border: 1px solid var(--v2087-border) !important;
+  box-shadow: var(--v2087-shadow) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  overscroll-behavior: contain !important;
+  box-sizing: border-box !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .runtime-content > *,
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen :is(.runtime-hero-card,.runtime-panel,.runtime-item-card,.shop-card,.mission-card,.gear-card,.dex-card,.ranking-panel,.v204-window-card,.v204-inventory-shell,.v204-map-shell,.v204-quest-board,.shop-list,.mission-list,.gear-grid,.dex-grid,.v206-inventory-dashboard,.v206-catch-ledger,.v2074-sale-ledger,.v2074-dex-growth,.v2076-expedition-card,.v206-route-ready) {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  min-height: fit-content !important;
+  height: auto !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen :is(.runtime-card-list,.runtime-region-grid,.shop-list,.mission-list,.gear-grid,.dex-grid,.v204-inventory-grid,.v206-inventory-grid,.v2074-sale-grid,.v2076-expedition-candidates) {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 208px), 1fr)) !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen :is(.runtime-hero-card,.runtime-panel,.runtime-item-card,.shop-card,.mission-card,.gear-card,.dex-card,.region-card,.ranking-panel,.v204-window-card) {
+  border-radius: 19px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(224,249,255,.78)) !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.92), rgba(224,249,255,.78)) !important;
+  border: 1px solid rgba(255,255,255,.68) !important;
+  box-shadow: 0 10px 22px rgba(0, 69, 103, .11) !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen :is(.runtime-hero-card,.runtime-panel,.runtime-item-card,.shop-card,.mission-card,.gear-card,.dex-card,.region-card,.ranking-panel) img {
+  display: block !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .v2087-close-button,
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .v2059-menu-close,
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .v2084-close-button {
+  position: fixed !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 5px) !important;
+  right: calc(max(10px, env(safe-area-inset-right)) + 9px) !important;
+  width: var(--v2087-close-size) !important;
+  height: var(--v2087-close-size) !important;
+  min-width: var(--v2087-close-size) !important;
+  min-height: var(--v2087-close-size) !important;
+  z-index: 7 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 999px !important;
+  line-height: 1 !important;
+  font-size: 21px !important;
+  font-weight: 1000 !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button) {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  position: relative !important;
+  border-top-color: rgba(255,255,255,.82) !important;
+  background: linear-gradient(180deg, #ffffff 0%, #e5fbff 58%, #c1f2ff 100%) !important;
+  background-image: linear-gradient(180deg, #ffffff 0%, #e5fbff 58%, #c1f2ff 100%) !important;
+  background-clip: border-box !important;
+  box-shadow: 0 7px 14px rgba(0, 101, 135, .12) !important;
+  outline: 0 !important;
+  color: #04435e !important;
+  -webkit-text-fill-color: #04435e !important;
+  text-shadow: none !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  touch-action: manipulation !important;
+}
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button)::before,
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button)::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .village-world-screen.v2087-stabilized-village-screen .v2087-slim-village-hud,
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .village-world-screen.v2087-stabilized-village-screen .v2-village-hud {
+  width: min(210px, calc(100vw - 128px)) !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  padding: 5px 7px !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  background: var(--v2087-shell) !important;
+  background-image: var(--v2087-shell) !important;
+  border: 1px solid var(--v2087-border) !important;
+  box-shadow: var(--v2087-shadow) !important;
+}
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .village-world-screen.v2087-stabilized-village-screen .v2087-village-profile-chip,
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .village-world-screen.v2087-stabilized-village-screen .v2-profile-chip {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: 31px minmax(0, 1fr) !important;
+  grid-template-rows: 16px 16px !important;
+  gap: 0 7px !important;
+  align-items: center !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  text-align: left !important;
+}
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .village-world-screen.v2087-stabilized-village-screen .v2-profile-chip span {
+  grid-row: 1 / span 2 !important;
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 12px !important;
+  font-size: 10px !important;
+  background: linear-gradient(180deg, #ffffff, #d8f8ff) !important;
+  border: 1px solid rgba(255,255,255,.82) !important;
+}
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .village-world-screen.v2087-stabilized-village-screen .v2-profile-chip strong {
+  font-size: 14px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .village-world-screen.v2087-stabilized-village-screen .v2-profile-chip em {
+  font-size: 10px !important;
+  line-height: 1 !important;
+  color: var(--v2087-muted) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] :is(.v2017-character-panel[aria-hidden="false"],.v203-interior-panel[aria-hidden="false"],.v2-build-panel[aria-hidden="false"]) {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 42 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)) !important;
+  background: rgba(2, 21, 34, .35) !important;
+  backdrop-filter: blur(9px) saturate(1.06) !important;
+  -webkit-backdrop-filter: blur(9px) saturate(1.06) !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] :is(.v2017-character-card,.v203-interior-card,.v2-build-tray,.v2051-loop-body) {
+  max-width: min(94vw, 560px) !important;
+  max-height: calc(100svh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  border-radius: 26px !important;
+  background: var(--v2087-shell) !important;
+  background-image: var(--v2087-shell) !important;
+  border: 1px solid var(--v2087-border) !important;
+  box-shadow: var(--v2087-shadow) !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] :is(.v2017-character-close,.v203-interior-close,.v2055-loop-close,.v2059-loop-close) {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 999px !important;
+  display: grid !important;
+  place-items: center !important;
+  z-index: 5 !important;
+}
+
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] body:is(.v2087-modal-open,.v2086-modal-open,.v2085-modal-open,.v2084-popup-open,.v2032-character-panel-open,.v2040-interior-open,.v2041-interior-open,.v2042-interior-open,.v2043-interior-open,.v2044-interior-open) .v2050-expedition-board.v2075-expedition-dock,
+html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .village-world-screen:is(.v2081-expedition-panel-open,.v2082-expedition-panel-open) .v2051-loop-toggle {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+@media (max-width: 460px), (max-height: 720px) {
+  html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] {
+    --v2087-page-width: min(95vw, 540px);
+    --v2087-hud-height: 42px;
+    --v2087-close-size: 36px;
+  }
+  html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .runtime-title em {
+    display: none !important;
+  }
+  html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .runtime-menu-screen.v2087-stabilized-menu-screen .runtime-content {
+    padding: 10px !important;
+    border-radius: 21px !important;
+  }
+}

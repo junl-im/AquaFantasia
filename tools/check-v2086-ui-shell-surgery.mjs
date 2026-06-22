@@ -13,13 +13,13 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const validateScript = pkg.scripts?.validate ?? '';
 
-if (pkg.version !== '2.0.86') fail('package.json version must be 2.0.86');
+if (!/^2\.0\.(8[6-9]|9[0-9]|[1-9][0-9]{2,})$/.test(pkg.version)) fail('package.json version must be v2.0.86 or newer');
 if (lock.version !== pkg.version || lock.packages?.['']?.version !== pkg.version) fail('package-lock version must match package.json');
-if (!data.includes("APP_VERSION = '2.0.86'")) fail('APP_VERSION must be 2.0.86');
-if (!data.includes('aqua-fantasia-v2.0.86-ui-shell-surgery')) fail('data cache name must be v2.0.86 shell surgery');
-if (!sw.includes('aqua-fantasia-v2.0.86-ui-shell-surgery')) fail('service worker cache must be v2.0.86 shell surgery');
-if (!offline.includes('v2.0.86')) fail('offline badge must mention v2.0.86');
-if (!readme.startsWith('# AquaFantasia v2.0.86')) fail('README top version must be v2.0.86');
+if (!data.includes(`APP_VERSION = '${pkg.version}'`)) fail('APP_VERSION must match package version');
+if (!data.includes(`aqua-fantasia-v${pkg.version}`)) fail('data cache name must include current version');
+if (!sw.includes(`aqua-fantasia-v${pkg.version}`)) fail('service worker cache must include current version');
+if (!offline.includes(`v${pkg.version}`)) fail('offline badge must mention current version');
+if (!readme.startsWith(`# AquaFantasia v${pkg.version}`)) fail('README top version must match current version');
 if (!validateScript.includes('check-v2086-ui-shell-surgery.mjs')) fail('validate must run v2086 check');
 
 for (const token of [
