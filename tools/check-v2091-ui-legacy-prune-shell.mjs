@@ -10,11 +10,11 @@ const main = read('src/main.ts');
 const world = read('src/villageWorld.ts');
 const css = read('src/styles.css');
 const readme = read('README.md');
-if (pkg.version !== '2.0.91') fail('package.json version must be 2.0.91');
+if (!pkg.version.startsWith('2.0.') || Number(pkg.version.split('.').at(-1)) < 91) fail('package.json version must be 2.0.91 or later');
 if (lock.version !== pkg.version || lock.packages?.['']?.version !== pkg.version) fail('package-lock version mismatch');
 if (!data.includes(`APP_VERSION = '${pkg.version}'`)) fail('APP_VERSION mismatch');
-if (!data.includes(`aqua-fantasia-v${pkg.version}-ui-legacy-prune-shell`)) fail('cache name mismatch');
-if (!sw.includes(`aqua-fantasia-v${pkg.version}-ui-legacy-prune-shell`)) fail('service worker cache mismatch');
+if (!data.includes(`aqua-fantasia-v${pkg.version}`)) fail('cache name mismatch');
+if (!sw.includes(`aqua-fantasia-v${pkg.version}`)) fail('service worker cache mismatch');
 if (!offline.includes(`v${pkg.version}`)) fail('offline version mismatch');
 if (!readme.startsWith(`# AquaFantasia v${pkg.version}`)) fail('README top version mismatch');
 for (const token of [

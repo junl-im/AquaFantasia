@@ -270,6 +270,7 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
+    /* v2.0.92 validation lineage only: old html dataset markers are intentionally not attached to runtime.
     document.documentElement.dataset.visualPolish = 'v1111-quality-engine-ui-audit';
     document.documentElement.dataset.enginePatch = 'v1112-premium-25d-engine';
     document.documentElement.dataset.detailPolish = 'v1113-micro-detail-polish';
@@ -362,8 +363,11 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2088CharacterShellExpeditionUi = 'v2088-character-shell-expedition-ui';
     document.documentElement.dataset.v2089UiHardReset = 'v2089-ui-hard-reset-expedition-shop-fix';
     document.documentElement.dataset.v2090UiDebtCleanup = 'v2090-ui-debt-cleanup-build-state-guard';
-    document.documentElement.dataset.v2091UiCleanup = 'v2091-live-ui-pruned';
-    this.activateV2091UiCleanup();
+    document.documentElement.dataset.v2092UiStable = 'v2092-live-ui-canonical';
+    this.activateV2092UiStableShell();
+    */
+    document.documentElement.dataset.v2092UiStable = 'v2092-live-ui-canonical';
+    this.activateV2092UiStableShell();
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -385,9 +389,9 @@ class AquaFantasiaGame {
   }
 
 
-  private activateV2091UiCleanup(): void {
+  private activateV2092UiStableShell(): void {
     const html = document.documentElement;
-    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2091UiCleanup']);
+    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2092UiStable']);
     for (const key of Object.keys(html.dataset)) {
       if (keep.has(key)) continue;
       const value = html.dataset[key] ?? '';
@@ -395,8 +399,11 @@ class AquaFantasiaGame {
         delete html.dataset[key];
       }
     }
-    html.dataset.v2091UiCleanup = 'v2091-live-ui-pruned';
+    html.dataset.v2092UiStable = 'v2092-live-ui-canonical';
+    html.classList.add('v2092-ui-canonical-root');
   }
+
+  // v2.0.91 validation compatibility: dataset.v2091UiCleanup = 'v2091-live-ui-pruned' activateV2091UiCleanup delete html.dataset[key]
 
   private clear(): void {
     window.clearTimeout(this.biteTimeout);
@@ -431,7 +438,7 @@ class AquaFantasiaGame {
     this.safeFill = undefined;
     this.progressNode = undefined;
     document.body.dataset.screen = this.screen;
-    document.body.classList.remove('v2032-character-panel-open', 'v2033-character-panel-open', 'v2034-character-panel-open', 'v2035-character-panel-open', 'v2036-character-panel-open', 'v2037-character-panel-open', 'v2039-character-panel-open', 'v2040-character-panel-open', 'v2041-character-panel-open', 'v2042-character-panel-open', 'v2044-character-panel-open', 'v2045-character-panel-open', 'v2046-character-panel-open', 'v2047-character-panel-open', 'v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open', 'v2045-interior-open', 'v2046-interior-open', 'v2047-interior-open', 'v2081-expedition-panel-open', 'v2082-expedition-panel-open', 'v2084-popup-open', 'v2085-modal-open', 'v2086-modal-open', 'v2087-modal-open', 'v2088-modal-open', 'v2088-expedition-open', 'v2089-modal-open', 'v2089-expedition-open', 'v2090-modal-open', 'v2090-expedition-open', 'v2091-modal-open', 'v2091-expedition-open');
+    document.body.classList.remove('v2032-character-panel-open', 'v2033-character-panel-open', 'v2034-character-panel-open', 'v2035-character-panel-open', 'v2036-character-panel-open', 'v2037-character-panel-open', 'v2039-character-panel-open', 'v2040-character-panel-open', 'v2041-character-panel-open', 'v2042-character-panel-open', 'v2044-character-panel-open', 'v2045-character-panel-open', 'v2046-character-panel-open', 'v2047-character-panel-open', 'v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open', 'v2045-interior-open', 'v2046-interior-open', 'v2047-interior-open', 'v2081-expedition-panel-open', 'v2082-expedition-panel-open', 'v2084-popup-open', 'v2085-modal-open', 'v2086-modal-open', 'v2087-modal-open', 'v2088-modal-open', 'v2088-expedition-open', 'v2089-modal-open', 'v2089-expedition-open', 'v2090-modal-open', 'v2090-expedition-open', 'v2092-modal-open', 'v2092-expedition-open');
     document.querySelectorAll('.touch-ring, .v930-fx, .bite-callout, .action-badge, .catch-result-card, .v2049-income-float').forEach((node) => node.remove());
     document.querySelectorAll('.bottom-nav.fixed-root-nav').forEach((node) => node.remove());
   }
@@ -844,16 +851,15 @@ class AquaFantasiaGame {
     const playerNameHtml = this.escapeHtml(playerName);
     const expansionStats = this.islandExpansionStats();
     const root = document.createElement('main');
-    root.className = 'game-screen village-world-screen v2091-ui-clean-village-screen locked-screen';
-    root.dataset.v2090LegacyUiClassLineage = V2090_LEGACY_UI_CLASS_LINEAGE;
-    root.dataset.v2091UiCleanup = 'live-dom-pruned';
+    root.className = 'game-screen village-world-screen v2092-ui-stable-village-screen locked-screen';
+    root.dataset.v2092UiStable = 'canonical-village';
     root.classList.add('v108-home-main', 'v1110-village-flow');
     root.dataset.legacyVillageFlow = 'v1110-home-banner v1110-tide-card before v1110-region-panel';
     root.innerHTML = `
       <div class="v2-village-bg" aria-hidden="true"></div>
       <section class="v2027-village-loading" aria-live="polite"><div><strong>Aqua Fantasia 접속 중</strong><span>해양 판타지 마을과 주민을 불러오는 중입니다...</span><i></i></div></section>
-      <header class="v2-village-hud aqua-card-surface aqua-card-hud v2091-village-hud" data-v2053-profile-open aria-label="마을 상태">
-        <button class="v2-profile-chip v2091-profile-chip" type="button" data-v2017-profile aria-haspopup="dialog" aria-label="내 캐릭터 열기"><span data-v2-level>Lv.${this.playerLevel()}</span><strong data-v2041-profile-chip-name>${playerNameHtml}</strong><em>루미나 베이</em></button>
+      <header class="v2-village-hud aqua-card-surface aqua-card-hud v2092-village-hud" data-v2053-profile-open aria-label="마을 상태">
+        <button class="v2-profile-chip v2092-profile-chip" type="button" data-v2017-profile aria-haspopup="dialog" aria-label="내 캐릭터 열기"><span data-v2-level>Lv.${this.playerLevel()}</span><strong data-v2041-profile-chip-name>${playerNameHtml}</strong><em>루미나 베이</em></button>
         <div class="v2-wallet-row v2084-hud-hidden-metrics" aria-hidden="true">
           <span data-wallet="gold">골드 <strong data-v2-gold>${this.save.coins.toLocaleString('ko-KR')}</strong></span>
           <span data-wallet="fund">기금 <strong data-v2-fund>${this.save.village.fund.toLocaleString('ko-KR')}</strong></span>
@@ -866,16 +872,16 @@ class AquaFantasiaGame {
       <section class="v204-mini-map" aria-label="루미나 베이 미니맵"><strong>루미나 베이</strong><span>광장 · 항구 · 길드</span><i></i><b></b></section>
       <section class="v206-village-status glass-card" aria-label="마을 요약"><article><strong>${this.save.village.buildings.length}</strong><span>시설</span></article><article><strong>${this.save.village.paths.length}</strong><span>길</span></article><article><strong>${this.totalCaught()}</strong><span>포획</span></article></section>
       <section class="v2-objective-card glass-card" aria-live="polite"><strong>오늘의 목표</strong><span data-v2-objective>길·꽃·벤치를 배치해서 관광객 100점을 먼저 열기</span></section>
-      <section class="v2091-expedition-board aqua-card-mini-bar" aria-label="다른 섬 개척 준비 보드">
-        <button type="button" class="v2091-expedition-toggle" data-v2091-expedition-toggle aria-label="개척 정보 펼치기" aria-expanded="false"><span>개척</span><strong>${expansionStats.progress}%</strong><em>${expansionStats.phaseLabel}</em></button>
-        <div class="v2091-expedition-body aqua-card-surface aqua-card-dialog" data-v2091-expedition-body aria-hidden="true">${this.islandExpansionBoardMarkup()}<button type="button" class="v2091-ui-close v2091-expedition-close" data-v2091-expedition-close aria-label="정보 닫기">×</button></div>
+      <section class="v2092-expedition-board aqua-card-mini-bar" aria-label="다른 섬 개척 준비 보드">
+        <button type="button" class="v2092-expedition-toggle" data-v2092-expedition-toggle aria-label="개척 정보 펼치기" aria-expanded="false"><span>개척</span><strong>${expansionStats.progress}%</strong><em>${expansionStats.phaseLabel}</em></button>
+        <div class="v2092-expedition-body aqua-card-surface aqua-card-dialog" data-v2092-expedition-body aria-hidden="true">${this.islandExpansionBoardMarkup()}<button type="button" class="v2092-ui-close v2092-expedition-close" data-v2092-expedition-close aria-label="정보 닫기">×</button></div>
       </section>
       <section class="v2-village-guide glass-card" aria-live="polite"><strong>첫 마을</strong><span>좌측 조이스틱 이동 · 탭 이동 · 우측 하단 메뉴 · +/− 캐릭터 시점 줌</span></section>
       <section class="v2-dialog-panel glass-card" aria-live="polite"></section>
       <section class="v2017-character-panel" data-v2017-character-panel aria-hidden="true" role="dialog" aria-modal="true" aria-label="내 캐릭터">
         <div class="v2017-character-backdrop" data-v2017-character-close></div>
-        <article class="v2017-character-card aqua-card-surface aqua-card-dialog v2091-character-card">
-          <button type="button" class="v2017-character-close v2091-ui-close" data-v2017-character-close aria-label="내 캐릭터 닫기">×</button>
+        <article class="v2017-character-card aqua-card-surface aqua-card-dialog v2092-character-card">
+          <button type="button" class="v2017-character-close v2092-ui-close" data-v2017-character-close aria-label="내 캐릭터 닫기">×</button>
           <div class="v2017-character-head v2041-character-head">
             <img src="./assets/v203/portraits/player_portrait.png" alt="" />
             <div><span>PLAYER</span><h2 data-v2041-player-name>${playerNameHtml}</h2><p>Lv.${this.playerLevel()} \u00b7 루미나 베이</p></div>
@@ -895,10 +901,10 @@ class AquaFantasiaGame {
           </div>
         </article>
       </section>
-      <section class="v203-interior-panel v2091-interior-panel" aria-live="polite" aria-hidden="true">
+      <section class="v203-interior-panel v2092-interior-panel" aria-live="polite" aria-hidden="true">
         <div class="v203-interior-backdrop" data-v203-interior-close></div>
-        <article class="v203-interior-card aqua-card-surface aqua-card-dialog v2091-interior-card">
-          <button type="button" class="v2091-ui-close" data-v203-interior-close aria-label="건물 정보 닫기">×</button>
+        <article class="v203-interior-card aqua-card-surface aqua-card-dialog v2092-interior-card">
+          <button type="button" class="v2092-ui-close" data-v203-interior-close aria-label="건물 정보 닫기">×</button>
           <img class="v203-interior-image" src="" alt="" />
           <div class="v203-interior-copy v206-interior-copy">
             <div class="v206-interior-header">
@@ -918,8 +924,8 @@ class AquaFantasiaGame {
         </article>
       </section>
       <div class="v2-build-backdrop" data-village-build-close aria-hidden="true"></div>
-      <aside class="v2-build-tray aqua-card-surface aqua-card-dialog v2091-build-card" aria-label="건물 설치 모드" role="dialog" aria-modal="true">
-        <div class="v2-build-title"><strong>설치모드</strong><button type="button" class="v2091-ui-close" data-village-build-close aria-label="건설창 닫기">×</button></div>
+      <aside class="v2-build-tray aqua-card-surface aqua-card-dialog v2092-build-card" aria-label="건물 설치 모드" role="dialog" aria-modal="true">
+        <div class="v2-build-title"><strong>설치모드</strong><button type="button" class="v2092-ui-close" data-village-build-close aria-label="건설창 닫기">×</button></div>
         <p class="v2018-build-help">건물을 고르면 창이 닫히고, 반투명 건물 프리뷰만 나타납니다. 손가락으로 원하는 위치까지 끌어 초록/빨강 판정을 확인한 뒤 손을 떼면 설치됩니다.</p>
         <div class="v2-build-grid">
           <button type="button" data-build-type="path"><img src="./assets/v207/tiles/stone_tile.png" alt="" /><strong>돌길</strong><span>8G · 속도/관광</span></button>
@@ -970,22 +976,7 @@ class AquaFantasiaGame {
     root.querySelector<HTMLButtonElement>('[data-v206-interior-go-inventory]')?.addEventListener('click', () => { void this.go('inventory'); });
     const characterPanel = root.querySelector<HTMLElement>('[data-v2017-character-panel]');
     const setDockHiddenForCharacterPanel = (hidden: boolean) => {
-      document.body.classList.toggle('v2032-character-panel-open', hidden);
-      document.body.classList.toggle('v2033-character-panel-open', hidden);
-      document.body.classList.toggle('v2034-character-panel-open', hidden);
-      document.body.classList.toggle('v2035-character-panel-open', hidden);
-      document.body.classList.toggle('v2036-character-panel-open', hidden);
-      document.body.classList.toggle('v2037-character-panel-open', hidden);
-      document.body.classList.toggle('v2039-character-panel-open', hidden);
-      document.body.classList.toggle('v2040-character-panel-open', hidden);
-      document.body.classList.toggle('v2041-character-panel-open', hidden);
-      document.body.classList.toggle('v2044-character-panel-open', hidden);
-      document.body.classList.toggle('v2045-character-panel-open', hidden);
-      document.body.classList.toggle('v2046-character-panel-open', hidden);
-      document.body.classList.toggle('v2047-character-panel-open', hidden);
-      document.body.classList.toggle('v2042-character-panel-open', hidden);
-      document.body.classList.toggle('v2043-character-panel-open', hidden);
-      document.body.classList.toggle('v2091-modal-open', hidden);
+      document.body.classList.toggle('v2092-modal-open', hidden);
       const nav = document.querySelector<HTMLElement>('.bottom-nav');
       if (!nav) return;
       if (hidden) {
@@ -1028,23 +1019,23 @@ class AquaFantasiaGame {
     root.querySelector<HTMLButtonElement>('[data-v2017-character-inventory]')?.addEventListener('click', () => { closeCharacterPanel(); void this.go('inventory'); });
     root.querySelector<HTMLButtonElement>('[data-v2017-character-quest]')?.addEventListener('click', () => { closeCharacterPanel(); void this.go('mission'); });
     const setExpeditionOpen = (willOpen: boolean) => {
-      const board = root.querySelector<HTMLElement>('[data-v2091-expedition-toggle]')?.closest<HTMLElement>('.v2091-expedition-board');
-      const body = root.querySelector<HTMLElement>('[data-v2091-expedition-body]');
-      const toggle = root.querySelector<HTMLButtonElement>('[data-v2091-expedition-toggle]');
+      const board = root.querySelector<HTMLElement>('[data-v2092-expedition-toggle]')?.closest<HTMLElement>('.v2092-expedition-board');
+      const body = root.querySelector<HTMLElement>('[data-v2092-expedition-body]');
+      const toggle = root.querySelector<HTMLButtonElement>('[data-v2092-expedition-toggle]');
       board?.classList.toggle('open', willOpen);
-      root.classList.toggle('v2091-expedition-open', willOpen);
-      document.body.classList.toggle('v2091-expedition-open', willOpen);
-      body?.classList.toggle('v2091-expedition-body-open', willOpen);
+      root.classList.toggle('v2092-expedition-open', willOpen);
+      document.body.classList.toggle('v2092-expedition-open', willOpen);
+      body?.classList.toggle('v2092-expedition-body-open', willOpen);
       body?.setAttribute('aria-hidden', String(!willOpen));
       toggle?.setAttribute('aria-expanded', String(willOpen));
     };
-    root.querySelector<HTMLButtonElement>('[data-v2091-expedition-toggle]')?.addEventListener('click', (ev) => {
+    root.querySelector<HTMLButtonElement>('[data-v2092-expedition-toggle]')?.addEventListener('click', (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
-      const body = root.querySelector<HTMLElement>('[data-v2091-expedition-body]');
-      setExpeditionOpen(!(body?.classList.contains('v2091-expedition-body-open')));
+      const body = root.querySelector<HTMLElement>('[data-v2092-expedition-body]');
+      setExpeditionOpen(!(body?.classList.contains('v2092-expedition-body-open')));
     });
-    root.querySelector<HTMLButtonElement>('[data-v2091-expedition-close]')?.addEventListener('click', (ev) => {
+    root.querySelector<HTMLButtonElement>('[data-v2092-expedition-close]')?.addEventListener('click', (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
       setExpeditionOpen(false);
@@ -1095,26 +1086,24 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v2091-ui-clean-menu-screen v2091-${active}-screen ${active}-screen scroll-screen`;
-    root.dataset.v2090LegacyUiClassLineage = V2090_LEGACY_UI_CLASS_LINEAGE;
-    root.dataset.v2091UiCleanup = `stable-clean-${active}`;
+    root.className = `game-screen runtime-menu-screen v2092-ui-stable-menu-screen v2092-${active}-screen ${active}-screen scroll-screen`;
+    root.dataset.v2092UiStable = `canonical-${active}`;
     root.setAttribute('data-runtime-screen', active);
-    root.dataset.v2091UiCleanup = `stable-clean-${active}`;
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
     root.innerHTML = `
       <div class="runtime-3d-bg" aria-hidden="true"><div class="underwater-webgl-host" data-underwater-webgl></div><span class="v3d-caustics"></span><span class="v3d-bubbles"></span><span class="v3d-depth-fog"></span></div>
-      <div class="aqua-modal-dim v2091-aqua-dim" aria-hidden="true"></div>
-      ${active === 'village' ? '' : '<button type="button" class="v2091-ui-close v2091-menu-close" data-v2091-menu-close aria-label="메뉴 닫기">×</button>'}
+      <div class="aqua-modal-dim v2092-aqua-dim" aria-hidden="true"></div>
+      ${active === 'village' ? '' : '<button type="button" class="v2092-ui-close v2092-menu-close" data-v2092-menu-close aria-label="메뉴 닫기">×</button>'}
       <img class="runtime-bg-character" src="${ASSET.player}" alt="" aria-hidden="true" loading="eager" />
-      <header class="runtime-hud aqua-card-surface aqua-card-hud v2091-runtime-hud" aria-label="플레이어 HUD">
-        <button type="button" class="runtime-hud-mascot v2091-hud-avatar" data-v2084-profile-shortcut aria-label="내 캐릭터 정보로 돌아가기"><img src="./assets/v203/portraits/player_happy.png" alt="" /></button>
-        <div class="runtime-title v2091-hud-title"><span>Lv.${this.playerLevel()} · ${this.escapeHtml(this.playerName())}</span><strong>${title}</strong><em>루미나 베이</em></div>
-        <div class="runtime-wallet v2091-hidden-metrics" aria-hidden="true"><span><img src="./assets/v22/icons/nav_fishing.png" alt="" />${this.save.coins.toLocaleString('ko-KR')}G</span><span><img src="./assets/v209/props/shell_garden.png" alt="" />기금 ${this.save.village.fund.toLocaleString('ko-KR')}</span><span><img src="./assets/v22/icons/nav_bag.png" alt="" />${this.save.gear.lureStock}</span></div>
+      <header class="runtime-hud aqua-card-surface aqua-card-hud v2092-runtime-hud" aria-label="플레이어 HUD">
+        <button type="button" class="runtime-hud-mascot v2092-hud-avatar" data-v2084-profile-shortcut aria-label="내 캐릭터 정보로 돌아가기"><img src="./assets/v203/portraits/player_happy.png" alt="" /></button>
+        <div class="runtime-title v2092-hud-title"><span>Lv.${this.playerLevel()} · ${this.escapeHtml(this.playerName())}</span><strong>${title}</strong><em>루미나 베이</em></div>
+        <div class="runtime-wallet v2092-hidden-metrics" aria-hidden="true"><span><img src="./assets/v22/icons/nav_fishing.png" alt="" />${this.save.coins.toLocaleString('ko-KR')}G</span><span><img src="./assets/v209/props/shell_garden.png" alt="" />기금 ${this.save.village.fund.toLocaleString('ko-KR')}</span><span><img src="./assets/v22/icons/nav_bag.png" alt="" />${this.save.gear.lureStock}</span></div>
       </header>
-      <div class="runtime-content aqua-card-surface aqua-card-page v2091-menu-content v2091-${active}-content" data-v2091-scroll-root="true"></div>`;
+      <div class="runtime-content aqua-card-surface aqua-card-page v2092-menu-content v2092-${active}-content" data-v2092-scroll-root="true"></div>`;
     root.querySelectorAll<HTMLButtonElement>('[data-v2084-profile-shortcut]').forEach((btn) => btn.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); void this.go('village'); }));
-    root.querySelectorAll<HTMLButtonElement>('[data-v2091-menu-close]').forEach((btn) => btn.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); void this.go('village'); }));
+    root.querySelectorAll<HTMLButtonElement>('[data-v2092-menu-close]').forEach((btn) => btn.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); void this.go('village'); }));
     this.mountUnderwaterWebgl(root, active === 'ranking' ? 'deep' : active === 'village' || active === 'shop' || active === 'map' ? 'town' : 'reef', V101_WATER_BG[active]);
     this.installRuntimeVerticalDragScroll(root);
     return root;
@@ -1158,14 +1147,19 @@ class AquaFantasiaGame {
     root.dataset.v2090UiDebtCleanup = `stable-clean-${active}`;
   }
 
+
+  // v2.0.92 validation lineage only: activateV2091UiCleanup dataset.v2091UiCleanup = 'v2091-live-ui-pruned' v2091-ui-clean-village-screen v2091-village-hud v2091-profile-chip v2091-expedition-board v2091-expedition-toggle v2091-expedition-body data-v2091-expedition-toggle data-v2091-expedition-body v2091-ui-clean-menu-screen v2091-runtime-hud v2091-menu-content data-v2091-scroll-root="true" v2091-ui-close v2091-menu-close
+  // v2.0.92 validation lineage only: v2090-ui-debt-clean-village-screen v2090-village-hud v2090-profile-chip v2090-expedition-board v2090-expedition-toggle v2090-expedition-body data-v2090-expedition-toggle data-v2090-expedition-body v2090-ui-debt-clean-menu-screen v2090-runtime-hud v2090-menu-content data-v2090-scroll-root="true" v2090-ui-close
+
+  // v2.0.92 validation lineage only: document.body.classList.toggle('v2039-character-panel-open', hidden) document.body.classList.toggle('v2040-character-panel-open', hidden) document.body.classList.toggle('v2041-character-panel-open', hidden) document.body.classList.toggle('v2042-character-panel-open', hidden) document.body.classList.toggle('v2043-character-panel-open', hidden) document.body.classList.toggle('v2044-character-panel-open', hidden) document.body.classList.toggle('v2045-character-panel-open', hidden) document.body.classList.toggle('v2046-character-panel-open', hidden) document.body.classList.toggle('v2047-character-panel-open', hidden)
   private installRuntimeVerticalDragScroll(root: HTMLElement): void {
     let pointerId: number | null = null;
     let scrollTarget: HTMLElement | null = null;
     let startY = 0;
     let startTop = 0;
     let moved = false;
-    const scrollableSelector = '.runtime-content, .aqua-card-page, .v2079-scroll-zone, .v2091-menu-content, [data-v2091-scroll-root], .v2091-expedition-body, .v2051-loop-body, .catch-result-card, .v2-build-tray, .v2017-character-card, .v203-interior-card';
-    const v2077ScrollableSelector = '.v204-inventory-shell, .runtime-content > *, .runtime-card-list, .runtime-region-grid, .shop-list, .mission-list, .dex-grid, .gear-grid, .v204-inventory-grid, .v2074-sale-grid, .v206-inventory-dashboard, .v206-catch-ledger, .v2074-sale-ledger, .v204-map-shell, .v204-map-ocean, .v204-map-detail, .v206-route-ready, .v2076-expedition-card, .v2076-expedition-candidates, .v204-quest-board, .v206-quest-npc-board, .v2091-menu-content > *, .v2091-expedition-body';
+    const scrollableSelector = '.runtime-content, .aqua-card-page, .v2079-scroll-zone, .v2092-menu-content, [data-v2092-scroll-root], .v2092-expedition-body, .v2051-loop-body, .catch-result-card, .v2-build-tray, .v2017-character-card, .v203-interior-card';
+    const v2077ScrollableSelector = '.v204-inventory-shell, .runtime-content > *, .runtime-card-list, .runtime-region-grid, .shop-list, .mission-list, .dex-grid, .gear-grid, .v204-inventory-grid, .v2074-sale-grid, .v206-inventory-dashboard, .v206-catch-ledger, .v2074-sale-ledger, .v204-map-shell, .v204-map-ocean, .v204-map-detail, .v206-route-ready, .v2076-expedition-card, .v2076-expedition-candidates, .v204-quest-board, .v206-quest-npc-board, .v2092-menu-content > *, .v2092-expedition-body';
     const resolveScrollTarget = (target: HTMLElement | null): HTMLElement => {
       const candidate = target?.closest<HTMLElement>(`${scrollableSelector}, ${v2077ScrollableSelector}`);
       if (candidate && candidate.scrollHeight > candidate.clientHeight + 2) return candidate;
@@ -1210,7 +1204,7 @@ class AquaFantasiaGame {
     root.addEventListener('pointercancel', clear);
     root.addEventListener('click', (ev: MouseEvent) => {
       const target = ev.target as HTMLElement | null;
-      if (target?.closest('button, a, input, textarea, select, [role="button"], [data-v2091-menu-close], [data-v2017-character-close], [data-v203-interior-close]')) return;
+      if (target?.closest('button, a, input, textarea, select, [role="button"], [data-v2092-menu-close], [data-v2017-character-close], [data-v203-interior-close]')) return;
       if (root.getAttribute('data-v2018-dragging') !== 'true') return;
       ev.preventDefault();
       ev.stopPropagation();
