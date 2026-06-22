@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.99-clean-package-artifacts';
+const CACHE_NAME = 'aqua-fantasia-v2.0.100-ui-stability-root';
 const PRECACHE = [
   "./",
   "./index.html",
