@@ -1010,7 +1010,9 @@ export class VillageWorld {
       this.hoverTile = null;
     }
     this.root.classList.toggle('v2-build-active', Boolean(type));
+    this.root.classList.toggle('v2094-build-active', Boolean(type));
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
+    this.root.classList.toggle('v2094-build-tray-open', this.buildTrayOpen);
     this.root.toggleAttribute('data-v2028-build-preview-active', Boolean(type));
     this.root.toggleAttribute('data-v2042-build-drag-placement', Boolean(type));
     this.root.toggleAttribute('data-v2043-build-ghost-placement', Boolean(type));
@@ -1032,6 +1034,7 @@ export class VillageWorld {
   setBuildTrayOpen(open: boolean, keepSelection = false): void {
     this.buildTrayOpen = open;
     this.root.classList.toggle('v2-build-tray-open', open);
+    this.root.classList.toggle('v2094-build-tray-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
       if (!keepSelection) this.movingBuildingId = null;
@@ -1045,6 +1048,7 @@ export class VillageWorld {
       this.selectedBuild = null;
       this.hoverTile = null;
       this.root.classList.remove('v2-build-active');
+      this.root.classList.remove('v2094-build-active');
       this.previewLayer.removeChildren();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
     }
@@ -2154,8 +2158,8 @@ export class VillageWorld {
   private openBuildingManagePanel(building: VillageBuildingSave): void {
     const def = BUILD_DEFS[building.type];
     if (!def) return;
-    const panel = this.root.querySelector<HTMLElement>('.v203-interior-panel');
-    const image = this.root.querySelector<HTMLImageElement>('.v203-interior-image');
+    const panel = this.root.querySelector<HTMLElement>('[data-v2094-interior-panel]');
+    const image = this.root.querySelector<HTMLImageElement>('[data-v2094-interior-image]');
     const title = this.root.querySelector<HTMLElement>('[data-v203-interior-title]');
     const body = this.root.querySelector<HTMLElement>('[data-v203-interior-body]');
     const action = this.root.querySelector<HTMLElement>('[data-v203-interior-go-fishing]');
@@ -2178,9 +2182,9 @@ export class VillageWorld {
     inventoryAction?.toggleAttribute('hidden', true);
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
-    this.root.classList.add('v2091-interior-open');
-    document.body.classList.add('v2091-modal-open');
-    this.root.querySelector<HTMLElement>('.v2-world-controls')?.setAttribute('hidden', 'true');
+    this.root.classList.add('v2094-interior-open');
+    document.body.classList.add('v2094-modal-open');
+    this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
     panel.setAttribute('aria-hidden', 'false');
     this.showGuide(def.label, '건물 이동을 누르면 비용 없이 위치를 다시 잡을 수 있습니다.');
@@ -2193,8 +2197,8 @@ export class VillageWorld {
       this.showGuide(def?.label ?? '건물', def?.description ?? '아직 준비 중인 건물입니다.');
       return;
     }
-    const panel = this.root.querySelector<HTMLElement>('.v203-interior-panel');
-    const image = this.root.querySelector<HTMLImageElement>('.v203-interior-image');
+    const panel = this.root.querySelector<HTMLElement>('[data-v2094-interior-panel]');
+    const image = this.root.querySelector<HTMLImageElement>('[data-v2094-interior-image]');
     const title = this.root.querySelector<HTMLElement>('[data-v203-interior-title]');
     const body = this.root.querySelector<HTMLElement>('[data-v203-interior-body]');
     const action = this.root.querySelector<HTMLElement>('[data-v203-interior-go-fishing]');
@@ -2220,21 +2224,21 @@ export class VillageWorld {
     inventoryAction?.toggleAttribute('hidden', !interior.inventory);
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
-    this.root.classList.add('v2091-interior-open');
-    document.body.classList.add('v2091-modal-open');
-    this.root.querySelector<HTMLElement>('.v2-world-controls')?.setAttribute('hidden', 'true');
+    this.root.classList.add('v2094-interior-open');
+    document.body.classList.add('v2094-modal-open');
+    this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
     panel.setAttribute('aria-hidden', 'false');
     this.showGuide(interior.title, overrideBody ?? interior.body);
   }
 
   private closeInterior(): void {
-    const panel = this.root.querySelector<HTMLElement>('.v203-interior-panel');
+    const panel = this.root.querySelector<HTMLElement>('[data-v2094-interior-panel]');
     if (!panel) return;
     panel.classList.remove('open');
-    this.root.classList.remove('v2091-interior-open');
-    document.body.classList.remove('v2091-modal-open');
-    this.root.querySelector<HTMLElement>('.v2-world-controls')?.removeAttribute('hidden');
+    this.root.classList.remove('v2094-interior-open');
+    document.body.classList.remove('v2094-modal-open');
+    this.root.querySelector<HTMLElement>('.v2094-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');
     this.focusedBuildingId = null;
     panel.setAttribute('aria-hidden', 'true');
@@ -2245,7 +2249,7 @@ export class VillageWorld {
     if (now - this.lastDialogAt < 260) return;
     this.lastDialogAt = now;
     const text = actor.talk[Math.floor(Math.random() * actor.talk.length)] ?? '안녕하세요.';
-    const panel = this.root.querySelector<HTMLElement>('.v2-dialog-panel');
+    const panel = this.root.querySelector<HTMLElement>('.v2094-dialog-panel');
     if (!panel) return;
     const portrait = PORTRAIT_ASSETS[actor.role] ?? PORTRAIT_ASSETS.tourist;
     panel.classList.add('open');
@@ -2255,7 +2259,7 @@ export class VillageWorld {
 
   private showGuide(title: string, message: string): void {
     this.onToast({ type: 'normal', title, message });
-    const guide = this.root.querySelector<HTMLElement>('.v2-village-guide');
+    const guide = this.root.querySelector<HTMLElement>('.v2094-village-guide');
     if (!guide) return;
     guide.innerHTML = `<strong>${title}</strong><span>${message}</span>`;
     guide.classList.add('pop');
@@ -2541,7 +2545,7 @@ export class VillageWorld {
   }
 
   private showPassiveIncomeFloat(income: number): void {
-    const board = this.root.querySelector<HTMLElement>('.v2049-growth-board');
+    const board = this.root.querySelector<HTMLElement>('.v2094-expedition-body');
     if (!board || income <= 0) return;
     board.querySelector('.v2049-income-float')?.remove();
     const node = document.createElement('span');
@@ -2564,7 +2568,7 @@ export class VillageWorld {
     this.save.village.development = score;
     this.save.village.level = score >= 1000 ? 5 : score >= 500 ? 4 : score >= 300 ? 3 : score >= 100 ? 2 : 1;
     this.save.village.tourists = score >= 1000 ? 3 : score >= 500 ? 2 : score >= 100 ? 1 : 0;
-    const hud = this.root.querySelector<HTMLElement>('.v2-village-hud');
+    const hud = this.root.querySelector<HTMLElement>('.v2094-village-hud');
     if (hud) {
       hud.querySelector<HTMLElement>('[data-v2-gold]')!.textContent = this.save.coins.toLocaleString('ko-KR');
       hud.querySelector<HTMLElement>('[data-v2-fund]')!.textContent = this.save.village.fund.toLocaleString('ko-KR');
@@ -2579,7 +2583,7 @@ export class VillageWorld {
       else if (score < 1000) objective.textContent = '수족관·여관 업그레이드 준비로 VIP 1000점 도전';
       else objective.textContent = 'VIP 관광을 유지하며 다음 섬 개척 준비';
     }
-    const milestones = this.root.querySelector<HTMLElement>('.v2-milestone-line');
+    const milestones = this.root.querySelector<HTMLElement>('.v2094-milestone-line');
     if (milestones) {
       milestones.innerHTML = `<span class="${score >= 100 ? 'on' : ''}">100 관광객</span><span class="${score >= 500 ? 'on' : ''}">500 관광버스</span><span class="${score >= 1000 ? 'on' : ''}">1000 VIP</span>`;
     }
