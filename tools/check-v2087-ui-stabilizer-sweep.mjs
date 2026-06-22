@@ -13,13 +13,14 @@ const offline = read('public/offline.html');
 const readme = read('README.md');
 const validateScript = pkg.scripts?.validate ?? '';
 
-if (pkg.version !== '2.0.87') fail('package.json version must be 2.0.87');
+const patch = Number(pkg.version.split('.')[2] ?? 0);
+if (!/^2\.0\.\d+$/.test(pkg.version) || patch < 87) fail('package.json version must be v2.0.87 or newer');
 if (lock.version !== pkg.version || lock.packages?.['']?.version !== pkg.version) fail('package-lock version must match package.json');
-if (!data.includes("APP_VERSION = '2.0.87'")) fail('APP_VERSION must be 2.0.87');
-if (!data.includes('aqua-fantasia-v2.0.87-ui-stabilizer-sweep')) fail('data cache name must be v2.0.87 stabilizer sweep');
-if (!sw.includes('aqua-fantasia-v2.0.87-ui-stabilizer-sweep')) fail('service worker cache must be v2.0.87 stabilizer sweep');
-if (!offline.includes('v2.0.87')) fail('offline badge must mention v2.0.87');
-if (!readme.startsWith('# AquaFantasia v2.0.87')) fail('README top version must be v2.0.87');
+if (!data.includes(`APP_VERSION = '${pkg.version}'`)) fail('APP_VERSION must match package.json');
+if (!data.includes(`aqua-fantasia-v${pkg.version}`)) fail('data cache name must match current version');
+if (!sw.includes(`aqua-fantasia-v${pkg.version}`)) fail('service worker cache must match current version');
+if (!offline.includes(`v${pkg.version}`)) fail('offline badge must mention current version');
+if (!readme.startsWith(`# AquaFantasia v${pkg.version}`)) fail('README top version must match current version');
 if (!validateScript.includes('check-v2087-ui-stabilizer-sweep.mjs')) fail('validate must run v2087 check');
 
 for (const token of [

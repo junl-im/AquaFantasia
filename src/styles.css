@@ -33896,3 +33896,435 @@ html[data-v2087-ui-stabilizer-sweep="v2087-ui-stabilizer-sweep"] .village-world-
     border-radius: 21px !important;
   }
 }
+
+/* v2.0.88 Character Shell / Expedition UI repair
+   Root cause: generic modal-open classes were hiding the expedition board itself,
+   while accumulated HUD/menu rules kept overriding the character-card-like shell. */
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] {
+  --v2088-ink: #063f58;
+  --v2088-muted: #327289;
+  --v2088-border: rgba(118, 224, 246, .58);
+  --v2088-shell: linear-gradient(180deg, rgba(255,255,255,.96) 0%, rgba(231,251,255,.90) 55%, rgba(208,244,253,.86) 100%);
+  --v2088-shell-strong: linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(226,250,255,.94) 100%);
+  --v2088-dim: radial-gradient(circle at 50% 12%, rgba(224,252,255,.14), transparent 34%), rgba(2, 22, 36, .42);
+  --v2088-shadow: 0 20px 48px rgba(0, 53, 78, .20), inset 0 1px 0 rgba(255,255,255,.90);
+  --v2088-hud-w: min(252px, calc(100vw - 112px));
+  --v2088-hud-h: 44px;
+  --v2088-expedition-gap: 5px;
+  --v2088-close: 38px;
+}
+
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] :is(.runtime-menu-screen.v2088-character-shell-menu-screen,.v2017-character-panel[aria-hidden="false"],.v203-interior-panel[aria-hidden="false"],.v2-build-panel[aria-hidden="false"],.v2-build-tray.open) {
+  color: var(--v2088-ink) !important;
+}
+
+/* Character-info style dim is the shared base for all opened pages except fishing. */
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen::before,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .v2088-aqua-dim {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  display: block !important;
+  background: var(--v2088-dim) !important;
+  backdrop-filter: blur(9px) saturate(1.06) !important;
+  -webkit-backdrop-filter: blur(9px) saturate(1.06) !important;
+  pointer-events: none !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] body[data-screen="fishing"] .runtime-menu-screen.v2088-character-shell-menu-screen::before,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] body[data-screen="fishing"] .runtime-menu-screen.v2088-character-shell-menu-screen .v2088-aqua-dim { display: none !important; }
+
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen {
+  display: grid !important;
+  grid-template-rows: 44px minmax(0, 1fr) !important;
+  align-content: start !important;
+  justify-items: center !important;
+  gap: 8px !important;
+  padding: calc(max(8px, env(safe-area-inset-top)) + 2px) max(10px, env(safe-area-inset-right)) calc(78px + env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)) !important;
+  overflow: hidden !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen > :is(.runtime-hud,.runtime-content,.v2088-close-button) { position: relative !important; z-index: 2 !important; }
+
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .v2088-runtime-hud,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .runtime-hud {
+  width: min(560px, calc(100vw - 22px)) !important;
+  max-width: min(560px, calc(100vw - 22px)) !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  display: grid !important;
+  grid-template-columns: 32px minmax(0, 1fr) !important;
+  grid-template-rows: 1fr !important;
+  gap: 8px !important;
+  align-items: center !important;
+  padding: 5px calc(var(--v2088-close) + 12px) 5px 7px !important;
+  overflow: hidden !important;
+  border-radius: 20px !important;
+  background: var(--v2088-shell) !important;
+  background-image: var(--v2088-shell) !important;
+  border: 1px solid var(--v2088-border) !important;
+  box-shadow: var(--v2088-shadow) !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .v2088-hud-avatar,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .runtime-hud-mascot {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  border-radius: 13px !important;
+  padding: 2px !important;
+  overflow: hidden !important;
+  background: rgba(255,255,255,.72) !important;
+  border: 1px solid rgba(255,255,255,.82) !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .v2088-hud-title,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .runtime-title {
+  min-width: 0 !important;
+  height: 34px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  grid-template-rows: 16px 16px !important;
+  gap: 1px 8px !important;
+  align-items: center !important;
+  overflow: hidden !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .runtime-title span {
+  grid-column: 1 !important;
+  font-size: 11px !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+  color: var(--v2088-muted) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .runtime-title strong {
+  grid-column: 1 !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .runtime-title em {
+  grid-column: 2 !important;
+  grid-row: 1 / span 2 !important;
+  align-self: center !important;
+  font-size: 10px !important;
+  color: var(--v2088-muted) !important;
+  white-space: nowrap !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .runtime-wallet { display: none !important; }
+
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .v2088-menu-content,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .runtime-content {
+  width: min(560px, calc(100vw - 22px)) !important;
+  max-width: min(560px, calc(100vw - 22px)) !important;
+  min-width: 0 !important;
+  max-height: calc(100svh - 44px - 98px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  overscroll-behavior: contain !important;
+  border-radius: 25px !important;
+  padding: 12px !important;
+  background: var(--v2088-shell) !important;
+  background-image: var(--v2088-shell) !important;
+  border: 1px solid var(--v2088-border) !important;
+  box-shadow: var(--v2088-shadow) !important;
+}
+
+/* Village HUD: slim, readable level/name chip, and expedition bar attached just below it. */
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2088-character-hud,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2-village-hud {
+  position: fixed !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 0px) !important;
+  left: calc(max(10px, env(safe-area-inset-left)) + 0px) !important;
+  width: var(--v2088-hud-w) !important;
+  max-width: var(--v2088-hud-w) !important;
+  height: var(--v2088-hud-h) !important;
+  min-height: var(--v2088-hud-h) !important;
+  max-height: var(--v2088-hud-h) !important;
+  padding: 5px 7px !important;
+  z-index: 24 !important;
+  border-radius: 19px !important;
+  overflow: hidden !important;
+  background: var(--v2088-shell) !important;
+  background-image: var(--v2088-shell) !important;
+  border: 1px solid var(--v2088-border) !important;
+  box-shadow: var(--v2088-shadow) !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2088-profile-chip,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2-profile-chip {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: 44px minmax(0, 1fr) !important;
+  grid-template-rows: 16px 16px !important;
+  gap: 1px 7px !important;
+  align-items: center !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2-profile-chip span {
+  grid-row: 1 / span 2 !important;
+  width: 43px !important;
+  height: 30px !important;
+  min-width: 43px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 13px !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  background: linear-gradient(180deg, #ffffff, #dcf8ff) !important;
+  border: 1px solid rgba(255,255,255,.85) !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2-profile-chip strong {
+  font-size: 14px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2-profile-chip em {
+  font-size: 10px !important;
+  line-height: 1 !important;
+  color: var(--v2088-muted) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2088-expedition-board,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2050-expedition-board.v2075-expedition-dock {
+  position: fixed !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + var(--v2088-hud-h) + var(--v2088-expedition-gap)) !important;
+  left: calc(max(10px, env(safe-area-inset-left)) + 0px) !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(178px, calc(100vw - 24px)) !important;
+  max-width: min(178px, calc(100vw - 24px)) !important;
+  height: 31px !important;
+  min-height: 31px !important;
+  z-index: 23 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2088-expedition-toggle,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2051-loop-toggle {
+  width: 100% !important;
+  height: 31px !important;
+  min-height: 31px !important;
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 4px 8px !important;
+  border-radius: 999px !important;
+  background: var(--v2088-shell-strong) !important;
+  background-image: var(--v2088-shell-strong) !important;
+  border: 1px solid var(--v2088-border) !important;
+  box-shadow: 0 8px 18px rgba(0, 68, 94, .14) !important;
+  color: var(--v2088-ink) !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2051-loop-toggle span { font-size: 12px !important; line-height: 1 !important; white-space: nowrap !important; }
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2051-loop-toggle strong { font-size: 12px !important; line-height: 1 !important; justify-self: center !important; }
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2051-loop-toggle em { max-width: 58px !important; font-size: 9px !important; line-height: 1 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+
+/* Keep expedition content visible when expedition is open; only hide the tiny bar. */
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-expedition-open::after {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 41 !important;
+  background: var(--v2088-dim) !important;
+  backdrop-filter: blur(9px) saturate(1.05) !important;
+  -webkit-backdrop-filter: blur(9px) saturate(1.05) !important;
+  pointer-events: none !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-expedition-open .v2051-loop-toggle { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2088-expedition-body,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2051-loop-body {
+  display: none !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2051-expedition-mini.open .v2088-expedition-body,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2051-expedition-mini.open .v2051-loop-body {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 46 !important;
+  display: block !important;
+  width: min(560px, calc(100vw - 28px)) !important;
+  max-width: min(560px, calc(100vw - 28px)) !important;
+  max-height: calc(100svh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  padding: 18px 14px 14px !important;
+  border-radius: 26px !important;
+  background: var(--v2088-shell) !important;
+  background-image: var(--v2088-shell) !important;
+  border: 1px solid var(--v2088-border) !important;
+  box-shadow: var(--v2088-shadow) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] body:is(.v2088-modal-open,.v2087-modal-open,.v2086-modal-open,.v2085-modal-open,.v2084-popup-open,.v2032-character-panel-open,.v2040-interior-open,.v2041-interior-open,.v2042-interior-open,.v2043-interior-open,.v2044-interior-open):not(.v2088-expedition-open) .v2088-expedition-board {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Character-card shell for character, building info, build tray and expedition. */
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] :is(.v2017-character-panel[aria-hidden="false"],.v203-interior-panel[aria-hidden="false"],.v203-interior-panel.open) {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  min-width: 100vw !important;
+  height: 100svh !important;
+  min-height: 100svh !important;
+  z-index: 70 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)) !important;
+  background: var(--v2088-dim) !important;
+  backdrop-filter: blur(9px) saturate(1.06) !important;
+  -webkit-backdrop-filter: blur(9px) saturate(1.06) !important;
+  overflow: hidden !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] :is(.v2017-character-card,.v2088-character-card,.v203-interior-card,.v2088-interior-card,.v2-build-tray,.v2088-build-card) {
+  position: relative !important;
+  width: min(560px, calc(100vw - 28px)) !important;
+  max-width: min(560px, calc(100vw - 28px)) !important;
+  max-height: calc(100svh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  border-radius: 26px !important;
+  padding: 18px 14px 14px !important;
+  background: var(--v2088-shell) !important;
+  background-image: var(--v2088-shell) !important;
+  border: 1px solid var(--v2088-border) !important;
+  box-shadow: var(--v2088-shadow) !important;
+  color: var(--v2088-ink) !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] :is(.v2017-character-close,.v203-interior-close,.v2059-panel-close,.v2059-build-close,.v2088-dialog-close,.v2055-loop-close,.v2059-loop-close,.v2088-close-button) {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  width: var(--v2088-close) !important;
+  height: var(--v2088-close) !important;
+  min-width: var(--v2088-close) !important;
+  min-height: var(--v2088-close) !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 999px !important;
+  z-index: 8 !important;
+  font-size: 21px !important;
+  line-height: 1 !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .v2088-close-button {
+  position: fixed !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 6px) !important;
+  right: calc(max(10px, env(safe-area-inset-right)) + 8px) !important;
+}
+
+/* Button and icon residue repair: remove sprite seams/pseudo lines. */
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button) {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background: linear-gradient(180deg, #fbffff 0%, #e9fbff 100%) !important;
+  background-image: linear-gradient(180deg, #fbffff 0%, #e9fbff 100%) !important;
+  border: 1px solid rgba(88, 199, 225, .44) !important;
+  border-top-color: rgba(255,255,255,.88) !important;
+  box-shadow: 0 7px 14px rgba(0, 101, 135, .10) !important;
+  color: var(--v2088-ink) !important;
+  -webkit-text-fill-color: var(--v2088-ink) !important;
+  text-shadow: none !important;
+  outline: 0 !important;
+  overflow: hidden !important;
+  background-clip: padding-box !important;
+  touch-action: manipulation !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button)::before,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button)::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  background: none !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta) > img,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] :is(.runtime-menu-screen,.village-world-screen) :is(.runtime-hud-mascot img,.v203-interior-image,.v206-interior-portrait,.v2017-character-head img,.shop-card img,.mission-card img,.gear-card img,.dex-card img,.region-card img) {
+  object-fit: contain !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+/* Toasts stay available for feedback, but no longer dominate the UI while shells are being stabilized. */
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] #toast-root {
+  top: auto !important;
+  bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+  left: 18px !important;
+  right: 18px !important;
+  z-index: 39 !important;
+  pointer-events: none !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] #toast-root .toast,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] #toast-root .toast-item {
+  width: min(360px, 100%) !important;
+  margin-inline: auto !important;
+  padding: 9px 12px !important;
+  border-radius: 18px !important;
+  opacity: .92 !important;
+  font-size: 12px !important;
+}
+
+/* Fishing bite: no camera/layout shake, one stable bite card. */
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .fishing-screen.v2088-fishing-bite-stable-screen .fishing-stage.camera-shake,
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .fishing-screen.v2088-fishing-bite-stable-screen .fishing-stage.bite-mode {
+  animation: none !important;
+  transform: none !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .fishing-screen.v2088-fishing-bite-stable-screen .bite-callout {
+  pointer-events: auto !important;
+  animation: biteCalloutPop .22s ease-out both !important;
+  top: 38% !important;
+  transform: translate(-50%, -50%) !important;
+}
+html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .fishing-screen.v2088-fishing-bite-stable-screen .bite-callout span { font-size: clamp(14px, 3.6vw, 18px) !important; }
+
+@media (max-width: 460px), (max-height: 720px) {
+  html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] { --v2088-hud-w: min(236px, calc(100vw - 108px)); --v2088-close: 36px; }
+  html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen { gap: 6px !important; }
+  html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .runtime-menu-screen.v2088-character-shell-menu-screen .runtime-title em { display: none !important; }
+  html[data-v2088-character-shell-expedition-ui="v2088-character-shell-expedition-ui"] .village-world-screen.v2088-character-shell-village-screen .v2088-expedition-board { width: min(166px, calc(100vw - 24px)) !important; }
+}
