@@ -408,7 +408,7 @@ const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
   palm: 160,
   tropicalTree: 166,
   palmAlt: 160,
-  lamp: 128,
+  lamp: 92,
   bench: 74,
   crate: 86,
   buoy: 70,
@@ -434,7 +434,7 @@ const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
   statue: 148,
   cherryTree: 132, mapleTree: 132, pineTree: 152, crystalTree: 148, flowerTree: 128, cypressTree: 150,
   dog: 66, sleepingDog: 48, cat: 62, walkingCat: 58, seagull: 60, flyingSeagull: 72, duck: 58, swimmingDuck: 74,
-  butterflyBlue: 48, butterflyPink: 44, petals: 64, sparkles: 60, waterRing: 72, shoreFoam: 96, splash: 102, steam: 94, cookingPot: 72, goldLantern: 90,
+  butterflyBlue: 48, butterflyPink: 44, petals: 64, sparkles: 60, waterRing: 72, shoreFoam: 96, splash: 102, steam: 94, cookingPot: 72, goldLantern: 68,
   fishShadowSmall: 44, fishShadowMid: 50, fishShadowBig: 58,
   woodSign: 78, ropeWall: 64, stoneCorner: 58, stoneCurve: 58, wideStairs: 74, ropeCorner: 56,
   noticeBoard: 92, plazaStairs: 82, bridgeAsset: 98,
@@ -681,6 +681,14 @@ const V2050_HIDDEN_DECORATION_KEYS = new Set([
   'butterflyBlue:14,16', 'butterflyPink:26,16', 'wideStairs:20,26',
 ]);
 
+const V2079_HIDDEN_DECORATION_KEYS = new Set([
+  // v2.0.79: final object audit. Keep the central plaza readable and remove repeated lamp/harbor-edge props
+  // that can look half-clipped after the crystal lamp replacement on narrow mobile screens.
+  'goldLantern:16,16', 'goldLantern:14,18', 'goldLantern:26,18', 'goldLantern:18,24', 'goldLantern:22,24',
+  'noticeBoard:20,21', 'plazaStairs:20,24', 'ropeFence:30,32',
+  'dock:19,33', 'dock:21,33', 'crate:15,30', 'crate:16,31', 'barrels:24,31',
+]);
+
 function decorationAuditKey(deco: Decoration): string {
   return `${deco.kind}:${deco.x},${deco.y}`;
 }
@@ -688,7 +696,7 @@ function decorationAuditKey(deco: Decoration): string {
 function shouldUseDecoration(deco: Decoration): boolean {
   // v2.0.29: hide duplicated large props that made the village feel cluttered or half-cut.
   const key = decorationAuditKey(deco);
-  return !V2029_HIDDEN_DECORATION_KEYS.has(key) && !V2045_HIDDEN_DECORATION_KEYS.has(key) && !V2049_HIDDEN_DECORATION_KEYS.has(key) && !V2050_HIDDEN_DECORATION_KEYS.has(key);
+  return !V2029_HIDDEN_DECORATION_KEYS.has(key) && !V2045_HIDDEN_DECORATION_KEYS.has(key) && !V2049_HIDDEN_DECORATION_KEYS.has(key) && !V2050_HIDDEN_DECORATION_KEYS.has(key) && !V2079_HIDDEN_DECORATION_KEYS.has(key);
 }
 
 const V2039_EDGE_SAFE_DECORATIONS = new Set<DecoKind>([
@@ -709,6 +717,8 @@ function auditedDecorationPlacement(deco: Decoration): { x: number; y: number; s
     if (['tropicalTree', 'palmAlt', 'cherryTree', 'mapleTree', 'pineTree', 'crystalTree', 'flowerTree', 'cypressTree'].includes(deco.kind)) scale = Math.min(scale, 0.34);
     if (['bridgeAsset', 'bridge', 'wideStairs', 'coral', 'rock'].includes(deco.kind)) scale = Math.min(scale, 0.42);
   }
+  if (deco.kind === 'lamp' || deco.kind === 'goldLantern') scale = Math.min(scale, 0.50);
+  if (deco.kind === 'crystal') scale = Math.min(scale, 0.56);
   if (y >= 34) scale = Math.min(scale, 0.52);
   if (x <= 4 || x >= 36) scale = Math.min(scale, 0.48);
   return { x: clamp(x, 2.2, MAP_SIZE - 3.2), y: clamp(y, 4.2, MAP_SIZE - 5.4), scale };
@@ -783,6 +793,7 @@ function decorationSpriteGroundOffset(kind: DecoKind, targetH: number): number {
   // v2.0.62: small animals/props should look grounded even if the PNG has transparent bottom padding.
   if (/dog|cat|walkingCat|sleepingDog/i.test(kind)) return Math.max(2, Math.min(4, targetH * 0.055));
   if (/tree|palm|flowerTree|cherryTree|mapleTree|pineTree|crystalTree|cypressTree/i.test(kind)) return Math.max(1, Math.min(3, targetH * 0.018));
+  if (/lamp|goldLantern|crystal/i.test(kind)) return Math.max(3, Math.min(5, targetH * 0.055));
   return Math.max(0, Math.min(2, targetH * 0.015));
 }
 

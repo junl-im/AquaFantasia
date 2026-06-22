@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.78-aqua-card-hud-panel-polish';
+const CACHE_NAME = 'aqua-fantasia-v2.0.79-aqua-card-object-layout-audit';
 const PRECACHE = [
   "./",
   "./index.html",

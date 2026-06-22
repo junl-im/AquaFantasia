@@ -333,6 +333,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2076IslandExpansionRoutes = 'v2076-island-expansion-routes';
     document.documentElement.dataset.v2077MenuUiCleanup = 'v2077-menu-aqua-card-scroll-close-expedition-fix';
     document.documentElement.dataset.v2078AquaCardUi = 'v2078-aqua-card-hud-panel-polish';
+    document.documentElement.dataset.v2079AquaCardObjectAudit = 'v2079-aqua-card-object-layout-audit';
     document.documentElement.dataset.cacheName = CACHE_NAME;
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
@@ -784,7 +785,7 @@ class AquaFantasiaGame {
     const playerNameHtml = this.escapeHtml(playerName);
     const expansionStats = this.islandExpansionStats();
     const root = document.createElement('main');
-    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen v209-asset-qa-screen v2010-village-clean-screen v2011-dock-safe-screen v2012-world-asset-screen v2013-world-safe-screen v2014-clean-village-screen v2016-world-stability-screen v2017-direction-ui-screen v2018-build-ux-screen v2020-village-asset-screen v2021-village-asset-screen v2022-hud-control-screen v2023-premium-village-screen v2024-village-object-repair-screen v2026-wide-stability-screen v2027-village-root-repair-screen v2039-village-object-audit-screen v2040-village-engine-audit-screen v2041-village-ui-screen v2042-village-ui-screen v2043-village-ui-screen v2044-village-ui-screen v2049-content-village-screen v2050-content-village-screen v2051-hud-loop-village-screen v2052-tile-anchor-village-screen v2053-hud-dock-village-screen v2054-layout-issue-village-screen v2055-playability-village-screen v2056-motion-tile-village-screen v2060-grounded-motion-village-screen v2061-loop-ui-village-screen v2062-ground-contact-village-screen v2063-unified-card-window-village-screen v2064-polish-audit-village-screen v2072-loop-polish-village-screen v2075-exploration-polish-village-screen v2076-expedition-route-village-screen v2077-expedition-hud-safe-village-screen v2078-village-ui-polish-screen locked-screen';
+    root.className = 'game-screen village-world-screen v2-village-screen v202-mobile-rpg-screen v203-asset-pass-screen v204-asset-ui-screen v206-village-detail-screen v207-layout-bugfix-screen v208-right-dock-screen v209-asset-qa-screen v2010-village-clean-screen v2011-dock-safe-screen v2012-world-asset-screen v2013-world-safe-screen v2014-clean-village-screen v2016-world-stability-screen v2017-direction-ui-screen v2018-build-ux-screen v2020-village-asset-screen v2021-village-asset-screen v2022-hud-control-screen v2023-premium-village-screen v2024-village-object-repair-screen v2026-wide-stability-screen v2027-village-root-repair-screen v2039-village-object-audit-screen v2040-village-engine-audit-screen v2041-village-ui-screen v2042-village-ui-screen v2043-village-ui-screen v2044-village-ui-screen v2049-content-village-screen v2050-content-village-screen v2051-hud-loop-village-screen v2052-tile-anchor-village-screen v2053-hud-dock-village-screen v2054-layout-issue-village-screen v2055-playability-village-screen v2056-motion-tile-village-screen v2060-grounded-motion-village-screen v2061-loop-ui-village-screen v2062-ground-contact-village-screen v2063-unified-card-window-village-screen v2064-polish-audit-village-screen v2072-loop-polish-village-screen v2075-exploration-polish-village-screen v2076-expedition-route-village-screen v2077-expedition-hud-safe-village-screen v2078-village-ui-polish-screen v2079-village-object-audit-screen locked-screen';
     root.classList.add('v108-home-main', 'v1110-village-flow');
     root.dataset.legacyVillageFlow = 'v1110-home-banner v1110-tide-card before v1110-region-panel';
     root.innerHTML = `
@@ -1021,7 +1022,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen v2059-dialog-close-screen v2063-unified-card-window-screen v2064-polish-audit-menu-screen v2072-menu-card-screen v2074-growth-loop-menu-screen v2075-scroll-polish-menu-screen v2076-expedition-route-menu-screen v2077-aqua-card-scroll-screen v2078-aqua-card-ui-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v204-asset-ui-screen v2018-menu-drag-screen v2024-menu-content-repair-screen v2027-menu-content-repair-screen v2028-menu-aqua-reset-screen v2029-menu-clean-page v2038-menu-aqua-card-screen v2039-menu-aqua-card-screen v2040-menu-aqua-card-screen v2041-menu-aqua-center-screen v2042-menu-aqua-center-screen v2043-menu-aqua-center-screen v2044-menu-aqua-center-screen v2045-menu-aqua-center-screen v2049-menu-content-screen v2050-menu-content-screen v2059-dialog-close-screen v2063-unified-card-window-screen v2064-polish-audit-menu-screen v2072-menu-card-screen v2074-growth-loop-menu-screen v2075-scroll-polish-menu-screen v2076-expedition-route-menu-screen v2077-aqua-card-scroll-screen v2078-aqua-card-ui-screen v2079-aqua-detail-screen ${active}-screen scroll-screen`;
     root.setAttribute('data-runtime-screen', active);
     root.dataset.v2027MenuRepair = 'true';
     root.dataset.v2028MenuAudit = 'simple-aqua-readable-content';
@@ -1042,6 +1043,7 @@ class AquaFantasiaGame {
     root.dataset.v2076ExpeditionRoutes = 'route-candidates-action-buttons';
     root.dataset.v2077MenuUiCleanup = 'aqua-card-scroll-close-normalized';
     root.dataset.v2078AquaCardUi = 'managed-aqua-card-stack';
+    root.dataset.v2079AquaCardObjectAudit = 'internal-card-spacing-scroll-object-audit';
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
     root.innerHTML = `
@@ -1066,8 +1068,8 @@ class AquaFantasiaGame {
     let startY = 0;
     let startTop = 0;
     let moved = false;
-    const scrollableSelector = '.runtime-content, .aqua-card-page, .v2051-loop-body, .catch-result-card, .v2-build-tray, .v2017-character-card, .v203-interior-card';
-    const v2077ScrollableSelector = '.v204-inventory-shell, .v206-inventory-shell, .v204-inventory-grid, .v206-inventory-grid, .v206-catch-ledger, .v2074-sale-ledger, .v2074-sale-grid, .v204-map-shell, .v206-route-ready, .v2076-expedition-card, .v2076-expedition-candidates, .v204-quest-board, .mission-list, .shop-list, .dex-grid, .gear-grid';
+    const scrollableSelector = '.runtime-content, .aqua-card-page, .v2079-scroll-zone, .v2051-loop-body, .catch-result-card, .v2-build-tray, .v2017-character-card, .v203-interior-card';
+    const v2077ScrollableSelector = '.v204-inventory-shell, .v206-inventory-shell, .v204-inventory-grid, .v206-inventory-grid, .v206-inventory-dashboard, .v206-catch-ledger, .v2074-sale-ledger, .v2074-sale-grid, .v204-map-shell, .v204-map-ocean, .v204-map-detail, .v206-route-ready, .v2076-expedition-card, .v2076-expedition-candidates, .v204-quest-board, .v206-quest-npc-board, .mission-list, .shop-list, .dex-grid, .gear-grid, .runtime-card-list, .runtime-region-grid';
     const resolveScrollTarget = (target: HTMLElement | null): HTMLElement => {
       const candidate = target?.closest<HTMLElement>(`${scrollableSelector}, ${v2077ScrollableSelector}`);
       if (candidate && candidate.scrollHeight > candidate.clientHeight + 2) return candidate;
