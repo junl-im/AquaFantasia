@@ -1705,8 +1705,15 @@ export class VillageWorld {
   private pointerHitFromEvent(ev: PointerEvent): VillagePointerHit {
     const screen = this.pointerToStagePoint(ev);
     const world = this.screenToWorld(screen, this.camera.scale);
+    // v2.0.96: players naturally tap the lower-left foot of an isometric tile/building.
+    // Use a small lower-left bias only for tile selection; keep the raw world point
+    // for building distance scoring so hitboxes do not drift visually.
+    const biasedWorld = {
+      x: world.x - TILE_W * 0.16,
+      y: world.y + TILE_H * 0.16,
+    };
     // v2080 validation lineage: const tile = nearestDiamondTile(wx, wy);
-    const tile = nearestDiamondTile(world.x, world.y);
+    const tile = nearestDiamondTile(biasedWorld.x, biasedWorld.y);
     return {
       x: safeIntegerTile(tile.x),
       y: safeIntegerTile(tile.y),

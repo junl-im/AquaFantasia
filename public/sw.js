@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.95-ui-canonical-runtime-prune';
+const CACHE_NAME = 'aqua-fantasia-v2.0.96-ui-restored-runtime-shell';
 const PRECACHE = [
   "./",
   "./index.html",
