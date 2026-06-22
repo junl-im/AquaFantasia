@@ -33120,3 +33120,357 @@ html[data-v2085-ui-emergency-reset="v2085-ui-emergency-hud-menu-reset"] body:is(
     padding: 11px !important;
   }
 }
+
+/* v2.0.86 UI Shell Surgery
+   Final scoped layer after v2077-v2085 accumulation: keep legacy tokens for regression checks,
+   but make the actual runtime menu/village HUD layout use one compact, predictable shell. */
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] {
+  --v2086-ink: #053d5a;
+  --v2086-muted: rgba(5, 61, 90, .68);
+  --v2086-shell: linear-gradient(180deg, rgba(255,255,255,.98), rgba(222,250,255,.95) 55%, rgba(180,243,254,.9));
+  --v2086-shell-border: rgba(122, 222, 245, .56);
+  --v2086-shell-shadow: 0 16px 36px rgba(0, 54, 87, .18), inset 0 1px 0 rgba(255,255,255,.88);
+  --v2086-dim: radial-gradient(circle at 50% 12%, rgba(224,252,255,.13), transparent 34%), rgba(1, 18, 32, .38);
+  --v2086-width: min(620px, calc(100vw - max(18px, env(safe-area-inset-left)) - max(18px, env(safe-area-inset-right))));
+  --v2086-close-size: 38px;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100svh !important;
+  min-height: 100svh !important;
+  display: grid !important;
+  grid-template-rows: 48px minmax(0, 1fr) !important;
+  align-content: start !important;
+  justify-items: center !important;
+  gap: 8px !important;
+  padding: calc(max(8px, env(safe-area-inset-top)) + 2px) max(10px, env(safe-area-inset-right)) calc(max(78px, env(safe-area-inset-bottom) + 70px)) max(10px, env(safe-area-inset-left)) !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  color: var(--v2086-ink) !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen::before,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .aqua-modal-dim,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen :is(.v2081-menu-dim,.v2082-menu-dim,.v2084-aqua-modal-dim) {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  display: block !important;
+  pointer-events: none !important;
+  background: var(--v2086-dim) !important;
+  backdrop-filter: blur(5px) saturate(1.04) !important;
+  -webkit-backdrop-filter: blur(5px) saturate(1.04) !important;
+  opacity: 1 !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] body[data-screen="fishing"] .runtime-menu-screen.v2086-surgical-menu-screen::before,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] body[data-screen="fishing"] .runtime-menu-screen.v2086-surgical-menu-screen .aqua-modal-dim {
+  display: none !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen > :is(.runtime-hud,.runtime-content,.v2059-screen-close,.v2084-close-button) {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .v2086-slim-runtime-hud,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .runtime-hud {
+  grid-row: 1 !important;
+  width: var(--v2086-width) !important;
+  max-width: var(--v2086-width) !important;
+  min-width: 0 !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  display: grid !important;
+  grid-template-columns: 34px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  padding: 5px calc(var(--v2086-close-size) + 9px) 5px 7px !important;
+  border-radius: 20px !important;
+  background: var(--v2086-shell) !important;
+  background-image: var(--v2086-shell) !important;
+  border: 1px solid var(--v2086-shell-border) !important;
+  box-shadow: var(--v2086-shell-shadow) !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .v2086-hud-avatar,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .runtime-hud-mascot {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  padding: 0 !important;
+  border-radius: 14px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: linear-gradient(180deg, #ffffff, #c8f6ff) !important;
+  border: 1px solid rgba(255,255,255,.84) !important;
+  box-shadow: 0 5px 12px rgba(0, 89, 124, .13) !important;
+  overflow: hidden !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .runtime-hud-mascot img {
+  width: 30px !important;
+  height: 30px !important;
+  display: block !important;
+  object-fit: contain !important;
+  background: none !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .v2086-hud-title,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .runtime-title {
+  min-width: 0 !important;
+  height: 36px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  grid-template-rows: 17px 17px !important;
+  gap: 1px 7px !important;
+  align-items: center !important;
+  text-align: left !important;
+  overflow: hidden !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .runtime-title span {
+  grid-column: 1 / 2 !important;
+  grid-row: 1 !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+  color: var(--v2086-muted) !important;
+  font-weight: 950 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .runtime-title strong {
+  grid-column: 1 / 2 !important;
+  grid-row: 2 !important;
+  min-width: 0 !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  color: var(--v2086-ink) !important;
+  letter-spacing: -.02em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .runtime-title em {
+  grid-column: 2 !important;
+  grid-row: 1 / span 2 !important;
+  align-self: center !important;
+  max-width: 94px !important;
+  padding: 5px 8px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.54) !important;
+  border: 1px solid rgba(255,255,255,.58) !important;
+  color: var(--v2086-muted) !important;
+  font-size: 10px !important;
+  font-style: normal !important;
+  font-weight: 1000 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .runtime-wallet,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .v2086-hud-hidden-metrics,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .v2085-hud-hidden-metrics {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .v2086-menu-content,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .runtime-content {
+  grid-row: 2 !important;
+  width: var(--v2086-width) !important;
+  max-width: var(--v2086-width) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: calc(100svh - max(8px, env(safe-area-inset-top)) - max(78px, env(safe-area-inset-bottom) + 70px) - 58px) !important;
+  margin: 0 !important;
+  padding: 12px !important;
+  padding-bottom: calc(18px + env(safe-area-inset-bottom)) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  border-radius: 25px !important;
+  background: var(--v2086-shell) !important;
+  background-image: var(--v2086-shell) !important;
+  border: 1px solid var(--v2086-shell-border) !important;
+  box-shadow: var(--v2086-shell-shadow) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  overscroll-behavior: contain !important;
+  box-sizing: border-box !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .runtime-content > *,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen :is(.runtime-hero-card,.runtime-panel,.runtime-item-card,.shop-card,.mission-card,.gear-card,.dex-card,.ranking-panel,.v204-window-card,.v204-inventory-shell,.v204-map-shell,.v204-quest-board,.shop-list,.mission-list,.gear-grid,.dex-grid,.v206-inventory-dashboard,.v206-catch-ledger,.v2074-sale-ledger,.v2074-dex-growth,.v2076-expedition-card) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen :is(.runtime-card-list,.runtime-region-grid,.shop-list,.mission-list,.gear-grid,.dex-grid,.v204-inventory-grid,.v206-inventory-grid,.v2074-sale-grid,.v2076-expedition-candidates) {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)) !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+  min-width: 0 !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen :is(.runtime-hero-card,.runtime-panel,.runtime-item-card,.shop-card,.mission-card,.gear-card,.dex-card,.region-card,.ranking-panel) {
+  border-radius: 20px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(221,248,255,.76)) !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.9), rgba(221,248,255,.76)) !important;
+  border: 1px solid rgba(255,255,255,.66) !important;
+  box-shadow: 0 10px 22px rgba(0, 69, 103, .12) !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .v2059-menu-close,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .v2084-close-button {
+  position: fixed !important;
+  top: calc(max(8px, env(safe-area-inset-top)) + 7px) !important;
+  right: calc(max(10px, env(safe-area-inset-right)) + 10px) !important;
+  width: var(--v2086-close-size) !important;
+  height: var(--v2086-close-size) !important;
+  min-width: var(--v2086-close-size) !important;
+  min-height: var(--v2086-close-size) !important;
+  z-index: 8 !important;
+  border-radius: 999px !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button) {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background: linear-gradient(180deg, #ffffff 0%, #dff9ff 52%, #b9f0ff 100%) !important;
+  background-image: linear-gradient(180deg, #ffffff 0%, #dff9ff 52%, #b9f0ff 100%) !important;
+  border: 1px solid rgba(255,255,255,.78) !important;
+  box-shadow: 0 7px 14px rgba(0, 101, 135, .13) !important;
+  outline: 0 !important;
+  color: #04435e !important;
+  -webkit-text-fill-color: #04435e !important;
+  text-shadow: none !important;
+  background-clip: border-box !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  touch-action: manipulation !important;
+}
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button)::before,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] :is(.runtime-menu-screen,.village-world-screen) :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2051-loop-body button,.v2076-expedition-actions button,.v2076-route-card button)::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .village-world-screen.v2086-surgical-village-screen .v2086-slim-village-hud,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .village-world-screen.v2086-surgical-village-screen .v2-village-hud {
+  width: min(208px, calc(100vw - 128px)) !important;
+  min-width: 0 !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  padding: 5px 7px !important;
+  border-radius: 19px !important;
+  overflow: hidden !important;
+  background: var(--v2086-shell) !important;
+  background-image: var(--v2086-shell) !important;
+  border: 1px solid var(--v2086-shell-border) !important;
+  box-shadow: var(--v2086-shell-shadow) !important;
+}
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .village-world-screen.v2086-surgical-village-screen .v2086-village-profile-chip,
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .village-world-screen.v2086-surgical-village-screen .v2-profile-chip {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: 34px minmax(0, 1fr) !important;
+  grid-template-rows: 18px 18px !important;
+  gap: 0 7px !important;
+  align-items: center !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-align: left !important;
+}
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .village-world-screen.v2086-surgical-village-screen .v2-profile-chip span {
+  grid-row: 1 / span 2 !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 13px !important;
+  font-size: 10px !important;
+  background: linear-gradient(180deg, #ffffff, #cdf7ff) !important;
+  border: 1px solid rgba(255,255,255,.82) !important;
+}
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .village-world-screen.v2086-surgical-village-screen .v2-profile-chip strong {
+  font-size: 15px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .village-world-screen.v2086-surgical-village-screen .v2-profile-chip em {
+  font-size: 10px !important;
+  line-height: 1 !important;
+  color: var(--v2086-muted) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] body:is(.v2086-modal-open,.v2085-modal-open,.v2084-popup-open,.v2032-character-panel-open,.v2040-interior-open,.v2041-interior-open,.v2042-interior-open,.v2043-interior-open,.v2044-interior-open) .v2050-expedition-board.v2075-expedition-dock {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+@media (max-width: 480px), (max-height: 760px) {
+  html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen {
+    grid-template-rows: 46px minmax(0, 1fr) !important;
+    gap: 7px !important;
+    padding-top: calc(max(6px, env(safe-area-inset-top)) + 2px) !important;
+  }
+  html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .runtime-hud {
+    height: 46px !important;
+    min-height: 46px !important;
+    max-height: 46px !important;
+    padding-right: calc(var(--v2086-close-size) + 8px) !important;
+  }
+  html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .runtime-title em {
+    display: none !important;
+  }
+  html[data-v2086-ui-shell-surgery="v2086-ui-shell-surgery"] .runtime-menu-screen.v2086-surgical-menu-screen .runtime-content {
+    max-height: calc(100svh - max(6px, env(safe-area-inset-top)) - max(76px, env(safe-area-inset-bottom) + 68px) - 55px) !important;
+    padding: 10px !important;
+  }
+}
