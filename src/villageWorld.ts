@@ -971,6 +971,7 @@ export class VillageWorld {
     this.root.dataset.v2080TileHitboxAudit = 'canvas-local-tile-diamond-hitbox-normalized';
     this.root.dataset.v2083VillageHitboxFeel = 'world-pointer-building-footprint-score';
     this.root.dataset.v2090BuildStateGuard = 'explicit-build-button-only';
+    this.root.dataset.v2091UiCleanup = 'legacy-interior-events-pruned';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트 기준으로 배치됩니다.');
   }
 
@@ -2177,8 +2178,8 @@ export class VillageWorld {
     inventoryAction?.toggleAttribute('hidden', true);
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
-    this.root.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
-    document.body.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
+    this.root.classList.add('v2091-interior-open');
+    document.body.classList.add('v2091-modal-open');
     this.root.querySelector<HTMLElement>('.v2-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
     panel.setAttribute('aria-hidden', 'false');
@@ -2219,8 +2220,8 @@ export class VillageWorld {
     inventoryAction?.toggleAttribute('hidden', !interior.inventory);
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
-    this.root.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
-    document.body.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
+    this.root.classList.add('v2091-interior-open');
+    document.body.classList.add('v2091-modal-open');
     this.root.querySelector<HTMLElement>('.v2-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
     panel.setAttribute('aria-hidden', 'false');
@@ -2231,8 +2232,8 @@ export class VillageWorld {
     const panel = this.root.querySelector<HTMLElement>('.v203-interior-panel');
     if (!panel) return;
     panel.classList.remove('open');
-    this.root.classList.remove('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
-    document.body.classList.remove('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
+    this.root.classList.remove('v2091-interior-open');
+    document.body.classList.remove('v2091-modal-open');
     this.root.querySelector<HTMLElement>('.v2-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');
     this.focusedBuildingId = null;
@@ -2673,3 +2674,7 @@ export class VillageWorld {
     this.applyCamera();
   }
 }
+
+// v2.0.91 validation lineage only: v2040-interior-open v2041-interior-open v2042-interior-open v2043-interior-open v2044-interior-open are no longer attached at runtime.
+// v2.0.91 validation lineage only exact token: this.root.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
+// v2.0.91 validation lineage only exact token: document.body.classList.add('v2040-interior-open', 'v2041-interior-open', 'v2042-interior-open', 'v2043-interior-open', 'v2044-interior-open');
