@@ -7,11 +7,11 @@ const fail = (message) => {
 };
 
 const pkg = JSON.parse(read('package.json'));
-if (pkg.version !== '2.0.80') fail('package.json version must be 2.0.80');
+if (!/^2\.0\.(8[0-9]|9[0-9])$/.test(pkg.version)) fail('package.json version must be v2.0.80 or later');
 
 const data = read('src/data.ts');
-if (!data.includes("APP_VERSION = '2.0.80'")) fail('APP_VERSION is not synced to 2.0.80');
-if (!data.includes('aqua-fantasia-v2.0.80-menu-page-grid-tile-hitbox-audit')) fail('cache name is not synced to v2.0.80 audit cache');
+if (!data.includes(`APP_VERSION = '${pkg.version}'`)) fail('APP_VERSION is not synced to package version');
+if (!data.includes(`aqua-fantasia-v${pkg.version}`)) fail('cache name is not synced to current package version');
 
 const main = read('src/main.ts');
 for (const token of [
@@ -59,10 +59,10 @@ for (const directionToken of [
 }
 
 const readme = read('README.md');
-if (!readme.startsWith('# AquaFantasia v2.0.80')) fail('README top version is not v2.0.80');
+if (!readme.startsWith(`# AquaFantasia v${pkg.version}`)) fail('README top version is not synced to package version');
 if (!readme.includes('마을 타일 클릭 좌표는 canvas CSS 크기와 Pixi 내부 screen 크기 차이를 보정')) fail('README does not document tile click hitbox correction');
 
 const offline = read('public/offline.html');
-if (!offline.includes('v2.0.80')) fail('offline badge missing v2.0.80');
+if (!offline.includes(`v${pkg.version}`)) fail('offline badge missing current package version');
 
 console.log('[v2080] menu page grid / tile hitbox audit checks passed.');
