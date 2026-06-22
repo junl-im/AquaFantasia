@@ -35858,3 +35858,320 @@ html[data-v2092-ui-stable="v2092-live-ui-canonical"] .village-world-screen :is(.
   html[data-v2092-ui-stable="v2092-live-ui-canonical"] .v2092-expedition-board { width: min(204px, calc(100vw - 82px)) !important; min-width: 176px !important; }
   html[data-v2092-ui-stable="v2092-live-ui-canonical"] .v2092-hud-title em { display: none !important; }
 }
+
+/* v2.0.93 UI canonical hardening pass: one live shell, legacy UI markers inactive */
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] {
+  --v2093-ink: #07374b;
+  --v2093-muted: rgba(7, 55, 75, .68);
+  --v2093-border: rgba(94, 198, 224, .34);
+  --v2093-card: linear-gradient(180deg, rgba(246, 254, 255, .96), rgba(213, 246, 255, .92));
+  --v2093-shell: linear-gradient(180deg, rgba(255,255,255,.94), rgba(222,248,255,.88));
+  --v2093-dim: radial-gradient(circle at 50% 0%, rgba(103, 218, 255, .22), transparent 42%), rgba(7, 25, 42, .48);
+  --v2093-shadow: 0 18px 42px rgba(13, 91, 124, .22), inset 0 1px 0 rgba(255,255,255,.85);
+  --v2093-close: 40px;
+  --v2093-hud-top: max(8px, env(safe-area-inset-top));
+  --v2093-hud-h: 44px;
+}
+
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-ui-stable-village-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  overflow: hidden !important;
+  background: #072033 !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-village-hud {
+  position: fixed !important;
+  top: var(--v2093-hud-top) !important;
+  left: max(10px, env(safe-area-inset-left)) !important;
+  right: auto !important;
+  width: min(390px, calc(100vw - 96px)) !important;
+  height: var(--v2093-hud-h) !important;
+  min-height: var(--v2093-hud-h) !important;
+  max-height: var(--v2093-hud-h) !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  align-items: center !important;
+  padding: 4px 7px !important;
+  border-radius: 22px !important;
+  border: 1px solid var(--v2093-border) !important;
+  background: var(--v2093-shell) !important;
+  background-image: var(--v2093-shell) !important;
+  box-shadow: var(--v2093-shadow) !important;
+  z-index: 760 !important;
+  overflow: hidden !important;
+  color: var(--v2093-ink) !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-profile-chip {
+  width: 100% !important;
+  height: 36px !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  display: grid !important;
+  grid-template-columns: minmax(74px, max-content) minmax(0, 1fr) minmax(68px, max-content) !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 0 8px !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  color: var(--v2093-ink) !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-profile-chip :is(span,strong,em) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-profile-chip span {
+  min-width: 74px !important;
+  padding: 6px 9px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(90,196,224,.32) !important;
+  background: rgba(255,255,255,.58) !important;
+  font-size: 12px !important;
+  font-weight: 1000 !important;
+  text-align: center !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-profile-chip strong { font-size: 14px !important; font-weight: 1000 !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-profile-chip em { font-size: 11px !important; font-weight: 900 !important; color: var(--v2093-muted) !important; text-align: right !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2-wallet-row,
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2-milestone-line,
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-hidden-metrics { display: none !important; }
+
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-expedition-board {
+  position: fixed !important;
+  top: calc(var(--v2093-hud-top) + var(--v2093-hud-h) + 4px) !important;
+  left: max(14px, env(safe-area-inset-left)) !important;
+  width: min(238px, calc(100vw - 116px)) !important;
+  min-width: min(210px, calc(100vw - 116px)) !important;
+  max-width: 238px !important;
+  height: 30px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  z-index: 755 !important;
+  pointer-events: auto !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] body.v2093-modal-open .v2093-expedition-board:not(.open) { display: none !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-expedition-toggle {
+  width: 100% !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  display: grid !important;
+  grid-template-columns: auto auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 0 10px !important;
+  border-radius: 999px !important;
+  border: 1px solid var(--v2093-border) !important;
+  background: var(--v2093-shell) !important;
+  background-image: var(--v2093-shell) !important;
+  box-shadow: 0 10px 22px rgba(13, 91, 124, .18), inset 0 1px 0 rgba(255,255,255,.86) !important;
+  overflow: hidden !important;
+  color: var(--v2093-ink) !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-expedition-toggle :is(span,strong,em) { min-width: 0 !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; line-height: 1 !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-expedition-toggle span,
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-expedition-toggle strong { font-size: 12px !important; font-weight: 1000 !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-expedition-toggle em { font-size: 10px !important; color: var(--v2093-muted) !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-expedition-board.open .v2093-expedition-toggle { display: none !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-expedition-body {
+  display: none !important;
+  position: fixed !important;
+  top: calc(var(--v2093-hud-top) + var(--v2093-hud-h) + 10px) !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  width: auto !important;
+  max-width: min(560px, calc(100vw - 24px)) !important;
+  min-height: min(360px, calc(100svh - 190px)) !important;
+  max-height: calc(100svh - var(--v2093-hud-top) - var(--v2093-hud-h) - 92px) !important;
+  margin: 0 auto !important;
+  padding: 48px 14px 16px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  border-radius: 28px !important;
+  border: 1px solid var(--v2093-border) !important;
+  background: var(--v2093-card) !important;
+  background-image: var(--v2093-card) !important;
+  box-shadow: var(--v2093-shadow) !important;
+  z-index: 880 !important;
+  color: var(--v2093-ink) !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-expedition-body.v2093-expedition-body-open { display: grid !important; align-content: start !important; gap: 12px !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-expedition-body > * { min-width: 0 !important; max-width: 100% !important; box-sizing: border-box !important; }
+
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-ui-stable-menu-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  display: grid !important;
+  grid-template-rows: 44px minmax(0, 1fr) !important;
+  gap: 8px !important;
+  padding: calc(max(8px, env(safe-area-inset-top)) + 4px) max(10px, env(safe-area-inset-right)) calc(84px + max(8px, env(safe-area-inset-bottom))) max(10px, env(safe-area-inset-left)) !important;
+  overflow: hidden !important;
+  background: #052136 !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-ui-stable-menu-screen::before,
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-aqua-dim,
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] :is(.v2017-character-panel[aria-hidden="false"],.v2017-character-panel.open,.v203-interior-panel[aria-hidden="false"],.v203-interior-panel.open)::before {
+  content: '' !important;
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background: var(--v2093-dim) !important;
+  backdrop-filter: blur(8px) saturate(1.12) !important;
+  z-index: 0 !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-runtime-hud,
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-menu-content,
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-menu-close { position: relative !important; z-index: 2 !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-runtime-hud {
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  width: min(420px, calc(100vw - 68px)) !important;
+  padding: 4px 7px !important;
+  display: grid !important;
+  grid-template-columns: 32px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 8px !important;
+  border-radius: 20px !important;
+  border: 1px solid var(--v2093-border) !important;
+  background: var(--v2093-shell) !important;
+  background-image: var(--v2093-shell) !important;
+  box-shadow: var(--v2093-shadow) !important;
+  overflow: hidden !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-hud-avatar { width: 32px !important; height: 32px !important; min-width: 32px !important; min-height: 32px !important; padding: 0 !important; border-radius: 50% !important; overflow: hidden !important; background: rgba(255,255,255,.54) !important; border: 1px solid rgba(255,255,255,.72) !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-hud-avatar img { width: 100% !important; height: 100% !important; display: block !important; object-fit: cover !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-hud-title { min-width: 0 !important; display: grid !important; grid-template-columns: minmax(0, 1fr) auto !important; grid-template-rows: 15px 17px !important; gap: 0 8px !important; align-items: center !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-hud-title :is(span,strong,em) { min-width: 0 !important; max-width: 100% !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; line-height: 1 !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-hud-title span { grid-column: 1 !important; grid-row: 1 !important; font-size: 11px !important; font-weight: 1000 !important; color: var(--v2093-muted) !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-hud-title strong { grid-column: 1 !important; grid-row: 2 !important; font-size: 15px !important; font-weight: 1000 !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-hud-title em { grid-column: 2 !important; grid-row: 1 / span 2 !important; max-width: 80px !important; font-size: 10px !important; color: var(--v2093-muted) !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-menu-content {
+  min-height: 0 !important;
+  width: 100% !important;
+  max-width: min(580px, calc(100vw - 20px)) !important;
+  justify-self: center !important;
+  padding: 14px !important;
+  display: grid !important;
+  align-content: start !important;
+  gap: 12px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  border-radius: 28px !important;
+  border: 1px solid var(--v2093-border) !important;
+  background: var(--v2093-card) !important;
+  background-image: var(--v2093-card) !important;
+  box-shadow: var(--v2093-shadow) !important;
+  box-sizing: border-box !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-menu-content > *,
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-menu-content :is(.runtime-hero-card,.runtime-panel,.runtime-card-list,.runtime-region-grid,.shop-list,.mission-list,.dex-grid,.gear-grid,.v204-inventory-grid,.v206-inventory-dashboard,.v204-quest-board,.v206-route-ready,.v2076-expedition-candidates) {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-menu-content :is(.runtime-card-list,.shop-list,.mission-list,.dex-grid,.gear-grid,.runtime-region-grid,.v204-inventory-grid,.v206-inventory-dashboard,.v206-route-ready,.v2076-expedition-candidates) {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 216px), 1fr)) !important;
+  gap: 12px !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-menu-content :is(.mission-list,.v204-quest-board) { grid-template-columns: 1fr !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-menu-content :is(.runtime-hero-card,.runtime-panel,.runtime-item-card,.gear-card,.shop-card,.mission-card,.dex-card,.runtime-dex-card,.v204-window-card,.ranking-panel) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(91, 196, 225, .27) !important;
+  background: rgba(255,255,255,.5) !important;
+  background-image: none !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.72), 0 8px 20px rgba(30, 118, 150, .1) !important;
+  color: var(--v2093-ink) !important;
+  overflow: hidden !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-menu-close,
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-ui-close {
+  width: var(--v2093-close) !important;
+  height: var(--v2093-close) !important;
+  min-width: var(--v2093-close) !important;
+  min-height: var(--v2093-close) !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 999px !important;
+  border: 1px solid var(--v2093-border) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(210,245,255,.96)) !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.98), rgba(210,245,255,.96)) !important;
+  box-shadow: 0 12px 28px rgba(28, 118, 150, .18), inset 0 1px 0 rgba(255,255,255,.9) !important;
+  color: var(--v2093-ink) !important;
+  font-size: 21px !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  text-decoration: none !important;
+  z-index: 980 !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-menu-close { position: fixed !important; top: calc(max(8px, env(safe-area-inset-top)) + 6px) !important; right: calc(max(10px, env(safe-area-inset-right)) + 6px) !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] :is(.v2017-character-card,.v203-interior-card,.v2-build-tray,.v2093-expedition-body) > .v2093-ui-close,
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2-build-title > .v2093-ui-close { position: absolute !important; top: 12px !important; right: 12px !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-card,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2076-expedition-actions button,.v2076-route-card button)::before,
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-card,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2076-expedition-actions button,.v2076-route-card button)::after { content: none !important; display: none !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost,.v2017-character-actions button,.v203-interior-actions button,.v2041-name-editor button,.v2-build-grid button,.v2076-expedition-actions button,.v2076-route-card button):not(.v2093-ui-close):not(.v2093-menu-close):not(.v2093-expedition-toggle) {
+  appearance: none !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.92), rgba(211,244,255,.88)) !important;
+  color: var(--v2093-ink) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.76), 0 8px 18px rgba(29,112,150,.12) !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2017-character-panel[aria-hidden="false"],
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2017-character-panel.open,
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v203-interior-panel[aria-hidden="false"],
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v203-interior-panel.open {
+  position: fixed !important;
+  inset: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(92px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)) !important;
+  background: var(--v2093-dim) !important;
+  backdrop-filter: blur(8px) saturate(1.12) !important;
+  z-index: 900 !important;
+  overflow: hidden !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] :is(.v2017-character-card,.v203-interior-card,.v2-build-tray) {
+  position: relative !important;
+  width: min(560px, calc(100vw - 24px)) !important;
+  max-width: min(560px, calc(100vw - 24px)) !important;
+  max-height: calc(100svh - 120px) !important;
+  padding: 48px 16px 16px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  border-radius: 28px !important;
+  border: 1px solid var(--v2093-border) !important;
+  background: var(--v2093-card) !important;
+  background-image: var(--v2093-card) !important;
+  box-shadow: var(--v2093-shadow) !important;
+  color: var(--v2093-ink) !important;
+}
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v203-interior-actions [data-v203-interior-close] { display: none !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2-build-tray,
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2-build-backdrop { display: none !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2-build-tray-open .v2-build-backdrop { display: block !important; position: fixed !important; inset: 0 !important; background: var(--v2093-dim) !important; z-index: 885 !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2-build-tray-open .v2-build-tray { display: grid !important; position: fixed !important; inset: auto max(12px, env(safe-area-inset-right)) max(90px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)) !important; z-index: 900 !important; }
+html[data-v2093-ui-stable="v2093-live-ui-canonical"] .village-world-screen :is(.v2-world-controls,[data-village-shop],[data-village-build-open],[data-village-fishing]) { pointer-events: auto !important; touch-action: manipulation !important; }
+@media (max-width: 430px) {
+  html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-village-hud { width: calc(100vw - 84px) !important; }
+  html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-profile-chip { grid-template-columns: minmax(70px, max-content) minmax(0, 1fr) minmax(54px, max-content) !important; gap: 5px !important; }
+  html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-profile-chip em { font-size: 10px !important; }
+  html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-expedition-board { width: min(218px, calc(100vw - 98px)) !important; min-width: min(190px, calc(100vw - 98px)) !important; }
+  html[data-v2093-ui-stable="v2093-live-ui-canonical"] .v2093-hud-title em { display: none !important; }
+}
