@@ -31985,3 +31985,460 @@ html[data-v2081-aqua-ui-root-repair="v2081-aqua-ui-root-repair"] .v2081-hud-over
     max-height: calc(100svh - max(8px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom)) - 204px) !important;
   }
 }
+
+/* v2.0.82 Menu Fixed Layout Separation
+   Purpose: stop shared menu/HUD/card CSS from fighting across pages by adding a final,
+   page-scoped layout layer. Fishing is excluded because it is a full-screen playfield. */
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] {
+  --v2082-menu-max: min(930px, calc(100vw - max(20px, env(safe-area-inset-left)) - max(20px, env(safe-area-inset-right))));
+  --v2082-card-gap: clamp(10px, 2.4vw, 16px);
+  --v2082-card-radius: 28px;
+  --v2082-card-bg: linear-gradient(180deg, rgba(255,255,255,.97), rgba(213,250,255,.90) 54%, rgba(143,234,250,.80));
+  --v2082-card-border: rgba(116, 226, 251, .66);
+  --v2082-ink: #043a55;
+  --v2082-muted: rgba(4, 58, 85, .72);
+  --v2082-shadow: 0 20px 54px rgba(0, 64, 106, .20), inset 0 2px 0 rgba(255,255,255,.88);
+  --v2082-button: linear-gradient(180deg, #fbffff, #a8f2ff 54%, #4ed1ea);
+  --v2082-gold: linear-gradient(180deg, #fff9c8, #ffd868 60%, #efa634);
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen {
+  width: 100vw !important;
+  height: 100svh !important;
+  min-height: 100svh !important;
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) !important;
+  align-items: stretch !important;
+  justify-items: center !important;
+  gap: var(--v2082-card-gap) !important;
+  padding: calc(max(12px, env(safe-area-inset-top)) + 8px) max(12px, env(safe-area-inset-left)) calc(96px + max(12px, env(safe-area-inset-bottom))) max(12px, env(safe-area-inset-right)) !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  color: var(--v2082-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  isolation: isolate !important;
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="fishing"] .runtime-menu-screen.v2082-menu-fixed-layout-screen {
+  display: block !important;
+  padding: 0 !important;
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-menu-dim,
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen::before {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  background: radial-gradient(circle at 50% 5%, rgba(175, 248, 255, .22), transparent 34%), rgba(2, 24, 46, .43) !important;
+  backdrop-filter: blur(9px) saturate(1.08) !important;
+  -webkit-backdrop-filter: blur(9px) saturate(1.08) !important;
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="fishing"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-menu-dim,
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="fishing"] .runtime-menu-screen.v2082-menu-fixed-layout-screen::before {
+  display: none !important;
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-runtime-hud {
+  grid-row: 1 !important;
+  width: var(--v2082-menu-max) !important;
+  max-width: var(--v2082-menu-max) !important;
+  min-width: 0 !important;
+  min-height: 126px !important;
+  max-height: 174px !important;
+  display: grid !important;
+  grid-template-columns: 58px minmax(0, 1fr) !important;
+  grid-template-rows: auto auto !important;
+  grid-template-areas: "avatar title" "wallet wallet" !important;
+  align-items: center !important;
+  gap: 9px 12px !important;
+  padding: 13px 58px 13px 15px !important;
+  border-radius: 30px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  background: var(--v2082-card-bg) !important;
+  background-image: var(--v2082-card-bg) !important;
+  border: 1px solid var(--v2082-card-border) !important;
+  box-shadow: var(--v2082-shadow) !important;
+  z-index: 20 !important;
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-hud-mascot {
+  grid-area: avatar !important;
+  width: 56px !important;
+  height: 56px !important;
+  min-width: 56px !important;
+  min-height: 56px !important;
+  object-fit: contain !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(173,241,255,.72)) !important;
+  border-radius: 21px !important;
+  border: 1px solid rgba(255,255,255,.78) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.88) !important;
+  padding: 2px !important;
+  overflow: hidden !important;
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-hud-title {
+  grid-area: title !important;
+  min-width: 0 !important;
+  display: grid !important;
+  grid-template-rows: auto auto auto !important;
+  gap: 2px !important;
+  align-content: center !important;
+  overflow: hidden !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-hud-title span,
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-hud-title strong,
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-hud-title em {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  line-height: 1.08 !important;
+  margin: 0 !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-hud-title strong {
+  font-size: clamp(24px, 6.2vw, 38px) !important;
+  letter-spacing: -.045em !important;
+  color: #053d5c !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-hud-title em {
+  font-size: clamp(11px, 2.8vw, 14px) !important;
+  font-style: normal !important;
+  color: var(--v2082-muted) !important;
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-hud-wallet {
+  grid-area: wallet !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+  align-items: stretch !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-hud-wallet span {
+  min-width: 0 !important;
+  height: 31px !important;
+  min-height: 31px !important;
+  display: grid !important;
+  grid-template-columns: 18px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 0 9px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.72) !important;
+  border: 1px solid rgba(94, 203, 227, .34) !important;
+  color: #06405d !important;
+  font-size: clamp(10px, 2.7vw, 12px) !important;
+  font-weight: 1000 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-hud-wallet img {
+  width: 18px !important;
+  height: 18px !important;
+  object-fit: contain !important;
+  background: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  padding: 0 !important;
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-menu-content {
+  grid-row: 2 !important;
+  width: var(--v2082-menu-max) !important;
+  max-width: var(--v2082-menu-max) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: var(--v2082-card-gap) !important;
+  padding: 16px !important;
+  padding-bottom: calc(28px + max(12px, env(safe-area-inset-bottom))) !important;
+  border-radius: 31px !important;
+  background: var(--v2082-card-bg) !important;
+  background-image: var(--v2082-card-bg) !important;
+  border: 1px solid var(--v2082-card-border) !important;
+  box-shadow: var(--v2082-shadow) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+  touch-action: pan-y !important;
+  box-sizing: border-box !important;
+  z-index: 15 !important;
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-menu-content > * {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.runtime-hero-card,.v2082-hero-card) {
+  display: grid !important;
+  grid-template-columns: 64px minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-height: 92px !important;
+  padding: 14px !important;
+  border-radius: 26px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.82), rgba(211,249,255,.66)) !important;
+  border: 1px solid rgba(116, 226, 251, .48) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.82) !important;
+  overflow: hidden !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.runtime-hero-card,.v2082-hero-card) > img {
+  width: 58px !important;
+  height: 58px !important;
+  object-fit: contain !important;
+  align-self: center !important;
+  justify-self: center !important;
+  background: none !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.runtime-hero-card,.v2082-hero-card) > div {
+  min-width: 0 !important;
+  display: grid !important;
+  gap: 3px !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.runtime-hero-card,.v2082-hero-card) h2,
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.runtime-hero-card,.v2082-hero-card) p,
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.runtime-hero-card,.v2082-hero-card) span {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.runtime-hero-card,.v2082-hero-card) p {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+  line-height: 1.34 !important;
+  color: var(--v2082-muted) !important;
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.runtime-card-list,.runtime-region-grid,.runtime-item-grid,.runtime-dex-grid,.shop-list,.mission-list,.gear-grid,.dex-grid,.v204-inventory-grid,.v206-inventory-dashboard,.v2074-sale-grid,.v206-route-ready,.v2074-dex-growth,.ranking-stats-grid) {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  display: grid !important;
+  gap: 12px !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-inventory-layout :is(.v204-inventory-grid,.v206-inventory-dashboard) { grid-template-columns: repeat(auto-fit, minmax(138px, 1fr)) !important; }
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-map-layout :is(.v206-route-ready,.v2076-expedition-candidates) { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important; }
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-mission-layout :is(.mission-list,.v204-quest-board) { grid-template-columns: 1fr !important; }
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-shop-layout .shop-list { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)) !important; }
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-gear-layout .gear-grid { grid-template-columns: repeat(auto-fit, minmax(218px, 1fr)) !important; }
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-dex-layout .dex-grid { grid-template-columns: repeat(auto-fit, minmax(146px, 1fr)) !important; }
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.runtime-item-card,.gear-card,.shop-card,.mission-card,.dex-card,.runtime-dex-card,.v204-window-card,.v206-route-ready article,.v2074-dex-growth article,.ranking-panel,.runtime-panel) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  border-radius: 22px !important;
+  overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost) {
+  min-width: 0 !important;
+  min-height: 38px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  gap: 4px !important;
+  padding: 8px 13px !important;
+  border-radius: 999px !important;
+  background: var(--v2082-button) !important;
+  background-image: var(--v2082-button) !important;
+  border: 1px solid rgba(255,255,255,.74) !important;
+  box-shadow: 0 8px 18px rgba(0, 114, 145, .16), inset 0 1px 0 rgba(255,255,255,.86) !important;
+  color: #04445f !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+  white-space: normal !important;
+  line-height: 1.1 !important;
+  overflow: hidden !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost)::before,
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(button,.runtime-btn,.image-btn,.compact-cta,.shop-price,.btn-aqua-action,.btn-gold-cost)::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.btn-gold-cost,.runtime-btn.gold,.shop-price) {
+  background: var(--v2082-gold) !important;
+  background-image: var(--v2082-gold) !important;
+  color: #5b3200 !important;
+}
+
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.v950-item-orb,.v950-shop-card > img,.dex-card > img,.runtime-item-card > img,.gear-card img,.shop-card img,.v206-inventory-dashboard img) {
+  background: none !important;
+  background-image: none !important;
+  object-fit: contain !important;
+  overflow: hidden !important;
+  clip-path: inset(0 round 18px) !important;
+}
+
+/* Village HUD and expedition bar: keep the good border, fix internal placement and add a real breathing gap. */
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="village"] .v2082-hud-menu-layout-screen .v2-village-hud {
+  display: grid !important;
+  grid-template-rows: auto auto auto !important;
+  align-items: stretch !important;
+  gap: 6px !important;
+  width: min(318px, calc(100vw - 96px)) !important;
+  min-width: 0 !important;
+  padding: 9px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="village"] .v2082-hud-menu-layout-screen .v2-profile-chip {
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr) !important;
+  grid-template-rows: auto auto !important;
+  align-items: center !important;
+  gap: 2px 8px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="village"] .v2082-hud-menu-layout-screen .v2-profile-chip span {
+  grid-row: 1 / span 2 !important;
+  width: 48px !important;
+  height: 38px !important;
+  min-width: 48px !important;
+  min-height: 38px !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="village"] .v2082-hud-menu-layout-screen .v2-profile-chip strong,
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="village"] .v2082-hud-menu-layout-screen .v2-profile-chip em {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="village"] .v2082-hud-menu-layout-screen .v2-wallet-row {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="village"] .v2082-hud-menu-layout-screen .v2-wallet-row span {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="village"] .v2082-hud-menu-layout-screen .v2050-expedition-board.v2075-expedition-dock {
+  top: calc(max(7px, env(safe-area-inset-top)) + 124px) !important;
+  left: max(14px, env(safe-area-inset-left)) !important;
+  width: min(142px, calc(100vw - 160px)) !important;
+  min-width: 122px !important;
+  max-width: 142px !important;
+  z-index: 190 !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="village"] .v2082-hud-menu-layout-screen .v2075-expedition-toggle {
+  height: 27px !important;
+  min-height: 27px !important;
+  max-width: 142px !important;
+  padding: 0 10px !important;
+  font-size: 9.5px !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body.v2082-expedition-panel-open .v2082-hud-menu-layout-screen .v2050-expedition-board.v2075-expedition-dock .v2075-expedition-toggle,
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body.v2082-expedition-panel-open .v2082-hud-menu-layout-screen .v2050-expedition-board.v2075-expedition-dock:not(.open) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body.v2082-expedition-panel-open .v2082-hud-menu-layout-screen .v2051-expedition-mini.open .v2051-loop-body {
+  top: calc(max(7px, env(safe-area-inset-top)) + 124px) !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  z-index: 820 !important;
+  max-height: calc(100svh - max(7px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom)) - 210px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  touch-action: pan-y !important;
+}
+html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body:is(.v2032-character-panel-open,.v2040-interior-open,.v2041-interior-open,.v2042-interior-open,.v2043-interior-open,.v2044-interior-open,.v2082-expedition-panel-open) .v2082-hud-menu-layout-screen .v2050-expedition-board.v2075-expedition-dock:not(.open) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+@media (max-width: 520px), (max-height: 760px) {
+  html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen {
+    gap: 9px !important;
+    padding: calc(max(8px, env(safe-area-inset-top)) + 6px) max(8px, env(safe-area-inset-left)) calc(92px + max(10px, env(safe-area-inset-bottom))) max(8px, env(safe-area-inset-right)) !important;
+  }
+  html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-runtime-hud {
+    width: min(930px, calc(100vw - 16px)) !important;
+    max-width: calc(100vw - 16px) !important;
+    min-height: 128px !important;
+    padding: 11px 52px 11px 11px !important;
+    gap: 8px !important;
+  }
+  html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-hud-wallet {
+    grid-template-columns: 1fr !important;
+    gap: 5px !important;
+  }
+  html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen .v2082-menu-content {
+    width: min(930px, calc(100vw - 16px)) !important;
+    max-width: calc(100vw - 16px) !important;
+    border-radius: 27px !important;
+    padding: 12px !important;
+    padding-bottom: calc(30px + max(12px, env(safe-area-inset-bottom))) !important;
+  }
+  html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.runtime-hero-card,.v2082-hero-card) {
+    grid-template-columns: 52px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    padding: 12px !important;
+  }
+  html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.runtime-hero-card,.v2082-hero-card) > img {
+    width: 48px !important;
+    height: 48px !important;
+  }
+  html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-menu-fixed-layout-screen :is(.runtime-hero-card,.v2082-hero-card) > button {
+    grid-column: 1 / -1 !important;
+    justify-self: stretch !important;
+  }
+  html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-shop-layout .shop-list,
+  html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-gear-layout .gear-grid,
+  html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-dex-layout .dex-grid,
+  html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] .runtime-menu-screen.v2082-inventory-layout :is(.v204-inventory-grid,.v206-inventory-dashboard) {
+    grid-template-columns: 1fr !important;
+  }
+  html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="village"] .v2082-hud-menu-layout-screen .v2-village-hud {
+    width: min(302px, calc(100vw - 92px)) !important;
+  }
+  html[data-v2082-menu-fixed-layout="v2082-menu-fixed-layout"] body[data-screen="village"] .v2082-hud-menu-layout-screen .v2050-expedition-board.v2075-expedition-dock {
+    top: calc(max(7px, env(safe-area-inset-top)) + 128px) !important;
+    width: min(136px, calc(100vw - 142px)) !important;
+    min-width: 116px !important;
+  }
+}

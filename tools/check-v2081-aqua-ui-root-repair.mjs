@@ -9,14 +9,18 @@ const lock = JSON.parse(read('package-lock.json'));
 const offline = read('public/offline.html');
 const sw = read('public/sw.js');
 
+const versionNumber = Number(pkg.version.split('.').at(-1));
+const isAtLeast2081 = pkg.version.startsWith('2.0.') && versionNumber >= 81;
+const currentCachePrefix = `aqua-fantasia-v${pkg.version}-`;
+
 const required = [
-  [pkg.version === '2.0.81', 'package.json version must be 2.0.81'],
-  [lock.version === '2.0.81', 'package-lock root version must be 2.0.81'],
-  [lock.packages?.['']?.version === '2.0.81', 'package-lock package version must be 2.0.81'],
-  [data.includes("APP_VERSION = '2.0.81'"), 'APP_VERSION must be 2.0.81'],
-  [data.includes('aqua-fantasia-v2.0.81-aqua-ui-root-repair'), 'data cache name must be v2.0.81'],
-  [sw.includes('aqua-fantasia-v2.0.81-aqua-ui-root-repair'), 'service worker cache must be v2.0.81'],
-  [offline.includes('v2.0.81'), 'offline badge must mention v2.0.81'],
+  [isAtLeast2081, 'package.json version must be v2.0.81 or newer'],
+  [lock.version === pkg.version, 'package-lock root version must match package.json'],
+  [lock.packages?.['']?.version === pkg.version, 'package-lock package version must match package.json'],
+  [data.includes(`APP_VERSION = '${pkg.version}'`), 'APP_VERSION must match package.json'],
+  [data.includes(currentCachePrefix), 'data cache name must match current version'],
+  [sw.includes(currentCachePrefix), 'service worker cache must match current version'],
+  [offline.includes(`v${pkg.version}`), 'offline badge must mention current version'],
   [main.includes("dataset.v2081AquaUiRootRepair = 'v2081-aqua-ui-root-repair'"), 'html dataset v2081 marker missing'],
   [main.includes('v2081-aqua-menu-root-repair-screen'), 'runtime menu v2081 class missing'],
   [main.includes('v2081-hud-overlay-root-repair-screen'), 'village v2081 class missing'],

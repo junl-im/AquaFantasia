@@ -1,5 +1,5 @@
 // v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.0.81-aqua-ui-root-repair';
+const CACHE_NAME = 'aqua-fantasia-v2.0.82-menu-fixed-layout-separation';
 const PRECACHE = [
   "./",
   "./index.html",
