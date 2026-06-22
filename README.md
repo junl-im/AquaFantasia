@@ -1,4 +1,14 @@
-# AquaFantasia v2.0.82
+# AquaFantasia v2.0.83
+
+## v2.0.83 변경사항
+
+- 메뉴별 카드 디자인 고급화는 보류하고, 실제 마을 화면의 마을 클릭 좌표/타일/건물 히트박스 체감 보정에 집중했습니다.
+- 포인터 좌표 변환을 `pointerToStagePoint` / `pointerToWorldPoint` / `pointerHitFromEvent`로 분리해 캔버스 CSS 크기, Pixi screen 좌표, 카메라 좌표 변환을 한 곳에서 관리하도록 정리했습니다.
+- 핀치 줌 포인터도 캔버스 로컬 stage 좌표를 사용하도록 맞춰, 터치 확대/축소 후 클릭 위치가 어긋나는 느낌을 줄였습니다.
+- 건물 클릭 판정을 단순 타일 첫 후보 선택에서 실제 월드 좌표 기반 `buildingHitScore` 방식으로 바꿔, 겹친 히트박스에서 옆/우측 건물이 먼저 잡히는 문제를 완화했습니다.
+- 건물 상호작용 시 선택 마커와 이동 목표를 건물 전면 `buildingFocusTile` 기준으로 맞춰, 사용자가 누른 건물과 반응 위치가 더 자연스럽게 보이도록 조정했습니다.
+- `v2.0.83` 전용 검증 스크립트 `check-v2083-village-hitbox-feel.mjs`를 추가하고 validate에 연결했습니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge, README를 `2.0.83`으로 동기화했습니다.
 
 ## v2.0.82 변경사항
 

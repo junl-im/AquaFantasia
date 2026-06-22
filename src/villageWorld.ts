@@ -7,6 +7,8 @@ const TILE_H = 40;
 const BASE_SCALE = 0.86;
 const BUILDING_VISUAL_SCALE = 0.74;
 const BUILDING_COLLISION_FRONT_TRIM = 1;
+const BUILDING_HITBOX_FRONT_MARGIN = 1;
+const BUILDING_HITBOX_SIDE_MARGIN = 0.24;
 const TILE_ACTOR_GROUND_Y = 0.58;
 const TILE_DECOR_GROUND_Y = 0.66;
 const BUILDING_GROUND_BACKSET = 0.12;
@@ -53,6 +55,7 @@ type PointerTrack = {
 };
 
 type PointerPoint = { x: number; y: number };
+type VillagePointerHit = { x: number; y: number; worldX: number; worldY: number; screenX: number; screenY: number };
 
 type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse' | 'stall' | 'pottedPalm' | 'barrels' | 'coral' | 'crystal' | 'banner' | 'woodFence' | 'ropeFence' | 'bollard' | 'stairs' | 'bridge' | 'tropicalTree' | 'palmAlt' | 'stoneWall' | 'arch' | 'questBoard' | 'statue' | 'cherryTree' | 'mapleTree' | 'pineTree' | 'crystalTree' | 'flowerTree' | 'cypressTree' | 'dog' | 'sleepingDog' | 'cat' | 'walkingCat' | 'seagull' | 'flyingSeagull' | 'duck' | 'swimmingDuck' | 'butterflyBlue' | 'butterflyPink' | 'petals' | 'sparkles' | 'waterRing' | 'shoreFoam' | 'splash' | 'steam' | 'cookingPot' | 'goldLantern' | 'fishShadowSmall' | 'fishShadowMid' | 'fishShadowBig' | 'woodSign' | 'ropeWall' | 'stoneCorner' | 'stoneCurve' | 'wideStairs' | 'ropeCorner' | 'noticeBoard' | 'plazaStairs' | 'bridgeAsset';
 
@@ -966,6 +969,7 @@ export class VillageWorld {
     this.root.dataset.v2061LoopUiButtonAudit = 'stable-grounded-world-after-loop-ui-audit';
     this.root.dataset.v2062GroundContactAudit = 'shadow-foot-contact-no-floating-motion';
     this.root.dataset.v2080TileHitboxAudit = 'canvas-local-tile-diamond-hitbox-normalized';
+    this.root.dataset.v2083VillageHitboxFeel = 'world-pointer-building-footprint-score';
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트 기준으로 배치됩니다.');
   }
 
@@ -1607,7 +1611,7 @@ export class VillageWorld {
     const canvas = this.app.canvas;
     canvas.style.touchAction = 'none';
     canvas.addEventListener('pointerdown', (ev: PointerEvent) => {
-      this.activePointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+      this.activePointers.set(ev.pointerId, this.pointerToStagePoint(ev));
       canvas.setPointerCapture?.(ev.pointerId);
       if (this.activePointers.size >= 2) {
         this.pointer = undefined;
@@ -1618,7 +1622,7 @@ export class VillageWorld {
       if (this.selectedBuild) this.updatePreviewFromPointer(ev);
     });
     canvas.addEventListener('pointermove', (ev: PointerEvent) => {
-      if (this.activePointers.has(ev.pointerId)) this.activePointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+      if (this.activePointers.has(ev.pointerId)) this.activePointers.set(ev.pointerId, this.pointerToStagePoint(ev));
       if (this.activePointers.size >= 2) {
         this.updatePinchZoom();
         return;
@@ -1675,6 +1679,36 @@ export class VillageWorld {
 
   private screenToWorld(point: PointerPoint, scale = this.camera.scale): PointerPoint {
     return { x: (point.x - this.camera.x) / scale, y: (point.y - this.camera.y) / scale };
+  }
+
+  private pointerToStagePoint(ev: PointerEvent): PointerPoint {
+    if (!this.app) return { x: ev.clientX, y: ev.clientY };
+    const rect = this.app.canvas.getBoundingClientRect();
+    const scaleX = this.app.screen.width / Math.max(1, rect.width);
+    const scaleY = this.app.screen.height / Math.max(1, rect.height);
+    return {
+      x: (ev.clientX - rect.left) * scaleX,
+      y: (ev.clientY - rect.top) * scaleY,
+    };
+  }
+
+  private pointerToWorldPoint(ev: PointerEvent): PointerPoint {
+    return this.screenToWorld(this.pointerToStagePoint(ev), this.camera.scale);
+  }
+
+  private pointerHitFromEvent(ev: PointerEvent): VillagePointerHit {
+    const screen = this.pointerToStagePoint(ev);
+    const world = this.screenToWorld(screen, this.camera.scale);
+    // v2080 validation lineage: const tile = nearestDiamondTile(wx, wy);
+    const tile = nearestDiamondTile(world.x, world.y);
+    return {
+      x: safeIntegerTile(tile.x),
+      y: safeIntegerTile(tile.y),
+      worldX: world.x,
+      worldY: world.y,
+      screenX: screen.x,
+      screenY: screen.y,
+    };
   }
 
   private beginPinchZoom(): void {
@@ -1825,11 +1859,12 @@ export class VillageWorld {
   }
 
   private handlePointerTap(ev: PointerEvent): void {
-    const tile = this.tileFromPointer(ev);
-    if (!this.inBounds(tile.x, tile.y)) return;
+    const hit = this.pointerHitFromEvent(ev);
+    if (!this.inBounds(hit.x, hit.y)) return;
     if (this.selectedBuild) {
       const def = BUILD_DEFS[this.selectedBuild];
-      const origin = this.buildOriginFromPointerTile(tile.x, tile.y, def);
+      // v2043 validation lineage: const origin = this.buildOriginFromPointerTile(tile.x, tile.y, def)
+      const origin = this.buildOriginFromPointerTile(hit.x, hit.y, def);
       const ok = this.canPlace(origin.x, origin.y, def, this.movingBuildingId);
       this.updateBuildPreviewAtTile(origin.x, origin.y, true);
       this.showTileMarker(origin.x, origin.y, ok ? 0x35f08a : 0xff4747);
@@ -1837,20 +1872,22 @@ export class VillageWorld {
       else this.tryPlace(origin.x, origin.y, this.selectedBuild);
       return;
     }
-    this.showTileMarker(tile.x, tile.y, 0x6bdcff);
-    const npc = this.findNpcNear(tile.x, tile.y);
-    if (npc) {
-      this.movePlayerNear(tile.x, tile.y);
-      this.openDialogue(npc);
-      return;
-    }
-    const building = this.findBuildingNear(tile.x, tile.y);
+    const building = this.findBuildingNear(hit.x, hit.y, hit.worldX, hit.worldY);
     if (building) {
-      this.movePlayerNear(tile.x, tile.y);
+      const focus = this.buildingFocusTile(building);
+      this.showTileMarker(focus.x, focus.y, 0x6bdcff);
+      this.movePlayerNear(focus.x, focus.y);
       this.interactBuilding(building);
       return;
     }
-    this.movePlayerTo(tile.x, tile.y);
+    this.showTileMarker(hit.x, hit.y, 0x6bdcff);
+    const npc = this.findNpcNear(hit.x, hit.y);
+    if (npc) {
+      this.movePlayerNear(hit.x, hit.y);
+      this.openDialogue(npc);
+      return;
+    }
+    this.movePlayerTo(hit.x, hit.y);
   }
 
   private updatePreviewFromPointer(ev: PointerEvent): void {
@@ -1942,16 +1979,8 @@ export class VillageWorld {
   }
 
   private tileFromPointer(ev: PointerEvent): { x: number; y: number } {
-    if (!this.app) return { x: 0, y: 0 };
-    const rect = this.app.canvas.getBoundingClientRect();
-    const scaleX = this.app.screen.width / Math.max(1, rect.width);
-    const scaleY = this.app.screen.height / Math.max(1, rect.height);
-    const sx = (ev.clientX - rect.left) * scaleX;
-    const sy = (ev.clientY - rect.top) * scaleY;
-    const wx = (sx - this.camera.x) / this.camera.scale;
-    const wy = (sy - this.camera.y) / this.camera.scale;
-    const tile = nearestDiamondTile(wx, wy);
-    return { x: safeIntegerTile(tile.x), y: safeIntegerTile(tile.y) };
+    const hit = this.pointerHitFromEvent(ev);
+    return { x: hit.x, y: hit.y };
   }
 
   private beginMoveBuilding(building: VillageBuildingSave): void {
@@ -2055,15 +2084,42 @@ export class VillageWorld {
     return Boolean(building && x >= building.x && x < building.x + building.w && y >= building.y && y < building.y + building.h);
   }
 
-  private findBuildingNear(x: number, y: number): VillageBuildingSave | undefined {
-    const candidates = [...this.save.village.buildings].sort((a, b) => (b.y + b.h) - (a.y + a.h));
-    return candidates.find((b) => {
-      const baseLeft = footprintBaseLeftTile(b);
-      const insideFootprint = x >= b.x && x < b.x + b.w && y >= b.y && y < b.y + b.h;
-      const lowerLeftTouch = x >= baseLeft.x - 1 && x <= baseLeft.x + Math.max(1, Math.ceil(b.w * 0.58)) && y >= baseLeft.y - 1 && y <= baseLeft.y + 1;
-      const atFrontDoor = x >= baseLeft.x && x <= baseLeft.x + Math.max(1, Math.ceil(b.w * 0.48)) && y === b.y + b.h;
-      return lowerLeftTouch || atFrontDoor || insideFootprint;
-    });
+  private buildingFocusTile(building: Pick<VillageBuildingSave, 'x' | 'y' | 'w' | 'h'>): { x: number; y: number } {
+    return {
+      x: clamp(Math.round(building.x + building.w / 2 - 0.5), 1, MAP_SIZE - 2),
+      y: clamp(building.y + building.h, 1, MAP_SIZE - 2),
+    };
+  }
+
+  private buildingHitScore(building: VillageBuildingSave, x: number, y: number, worldX: number, worldY: number): number {
+    const def = BUILD_DEFS[building.type];
+    const insideFootprint = x >= building.x && x < building.x + building.w && y >= building.y && y < building.y + building.h;
+    const frontY = building.y + building.h;
+    const sideSlack = Math.max(0, Math.ceil(building.w * BUILDING_HITBOX_SIDE_MARGIN));
+    const atFrontDoor = y >= frontY - BUILDING_HITBOX_FRONT_MARGIN && y <= frontY + BUILDING_HITBOX_FRONT_MARGIN
+      && x >= building.x - sideSlack && x < building.x + building.w + sideSlack;
+    const lowerLeftTouch = atFrontDoor;
+    const propNear = def?.kind === 'prop' && Math.abs(x - this.buildingFocusTile(building).x) <= 1 && Math.abs(y - this.buildingFocusTile(building).y) <= 1;
+    if (!insideFootprint && !lowerLeftTouch && !propNear) return Number.POSITIVE_INFINITY;
+
+    const focus = this.buildingFocusTile(building);
+    const focusWorld = centerOfTile(focus.x, focus.y);
+    const footprintCenter = footprintGround(building.x, building.y, building.w, building.h);
+    const normalizedWorldDistance = Math.min(
+      Math.hypot(worldX - focusWorld.x, worldY - focusWorld.y) / TILE_W,
+      Math.hypot(worldX - footprintCenter.x, worldY - footprintCenter.y) / TILE_W,
+    );
+    const tileDistance = insideFootprint ? 0 : Math.abs(x - focus.x) + Math.abs(y - focus.y);
+    const depthPenalty = Math.max(0, building.y - y) * 0.015;
+    return normalizedWorldDistance + tileDistance * 0.18 + depthPenalty;
+  }
+
+  private findBuildingNear(x: number, y: number, worldX = centerOfTile(x, y).x, worldY = centerOfTile(x, y).y): VillageBuildingSave | undefined {
+    const candidates = [...this.save.village.buildings]
+      .map((building) => ({ building, score: this.buildingHitScore(building, x, y, worldX, worldY) }))
+      .filter((entry) => Number.isFinite(entry.score))
+      .sort((a, b) => a.score - b.score || (b.building.y + b.building.h) - (a.building.y + a.building.h));
+    return candidates[0]?.building;
   }
 
   private interactBuilding(building: VillageBuildingSave): void {

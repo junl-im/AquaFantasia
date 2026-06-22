@@ -11,15 +11,16 @@ const sw = read('public/sw.js');
 const readme = read('README.md');
 const validateScript = pkg.scripts?.validate ?? '';
 
+const versionOk = /^2\.0\.(8[2-9]|9[0-9])$/.test(pkg.version);
 const required = [
-  [pkg.version === '2.0.82', 'package.json version must be 2.0.82'],
-  [lock.version === '2.0.82', 'package-lock root version must be 2.0.82'],
-  [lock.packages?.['']?.version === '2.0.82', 'package-lock package version must be 2.0.82'],
-  [data.includes("APP_VERSION = '2.0.82'"), 'APP_VERSION must be 2.0.82'],
-  [data.includes('aqua-fantasia-v2.0.82-menu-fixed-layout-separation'), 'data cache name must be v2.0.82'],
-  [sw.includes('aqua-fantasia-v2.0.82-menu-fixed-layout-separation'), 'service worker cache must be v2.0.82'],
-  [offline.includes('v2.0.82'), 'offline badge must mention v2.0.82'],
-  [readme.includes('AquaFantasia v2.0.82'), 'README must document v2.0.82'],
+  [versionOk, 'package.json version must be v2.0.82 or later'],
+  [lock.version === pkg.version, 'package-lock root version must match package.json'],
+  [lock.packages?.['']?.version === pkg.version, 'package-lock package version must match package.json'],
+  [data.includes(`APP_VERSION = '${pkg.version}'`), 'APP_VERSION must match package.json'],
+  [data.includes(`aqua-fantasia-v${pkg.version}`), 'data cache name must match package.json'],
+  [sw.includes(`aqua-fantasia-v${pkg.version}`), 'service worker cache must match package.json'],
+  [offline.includes(`v${pkg.version}`), 'offline badge must mention current version'],
+  [readme.includes(`AquaFantasia v${pkg.version}`), 'README must document current version'],
   [validateScript.includes('check-v2082-menu-fixed-layout-separation.mjs'), 'validate must run v2082 check'],
   [main.includes("dataset.v2082MenuFixedLayout = 'v2082-menu-fixed-layout'"), 'html dataset v2082 marker missing'],
   [main.includes('v2082-menu-fixed-layout-screen'), 'runtime menu v2082 fixed layout class missing'],
