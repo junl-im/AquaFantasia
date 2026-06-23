@@ -1,5 +1,5 @@
-// v2.1.8 rolls back the broken 2.1.x UI overlays to the stable v2.0.99/v2080-v2098 shell and fixes raw touch/interior/page/fishing guards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.8-stable-ui-fishing-rollback';
+// v2.1.9 keeps the v2.1.8 stable rollback and narrows touch, shop routing, page cards, modal layers, and fishing HUD guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.9-ui-touch-shop-fishing-audit';
 const PRECACHE = [
   "./",
   "./index.html",

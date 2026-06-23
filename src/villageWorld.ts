@@ -37,6 +37,7 @@ type BuildDefinition = {
 type WorldCallbacks = {
   onSave: () => void;
   onGoFishing: () => void;
+  onOpenShop?: () => void;
   onToast: (toast: { type?: ToastKind; title: string; message?: string }) => void;
 };
 
@@ -850,6 +851,7 @@ export class VillageWorld {
   private readonly save: SaveData;
   private readonly onSave: () => void;
   private readonly onGoFishing: () => void;
+  private readonly onOpenShop?: () => void;
   private readonly onToast: WorldCallbacks['onToast'];
   private app?: Application;
   private world = new Container();
@@ -896,6 +898,7 @@ export class VillageWorld {
     this.save = options.save;
     this.onSave = options.onSave;
     this.onGoFishing = options.onGoFishing;
+    this.onOpenShop = options.onOpenShop;
     this.onToast = options.onToast;
     this.ensureVillageState();
   }
@@ -973,7 +976,8 @@ export class VillageWorld {
     this.root.dataset.v2090BuildStateGuard = 'explicit-build-button-only';
     this.root.dataset.v2091UiCleanup = 'legacy-interior-events-pruned';
     this.root.dataset.v218StableRollback = 'v218-raw-diamond-touch-interior-selector-repair';
-    this.root.classList.add('v218-village-touch-repaired');
+    this.root.dataset.v219UiTouchShopFishingAudit = 'v219-foot-biased-touch-shop-route';
+    this.root.classList.add('v218-village-touch-repaired', 'v219-village-touch-shop-repaired');
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트 기준으로 배치됩니다.');
   }
 
@@ -1715,10 +1719,16 @@ export class VillageWorld {
   private pointerHitFromEvent(ev: PointerEvent): VillagePointerHit {
     const screen = this.pointerToStagePoint(ev);
     const world = this.screenToWorld(screen, this.camera.scale);
-    // v2.1.8: use the raw canvas-local diamond point again.
-    // The old lower-left bias made the visible floor tap land on a neighboring tile on many mobile viewports.
+    // v2.1.9: restore a small foot-point bias for isometric tiles, but keep the raw
+    // world coordinates for distance scoring. The full v2.0.96 bias was too strong
+    // on some mobile screens; raw-only in v2.1.8 made taps feel visually high.
+    const footWorld = { x: world.x - TILE_W * 0.14, y: world.y + TILE_H * 0.16 };
     // v2080 validation lineage: const tile = nearestDiamondTile(wx, wy);
-    const tile = nearestDiamondTile(world.x, world.y);
+    const rawTile = nearestDiamondTile(world.x, world.y);
+    const footTile = nearestDiamondTile(footWorld.x, footWorld.y);
+    const rawScore = diamondHitScore(world.x, world.y, rawTile.x, rawTile.y);
+    const footScore = diamondHitScore(footWorld.x, footWorld.y, footTile.x, footTile.y);
+    const tile = footScore <= Math.max(1.05, rawScore + 0.24) ? footTile : rawTile;
     return {
       x: safeIntegerTile(tile.x),
       y: safeIntegerTile(tile.y),
@@ -1789,7 +1799,16 @@ export class VillageWorld {
       node.addEventListener('pointerup', (ev) => { ev.stopPropagation(); }, { capture: true });
     });
     this.bindJoystick();
-    this.root.querySelector<HTMLButtonElement>('[data-village-fishing]')?.addEventListener('click', () => this.onGoFishing());
+    this.root.querySelector<HTMLButtonElement>('[data-village-shop]')?.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.onOpenShop?.();
+    });
+    this.root.querySelector<HTMLButtonElement>('[data-village-fishing]')?.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.onGoFishing();
+    });
     this.root.querySelectorAll<HTMLElement>('[data-v203-interior-close]').forEach((node) => node.addEventListener('click', () => this.closeInterior()));
     this.root.querySelector<HTMLButtonElement>('[data-v203-interior-go-fishing]')?.addEventListener('click', () => this.onGoFishing());
     this.root.querySelector<HTMLButtonElement>('[data-v2044-interior-move]')?.addEventListener('click', () => {
