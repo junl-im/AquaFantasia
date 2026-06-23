@@ -1,5 +1,5 @@
-// v2.1.10 imports the new individual PNG asset pack and connects bounded fish/fishing/UI assets while preserving the v2.1.8 stable rollback.
-const CACHE_NAME = 'aqua-fantasia-v2.1.10-asset-integration-pass';
+// v2.1.11 rebuilds a single Aqua Shell UI and keeps imported PNG assets explicitly bounded.
+const CACHE_NAME = 'aqua-fantasia-v2.1.11-aqua-shell-rebuild';
 const PRECACHE = [
   "./",
   "./index.html",

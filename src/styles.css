@@ -37779,3 +37779,549 @@ html.v2110-asset-integration-pass-root body[data-screen="dex"] .dex-card {
   background-position: center !important;
   background-repeat: no-repeat !important;
 }
+
+/* v2.1.11: Aqua Shell rebuild
+   A single compact UI structure replaces the accumulated v2.1.x overlay pile.
+   Rules are scoped to html.v2111-aqua-shell-root so older validation lineage stays inert. */
+html.v2111-aqua-shell-root {
+  --v2111-safe-top: max(10px, env(safe-area-inset-top));
+  --v2111-safe-right: max(10px, env(safe-area-inset-right));
+  --v2111-safe-bottom: max(10px, env(safe-area-inset-bottom));
+  --v2111-safe-left: max(10px, env(safe-area-inset-left));
+  --v2111-ink: #0a4e68;
+  --v2111-muted: rgba(43, 103, 127, .76);
+  --v2111-line: rgba(74, 190, 220, .38);
+  --v2111-card: linear-gradient(180deg, rgba(252,255,255,.97), rgba(214,249,255,.92));
+  --v2111-card-deep: linear-gradient(180deg, rgba(236,253,255,.98), rgba(177,237,250,.91));
+  --v2111-shadow: 0 18px 46px rgba(7, 66, 102, .20), inset 0 1px 0 rgba(255,255,255,.92);
+  --v2111-radius: 24px;
+  --v2111-blur: blur(14px) saturate(1.15);
+  --v2111-bottom-nav-w: min(44vw, 178px);
+  --v2111-bottom-nav-h: 46px;
+  color: var(--v2111-ink);
+}
+html.v2111-aqua-shell-root *,
+html.v2111-aqua-shell-root *::before,
+html.v2111-aqua-shell-root *::after { box-sizing: border-box; }
+html.v2111-aqua-shell-root body { text-rendering: geometricPrecision; -webkit-font-smoothing: antialiased; }
+
+/* Start/login: pure CSS slim aqua toggle, no PNG background. */
+html.v2111-aqua-shell-root .start-art-screen .hit-keep,
+html.v2111-aqua-shell-root .start-art-screen .hit-keep.v810-keep-button,
+html.v2111-aqua-shell-root .start-art-screen .hit-keep.v740-keep-toggle,
+html.v2111-aqua-shell-root .start-art-screen .hit-keep.v730-keep-toggle,
+html.v2111-aqua-shell-root .start-art-screen .hit-keep.v720-keep-toggle,
+html.v2111-aqua-shell-root .start-art-screen .hit-keep.v750-keep-toggle {
+  position: absolute !important;
+  left: 50% !important;
+  top: 75.6% !important;
+  width: min(48%, 220px) !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  transform: translateX(-50%) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 0 12px !important;
+  border: 1px solid rgba(126, 229, 247, .74) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, rgba(245,255,255,.82), rgba(164,232,246,.70)) !important;
+  background-image: linear-gradient(180deg, rgba(245,255,255,.82), rgba(164,232,246,.70)) !important;
+  box-shadow: 0 8px 20px rgba(13, 83, 111, .16), inset 0 1px 0 rgba(255,255,255,.95) !important;
+  color: #0b526a !important;
+  -webkit-text-fill-color: #0b526a !important;
+  text-shadow: none !important;
+  letter-spacing: -.03em !important;
+  pointer-events: auto !important;
+}
+html.v2111-aqua-shell-root .start-art-screen .hit-keep::before,
+html.v2111-aqua-shell-root .start-art-screen .hit-keep::after { content: none !important; display: none !important; background: none !important; }
+html.v2111-aqua-shell-root .start-art-screen .hit-keep .keep-indicator {
+  position: relative !important;
+  display: inline-flex !important;
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 18px !important;
+  border-radius: 50% !important;
+  border: 2px solid rgba(48, 176, 211, .70) !important;
+  background: rgba(255,255,255,.74) !important;
+  box-shadow: inset 0 1px 4px rgba(0, 93, 123, .15) !important;
+}
+html.v2111-aqua-shell-root .start-art-screen .hit-keep .keep-indicator::after {
+  content: "✓" !important;
+  position: absolute !important;
+  inset: -4px 0 0 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  transform: scale(.15) !important;
+  opacity: 0 !important;
+  border: 0 !important;
+  color: #fff !important;
+  font-size: 17px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+}
+html.v2111-aqua-shell-root .start-art-screen .hit-keep.checked .keep-indicator {
+  border-color: rgba(20, 159, 208, .92) !important;
+  background: linear-gradient(180deg, #61dfff, #16a9db) !important;
+}
+html.v2111-aqua-shell-root .start-art-screen .hit-keep.checked .keep-indicator::after { transform: scale(1) !important; opacity: 1 !important; }
+html.v2111-aqua-shell-root .start-art-screen .hit-keep .keep-text {
+  display: inline !important;
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  color: #0b526a !important;
+  -webkit-text-fill-color: #0b526a !important;
+  font-size: clamp(10px, 2.85vw, 13px) !important;
+  font-weight: 900 !important;
+  white-space: nowrap !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* Village Aqua Shell: explicit positions. */
+html.v2111-aqua-shell-root body[data-screen="village"] .village-world-screen.v2111-village-shell {
+  overflow: hidden !important;
+  padding: 0 !important;
+  background: #7de9ff !important;
+}
+html.v2111-aqua-shell-root body[data-screen="village"] .v2-village-stage { position: absolute !important; inset: 0 !important; z-index: 1 !important; pointer-events: auto !important; }
+html.v2111-aqua-shell-root .village-world-screen.v2111-village-shell.v2097-village-ready .v2111-village-loading { display: none !important; }
+html.v2111-aqua-shell-root .v2111-village-loading {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 200 !important;
+  display: grid !important;
+  place-items: center !important;
+  background: radial-gradient(circle at 50% 36%, rgba(255,255,255,.55), rgba(97,217,247,.70) 42%, rgba(34,146,203,.82)) !important;
+  color: #0b526a !important;
+  pointer-events: none !important;
+}
+html.v2111-aqua-shell-root .v2111-village-loading > div {
+  min-width: 230px !important;
+  max-width: 78vw !important;
+  padding: 20px 22px !important;
+  border-radius: 24px !important;
+  border: 1px solid var(--v2111-line) !important;
+  background: var(--v2111-card) !important;
+  box-shadow: var(--v2111-shadow) !important;
+  text-align: center !important;
+}
+
+html.v2111-aqua-shell-root body[data-screen="village"] .v2097-village-hud {
+  position: fixed !important;
+  left: var(--v2111-safe-left) !important;
+  top: var(--v2111-safe-top) !important;
+  z-index: 54 !important;
+  display: flex !important;
+  align-items: center !important;
+  width: min(42vw, 176px) !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  padding: 5px !important;
+  border-radius: 18px !important;
+  border: 1px solid var(--v2111-line) !important;
+  background: var(--v2111-card) !important;
+  box-shadow: var(--v2111-shadow) !important;
+  backdrop-filter: var(--v2111-blur) !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+html.v2111-aqua-shell-root .v2097-village-hud .v2097-profile-chip {
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  grid-template-rows: 18px 16px !important;
+  column-gap: 7px !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 6px !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--v2111-ink) !important;
+  -webkit-text-fill-color: var(--v2111-ink) !important;
+  text-shadow: none !important;
+}
+html.v2111-aqua-shell-root .v2097-profile-chip [data-v2-level] { grid-row: 1 / 3 !important; min-width: 42px !important; padding: 4px 6px !important; border-radius: 999px !important; background: rgba(85,213,242,.28) !important; font-size: 11px !important; font-weight: 1000 !important; white-space: nowrap !important; }
+html.v2111-aqua-shell-root .v2097-profile-chip strong { overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; font-size: 13px !important; line-height: 1 !important; }
+html.v2111-aqua-shell-root .v2097-profile-chip em { overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; font-size: 9px !important; font-style: normal !important; color: var(--v2111-muted) !important; }
+html.v2111-aqua-shell-root .v2097-hidden-metrics { display: none !important; }
+
+html.v2111-aqua-shell-root body[data-screen="village"] .v2097-expedition-board {
+  position: fixed !important;
+  left: var(--v2111-safe-left) !important;
+  top: calc(var(--v2111-safe-top) + 56px) !important;
+  z-index: 53 !important;
+  width: min(42vw, 176px) !important;
+  max-width: 176px !important;
+  pointer-events: auto !important;
+  background: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+html.v2111-aqua-shell-root .v2097-expedition-toggle {
+  width: 100% !important;
+  min-height: 40px !important;
+  padding: 6px 10px !important;
+  border-radius: 17px !important;
+  border: 1px solid var(--v2111-line) !important;
+  background: var(--v2111-card-deep) !important;
+  box-shadow: var(--v2111-shadow) !important;
+  color: var(--v2111-ink) !important;
+  -webkit-text-fill-color: var(--v2111-ink) !important;
+  text-shadow: none !important;
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  grid-template-rows: 15px 13px !important;
+  align-items: center !important;
+  gap: 0 6px !important;
+}
+html.v2111-aqua-shell-root .v2097-expedition-toggle span { font-size: 12px !important; font-weight: 1000 !important; }
+html.v2111-aqua-shell-root .v2097-expedition-toggle strong { grid-row: 1 / 3 !important; font-size: 16px !important; }
+html.v2111-aqua-shell-root .v2097-expedition-toggle em { font-size: 9px !important; font-style: normal !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
+
+html.v2111-aqua-shell-root .v2097-world-controls {
+  position: fixed !important;
+  top: var(--v2111-safe-top) !important;
+  right: var(--v2111-safe-right) !important;
+  z-index: 58 !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(50px, 58px)) !important;
+  gap: 6px !important;
+  width: auto !important;
+  padding: 6px !important;
+  border-radius: 22px !important;
+  border: 1px solid var(--v2111-line) !important;
+  background: rgba(232,253,255,.72) !important;
+  box-shadow: var(--v2111-shadow) !important;
+  backdrop-filter: var(--v2111-blur) !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+html.v2111-aqua-shell-root .v2097-world-controls button {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  width: 56px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 4px !important;
+  border-radius: 15px !important;
+  border: 1px solid rgba(89, 194, 222, .40) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(170,235,248,.74)) !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.86), rgba(170,235,248,.74)) !important;
+  box-shadow: 0 8px 16px rgba(10, 82, 118, .14), inset 0 1px 0 rgba(255,255,255,.95) !important;
+  color: var(--v2111-ink) !important;
+  -webkit-text-fill-color: var(--v2111-ink) !important;
+  text-shadow: none !important;
+  overflow: hidden !important;
+  pointer-events: auto !important;
+}
+html.v2111-aqua-shell-root .v2097-world-controls button::before,
+html.v2111-aqua-shell-root .v2097-world-controls button::after { content: none !important; display: none !important; }
+html.v2111-aqua-shell-root .v2097-world-controls button img { width: 17px !important; height: 17px !important; object-fit: contain !important; display: block !important; }
+html.v2111-aqua-shell-root .v2097-world-controls button span:last-child { font-size: 9px !important; font-weight: 950 !important; line-height: 1 !important; white-space: nowrap !important; filter: none !important; }
+
+html.v2111-aqua-shell-root .v2097-joystick {
+  position: fixed !important;
+  left: var(--v2111-safe-left) !important;
+  bottom: calc(var(--v2111-safe-bottom) + 10px) !important;
+  z-index: 57 !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 96px !important;
+  height: 96px !important;
+  min-width: 96px !important;
+  min-height: 96px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+html.v2111-aqua-shell-root .v2097-joystick-base {
+  width: 80px !important;
+  height: 80px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(113, 222, 244, .58) !important;
+  background: radial-gradient(circle at 45% 38%, rgba(255,255,255,.78), rgba(95,217,245,.35) 52%, rgba(26,133,183,.18)) !important;
+  box-shadow: 0 12px 28px rgba(7,72,112,.18), inset 0 1px 0 rgba(255,255,255,.90) !important;
+}
+html.v2111-aqua-shell-root .v2097-joystick-knob { width: 36px !important; height: 36px !important; border-radius: 50% !important; background: linear-gradient(180deg, #fff, #54d7f5) !important; box-shadow: 0 7px 14px rgba(8, 74, 111, .24) !important; }
+html.v2111-aqua-shell-root .v2097-joystick > span { margin-top: -16px !important; font-size: 9px !important; font-weight: 1000 !important; color: rgba(10,78,104,.70) !important; text-shadow: none !important; }
+
+html.v2111-aqua-shell-root .bottom-nav.v2111-bottom-nav,
+html.v2111-aqua-shell-root .bottom-nav.v2098-bottom-nav {
+  position: fixed !important;
+  left: auto !important;
+  top: auto !important;
+  right: var(--v2111-safe-right) !important;
+  bottom: calc(var(--v2111-safe-bottom) + 8px) !important;
+  z-index: 59 !important;
+  width: var(--v2111-bottom-nav-w) !important;
+  max-width: var(--v2111-bottom-nav-w) !important;
+  min-width: 156px !important;
+  height: var(--v2111-bottom-nav-h) !important;
+  min-height: var(--v2111-bottom-nav-h) !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 3px !important;
+  padding: 4px !important;
+  border-radius: 19px !important;
+  border: 1px solid var(--v2111-line) !important;
+  background: rgba(238,254,255,.82) !important;
+  box-shadow: var(--v2111-shadow) !important;
+  backdrop-filter: var(--v2111-blur) !important;
+  transform: none !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+html.v2111-aqua-shell-root body[data-screen="fishing"] .bottom-nav { display: none !important; }
+html.v2111-aqua-shell-root .bottom-nav.v2098-bottom-nav .v2098-nav-item {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 2px 1px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 1px !important;
+  border-radius: 14px !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--v2111-ink) !important;
+  -webkit-text-fill-color: var(--v2111-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+  overflow: hidden !important;
+}
+html.v2111-aqua-shell-root .bottom-nav.v2098-bottom-nav .v2098-nav-item.active { background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(98,218,245,.52)) !important; box-shadow: inset 0 0 0 1px rgba(68,183,216,.28) !important; }
+html.v2111-aqua-shell-root .bottom-nav.v2098-bottom-nav .v2098-nav-item img { width: 16px !important; height: 16px !important; object-fit: contain !important; filter: none !important; }
+html.v2111-aqua-shell-root .bottom-nav.v2098-bottom-nav .v2098-nav-item span { max-width: 100% !important; font-size: 8px !important; line-height: 1 !important; font-weight: 950 !important; letter-spacing: -.04em !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: clip !important; text-shadow: none !important; filter: none !important; }
+
+/* Modal/page shell: only the active page/card is visible, with outside dim/blur. */
+html.v2111-aqua-shell-root body.v2111-modal-open .village-world-screen :is(.v2097-village-hud,.v2097-world-controls,.v2097-joystick,.bottom-nav,.v2097-expedition-board,.v2097-village-guide,.v2097-village-notice),
+html.v2111-aqua-shell-root .village-world-screen.v2097-expedition-open :is(.v2097-village-hud,.v2097-world-controls,.v2097-joystick,.bottom-nav,.v2097-village-guide,.v2097-village-notice),
+html.v2111-aqua-shell-root .village-world-screen.v2097-build-tray-open :is(.v2097-village-guide,.v2097-village-notice) { display: none !important; }
+html.v2111-aqua-shell-root .v2097-character-panel,
+html.v2111-aqua-shell-root .v2097-interior-panel { display: none !important; position: fixed !important; inset: 0 !important; z-index: 130 !important; padding: var(--v2111-safe-top) var(--v2111-safe-right) var(--v2111-safe-bottom) var(--v2111-safe-left) !important; place-items: center !important; pointer-events: none !important; }
+html.v2111-aqua-shell-root .v2097-character-panel.open,
+html.v2111-aqua-shell-root .v2097-interior-panel.open { display: grid !important; pointer-events: auto !important; }
+html.v2111-aqua-shell-root .v2097-modal-backdrop,
+html.v2111-aqua-shell-root .v2097-menu-dim.v2111-page-backdrop,
+html.v2111-aqua-shell-root .v2097-build-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(6, 53, 80, .26) !important;
+  backdrop-filter: blur(14px) saturate(1.1) !important;
+}
+html.v2111-aqua-shell-root .v2097-build-backdrop { display: none !important; z-index: 90 !important; pointer-events: none !important; }
+html.v2111-aqua-shell-root .village-world-screen.v2097-build-tray-open .v2097-build-backdrop { display: block !important; pointer-events: auto !important; }
+html.v2111-aqua-shell-root :is(.v2097-character-card,.v2097-interior-card,.v2097-build-tray,.v2111-aqua-page) {
+  border: 1px solid var(--v2111-line) !important;
+  border-radius: var(--v2111-radius) !important;
+  background: var(--v2111-card) !important;
+  background-image: var(--v2111-card) !important;
+  box-shadow: var(--v2111-shadow) !important;
+  color: var(--v2111-ink) !important;
+  -webkit-text-fill-color: var(--v2111-ink) !important;
+  text-shadow: none !important;
+  overflow: hidden !important;
+  filter: none !important;
+}
+html.v2111-aqua-shell-root :is(.v2097-character-card,.v2097-interior-card) {
+  position: relative !important;
+  z-index: 1 !important;
+  width: min(92vw, 430px) !important;
+  max-height: min(84svh, 720px) !important;
+  padding: 58px 18px 18px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+html.v2111-aqua-shell-root .v2097-interior-card { width: min(94vw, 500px) !important; }
+html.v2111-aqua-shell-root .v2097-ui-close,
+html.v2111-aqua-shell-root .v2097-menu-close {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  z-index: 3 !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(70, 187, 219, .48) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(107,221,246,.70)) !important;
+  box-shadow: 0 8px 18px rgba(10,82,118,.16) !important;
+  color: var(--v2111-ink) !important;
+  -webkit-text-fill-color: var(--v2111-ink) !important;
+  font-size: 24px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  text-shadow: none !important;
+}
+html.v2111-aqua-shell-root .v2097-interior-image { width: 100% !important; max-height: 210px !important; object-fit: contain !important; border-radius: 20px !important; background: rgba(255,255,255,.36) !important; }
+html.v2111-aqua-shell-root .v2097-character-head { display: grid !important; grid-template-columns: 84px 1fr !important; gap: 12px !important; align-items: center !important; }
+html.v2111-aqua-shell-root .v2097-character-head img { width: 84px !important; height: 84px !important; object-fit: contain !important; border-radius: 22px !important; background: rgba(255,255,255,.42) !important; }
+html.v2111-aqua-shell-root .v2097-character-head h2,
+html.v2111-aqua-shell-root .v2097-interior-copy strong { color: var(--v2111-ink) !important; -webkit-text-fill-color: var(--v2111-ink) !important; text-shadow: none !important; }
+html.v2111-aqua-shell-root .v2097-character-stats { display: grid !important; grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 8px !important; }
+html.v2111-aqua-shell-root .v2097-character-stats article,
+html.v2111-aqua-shell-root .v2097-interior-status span { border-radius: 16px !important; background: rgba(255,255,255,.50) !important; border: 1px solid rgba(84, 196, 223, .22) !important; padding: 10px !important; }
+html.v2111-aqua-shell-root .v2097-card-actions { display: grid !important; grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 8px !important; }
+html.v2111-aqua-shell-root .v2097-card-actions button,
+html.v2111-aqua-shell-root .runtime-btn,
+html.v2111-aqua-shell-root .v2097-name-editor button {
+  min-height: 42px !important;
+  border: 1px solid rgba(71, 189, 220, .44) !important;
+  border-radius: 15px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(125,226,248,.72)) !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.92), rgba(125,226,248,.72)) !important;
+  box-shadow: 0 8px 16px rgba(9,83,119,.13) !important;
+  color: var(--v2111-ink) !important;
+  -webkit-text-fill-color: var(--v2111-ink) !important;
+  text-shadow: none !important;
+  font-weight: 950 !important;
+}
+
+html.v2111-aqua-shell-root .v2097-build-tray {
+  position: fixed !important;
+  top: calc(var(--v2111-safe-top) + 6px) !important;
+  right: var(--v2111-safe-right) !important;
+  left: auto !important;
+  bottom: auto !important;
+  z-index: 105 !important;
+  display: none !important;
+  width: min(90vw, 390px) !important;
+  max-height: calc(100svh - var(--v2111-safe-top) - var(--v2111-safe-bottom) - 16px) !important;
+  padding: 56px 14px 14px !important;
+  overflow-y: auto !important;
+  pointer-events: auto !important;
+}
+html.v2111-aqua-shell-root .village-world-screen.v2097-build-tray-open .v2097-build-tray { display: block !important; }
+html.v2111-aqua-shell-root .v2097-build-title { position: static !important; display: block !important; }
+html.v2111-aqua-shell-root .v2097-build-title > strong { position: absolute !important; left: 18px !important; top: 18px !important; font-size: 17px !important; }
+html.v2111-aqua-shell-root .v2097-build-grid { display: grid !important; grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 8px !important; }
+html.v2111-aqua-shell-root .v2097-build-grid button { min-height: 92px !important; border-radius: 18px !important; border: 1px solid rgba(71, 189, 220, .32) !important; background: rgba(255,255,255,.52) !important; color: var(--v2111-ink) !important; text-shadow: none !important; }
+html.v2111-aqua-shell-root .v2097-build-grid img { width: 42px !important; height: 42px !important; object-fit: contain !important; }
+
+html.v2111-aqua-shell-root .village-world-screen.v2097-expedition-open .v2097-expedition-board {
+  inset: 0 !important;
+  z-index: 126 !important;
+  width: auto !important;
+  max-width: none !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: var(--v2111-safe-top) var(--v2111-safe-right) var(--v2111-safe-bottom) var(--v2111-safe-left) !important;
+  background: rgba(6, 53, 80, .26) !important;
+  backdrop-filter: blur(14px) saturate(1.1) !important;
+}
+html.v2111-aqua-shell-root .village-world-screen.v2097-expedition-open .v2097-expedition-toggle { display: none !important; }
+html.v2111-aqua-shell-root .village-world-screen.v2097-expedition-open .v2097-expedition-body {
+  display: block !important;
+  position: relative !important;
+  inset: auto !important;
+  z-index: 1 !important;
+  width: min(92vw, 460px) !important;
+  max-height: min(84svh, 720px) !important;
+  overflow-y: auto !important;
+  padding: 56px 16px 16px !important;
+  border-radius: var(--v2111-radius) !important;
+  border: 1px solid var(--v2111-line) !important;
+  background: var(--v2111-card) !important;
+  box-shadow: var(--v2111-shadow) !important;
+  color: var(--v2111-ink) !important;
+  -webkit-text-fill-color: var(--v2111-ink) !important;
+  text-shadow: none !important;
+}
+html.v2111-aqua-shell-root .village-world-screen:not(.v2097-expedition-open) .v2097-expedition-body { display: none !important; }
+
+/* Runtime menu pages: centered full page card, no HUD following the page. */
+html.v2111-aqua-shell-root body:not([data-screen="login"]):not([data-screen="village"]):not([data-screen="fishing"]) .runtime-menu-screen.v2111-runtime-page-shell {
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: var(--v2111-safe-top) var(--v2111-safe-right) calc(var(--v2111-safe-bottom) + var(--v2111-bottom-nav-h) + 16px) var(--v2111-safe-left) !important;
+  overflow: hidden !important;
+}
+html.v2111-aqua-shell-root body:not([data-screen="login"]):not([data-screen="village"]):not([data-screen="fishing"]) .runtime-menu-screen.v2111-runtime-page-shell .runtime-hud,
+html.v2111-aqua-shell-root body:not([data-screen="login"]):not([data-screen="village"]):not([data-screen="fishing"]) .runtime-bg-character { display: none !important; }
+html.v2111-aqua-shell-root .runtime-menu-screen.v2111-runtime-page-shell .v2111-page-backdrop { display: block !important; z-index: 0 !important; }
+html.v2111-aqua-shell-root .runtime-menu-screen.v2111-runtime-page-shell .v2111-aqua-page {
+  position: relative !important;
+  z-index: 1 !important;
+  width: min(94vw, 520px) !important;
+  min-height: min(58svh, 520px) !important;
+  max-height: calc(100svh - var(--v2111-safe-top) - var(--v2111-safe-bottom) - var(--v2111-bottom-nav-h) - 28px) !important;
+  padding: 58px 16px 18px !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+html.v2111-aqua-shell-root .runtime-menu-screen.v2111-runtime-page-shell .v2097-menu-close { position: fixed !important; top: calc(var(--v2111-safe-top) + 12px) !important; right: calc(var(--v2111-safe-right) + 12px) !important; z-index: 5 !important; }
+html.v2111-aqua-shell-root :is(.shop-list,.mission-list,.dex-grid,.gear-grid,.runtime-card-list,.runtime-region-grid) { display: grid !important; grid-template-columns: 1fr !important; gap: 10px !important; width: 100% !important; }
+html.v2111-aqua-shell-root :is(.runtime-hero-card,.runtime-panel,.shop-card,.runtime-item-card,.mission-card,.region-card,.dex-card,.gear-card) { border-radius: 18px !important; border: 1px solid rgba(76, 190, 220, .26) !important; background: rgba(255,255,255,.54) !important; box-shadow: 0 8px 18px rgba(10,84,119,.10) !important; color: var(--v2111-ink) !important; -webkit-text-fill-color: var(--v2111-ink) !important; text-shadow: none !important; }
+
+/* Fishing: keep the core game visible and remove oversized decorative clutter. */
+html.v2111-aqua-shell-root body[data-screen="fishing"] .fishing-screen.v2111-fishing-rebuild-screen {
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #52d8f5 !important;
+}
+html.v2111-aqua-shell-root body[data-screen="fishing"] .v2110-fishing-props,
+html.v2111-aqua-shell-root body[data-screen="fishing"] :is(.v205-fish-shadow,.v2031-fishing-ripple,.v2031-fishing-foam,.v2028-fishing-safe-grid) { display: none !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .fishing-stage { position: absolute !important; inset: 0 !important; z-index: 1 !important; overflow: hidden !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .fishing-hud {
+  position: fixed !important;
+  left: var(--v2111-safe-left) !important;
+  top: var(--v2111-safe-top) !important;
+  z-index: 50 !important;
+  display: flex !important;
+  gap: 5px !important;
+  width: min(68vw, 286px) !important;
+  min-width: 0 !important;
+  padding: 5px !important;
+  border: 1px solid var(--v2111-line) !important;
+  border-radius: 18px !important;
+  background: rgba(239,254,255,.84) !important;
+  box-shadow: var(--v2111-shadow) !important;
+  backdrop-filter: var(--v2111-blur) !important;
+  color: var(--v2111-ink) !important;
+}
+html.v2111-aqua-shell-root body[data-screen="fishing"] .fishing-hud .hud-chip { min-width: 0 !important; max-width: 118px !important; height: 34px !important; padding: 3px 6px !important; border-radius: 13px !important; background: rgba(255,255,255,.45) !important; color: var(--v2111-ink) !important; text-shadow: none !important; overflow: hidden !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .fishing-hud img { width: 18px !important; height: 18px !important; object-fit: contain !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .fishing-hud strong,
+html.v2111-aqua-shell-root body[data-screen="fishing"] .fishing-hud span { overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; text-shadow: none !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .v2059-fishing-close { position: fixed !important; top: var(--v2111-safe-top) !important; right: var(--v2111-safe-right) !important; z-index: 60 !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .fishing-loadout-strip { position: fixed !important; top: calc(var(--v2111-safe-top) + 50px) !important; left: var(--v2111-safe-left) !important; right: var(--v2111-safe-right) !important; z-index: 45 !important; display: flex !important; gap: 8px !important; justify-content: flex-start !important; pointer-events: auto !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .fishing-loadout-strip > div { max-width: 132px !important; min-height: 34px !important; padding: 4px 8px !important; border-radius: 14px !important; background: rgba(239,254,255,.80) !important; border: 1px solid rgba(76,190,220,.28) !important; color: var(--v2111-ink) !important; text-shadow: none !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .fishing-loadout-strip img { width: 22px !important; height: 22px !important; object-fit: contain !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .recent-catch-strip { position: fixed !important; left: var(--v2111-safe-left) !important; right: var(--v2111-safe-right) !important; bottom: calc(var(--v2111-safe-bottom) + 12px) !important; z-index: 44 !important; max-height: 74px !important; padding: 8px !important; border-radius: 18px !important; background: rgba(239,254,255,.78) !important; border: 1px solid rgba(76,190,220,.26) !important; box-shadow: var(--v2111-shadow) !important; overflow: hidden !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .recent-catch-strip img { width: 34px !important; height: 34px !important; object-fit: contain !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .cast-button { position: fixed !important; left: 50% !important; bottom: calc(var(--v2111-safe-bottom) + 96px) !important; transform: translateX(-50%) !important; z-index: 56 !important; width: min(56vw, 228px) !important; height: 58px !important; min-height: 58px !important; border-radius: 24px !important; border: 1px solid rgba(79,190,220,.46) !important; background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(83,220,249,.76)) !important; background-image: linear-gradient(180deg, rgba(255,255,255,.94), rgba(83,220,249,.76)) !important; box-shadow: 0 14px 30px rgba(8,82,120,.22), inset 0 1px 0 rgba(255,255,255,.95) !important; color: var(--v2111-ink) !important; text-shadow: none !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .cast-button::before,
+html.v2111-aqua-shell-root body[data-screen="fishing"] .cast-button::after,
+html.v2111-aqua-shell-root body[data-screen="fishing"] .cast-button > img { display: none !important; content: none !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .v2055-reel-console:not(.hidden) { position: fixed !important; left: var(--v2111-safe-left) !important; right: var(--v2111-safe-right) !important; bottom: calc(var(--v2111-safe-bottom) + 12px) !important; z-index: 70 !important; max-height: 45svh !important; overflow-y: auto !important; border-radius: 22px !important; border: 1px solid var(--v2111-line) !important; background: var(--v2111-card) !important; box-shadow: var(--v2111-shadow) !important; color: var(--v2111-ink) !important; text-shadow: none !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] .reel-panel:not(.hidden) { position: fixed !important; left: var(--v2111-safe-left) !important; right: var(--v2111-safe-right) !important; top: calc(var(--v2111-safe-top) + 94px) !important; z-index: 68 !important; max-height: 42svh !important; overflow: hidden !important; border-radius: 22px !important; background: var(--v2111-card) !important; box-shadow: var(--v2111-shadow) !important; }
+html.v2111-aqua-shell-root body[data-screen="fishing"] :is(.reel-panel img,.catch-result-card img,.result-fish img) { max-width: 96px !important; max-height: 96px !important; object-fit: contain !important; }
+
+@media (max-width: 420px) {
+  html.v2111-aqua-shell-root { --v2111-bottom-nav-w: 162px; --v2111-bottom-nav-h: 44px; }
+  html.v2111-aqua-shell-root .v2097-world-controls { grid-template-columns: repeat(2, 52px) !important; gap: 5px !important; padding: 5px !important; }
+  html.v2111-aqua-shell-root .v2097-world-controls button { width: 52px !important; height: 40px !important; }
+  html.v2111-aqua-shell-root .v2097-joystick { width: 88px !important; height: 88px !important; }
+  html.v2111-aqua-shell-root .v2097-joystick-base { width: 74px !important; height: 74px !important; }
+  html.v2111-aqua-shell-root body[data-screen="village"] .v2097-village-hud,
+  html.v2111-aqua-shell-root body[data-screen="village"] .v2097-expedition-board { width: min(46vw, 164px) !important; }
+}

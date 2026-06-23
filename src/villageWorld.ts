@@ -1019,6 +1019,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2094-build-active', Boolean(type));
     this.root.classList.toggle('v2097-build-active', Boolean(type));
     this.root.classList.toggle('v2098-build-active', Boolean(type));
+    this.root.classList.toggle('v2111-build-active', Boolean(type));
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2094-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2097-build-tray-open', this.buildTrayOpen);
@@ -1047,6 +1048,8 @@ export class VillageWorld {
     this.root.classList.toggle('v2094-build-tray-open', open);
     this.root.classList.toggle('v2097-build-tray-open', open);
     this.root.classList.toggle('v2098-build-tray-open', open);
+    this.root.classList.toggle('v2111-build-tray-open', open);
+    document.body.classList.toggle('v2111-build-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
       if (!keepSelection) this.movingBuildingId = null;
@@ -1063,6 +1066,8 @@ export class VillageWorld {
       this.root.classList.remove('v2094-build-active');
       this.root.classList.remove('v2097-build-active');
       this.root.classList.remove('v2098-build-active');
+      this.root.classList.remove('v2111-build-active');
+      document.body.classList.remove('v2111-build-open');
       this.previewLayer.removeChildren();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
     }
@@ -1719,16 +1724,11 @@ export class VillageWorld {
   private pointerHitFromEvent(ev: PointerEvent): VillagePointerHit {
     const screen = this.pointerToStagePoint(ev);
     const world = this.screenToWorld(screen, this.camera.scale);
-    // v2.1.9: restore a small foot-point bias for isometric tiles, but keep the raw
-    // world coordinates for distance scoring. The full v2.0.96 bias was too strong
-    // on some mobile screens; raw-only in v2.1.8 made taps feel visually high.
-    const footWorld = { x: world.x - TILE_W * 0.14, y: world.y + TILE_H * 0.16 };
+    // v2.1.11: use the real canvas-local diamond hit. Previous visual-foot bias made
+    // the village floor feel shifted on mobile, so the new shell keeps raw coordinates.
+    // Building hit scoring still receives raw worldX/worldY for body/footprint pickup.
     // v2080 validation lineage: const tile = nearestDiamondTile(wx, wy);
-    const rawTile = nearestDiamondTile(world.x, world.y);
-    const footTile = nearestDiamondTile(footWorld.x, footWorld.y);
-    const rawScore = diamondHitScore(world.x, world.y, rawTile.x, rawTile.y);
-    const footScore = diamondHitScore(footWorld.x, footWorld.y, footTile.x, footTile.y);
-    const tile = footScore <= Math.max(1.05, rawScore + 0.24) ? footTile : rawTile;
+    const tile = nearestDiamondTile(world.x, world.y);
     return {
       x: safeIntegerTile(tile.x),
       y: safeIntegerTile(tile.y),
@@ -1782,9 +1782,14 @@ export class VillageWorld {
     this.root.querySelector<HTMLButtonElement>('[data-village-zoom-in]')?.addEventListener('click', () => this.zoom(0.11, true));
     this.root.querySelector<HTMLButtonElement>('[data-village-zoom-out]')?.addEventListener('click', () => this.zoom(-0.11, true));
     this.root.querySelector<HTMLButtonElement>('[data-village-center]')?.addEventListener('click', () => { this.cameraFollowUntil = performance.now() + 1200; this.centerCameraOnPlayer(); });
-    this.root.querySelector<HTMLButtonElement>('[data-village-build-open]')?.addEventListener('click', (ev) => {
+    const buildOpenButton = this.root.querySelector<HTMLButtonElement>('[data-village-build-open]');
+    let lastBuildToggleAt = 0;
+    const toggleBuildTrayFromButton = (ev: Event) => {
       ev.preventDefault();
       ev.stopPropagation();
+      const now = performance.now();
+      if (now - lastBuildToggleAt < 180) return;
+      lastBuildToggleAt = now;
       if (this.selectedBuild) {
         this.setBuildMode(null);
         this.setBuildTrayOpen(false);
@@ -1792,23 +1797,26 @@ export class VillageWorld {
         return;
       }
       this.setBuildTrayOpen(!this.buildTrayOpen);
-    });
+    };
+    buildOpenButton?.addEventListener('pointerup', toggleBuildTrayFromButton, { capture: true });
+    buildOpenButton?.addEventListener('click', toggleBuildTrayFromButton, { capture: true });
     this.root.querySelectorAll<HTMLElement>('[data-village-build-close]').forEach((node) => node.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); this.setBuildTrayOpen(false); }));
     this.root.querySelectorAll<HTMLElement>('[data-village-build-open], [data-village-build-close], [data-build-type], [data-village-zoom-in], [data-village-zoom-out], [data-village-center], [data-village-shop], [data-village-fishing]').forEach((node) => {
       node.addEventListener('pointerdown', (ev) => { ev.stopPropagation(); }, { capture: true });
       node.addEventListener('pointerup', (ev) => { ev.stopPropagation(); }, { capture: true });
     });
     this.bindJoystick();
-    this.root.querySelector<HTMLButtonElement>('[data-village-shop]')?.addEventListener('click', (ev) => {
+    const routeAction = (handler: () => void) => (ev: Event) => {
       ev.preventDefault();
       ev.stopPropagation();
-      this.onOpenShop?.();
-    });
-    this.root.querySelector<HTMLButtonElement>('[data-village-fishing]')?.addEventListener('click', (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      this.onGoFishing();
-    });
+      handler();
+    };
+    const shopButton = this.root.querySelector<HTMLButtonElement>('[data-village-shop]');
+    const fishingButton = this.root.querySelector<HTMLButtonElement>('[data-village-fishing]');
+    shopButton?.addEventListener('pointerup', routeAction(() => this.onOpenShop?.()), { capture: true });
+    shopButton?.addEventListener('click', routeAction(() => this.onOpenShop?.()), { capture: true });
+    fishingButton?.addEventListener('pointerup', routeAction(() => this.onGoFishing()), { capture: true });
+    fishingButton?.addEventListener('click', routeAction(() => this.onGoFishing()), { capture: true });
     this.root.querySelectorAll<HTMLElement>('[data-v203-interior-close]').forEach((node) => node.addEventListener('click', () => this.closeInterior()));
     this.root.querySelector<HTMLButtonElement>('[data-v203-interior-go-fishing]')?.addEventListener('click', () => this.onGoFishing());
     this.root.querySelector<HTMLButtonElement>('[data-v2044-interior-move]')?.addEventListener('click', () => {
@@ -2214,7 +2222,7 @@ export class VillageWorld {
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
     this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open');
     document.body.classList.add('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
@@ -2257,7 +2265,7 @@ export class VillageWorld {
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
     this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open');
     document.body.classList.add('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
@@ -2270,7 +2278,7 @@ export class VillageWorld {
     if (!panel) return;
     panel.classList.remove('open');
     this.root.classList.remove('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open');
+    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open');
     document.body.classList.remove('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');
