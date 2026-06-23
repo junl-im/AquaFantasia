@@ -39324,3 +39324,193 @@ html.v2115-aqua-screen-shell-root body[data-screen="fishing"] .stage-ui .cast-bu
   text-shadow: none !important;
   filter: none !important;
 }
+
+/* v2.1.16: Village Asset Polish
+   A narrow steward layer: apply supplied PNG assets to village props/cards while keeping the aqua shell stable. */
+html.v2116-village-asset-polish-root {
+  --v2116-ink: #06445f;
+  --v2116-muted: rgba(6, 68, 95, .68);
+  --v2116-line: rgba(75, 190, 222, .38);
+  --v2116-card: linear-gradient(180deg, rgba(255,255,255,.93), rgba(206,247,255,.88));
+  --v2116-card-asset: url('./assets/v2110/ui/main_aqua_cards/ui_main_001.png');
+  --v2116-button-asset: url('./assets/v2110/ui/buttons_and_badges/ui_button_002.png');
+  --v2116-modal-asset: url('./assets/v2110/ui/modals_tabs_toggles/ui_modal_001.png');
+  --v2116-round-close-asset: url('./assets/v2110/ui/buttons_and_badges/ui_button_006.png');
+  --v2116-shadow: 0 22px 54px rgba(1, 40, 69, .20), inset 0 1px 0 rgba(255,255,255,.90);
+  --v2116-safe-top: max(10px, env(safe-area-inset-top));
+  --v2116-safe-right: max(10px, env(safe-area-inset-right));
+  --v2116-safe-bottom: max(10px, env(safe-area-inset-bottom));
+  --v2116-safe-left: max(10px, env(safe-area-inset-left));
+}
+
+html.v2116-village-asset-polish-root :is(button,[role="button"])::before,
+html.v2116-village-asset-polish-root :is(button,[role="button"])::after { filter: none !important; text-shadow: none !important; }
+
+/* Start screen: login keep toggle appears only with the full start button group. */
+html.v2116-village-asset-polish-root .login-screen.v2116-start-shell .v2084-start-actions,
+html.v2116-village-asset-polish-root .login-screen.v2116-start-shell .login-touch-shine {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition: opacity .18s ease !important;
+}
+html.v2116-village-asset-polish-root .login-screen.v2116-start-shell.v2084-start-ready .v2084-start-actions,
+html.v2116-village-asset-polish-root .login-screen.v2116-start-shell.v2084-start-ready .login-touch-shine {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+html.v2116-village-asset-polish-root .login-screen.v2116-start-shell .hit-keep {
+  left: 50% !important;
+  top: 77.65% !important;
+  transform: translateX(-50%) !important;
+  width: min(38%, 176px) !important;
+  height: 28px !important;
+  min-width: 0 !important;
+  min-height: 26px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 0 8px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(90, 204, 231, .42) !important;
+  background: rgba(239,254,255,.78) !important;
+  background-image: none !important;
+  box-shadow: 0 8px 18px rgba(4,70,100,.12) !important;
+  color: var(--v2116-ink) !important;
+  -webkit-text-fill-color: var(--v2116-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2116-village-asset-polish-root .login-screen.v2116-start-shell .hit-keep::before,
+html.v2116-village-asset-polish-root .login-screen.v2116-start-shell .hit-keep::after { content: none !important; display: none !important; }
+html.v2116-village-asset-polish-root .login-screen.v2116-start-shell .hit-keep .keep-indicator {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(68,184,216,.55) !important;
+  background: rgba(255,255,255,.78) !important;
+}
+html.v2116-village-asset-polish-root .login-screen.v2116-start-shell .hit-keep.checked .keep-indicator {
+  background: linear-gradient(180deg, #7ce8ff, #14a6d6) !important;
+  border-color: rgba(16,125,165,.70) !important;
+}
+html.v2116-village-asset-polish-root .login-screen.v2116-start-shell .hit-keep.checked .keep-indicator::after {
+  content: '✓' !important;
+  color: #06445f !important;
+  font-size: 12px !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+}
+html.v2116-village-asset-polish-root .login-screen.v2116-start-shell .hit-keep .keep-text {
+  font-size: clamp(9.5px, 2.35vw, 11.5px) !important;
+  letter-spacing: -.045em !important;
+  white-space: nowrap !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* Village shell positions. */
+html.v2116-village-asset-polish-root body[data-screen="village"] .village-world-screen.v2116-village-asset-shell.v2116-village-loading-state :is(.v2097-village-hud,.v2097-expedition-board,.v2097-world-controls,.v2097-joystick,.bottom-nav,.v2097-village-guide,.v2097-village-notice) { display: none !important; pointer-events: none !important; }
+html.v2116-village-asset-polish-root body[data-screen="village"] .village-world-screen.v2116-village-ready :is(.v2097-village-hud,.v2097-expedition-board,.v2097-world-controls,.v2097-joystick) { visibility: visible !important; opacity: 1 !important; }
+html.v2116-village-asset-polish-root body[data-screen="village"] .v2097-village-hud { left: var(--v2116-safe-left) !important; top: calc(var(--v2116-safe-top) + 4px) !important; width: min(43vw, 238px) !important; min-height: 50px !important; border: 1px solid var(--v2116-line) !important; background: rgba(241,254,255,.84) !important; box-shadow: 0 10px 26px rgba(3,65,96,.13) !important; backdrop-filter: blur(12px) saturate(1.08) !important; }
+html.v2116-village-asset-polish-root body[data-screen="village"] .v2097-profile-chip { min-height: 42px !important; padding: 6px 8px !important; gap: 5px !important; text-shadow: none !important; filter: none !important; }
+html.v2116-village-asset-polish-root body[data-screen="village"] .v2097-profile-chip strong { max-width: 104px !important; font-size: 12px !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
+html.v2116-village-asset-polish-root body[data-screen="village"] .v2097-profile-chip span { min-width: 48px !important; font-size: 11px !important; }
+html.v2116-village-asset-polish-root body[data-screen="village"] .v2097-profile-chip em { font-size: 9px !important; }
+html.v2116-village-asset-polish-root body[data-screen="village"] .v2097-expedition-board { left: var(--v2116-safe-left) !important; top: calc(var(--v2116-safe-top) + 62px) !important; width: min(43vw, 238px) !important; z-index: 44 !important; }
+html.v2116-village-asset-polish-root body[data-screen="village"] .v2097-expedition-toggle { height: 38px !important; padding: 5px 8px !important; border-radius: 16px !important; background: rgba(238,253,255,.88) !important; border: 1px solid var(--v2116-line) !important; text-shadow: none !important; filter: none !important; }
+
+/* Top-right command grid: +/-, build/origin, shop/sail. */
+html.v2116-village-asset-polish-root body[data-screen="village"] .v2097-world-controls.v2116-world-controls,
+html.v2116-village-asset-polish-root body[data-screen="village"] .v2116-world-controls {
+  display: grid !important;
+  grid-template-columns: repeat(2, 42px) !important;
+  grid-auto-rows: 38px !important;
+  gap: 5px !important;
+  right: var(--v2116-safe-right) !important;
+  top: calc(var(--v2116-safe-top) + 4px) !important;
+  width: auto !important;
+  max-width: 96px !important;
+  padding: 5px !important;
+  border-radius: 18px !important;
+  border: 1px solid var(--v2116-line) !important;
+  background: rgba(241,254,255,.82) !important;
+  box-shadow: 0 12px 28px rgba(3,61,94,.14) !important;
+  backdrop-filter: blur(12px) saturate(1.08) !important;
+  pointer-events: auto !important;
+  text-shadow: none !important;
+  filter: none !important;
+  z-index: 48 !important;
+}
+html.v2116-village-asset-polish-root .v2116-world-controls button { width: 42px !important; height: 38px !important; min-width: 0 !important; min-height: 0 !important; padding: 2px 1px !important; border-radius: 13px !important; border: 1px solid rgba(65,184,218,.30) !important; background: rgba(255,255,255,.58) !important; color: var(--v2116-ink) !important; -webkit-text-fill-color: var(--v2116-ink) !important; text-shadow: none !important; filter: none !important; overflow: hidden !important; }
+html.v2116-village-asset-polish-root .v2116-world-controls button:nth-child(1) { order: 1; }
+html.v2116-village-asset-polish-root .v2116-world-controls button:nth-child(2) { order: 2; }
+html.v2116-village-asset-polish-root .v2116-world-controls button:nth-child(3) { order: 3; }
+html.v2116-village-asset-polish-root .v2116-world-controls button:nth-child(4) { order: 4; }
+html.v2116-village-asset-polish-root .v2116-world-controls button:nth-child(5) { order: 5; }
+html.v2116-village-asset-polish-root .v2116-world-controls button:nth-child(6) { order: 6; }
+html.v2116-village-asset-polish-root .v2116-world-controls button::before,
+html.v2116-village-asset-polish-root .v2116-world-controls button::after { content: none !important; display: none !important; }
+html.v2116-village-asset-polish-root .v2116-world-controls button > span:first-child { display: grid !important; place-items: center !important; height: 18px !important; font-size: 15px !important; line-height: 1 !important; }
+html.v2116-village-asset-polish-root .v2116-world-controls button img { width: 16px !important; height: 16px !important; max-width: 16px !important; max-height: 16px !important; object-fit: contain !important; object-position: center !important; filter: none !important; transform: none !important; }
+html.v2116-village-asset-polish-root .v2116-world-controls button > span:last-child { display: block !important; width: 100% !important; font-size: 8.5px !important; font-weight: 950 !important; line-height: 1 !important; letter-spacing: -.05em !important; white-space: nowrap !important; text-shadow: none !important; filter: none !important; overflow: hidden !important; }
+
+html.v2116-village-asset-polish-root body[data-screen="village"] .v2097-joystick { left: calc(var(--v2116-safe-left) + 8px) !important; bottom: calc(var(--v2116-safe-bottom) + 10px) !important; width: 104px !important; height: 104px !important; }
+html.v2116-village-asset-polish-root body[data-screen="village"] .v2097-joystick-base { width: 82px !important; height: 82px !important; background: rgba(226,253,255,.36) !important; border: 1px solid rgba(73,190,222,.34) !important; }
+html.v2116-village-asset-polish-root body[data-screen="village"] .v2097-joystick-knob { left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; width: 38px !important; height: 38px !important; background: rgba(255,255,255,.86) !important; border: 1px solid rgba(65,184,218,.45) !important; }
+
+html.v2116-village-asset-polish-root .bottom-nav.v2116-bottom-nav { position: fixed !important; right: var(--v2116-safe-right) !important; left: auto !important; bottom: calc(var(--v2116-safe-bottom) + 8px) !important; width: 178px !important; max-width: 178px !important; height: 42px !important; min-height: 42px !important; display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 3px !important; padding: 4px !important; border-radius: 18px !important; background: rgba(241,254,255,.84) !important; background-image: linear-gradient(180deg, rgba(255,255,255,.78), rgba(201,248,255,.60)), var(--v2116-modal-asset) !important; background-size: cover !important; background-blend-mode: normal, soft-light !important; border: 1px solid var(--v2116-line) !important; box-shadow: 0 10px 24px rgba(5,62,93,.14), inset 0 1px 0 rgba(255,255,255,.88) !important; backdrop-filter: blur(12px) saturate(1.08) !important; transform: none !important; filter: none !important; z-index: 47 !important; }
+html.v2116-village-asset-polish-root .bottom-nav.v2116-bottom-nav .v2098-nav-item { width: 41px !important; height: 34px !important; min-width: 0 !important; min-height: 0 !important; padding: 2px 1px !important; border-radius: 12px !important; font-size: 8.5px !important; letter-spacing: -.055em !important; color: var(--v2116-ink) !important; -webkit-text-fill-color: var(--v2116-ink) !important; text-shadow: none !important; filter: none !important; overflow: hidden !important; }
+html.v2116-village-asset-polish-root .bottom-nav.v2116-bottom-nav img { width: 13px !important; height: 13px !important; max-width: 13px !important; max-height: 13px !important; filter: none !important; }
+html.v2116-village-asset-polish-root .bottom-nav.v2116-bottom-nav span { font-size: 8.5px !important; line-height: 1 !important; white-space: nowrap !important; text-shadow: none !important; filter: none !important; }
+
+/* One aqua card contract for all opened pages and popups. */
+html.v2116-village-asset-polish-root :is(.v2116-aqua-card,.v2116-aqua-page,.v2097-character-card,.v2097-interior-card,.v2097-build-tray,.v2097-expedition-body) { border: 1px solid var(--v2116-line) !important; border-radius: 26px !important; background-color: rgba(238,253,255,.95) !important; background-image: var(--v2116-card), var(--v2116-card-asset) !important; background-size: cover !important; background-blend-mode: normal, soft-light !important; box-shadow: var(--v2116-shadow) !important; color: var(--v2116-ink) !important; -webkit-text-fill-color: var(--v2116-ink) !important; text-shadow: none !important; filter: none !important; }
+html.v2116-village-asset-polish-root :is(.v2097-character-panel,.v2097-interior-panel) { position: fixed !important; inset: 0 !important; z-index: 214 !important; display: none !important; place-items: center !important; padding: calc(var(--v2116-safe-top) + 8px) var(--v2116-safe-right) calc(var(--v2116-safe-bottom) + 8px) var(--v2116-safe-left) !important; pointer-events: none !important; }
+html.v2116-village-asset-polish-root :is(.v2097-character-panel.open,.v2097-interior-panel.open) { display: grid !important; pointer-events: auto !important; }
+html.v2116-village-asset-polish-root :is(.v2097-modal-backdrop,.v2097-build-backdrop,.v2111-page-backdrop) { background: rgba(3,35,58,.39) !important; backdrop-filter: blur(16px) saturate(1.12) !important; }
+html.v2116-village-asset-polish-root :is(.v2097-character-card,.v2097-interior-card) { width: min(92vw, 508px) !important; max-height: min(84svh, 724px) !important; padding: 50px 16px 16px !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch !important; }
+html.v2116-village-asset-polish-root .v2097-ui-close,
+html.v2116-village-asset-polish-root .v2097-menu-close { position: absolute !important; top: 12px !important; right: 12px !important; width: 34px !important; height: 34px !important; min-width: 34px !important; min-height: 34px !important; border-radius: 50% !important; border: 1px solid rgba(67,184,216,.50) !important; background-image: linear-gradient(180deg, rgba(255,255,255,.98), rgba(105,219,246,.74)), var(--v2116-round-close-asset) !important; background-size: cover !important; background-blend-mode: normal, soft-light !important; color: var(--v2116-ink) !important; -webkit-text-fill-color: var(--v2116-ink) !important; box-shadow: 0 8px 18px rgba(4,60,92,.16) !important; text-shadow: none !important; filter: none !important; z-index: 6 !important; }
+html.v2116-village-asset-polish-root .v2097-card-actions [data-v203-interior-close]:not(.v2097-ui-close),
+html.v2116-village-asset-polish-root .v2097-card-actions [data-v2017-character-close]:not(.v2097-ui-close),
+html.v2116-village-asset-polish-root button[data-village-build-close]:not(.v2097-ui-close) { display: none !important; }
+html.v2116-village-asset-polish-root .v2097-interior-image { display: none !important; width: 0 !important; height: 0 !important; }
+html.v2116-village-asset-polish-root .v2097-interior-portrait { width: 54px !important; height: 54px !important; max-width: 54px !important; max-height: 54px !important; object-fit: contain !important; }
+html.v2116-village-asset-polish-root .v2097-card-actions button,
+html.v2116-village-asset-polish-root .v2097-build-grid button,
+html.v2116-village-asset-polish-root .runtime-content button:not(.v2097-menu-close) { background-color: rgba(255,255,255,.68) !important; background-image: linear-gradient(180deg, rgba(255,255,255,.80), rgba(171,239,255,.44)), var(--v2116-button-asset) !important; background-size: cover !important; background-blend-mode: normal, soft-light !important; border: 1px solid rgba(65,184,218,.34) !important; border-radius: 16px !important; color: var(--v2116-ink) !important; -webkit-text-fill-color: var(--v2116-ink) !important; text-shadow: none !important; filter: none !important; }
+
+html.v2116-village-asset-polish-root .v2097-expedition-body.v2097-expedition-body-open { position: fixed !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; width: min(92vw, 520px) !important; max-height: min(82svh, 720px) !important; min-height: min(54svh, 520px) !important; padding: 50px 16px 16px !important; overflow-y: auto !important; z-index: 216 !important; pointer-events: auto !important; }
+html.v2116-village-asset-polish-root .v2097-build-tray { left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; width: min(92vw, 520px) !important; max-height: min(82svh, 720px) !important; z-index: 216 !important; }
+html.v2116-village-asset-polish-root .village-world-screen.v2116-build-tray-open .v2097-build-tray { display: block !important; }
+html.v2116-village-asset-polish-root .village-world-screen.v2116-build-tray-open .v2097-build-backdrop { display: block !important; pointer-events: auto !important; z-index: 199 !important; }
+html.v2116-village-asset-polish-root body.v2116-expedition-open .village-world-screen :is(.v2097-village-hud,.v2097-world-controls,.v2097-joystick,.bottom-nav,.v2097-village-guide,.v2097-village-notice),
+html.v2116-village-asset-polish-root body.v2116-modal-open .village-world-screen :is(.v2097-village-hud,.v2097-expedition-board:not(.open),.v2097-world-controls,.v2097-joystick,.bottom-nav,.v2097-village-guide,.v2097-village-notice),
+html.v2116-village-asset-polish-root body.v2116-build-open .village-world-screen :is(.v2097-village-hud,.v2097-expedition-board,.v2097-world-controls,.v2097-joystick,.bottom-nav,.v2097-village-guide,.v2097-village-notice) { display: none !important; }
+
+html.v2116-village-asset-polish-root .runtime-menu-screen.v2116-runtime-page-shell { display: grid !important; place-items: center !important; min-height: 100svh !important; padding: calc(var(--v2116-safe-top) + 16px) var(--v2116-safe-right) calc(var(--v2116-safe-bottom) + 58px) var(--v2116-safe-left) !important; overflow: hidden !important; }
+html.v2116-village-asset-polish-root .runtime-menu-screen.v2116-runtime-page-shell .runtime-hud { display: none !important; }
+html.v2116-village-asset-polish-root .runtime-menu-screen.v2116-runtime-page-shell .v2116-aqua-page { width: min(93vw, 684px) !important; min-height: min(62svh, 620px) !important; max-height: calc(100svh - var(--v2116-safe-top) - var(--v2116-safe-bottom) - 92px) !important; padding: 22px 16px !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch !important; }
+html.v2116-village-asset-polish-root .runtime-menu-screen.v2116-runtime-page-shell .v2097-menu-close { position: fixed !important; top: calc(var(--v2116-safe-top) + 10px) !important; right: calc(var(--v2116-safe-right) + 10px) !important; z-index: 180 !important; }
+
+/* Fishing: use new props as small edge dressing instead of hiding or letting them flood the playfield. */
+html.v2116-village-asset-polish-root body[data-screen="fishing"] .fishing-screen.v2116-fishing-asset-screen { position: fixed !important; inset: 0 !important; overflow: hidden !important; background-color: #08729a !important; }
+html.v2116-village-asset-polish-root body[data-screen="fishing"] .fishing-screen.v2116-fishing-asset-screen .bottom-nav { display: none !important; }
+html.v2116-village-asset-polish-root body[data-screen="fishing"] .v2110-fishing-props { display: block !important; visibility: visible !important; position: absolute !important; inset: 0 !important; pointer-events: none !important; z-index: 3 !important; opacity: .58 !important; }
+html.v2116-village-asset-polish-root body[data-screen="fishing"] .v2110-fishing-prop { position: absolute !important; display: block !important; width: auto !important; height: auto !important; object-fit: contain !important; pointer-events: none !important; filter: drop-shadow(0 8px 12px rgba(0,30,50,.18)) !important; }
+html.v2116-village-asset-polish-root body[data-screen="fishing"] .v2110-fishing-boat { left: 4% !important; bottom: 16% !important; max-width: 118px !important; max-height: 84px !important; }
+html.v2116-village-asset-polish-root body[data-screen="fishing"] .v2110-fishing-buoy { right: 9% !important; bottom: 36% !important; max-width: 50px !important; max-height: 60px !important; }
+html.v2116-village-asset-polish-root body[data-screen="fishing"] .v2110-fishing-rope { left: 8% !important; top: 20% !important; max-width: 72px !important; max-height: 44px !important; opacity: .55 !important; }
+html.v2116-village-asset-polish-root body[data-screen="fishing"] .v2110-fishing-net { right: 8% !important; top: 19% !important; max-width: 94px !important; max-height: 58px !important; opacity: .48 !important; }
+html.v2116-village-asset-polish-root body[data-screen="fishing"] :is(.fishing-hud img,.fishing-loadout-strip img,.recent-catch-strip img,.hud-chip img,.v2055-reel-console img) { width: 18px !important; height: 18px !important; max-width: 18px !important; max-height: 18px !important; object-fit: contain !important; filter: none !important; }
+html.v2116-village-asset-polish-root body[data-screen="fishing"] :is(.fishing-hud,.fishing-loadout-strip,.recent-catch-strip,.v2055-reel-console,.reel-panel,.catch-result-card) { border-color: var(--v2116-line) !important; background-image: linear-gradient(180deg, rgba(255,255,255,.86), rgba(198,246,255,.76)), var(--v2116-modal-asset) !important; background-size: cover !important; background-blend-mode: normal, soft-light !important; color: var(--v2116-ink) !important; -webkit-text-fill-color: var(--v2116-ink) !important; text-shadow: none !important; filter: none !important; }
+html.v2116-village-asset-polish-root body[data-screen="fishing"] .stage-ui .cast-button { min-width: 136px !important; min-height: 46px !important; max-height: 48px !important; background-image: linear-gradient(180deg, rgba(255,255,255,.94), rgba(93,225,249,.78)), var(--v2116-button-asset) !important; background-size: cover !important; background-blend-mode: normal, soft-light !important; }
+
+/* v2116 validation anchor + explicit two-class card selector. */
+html.v2116-village-asset-polish-root :is(.v2116-aqua-card,.v2116-aqua-page) { border-color: var(--v2116-line) !important; }

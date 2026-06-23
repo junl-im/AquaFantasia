@@ -58,7 +58,7 @@ type PointerTrack = {
 type PointerPoint = { x: number; y: number };
 type VillagePointerHit = { x: number; y: number; worldX: number; worldY: number; screenX: number; screenY: number };
 
-type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse' | 'stall' | 'pottedPalm' | 'barrels' | 'coral' | 'crystal' | 'banner' | 'woodFence' | 'ropeFence' | 'bollard' | 'stairs' | 'bridge' | 'tropicalTree' | 'palmAlt' | 'stoneWall' | 'arch' | 'questBoard' | 'statue' | 'cherryTree' | 'mapleTree' | 'pineTree' | 'crystalTree' | 'flowerTree' | 'cypressTree' | 'dog' | 'sleepingDog' | 'cat' | 'walkingCat' | 'seagull' | 'flyingSeagull' | 'duck' | 'swimmingDuck' | 'butterflyBlue' | 'butterflyPink' | 'petals' | 'sparkles' | 'waterRing' | 'shoreFoam' | 'splash' | 'steam' | 'cookingPot' | 'goldLantern' | 'fishShadowSmall' | 'fishShadowMid' | 'fishShadowBig' | 'woodSign' | 'ropeWall' | 'stoneCorner' | 'stoneCurve' | 'wideStairs' | 'ropeCorner' | 'noticeBoard' | 'plazaStairs' | 'bridgeAsset';
+type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse' | 'stall' | 'pottedPalm' | 'barrels' | 'coral' | 'crystal' | 'banner' | 'woodFence' | 'ropeFence' | 'bollard' | 'stairs' | 'bridge' | 'tropicalTree' | 'palmAlt' | 'stoneWall' | 'arch' | 'questBoard' | 'statue' | 'cherryTree' | 'mapleTree' | 'pineTree' | 'crystalTree' | 'flowerTree' | 'cypressTree' | 'dog' | 'sleepingDog' | 'cat' | 'walkingCat' | 'seagull' | 'flyingSeagull' | 'duck' | 'swimmingDuck' | 'butterflyBlue' | 'butterflyPink' | 'petals' | 'sparkles' | 'waterRing' | 'shoreFoam' | 'splash' | 'steam' | 'cookingPot' | 'goldLantern' | 'fishShadowSmall' | 'fishShadowMid' | 'fishShadowBig' | 'woodSign' | 'ropeWall' | 'stoneCorner' | 'stoneCurve' | 'wideStairs' | 'ropeCorner' | 'noticeBoard' | 'plazaStairs' | 'bridgeAsset' | 'fishingBoat' | 'rowBoat' | 'ropeCoil' | 'anchorAsset' | 'treasureChest' | 'seaweedPatch' | 'driftwood' | 'crabTrap' | 'lifeRing' | 'bucketAsset' | 'tackleBoxAsset' | 'netAsset' | 'signAsset' | 'palletAsset' | 'bobberAsset' | 'shellCluster';
 
 type Decoration = {
   kind: DecoKind;
@@ -330,12 +330,48 @@ const INTERIOR_ASSETS: Partial<Record<VillageBuildingType, { title: string; imag
 const CAMERA_PAD = 280;
 
 const TILE_TEXTURES: Record<VillageTileKind, string[]> = {
-  grass: ['./assets/v2023/tiles/grass_tile_0.png', './assets/v2023/tiles/grass_flower_tile_0.png', './assets/v207/tiles/grass_tile.png'],
-  sand: ['./assets/v2023/tiles/sand_tile_0.png', './assets/v2023/tiles/sand_shell_tile_0.png', './assets/v207/tiles/sand_path_tile.png'],
-  sea: ['./assets/v2023/tiles/water_tile_0.png', './assets/v207/tiles/water_tile.png'],
-  stone: ['./assets/v2023/tiles/stone_tile_0.png', './assets/v207/tiles/stone_cracked_tile.png', './assets/v207/tiles/grass_path_tile.png', './assets/v207/tiles/curved_path_tile.png'],
-  wood: ['./assets/v207/tiles/beach_path_tile.png'],
-  plaza: ['./assets/v2023/tiles/plaza_tile_0.png', './assets/v2023/tiles/plaza_shell_tile_0.png', './assets/v207/tiles/plaza_tile.png'],
+  grass: [
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_030_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_037_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_039_32x32.png',
+    './assets/v2023/tiles/grass_tile_0.png', './assets/v2023/tiles/grass_flower_tile_0.png', './assets/v207/tiles/grass_tile.png'
+  ],
+  sand: [
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_045_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_046_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_067_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_078_32x32.png',
+    './assets/v2023/tiles/sand_tile_0.png', './assets/v2023/tiles/sand_shell_tile_0.png', './assets/v207/tiles/sand_path_tile.png'
+  ],
+  sea: [
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_001_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_002_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_003_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_011_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_012_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_013_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_014_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_015_32x32.png',
+    './assets/v2023/tiles/water_tile_0.png', './assets/v207/tiles/water_tile.png'
+  ],
+  stone: [
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_055_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_057_32x32.png',
+    './assets/v2023/tiles/stone_tile_0.png', './assets/v207/tiles/stone_cracked_tile.png', './assets/v207/tiles/grass_path_tile.png', './assets/v207/tiles/curved_path_tile.png'
+  ],
+  wood: [
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_055_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_056_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_057_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_058_32x32.png',
+    './assets/v207/tiles/beach_path_tile.png'
+  ],
+  plaza: [
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_047_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_048_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_049_32x32.png',
+    './assets/v2023/tiles/plaza_tile_0.png', './assets/v2023/tiles/plaza_shell_tile_0.png', './assets/v207/tiles/plaza_tile.png'
+  ],
 };
 
 
@@ -344,29 +380,29 @@ const DECO_TEXTURES: Partial<Record<DecoKind, string>> = {
   palm: './assets/v2023/props/palm_tree.png',
   tropicalTree: './assets/v2012/props/tree_tropical.png',
   palmAlt: './assets/v2012/props/tree_palm_alt.png',
-  lamp: './assets/v209/props/crystal_lamp.png',
+  lamp: './assets/v2110/objects/fishing_props/fishing_prop_012.png',
   bench: './assets/v2025/props/harbor_beach_bench_source_02_512.png',
-  crate: './assets/v2025/props/harbor_beach_crate_stack_source_02_512.png',
-  buoy: './assets/v209/props/net_buoys.png',
-  dock: './assets/v2025/props/harbor_beach_dock_platform_source_02_512.png',
+  crate: './assets/v2110/objects/fishing_props/fishing_prop_011.png',
+  buoy: './assets/v2110/objects/fishing_props/fishing_prop_006.png',
+  dock: './assets/v2110/objects/fishing_props/fishing_prop_004.png',
   flag: './assets/v2025/props/harbor_beach_flag_blue_source_03_512.png',
-  rock: './assets/v2025/props/harbor_beach_shell_rocks_source_02_512.png',
-  flowerBed: './assets/v2025/props/harbor_beach_flower_box_source_02_512.png',
+  rock: './assets/v2110/objects/fishing_props/fishing_prop_020.png',
+  flowerBed: './assets/v2110/objects/fishing_props/fishing_prop_017.png',
   lighthouse: './assets/v209/props/crystal_pillar.png',
   stall: './assets/v2025/props/harbor_beach_seaside_stall_source_02_512.png',
   pottedPalm: './assets/v209/props/potted_palm.png',
-  barrels: './assets/v2025/props/harbor_beach_barrels_source_02_512.png',
-  coral: './assets/v2025/props/harbor_beach_coral_cluster_source_03_512.png',
-  crystal: './assets/v2025/props/harbor_beach_crystal_lamp_source_02_512.png',
+  barrels: './assets/v2110/objects/fishing_props/fishing_prop_013.png',
+  coral: './assets/v2110/objects/fishing_props/fishing_prop_018.png',
+  crystal: './assets/v2110/objects/fishing_props/fishing_prop_012.png',
   banner: './assets/v209/props/banner_stone.png',
   woodFence: './assets/v209/props/wood_fence.png',
-  ropeFence: './assets/v2025/props/harbor_beach_rope_fence_source_02_512.png',
-  bollard: './assets/v209/props/harbor_bollard.png',
+  ropeFence: './assets/v2110/objects/fishing_props/fishing_prop_005.png',
+  bollard: './assets/v2110/objects/fishing_props/fishing_prop_003.png',
   stairs: './assets/v209/props/stone_stairs.png',
   bridge: './assets/v209/props/wood_bridge.png',
   stoneWall: './assets/v209/props/stone_wall.png',
   arch: './assets/v209/props/crystal_arch.png',
-  questBoard: './assets/v2025/props/harbor_beach_quest_board_large_source_03_512.png',
+  questBoard: './assets/v2110/objects/fishing_props/fishing_prop_010.png',
   statue: './assets/v209/props/crystal_statue.png',
   cherryTree: './assets/v2012/props/tree_cherry.png',
   mapleTree: './assets/v2012/props/tree_maple.png',
@@ -392,19 +428,37 @@ const DECO_TEXTURES: Partial<Record<DecoKind, string>> = {
   steam: './assets/v2012/props/steam.png',
   cookingPot: './assets/v2012/props/cooking_pot.png',
   // v2.0.78: old gold_lantern.png is a right-edge half sprite; use the complete centered crystal lamp instead.
-  goldLantern: './assets/v209/props/crystal_lamp.png',
+  goldLantern: './assets/v2110/objects/fishing_props/fishing_prop_012.png',
   fishShadowSmall: './assets/v2012/props/fish_shadow_small.png',
   fishShadowMid: './assets/v2012/props/fish_shadow_mid.png',
   fishShadowBig: './assets/v2012/props/fish_shadow_big.png',
-  woodSign: './assets/v209/props/wood_sign.png',
+  woodSign: './assets/v2110/objects/fishing_props/fishing_prop_010.png',
   ropeWall: './assets/v2025/props/harbor_beach_rope_wall_source_02_512.png',
   stoneCorner: './assets/v209/props/stone_corner.png',
   stoneCurve: './assets/v2025/props/harbor_beach_stone_curve_source_02_512.png',
   wideStairs: './assets/v2025/props/harbor_beach_stair_wide_source_02_512.png',
   ropeCorner: './assets/v209/props/rope_corner.png',
-  noticeBoard: './assets/v2025/props/harbor_beach_notice_board_source_03_512.png',
+  noticeBoard: './assets/v2110/objects/fishing_props/fishing_prop_010.png',
   plazaStairs: './assets/v2023/props/plaza_stairs.png',
   bridgeAsset: './assets/v2025/props/harbor_beach_wood_bridge_source_02_512.png',
+  // v2.1.16: new individual PNG object pass. These are used as real village props,
+  // not as full-screen overlays, so they stay small, grounded, and nonblocking.
+  fishingBoat: './assets/v2110/objects/fishing_props/fishing_prop_001.png',
+  rowBoat: './assets/v2110/objects/fishing_props/fishing_prop_002.png',
+  ropeCoil: './assets/v2110/objects/fishing_props/fishing_prop_005.png',
+  anchorAsset: './assets/v2110/objects/fishing_props/fishing_prop_014.png',
+  treasureChest: './assets/v2110/objects/fishing_props/fishing_prop_015.png',
+  seaweedPatch: './assets/v2110/objects/fishing_props/fishing_prop_019.png',
+  driftwood: './assets/v2110/objects/fishing_props/fishing_prop_021.png',
+  crabTrap: './assets/v2110/objects/fishing_props/fishing_prop_022.png',
+  lifeRing: './assets/v2110/objects/fishing_props/fishing_prop_023.png',
+  bucketAsset: './assets/v2110/objects/fishing_props/fishing_prop_007.png',
+  tackleBoxAsset: './assets/v2110/objects/fishing_props/fishing_prop_008.png',
+  netAsset: './assets/v2110/objects/fishing_props/fishing_prop_009.png',
+  signAsset: './assets/v2110/objects/fishing_props/fishing_prop_010.png',
+  palletAsset: './assets/v2110/objects/fishing_props/fishing_prop_004.png',
+  bobberAsset: './assets/v2110/objects/fishing_props/fishing_prop_016.png',
+  shellCluster: './assets/v2110/objects/fishing_props/fishing_prop_017.png',
 };
 
 const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
@@ -442,17 +496,32 @@ const DECO_TARGET_HEIGHT: Record<DecoKind, number> = {
   fishShadowSmall: 44, fishShadowMid: 50, fishShadowBig: 58,
   woodSign: 78, ropeWall: 64, stoneCorner: 58, stoneCurve: 58, wideStairs: 74, ropeCorner: 56,
   noticeBoard: 92, plazaStairs: 82, bridgeAsset: 98,
+  fishingBoat: 126, rowBoat: 92, ropeCoil: 54, anchorAsset: 74, treasureChest: 72,
+  seaweedPatch: 62, driftwood: 58, crabTrap: 62, lifeRing: 58,
+  bucketAsset: 58, tackleBoxAsset: 54, netAsset: 54, signAsset: 70, palletAsset: 54, bobberAsset: 60, shellCluster: 58,
 };
 
 const BUILD_PROP_TEXTURES: Partial<Record<VillageBuildingType, string>> = {
   fountain: './assets/v2025/props/harbor_beach_fountain_asset_source_02_512.png',
-  flower: './assets/v2025/props/harbor_beach_shell_garden_source_02_512.png',
+  flower: './assets/v2110/objects/fishing_props/fishing_prop_017.png',
 };
 
 const BUILD_PROP_TARGET_HEIGHT: Partial<Record<VillageBuildingType, number>> = {
   fountain: 104,
   flower: 58,
 };
+
+const V2116_VILLAGE_ASSET_STEWARD_URLS = [
+  './assets/v2110/objects/fishing_props/fishing_prop_001.png',
+  './assets/v2110/objects/fishing_props/fishing_prop_002.png',
+  './assets/v2110/objects/fishing_props/fishing_prop_005.png',
+  './assets/v2110/objects/fishing_props/fishing_prop_014.png',
+  './assets/v2110/objects/fishing_props/fishing_prop_015.png',
+  './assets/v2110/objects/fishing_props/fishing_prop_019.png',
+  './assets/v2110/objects/fishing_props/fishing_prop_021.png',
+  './assets/v2110/objects/fishing_props/fishing_prop_022.png',
+  './assets/v2110/objects/fishing_props/fishing_prop_023.png',
+] as const;
 
 const BUILD_PREVIEW_TEXTURES = {
   valid: './assets/v2023/build/preview_valid_tile.png',
@@ -466,6 +535,8 @@ const CRITICAL_DECO_KINDS: DecoKind[] = [
   'lighthouse', 'stall', 'questBoard', 'coral', 'crystal', 'banner', 'woodFence', 'ropeFence',
   'bollard', 'stairs', 'bridge', 'woodSign', 'ropeWall', 'stoneCorner', 'stoneCurve', 'wideStairs', 'ropeCorner',
   'noticeBoard', 'plazaStairs', 'bridgeAsset',
+  'fishingBoat', 'rowBoat', 'ropeCoil', 'anchorAsset', 'treasureChest', 'seaweedPatch', 'driftwood', 'crabTrap', 'lifeRing',
+  'bucketAsset', 'tackleBoxAsset', 'netAsset', 'signAsset', 'palletAsset', 'bobberAsset', 'shellCluster',
 ];
 
 function uniqueUrls(urls: Array<string | undefined>): string[] {
@@ -655,6 +726,23 @@ const VILLAGE_DECORATIONS: Decoration[] = [
   { kind: 'goldLantern', x: 28, y: 19, scale: .30 },
   { kind: 'butterflyBlue', x: 14, y: 16, scale: .24 },
   { kind: 'butterflyPink', x: 26, y: 16, scale: .24 },
+  // v2.1.16: new harbor object clusters from the supplied PNG set. Keep them nonblocking and outside the main tap corridor.
+  { kind: 'rowBoat', x: 10, y: 33, scale: .42 },
+  { kind: 'fishingBoat', x: 30, y: 33, scale: .34 },
+  { kind: 'ropeCoil', x: 12, y: 30, scale: .42 },
+  { kind: 'anchorAsset', x: 27, y: 30, scale: .38 },
+  { kind: 'treasureChest', x: 24, y: 29, scale: .38 },
+  { kind: 'seaweedPatch', x: 7, y: 33, scale: .44 },
+  { kind: 'driftwood', x: 33, y: 33, scale: .40 },
+  { kind: 'crabTrap', x: 15, y: 33, scale: .34 },
+  { kind: 'lifeRing', x: 25, y: 33, scale: .34 },
+  { kind: 'bucketAsset', x: 13, y: 29, scale: .34 },
+  { kind: 'tackleBoxAsset', x: 28, y: 29, scale: .32 },
+  { kind: 'netAsset', x: 14, y: 31, scale: .34 },
+  { kind: 'signAsset', x: 10, y: 24, scale: .36 },
+  { kind: 'palletAsset', x: 21, y: 33, scale: .30 },
+  { kind: 'bobberAsset', x: 17, y: 34, scale: .30 },
+  { kind: 'shellCluster', x: 9, y: 34, scale: .34 },
 ];
 
 const V2029_HIDDEN_DECORATION_KEYS = new Set([
@@ -719,10 +807,11 @@ function auditedDecorationPlacement(deco: Decoration): { x: number; y: number; s
     if (y <= 5) y += 0.75;
     if (deco.kind === 'tree' || deco.kind === 'palm' || deco.kind === 'lighthouse') scale = Math.min(scale, 0.76);
     if (['tropicalTree', 'palmAlt', 'cherryTree', 'mapleTree', 'pineTree', 'crystalTree', 'flowerTree', 'cypressTree'].includes(deco.kind)) scale = Math.min(scale, 0.34);
-    if (['bridgeAsset', 'bridge', 'wideStairs', 'coral', 'rock'].includes(deco.kind)) scale = Math.min(scale, 0.42);
+    if (['bridgeAsset', 'bridge', 'wideStairs', 'coral', 'rock', 'fishingBoat', 'rowBoat', 'seaweedPatch', 'driftwood'].includes(deco.kind)) scale = Math.min(scale, 0.42);
   }
   if (deco.kind === 'lamp' || deco.kind === 'goldLantern') scale = Math.min(scale, 0.50);
   if (deco.kind === 'crystal') scale = Math.min(scale, 0.56);
+  if (['anchorAsset', 'treasureChest', 'ropeCoil', 'crabTrap', 'lifeRing', 'bucketAsset', 'tackleBoxAsset', 'netAsset', 'signAsset', 'palletAsset', 'bobberAsset', 'shellCluster'].includes(deco.kind)) scale = Math.min(scale, 0.48);
   if (y >= 34) scale = Math.min(scale, 0.52);
   if (x <= 4 || x >= 36) scale = Math.min(scale, 0.48);
   return { x: clamp(x, 2.2, MAP_SIZE - 3.2), y: clamp(y, 4.2, MAP_SIZE - 5.4), scale };
@@ -1056,11 +1145,13 @@ export class VillageWorld {
     this.root.classList.toggle('v2113-build-tray-open', open);
     this.root.classList.toggle('v2114-build-tray-open', open);
     this.root.classList.toggle('v2115-build-tray-open', open);
+    this.root.classList.toggle('v2116-build-tray-open', open);
     document.body.classList.toggle('v2111-build-open', open);
     document.body.classList.toggle('v2112-build-open', open);
     document.body.classList.toggle('v2113-build-open', open);
     document.body.classList.toggle('v2114-build-open', open);
     document.body.classList.toggle('v2115-build-open', open);
+    document.body.classList.toggle('v2116-build-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
       if (!keepSelection) this.movingBuildingId = null;
@@ -1084,10 +1175,12 @@ export class VillageWorld {
       this.root.classList.remove('v2112-build-tray-open');
       this.root.classList.remove('v2113-build-tray-open');
       this.root.classList.remove('v2114-build-tray-open');
+      this.root.classList.remove('v2116-build-tray-open');
       document.body.classList.remove('v2111-build-open');
       document.body.classList.remove('v2112-build-open');
       document.body.classList.remove('v2113-build-open');
       document.body.classList.remove('v2114-build-open');
+      document.body.classList.remove('v2116-build-open');
       this.previewLayer.removeChildren();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
     }
@@ -1223,6 +1316,7 @@ export class VillageWorld {
       ...Object.values(DECO_TEXTURES),
       ...Object.values(BUILD_PROP_TEXTURES),
       ...Object.values(BUILD_PREVIEW_TEXTURES),
+      ...V2116_VILLAGE_ASSET_STEWARD_URLS,
     ]);
   }
 
@@ -1235,6 +1329,7 @@ export class VillageWorld {
       ...Object.values(ACTOR_DIRECTION_TEXTURES.player),
       ...CRITICAL_DECO_KINDS.map((kind) => DECO_TEXTURES[kind]),
       ...Object.values(BUILD_PREVIEW_TEXTURES),
+      ...V2116_VILLAGE_ASSET_STEWARD_URLS,
     ]);
   }
 
@@ -2244,7 +2339,7 @@ export class VillageWorld {
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
     this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open');
     document.body.classList.add('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
@@ -2287,7 +2382,7 @@ export class VillageWorld {
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
     this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open');
     document.body.classList.add('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
@@ -2300,7 +2395,7 @@ export class VillageWorld {
     if (!panel) return;
     panel.classList.remove('open');
     this.root.classList.remove('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open');
+    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open');
     document.body.classList.remove('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');

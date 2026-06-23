@@ -1,5 +1,5 @@
-// v2.1.15 rebuilds the Aqua screen shell, start reveal, modal cards, controls, and fishing layout polish.
-const CACHE_NAME = 'aqua-fantasia-v2.1.15-aqua-screen-shell';
+// v2.1.16 applies the new village asset polish pass to village objects, sea/beach tiles, aqua cards, and fishing-safe UI polish.
+const CACHE_NAME = 'aqua-fantasia-v2.1.16-village-asset-polish';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -689,11 +689,22 @@ const PRECACHE = [
   "./assets/v2110/ui/main_aqua_cards/ui_main_006.png",
   "./assets/v2110/ui/fishing_hud/ui_hud_004.png",
   "./assets/v2110/ui/fish_dex_cards/ui_card_001.png",
+  "./assets/v2110/objects/fishing_props/fishing_prop_001.png",
   "./assets/v2110/objects/fishing_props/fishing_prop_002.png",
+  "./assets/v2110/objects/fishing_props/fishing_prop_004.png",
   "./assets/v2110/objects/fishing_props/fishing_prop_005.png",
   "./assets/v2110/objects/fishing_props/fishing_prop_006.png",
   "./assets/v2110/objects/fishing_props/fishing_prop_009.png",
-  "./assets/v2110/tiles_32x32/sea_and_beach/sea_tile_001_32x32.png"
+  "./assets/v2110/objects/fishing_props/fishing_prop_010.png",
+  "./assets/v2110/objects/fishing_props/fishing_prop_014.png",
+  "./assets/v2110/objects/fishing_props/fishing_prop_015.png",
+  "./assets/v2110/objects/fishing_props/fishing_prop_019.png",
+  "./assets/v2110/objects/fishing_props/fishing_prop_021.png",
+  "./assets/v2110/objects/fishing_props/fishing_prop_022.png",
+  "./assets/v2110/objects/fishing_props/fishing_prop_023.png",
+  "./assets/v2110/tiles_32x32/sea_and_beach/sea_tile_001_32x32.png",
+  "./assets/v2110/tiles_32x32/sea_and_beach/sea_tile_045_32x32.png",
+  "./assets/v2110/tiles_32x32/sea_and_beach/sea_tile_055_32x32.png"
 ];
 
 async function precacheSafely() {
