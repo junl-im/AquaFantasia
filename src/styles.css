@@ -37625,3 +37625,157 @@ html.v219-ui-touch-shop-fishing-audit-root body[data-screen="fishing"] :is(.v205
   object-fit: contain !important;
 }
 html.v219-ui-touch-shop-fishing-audit-root body[data-screen="fishing"] .v2028-fishing-safe-grid { display: none !important; }
+
+/* v2.1.10: new individual PNG asset integration pass
+   Keep the v2.1.8/v2.1.9 stable rollback and add only bounded assets.
+   Do not use these PNGs on the login keep-device toggle; that control stays pure CSS. */
+html.v2110-asset-integration-pass-root {
+  --v2110-button-aqua: url('./assets/v2110/ui/buttons_and_badges/ui_button_002.png');
+  --v2110-button-gold: url('./assets/v2110/ui/buttons_and_badges/ui_button_001.png');
+  --v2110-sea-tile-css: url('./assets/v2110/tiles_32x32/sea_and_beach/sea_tile_001_32x32.png');
+  --v2110-card-aqua: url('./assets/v2110/ui/main_aqua_cards/ui_main_001.png');
+}
+
+html.v2110-asset-integration-pass-root .start-art-screen .hit-keep,
+html.v2110-asset-integration-pass-root .start-art-screen .hit-keep::before,
+html.v2110-asset-integration-pass-root .start-art-screen .hit-keep::after {
+  background-image: none !important;
+}
+
+html.v2110-asset-integration-pass-root :is(.runtime-btn,.btn-aqua-action,.v2097-world-controls button,.v2055-reel-actions button,.cast-button) {
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+
+html.v2110-asset-integration-pass-root :is(.runtime-btn,.btn-aqua-action,.v2097-world-controls button,.v2055-reel-actions button,.cast-button)::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 2px !important;
+  border-radius: inherit !important;
+  background-image: var(--v2110-button-aqua) !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100% !important;
+  opacity: .18 !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
+}
+
+html.v2110-asset-integration-pass-root :is(.runtime-btn.gold,.cast-button)::before {
+  background-image: var(--v2110-button-gold) !important;
+  opacity: .20 !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .fishing-screen.v2110-fishing-new-assets-screen::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image: var(--v2110-sea-tile, var(--v2110-sea-tile-css)) !important;
+  background-repeat: repeat !important;
+  background-size: 32px 32px !important;
+  opacity: .055 !important;
+  mix-blend-mode: screen !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .fishing-stage,
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .fishing-3d-ambient,
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .pixi-layer {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .v2110-fishing-props {
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 9 !important;
+  overflow: hidden !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .v2110-fishing-prop {
+  position: absolute !important;
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  opacity: .72 !important;
+  filter: drop-shadow(0 8px 16px rgba(5, 45, 70, .28)) !important;
+  transform-origin: center bottom !important;
+  user-select: none !important;
+  -webkit-user-drag: none !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .v2110-fishing-boat {
+  left: clamp(14px, 3vw, 38px) !important;
+  bottom: clamp(116px, 15svh, 190px) !important;
+  max-width: min(22vw, 146px) !important;
+  transform: rotate(-2deg) !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .v2110-fishing-buoy {
+  right: clamp(22px, 5vw, 58px) !important;
+  bottom: clamp(178px, 24svh, 280px) !important;
+  max-width: min(12vw, 70px) !important;
+  opacity: .62 !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .v2110-fishing-rope {
+  left: clamp(10px, 5vw, 70px) !important;
+  bottom: clamp(58px, 9svh, 116px) !important;
+  max-width: min(20vw, 130px) !important;
+  opacity: .46 !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .v2110-fishing-net {
+  right: clamp(12px, 4vw, 52px) !important;
+  bottom: clamp(54px, 8svh, 112px) !important;
+  max-width: min(19vw, 132px) !important;
+  opacity: .44 !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] :is(.recent-catch-strip img,.runtime-item-card img,.dex-card img,.recent-card img) {
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .recent-catch-strip .recent-card img {
+  max-width: 54px !important;
+  max-height: 42px !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .catch-result img,
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .result-fish img {
+  max-width: min(56vw, 260px) !important;
+  max-height: 28svh !important;
+  object-fit: contain !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] :is(.fishing-hud img,.fishing-loadout-strip img) {
+  max-width: 26px !important;
+  max-height: 26px !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] .v2028-fishing-safe-grid,
+html.v2110-asset-integration-pass-root body[data-screen="fishing"] :is(.v205-fish-shadow,.v2031-fishing-ripple,.v2031-fishing-foam) {
+  max-width: 160px !important;
+  max-height: 160px !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="dex"] .dex-card img,
+html.v2110-asset-integration-pass-root body[data-screen="inventory"] .runtime-item-card img,
+html.v2110-asset-integration-pass-root body[data-screen="shop"] .shop-card img {
+  max-width: min(48vw, 128px) !important;
+  max-height: 104px !important;
+  object-fit: contain !important;
+}
+
+html.v2110-asset-integration-pass-root body[data-screen="dex"] .dex-card {
+  background-image:
+    linear-gradient(180deg, rgba(244, 254, 255, .88), rgba(178, 237, 255, .74)),
+    url('./assets/v2110/ui/fish_dex_cards/ui_card_001.png') !important;
+  background-size: cover, 100% 100% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}

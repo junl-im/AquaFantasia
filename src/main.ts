@@ -67,7 +67,7 @@ const ASSET = {
   loginBg: './assets/v85/screens/start_screen_clean_v810.webp',
   player: './assets/v93/characters/fisher_boat_cute_action.png',
   float: './assets/v92/icons/bobber.png',
-  fish: './assets/v92/fish/fish_01.png',
+  fish: './assets/v2110/fish/common_tropical/fish_common_001.png',
   gauge: './assets/v92/fx/gauge_050.png',
   slot: './assets/art/fish_slot.png',
   ripple: './assets/art/water_ripple_overlay.webp',
@@ -134,6 +134,17 @@ const ASSET = {
   v2025WorldMapPage: './assets/v2025/ui/worldmap_page_bg_coral_premium_sd2026.png',
   v2025FishingPage: './assets/v2025/ui/fishing_page_bg_emerald_premium_sd2026.png',
   v2025BuildPage: './assets/v2025/ui/build_page_bg_deep_premium_sd2026.png',
+  v2110SeaTile: './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_001_32x32.png',
+  v2110UiButtonAqua: './assets/v2110/ui/buttons_and_badges/ui_button_002.png',
+  v2110UiButtonGold: './assets/v2110/ui/buttons_and_badges/ui_button_001.png',
+  v2110UiClose: './assets/v2110/ui/main_aqua_cards/ui_main_006.png',
+  v2110FishingHookBadge: './assets/v2110/ui/fishing_hud/ui_hud_004.png',
+  v2110FishingBoat: './assets/v2110/objects/fishing_props/fishing_prop_002.png',
+  v2110FishingBuoy: './assets/v2110/objects/fishing_props/fishing_prop_006.png',
+  v2110FishingRope: './assets/v2110/objects/fishing_props/fishing_prop_005.png',
+  v2110FishingNet: './assets/v2110/objects/fishing_props/fishing_prop_009.png',
+  v2110FishingSign: './assets/v2110/objects/fishing_props/fishing_prop_010.png',
+  v2110FishCardFrame: './assets/v2110/ui/fish_dex_cards/ui_card_001.png',
 };
 
 const V13_BG: Record<Exclude<Screen, 'login'>, string> = {
@@ -257,12 +268,12 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
-    // v2.1.9 live UI policy: keep the v2.1.8 rollback, then add only targeted touch/shop/page/fishing guards.
+    // v2.1.10 live UI policy: keep the v2.1.8 rollback, then add bounded individual PNG assets without disturbing touch/UI stability.
     document.documentElement.dataset.v2098UiRecovery = 'v2098-dock-fishing-build-recovery';
     document.documentElement.dataset.v218StableRollback = 'v218-stable-ui-fishing-rollback';
-    document.documentElement.dataset.v219UiTouchShopFishingAudit = 'v219-ui-touch-shop-fishing-audit';
+    document.documentElement.dataset.v2110AssetIntegrationPass = 'v2110-asset-integration-pass';
     this.activateV2097UiResetShell();
-    document.documentElement.classList.add('v2098-ui-recovery-root', 'v218-stable-ui-fishing-rollback-root', 'v219-ui-touch-shop-fishing-audit-root');
+    document.documentElement.classList.add('v2098-ui-recovery-root', 'v218-stable-ui-fishing-rollback-root', 'v219-ui-touch-shop-fishing-audit-root', 'v2110-asset-integration-pass-root');
     // v2.0.92 validation lineage only: dataset.v2092UiStable = 'v2092-live-ui-canonical' activateV2092UiStableShell html.classList.add('v2092-ui-canonical-root') v2092-ui-stable-village-screen v2092-village-hud v2092-profile-chip v2092-expedition-board v2092-expedition-toggle data-v2092-expedition-toggle v2092-expedition-body data-v2092-expedition-body v2092-expedition-body-open v2092-ui-close v2092-ui-stable-menu-screen v2092-runtime-hud v2092-menu-content data-v2092-scroll-root="true" v2092-menu-close
     // v2.0.93 validation lineage only: old html dataset markers intentionally removed from live runtime. visualPolish enginePatch v2077MenuUiCleanup v2089UiHardReset v2090UiDebtCleanup v2091UiCleanup v2092UiStable
     /* v2.0.92 validation lineage only: old html dataset markers are intentionally not attached to runtime.
@@ -1236,12 +1247,13 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v218-fishing-stable-rollback-screen v219-fishing-hud-input-audit-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen v2057-fishing-aqua-touch-screen v2058-tech-modernized-screen v2059-fishing-dialog-screen v2060-grounded-motion-fishing-screen v2061-loop-ui-fishing-screen v2062-ground-contact-fishing-screen v2063-fishing-rework-screen v2063-unified-card-window-screen v2064-fishing-polish-screen v2072-fishing-playable-screen v2073-fishing-core-feel-screen v2074-growth-loop-screen v2084-fishing-bite-single-screen v2098-fishing-restored-screen locked-screen';
+    root.className = 'game-screen fishing-screen v218-fishing-stable-rollback-screen v219-fishing-hud-input-audit-screen v2110-fishing-new-assets-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen v2057-fishing-aqua-touch-screen v2058-tech-modernized-screen v2059-fishing-dialog-screen v2060-grounded-motion-fishing-screen v2061-loop-ui-fishing-screen v2062-ground-contact-fishing-screen v2063-fishing-rework-screen v2063-unified-card-window-screen v2064-fishing-polish-screen v2072-fishing-playable-screen v2073-fishing-core-feel-screen v2074-growth-loop-screen v2084-fishing-bite-single-screen v2098-fishing-restored-screen locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     // v2048 legacy validation tokens preserved: 누르면 게이지가 올라가고, 떼면 내려갑니다 · safeTimer >= 2.0
     const v101FishingBg = V101_REGION_BG[region.key] ?? V101_WATER_BG.fishing;
     root.style.setProperty('--v101-water-bg', `url("${v101FishingBg}")`);
+    root.style.setProperty('--v2110-sea-tile', `url("${ASSET.v2110SeaTile}")`);
     root.innerHTML = `
       <span id="fishingHint" class="sr-only">낚시 시작 버튼으로 캐스팅하세요.</span>
       <button type="button" class="v2059-screen-close v2059-fishing-close" data-v2059-fishing-close aria-label="낚시 닫기">×</button>
@@ -1255,6 +1267,12 @@ class AquaFantasiaGame {
         <img class="v205-fish-shadow v205-shadow-large" src="${ASSET.fishingShadowLarge}" alt="" aria-hidden="true" />
         <img class="v2031-fishing-ripple" src="${ASSET.fishingAmbientRing}" alt="" aria-hidden="true" />
         <img class="v2031-fishing-foam" src="${ASSET.fishingAmbientFoam}" alt="" aria-hidden="true" />
+        <div class="v2110-fishing-props" aria-hidden="true">
+          <img class="v2110-fishing-prop v2110-fishing-boat" src="${ASSET.v2110FishingBoat}" alt="" loading="lazy" />
+          <img class="v2110-fishing-prop v2110-fishing-buoy" src="${ASSET.v2110FishingBuoy}" alt="" loading="lazy" />
+          <img class="v2110-fishing-prop v2110-fishing-rope" src="${ASSET.v2110FishingRope}" alt="" loading="lazy" />
+          <img class="v2110-fishing-prop v2110-fishing-net" src="${ASSET.v2110FishingNet}" alt="" loading="lazy" />
+        </div>
         <div class="fishing-guide-card v205-guide-card v2029-fishing-guide-card v2030-fishing-guide-card v2031-fishing-guide-card v2038-fishing-guide-card v2039-fishing-guide-card v2040-fishing-guide-card v2041-fishing-guide-card v2046-fishing-guide-card v2047-fishing-guide-card v2048-fishing-guide-card v2049-fishing-guide-card v2050-fishing-guide-card v2051-fishing-guide-card" aria-hidden="true"><strong>낚시 준비</strong><span data-fishing-tip>낚시 시작 → 물었다! → 감기/풀기 버튼으로 장력 조절</span></div>
       </div>
       <div class="fishing-hud v205-fishing-hud v2028-fishing-hud v2029-fishing-hud v2030-fishing-hud v2031-fishing-hud v2044-fishing-hud v2032-fishing-hud v2033-fishing-hud v2034-fishing-hud v2035-fishing-hud v2036-fishing-hud v2037-fishing-hud v2038-fishing-hud v2039-fishing-hud v2040-fishing-hud v2041-fishing-hud v2043-fishing-hud v2044-fishing-hud v2047-fishing-hud v2048-fishing-hud v2049-fishing-hud v2050-fishing-hud" aria-label="플레이어 정보">

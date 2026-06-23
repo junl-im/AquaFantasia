@@ -1,5 +1,5 @@
-// v2.1.9 keeps the v2.1.8 stable rollback and narrows touch, shop routing, page cards, modal layers, and fishing HUD guards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.9-ui-touch-shop-fishing-audit';
+// v2.1.10 imports the new individual PNG asset pack and connects bounded fish/fishing/UI assets while preserving the v2.1.8 stable rollback.
+const CACHE_NAME = 'aqua-fantasia-v2.1.10-asset-integration-pass';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -674,7 +674,26 @@ const PRECACHE = [
   "./assets/v2025/ui/worldmap_header_coral_premium_sd2026.png",
   "./assets/v2025/ui/worldmap_item_slot_coral_premium_sd2026.png",
   "./assets/v2025/ui/worldmap_page_bg_coral_premium_sd2026.png",
-  "./assets/v2025/ui/worldmap_primary_button_coral_premium_sd2026.png"
+  "./assets/v2025/ui/worldmap_primary_button_coral_premium_sd2026.png",
+  "./assets/v2110/asset_manifest.json",
+  "./assets/v2110/fish/common_tropical/fish_common_001.png",
+  "./assets/v2110/fish/common_tropical/fish_common_002.png",
+  "./assets/v2110/fish/common_tropical/fish_common_003.png",
+  "./assets/v2110/fish/common_tropical/fish_common_004.png",
+  "./assets/v2110/fish/rare_deepsea/fish_rare_001.png",
+  "./assets/v2110/fish/rare_deepsea/fish_rare_002.png",
+  "./assets/v2110/fish/rare_deepsea/fish_rare_003.png",
+  "./assets/v2110/fish/rare_deepsea/fish_rare_004.png",
+  "./assets/v2110/ui/buttons_and_badges/ui_button_001.png",
+  "./assets/v2110/ui/buttons_and_badges/ui_button_002.png",
+  "./assets/v2110/ui/main_aqua_cards/ui_main_006.png",
+  "./assets/v2110/ui/fishing_hud/ui_hud_004.png",
+  "./assets/v2110/ui/fish_dex_cards/ui_card_001.png",
+  "./assets/v2110/objects/fishing_props/fishing_prop_002.png",
+  "./assets/v2110/objects/fishing_props/fishing_prop_005.png",
+  "./assets/v2110/objects/fishing_props/fishing_prop_006.png",
+  "./assets/v2110/objects/fishing_props/fishing_prop_009.png",
+  "./assets/v2110/tiles_32x32/sea_and_beach/sea_tile_001_32x32.png"
 ];
 
 async function precacheSafely() {
