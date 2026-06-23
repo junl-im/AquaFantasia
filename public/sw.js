@@ -1,5 +1,5 @@
-// v2.1.25 removes opening chrome, locks player 3시 direction/motion, and refines command/menu icon spacing.
-const CACHE_NAME = 'aqua-fantasia-v2.1.25-opening-direction-motion-ui';
+// v2.1.26 fixes the v2.1.25 CSS build syntax regression and locks CSS balance validation.
+const CACHE_NAME = 'aqua-fantasia-v2.1.26-css-build-syntax-fix';
 const PRECACHE = [
   "./",
   "./index.html",

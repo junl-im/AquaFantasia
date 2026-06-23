@@ -41582,7 +41582,7 @@ html.v2125-opening-direction-motion-ui-root .bottom-nav.v2125-bottom-nav span {
 
 /* Joystick: default center only; runtime updates --v2125-joystick-transform while dragging. */
 html.v2125-opening-direction-motion-ui-root body[data-screen="village"] .v2097-joystick-knob {
-  transform: var(--v2125-joystick-transform, var(--v2124-joystick-transform, var(--v2123-joystick-transform, var(--v2122-joystick-transform, var(--v2121-joystick-transform, translate(-50%, -50%))))) !important;
+  transform: var(--v2125-joystick-transform, var(--v2124-joystick-transform, var(--v2123-joystick-transform, var(--v2122-joystick-transform, var(--v2121-joystick-transform, translate(-50%, -50%)))))) !important;
   will-change: transform !important;
 }
 
@@ -41617,3 +41617,5 @@ html.v2125-opening-direction-motion-ui-root body[data-screen="fishing"] .fishing
   display: none !important;
   pointer-events: none !important;
 }
+
+/* v2.1.26 CSS build syntax guard: keep nested joystick var() fallback balanced for PostCSS/Vite. */
