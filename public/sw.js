@@ -1,5 +1,5 @@
-// v2.1.7 repairs event routing, shared aqua UI stability, village interior panels, and fishing input conflicts.
-const CACHE_NAME = 'aqua-fantasia-v2.1.7-aqua-ui-touch-fishing-normalize';
+// v2.1.8 rolls back the broken 2.1.x UI overlays to the stable v2.0.99/v2080-v2098 shell and fixes raw touch/interior/page/fishing guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.8-stable-ui-fishing-rollback';
 const PRECACHE = [
   "./",
   "./index.html",

@@ -7,8 +7,8 @@ const TILE_H = 40;
 const BASE_SCALE = 0.86;
 const BUILDING_VISUAL_SCALE = 0.74;
 const BUILDING_COLLISION_FRONT_TRIM = 1;
-const BUILDING_HITBOX_FRONT_MARGIN = 2;
-const BUILDING_HITBOX_SIDE_MARGIN = 0.52;
+const BUILDING_HITBOX_FRONT_MARGIN = 1;
+const BUILDING_HITBOX_SIDE_MARGIN = 0.24;
 const TILE_ACTOR_GROUND_Y = 0.58;
 const TILE_DECOR_GROUND_Y = 0.66;
 const BUILDING_GROUND_BACKSET = 0.12;
@@ -972,9 +972,8 @@ export class VillageWorld {
     this.root.dataset.v2083VillageHitboxFeel = 'world-pointer-building-footprint-score';
     this.root.dataset.v2090BuildStateGuard = 'explicit-build-button-only';
     this.root.dataset.v2091UiCleanup = 'legacy-interior-events-pruned';
-    this.root.dataset.v215VillageHitbox = 'expanded-building-body-front-footprint-hitbox';
-    this.root.dataset.v216InteriorPanelRepair = 'v216-v2097-interior-selector-event-lock';
-    this.root.classList.add('v215-village-hitbox-ready', 'v216-village-interior-ready');
+    this.root.dataset.v218StableRollback = 'v218-raw-diamond-touch-interior-selector-repair';
+    this.root.classList.add('v218-village-touch-repaired');
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트 기준으로 배치됩니다.');
   }
 
@@ -1716,15 +1715,10 @@ export class VillageWorld {
   private pointerHitFromEvent(ev: PointerEvent): VillagePointerHit {
     const screen = this.pointerToStagePoint(ev);
     const world = this.screenToWorld(screen, this.camera.scale);
-    // v2.0.96: players naturally tap the lower-left foot of an isometric tile/building.
-    // Use a small lower-left bias only for tile selection; keep the raw world point
-    // for building distance scoring so hitboxes do not drift visually.
-    const biasedWorld = {
-      x: world.x - TILE_W * 0.22,
-      y: world.y + TILE_H * 0.22,
-    };
+    // v2.1.8: use the raw canvas-local diamond point again.
+    // The old lower-left bias made the visible floor tap land on a neighboring tile on many mobile viewports.
     // v2080 validation lineage: const tile = nearestDiamondTile(wx, wy);
-    const tile = nearestDiamondTile(biasedWorld.x, biasedWorld.y);
+    const tile = nearestDiamondTile(world.x, world.y);
     return {
       x: safeIntegerTile(tile.x),
       y: safeIntegerTile(tile.y),
@@ -1795,7 +1789,7 @@ export class VillageWorld {
       node.addEventListener('pointerup', (ev) => { ev.stopPropagation(); }, { capture: true });
     });
     this.bindJoystick();
-    this.root.querySelector<HTMLButtonElement>('[data-village-fishing]')?.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); this.onGoFishing(); });
+    this.root.querySelector<HTMLButtonElement>('[data-village-fishing]')?.addEventListener('click', () => this.onGoFishing());
     this.root.querySelectorAll<HTMLElement>('[data-v203-interior-close]').forEach((node) => node.addEventListener('click', () => this.closeInterior()));
     this.root.querySelector<HTMLButtonElement>('[data-v203-interior-go-fishing]')?.addEventListener('click', () => this.onGoFishing());
     this.root.querySelector<HTMLButtonElement>('[data-v2044-interior-move]')?.addEventListener('click', () => {
@@ -2123,33 +2117,25 @@ export class VillageWorld {
 
   private buildingHitScore(building: VillageBuildingSave, x: number, y: number, worldX: number, worldY: number): number {
     const def = BUILD_DEFS[building.type];
+    const insideFootprint = x >= building.x && x < building.x + building.w && y >= building.y && y < building.y + building.h;
+    const frontY = building.y + building.h;
+    const sideSlack = Math.max(0, Math.ceil(building.w * BUILDING_HITBOX_SIDE_MARGIN));
+    const atFrontDoor = y >= frontY - BUILDING_HITBOX_FRONT_MARGIN && y <= frontY + BUILDING_HITBOX_FRONT_MARGIN
+      && x >= building.x - sideSlack && x < building.x + building.w + sideSlack;
+    const lowerLeftTouch = atFrontDoor;
+    const propNear = def?.kind === 'prop' && Math.abs(x - this.buildingFocusTile(building).x) <= 1 && Math.abs(y - this.buildingFocusTile(building).y) <= 1;
+    if (!insideFootprint && !lowerLeftTouch && !propNear) return Number.POSITIVE_INFINITY;
+
     const focus = this.buildingFocusTile(building);
     const focusWorld = centerOfTile(focus.x, focus.y);
     const footprintCenter = footprintGround(building.x, building.y, building.w, building.h);
-    const insideFootprint = x >= building.x && x < building.x + building.w && y >= building.y && y < building.y + building.h;
-    const frontY = building.y + building.h;
-    const sideSlack = Math.max(1, Math.ceil(building.w * BUILDING_HITBOX_SIDE_MARGIN));
-    const atFrontDoor = y >= frontY - BUILDING_HITBOX_FRONT_MARGIN && y <= frontY + BUILDING_HITBOX_FRONT_MARGIN
-      && x >= building.x - sideSlack && x < building.x + building.w + sideSlack;
-    const expandedFootprint = x >= building.x - sideSlack && x < building.x + building.w + sideSlack
-      && y >= building.y - 1 && y <= building.y + building.h + BUILDING_HITBOX_FRONT_MARGIN;
-    const visualRadiusTiles = Math.max(1.22, building.w * 0.58 + building.h * 0.34);
-    const visualBodyNear = def?.kind === 'building'
-      && Math.min(
-        Math.hypot(worldX - focusWorld.x, worldY - focusWorld.y) / TILE_W,
-        Math.hypot(worldX - footprintCenter.x, worldY - footprintCenter.y) / TILE_W,
-      ) <= visualRadiusTiles;
-    const propNear = def?.kind === 'prop' && Math.abs(x - focus.x) <= 1 && Math.abs(y - focus.y) <= 1;
-    if (!insideFootprint && !atFrontDoor && !expandedFootprint && !visualBodyNear && !propNear) return Number.POSITIVE_INFINITY;
-
     const normalizedWorldDistance = Math.min(
       Math.hypot(worldX - focusWorld.x, worldY - focusWorld.y) / TILE_W,
       Math.hypot(worldX - footprintCenter.x, worldY - footprintCenter.y) / TILE_W,
     );
     const tileDistance = insideFootprint ? 0 : Math.abs(x - focus.x) + Math.abs(y - focus.y);
     const depthPenalty = Math.max(0, building.y - y) * 0.015;
-    const kindBias = def?.kind === 'building' ? 0 : def?.kind === 'prop' ? 0.35 : 0.7;
-    return normalizedWorldDistance + tileDistance * 0.16 + depthPenalty + kindBias;
+    return normalizedWorldDistance + tileDistance * 0.18 + depthPenalty;
   }
 
   private findBuildingNear(x: number, y: number, worldX = centerOfTile(x, y).x, worldY = centerOfTile(x, y).y): VillageBuildingSave | undefined {
@@ -2208,9 +2194,10 @@ export class VillageWorld {
     inventoryAction?.toggleAttribute('hidden', true);
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
-    this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v217-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v217-aqua-modal-open', 'v217-interior-open');
-    this.root.querySelector<HTMLElement>('.v2097-world-controls, .v2094-world-controls')?.setAttribute('hidden', 'true');
+    this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open');
+    document.body.classList.add('v2094-modal-open');
+    this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
     panel.setAttribute('aria-hidden', 'false');
     this.showGuide(def.label, '건물 이동을 누르면 비용 없이 위치를 다시 잡을 수 있습니다.');
@@ -2250,9 +2237,10 @@ export class VillageWorld {
     inventoryAction?.toggleAttribute('hidden', !interior.inventory);
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
-    this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v217-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v217-aqua-modal-open', 'v217-interior-open');
-    this.root.querySelector<HTMLElement>('.v2097-world-controls, .v2094-world-controls')?.setAttribute('hidden', 'true');
+    this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open');
+    document.body.classList.add('v2094-modal-open');
+    this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
     panel.setAttribute('aria-hidden', 'false');
     this.showGuide(interior.title, overrideBody ?? interior.body);
@@ -2262,9 +2250,10 @@ export class VillageWorld {
     const panel = this.root.querySelector<HTMLElement>('[data-v2097-interior-panel], [data-v2094-interior-panel]');
     if (!panel) return;
     panel.classList.remove('open');
-    this.root.classList.remove('v2094-interior-open', 'v2097-interior-open', 'v217-interior-modal-open');
-    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v217-aqua-modal-open', 'v217-interior-open');
-    this.root.querySelector<HTMLElement>('.v2097-world-controls, .v2094-world-controls')?.removeAttribute('hidden');
+    this.root.classList.remove('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
+    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open');
+    document.body.classList.remove('v2094-modal-open');
+    this.root.querySelector<HTMLElement>('.v2094-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');
     this.focusedBuildingId = null;
     panel.setAttribute('aria-hidden', 'true');
@@ -2275,7 +2264,7 @@ export class VillageWorld {
     if (now - this.lastDialogAt < 260) return;
     this.lastDialogAt = now;
     const text = actor.talk[Math.floor(Math.random() * actor.talk.length)] ?? '안녕하세요.';
-    const panel = this.root.querySelector<HTMLElement>('.v2094-dialog-panel');
+    const panel = this.root.querySelector<HTMLElement>('.v2097-dialog-panel, .v2094-dialog-panel');
     if (!panel) return;
     const portrait = PORTRAIT_ASSETS[actor.role] ?? PORTRAIT_ASSETS.tourist;
     panel.classList.add('open');
@@ -2285,9 +2274,10 @@ export class VillageWorld {
 
   private showGuide(title: string, message: string): void {
     this.onToast({ type: 'normal', title, message });
-    const guide = this.root.querySelector<HTMLElement>('.v2094-village-guide');
+    const guide = this.root.querySelector<HTMLElement>('.v2097-village-guide, .v2094-village-guide');
     if (!guide) return;
     guide.innerHTML = `<strong>${title}</strong><span>${message}</span>`;
+    guide.hidden = false;
     guide.classList.add('pop');
     window.setTimeout(() => guide.classList.remove('pop'), 900);
   }
