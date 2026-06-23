@@ -1,5 +1,5 @@
-// v2.1.12 rebuilds a single Aqua Shell UI and keeps imported PNG assets explicitly bounded.
-const CACHE_NAME = 'aqua-fantasia-v2.1.12-aqua-shell-foundation';
+// v2.1.13 steadies the Aqua Core UI shell, input routes, and fishing controls.
+const CACHE_NAME = 'aqua-fantasia-v2.1.13-aqua-core-steward';
 const PRECACHE = [
   "./",
   "./index.html",
