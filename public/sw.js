@@ -1,5 +1,5 @@
-// v2.1.11 rebuilds a single Aqua Shell UI and keeps imported PNG assets explicitly bounded.
-const CACHE_NAME = 'aqua-fantasia-v2.1.11-aqua-shell-rebuild';
+// v2.1.12 rebuilds a single Aqua Shell UI and keeps imported PNG assets explicitly bounded.
+const CACHE_NAME = 'aqua-fantasia-v2.1.12-aqua-shell-foundation';
 const PRECACHE = [
   "./",
   "./index.html",

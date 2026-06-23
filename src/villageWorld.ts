@@ -1020,6 +1020,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2097-build-active', Boolean(type));
     this.root.classList.toggle('v2098-build-active', Boolean(type));
     this.root.classList.toggle('v2111-build-active', Boolean(type));
+    this.root.classList.toggle('v2112-build-active', Boolean(type));
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2094-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2097-build-tray-open', this.buildTrayOpen);
@@ -1049,7 +1050,9 @@ export class VillageWorld {
     this.root.classList.toggle('v2097-build-tray-open', open);
     this.root.classList.toggle('v2098-build-tray-open', open);
     this.root.classList.toggle('v2111-build-tray-open', open);
+    this.root.classList.toggle('v2112-build-tray-open', open);
     document.body.classList.toggle('v2111-build-open', open);
+    document.body.classList.toggle('v2112-build-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
       if (!keepSelection) this.movingBuildingId = null;
@@ -1067,7 +1070,10 @@ export class VillageWorld {
       this.root.classList.remove('v2097-build-active');
       this.root.classList.remove('v2098-build-active');
       this.root.classList.remove('v2111-build-active');
+      this.root.classList.remove('v2112-build-active');
+      this.root.classList.remove('v2112-build-tray-open');
       document.body.classList.remove('v2111-build-open');
+      document.body.classList.remove('v2112-build-open');
       this.previewLayer.removeChildren();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
     }
@@ -1724,7 +1730,7 @@ export class VillageWorld {
   private pointerHitFromEvent(ev: PointerEvent): VillagePointerHit {
     const screen = this.pointerToStagePoint(ev);
     const world = this.screenToWorld(screen, this.camera.scale);
-    // v2.1.11: use the real canvas-local diamond hit. Previous visual-foot bias made
+    // v2.1.12: keep the real canvas-local diamond hit. Previous visual-foot bias made
     // the village floor feel shifted on mobile, so the new shell keeps raw coordinates.
     // Building hit scoring still receives raw worldX/worldY for body/footprint pickup.
     // v2080 validation lineage: const tile = nearestDiamondTile(wx, wy);
