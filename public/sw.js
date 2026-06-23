@@ -1,5 +1,5 @@
-// v2.1.4 unifies aqua-card UI, removes toast popups, and restores fishing screen clarity.
-const CACHE_NAME = 'aqua-fantasia-v2.1.4-aqua-ui-unified-fishing-polish';
+// v2.1.5 locks the right-bottom menu dock and restores village building hit interactions.
+const CACHE_NAME = 'aqua-fantasia-v2.1.5-ui-hitbox-menu-fix';
 const PRECACHE = [
   "./",
   "./index.html",

@@ -7,8 +7,8 @@ const TILE_H = 40;
 const BASE_SCALE = 0.86;
 const BUILDING_VISUAL_SCALE = 0.74;
 const BUILDING_COLLISION_FRONT_TRIM = 1;
-const BUILDING_HITBOX_FRONT_MARGIN = 1;
-const BUILDING_HITBOX_SIDE_MARGIN = 0.24;
+const BUILDING_HITBOX_FRONT_MARGIN = 2;
+const BUILDING_HITBOX_SIDE_MARGIN = 0.52;
 const TILE_ACTOR_GROUND_Y = 0.58;
 const TILE_DECOR_GROUND_Y = 0.66;
 const BUILDING_GROUND_BACKSET = 0.12;
@@ -972,6 +972,8 @@ export class VillageWorld {
     this.root.dataset.v2083VillageHitboxFeel = 'world-pointer-building-footprint-score';
     this.root.dataset.v2090BuildStateGuard = 'explicit-build-button-only';
     this.root.dataset.v2091UiCleanup = 'legacy-interior-events-pruned';
+    this.root.dataset.v215VillageHitbox = 'expanded-building-body-front-footprint-hitbox';
+    this.root.classList.add('v215-village-hitbox-ready');
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트 기준으로 배치됩니다.');
   }
 
@@ -2120,25 +2122,33 @@ export class VillageWorld {
 
   private buildingHitScore(building: VillageBuildingSave, x: number, y: number, worldX: number, worldY: number): number {
     const def = BUILD_DEFS[building.type];
-    const insideFootprint = x >= building.x && x < building.x + building.w && y >= building.y && y < building.y + building.h;
-    const frontY = building.y + building.h;
-    const sideSlack = Math.max(0, Math.ceil(building.w * BUILDING_HITBOX_SIDE_MARGIN));
-    const atFrontDoor = y >= frontY - BUILDING_HITBOX_FRONT_MARGIN && y <= frontY + BUILDING_HITBOX_FRONT_MARGIN
-      && x >= building.x - sideSlack && x < building.x + building.w + sideSlack;
-    const lowerLeftTouch = atFrontDoor;
-    const propNear = def?.kind === 'prop' && Math.abs(x - this.buildingFocusTile(building).x) <= 1 && Math.abs(y - this.buildingFocusTile(building).y) <= 1;
-    if (!insideFootprint && !lowerLeftTouch && !propNear) return Number.POSITIVE_INFINITY;
-
     const focus = this.buildingFocusTile(building);
     const focusWorld = centerOfTile(focus.x, focus.y);
     const footprintCenter = footprintGround(building.x, building.y, building.w, building.h);
+    const insideFootprint = x >= building.x && x < building.x + building.w && y >= building.y && y < building.y + building.h;
+    const frontY = building.y + building.h;
+    const sideSlack = Math.max(1, Math.ceil(building.w * BUILDING_HITBOX_SIDE_MARGIN));
+    const atFrontDoor = y >= frontY - BUILDING_HITBOX_FRONT_MARGIN && y <= frontY + BUILDING_HITBOX_FRONT_MARGIN
+      && x >= building.x - sideSlack && x < building.x + building.w + sideSlack;
+    const expandedFootprint = x >= building.x - sideSlack && x < building.x + building.w + sideSlack
+      && y >= building.y - 1 && y <= building.y + building.h + BUILDING_HITBOX_FRONT_MARGIN;
+    const visualRadiusTiles = Math.max(1.22, building.w * 0.58 + building.h * 0.34);
+    const visualBodyNear = def?.kind === 'building'
+      && Math.min(
+        Math.hypot(worldX - focusWorld.x, worldY - focusWorld.y) / TILE_W,
+        Math.hypot(worldX - footprintCenter.x, worldY - footprintCenter.y) / TILE_W,
+      ) <= visualRadiusTiles;
+    const propNear = def?.kind === 'prop' && Math.abs(x - focus.x) <= 1 && Math.abs(y - focus.y) <= 1;
+    if (!insideFootprint && !atFrontDoor && !expandedFootprint && !visualBodyNear && !propNear) return Number.POSITIVE_INFINITY;
+
     const normalizedWorldDistance = Math.min(
       Math.hypot(worldX - focusWorld.x, worldY - focusWorld.y) / TILE_W,
       Math.hypot(worldX - footprintCenter.x, worldY - footprintCenter.y) / TILE_W,
     );
     const tileDistance = insideFootprint ? 0 : Math.abs(x - focus.x) + Math.abs(y - focus.y);
     const depthPenalty = Math.max(0, building.y - y) * 0.015;
-    return normalizedWorldDistance + tileDistance * 0.18 + depthPenalty;
+    const kindBias = def?.kind === 'building' ? 0 : def?.kind === 'prop' ? 0.35 : 0.7;
+    return normalizedWorldDistance + tileDistance * 0.16 + depthPenalty + kindBias;
   }
 
   private findBuildingNear(x: number, y: number, worldX = centerOfTile(x, y).x, worldY = centerOfTile(x, y).y): VillageBuildingSave | undefined {

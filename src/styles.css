@@ -39423,3 +39423,162 @@ html.v214-aqua-ui-unified-root body[data-screen="fishing"] .fishing-phase-reelin
   html.v214-aqua-ui-unified-root body[data-screen="fishing"] .cast-button { width: min(238px, calc(100vw - 106px)) !important; }
   html.v214-aqua-ui-unified-root body[data-screen="fishing"] .recent-catch-strip.v214-recent-catch { width: min(244px, calc(100vw - 102px)) !important; }
 }
+
+/* v2.1.5: right-bottom dock lock + village hitbox/pointer repair */
+html.v215-ui-hitbox-menu-fix-root {
+  --v215-safe-left: max(10px, env(safe-area-inset-left));
+  --v215-safe-right: max(10px, env(safe-area-inset-right));
+  --v215-safe-bottom: max(10px, env(safe-area-inset-bottom));
+  --v215-dock-h: 58px;
+  --v215-joy-clearance: 106px;
+  --v215-dock-w: min(292px, calc(100vw - var(--v215-safe-left) - var(--v215-safe-right) - var(--v215-joy-clearance)));
+  --v215-ink: #07506b;
+  --v215-border: rgba(56, 178, 205, .36);
+  --v215-card: linear-gradient(180deg, rgba(255,255,255,.90), rgba(194,248,255,.74));
+  --v215-soft-shadow: 0 14px 30px rgba(7, 78, 112, .18), inset 0 1px 0 rgba(255,255,255,.96);
+}
+html.v215-ui-hitbox-menu-fix-root body[data-screen="login"] .bottom-nav,
+html.v215-ui-hitbox-menu-fix-root .bottom-nav:not(.v2098-bottom-nav) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v215-ui-hitbox-menu-fix-root .bottom-nav.v2098-bottom-nav,
+html.v215-ui-hitbox-menu-fix-root .bottom-nav.v2098-bottom-nav.v215-right-bottom-dock {
+  position: fixed !important;
+  left: auto !important;
+  right: var(--v215-safe-right) !important;
+  bottom: var(--v215-safe-bottom) !important;
+  top: auto !important;
+  width: var(--v215-dock-w) !important;
+  max-width: var(--v215-dock-w) !important;
+  min-width: 0 !important;
+  height: var(--v215-dock-h) !important;
+  min-height: var(--v215-dock-h) !important;
+  max-height: var(--v215-dock-h) !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  grid-template-rows: 1fr !important;
+  align-items: stretch !important;
+  gap: 5px !important;
+  padding: 6px !important;
+  margin: 0 !important;
+  transform: none !important;
+  translate: none !important;
+  border-radius: 25px !important;
+  color: var(--v215-ink) !important;
+  -webkit-text-fill-color: var(--v215-ink) !important;
+  background: var(--v215-card) !important;
+  background-image: var(--v215-card) !important;
+  border: 1px solid var(--v215-border) !important;
+  box-shadow: var(--v215-soft-shadow) !important;
+  backdrop-filter: blur(16px) saturate(1.16) !important;
+  pointer-events: auto !important;
+  overflow: hidden !important;
+  z-index: 850 !important;
+}
+html.v215-ui-hitbox-menu-fix-root .bottom-nav.v2098-bottom-nav.v1117-nav-repaired {
+  left: auto !important;
+  right: var(--v215-safe-right) !important;
+  width: var(--v215-dock-w) !important;
+  max-width: var(--v215-dock-w) !important;
+}
+html.v215-ui-hitbox-menu-fix-root .bottom-nav.v2098-bottom-nav .v2098-nav-item {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  max-height: 46px !important;
+  display: grid !important;
+  grid-template-rows: 22px 14px !important;
+  place-items: center !important;
+  gap: 1px !important;
+  padding: 4px 2px !important;
+  border-radius: 18px !important;
+  color: var(--v215-ink) !important;
+  -webkit-text-fill-color: var(--v215-ink) !important;
+  background: rgba(255,255,255,.54) !important;
+  border: 1px solid rgba(56, 178, 205, .18) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.86) !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
+  text-shadow: none !important;
+}
+html.v215-ui-hitbox-menu-fix-root .bottom-nav.v2098-bottom-nav .v2098-nav-item.active {
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(117,230,246,.60)) !important;
+  border-color: rgba(34, 154, 188, .34) !important;
+}
+html.v215-ui-hitbox-menu-fix-root .bottom-nav.v2098-bottom-nav .v2098-nav-item img {
+  width: 21px !important;
+  height: 21px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 3px 6px rgba(8, 78, 112, .18)) !important;
+}
+html.v215-ui-hitbox-menu-fix-root .bottom-nav.v2098-bottom-nav .v2098-nav-item span {
+  max-width: 100% !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  font-size: 9.2px !important;
+  font-weight: 1000 !important;
+  letter-spacing: -.04em !important;
+  color: var(--v215-ink) !important;
+  -webkit-text-fill-color: var(--v215-ink) !important;
+}
+html.v215-ui-hitbox-menu-fix-root .village-world-screen .v2-village-stage,
+html.v215-ui-hitbox-menu-fix-root .village-world-screen .v2-village-stage canvas {
+  pointer-events: auto !important;
+  touch-action: none !important;
+}
+html.v215-ui-hitbox-menu-fix-root .v2097-build-backdrop {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+html.v215-ui-hitbox-menu-fix-root :is(.v2-build-tray-open,.v2094-build-tray-open,.v2097-build-tray-open,.v2098-build-tray-open) .v2097-build-backdrop {
+  display: block !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  z-index: 1290 !important;
+}
+html.v215-ui-hitbox-menu-fix-root .village-world-screen:not(.v2-build-tray-open):not(.v2094-build-tray-open):not(.v2097-build-tray-open):not(.v2098-build-tray-open) .v2097-build-tray {
+  display: none !important;
+  pointer-events: none !important;
+}
+html.v215-ui-hitbox-menu-fix-root .village-world-screen.v215-village-hitbox-ready .v2-village-stage::after {
+  content: "건물을 터치하면 정보창이 열립니다";
+  position: fixed;
+  left: var(--v215-safe-left);
+  bottom: calc(var(--v215-safe-bottom) + var(--v215-dock-h) + 12px);
+  max-width: min(260px, calc(100vw - var(--v215-safe-left) - var(--v215-safe-right) - var(--v215-dock-w) - 24px));
+  padding: 7px 10px;
+  border-radius: 999px;
+  color: rgba(255,255,255,.92);
+  background: rgba(4, 83, 116, .34);
+  border: 1px solid rgba(255,255,255,.28);
+  box-shadow: 0 10px 22px rgba(3, 64, 92, .13);
+  backdrop-filter: blur(10px) saturate(1.12);
+  font-size: 10px;
+  font-weight: 1000;
+  letter-spacing: -.035em;
+  pointer-events: none;
+  z-index: 4;
+}
+@media (max-width: 430px) {
+  html.v215-ui-hitbox-menu-fix-root {
+    --v215-joy-clearance: 96px;
+    --v215-dock-w: min(258px, calc(100vw - var(--v215-safe-left) - var(--v215-safe-right) - var(--v215-joy-clearance)));
+    --v215-dock-h: 56px;
+  }
+  html.v215-ui-hitbox-menu-fix-root .bottom-nav.v2098-bottom-nav .v2098-nav-item { height: 44px !important; min-height: 44px !important; }
+}
+@media (max-width: 360px) {
+  html.v215-ui-hitbox-menu-fix-root {
+    --v215-joy-clearance: 86px;
+    --v215-dock-w: min(238px, calc(100vw - var(--v215-safe-left) - var(--v215-safe-right) - var(--v215-joy-clearance)));
+  }
+  html.v215-ui-hitbox-menu-fix-root .bottom-nav.v2098-bottom-nav { gap: 3px !important; padding-inline: 4px !important; }
+  html.v215-ui-hitbox-menu-fix-root .bottom-nav.v2098-bottom-nav .v2098-nav-item span { font-size: 8.4px !important; }
+}

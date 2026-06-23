@@ -257,7 +257,7 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
-    // v2.1.4 live UI policy: unify aqua-card UI, remove toast popups, and refine fishing screen clarity.
+    // v2.1.5 live UI policy: keep the menu dock locked to the right-bottom corner and restore village building hit interactions.
     document.documentElement.dataset.v2098UiRecovery = 'v2098-dock-fishing-build-recovery';
     document.documentElement.dataset.v2100UiStability = 'v2100-version-independent-ui-stability-root';
     document.documentElement.dataset.v210AquaUiFoundation = 'v210-aqua-card-layout-foundation';
@@ -265,8 +265,9 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v212AquaUiPolish = 'v212-aqua-ui-polish-pass';
     document.documentElement.dataset.v213AquaUiDetail = 'v213-aqua-ui-detail-polish-pass';
     document.documentElement.dataset.v214AquaUiUnified = 'v214-aqua-ui-unified-fishing-polish-pass';
+    document.documentElement.dataset.v215UiHitboxMenuFix = 'v215-right-bottom-menu-building-hitbox-pass';
     this.activateV2097UiResetShell();
-    document.documentElement.classList.add('v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root', 'v212-aqua-ui-polish-root', 'v213-aqua-ui-detail-root', 'v214-aqua-ui-unified-root');
+    document.documentElement.classList.add('v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root', 'v212-aqua-ui-polish-root', 'v213-aqua-ui-detail-root', 'v214-aqua-ui-unified-root', 'v215-ui-hitbox-menu-fix-root');
     // v2.0.92 validation lineage only: dataset.v2092UiStable = 'v2092-live-ui-canonical' activateV2092UiStableShell html.classList.add('v2092-ui-canonical-root') v2092-ui-stable-village-screen v2092-village-hud v2092-profile-chip v2092-expedition-board v2092-expedition-toggle data-v2092-expedition-toggle v2092-expedition-body data-v2092-expedition-body v2092-expedition-body-open v2092-ui-close v2092-ui-stable-menu-screen v2092-runtime-hud v2092-menu-content data-v2092-scroll-root="true" v2092-menu-close
     // v2.0.93 validation lineage only: old html dataset markers intentionally removed from live runtime. visualPolish enginePatch v2077MenuUiCleanup v2089UiHardReset v2090UiDebtCleanup v2091UiCleanup v2092UiStable
     /* v2.0.92 validation lineage only: old html dataset markers are intentionally not attached to runtime.
@@ -388,7 +389,7 @@ class AquaFantasiaGame {
 
   private activateV2097UiResetShell(): void {
     const html = document.documentElement;
-    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v2100UiStability', 'v210AquaUiFoundation', 'v211AquaUiRefinement', 'v212AquaUiPolish', 'v213AquaUiDetail', 'v214AquaUiUnified']);
+    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v2100UiStability', 'v210AquaUiFoundation', 'v211AquaUiRefinement', 'v212AquaUiPolish', 'v213AquaUiDetail', 'v214AquaUiUnified', 'v215UiHitboxMenuFix']);
     for (const key of Object.keys(html.dataset)) {
       if (keep.has(key)) continue;
       const value = html.dataset[key] ?? '';
@@ -404,8 +405,9 @@ class AquaFantasiaGame {
     html.dataset.v212AquaUiPolish = 'v212-aqua-ui-polish-pass';
     html.dataset.v213AquaUiDetail = 'v213-aqua-ui-detail-polish-pass';
     html.dataset.v214AquaUiUnified = 'v214-aqua-ui-unified-fishing-polish-pass';
+    html.dataset.v215UiHitboxMenuFix = 'v215-right-bottom-menu-building-hitbox-pass';
     html.classList.remove('v2092-ui-canonical-root', 'v2093-ui-canonical-root');
-    html.classList.add('v2097-ui-clean-root', 'v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root', 'v212-aqua-ui-polish-root', 'v213-aqua-ui-detail-root', 'v214-aqua-ui-unified-root');
+    html.classList.add('v2097-ui-clean-root', 'v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root', 'v212-aqua-ui-polish-root', 'v213-aqua-ui-detail-root', 'v214-aqua-ui-unified-root', 'v215-ui-hitbox-menu-fix-root');
   }
 
   // v2.0.92 validation compatibility: dataset.v2091UiCleanup = 'v2091-live-ui-pruned' activateV2091UiCleanup delete html.dataset[key]
@@ -1539,8 +1541,9 @@ class AquaFantasiaGame {
       { screen: 'map', icon: './assets/v22/icons/nav_map.png', label: '지도' },
     ];
     const nav = document.createElement('nav');
-    nav.className = 'bottom-nav v2098-bottom-nav';
+    nav.className = 'bottom-nav v2098-bottom-nav v215-right-bottom-dock';
     nav.dataset.v2098Dock = 'right-bottom-home-bag-quest-map';
+    nav.dataset.v215DockLock = 'right-bottom-no-full-width-repair';
     nav.setAttribute('aria-label', '주요 메뉴');
     nav.innerHTML = items.map((item) => `
       <button type="button" class="v2098-nav-item ${item.screen === active ? 'active' : ''}" data-screen="${item.screen}" data-v2098-nav="${item.screen}" aria-label="${item.label}" aria-current="${item.screen === active ? 'page' : 'false'}">
@@ -3295,6 +3298,28 @@ class AquaFantasiaGame {
 
   private repairBottomNavBounds(nav: HTMLElement): void {
     nav.classList.add('v1117-nav-safe', 'v1118-nav-safe', 'v1119-nav-safe');
+    if (nav.classList.contains('v2098-bottom-nav')) {
+      nav.classList.add('v215-right-bottom-dock');
+      nav.dataset.v215DockLock = 'right-bottom-no-full-width-repair';
+      nav.style.setProperty('position', 'fixed', 'important');
+      nav.style.setProperty('left', 'auto', 'important');
+      nav.style.setProperty('right', 'var(--v215-safe-right, max(10px, env(safe-area-inset-right)))', 'important');
+      nav.style.setProperty('bottom', 'var(--v215-safe-bottom, max(10px, env(safe-area-inset-bottom)))', 'important');
+      nav.style.setProperty('width', 'var(--v215-dock-w, min(292px, calc(100vw - 118px)))', 'important');
+      nav.style.setProperty('max-width', 'var(--v215-dock-w, min(292px, calc(100vw - 118px)))', 'important');
+      nav.style.setProperty('min-width', '0', 'important');
+      nav.style.setProperty('height', 'var(--v215-dock-h, 58px)', 'important');
+      nav.style.setProperty('min-height', 'var(--v215-dock-h, 58px)', 'important');
+      nav.style.setProperty('display', 'grid', 'important');
+      nav.style.setProperty('grid-template-columns', 'repeat(4, minmax(0, 1fr))', 'important');
+      nav.style.setProperty('margin', '0', 'important');
+      nav.style.setProperty('transform', 'none', 'important');
+      nav.style.setProperty('translate', 'none', 'important');
+      nav.style.setProperty('overflow', 'hidden', 'important');
+      document.documentElement.classList.remove('v117-nav-bounds-emergency');
+      nav.classList.remove('v1117-nav-repaired');
+      return;
+    }
     if (nav.classList.contains('v208-right-dock-nav')) {
       nav.style.setProperty('left', 'auto', 'important');
       nav.style.setProperty('right', 'var(--v2016-dock-right, var(--v2014-dock-right, var(--v2013-dock-right, max(10px, env(safe-area-inset-right)))))))', 'important');
