@@ -1,5 +1,5 @@
-// v2.1.14 steadies the Aqua Core UI shell, input routes, and fishing controls.
-const CACHE_NAME = 'aqua-fantasia-v2.1.14-interaction-shell-polish';
+// v2.1.15 rebuilds the Aqua screen shell, start reveal, modal cards, controls, and fishing layout polish.
+const CACHE_NAME = 'aqua-fantasia-v2.1.15-aqua-screen-shell';
 const PRECACHE = [
   "./",
   "./index.html",
