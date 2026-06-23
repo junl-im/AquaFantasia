@@ -228,14 +228,33 @@ const ACTOR_DIRECTIONS: ActorDirection[] = ['south', 'southeast', 'east', 'north
 
 const V2118_PLAYER_MOTION_LOCK = 'v2118-player-eight-direction-motion-lock';
 const V2119_PLAYER_MOTION_IMAGE_LOCK = 'v2119-player-corrected-rod-frame-lock';
+const V2120_PLAYER_DIRECTION_REMAP_LOCK = 'v2120-player-direction-visual-remap-lock';
+const V2121_UI_CONTINUITY_LOCK = 'v2121-ui-continuity-polish-lock';
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
   Array.from({ length: PLAYER_ACTOR_FRAME_COUNT }, (_, index) => `./assets/v2118/characters/player/player_${direction}_frame_${String(index + 1).padStart(2, '0')}.png`),
 ])) as Record<ActorDirection, string[]>;
 
+const PLAYER_ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
+  // v2.1.20: the corrected uploaded player frames are visually reversed on the left/right axis.
+  // Keep the movement direction math stable, but select the matching player frame set here.
+  south: 'south',
+  southeast: 'southeast',
+  east: 'west',
+  northeast: 'northwest',
+  north: 'north',
+  northwest: 'northeast',
+  west: 'east',
+  southwest: 'southwest',
+};
+
+function playerActorVisualDirection(direction: ActorDirection): ActorDirection {
+  return PLAYER_ACTOR_DIRECTION_TEXTURE_FIX[direction] ?? direction;
+}
+
 function playerActorMotionTextureUrl(direction: ActorDirection, frameIndex = 0): string {
-  const corrected = ACTOR_DIRECTION_TEXTURE_FIX[direction] ?? direction;
+  const corrected = playerActorVisualDirection(direction);
   const frames = PLAYER_ACTOR_MOTION_TEXTURES[corrected] ?? PLAYER_ACTOR_MOTION_TEXTURES.south;
   return frames[Math.abs(frameIndex) % frames.length] ?? frames[0];
 }
@@ -344,8 +363,8 @@ const INTERIOR_ASSETS: Partial<Record<VillageBuildingType, { title: string; imag
 const CAMERA_PAD = 280;
 
 const TILE_TEXTURES: Record<VillageTileKind, string[]> = {
-  // v2.1.19: keep grass/sand/wood visually distinct from water. The supplied blue 32x32
-  // sea tiles are used only by the sea family; land keeps legacy warm/green tiles.
+  // v2.1.20: keep grass/sand/wood visually distinct from water. The supplied blue 32x32
+  // sea tiles are used only by the actual shoreline sea band; land keeps legacy warm/green tiles.
   grass: [
     './assets/v2023/tiles/grass_tile_0.png',
     './assets/v2023/tiles/grass_flower_tile_0.png',
@@ -592,6 +611,13 @@ function actorDirectionFromVector(dx: number, dy: number): ActorDirection {
 
 function actorDirectionQaPasses(): boolean {
   return ACTOR_DIRECTION_QA_VECTORS.every(({ movement, dx, dy, texture }) => actorDirectionFromVector(dx, dy) === movement && ACTOR_DIRECTION_TEXTURE_FIX[movement] === texture);
+}
+
+function playerDirectionRemapQaPasses(): boolean {
+  return playerActorVisualDirection('northwest') === 'northeast'
+    && playerActorVisualDirection('northeast') === 'northwest'
+    && playerActorVisualDirection('east') === 'west'
+    && playerActorVisualDirection('west') === 'east';
 }
 
 
@@ -1058,6 +1084,7 @@ export class VillageWorld {
     this.normalizeSavedBuildingFootprints();
     await this.loadCriticalTextures();
     if (!actorDirectionQaPasses()) console.warn('[AquaFantasia] actor direction QA mapping mismatch');
+    if (!playerDirectionRemapQaPasses()) console.warn('[AquaFantasia] player direction remap QA mismatch');
     this.renderTiles();
     this.renderBuildings();
     this.renderDecorations();
@@ -1076,6 +1103,8 @@ export class VillageWorld {
     this.root.dataset.v2045VillageAudit = 'direction-asset-performance-trim';
     this.root.dataset.v2118PlayerMotionLock = V2118_PLAYER_MOTION_LOCK;
     this.root.dataset.v2119PlayerMotionImageLock = V2119_PLAYER_MOTION_IMAGE_LOCK;
+    this.root.dataset.v2120PlayerDirectionRemapLock = V2120_PLAYER_DIRECTION_REMAP_LOCK;
+    this.root.dataset.v2121UiContinuityLock = V2121_UI_CONTINUITY_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
@@ -1140,6 +1169,8 @@ export class VillageWorld {
     this.root.classList.toggle('v2114-build-active', Boolean(type));
     this.root.classList.toggle('v2118-build-active', Boolean(type));
     this.root.classList.toggle('v2119-build-active', Boolean(type));
+    this.root.classList.toggle('v2120-build-active', Boolean(type));
+    this.root.classList.toggle('v2121-build-active', Boolean(type));
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2094-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2097-build-tray-open', this.buildTrayOpen);
@@ -1177,6 +1208,8 @@ export class VillageWorld {
     this.root.classList.toggle('v2117-build-tray-open', open);
     this.root.classList.toggle('v2118-build-tray-open', open);
     this.root.classList.toggle('v2119-build-tray-open', open);
+    this.root.classList.toggle('v2120-build-tray-open', open);
+    this.root.classList.toggle('v2121-build-tray-open', open);
     document.body.classList.toggle('v2111-build-open', open);
     document.body.classList.toggle('v2112-build-open', open);
     document.body.classList.toggle('v2113-build-open', open);
@@ -1186,6 +1219,8 @@ export class VillageWorld {
     document.body.classList.toggle('v2117-build-open', open);
     document.body.classList.toggle('v2118-build-open', open);
     document.body.classList.toggle('v2119-build-open', open);
+    document.body.classList.toggle('v2120-build-open', open);
+    document.body.classList.toggle('v2121-build-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
       if (!keepSelection) this.movingBuildingId = null;
@@ -1207,14 +1242,14 @@ export class VillageWorld {
       this.root.classList.remove('v2113-build-active');
       this.root.classList.remove('v2114-build-active');
       this.root.classList.remove('v2118-build-active');
-      this.root.classList.remove('v2119-build-active');
+      this.root.classList.remove('v2119-build-active', 'v2120-build-active', 'v2121-build-active');
       this.root.classList.remove('v2112-build-tray-open');
       this.root.classList.remove('v2113-build-tray-open');
       this.root.classList.remove('v2114-build-tray-open');
       this.root.classList.remove('v2116-build-tray-open');
       this.root.classList.remove('v2117-build-tray-open');
       this.root.classList.remove('v2118-build-tray-open');
-      this.root.classList.remove('v2119-build-tray-open');
+      this.root.classList.remove('v2119-build-tray-open', 'v2120-build-tray-open', 'v2121-build-tray-open');
       document.body.classList.remove('v2111-build-open');
       document.body.classList.remove('v2112-build-open');
       document.body.classList.remove('v2113-build-open');
@@ -1222,7 +1257,7 @@ export class VillageWorld {
       document.body.classList.remove('v2116-build-open');
       document.body.classList.remove('v2117-build-open');
       document.body.classList.remove('v2118-build-open');
-      document.body.classList.remove('v2119-build-open');
+      document.body.classList.remove('v2119-build-open', 'v2120-build-open', 'v2121-build-open');
       this.previewLayer.removeChildren();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
     }
@@ -1334,7 +1369,7 @@ export class VillageWorld {
     for (let y = 0; y < MAP_SIZE; y += 1) {
       for (let x = 0; x < MAP_SIZE; x += 1) {
         let kind: VillageTileKind = 'grass';
-        if (y >= 35) kind = 'sea';
+        if (y >= 37) kind = 'sea';
         else if (y >= 32 || x <= 2 || x >= 37) kind = 'sand';
         else if ((x >= 17 && x <= 22 && y >= 17 && y <= 24) || (x >= 16 && x <= 23 && y >= 18 && y <= 22)) kind = 'plaza';
         else if (x === 20 && y >= 14 && y <= 34) kind = 'stone';
@@ -1713,7 +1748,7 @@ export class VillageWorld {
 
   private actorTextureUrl(role: Actor['role'], direction: ActorDirection): string {
     const corrected = ACTOR_DIRECTION_TEXTURE_FIX[direction] ?? direction;
-    if (role === 'player') return playerActorMotionTextureUrl(corrected, 0);
+    if (role === 'player') return playerActorMotionTextureUrl(direction, 0);
     return ACTOR_DIRECTION_TEXTURES[role]?.[corrected] ?? ACTOR_TEXTURES[role];
   }
 
@@ -2017,6 +2052,8 @@ export class VillageWorld {
       knob.style.setProperty('--v2117-joystick-transform', knobTransform);
       knob.style.setProperty('--v2118-joystick-transform', knobTransform);
       knob.style.setProperty('--v2119-joystick-transform', knobTransform);
+      knob.style.setProperty('--v2120-joystick-transform', knobTransform);
+      knob.style.setProperty('--v2121-joystick-transform', knobTransform);
       knob.style.transform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
       const strength = Math.min(1, length / radius);
       this.joystick.x = nx * strength;
@@ -2032,6 +2069,8 @@ export class VillageWorld {
       knob.style.setProperty('--v2117-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2118-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2119-joystick-transform', 'translate(-50%, -50%)');
+      knob.style.setProperty('--v2120-joystick-transform', 'translate(-50%, -50%)');
+      knob.style.setProperty('--v2121-joystick-transform', 'translate(-50%, -50%)');
       knob.style.transform = 'translate(-50%, -50%)';
     };
     stick.addEventListener('pointerdown', (ev) => {
@@ -2396,7 +2435,7 @@ export class VillageWorld {
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
     this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open', 'v2119-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open', 'v2119-modal-open', 'v2120-modal-open', 'v2121-modal-open');
     document.body.classList.add('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
@@ -2439,7 +2478,7 @@ export class VillageWorld {
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
     this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open', 'v2119-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open', 'v2119-modal-open', 'v2120-modal-open', 'v2121-modal-open');
     document.body.classList.add('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
@@ -2452,7 +2491,7 @@ export class VillageWorld {
     if (!panel) return;
     panel.classList.remove('open');
     this.root.classList.remove('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open', 'v2119-modal-open');
+    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open', 'v2119-modal-open', 'v2120-modal-open', 'v2121-modal-open');
     document.body.classList.remove('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');

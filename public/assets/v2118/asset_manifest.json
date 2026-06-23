@@ -1,5 +1,5 @@
 {
-  "version": "2.1.19",
+  "version": "2.1.20",
   "sourceZip": "aqua_fantasia_individual_assets_png.zip",
   "sourceFramesProvided": 28,
   "sourceDirectionGroupsProvided": 7,
@@ -55,5 +55,6 @@
   "tileSetPngCount": 81,
   "landTilePolicy": "grass uses non-blue legacy land tiles only; v2118 sea_and_beach water candidates are used only for sea/sand/wood families.",
   "playerMotionCorrection": "v2.1.19 replaced the corrected player northeast/northwest rod frames and source fisher direction 05 frames from uploaded v2118.zip.",
-  "playerMotionLock": "V2119_PLAYER_MOTION_IMAGE_LOCK"
+  "playerMotionLock": "V2119_PLAYER_MOTION_IMAGE_LOCK",
+  "playerDirectionCorrection": "v2.1.20 corrected runtime player visual mapping for northwest/northeast and east/west after the fixed frame upload."
 }

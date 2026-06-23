@@ -1,0 +1,24 @@
+{
+  "version": "2.1.20",
+  "opening": {
+    "source": "op.mp4",
+    "runtimeMp4": "./opening/aqua_opening_v2120.mp4",
+    "poster": "./opening/aqua_opening_poster_v2120.jpg",
+    "note": "User supplied opening video optimized to a muted mobile MP4. GIF conversion was avoided because MP4 is lighter and smoother for this 4.9 second portrait clip."
+  },
+  "playerDirectionRemap": {
+    "lock": "V2120_PLAYER_DIRECTION_REMAP_LOCK",
+    "runtimeFix": {
+      "northwest": "northeast",
+      "northeast": "northwest",
+      "east": "west",
+      "west": "east"
+    },
+    "note": "Movement math stays stable. Only the player visual frame set is remapped so 11/1 and 3/9 o'clock no longer show the opposite image."
+  },
+  "ui": {
+    "loginKeepToggle": "locked-css-aqua-toggle-no-image-background",
+    "openingBubble": "top speech bubble over full-screen MP4",
+    "aquaCardSkin": "shared card, blur, X close, and no text-shadow rules are maintained"
+  }
+}

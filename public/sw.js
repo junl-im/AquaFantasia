@@ -1,10 +1,12 @@
-// v2.1.19 polishes the opening cinematic, exit dialog, corrected player rod frames, bottom nav scale, and tile color balance.
-const CACHE_NAME = 'aqua-fantasia-v2.1.19-opening-exit-character-ui';
+// v2.1.21 keeps the opening MP4/direction locks and polishes page continuity, fishing layout, and modal rhythm.
+const CACHE_NAME = 'aqua-fantasia-v2.1.21-ui-continuity-polish';
 const PRECACHE = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./offline.html",
+  "./assets/v2120/opening/aqua_opening_v2120.mp4",
+  "./assets/v2120/opening/aqua_opening_poster_v2120.jpg",
   "./assets/v1110/home/village_islands_user_bg.webp",
   "./assets/v1110/home/village_islands_user_bg.png",
   "./assets/v22/characters/player_sd_front.png",

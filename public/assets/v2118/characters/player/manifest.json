@@ -1,5 +1,5 @@
 {
-  "version": "2.1.19",
+  "version": "2.1.21",
   "directions": [
     "north",
     "northeast",
@@ -45,5 +45,5 @@
     "player_northwest_frame_03.png",
     "player_northwest_frame_04.png"
   ],
-  "correction": "v2.1.19 user supplied fishing-rod frame correction applied; this player 8-way motion set is locked."
+  "directionCorrection": "v2.1.21 keeps the v2.1.20 direction remap locked; no image background is applied to login keep toggle; UI continuity polish only."
 }
