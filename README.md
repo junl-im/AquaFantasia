@@ -1,8 +1,17 @@
-# AquaFantasia v2.1.23
+# AquaFantasia v2.1.24
+
+## v2.1.24 변경사항
+
+- 버전을 `2.1.24`로 동기화했습니다.
+- `v2124-stability-performance-root`를 추가해 모달/개척/건설 상태 클래스가 남아 UI를 꼬이게 하는 문제를 일반식으로 정리했습니다.
+- 조이스틱 노브가 최신 CSS 변수에 의해 중앙에 고정될 수 있던 문제를 수정했습니다. 기본 위치는 중앙이지만 조작 중에는 실제 입력 방향으로 움직입니다.
+- 낚시 릴 패널 내부 터치가 루트 릴 입력과 중복 처리될 수 있는 충돌을 줄였습니다. 감기/풀기/릴 콘솔/릴 패널은 각자 입력만 처리합니다.
+- 오프닝 영상은 계속 최초 게임 시작 로딩 전용으로 유지하고, 홈/닫기/메뉴 복귀와 연결되지 않도록 검증을 유지했습니다.
+- 로그인 유지 토글, 플레이어 8방향 32프레임, 방향 매핑 고정값은 유지했습니다.
 
 ## v2.1.23 변경사항
 
-- 버전을 `2.1.23`으로 동기화했습니다.
+- 버전을 `2.1.24`로 동기화했습니다.
 - 플레이어 캐릭터 방향/걷기 모션을 다시 고정했습니다.
   - 3시 이동은 실제 3시로 보이도록 `east -> west asset` 매핑을 잠금 처리했습니다.
   - 9시 이동은 실제 9시로 보이도록 `west -> east asset` 매핑을 잠금 처리했습니다.
@@ -42,10 +51,10 @@
 
 ## 검증 기준
 
-- v2.1.23 작업본에서 `npm run validate`가 통과해야 합니다.
-- v2.1.23 통파일 ZIP을 새로 풀어 `npm run validate`가 통과해야 합니다.
-- v2.1.22 통파일에 v2.1.23 패치 ZIP을 덮어쓴 뒤 `npm run validate`가 통과해야 합니다.
-- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge/version이 `2.1.23`으로 동기화되어야 합니다.
+- v2.1.24 작업본에서 `npm run validate`가 통과해야 합니다.
+- v2.1.24 통파일 ZIP을 새로 풀어 `npm run validate`가 통과해야 합니다.
+- v2.1.23 통파일에 v2.1.24 패치 ZIP을 덮어쓴 뒤 `npm run validate`가 통과해야 합니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge/version이 `2.1.24`로 동기화되어야 합니다.
 - 루트 Markdown은 이 `README.md` 하나만 유지합니다.
 - `node_modules`, `dist`, `reports`, 백업 폴더, `.log`, `*_NOTES.md`는 ZIP에 포함하지 않습니다.
 - 금지 registry/internal 문자열은 포함하지 않습니다.

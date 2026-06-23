@@ -1,5 +1,5 @@
-// v2.1.23 hard-locks player direction/motion, keeps the opening video first-start-only, and stabilizes aqua UI/fishing layout.
-const CACHE_NAME = 'aqua-fantasia-v2.1.23-bug-ui-fishing-stability';
+// v2.1.24 keeps player direction/motion locked, isolates first-start opening, stabilizes UI states, and reduces fishing input conflicts.
+const CACHE_NAME = 'aqua-fantasia-v2.1.24-stability-performance-polish';
 const PRECACHE = [
   "./",
   "./index.html",

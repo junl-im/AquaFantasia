@@ -232,6 +232,7 @@ const V2120_PLAYER_DIRECTION_REMAP_LOCK = 'v2120-player-direction-visual-remap-l
 const V2121_UI_CONTINUITY_LOCK = 'v2121-ui-continuity-polish-lock';
 const V2122_PLAYER_CARDINAL_MOTION_LOCK = 'v2122-player-cardinal-motion-lock';
 const V2123_PLAYER_DIRECTION_MOTION_LOCK = 'v2123-player-direction-motion-hard-lock';
+const V2124_STATE_INPUT_LOCK = 'v2124-state-input-performance-lock';
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -1111,6 +1112,7 @@ export class VillageWorld {
     this.root.dataset.v2121UiContinuityLock = V2121_UI_CONTINUITY_LOCK;
     this.root.dataset.v2122PlayerCardinalMotionLock = V2122_PLAYER_CARDINAL_MOTION_LOCK;
     this.root.dataset.v2123PlayerDirectionMotionLock = V2123_PLAYER_DIRECTION_MOTION_LOCK;
+    this.root.dataset.v2124StateInputLock = V2124_STATE_INPUT_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
@@ -2060,6 +2062,9 @@ export class VillageWorld {
       knob.style.setProperty('--v2119-joystick-transform', knobTransform);
       knob.style.setProperty('--v2120-joystick-transform', knobTransform);
       knob.style.setProperty('--v2121-joystick-transform', knobTransform);
+      knob.style.setProperty('--v2122-joystick-transform', knobTransform);
+      knob.style.setProperty('--v2123-joystick-transform', knobTransform);
+      knob.style.setProperty('--v2124-joystick-transform', knobTransform);
       knob.style.transform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
       const strength = Math.min(1, length / radius);
       this.joystick.x = nx * strength;
@@ -2079,6 +2084,7 @@ export class VillageWorld {
       knob.style.setProperty('--v2121-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2122-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2123-joystick-transform', 'translate(-50%, -50%)');
+      knob.style.setProperty('--v2124-joystick-transform', 'translate(-50%, -50%)');
       knob.style.transform = 'translate(-50%, -50%)';
     };
     stick.addEventListener('pointerdown', (ev) => {
