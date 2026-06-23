@@ -231,6 +231,7 @@ const V2119_PLAYER_MOTION_IMAGE_LOCK = 'v2119-player-corrected-rod-frame-lock';
 const V2120_PLAYER_DIRECTION_REMAP_LOCK = 'v2120-player-direction-visual-remap-lock';
 const V2121_UI_CONTINUITY_LOCK = 'v2121-ui-continuity-polish-lock';
 const V2122_PLAYER_CARDINAL_MOTION_LOCK = 'v2122-player-cardinal-motion-lock';
+const V2123_PLAYER_DIRECTION_MOTION_LOCK = 'v2123-player-direction-motion-hard-lock';
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -238,15 +239,17 @@ const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((di
 ])) as Record<ActorDirection, string[]>;
 
 const PLAYER_ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
-  // v2.1.22: lock the 3시/9시 cardinal frames to their own files.
-  // Keep the existing 1시/11시 diagonal visual correction from v2.1.20.
+  // v2.1.23 hard lock: the supplied player PNG files are labelled opposite on
+  // the horizontal axis, so 3시 movement must intentionally load the west file
+  // and 9시 movement must load the east file. Keep the previous 1시/11시
+  // diagonal correction because those source filenames are also mirrored.
   south: 'south',
   southeast: 'southeast',
-  east: 'east',
+  east: 'west',
   northeast: 'northwest',
   north: 'north',
   northwest: 'northeast',
-  west: 'west',
+  west: 'east',
   southwest: 'southwest',
 };
 
@@ -617,8 +620,8 @@ function actorDirectionQaPasses(): boolean {
 function playerDirectionRemapQaPasses(): boolean {
   return playerActorVisualDirection('northwest') === 'northeast'
     && playerActorVisualDirection('northeast') === 'northwest'
-    && playerActorVisualDirection('east') === 'east'
-    && playerActorVisualDirection('west') === 'west';
+    && playerActorVisualDirection('east') === 'west'
+    && playerActorVisualDirection('west') === 'east';
 }
 
 
@@ -1107,6 +1110,7 @@ export class VillageWorld {
     this.root.dataset.v2120PlayerDirectionRemapLock = V2120_PLAYER_DIRECTION_REMAP_LOCK;
     this.root.dataset.v2121UiContinuityLock = V2121_UI_CONTINUITY_LOCK;
     this.root.dataset.v2122PlayerCardinalMotionLock = V2122_PLAYER_CARDINAL_MOTION_LOCK;
+    this.root.dataset.v2123PlayerDirectionMotionLock = V2123_PLAYER_DIRECTION_MOTION_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
@@ -2073,6 +2077,8 @@ export class VillageWorld {
       knob.style.setProperty('--v2119-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2120-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2121-joystick-transform', 'translate(-50%, -50%)');
+      knob.style.setProperty('--v2122-joystick-transform', 'translate(-50%, -50%)');
+      knob.style.setProperty('--v2123-joystick-transform', 'translate(-50%, -50%)');
       knob.style.transform = 'translate(-50%, -50%)';
     };
     stick.addEventListener('pointerdown', (ev) => {
@@ -2643,7 +2649,7 @@ export class VillageWorld {
 
   private animateActorWalk(actor: Actor, movementAmount: number, deltaMs: number): void {
     const walking = movementAmount > 0.18;
-    if (walking) actor.walkPhase += deltaMs * 0.015;
+    if (walking) actor.walkPhase += deltaMs * 0.026;
     else actor.walkPhase *= 0.72;
     // v2.0.60: grounded footstep motion. The sprite's anchor stays at the feet,
     // so we do not raise the whole character off the tile.
@@ -2652,7 +2658,7 @@ export class VillageWorld {
     if (actor.body instanceof Sprite) {
       const targetH = actor.role === 'player' ? 90 : 80;
       if (actor.role === 'player') {
-        const frameIndex = walking ? Math.floor(actor.walkPhase / 3) % PLAYER_ACTOR_FRAME_COUNT : 0;
+        const frameIndex = walking ? Math.floor(actor.walkPhase) % PLAYER_ACTOR_FRAME_COUNT : 0;
         const frameUrl = playerActorMotionTextureUrl(actor.direction, frameIndex);
         const frameTexture = this.textures.get(frameUrl);
         if (frameTexture && actor.body.texture !== frameTexture) {
