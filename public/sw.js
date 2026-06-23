@@ -1,5 +1,5 @@
-// v2.1.24 keeps player direction/motion locked, isolates first-start opening, stabilizes UI states, and reduces fishing input conflicts.
-const CACHE_NAME = 'aqua-fantasia-v2.1.24-stability-performance-polish';
+// v2.1.25 removes opening chrome, locks player 3시 direction/motion, and refines command/menu icon spacing.
+const CACHE_NAME = 'aqua-fantasia-v2.1.25-opening-direction-motion-ui';
 const PRECACHE = [
   "./",
   "./index.html",

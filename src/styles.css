@@ -41336,3 +41336,284 @@ html.perf-lite.v2124-stability-performance-root :is(.water-overlay,.caustic-over
   animation-duration: 30s !important;
   opacity: .54 !important;
 }
+
+/* v2.1.25 opening/direction/motion/UI polish.
+   This layer intentionally removes legacy opening chrome, locks 3시/9시 to the visible cardinal frames,
+   restores joystick walking animation by pairing with the v2125 runtime tick guard, and tunes the top/bottom menus. */
+html.v2125-opening-direction-motion-ui-root {
+  --v2125-safe-top: max(10px, env(safe-area-inset-top));
+  --v2125-safe-right: max(10px, env(safe-area-inset-right));
+  --v2125-safe-bottom: max(10px, env(safe-area-inset-bottom));
+  --v2125-safe-left: max(10px, env(safe-area-inset-left));
+  --v2125-command-width: 146px;
+  --v2125-ink: #053e56;
+  --v2125-muted: rgba(5,62,86,.72);
+  --v2125-card: linear-gradient(180deg, rgba(255,255,255,.96), rgba(220,250,255,.90));
+  --v2125-line: rgba(66,191,226,.34);
+  --v2125-shadow: 0 18px 44px rgba(0,54,86,.18), inset 0 1px 0 rgba(255,255,255,.90);
+}
+
+/* Opening video: first-start-only fullscreen video with no inherited card/frame chrome. */
+html.v2125-opening-direction-motion-ui-root body[data-screen="village"] .village-world-screen.v2125-village-opening-state :is(.v2097-village-hud,.v2097-expedition-board,.v2097-world-controls,.v2097-joystick,.bottom-nav,.v2097-village-guide,.v2097-village-notice,.v2097-dialog-panel) {
+  display: none !important;
+  pointer-events: none !important;
+}
+html.v2125-opening-direction-motion-ui-root .v2125-opening-cinematic,
+html.v2125-opening-direction-motion-ui-root section.v2125-opening-cinematic {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2500 !important;
+  display: block !important;
+  place-items: unset !important;
+  width: 100vw !important;
+  height: 100svh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: #062d48 !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  overflow: hidden !important;
+  pointer-events: auto !important;
+  color: var(--v2125-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2125-opening-direction-motion-ui-root .v2125-opening-cinematic::before,
+html.v2125-opening-direction-motion-ui-root .v2125-opening-cinematic::after,
+html.v2125-opening-direction-motion-ui-root .v2125-opening-cinematic *::before,
+html.v2125-opening-direction-motion-ui-root .v2125-opening-cinematic *::after {
+  content: none !important;
+  display: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+html.v2125-opening-direction-motion-ui-root .v2125-opening-cinematic > :not(.v2125-opening-video):not(.v2125-opening-vignette):not(.v2125-opening-bubble):not(.v2125-opening-skip) {
+  display: none !important;
+  pointer-events: none !important;
+}
+html.v2125-opening-direction-motion-ui-root .v2125-opening-video,
+html.v2125-opening-direction-motion-ui-root video.v2125-opening-video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100svh !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  z-index: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  filter: saturate(1.04) contrast(1.01) brightness(.98) !important;
+  pointer-events: none !important;
+}
+html.v2125-opening-direction-motion-ui-root .v2125-opening-vignette {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+  background: linear-gradient(180deg, rgba(2,28,44,.12), rgba(2,28,44,.02) 46%, rgba(2,24,39,.20)) !important;
+}
+html.v2125-opening-direction-motion-ui-root .v2125-opening-bubble {
+  position: absolute !important;
+  top: calc(var(--v2125-safe-top) + 10px) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 3 !important;
+  width: min(430px, calc(100vw - 36px)) !important;
+  margin: 0 !important;
+  padding: 11px 14px 12px !important;
+  border-radius: 22px !important;
+  background: rgba(247,253,255,.78) !important;
+  background-image: none !important;
+  border: 1px solid rgba(132,230,250,.26) !important;
+  box-shadow: 0 10px 26px rgba(0,38,64,.12), inset 0 1px 0 rgba(255,255,255,.60) !important;
+  backdrop-filter: blur(8px) saturate(1.08) !important;
+  text-align: center !important;
+  color: var(--v2125-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2125-opening-direction-motion-ui-root .v2125-opening-bubble strong,
+html.v2125-opening-direction-motion-ui-root .v2125-opening-bubble i { display: none !important; }
+html.v2125-opening-direction-motion-ui-root .v2125-opening-bubble span,
+html.v2125-opening-direction-motion-ui-root .v2125-opening-bubble em {
+  display: block !important;
+  margin: 0 !important;
+  color: var(--v2125-ink) !important;
+  -webkit-text-fill-color: var(--v2125-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+  line-height: 1.28 !important;
+  letter-spacing: -.035em !important;
+}
+html.v2125-opening-direction-motion-ui-root .v2125-opening-bubble span { font-size: clamp(12px, 3.3vw, 15px) !important; font-weight: 1000 !important; }
+html.v2125-opening-direction-motion-ui-root .v2125-opening-bubble em { margin-top: 3px !important; font-style: normal !important; font-size: clamp(10px, 2.65vw, 12px) !important; color: var(--v2125-muted) !important; -webkit-text-fill-color: var(--v2125-muted) !important; }
+html.v2125-opening-direction-motion-ui-root .v2125-opening-skip {
+  position: absolute !important;
+  right: calc(var(--v2125-safe-right) + 8px) !important;
+  bottom: calc(var(--v2125-safe-bottom) + 8px) !important;
+  z-index: 4 !important;
+  min-width: 84px !important;
+  min-height: 32px !important;
+  padding: 0 12px !important;
+  border-radius: 999px !important;
+  background: rgba(247,254,255,.78) !important;
+  border: 1px solid rgba(132,230,250,.28) !important;
+  box-shadow: 0 8px 18px rgba(0,38,64,.12) !important;
+  color: var(--v2125-ink) !important;
+  -webkit-text-fill-color: var(--v2125-ink) !important;
+  font-size: 11px !important;
+  font-weight: 1000 !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2125-opening-direction-motion-ui-root .village-world-screen.v2125-village-ready .v2125-opening-cinematic,
+html.v2125-opening-direction-motion-ui-root .village-world-screen:not(.v2125-village-opening-state) .v2125-opening-cinematic {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* Top command cluster: transparent group shell, slightly wider buttons and clearer gaps. */
+html.v2125-opening-direction-motion-ui-root body[data-screen="village"] .v2125-world-controls {
+  width: var(--v2125-command-width) !important;
+  min-width: var(--v2125-command-width) !important;
+  max-width: var(--v2125-command-width) !important;
+  padding: 4px !important;
+  gap: 7px !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+html.v2125-opening-direction-motion-ui-root body[data-screen="village"] .v2125-world-controls button {
+  width: 64px !important;
+  min-width: 64px !important;
+  max-width: 64px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 3px 2px !important;
+  margin: 0 !important;
+  transform: none !important;
+  translate: none !important;
+  overflow: hidden !important;
+}
+html.v2125-opening-direction-motion-ui-root body[data-screen="village"] .v2125-world-controls :is(img, span:first-child) {
+  width: 19px !important;
+  height: 19px !important;
+  max-width: 19px !important;
+  max-height: 19px !important;
+  object-fit: contain !important;
+  margin: 0 auto 1px !important;
+  filter: none !important;
+}
+html.v2125-opening-direction-motion-ui-root body[data-screen="village"] .v2125-world-controls :is(button::before, button::after) {
+  content: none !important;
+  display: none !important;
+}
+html.v2125-opening-direction-motion-ui-root body[data-screen="village"] .v2097-village-hud {
+  width: min(350px, calc(100vw - var(--v2125-command-width) - var(--v2125-safe-left) - var(--v2125-safe-right) - 22px)) !important;
+  max-width: calc(100vw - var(--v2125-command-width) - var(--v2125-safe-left) - var(--v2125-safe-right) - 22px) !important;
+}
+html.v2125-opening-direction-motion-ui-root body[data-screen="village"] .v2097-expedition-board {
+  top: calc(var(--v2125-safe-top) + 53px) !important;
+  width: min(324px, calc(100vw - var(--v2125-command-width) - var(--v2125-safe-left) - var(--v2125-safe-right) - 22px)) !important;
+  max-width: calc(100vw - var(--v2125-command-width) - var(--v2125-safe-left) - var(--v2125-safe-right) - 22px) !important;
+}
+
+/* Bottom menu: slightly larger icons, stable layout on press. */
+html.v2125-opening-direction-motion-ui-root .bottom-nav.v2125-bottom-nav {
+  width: 194px !important;
+  min-width: 194px !important;
+  max-width: 194px !important;
+  height: 53px !important;
+  min-height: 53px !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 4px !important;
+  padding: 4px !important;
+  transform: none !important;
+  translate: none !important;
+  contain: layout paint !important;
+  overflow: hidden !important;
+}
+html.v2125-opening-direction-motion-ui-root .bottom-nav.v2125-bottom-nav .v2098-nav-item,
+html.v2125-opening-direction-motion-ui-root .bottom-nav.v2125-bottom-nav .v2098-nav-item:active,
+html.v2125-opening-direction-motion-ui-root .bottom-nav.v2125-bottom-nav .v2098-nav-item.active,
+html.v2125-opening-direction-motion-ui-root .bottom-nav.v2125-bottom-nav .v2098-nav-item:focus {
+  width: 45px !important;
+  min-width: 45px !important;
+  max-width: 45px !important;
+  height: 45px !important;
+  min-height: 45px !important;
+  max-height: 45px !important;
+  transform: none !important;
+  translate: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2125-opening-direction-motion-ui-root .bottom-nav.v2125-bottom-nav img {
+  width: 21px !important;
+  height: 21px !important;
+  max-width: 21px !important;
+  max-height: 21px !important;
+  object-fit: contain !important;
+}
+html.v2125-opening-direction-motion-ui-root .bottom-nav.v2125-bottom-nav span {
+  font-size: 9px !important;
+  line-height: 1 !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* Joystick: default center only; runtime updates --v2125-joystick-transform while dragging. */
+html.v2125-opening-direction-motion-ui-root body[data-screen="village"] .v2097-joystick-knob {
+  transform: var(--v2125-joystick-transform, var(--v2124-joystick-transform, var(--v2123-joystick-transform, var(--v2122-joystick-transform, var(--v2121-joystick-transform, translate(-50%, -50%))))) !important;
+  will-change: transform !important;
+}
+
+/* Shared aqua UI readability guard. */
+html.v2125-opening-direction-motion-ui-root :is(.runtime-menu-screen.v2125-runtime-page-shell .v2125-aqua-page,.v2097-character-card,.v2097-interior-card,.v2097-build-tray,.v2097-expedition-body,.game-dialog-card) {
+  background-image: var(--v2125-card) !important;
+  border-color: var(--v2125-line) !important;
+  box-shadow: var(--v2125-shadow) !important;
+  color: var(--v2125-ink) !important;
+  -webkit-text-fill-color: var(--v2125-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html.v2125-opening-direction-motion-ui-root :is(.runtime-menu-screen.v2125-runtime-page-shell .v2125-aqua-page,.v2097-character-card,.v2097-interior-card,.v2097-build-tray,.v2097-expedition-body,.game-dialog-card) * {
+  text-shadow: none !important;
+  filter: none !important;
+  -webkit-text-stroke: 0 transparent !important;
+}
+html.v2125-opening-direction-motion-ui-root .runtime-menu-screen.v2125-runtime-page-shell .v2125-aqua-page {
+  width: min(94vw, 720px) !important;
+  min-height: min(70svh, 660px) !important;
+  max-height: calc(100svh - var(--v2125-safe-top) - var(--v2125-safe-bottom) - 78px) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+}
+
+/* Fishing layout unchanged except stronger guard against old chrome and nav leakage. */
+html.v2125-opening-direction-motion-ui-root body[data-screen="fishing"] .fishing-screen.v2125-fishing-polish-screen .bottom-nav { display: none !important; }
+html.v2125-opening-direction-motion-ui-root body[data-screen="fishing"] .fishing-screen.v2125-fishing-polish-screen :is(.v2020-reel-panel-frame,.v2021-reel-tooltip-frame,.v2110-fishing-props) {
+  display: none !important;
+  pointer-events: none !important;
+}

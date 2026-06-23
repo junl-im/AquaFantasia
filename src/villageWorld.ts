@@ -233,6 +233,7 @@ const V2121_UI_CONTINUITY_LOCK = 'v2121-ui-continuity-polish-lock';
 const V2122_PLAYER_CARDINAL_MOTION_LOCK = 'v2122-player-cardinal-motion-lock';
 const V2123_PLAYER_DIRECTION_MOTION_LOCK = 'v2123-player-direction-motion-hard-lock';
 const V2124_STATE_INPUT_LOCK = 'v2124-state-input-performance-lock';
+const V2125_DIRECTION_MOTION_LOCK = 'v2125-east-motion-visual-lock';
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -240,17 +241,16 @@ const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((di
 ])) as Record<ActorDirection, string[]>;
 
 const PLAYER_ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
-  // v2.1.23 hard lock: the supplied player PNG files are labelled opposite on
-  // the horizontal axis, so 3시 movement must intentionally load the west file
-  // and 9시 movement must load the east file. Keep the previous 1시/11시
-  // diagonal correction because those source filenames are also mirrored.
+  // v2.1.25 visual lock: the corrected player frames supplied for 3시/9시
+  // now match their cardinal filenames. Keep the 1시/11시 visual correction
+  // only, because those two diagonal labels are still mirrored in the source set.
   south: 'south',
   southeast: 'southeast',
-  east: 'west',
+  east: 'east',
   northeast: 'northwest',
   north: 'north',
   northwest: 'northeast',
-  west: 'east',
+  west: 'west',
   southwest: 'southwest',
 };
 
@@ -621,8 +621,8 @@ function actorDirectionQaPasses(): boolean {
 function playerDirectionRemapQaPasses(): boolean {
   return playerActorVisualDirection('northwest') === 'northeast'
     && playerActorVisualDirection('northeast') === 'northwest'
-    && playerActorVisualDirection('east') === 'west'
-    && playerActorVisualDirection('west') === 'east';
+    && playerActorVisualDirection('east') === 'east'
+    && playerActorVisualDirection('west') === 'west';
 }
 
 
@@ -1113,6 +1113,7 @@ export class VillageWorld {
     this.root.dataset.v2122PlayerCardinalMotionLock = V2122_PLAYER_CARDINAL_MOTION_LOCK;
     this.root.dataset.v2123PlayerDirectionMotionLock = V2123_PLAYER_DIRECTION_MOTION_LOCK;
     this.root.dataset.v2124StateInputLock = V2124_STATE_INPUT_LOCK;
+    this.root.dataset.v2125DirectionMotionLock = V2125_DIRECTION_MOTION_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
@@ -2065,6 +2066,7 @@ export class VillageWorld {
       knob.style.setProperty('--v2122-joystick-transform', knobTransform);
       knob.style.setProperty('--v2123-joystick-transform', knobTransform);
       knob.style.setProperty('--v2124-joystick-transform', knobTransform);
+      knob.style.setProperty('--v2125-joystick-transform', knobTransform);
       knob.style.transform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
       const strength = Math.min(1, length / radius);
       this.joystick.x = nx * strength;
@@ -2085,6 +2087,7 @@ export class VillageWorld {
       knob.style.setProperty('--v2122-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2123-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2124-joystick-transform', 'translate(-50%, -50%)');
+      knob.style.setProperty('--v2125-joystick-transform', 'translate(-50%, -50%)');
       knob.style.transform = 'translate(-50%, -50%)';
     };
     stick.addEventListener('pointerdown', (ev) => {
@@ -2555,8 +2558,11 @@ export class VillageWorld {
 
   private tick(deltaMs: number): void {
     if (!this.app || this.destroyed) return;
-    this.movePlayerByJoystick(deltaMs);
-    this.updateActor(this.player, deltaMs);
+    // v2.1.25: joystick movement already advances player position, direction,
+    // and walking frame. Do not immediately call updateActor(player) afterward,
+    // because the path-empty branch resets the player back to idle frame 01.
+    if (this.joystick.active) this.movePlayerByJoystick(deltaMs);
+    else this.updateActor(this.player, deltaMs);
     this.ensureNpcHealth();
     for (const npc of this.npcs) {
       npc.targetTimer -= deltaMs;
