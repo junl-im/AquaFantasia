@@ -347,6 +347,9 @@ const TILE_TEXTURES: Record<VillageTileKind, string[]> = {
     './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_001_32x32.png',
     './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_002_32x32.png',
     './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_003_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_004_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_005_32x32.png',
+    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_006_32x32.png',
     './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_011_32x32.png',
     './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_012_32x32.png',
     './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_013_32x32.png',
@@ -1146,12 +1149,14 @@ export class VillageWorld {
     this.root.classList.toggle('v2114-build-tray-open', open);
     this.root.classList.toggle('v2115-build-tray-open', open);
     this.root.classList.toggle('v2116-build-tray-open', open);
+    this.root.classList.toggle('v2117-build-tray-open', open);
     document.body.classList.toggle('v2111-build-open', open);
     document.body.classList.toggle('v2112-build-open', open);
     document.body.classList.toggle('v2113-build-open', open);
     document.body.classList.toggle('v2114-build-open', open);
     document.body.classList.toggle('v2115-build-open', open);
     document.body.classList.toggle('v2116-build-open', open);
+    document.body.classList.toggle('v2117-build-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
       if (!keepSelection) this.movingBuildingId = null;
@@ -1176,11 +1181,13 @@ export class VillageWorld {
       this.root.classList.remove('v2113-build-tray-open');
       this.root.classList.remove('v2114-build-tray-open');
       this.root.classList.remove('v2116-build-tray-open');
+      this.root.classList.remove('v2117-build-tray-open');
       document.body.classList.remove('v2111-build-open');
       document.body.classList.remove('v2112-build-open');
       document.body.classList.remove('v2113-build-open');
       document.body.classList.remove('v2114-build-open');
       document.body.classList.remove('v2116-build-open');
+      document.body.classList.remove('v2117-build-open');
       this.previewLayer.removeChildren();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
     }
@@ -1963,6 +1970,7 @@ export class VillageWorld {
       const limited = Math.min(radius, length);
       const nx = length > 0 ? dx / length : 0;
       const ny = length > 0 ? dy / length : 0;
+      knob.style.setProperty('--v2117-joystick-transform', `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`);
       knob.style.transform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
       const strength = Math.min(1, length / radius);
       this.joystick.x = nx * strength;
@@ -1975,6 +1983,7 @@ export class VillageWorld {
     };
     const reset = () => {
       this.joystick = { x: 0, y: 0, active: false, pointerId: null };
+      knob.style.setProperty('--v2117-joystick-transform', 'translate(-50%, -50%)');
       knob.style.transform = 'translate(-50%, -50%)';
     };
     stick.addEventListener('pointerdown', (ev) => {
@@ -2339,7 +2348,7 @@ export class VillageWorld {
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
     this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open');
     document.body.classList.add('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
@@ -2382,7 +2391,7 @@ export class VillageWorld {
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
     this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open');
     document.body.classList.add('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
@@ -2395,7 +2404,7 @@ export class VillageWorld {
     if (!panel) return;
     panel.classList.remove('open');
     this.root.classList.remove('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open');
+    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open');
     document.body.classList.remove('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');

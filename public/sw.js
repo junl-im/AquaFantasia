@@ -1,5 +1,5 @@
-// v2.1.16 applies the new village asset polish pass to village objects, sea/beach tiles, aqua cards, and fishing-safe UI polish.
-const CACHE_NAME = 'aqua-fantasia-v2.1.16-village-asset-polish';
+// v2.1.17 fixes modal placement, joystick movement, bottom dock stability, top controls spacing, fishing reel centering, and supplied water tile usage.
+const CACHE_NAME = 'aqua-fantasia-v2.1.17-layout-input-fishing-polish';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -703,6 +703,10 @@ const PRECACHE = [
   "./assets/v2110/objects/fishing_props/fishing_prop_022.png",
   "./assets/v2110/objects/fishing_props/fishing_prop_023.png",
   "./assets/v2110/tiles_32x32/sea_and_beach/sea_tile_001_32x32.png",
+  "./assets/v2110/tiles_32x32/sea_and_beach/sea_tile_012_32x32.png",
+  "./assets/v2110/tiles_32x32/sea_and_beach/sea_tile_011_32x32.png",
+  "./assets/v2110/tiles_32x32/sea_and_beach/sea_tile_003_32x32.png",
+  "./assets/v2110/tiles_32x32/sea_and_beach/sea_tile_002_32x32.png",
   "./assets/v2110/tiles_32x32/sea_and_beach/sea_tile_045_32x32.png",
   "./assets/v2110/tiles_32x32/sea_and_beach/sea_tile_055_32x32.png"
 ];
