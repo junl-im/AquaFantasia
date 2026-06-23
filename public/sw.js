@@ -1,5 +1,5 @@
-// v1.1.14 keeps tech/perf/content-flow hardening and adds detail stability QA caching safeguards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.3-aqua-ui-detail-polish';
+// v2.1.4 unifies aqua-card UI, removes toast popups, and restores fishing screen clarity.
+const CACHE_NAME = 'aqua-fantasia-v2.1.4-aqua-ui-unified-fishing-polish';
 const PRECACHE = [
   "./",
   "./index.html",
