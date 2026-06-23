@@ -1795,7 +1795,7 @@ export class VillageWorld {
       node.addEventListener('pointerup', (ev) => { ev.stopPropagation(); }, { capture: true });
     });
     this.bindJoystick();
-    this.root.querySelector<HTMLButtonElement>('[data-village-fishing]')?.addEventListener('click', () => this.onGoFishing());
+    this.root.querySelector<HTMLButtonElement>('[data-village-fishing]')?.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); this.onGoFishing(); });
     this.root.querySelectorAll<HTMLElement>('[data-v203-interior-close]').forEach((node) => node.addEventListener('click', () => this.closeInterior()));
     this.root.querySelector<HTMLButtonElement>('[data-v203-interior-go-fishing]')?.addEventListener('click', () => this.onGoFishing());
     this.root.querySelector<HTMLButtonElement>('[data-v2044-interior-move]')?.addEventListener('click', () => {
@@ -2208,8 +2208,8 @@ export class VillageWorld {
     inventoryAction?.toggleAttribute('hidden', true);
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
-    this.root.classList.add('v2094-interior-open', 'v2097-interior-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open');
+    this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v217-interior-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v217-aqua-modal-open', 'v217-interior-open');
     this.root.querySelector<HTMLElement>('.v2097-world-controls, .v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
     panel.setAttribute('aria-hidden', 'false');
@@ -2250,8 +2250,8 @@ export class VillageWorld {
     inventoryAction?.toggleAttribute('hidden', !interior.inventory);
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
-    this.root.classList.add('v2094-interior-open', 'v2097-interior-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open');
+    this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v217-interior-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v217-aqua-modal-open', 'v217-interior-open');
     this.root.querySelector<HTMLElement>('.v2097-world-controls, .v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
     panel.setAttribute('aria-hidden', 'false');
@@ -2262,8 +2262,8 @@ export class VillageWorld {
     const panel = this.root.querySelector<HTMLElement>('[data-v2097-interior-panel], [data-v2094-interior-panel]');
     if (!panel) return;
     panel.classList.remove('open');
-    this.root.classList.remove('v2094-interior-open', 'v2097-interior-open');
-    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open');
+    this.root.classList.remove('v2094-interior-open', 'v2097-interior-open', 'v217-interior-modal-open');
+    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v217-aqua-modal-open', 'v217-interior-open');
     this.root.querySelector<HTMLElement>('.v2097-world-controls, .v2094-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');
     this.focusedBuildingId = null;
