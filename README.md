@@ -1,11 +1,11 @@
-# AquaFantasia v2.1.1
+# AquaFantasia v2.1.2
 
-## v2.1.1 변경사항
+## v2.1.2 변경사항
 
 이번 패치는 v2.1.0의 아쿠아 카드 UI 기초 재정렬 위에 올리는 **UI/UX 다듬기 패치**입니다. 새 콘텐츠는 추가하지 않고, 사용자가 지정한 화면 기준인 `캐릭터 정보창 같은 밝은 아쿠아 카드`, `카드 바깥 딤/블러`, `좌측 아래 조이스틱`, `우측 아래 메뉴바`, `왼쪽 위 HUD`, `우측 위 메뉴바`, `HUD 아래 개척 바` 구조를 더 안정적으로 고정했습니다.
 
-- 버전을 `2.1.1`로 올리고 `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge/version, `README.md`를 동기화했습니다.
-- `v211-aqua-ui-refinement-root`와 `dataset.v211AquaUiRefinement = 'v211-aqua-ui-refinement-pass'`를 추가해 v2.1.x 다듬기 CSS가 버전 변경 후에도 명확하게 적용되도록 했습니다.
+- 버전을 `2.1.2`로 올리고 `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge/version, `README.md`를 동기화했습니다.
+- `v212-aqua-ui-polish-root`와 `dataset.v212AquaUiPolish = 'v212-aqua-ui-polish-pass'`를 추가해 v2.1.x 다듬기 CSS가 버전 변경 후에도 명확하게 적용되도록 했습니다.
 - 마을 첫 화면 배치를 다시 다듬었습니다.
   - 왼쪽 위: 더 읽기 쉬운 짧은 아쿠아 HUD
   - HUD 아래: 개척 바를 HUD와 같은 왼쪽 축에 정렬
@@ -18,7 +18,7 @@
 - 닫기 X 버튼은 우측 상단 원형 아쿠아 버튼 기준을 유지하고, 눌림 피드백만 가볍게 추가했습니다.
 - 구형 버튼 스프라이트와 푸른 줄 잔상이 다시 올라오지 않도록 버튼/도크 가상 요소 차단 규칙을 강화했습니다.
 - 첫 시작 화면의 `이 기기에 로그인 유지` 체크/글씨 가독성을 추가 보정했습니다.
-- `tools/check-v211-aqua-ui-refinement.mjs`를 추가하고 `npm run validate`에 연결해 v2.1.1 버전 동기화, UI 루트, HUD/개척바/우측 조작바/조이스틱/하단 메뉴바, 패키지 청결, registry 오염 문자열을 검사합니다.
+- `tools/check-v212-aqua-ui-polish.mjs`를 추가하고 `npm run validate`에 연결해 v2.1.2 버전 동기화, UI 루트, HUD/개척바/우측 조작바/조이스틱/하단 메뉴바, 패키지 청결, registry 오염 문자열을 검사합니다.
 
 ## 유지 내용
 
@@ -34,7 +34,7 @@
 - 금지 registry 문자열 없음 유지
 - 루트 Markdown은 `README.md` 하나만 유지
 - 금지 산출물(`node_modules`, `dist`, `reports`, 백업 폴더, `.log`, `*_NOTES.md`) 미포함 유지
-- 통파일 ZIP과 v2.1.0 기준 덮어쓰기 패치 ZIP 둘 다 제공
+- 통파일 ZIP과 v2.1.1 기준 덮어쓰기 패치 ZIP 둘 다 제공
 
 ## 패키징 규칙
 

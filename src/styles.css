@@ -38091,3 +38091,338 @@ html.v211-aqua-ui-refinement-root .hit-keep.v2025-keep-button .keep-indicator {
   html.v211-aqua-ui-refinement-root .v2097-joystick-knob { width: 38px !important; height: 38px !important; }
   html.v211-aqua-ui-refinement-root .bottom-nav.v2098-bottom-nav .v2098-nav-item span { font-size: 8.5px !important; }
 }
+
+/* v2.1.2 aqua UI polish: stronger no-overlap layout, clearer menu priority and softer card blur. */
+html.v212-aqua-ui-polish-root {
+  --v212-safe-top: max(12px, env(safe-area-inset-top));
+  --v212-safe-left: max(12px, env(safe-area-inset-left));
+  --v212-safe-right: max(10px, env(safe-area-inset-right));
+  --v212-safe-bottom: max(12px, env(safe-area-inset-bottom));
+  --v212-ink: #084d66;
+  --v212-muted: rgba(8, 77, 102, .70);
+  --v212-card: linear-gradient(180deg, rgba(255,255,255,.98), rgba(222,252,255,.93) 58%, rgba(169,239,250,.86));
+  --v212-card-strong: linear-gradient(180deg, rgba(255,255,255,.985), rgba(229,253,255,.96) 58%, rgba(161,238,249,.90));
+  --v212-glass: rgba(255,255,255,.73);
+  --v212-border: rgba(46, 169, 199, .48);
+  --v212-shadow: 0 18px 42px rgba(8, 76, 111, .17), inset 0 1px 0 rgba(255,255,255,.96);
+  --v212-soft-shadow: 0 12px 28px rgba(8, 76, 111, .13), inset 0 1px 0 rgba(255,255,255,.94);
+  --v212-blur: blur(16px) saturate(1.18);
+  --v212-toolbar-w: clamp(98px, 26vw, 116px);
+  --v212-hud-w: min(268px, calc(100vw - var(--v212-toolbar-w) - var(--v212-safe-left) - var(--v212-safe-right) - 18px));
+  --v212-dock-w: min(258px, calc(100vw - var(--v212-safe-left) - var(--v212-safe-right) - 106px));
+  --v212-dock-h: 56px;
+  --v212-joy-size: 82px;
+}
+html.v212-aqua-ui-polish-root .v2097-village-hud {
+  top: var(--v212-safe-top) !important;
+  left: var(--v212-safe-left) !important;
+  width: max(212px, var(--v212-hud-w)) !important;
+  height: 50px !important;
+  min-height: 50px !important;
+  max-height: 50px !important;
+  padding: 5px 7px !important;
+  border-radius: 24px !important;
+  background: var(--v212-card) !important;
+  border: 1px solid var(--v212-border) !important;
+  box-shadow: var(--v212-shadow) !important;
+  backdrop-filter: var(--v212-blur) !important;
+  z-index: 820 !important;
+}
+html.v212-aqua-ui-polish-root .v2097-profile-chip {
+  height: 39px !important;
+  grid-template-columns: minmax(62px, max-content) minmax(0, 1fr) minmax(44px, max-content) !important;
+  gap: 5px !important;
+  padding: 0 7px !important;
+  color: var(--v212-ink) !important;
+}
+html.v212-aqua-ui-polish-root .v2097-profile-chip span {
+  min-width: 62px !important;
+  height: 28px !important;
+  padding: 0 7px !important;
+  font-size: 10.5px !important;
+  background: rgba(255,255,255,.82) !important;
+}
+html.v212-aqua-ui-polish-root .v2097-profile-chip strong {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  color: var(--v212-ink) !important;
+  font-size: 13px !important;
+}
+html.v212-aqua-ui-polish-root .v2097-profile-chip em {
+  min-width: 44px !important;
+  max-width: 58px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 9.5px !important;
+  color: var(--v212-muted) !important;
+}
+html.v212-aqua-ui-polish-root .v2097-expedition-board {
+  top: calc(var(--v212-safe-top) + 58px) !important;
+  left: var(--v212-safe-left) !important;
+  width: max(204px, min(252px, calc(100vw - var(--v212-toolbar-w) - var(--v212-safe-left) - var(--v212-safe-right) - 22px))) !important;
+  z-index: 812 !important;
+}
+html.v212-aqua-ui-polish-root .v2097-expedition-toggle {
+  height: 34px !important;
+  min-height: 34px !important;
+  grid-template-columns: 38px 38px minmax(0, 1fr) !important;
+  gap: 5px !important;
+  padding: 0 9px !important;
+  border-radius: 999px !important;
+  background: var(--v212-card) !important;
+  border: 1px solid var(--v212-border) !important;
+  box-shadow: var(--v212-soft-shadow) !important;
+  color: var(--v212-ink) !important;
+}
+html.v212-aqua-ui-polish-root .v2097-expedition-toggle span,
+html.v212-aqua-ui-polish-root .v2097-expedition-toggle strong { font-size: 11px !important; }
+html.v212-aqua-ui-polish-root .v2097-expedition-toggle em {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  color: var(--v212-muted) !important;
+  font-size: 9px !important;
+}
+html.v212-aqua-ui-polish-root .v2097-expedition-body {
+  top: calc(var(--v212-safe-top) + 98px) !important;
+  left: var(--v212-safe-left) !important;
+  right: var(--v212-safe-right) !important;
+  max-height: calc(100svh - var(--v212-safe-top) - var(--v212-safe-bottom) - var(--v212-dock-h) - 122px) !important;
+  background: var(--v212-card-strong) !important;
+  border: 1px solid var(--v212-border) !important;
+  box-shadow: 0 0 0 9999px rgba(31, 122, 151, .26), var(--v212-shadow) !important;
+  backdrop-filter: var(--v212-blur) !important;
+}
+html.v212-aqua-ui-polish-root .v2097-world-controls,
+html.v212-aqua-ui-polish-root .v2098-world-controls {
+  top: var(--v212-safe-top) !important;
+  right: var(--v212-safe-right) !important;
+  width: var(--v212-toolbar-w) !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-auto-rows: 36px !important;
+  gap: 5px !important;
+  padding: 6px !important;
+  border-radius: 23px !important;
+  background: var(--v212-card) !important;
+  border: 1px solid var(--v212-border) !important;
+  box-shadow: var(--v212-shadow) !important;
+  backdrop-filter: var(--v212-blur) !important;
+  z-index: 830 !important;
+}
+html.v212-aqua-ui-polish-root .v2097-world-controls button {
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 2px 1px !important;
+  border-radius: 16px !important;
+  background: var(--v212-glass) !important;
+  border: 1px solid rgba(46,169,199,.28) !important;
+  color: var(--v212-ink) !important;
+  -webkit-text-fill-color: var(--v212-ink) !important;
+  font-size: 8.4px !important;
+  line-height: 1 !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v212-aqua-ui-polish-root .v2097-world-controls button:is([data-village-build-open],[data-village-shop],[data-village-fishing]) {
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(139,232,246,.58)) !important;
+  border-color: rgba(46,169,199,.40) !important;
+  font-weight: 1000 !important;
+}
+html.v212-aqua-ui-polish-root .v2097-world-controls button span:first-child {
+  min-height: 16px !important;
+  font-size: 13px !important;
+}
+html.v212-aqua-ui-polish-root .v2097-world-controls img {
+  width: 16px !important;
+  height: 16px !important;
+  object-fit: contain !important;
+  filter: none !important;
+}
+html.v212-aqua-ui-polish-root .v2097-joystick {
+  left: var(--v212-safe-left) !important;
+  bottom: var(--v212-safe-bottom) !important;
+  width: 96px !important;
+  height: 98px !important;
+  z-index: 810 !important;
+}
+html.v212-aqua-ui-polish-root .v2097-joystick-base {
+  width: var(--v212-joy-size) !important;
+  height: var(--v212-joy-size) !important;
+  background: radial-gradient(circle at 50% 46%, rgba(255,255,255,.18), rgba(7,77,104,.34)) !important;
+  border: 2px solid rgba(233,254,255,.70) !important;
+  box-shadow: 0 13px 28px rgba(5,76,111,.18), inset 0 0 0 9px rgba(255,255,255,.11) !important;
+}
+html.v212-aqua-ui-polish-root .v2097-joystick-knob {
+  width: 42px !important;
+  height: 42px !important;
+  background: radial-gradient(circle at 34% 28%, #fff, #c9f9ff 50%, #55bfd5 100%) !important;
+}
+html.v212-aqua-ui-polish-root .bottom-nav.v2098-bottom-nav {
+  right: var(--v212-safe-right) !important;
+  bottom: var(--v212-safe-bottom) !important;
+  width: max(204px, var(--v212-dock-w)) !important;
+  max-width: calc(100vw - var(--v212-safe-left) - var(--v212-safe-right) - 104px) !important;
+  height: var(--v212-dock-h) !important;
+  min-height: var(--v212-dock-h) !important;
+  padding: 5px !important;
+  gap: 4px !important;
+  border-radius: 23px !important;
+  background: var(--v212-card) !important;
+  border: 1px solid var(--v212-border) !important;
+  box-shadow: var(--v212-shadow) !important;
+  backdrop-filter: var(--v212-blur) !important;
+  z-index: 805 !important;
+}
+html.v212-aqua-ui-polish-root .bottom-nav.v2098-bottom-nav .v2098-nav-item {
+  min-width: 0 !important;
+  grid-template-rows: 21px 1fr !important;
+  padding: 3px 1px !important;
+  gap: 1px !important;
+  border-radius: 16px !important;
+  color: var(--v212-ink) !important;
+  -webkit-text-fill-color: var(--v212-ink) !important;
+  font-size: 8.8px !important;
+}
+html.v212-aqua-ui-polish-root .bottom-nav.v2098-bottom-nav .v2098-nav-item img {
+  width: 20px !important;
+  height: 20px !important;
+  object-fit: contain !important;
+}
+html.v212-aqua-ui-polish-root .bottom-nav.v2098-bottom-nav .v2098-nav-item span {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  color: var(--v212-ink) !important;
+  font-size: 8.8px !important;
+  letter-spacing: -.045em !important;
+}
+html.v212-aqua-ui-polish-root .bottom-nav.v2098-bottom-nav .v2098-nav-item.active {
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(132,229,245,.54)) !important;
+  border: 1px solid rgba(46,169,199,.32) !important;
+}
+html.v212-aqua-ui-polish-root .v2097-modal-backdrop,
+html.v212-aqua-ui-polish-root .v2097-build-backdrop,
+html.v212-aqua-ui-polish-root .v2097-menu-dim {
+  background: rgba(25, 116, 145, .28) !important;
+  backdrop-filter: blur(18px) saturate(1.15) !important;
+}
+html.v212-aqua-ui-polish-root .v2097-modal-card,
+html.v212-aqua-ui-polish-root .v2097-character-card,
+html.v212-aqua-ui-polish-root .v2097-interior-card,
+html.v212-aqua-ui-polish-root .v2097-build-tray,
+html.v212-aqua-ui-polish-root .v2097-menu-content,
+html.v212-aqua-ui-polish-root .v2098-menu-content {
+  background: var(--v212-card-strong) !important;
+  border: 1px solid var(--v212-border) !important;
+  border-radius: 30px !important;
+  color: var(--v212-ink) !important;
+  box-shadow: var(--v212-shadow) !important;
+  backdrop-filter: var(--v212-blur) !important;
+}
+html.v212-aqua-ui-polish-root .v2097-ui-close,
+html.v212-aqua-ui-polish-root .v2097-menu-close,
+html.v212-aqua-ui-polish-root .v2059-fishing-close,
+html.v212-aqua-ui-polish-root .v2059-result-close {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(180deg, #fff, #cbf7ff) !important;
+  border: 1px solid rgba(46,169,199,.52) !important;
+  color: var(--v212-ink) !important;
+  -webkit-text-fill-color: var(--v212-ink) !important;
+  box-shadow: 0 10px 22px rgba(8,76,111,.16), inset 0 1px 0 rgba(255,255,255,.96) !important;
+  z-index: 5 !important;
+}
+html.v212-aqua-ui-polish-root .runtime-menu-screen.v2097-menu-screen {
+  padding: var(--v212-safe-top) var(--v212-safe-right) calc(var(--v212-dock-h) + var(--v212-safe-bottom) + 14px) var(--v212-safe-left) !important;
+}
+html.v212-aqua-ui-polish-root .runtime-hud.v2097-menu-hud {
+  height: 50px !important;
+  min-height: 50px !important;
+  border-radius: 24px !important;
+  background: var(--v212-card) !important;
+  border: 1px solid var(--v212-border) !important;
+  box-shadow: var(--v212-soft-shadow) !important;
+}
+html.v212-aqua-ui-polish-root .v2097-menu-content,
+html.v212-aqua-ui-polish-root .v2098-menu-content {
+  width: min(680px, calc(100vw - 24px)) !important;
+  max-height: calc(100svh - var(--v212-safe-top) - var(--v212-safe-bottom) - var(--v212-dock-h) - 78px) !important;
+  overflow: auto !important;
+  scrollbar-gutter: stable both-edges !important;
+}
+html.v212-aqua-ui-polish-root :is(.runtime-hero-card,.runtime-panel,.runtime-card,.shop-card,.mission-card,.gear-card,.dex-card,.v2076-route-card,.v2076-expedition-card,.v2097-build-grid button,.runtime-btn,.btn-aqua-action,.compact-cta) {
+  background: rgba(255,255,255,.74) !important;
+  border-color: rgba(46,169,199,.34) !important;
+  color: var(--v212-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v212-aqua-ui-polish-root .hit-keep.v2025-keep-button {
+  background: rgba(255,255,255,.84) !important;
+  border: 1px solid rgba(46,169,199,.34) !important;
+  box-shadow: var(--v212-soft-shadow) !important;
+}
+html.v212-aqua-ui-polish-root .hit-keep.v2025-keep-button .keep-text {
+  color: var(--v212-ink) !important;
+  -webkit-text-fill-color: var(--v212-ink) !important;
+  text-shadow: none !important;
+}
+html.v212-aqua-ui-polish-root :is(.v2-build-tray-open,.v2094-build-tray-open,.v2097-build-tray-open,.v2098-build-tray-open) .v2097-world-controls,
+html.v212-aqua-ui-polish-root :is(.v2097-modal-open,.v2098-modal-open,.v2097-expedition-open,.v2098-expedition-open) .v2097-world-controls {
+  opacity: .18 !important;
+  pointer-events: none !important;
+}
+html.v212-aqua-ui-polish-root body[data-screen="login"] .bottom-nav,
+html.v212-aqua-ui-polish-root .bottom-nav:not(.v2098-bottom-nav),
+html.v212-aqua-ui-polish-root .fixed-root-nav,
+html.v212-aqua-ui-polish-root .v2-village-controls,
+html.v212-aqua-ui-polish-root .v2-joystick {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+@media (max-width: 430px) {
+  html.v212-aqua-ui-polish-root {
+    --v212-toolbar-w: 100px;
+    --v212-hud-w: min(232px, calc(100vw - var(--v212-toolbar-w) - var(--v212-safe-left) - var(--v212-safe-right) - 14px));
+    --v212-dock-w: min(226px, calc(100vw - var(--v212-safe-left) - var(--v212-safe-right) - 100px));
+    --v212-joy-size: 78px;
+  }
+  html.v212-aqua-ui-polish-root .v2097-village-hud { height: 48px !important; min-height: 48px !important; padding: 5px 6px !important; }
+  html.v212-aqua-ui-polish-root .v2097-profile-chip { grid-template-columns: minmax(56px, max-content) minmax(0, 1fr) minmax(40px, max-content) !important; gap: 4px !important; }
+  html.v212-aqua-ui-polish-root .v2097-profile-chip span { min-width: 56px !important; font-size: 10px !important; padding: 0 6px !important; }
+  html.v212-aqua-ui-polish-root .v2097-profile-chip strong { font-size: 12.4px !important; }
+  html.v212-aqua-ui-polish-root .v2097-profile-chip em { min-width: 40px !important; max-width: 48px !important; font-size: 9px !important; }
+  html.v212-aqua-ui-polish-root .v2097-expedition-board { top: calc(var(--v212-safe-top) + 55px) !important; width: max(198px, min(224px, calc(100vw - var(--v212-toolbar-w) - var(--v212-safe-left) - var(--v212-safe-right) - 16px))) !important; }
+  html.v212-aqua-ui-polish-root .v2097-world-controls { grid-auto-rows: 35px !important; gap: 4px !important; padding: 5px !important; }
+  html.v212-aqua-ui-polish-root .v2097-world-controls button { height: 35px !important; min-height: 35px !important; font-size: 8px !important; }
+  html.v212-aqua-ui-polish-root .bottom-nav.v2098-bottom-nav { gap: 3px !important; padding: 5px 4px !important; }
+}
+@media (max-width: 360px) {
+  html.v212-aqua-ui-polish-root {
+    --v212-toolbar-w: 96px;
+    --v212-hud-w: min(210px, calc(100vw - var(--v212-toolbar-w) - var(--v212-safe-left) - var(--v212-safe-right) - 12px));
+    --v212-dock-w: 204px;
+    --v212-joy-size: 72px;
+  }
+  html.v212-aqua-ui-polish-root .v2097-village-hud { width: max(196px, var(--v212-hud-w)) !important; }
+  html.v212-aqua-ui-polish-root .v2097-expedition-board { width: max(188px, min(206px, calc(100vw - var(--v212-toolbar-w) - var(--v212-safe-left) - var(--v212-safe-right) - 12px))) !important; }
+  html.v212-aqua-ui-polish-root .v2097-joystick { width: 86px !important; }
+  html.v212-aqua-ui-polish-root .bottom-nav.v2098-bottom-nav { max-width: calc(100vw - var(--v212-safe-left) - var(--v212-safe-right) - 92px) !important; }
+  html.v212-aqua-ui-polish-root .bottom-nav.v2098-bottom-nav .v2098-nav-item span { font-size: 8.2px !important; }
+}

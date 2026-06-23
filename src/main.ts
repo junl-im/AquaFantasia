@@ -257,13 +257,14 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
-    // v2.1.1 live UI policy: keep the restored dock/fishing layout and refine the aqua-card UI foundation.
+    // v2.1.2 live UI policy: keep the restored dock/fishing layout and polish the aqua-card UI foundation.
     document.documentElement.dataset.v2098UiRecovery = 'v2098-dock-fishing-build-recovery';
     document.documentElement.dataset.v2100UiStability = 'v2100-version-independent-ui-stability-root';
     document.documentElement.dataset.v210AquaUiFoundation = 'v210-aqua-card-layout-foundation';
     document.documentElement.dataset.v211AquaUiRefinement = 'v211-aqua-ui-refinement-pass';
+    document.documentElement.dataset.v212AquaUiPolish = 'v212-aqua-ui-polish-pass';
     this.activateV2097UiResetShell();
-    document.documentElement.classList.add('v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root');
+    document.documentElement.classList.add('v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root', 'v212-aqua-ui-polish-root');
     // v2.0.92 validation lineage only: dataset.v2092UiStable = 'v2092-live-ui-canonical' activateV2092UiStableShell html.classList.add('v2092-ui-canonical-root') v2092-ui-stable-village-screen v2092-village-hud v2092-profile-chip v2092-expedition-board v2092-expedition-toggle data-v2092-expedition-toggle v2092-expedition-body data-v2092-expedition-body v2092-expedition-body-open v2092-ui-close v2092-ui-stable-menu-screen v2092-runtime-hud v2092-menu-content data-v2092-scroll-root="true" v2092-menu-close
     // v2.0.93 validation lineage only: old html dataset markers intentionally removed from live runtime. visualPolish enginePatch v2077MenuUiCleanup v2089UiHardReset v2090UiDebtCleanup v2091UiCleanup v2092UiStable
     /* v2.0.92 validation lineage only: old html dataset markers are intentionally not attached to runtime.
@@ -385,7 +386,7 @@ class AquaFantasiaGame {
 
   private activateV2097UiResetShell(): void {
     const html = document.documentElement;
-    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v2100UiStability', 'v210AquaUiFoundation', 'v211AquaUiRefinement']);
+    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v2100UiStability', 'v210AquaUiFoundation', 'v211AquaUiRefinement', 'v212AquaUiPolish']);
     for (const key of Object.keys(html.dataset)) {
       if (keep.has(key)) continue;
       const value = html.dataset[key] ?? '';
@@ -398,8 +399,9 @@ class AquaFantasiaGame {
     html.dataset.v2100UiStability = 'v2100-version-independent-ui-stability-root';
     html.dataset.v210AquaUiFoundation = 'v210-aqua-card-layout-foundation';
     html.dataset.v211AquaUiRefinement = 'v211-aqua-ui-refinement-pass';
+    html.dataset.v212AquaUiPolish = 'v212-aqua-ui-polish-pass';
     html.classList.remove('v2092-ui-canonical-root', 'v2093-ui-canonical-root');
-    html.classList.add('v2097-ui-clean-root', 'v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root');
+    html.classList.add('v2097-ui-clean-root', 'v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root', 'v212-aqua-ui-polish-root');
   }
 
   // v2.0.92 validation compatibility: dataset.v2091UiCleanup = 'v2091-live-ui-pruned' activateV2091UiCleanup delete html.dataset[key]
@@ -940,12 +942,12 @@ class AquaFantasiaGame {
         </div>
       </aside>
       <div class="v2097-world-controls v2098-world-controls" aria-label="마을 조작">
-        <button type="button" data-village-zoom-in aria-label="확대"><span aria-hidden="true">＋</span><span>확대</span></button>
-        <button type="button" data-village-zoom-out aria-label="축소"><span aria-hidden="true">－</span><span>축소</span></button>
-        <button type="button" data-village-center aria-label="플레이어 위치로 이동"><span aria-hidden="true">◎</span><span>원점</span></button>
         <button type="button" data-village-build-open aria-label="건설 메뉴 열기"><span aria-hidden="true"><img src="./assets/v22/icons/nav_build.png" alt="" /></span><span>건설</span></button>
         <button type="button" data-village-shop aria-label="상점 열기"><span aria-hidden="true"><img src="./assets/v92/icons/shop.png" alt="" /></span><span>상점</span></button>
         <button type="button" data-village-fishing aria-label="항구 출항"><span aria-hidden="true"><img src="./assets/v22/icons/nav_fishing.png" alt="" /></span><span>출항</span></button>
+        <button type="button" data-village-center aria-label="플레이어 위치로 이동"><span aria-hidden="true">◎</span><span>원점</span></button>
+        <button type="button" data-village-zoom-in aria-label="확대"><span aria-hidden="true">＋</span><span>확대</span></button>
+        <button type="button" data-village-zoom-out aria-label="축소"><span aria-hidden="true">－</span><span>축소</span></button>
       </div>
       <div class="v2097-joystick" data-village-joystick data-no-swipe aria-label="이동 조이스틱">
         <div class="v2097-joystick-base"><div class="v2097-joystick-knob" data-village-joystick-knob></div></div>
