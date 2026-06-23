@@ -1022,6 +1022,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2111-build-active', Boolean(type));
     this.root.classList.toggle('v2112-build-active', Boolean(type));
     this.root.classList.toggle('v2113-build-active', Boolean(type));
+    this.root.classList.toggle('v2114-build-active', Boolean(type));
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2094-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2097-build-tray-open', this.buildTrayOpen);
@@ -1053,9 +1054,11 @@ export class VillageWorld {
     this.root.classList.toggle('v2111-build-tray-open', open);
     this.root.classList.toggle('v2112-build-tray-open', open);
     this.root.classList.toggle('v2113-build-tray-open', open);
+    this.root.classList.toggle('v2114-build-tray-open', open);
     document.body.classList.toggle('v2111-build-open', open);
     document.body.classList.toggle('v2112-build-open', open);
     document.body.classList.toggle('v2113-build-open', open);
+    document.body.classList.toggle('v2114-build-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
       if (!keepSelection) this.movingBuildingId = null;
@@ -1075,11 +1078,14 @@ export class VillageWorld {
       this.root.classList.remove('v2111-build-active');
       this.root.classList.remove('v2112-build-active');
       this.root.classList.remove('v2113-build-active');
+      this.root.classList.remove('v2114-build-active');
       this.root.classList.remove('v2112-build-tray-open');
       this.root.classList.remove('v2113-build-tray-open');
+      this.root.classList.remove('v2114-build-tray-open');
       document.body.classList.remove('v2111-build-open');
       document.body.classList.remove('v2112-build-open');
       document.body.classList.remove('v2113-build-open');
+      document.body.classList.remove('v2114-build-open');
       this.previewLayer.removeChildren();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
     }
@@ -1797,6 +1803,7 @@ export class VillageWorld {
     const buildOpenButton = this.root.querySelector<HTMLButtonElement>('[data-village-build-open]');
     let lastBuildToggleAt = 0;
     const toggleBuildTrayFromButton = (ev: Event) => {
+      if (ev.defaultPrevented) return;
       ev.preventDefault();
       ev.stopPropagation();
       const now = performance.now();
@@ -1819,6 +1826,7 @@ export class VillageWorld {
     });
     this.bindJoystick();
     const routeAction = (handler: () => void) => (ev: Event) => {
+      if (ev.defaultPrevented) return;
       ev.preventDefault();
       ev.stopPropagation();
       handler();

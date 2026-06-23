@@ -1,28 +1,27 @@
-# AquaFantasia v2.1.13
+# AquaFantasia v2.1.14
 
-## v2.1.13 변경사항
+## v2.1.14 변경사항
 
-- 버전을 `2.1.13`으로 동기화했습니다.
-- v2.1.11~v2.1.12의 새 아쿠아 쉘을 유지하면서 `v2113-aqua-core-root`를 추가해 UI 상태, 버튼 입력, 낚시 화면을 한 번 더 안정화했습니다.
-- 마을 기본 UI는 왼쪽 위 HUD, HUD 아래 개척 바, 오른쪽 위 `건설 / 상점 / 출항 / 원점 / 확대 / 축소`, 왼쪽 아래 조이스틱, 오른쪽 아래 `홈 / 가방 / 퀘스트 / 지도` 배치를 다시 잠갔습니다.
-- 게임 시작 로딩 오버레이는 과하게 화면을 덮지 않도록 낮은 z-index의 얇은 아쿠아 로딩 카드로 줄였습니다.
-- 로그인 유지 버튼은 좌측 밀림을 막기 위해 inline guard까지 `left: 50%`, `translateX(-50%)` 기준으로 재고정했고, 이미지 배경 없이 얇은 아쿠아 토글과 `✓` 체크 상태만 사용합니다.
-- 우측 하단 메뉴바는 더 작고 선명한 텍스트 기준으로 고정하고, 닫기/모달 이후에도 `grid` 구조가 유지되도록 보정했습니다.
-- 건설 버튼 무반응 원인을 수정했습니다. 기존 root capture guard가 건설 버튼 이벤트를 막고도 실제 토글을 하지 않던 흐름을 v2.1.13에서 `VillageWorld.setBuildTrayOpen()` 직접 호출 방식으로 보강했습니다.
-- 건설창은 다시 중앙 아쿠아 카드 모달로 열리고, 바깥 영역은 딤/블러 처리됩니다.
-- 상점/출항 버튼은 기존 pointerup/click 라우팅을 유지하면서 오버레이가 탭을 뺏는 상황을 줄이는 구조를 유지했습니다.
-- 캐릭터 정보창, 건물 정보창, 개척창, 건설창, 상점/가방/퀘스트/지도 페이지는 공통 아쿠아 카드 색상, 테두리, 그림자, 우측 상단 X 버튼 규칙을 v2113 레이어에서 다시 묶었습니다.
-- 상점/가방/퀘스트/지도 페이지는 코딱지만하게 열리지 않도록 중앙 큰 카드 최소 높이와 스크롤 루트를 다시 지정했습니다.
-- 낚시 화면은 핵심 게임 모드로 분리해 마을 하단 메뉴가 붙지 않도록 유지하고, 화면을 채우던 v2110 낚시 장식 소품을 숨긴 뒤 HUD, 골드/미끼, 장비바, 최근 포획, 캐스팅 버튼, 릴 콘솔 크기를 제한했습니다.
-- v2.1.10 신규 에셋 278개는 계속 포함하되, UI 버튼/토글 배경으로 무분별하게 덮지 않고 명시적으로 필요한 에셋만 사용합니다.
-- `tools/check-v2113-aqua-core-steward.mjs`를 추가하고 `npm run validate`에 연결했습니다.
-- 캐릭터 방향 고정 로직(`ACTOR_DIRECTION_TEXTURE_FIX`, `ACTOR_DIRECTION_TEXTURES`, `actorDirectionFromVector`, `actorTextureUrl`, `actorDirectionQaPasses`)은 유지했습니다.
+- 버전을 `2.1.14`로 동기화했습니다.
+- `v2114-aqua-interaction-root`와 `v2114-village-interaction`을 추가해 v2.1.11~v2.1.13 아쿠아 쉘 위에 실제 입력/표시 수호 레이어를 얹었습니다.
+- 마을 기본 UI를 다시 고정했습니다. 왼쪽 위 HUD, HUD 아래 개척 바, 우측 상단 건설/상점/출항/원점/확대/축소, 좌측 아래 조이스틱, 우측 아래 `홈 / 가방 / 퀘스트 / 지도` 메뉴바가 각각 독립 위치를 유지합니다.
+- 우측 하단 메뉴바의 글 번짐을 줄이기 위해 텍스트 그림자와 필터를 제거하고 아이콘/라벨 크기를 더 작고 선명하게 조정했습니다.
+- 건설/상점/출항 버튼을 `bindVillagePrimaryTap` 단일 브리지로 묶었습니다. 기존 root capture fallback은 v2.1.14 루트에서는 비활성화하고, 중복 토글을 막기 위해 VillageWorld 쪽은 이미 처리된 이벤트를 건너뛰도록 보강했습니다.
+- 캐릭터 정보창, 건물 정보창, 개척창, 건설창, 상점/가방/퀘스트/지도 페이지는 공통 아쿠아 카드 색상, 테두리, 그림자, 딤/블러, 우측 상단 닫기 버튼 규칙을 v2114 레이어에서 다시 정리했습니다.
+- 개척/캐릭터/건물/건설 모달이 열린 상태에서는 HUD, 조작바, 조이스틱, 하단 메뉴가 위에 따라오지 않도록 `v2114-modal-open`, `v2114-expedition-open`, `v2114-build-open` 상태를 추가했습니다.
+- 시작 화면 `이 기기에서 로그인 유지` 버튼은 이미지 배경 없이 작고 얇은 CSS 아쿠아 토글로 유지하고, 선택 상태는 원형 인디케이터의 `✓`로만 표시합니다.
+- 낚시 화면에서는 마을 메뉴바와 v2.1.10 장식 소품이 다시 덮이지 않도록 숨기고, 골드/미끼/장비/최근 포획/캐스팅 버튼 크기 제한을 유지했습니다.
+- 신규 v2.1.10 에셋 278개는 유지하되, UI 버튼 배경으로 무분별하게 덮지 않습니다.
+- 캐릭터 방향 고정 로직은 수정하지 않았습니다.
+- `tools/check-v2114-interaction-shell-polish.mjs`를 추가하고 `npm run validate`에 연결했습니다.
 
 ## 검증 기준
 
 - `npm run validate`가 통과해야 합니다.
-- 통파일 ZIP을 새로 풀어도 `npm run validate`가 통과해야 합니다.
-- v2.1.12 통파일에 v2.1.13 패치 ZIP을 덮어쓴 뒤 `npm run validate`가 통과해야 합니다.
-- ZIP에는 `node_modules`, `dist`, `reports`, 백업 폴더, 임시 로그, `*_NOTES.md`를 포함하지 않습니다.
-- 루트 Markdown 파일은 이 `README.md` 하나만 유지합니다.
-- GitHub Actions workflow `validate-and-deploy`에서는 public npm registry 사용과 validate/typecheck/build 절차를 유지합니다.
+- 통파일 ZIP을 새로 풀어 `npm run validate`가 통과해야 합니다.
+- v2.1.13 통파일에 v2.1.14 패치 ZIP을 덮어쓴 뒤 `npm run validate`가 통과해야 합니다.
+- `node_modules`, `dist`, `reports`, `AquaFantasia_backup_v1`, `.log`, `*_NOTES.md`는 ZIP에 포함하지 않습니다.
+- 루트 Markdown은 `README.md` 하나만 유지합니다.
+- `package.json`, `package-lock.json`, `APP_VERSION`, service worker cache, offline badge/version이 같은 버전이어야 합니다.
+- 내부/사설 registry 오염 문자열은 포함하지 않습니다.
+- GitHub Actions workflow `validate-and-deploy` 기준을 유지합니다.

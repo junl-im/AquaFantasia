@@ -1,5 +1,5 @@
-// v2.1.13 steadies the Aqua Core UI shell, input routes, and fishing controls.
-const CACHE_NAME = 'aqua-fantasia-v2.1.13-aqua-core-steward';
+// v2.1.14 steadies the Aqua Core UI shell, input routes, and fishing controls.
+const CACHE_NAME = 'aqua-fantasia-v2.1.14-interaction-shell-polish';
 const PRECACHE = [
   "./",
   "./index.html",
