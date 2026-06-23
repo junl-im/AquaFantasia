@@ -40062,3 +40062,275 @@ html.v2118-character-water-ui-root body[data-screen="fishing"] .v2110-fishing-pr
 
 /* v2118 validation anchor. */
 html.v2118-character-water-ui-root :is(.v2118-aqua-card,.v2118-aqua-page) { border-color: var(--v2118-line) !important; }
+
+
+/* v2.1.19 opening, exit-dialog, corrected-player, and aqua UI tuning.
+   Login keep toggle is approved and locked: no PNG/image background is applied to it. */
+html.v2119-opening-exit-character-ui-root {
+  --v2119-safe-top: max(12px, calc(env(safe-area-inset-top) + var(--viewport-offset-top, 0px) + 8px));
+  --v2119-safe-right: max(10px, env(safe-area-inset-right));
+  --v2119-safe-bottom: max(10px, env(safe-area-inset-bottom));
+  --v2119-safe-left: max(10px, env(safe-area-inset-left));
+  --v2119-ink: #06415d;
+  --v2119-muted: rgba(6,65,93,.72);
+  --v2119-line: rgba(67,184,216,.42);
+  --v2119-card: linear-gradient(180deg, rgba(252,255,255,.96), rgba(203,249,255,.84) 58%, rgba(142,227,246,.76));
+  --v2119-shadow: 0 18px 46px rgba(1,43,70,.26), inset 0 1px 0 rgba(255,255,255,.9);
+  --v2119-command-width: 116px;
+  --v2119-hud-width: min(61vw, 370px);
+}
+
+html.v2119-opening-exit-character-ui-root .login-screen.v2119-start-shell .hit-keep,
+html.v2119-opening-exit-character-ui-root .login-screen.v2119-start-shell .hit-keep.checked,
+html.v2119-opening-exit-character-ui-root .login-screen.v2119-start-shell .hit-keep:active {
+  background-image: none !important;
+  background: rgba(239,253,255,.84) !important;
+  box-shadow: 0 7px 16px rgba(0,65,95,.13), inset 0 1px 0 rgba(255,255,255,.88) !important;
+}
+html.v2119-opening-exit-character-ui-root .login-screen.v2119-start-shell .hit-keep .keep-text {
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+html.v2119-opening-exit-character-ui-root body[data-screen="village"] .village-world-screen.v2119-village-opening-state :is(.v2097-village-hud,.v2097-expedition-board,.v2097-world-controls,.v2097-joystick,.bottom-nav,.v2097-village-guide,.v2097-village-notice) {
+  display: none !important;
+  pointer-events: none !important;
+}
+html.v2119-opening-exit-character-ui-root .v2119-opening-cinematic {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 900 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: calc(var(--v2119-safe-top) + 16px) var(--v2119-safe-right) calc(var(--v2119-safe-bottom) + 18px) var(--v2119-safe-left) !important;
+  overflow: hidden !important;
+  background:
+    radial-gradient(circle at 50% 14%, rgba(255,232,155,.55), transparent 19%),
+    radial-gradient(circle at 50% 30%, rgba(122,232,255,.35), transparent 36%),
+    linear-gradient(180deg, #8de9ff 0%, #4ec7ed 38%, #177ba7 72%, #075176 100%) !important;
+  color: #073d5a !important;
+  backdrop-filter: none !important;
+}
+html.v2119-opening-exit-character-ui-root .v2119-opening-cinematic::before {
+  content: "";
+  position: absolute;
+  inset: -10% -20% 42%;
+  background: radial-gradient(circle at 50% 70%, rgba(255,246,198,.86), transparent 28%), linear-gradient(180deg, rgba(255,255,255,.28), transparent 70%);
+  animation: v2119Sunrise 3.6s ease-in-out infinite alternate;
+}
+html.v2119-opening-exit-character-ui-root .v2119-opening-sea,
+html.v2119-opening-exit-character-ui-root .v2119-opening-sea i {
+  position: absolute;
+  left: -12%;
+  right: -12%;
+  bottom: 0;
+  height: 48%;
+  pointer-events: none;
+}
+html.v2119-opening-exit-character-ui-root .v2119-opening-sea { overflow: hidden; }
+html.v2119-opening-exit-character-ui-root .v2119-opening-sea i {
+  display: block;
+  height: 34%;
+  bottom: var(--wave-bottom, 0%);
+  background: repeating-radial-gradient(ellipse at 50% 110%, rgba(255,255,255,.34) 0 3px, transparent 4px 16px), linear-gradient(180deg, rgba(128,232,255,.42), rgba(7,103,150,.64));
+  border-radius: 50% 50% 0 0 / 70% 70% 0 0;
+  opacity: var(--wave-alpha, .55);
+  transform: translateX(0);
+  animation: v2119Wave 5.2s ease-in-out infinite alternate;
+}
+html.v2119-opening-exit-character-ui-root .v2119-opening-sea i:nth-child(2) { --wave-bottom: 9%; --wave-alpha: .42; animation-duration: 6.2s; animation-delay: -.8s; }
+html.v2119-opening-exit-character-ui-root .v2119-opening-sea i:nth-child(3) { --wave-bottom: 19%; --wave-alpha: .26; animation-duration: 7.4s; animation-delay: -1.5s; }
+html.v2119-opening-exit-character-ui-root .v2119-opening-boat {
+  position: absolute;
+  width: min(118px, 28vw);
+  height: min(66px, 15vw);
+  left: 10%;
+  bottom: 35%;
+  background: linear-gradient(180deg, transparent 0 38%, rgba(5,71,91,.82) 39% 64%, transparent 65%), linear-gradient(135deg, transparent 0 34%, rgba(255,255,255,.88) 35% 66%, transparent 67%);
+  clip-path: polygon(0 58%, 72% 58%, 100% 72%, 78% 88%, 12% 88%);
+  opacity: .72;
+  filter: drop-shadow(0 10px 12px rgba(0,54,88,.24));
+  animation: v2119Boat 4.6s ease-in-out infinite alternate;
+}
+html.v2119-opening-exit-character-ui-root .v2119-opening-bubble {
+  position: relative !important;
+  z-index: 2 !important;
+  width: min(448px, calc(100vw - 42px)) !important;
+  margin-top: min(35svh, 390px) !important;
+  padding: 18px 18px 18px !important;
+  border-radius: 28px !important;
+  background: rgba(249,254,255,.92) !important;
+  border: 1px solid rgba(106,219,244,.48) !important;
+  box-shadow: 0 22px 54px rgba(0,45,75,.26), inset 0 1px 0 rgba(255,255,255,.92) !important;
+  color: var(--v2119-ink) !important;
+  text-align: center !important;
+}
+html.v2119-opening-exit-character-ui-root .v2119-opening-bubble strong { display:block !important; font-size: clamp(23px, 6vw, 31px) !important; line-height: 1.05 !important; letter-spacing: -.04em !important; text-shadow: none !important; }
+html.v2119-opening-exit-character-ui-root .v2119-opening-bubble span { display:block !important; margin-top: 9px !important; font-weight: 1000 !important; font-size: clamp(14px, 3.9vw, 17px) !important; line-height: 1.35 !important; color: var(--v2119-ink) !important; text-shadow: none !important; }
+html.v2119-opening-exit-character-ui-root .v2119-opening-bubble em { display:block !important; margin-top: 6px !important; font-style: normal !important; font-size: clamp(12px, 3.2vw, 14px) !important; line-height: 1.35 !important; color: var(--v2119-muted) !important; text-shadow: none !important; }
+html.v2119-opening-exit-character-ui-root .v2119-opening-bubble i { display:block; width: 34px; height: 4px; margin: 14px auto 0; border-radius: 999px; background: linear-gradient(90deg, rgba(30,182,222,.15), rgba(30,182,222,.95), rgba(30,182,222,.15)); animation: v2119LoadingPulse 1s ease-in-out infinite; }
+@keyframes v2119Sunrise { from { transform: translateY(10px) scale(.98); opacity: .72; } to { transform: translateY(-8px) scale(1.03); opacity: 1; } }
+@keyframes v2119Wave { from { transform: translateX(-2%); } to { transform: translateX(2%); } }
+@keyframes v2119Boat { from { transform: translate(0, 5px) rotate(-2deg); } to { transform: translate(18vw, -3px) rotate(1deg); } }
+@keyframes v2119LoadingPulse { 0%,100% { transform: scaleX(.45); opacity: .45; } 50% { transform: scaleX(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  html.v2119-opening-exit-character-ui-root .v2119-opening-cinematic::before,
+  html.v2119-opening-exit-character-ui-root .v2119-opening-sea i,
+  html.v2119-opening-exit-character-ui-root .v2119-opening-boat,
+  html.v2119-opening-exit-character-ui-root .v2119-opening-bubble i { animation: none !important; }
+}
+
+html.v2119-opening-exit-character-ui-root body[data-screen="village"] .v2097-village-hud {
+  width: var(--v2119-hud-width) !important;
+  max-width: calc(100vw - var(--v2119-safe-left) - var(--v2119-safe-right) - var(--v2119-command-width) - 18px) !important;
+}
+html.v2119-opening-exit-character-ui-root body[data-screen="village"] .v2097-world-controls.v2119-world-controls {
+  width: var(--v2119-command-width) !important;
+  min-width: var(--v2119-command-width) !important;
+  max-width: var(--v2119-command-width) !important;
+  grid-template-columns: repeat(2, 52px) !important;
+  gap: 4px !important;
+  padding: 5px !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+}
+html.v2119-opening-exit-character-ui-root body[data-screen="village"] .v2097-world-controls.v2119-world-controls button {
+  width: 52px !important;
+  min-width: 52px !important;
+  max-width: 52px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  padding: 4px 2px !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2119-opening-exit-character-ui-root body[data-screen="village"] .v2097-world-controls.v2119-world-controls button img { width: 17px !important; height: 17px !important; max-width: 17px !important; max-height: 17px !important; object-fit: contain !important; }
+html.v2119-opening-exit-character-ui-root body[data-screen="village"] .v2097-world-controls.v2119-world-controls button > span:first-child { height: 19px !important; max-height: 19px !important; font-size: 16px !important; overflow: hidden !important; }
+html.v2119-opening-exit-character-ui-root body[data-screen="village"] .v2097-world-controls.v2119-world-controls button > span:last-child { font-size: 8.8px !important; letter-spacing: -.055em !important; line-height: 1 !important; text-shadow: none !important; filter: none !important; }
+
+html.v2119-opening-exit-character-ui-root .bottom-nav.v2119-bottom-nav {
+  width: 176px !important;
+  max-width: 176px !important;
+  min-width: 176px !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  padding: 4px !important;
+  gap: 2px !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+}
+html.v2119-opening-exit-character-ui-root .bottom-nav.v2119-bottom-nav .v2098-nav-item,
+html.v2119-opening-exit-character-ui-root .bottom-nav.v2119-bottom-nav .v2098-nav-item:active,
+html.v2119-opening-exit-character-ui-root .bottom-nav.v2119-bottom-nav .v2098-nav-item:focus,
+html.v2119-opening-exit-character-ui-root .bottom-nav.v2119-bottom-nav .v2098-nav-item.active {
+  width: 40px !important;
+  min-width: 40px !important;
+  max-width: 40px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  max-height: 38px !important;
+  padding: 3px 1px !important;
+  border-radius: 13px !important;
+  transform: none !important;
+  translate: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2119-opening-exit-character-ui-root .bottom-nav.v2119-bottom-nav img { width: 15px !important; height: 15px !important; max-width: 15px !important; max-height: 15px !important; margin: 0 auto 2px !important; filter: none !important; }
+html.v2119-opening-exit-character-ui-root .bottom-nav.v2119-bottom-nav span { font-size: 8.7px !important; line-height: 1 !important; text-shadow: none !important; filter: none !important; }
+
+html.v2119-opening-exit-character-ui-root .v2097-joystick-knob {
+  transform: var(--v2119-joystick-transform, var(--v2118-joystick-transform, var(--v2117-joystick-transform, translate(-50%, -50%)))) !important;
+}
+
+html.v2119-opening-exit-character-ui-root .game-dialog-backdrop.v2119-game-dialog-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 1800 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: calc(var(--v2119-safe-top) + 12px) var(--v2119-safe-right) calc(var(--v2119-safe-bottom) + 12px) var(--v2119-safe-left) !important;
+  background: rgba(4,35,57,.46) !important;
+  backdrop-filter: blur(16px) saturate(1.12) !important;
+}
+html.v2119-opening-exit-character-ui-root .game-dialog-card.v2119-game-dialog-card,
+html.v2119-opening-exit-character-ui-root .exit-fallback-hint {
+  width: min(386px, calc(100vw - 34px)) !important;
+  max-width: calc(100vw - 34px) !important;
+  padding: 48px 18px 18px !important;
+  border-radius: 28px !important;
+  background-image: var(--v2119-card) !important;
+  border: 1px solid var(--v2119-line) !important;
+  box-shadow: var(--v2119-shadow) !important;
+  color: var(--v2119-ink) !important;
+  -webkit-text-fill-color: var(--v2119-ink) !important;
+  text-align: center !important;
+  filter: none !important;
+  overflow: hidden !important;
+}
+html.v2119-opening-exit-character-ui-root .game-dialog-card.v2119-game-dialog-card strong,
+html.v2119-opening-exit-character-ui-root .exit-fallback-hint strong { display: block !important; font-size: clamp(20px, 5.4vw, 26px) !important; line-height: 1.12 !important; letter-spacing: -.045em !important; color: var(--v2119-ink) !important; -webkit-text-fill-color: var(--v2119-ink) !important; text-shadow: none !important; filter: none !important; }
+html.v2119-opening-exit-character-ui-root .game-dialog-card.v2119-game-dialog-card p,
+html.v2119-opening-exit-character-ui-root .exit-fallback-hint span { margin: 10px auto 16px !important; font-size: clamp(13px, 3.4vw, 15px) !important; line-height: 1.42 !important; font-weight: 850 !important; color: var(--v2119-muted) !important; -webkit-text-fill-color: var(--v2119-muted) !important; text-shadow: none !important; filter: none !important; word-break: keep-all !important; overflow-wrap: anywhere !important; }
+html.v2119-opening-exit-character-ui-root .game-dialog-card.v2119-game-dialog-card > div { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+html.v2119-opening-exit-character-ui-root .game-dialog-card.v2119-game-dialog-card .dialog-btn,
+html.v2119-opening-exit-character-ui-root .exit-fallback-hint button {
+  min-height: 44px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(65,184,218,.36) !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.95), rgba(113,222,247,.76)) !important;
+  color: var(--v2119-ink) !important;
+  -webkit-text-fill-color: var(--v2119-ink) !important;
+  font-size: 14px !important;
+  font-weight: 1000 !important;
+  letter-spacing: -.035em !important;
+  text-shadow: none !important;
+  filter: none !important;
+  overflow: hidden !important;
+}
+html.v2119-opening-exit-character-ui-root .game-dialog-card.v2119-game-dialog-card .dialog-btn.ok { background-image: linear-gradient(180deg, rgba(255,255,255,.97), rgba(59,204,232,.82)) !important; }
+html.v2119-opening-exit-character-ui-root .game-dialog-card.v2119-game-dialog-card .v2119-dialog-x {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(65,184,218,.42) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(121,225,248,.82)) !important;
+  color: var(--v2119-ink) !important;
+  -webkit-text-fill-color: var(--v2119-ink) !important;
+  font-size: 20px !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+  text-shadow: none !important;
+  filter: none !important;
+  box-shadow: 0 8px 18px rgba(4,60,92,.16) !important;
+}
+html.v2119-opening-exit-character-ui-root .exit-fallback-hint { left: 50% !important; bottom: calc(var(--v2119-safe-bottom) + 18px) !important; transform: translateX(-50%) !important; padding-top: 18px !important; z-index: 1850 !important; }
+
+html.v2119-opening-exit-character-ui-root :is(.v2119-aqua-card,.v2119-aqua-page,.v2097-character-card,.v2097-interior-card,.v2097-build-tray,.v2097-expedition-body) {
+  background-image: var(--v2119-card) !important;
+  border: 1px solid var(--v2119-line) !important;
+  box-shadow: var(--v2119-shadow) !important;
+  color: var(--v2119-ink) !important;
+  -webkit-text-fill-color: var(--v2119-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2119-opening-exit-character-ui-root :is(.runtime-menu-screen.v2119-runtime-page-shell .runtime-content,.v2097-character-card,.v2097-interior-card) * {
+  text-shadow: none !important;
+  filter: none !important;
+  -webkit-text-stroke: 0 transparent !important;
+}
+html.v2119-opening-exit-character-ui-root body[data-screen="fishing"] .fishing-screen.v2119-fishing-polish-screen .bottom-nav { display: none !important; }
+
+/* v2119 validation anchors */
+html.v2119-opening-exit-character-ui-root [data-v2119-primary-order="plus-minus-build-center-shop-sail"] { contain: layout paint !important; }

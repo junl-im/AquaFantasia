@@ -1,5 +1,5 @@
-// v2.1.18 locks the approved login toggle, fixes tile color balance, installs player 8-way walk frames, and polishes HUD/control spacing.
-const CACHE_NAME = 'aqua-fantasia-v2.1.18-character-tile-ui-polish';
+// v2.1.19 polishes the opening cinematic, exit dialog, corrected player rod frames, bottom nav scale, and tile color balance.
+const CACHE_NAME = 'aqua-fantasia-v2.1.19-opening-exit-character-ui';
 const PRECACHE = [
   "./",
   "./index.html",

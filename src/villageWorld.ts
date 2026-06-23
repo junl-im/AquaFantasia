@@ -227,6 +227,7 @@ const ACTOR_TEXTURES: Record<Actor['role'], string> = {
 const ACTOR_DIRECTIONS: ActorDirection[] = ['south', 'southeast', 'east', 'northeast', 'north', 'northwest', 'west', 'southwest'];
 
 const V2118_PLAYER_MOTION_LOCK = 'v2118-player-eight-direction-motion-lock';
+const V2119_PLAYER_MOTION_IMAGE_LOCK = 'v2119-player-corrected-rod-frame-lock';
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -343,8 +344,8 @@ const INTERIOR_ASSETS: Partial<Record<VillageBuildingType, { title: string; imag
 const CAMERA_PAD = 280;
 
 const TILE_TEXTURES: Record<VillageTileKind, string[]> = {
-  // v2.1.18: keep grass/land free of blue sea tiles. The supplied 32x32 pack is used
-  // only where its color family matches the tile kind.
+  // v2.1.19: keep grass/sand/wood visually distinct from water. The supplied blue 32x32
+  // sea tiles are used only by the sea family; land keeps legacy warm/green tiles.
   grass: [
     './assets/v2023/tiles/grass_tile_0.png',
     './assets/v2023/tiles/grass_flower_tile_0.png',
@@ -352,8 +353,6 @@ const TILE_TEXTURES: Record<VillageTileKind, string[]> = {
     './assets/v207/tiles/grass_flower_tile.png',
   ],
   sand: [
-    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_045_32x32.png',
-    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_046_32x32.png',
     './assets/v2023/tiles/sand_tile_0.png',
     './assets/v2023/tiles/sand_shell_tile_0.png',
     './assets/v207/tiles/sand_tile.png',
@@ -388,10 +387,8 @@ const TILE_TEXTURES: Record<VillageTileKind, string[]> = {
     './assets/v207/tiles/curved_path_tile.png',
   ],
   wood: [
-    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_055_32x32.png',
-    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_056_32x32.png',
-    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_057_32x32.png',
     './assets/v207/tiles/beach_path_tile.png',
+    './assets/v207/tiles/stone_tile.png',
   ],
   plaza: [
     './assets/v2023/tiles/plaza_tile_0.png',
@@ -1078,6 +1075,7 @@ export class VillageWorld {
     this.root.dataset.v2031VillageAudit = 'npc-direction-object-final-audit';
     this.root.dataset.v2045VillageAudit = 'direction-asset-performance-trim';
     this.root.dataset.v2118PlayerMotionLock = V2118_PLAYER_MOTION_LOCK;
+    this.root.dataset.v2119PlayerMotionImageLock = V2119_PLAYER_MOTION_IMAGE_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
@@ -1141,6 +1139,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2113-build-active', Boolean(type));
     this.root.classList.toggle('v2114-build-active', Boolean(type));
     this.root.classList.toggle('v2118-build-active', Boolean(type));
+    this.root.classList.toggle('v2119-build-active', Boolean(type));
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2094-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2097-build-tray-open', this.buildTrayOpen);
@@ -1177,6 +1176,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2116-build-tray-open', open);
     this.root.classList.toggle('v2117-build-tray-open', open);
     this.root.classList.toggle('v2118-build-tray-open', open);
+    this.root.classList.toggle('v2119-build-tray-open', open);
     document.body.classList.toggle('v2111-build-open', open);
     document.body.classList.toggle('v2112-build-open', open);
     document.body.classList.toggle('v2113-build-open', open);
@@ -1185,6 +1185,7 @@ export class VillageWorld {
     document.body.classList.toggle('v2116-build-open', open);
     document.body.classList.toggle('v2117-build-open', open);
     document.body.classList.toggle('v2118-build-open', open);
+    document.body.classList.toggle('v2119-build-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
       if (!keepSelection) this.movingBuildingId = null;
@@ -1206,12 +1207,14 @@ export class VillageWorld {
       this.root.classList.remove('v2113-build-active');
       this.root.classList.remove('v2114-build-active');
       this.root.classList.remove('v2118-build-active');
+      this.root.classList.remove('v2119-build-active');
       this.root.classList.remove('v2112-build-tray-open');
       this.root.classList.remove('v2113-build-tray-open');
       this.root.classList.remove('v2114-build-tray-open');
       this.root.classList.remove('v2116-build-tray-open');
       this.root.classList.remove('v2117-build-tray-open');
       this.root.classList.remove('v2118-build-tray-open');
+      this.root.classList.remove('v2119-build-tray-open');
       document.body.classList.remove('v2111-build-open');
       document.body.classList.remove('v2112-build-open');
       document.body.classList.remove('v2113-build-open');
@@ -1219,6 +1222,7 @@ export class VillageWorld {
       document.body.classList.remove('v2116-build-open');
       document.body.classList.remove('v2117-build-open');
       document.body.classList.remove('v2118-build-open');
+      document.body.classList.remove('v2119-build-open');
       this.previewLayer.removeChildren();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
     }
@@ -2012,6 +2016,7 @@ export class VillageWorld {
       const knobTransform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
       knob.style.setProperty('--v2117-joystick-transform', knobTransform);
       knob.style.setProperty('--v2118-joystick-transform', knobTransform);
+      knob.style.setProperty('--v2119-joystick-transform', knobTransform);
       knob.style.transform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
       const strength = Math.min(1, length / radius);
       this.joystick.x = nx * strength;
@@ -2026,6 +2031,7 @@ export class VillageWorld {
       this.joystick = { x: 0, y: 0, active: false, pointerId: null };
       knob.style.setProperty('--v2117-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2118-joystick-transform', 'translate(-50%, -50%)');
+      knob.style.setProperty('--v2119-joystick-transform', 'translate(-50%, -50%)');
       knob.style.transform = 'translate(-50%, -50%)';
     };
     stick.addEventListener('pointerdown', (ev) => {
@@ -2390,7 +2396,7 @@ export class VillageWorld {
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
     this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open', 'v2119-modal-open');
     document.body.classList.add('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
@@ -2433,7 +2439,7 @@ export class VillageWorld {
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
     this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open', 'v2119-modal-open');
     document.body.classList.add('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
@@ -2446,7 +2452,7 @@ export class VillageWorld {
     if (!panel) return;
     panel.classList.remove('open');
     this.root.classList.remove('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open');
+    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open', 'v2119-modal-open');
     document.body.classList.remove('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');

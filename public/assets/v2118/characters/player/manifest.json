@@ -1,5 +1,5 @@
 {
-  "version": "2.1.18",
+  "version": "2.1.19",
   "directions": [
     "north",
     "northeast",
@@ -44,5 +44,6 @@
     "player_northwest_frame_02.png",
     "player_northwest_frame_03.png",
     "player_northwest_frame_04.png"
-  ]
+  ],
+  "correction": "v2.1.19 user supplied fishing-rod frame correction applied; this player 8-way motion set is locked."
 }
