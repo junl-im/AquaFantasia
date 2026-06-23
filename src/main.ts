@@ -257,14 +257,15 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
-    // v2.1.2 live UI policy: keep the restored dock/fishing layout and polish the aqua-card UI foundation.
+    // v2.1.3 live UI policy: keep the restored layout and apply detailed aqua-card UI polish.
     document.documentElement.dataset.v2098UiRecovery = 'v2098-dock-fishing-build-recovery';
     document.documentElement.dataset.v2100UiStability = 'v2100-version-independent-ui-stability-root';
     document.documentElement.dataset.v210AquaUiFoundation = 'v210-aqua-card-layout-foundation';
     document.documentElement.dataset.v211AquaUiRefinement = 'v211-aqua-ui-refinement-pass';
     document.documentElement.dataset.v212AquaUiPolish = 'v212-aqua-ui-polish-pass';
+    document.documentElement.dataset.v213AquaUiDetail = 'v213-aqua-ui-detail-polish-pass';
     this.activateV2097UiResetShell();
-    document.documentElement.classList.add('v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root', 'v212-aqua-ui-polish-root');
+    document.documentElement.classList.add('v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root', 'v212-aqua-ui-polish-root', 'v213-aqua-ui-detail-root');
     // v2.0.92 validation lineage only: dataset.v2092UiStable = 'v2092-live-ui-canonical' activateV2092UiStableShell html.classList.add('v2092-ui-canonical-root') v2092-ui-stable-village-screen v2092-village-hud v2092-profile-chip v2092-expedition-board v2092-expedition-toggle data-v2092-expedition-toggle v2092-expedition-body data-v2092-expedition-body v2092-expedition-body-open v2092-ui-close v2092-ui-stable-menu-screen v2092-runtime-hud v2092-menu-content data-v2092-scroll-root="true" v2092-menu-close
     // v2.0.93 validation lineage only: old html dataset markers intentionally removed from live runtime. visualPolish enginePatch v2077MenuUiCleanup v2089UiHardReset v2090UiDebtCleanup v2091UiCleanup v2092UiStable
     /* v2.0.92 validation lineage only: old html dataset markers are intentionally not attached to runtime.
@@ -386,7 +387,7 @@ class AquaFantasiaGame {
 
   private activateV2097UiResetShell(): void {
     const html = document.documentElement;
-    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v2100UiStability', 'v210AquaUiFoundation', 'v211AquaUiRefinement', 'v212AquaUiPolish']);
+    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v2100UiStability', 'v210AquaUiFoundation', 'v211AquaUiRefinement', 'v212AquaUiPolish', 'v213AquaUiDetail']);
     for (const key of Object.keys(html.dataset)) {
       if (keep.has(key)) continue;
       const value = html.dataset[key] ?? '';
@@ -400,8 +401,9 @@ class AquaFantasiaGame {
     html.dataset.v210AquaUiFoundation = 'v210-aqua-card-layout-foundation';
     html.dataset.v211AquaUiRefinement = 'v211-aqua-ui-refinement-pass';
     html.dataset.v212AquaUiPolish = 'v212-aqua-ui-polish-pass';
+    html.dataset.v213AquaUiDetail = 'v213-aqua-ui-detail-polish-pass';
     html.classList.remove('v2092-ui-canonical-root', 'v2093-ui-canonical-root');
-    html.classList.add('v2097-ui-clean-root', 'v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root', 'v212-aqua-ui-polish-root');
+    html.classList.add('v2097-ui-clean-root', 'v2098-ui-recovery-root', 'v2100-ui-stability-root', 'v210-aqua-ui-foundation-root', 'v211-aqua-ui-refinement-root', 'v212-aqua-ui-polish-root', 'v213-aqua-ui-detail-root');
   }
 
   // v2.0.92 validation compatibility: dataset.v2091UiCleanup = 'v2091-live-ui-pruned' activateV2091UiCleanup delete html.dataset[key]
@@ -540,26 +542,26 @@ class AquaFantasiaGame {
       ['height', '4.9%'],
     ]);
     set(keep, [
-      ['left', '31.0%'],
-      ['top', '79.05%'],
-      ['width', '38.0%'],
-      ['height', '4.10%'],
+      ['left', '25.5%'],
+      ['top', '78.85%'],
+      ['width', '49.0%'],
+      ['height', '4.55%'],
       ['min-width', '0'],
-      ['min-height', '30px'],
-      ['padding', '0 7px'],
-      ['gap', '4px'],
+      ['min-height', '38px'],
+      ['padding', '0 11px'],
+      ['gap', '7px'],
       ['border-radius', '999px'],
       ['overflow', 'hidden'],
     ]);
     set(keep?.querySelector<HTMLElement>('.keep-indicator') ?? null, [
-      ['width', 'clamp(16px, 4.2vw, 20px)'],
-      ['height', 'clamp(16px, 4.2vw, 20px)'],
-      ['min-width', 'clamp(16px, 4.2vw, 20px)'],
-      ['flex-basis', 'clamp(16px, 4.2vw, 20px)'],
+      ['width', 'clamp(20px, 5.0vw, 24px)'],
+      ['height', 'clamp(20px, 5.0vw, 24px)'],
+      ['min-width', 'clamp(20px, 5.0vw, 24px)'],
+      ['flex-basis', 'clamp(20px, 5.0vw, 24px)'],
     ]);
     set(keep?.querySelector<HTMLElement>('.keep-text') ?? null, [
-      ['font-size', 'clamp(10px, 2.55vw, 12.5px)'],
-      ['letter-spacing', '-0.065em'],
+      ['font-size', 'clamp(12px, 3.0vw, 14px)'],
+      ['letter-spacing', '-0.045em'],
       ['white-space', 'nowrap'],
     ]);
   }
