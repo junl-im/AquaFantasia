@@ -1,5 +1,5 @@
-// v2.1.21 keeps the opening MP4/direction locks and polishes page continuity, fishing layout, and modal rhythm.
-const CACHE_NAME = 'aqua-fantasia-v2.1.21-ui-continuity-polish';
+// v2.1.22 isolates the opening video to first start only, locks player cardinal direction/motion, and polishes popup UI stability.
+const CACHE_NAME = 'aqua-fantasia-v2.1.22-route-direction-ui-stability';
 const PRECACHE = [
   "./",
   "./index.html",

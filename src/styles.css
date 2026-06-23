@@ -40735,3 +40735,199 @@ html.v2121-ui-continuity-polish-root body[data-screen="fishing"] .cast-button { 
 /* v2121 validation anchors */
 html.v2121-ui-continuity-polish-root .v2121-aqua-card,
 html.v2121-ui-continuity-polish-root .v2121-aqua-page { border-color: var(--v2121-line) !important; }
+
+/* v2.1.22 route/direction/UI stability patch.
+   Opening video is first-start-only, player 3시/9시 cardinal frames are locked,
+   and modal/page chrome is kept lightweight so it does not cover the video. */
+html.v2122-route-direction-ui-stability-root {
+  --v2122-safe-top: max(10px, env(safe-area-inset-top));
+  --v2122-safe-right: max(10px, env(safe-area-inset-right));
+  --v2122-safe-bottom: max(10px, env(safe-area-inset-bottom));
+  --v2122-safe-left: max(10px, env(safe-area-inset-left));
+  --v2122-ink: #063f57;
+  --v2122-muted: rgba(6,63,87,.72);
+  --v2122-card: linear-gradient(180deg, rgba(250,254,255,.94), rgba(217,248,255,.88));
+  --v2122-line: rgba(82,195,225,.34);
+  --v2122-shadow: 0 18px 44px rgba(0,54,86,.20), inset 0 1px 0 rgba(255,255,255,.92);
+}
+html.v2122-route-direction-ui-stability-root body[data-screen="village"] .village-world-screen.v2122-village-opening-state :is(.v2097-village-hud,.v2097-expedition-board,.v2097-world-controls,.v2097-joystick,.bottom-nav,.v2097-village-guide,.v2097-village-notice,.v2097-dialog-panel) {
+  display: none !important;
+  pointer-events: none !important;
+}
+html.v2122-route-direction-ui-stability-root .v2122-opening-cinematic {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 950 !important;
+  display: block !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #062d48 !important;
+  color: var(--v2122-ink) !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+html.v2122-route-direction-ui-stability-root .v2122-opening-cinematic::before,
+html.v2122-route-direction-ui-stability-root .v2122-opening-cinematic::after,
+html.v2122-route-direction-ui-stability-root .v2097-village-loading.v2122-opening-cinematic > div:not(.v2122-opening-vignette):not(.v2122-opening-bubble) {
+  display: none !important;
+  content: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html.v2122-route-direction-ui-stability-root .v2122-opening-video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  filter: saturate(1.04) contrast(1.01) brightness(.98) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html.v2122-route-direction-ui-stability-root .v2122-opening-vignette {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  background: linear-gradient(180deg, rgba(2,28,44,.16), rgba(2,28,44,.03) 44%, rgba(2,24,39,.22)) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html.v2122-route-direction-ui-stability-root .v2122-opening-bubble {
+  position: absolute !important;
+  top: calc(var(--v2122-safe-top) + 10px) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 3 !important;
+  width: min(430px, calc(100vw - 36px)) !important;
+  margin: 0 !important;
+  padding: 11px 14px 12px !important;
+  border-radius: 22px !important;
+  background: rgba(247,253,255,.80) !important;
+  border: 1px solid rgba(132,230,250,.30) !important;
+  box-shadow: 0 10px 26px rgba(0,38,64,.14), inset 0 1px 0 rgba(255,255,255,.65) !important;
+  backdrop-filter: blur(8px) saturate(1.08) !important;
+  text-align: center !important;
+}
+html.v2122-route-direction-ui-stability-root .v2122-opening-bubble strong { display: none !important; }
+html.v2122-route-direction-ui-stability-root .v2122-opening-bubble span {
+  display: block !important;
+  margin: 0 !important;
+  font-size: clamp(12px, 3.3vw, 15px) !important;
+  line-height: 1.28 !important;
+  font-weight: 1000 !important;
+  letter-spacing: -.035em !important;
+  color: var(--v2122-ink) !important;
+  -webkit-text-fill-color: var(--v2122-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2122-route-direction-ui-stability-root .v2122-opening-bubble em {
+  display: block !important;
+  margin-top: 3px !important;
+  font-style: normal !important;
+  font-size: clamp(10px, 2.65vw, 12px) !important;
+  line-height: 1.28 !important;
+  color: var(--v2122-muted) !important;
+  -webkit-text-fill-color: var(--v2122-muted) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2122-route-direction-ui-stability-root .v2122-opening-bubble i { display: none !important; }
+html.v2122-route-direction-ui-stability-root .v2122-opening-skip {
+  position: absolute !important;
+  right: calc(var(--v2122-safe-right) + 8px) !important;
+  bottom: calc(var(--v2122-safe-bottom) + 8px) !important;
+  z-index: 4 !important;
+  min-width: 84px !important;
+  min-height: 32px !important;
+  padding: 0 12px !important;
+  border-radius: 999px !important;
+  background: rgba(247,254,255,.80) !important;
+  border: 1px solid rgba(132,230,250,.32) !important;
+  box-shadow: 0 8px 18px rgba(0,38,64,.14) !important;
+  color: var(--v2122-ink) !important;
+  -webkit-text-fill-color: var(--v2122-ink) !important;
+  font-size: 11px !important;
+  font-weight: 1000 !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2122-route-direction-ui-stability-root .village-world-screen.v2122-village-ready .v2097-village-loading,
+html.v2122-route-direction-ui-stability-root .village-world-screen:not(.v2122-village-opening-state) .v2122-opening-cinematic {
+  display: none !important;
+  pointer-events: none !important;
+}
+html.v2122-route-direction-ui-stability-root body[data-screen="village"] .v2097-joystick-knob {
+  transform: var(--v2121-joystick-transform, var(--v2120-joystick-transform, var(--v2119-joystick-transform, translate(-50%, -50%)))) !important;
+  background-image: radial-gradient(circle at 42% 30%, #fff, #dcfbff 58%, #83e3f4) !important;
+}
+html.v2122-route-direction-ui-stability-root .bottom-nav.v2122-bottom-nav {
+  width: 182px !important;
+  min-width: 182px !important;
+  max-width: 182px !important;
+  height: 49px !important;
+  min-height: 49px !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 3px !important;
+  padding: 4px !important;
+  overflow: hidden !important;
+  transform: none !important;
+  translate: none !important;
+}
+html.v2122-route-direction-ui-stability-root .bottom-nav.v2122-bottom-nav .v2098-nav-item,
+html.v2122-route-direction-ui-stability-root .bottom-nav.v2122-bottom-nav .v2098-nav-item:active,
+html.v2122-route-direction-ui-stability-root .bottom-nav.v2122-bottom-nav .v2098-nav-item:focus,
+html.v2122-route-direction-ui-stability-root .bottom-nav.v2122-bottom-nav .v2098-nav-item.active {
+  width: 42px !important;
+  min-width: 42px !important;
+  max-width: 42px !important;
+  height: 41px !important;
+  min-height: 41px !important;
+  max-height: 41px !important;
+  transform: none !important;
+  translate: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2122-route-direction-ui-stability-root .bottom-nav.v2122-bottom-nav img { width: 16px !important; height: 16px !important; max-width: 16px !important; max-height: 16px !important; object-fit: contain !important; }
+html.v2122-route-direction-ui-stability-root .bottom-nav.v2122-bottom-nav span { font-size: 8.8px !important; line-height: 1 !important; text-shadow: none !important; filter: none !important; }
+html.v2122-route-direction-ui-stability-root :is(.runtime-menu-screen.v2122-runtime-page-shell .v2122-aqua-page,.v2097-character-card,.v2097-interior-card,.v2097-build-tray,.v2097-expedition-body,.game-dialog-card) {
+  background-image: var(--v2122-card) !important;
+  border: 1px solid var(--v2122-line) !important;
+  box-shadow: var(--v2122-shadow) !important;
+  color: var(--v2122-ink) !important;
+  -webkit-text-fill-color: var(--v2122-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2122-route-direction-ui-stability-root :is(.runtime-menu-screen.v2122-runtime-page-shell .v2122-aqua-page,.v2097-character-card,.v2097-interior-card,.v2097-build-tray,.v2097-expedition-body,.game-dialog-card) * {
+  text-shadow: none !important;
+  filter: none !important;
+  -webkit-text-stroke: 0 transparent !important;
+  line-height: 1.26 !important;
+}
+html.v2122-route-direction-ui-stability-root .runtime-menu-screen.v2122-runtime-page-shell {
+  display: grid !important;
+  place-items: center !important;
+  min-height: 100svh !important;
+  padding: calc(var(--v2122-safe-top) + 12px) var(--v2122-safe-right) calc(var(--v2122-safe-bottom) + 58px) var(--v2122-safe-left) !important;
+  overflow: hidden !important;
+}
+html.v2122-route-direction-ui-stability-root .runtime-menu-screen.v2122-runtime-page-shell .v2122-aqua-page {
+  width: min(94vw, 680px) !important;
+  min-height: min(66svh, 628px) !important;
+  max-height: calc(100svh - var(--v2122-safe-top) - var(--v2122-safe-bottom) - 86px) !important;
+  padding: 72px 16px 16px !important;
+  border-radius: 28px !important;
+  overflow-y: auto !important;
+  position: relative !important;
+}
+html.v2122-route-direction-ui-stability-root .v2097-card-actions [data-v203-interior-close]:not(.v2097-ui-close),
+html.v2122-route-direction-ui-stability-root .v2097-card-actions [data-v2017-character-close]:not(.v2097-ui-close),
+html.v2122-route-direction-ui-stability-root button[data-village-build-close]:not(.v2097-ui-close) { display: none !important; }

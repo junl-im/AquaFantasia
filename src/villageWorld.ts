@@ -230,6 +230,7 @@ const V2118_PLAYER_MOTION_LOCK = 'v2118-player-eight-direction-motion-lock';
 const V2119_PLAYER_MOTION_IMAGE_LOCK = 'v2119-player-corrected-rod-frame-lock';
 const V2120_PLAYER_DIRECTION_REMAP_LOCK = 'v2120-player-direction-visual-remap-lock';
 const V2121_UI_CONTINUITY_LOCK = 'v2121-ui-continuity-polish-lock';
+const V2122_PLAYER_CARDINAL_MOTION_LOCK = 'v2122-player-cardinal-motion-lock';
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -237,15 +238,15 @@ const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((di
 ])) as Record<ActorDirection, string[]>;
 
 const PLAYER_ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
-  // v2.1.20: the corrected uploaded player frames are visually reversed on the left/right axis.
-  // Keep the movement direction math stable, but select the matching player frame set here.
+  // v2.1.22: lock the 3시/9시 cardinal frames to their own files.
+  // Keep the existing 1시/11시 diagonal visual correction from v2.1.20.
   south: 'south',
   southeast: 'southeast',
-  east: 'west',
+  east: 'east',
   northeast: 'northwest',
   north: 'north',
   northwest: 'northeast',
-  west: 'east',
+  west: 'west',
   southwest: 'southwest',
 };
 
@@ -616,8 +617,8 @@ function actorDirectionQaPasses(): boolean {
 function playerDirectionRemapQaPasses(): boolean {
   return playerActorVisualDirection('northwest') === 'northeast'
     && playerActorVisualDirection('northeast') === 'northwest'
-    && playerActorVisualDirection('east') === 'west'
-    && playerActorVisualDirection('west') === 'east';
+    && playerActorVisualDirection('east') === 'east'
+    && playerActorVisualDirection('west') === 'west';
 }
 
 
@@ -1105,6 +1106,7 @@ export class VillageWorld {
     this.root.dataset.v2119PlayerMotionImageLock = V2119_PLAYER_MOTION_IMAGE_LOCK;
     this.root.dataset.v2120PlayerDirectionRemapLock = V2120_PLAYER_DIRECTION_REMAP_LOCK;
     this.root.dataset.v2121UiContinuityLock = V2121_UI_CONTINUITY_LOCK;
+    this.root.dataset.v2122PlayerCardinalMotionLock = V2122_PLAYER_CARDINAL_MOTION_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
@@ -2650,11 +2652,13 @@ export class VillageWorld {
     if (actor.body instanceof Sprite) {
       const targetH = actor.role === 'player' ? 90 : 80;
       if (actor.role === 'player') {
-        const frameIndex = walking ? Math.floor(actor.walkPhase / 5) % PLAYER_ACTOR_FRAME_COUNT : 0;
+        const frameIndex = walking ? Math.floor(actor.walkPhase / 3) % PLAYER_ACTOR_FRAME_COUNT : 0;
         const frameUrl = playerActorMotionTextureUrl(actor.direction, frameIndex);
         const frameTexture = this.textures.get(frameUrl);
         if (frameTexture && actor.body.texture !== frameTexture) {
           actor.body.texture = frameTexture;
+          const baseScale = targetH / Math.max(1, frameTexture.height);
+          actor.body.scale.set(baseScale);
           actor.groundOffset = actorSpriteGroundOffset(frameUrl, targetH);
         }
       }

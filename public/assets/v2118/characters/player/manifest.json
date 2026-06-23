@@ -1,5 +1,5 @@
 {
-  "version": "2.1.21",
+  "version": "2.1.22",
   "directions": [
     "north",
     "northeast",
@@ -45,5 +45,6 @@
     "player_northwest_frame_03.png",
     "player_northwest_frame_04.png"
   ],
-  "directionCorrection": "v2.1.21 keeps the v2.1.20 direction remap locked; no image background is applied to login keep toggle; UI continuity polish only."
+  "directionCorrection": "v2.1.22 locks player cardinal direction identity for 3시/9시 and preserves v2.1.20 diagonal visual remap plus 4-frame walking motion.",
+  "v2122Lock": "v2122-player-cardinal-motion-lock"
 }
