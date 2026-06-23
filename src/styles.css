@@ -39698,3 +39698,367 @@ html.v2117-layout-input-fishing-root body[data-screen="fishing"] .v2110-fishing-
 
 /* v2117 validation anchor. */
 html.v2117-layout-input-fishing-root :is(.v2117-aqua-card,.v2117-aqua-page) { border-color: var(--v2117-line) !important; }
+
+
+/* v2.1.18 character motion, water-tile balance, and UI spacing polish.
+   Keep the approved login persistence toggle as pure CSS: no PNG/image background. */
+html.v2118-character-water-ui-root {
+  --v2118-safe-top: max(10px, env(safe-area-inset-top));
+  --v2118-safe-right: max(10px, env(safe-area-inset-right));
+  --v2118-safe-bottom: max(8px, env(safe-area-inset-bottom));
+  --v2118-safe-left: max(10px, env(safe-area-inset-left));
+  --v2118-command-width: 112px;
+  --v2118-hud-width: min(58vw, 342px);
+  --v2118-ink: #094b64;
+  --v2118-muted: #497789;
+  --v2118-line: rgba(73, 184, 218, .42);
+  --v2118-shadow: 0 18px 44px rgba(4, 58, 88, .18), inset 0 1px 0 rgba(255,255,255,.88);
+  --v2118-card: linear-gradient(180deg, rgba(255,255,255,.94), rgba(205,248,255,.86));
+  --v2118-card-asset: url('./assets/v2110/ui/main_aqua_cards/ui_card_001.png');
+  --v2118-button-asset: url('./assets/v2110/ui/buttons_and_badges/ui_button_001.png');
+  --v2118-close-asset: url('./assets/v2110/ui/buttons_and_badges/ui_badge_001.png');
+}
+
+html.v2118-character-water-ui-root .login-screen.v2118-start-shell .remember-row,
+html.v2118-character-water-ui-root .login-screen.v2118-start-shell [data-remember-row],
+html.v2118-character-water-ui-root .login-screen.v2118-start-shell .login-remember,
+html.v2118-character-water-ui-root .login-screen.v2118-start-shell .remember-toggle {
+  background-image: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+html.v2118-character-water-ui-root .login-screen.v2118-start-shell .remember-row {
+  width: fit-content !important;
+  max-width: calc(100vw - 42px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 5px 10px !important;
+  min-height: 30px !important;
+  border-radius: 999px !important;
+  background: rgba(239,254,255,.78) !important;
+  border: 1px solid rgba(70,190,222,.38) !important;
+  box-shadow: 0 8px 18px rgba(2,61,90,.12), inset 0 1px 0 rgba(255,255,255,.88) !important;
+  color: #124f66 !important;
+  -webkit-text-fill-color: #124f66 !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+  letter-spacing: -.035em !important;
+}
+html.v2118-character-water-ui-root .login-screen.v2118-start-shell .remember-row :is(input[type="checkbox"], .remember-checkbox) {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  border-radius: 50% !important;
+  accent-color: #40c8e8 !important;
+}
+
+html.v2118-character-water-ui-root body[data-screen="village"] .village-world-screen.v2118-village-loading-state :is(.v2097-village-hud,.v2097-expedition-board,.v2097-world-controls,.v2097-joystick,.bottom-nav,.v2097-village-guide,.v2097-village-notice) {
+  display: none !important;
+  pointer-events: none !important;
+}
+html.v2118-character-water-ui-root body[data-screen="village"] .village-world-screen.v2118-village-ready :is(.v2097-village-hud,.v2097-expedition-board,.v2097-world-controls,.v2097-joystick,.bottom-nav.v2118-bottom-nav) {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-village-hud {
+  left: var(--v2118-safe-left) !important;
+  top: var(--v2118-safe-top) !important;
+  width: var(--v2118-hud-width) !important;
+  max-width: calc(100vw - var(--v2118-safe-left) - var(--v2118-safe-right) - var(--v2118-command-width) - 18px) !important;
+  min-width: 214px !important;
+  max-height: 82px !important;
+  padding: 8px 10px !important;
+  border-radius: 18px !important;
+  color: var(--v2118-ink) !important;
+  -webkit-text-fill-color: var(--v2118-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+  overflow: hidden !important;
+}
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-village-hud * {
+  text-shadow: none !important;
+  filter: none !important;
+  min-width: 0 !important;
+}
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-expedition-board:not(.open) {
+  left: var(--v2118-safe-left) !important;
+  top: calc(var(--v2118-safe-top) + 88px) !important;
+  width: min(var(--v2118-hud-width), 342px) !important;
+  max-width: calc(100vw - var(--v2118-safe-left) - var(--v2118-safe-right) - var(--v2118-command-width) - 18px) !important;
+}
+
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-world-controls.v2118-world-controls {
+  position: fixed !important;
+  right: var(--v2118-safe-right) !important;
+  top: var(--v2118-safe-top) !important;
+  width: var(--v2118-command-width) !important;
+  max-width: var(--v2118-command-width) !important;
+  min-width: var(--v2118-command-width) !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, 48px) !important;
+  grid-auto-rows: 42px !important;
+  gap: 4px !important;
+  padding: 6px !important;
+  border-radius: 19px !important;
+  background: rgba(241,254,255,.86) !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.80), rgba(201,248,255,.60)), var(--v2118-card-asset) !important;
+  background-size: cover !important;
+  background-blend-mode: normal, soft-light !important;
+  border: 1px solid var(--v2118-line) !important;
+  box-shadow: 0 12px 28px rgba(5,62,93,.14), inset 0 1px 0 rgba(255,255,255,.88) !important;
+  backdrop-filter: blur(12px) saturate(1.08) !important;
+  overflow: hidden !important;
+  z-index: 48 !important;
+  box-sizing: border-box !important;
+}
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-world-controls.v2118-world-controls button {
+  width: 48px !important;
+  min-width: 48px !important;
+  max-width: 48px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  max-height: 42px !important;
+  padding: 3px 2px !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  color: var(--v2118-ink) !important;
+  -webkit-text-fill-color: var(--v2118-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.92), rgba(156,235,250,.58)), var(--v2118-button-asset) !important;
+  background-size: cover !important;
+  background-blend-mode: normal, soft-light !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-world-controls.v2118-world-controls button:nth-child(1) { order: 1 !important; }
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-world-controls.v2118-world-controls button:nth-child(2) { order: 2 !important; }
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-world-controls.v2118-world-controls button:nth-child(3) { order: 3 !important; }
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-world-controls.v2118-world-controls button:nth-child(4) { order: 4 !important; }
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-world-controls.v2118-world-controls button:nth-child(5) { order: 5 !important; }
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-world-controls.v2118-world-controls button:nth-child(6) { order: 6 !important; }
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-world-controls.v2118-world-controls button > span:first-child {
+  display: grid !important;
+  place-items: center !important;
+  height: 18px !important;
+  max-height: 18px !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+  overflow: hidden !important;
+}
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-world-controls.v2118-world-controls button img {
+  width: 16px !important;
+  height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  filter: none !important;
+  transform: none !important;
+  clip-path: inset(0) !important;
+}
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-world-controls.v2118-world-controls button > span:last-child {
+  display: block !important;
+  width: 100% !important;
+  font-size: 8.4px !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  letter-spacing: -.055em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-joystick {
+  display: block !important;
+  position: fixed !important;
+  left: calc(var(--v2118-safe-left) + 8px) !important;
+  bottom: calc(var(--v2118-safe-bottom) + 10px) !important;
+  width: 104px !important;
+  height: 104px !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+  z-index: 47 !important;
+}
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-joystick-base {
+  width: 82px !important;
+  height: 82px !important;
+  border-radius: 50% !important;
+  position: relative !important;
+  overflow: visible !important;
+  background: rgba(226,253,255,.36) !important;
+  border: 1px solid rgba(73,190,222,.34) !important;
+}
+html.v2118-character-water-ui-root body[data-screen="village"] .v2097-joystick-knob {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: var(--v2118-joystick-transform, var(--v2117-joystick-transform, translate(-50%, -50%))) !important;
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  background: rgba(255,255,255,.86) !important;
+  border: 1px solid rgba(65,184,218,.45) !important;
+  box-shadow: 0 8px 16px rgba(2,60,90,.14) !important;
+  will-change: transform !important;
+}
+
+html.v2118-character-water-ui-root .bottom-nav.v2118-bottom-nav {
+  position: fixed !important;
+  right: var(--v2118-safe-right) !important;
+  left: auto !important;
+  bottom: calc(var(--v2118-safe-bottom) + 8px) !important;
+  width: 166px !important;
+  max-width: 166px !important;
+  min-width: 166px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 2px !important;
+  padding: 4px !important;
+  border-radius: 17px !important;
+  background: rgba(241,254,255,.84) !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.78), rgba(201,248,255,.60)), var(--v2118-card-asset) !important;
+  background-size: cover !important;
+  background-blend-mode: normal, soft-light !important;
+  border: 1px solid var(--v2118-line) !important;
+  box-shadow: 0 10px 24px rgba(5,62,93,.14), inset 0 1px 0 rgba(255,255,255,.88) !important;
+  backdrop-filter: blur(12px) saturate(1.08) !important;
+  transform: none !important;
+  translate: none !important;
+  filter: none !important;
+  overflow: hidden !important;
+  z-index: 47 !important;
+  box-sizing: border-box !important;
+}
+html.v2118-character-water-ui-root .bottom-nav.v2118-bottom-nav .v2098-nav-item,
+html.v2118-character-water-ui-root .bottom-nav.v2118-bottom-nav .v2098-nav-item:active,
+html.v2118-character-water-ui-root .bottom-nav.v2118-bottom-nav .v2098-nav-item:focus,
+html.v2118-character-water-ui-root .bottom-nav.v2118-bottom-nav .v2098-nav-item.active {
+  box-sizing: border-box !important;
+  width: 38px !important;
+  max-width: 38px !important;
+  min-width: 38px !important;
+  height: 34px !important;
+  max-height: 34px !important;
+  min-height: 34px !important;
+  padding: 2px 1px !important;
+  margin: 0 !important;
+  border-radius: 12px !important;
+  font-size: 8.3px !important;
+  line-height: 1 !important;
+  letter-spacing: -.06em !important;
+  color: var(--v2118-ink) !important;
+  -webkit-text-fill-color: var(--v2118-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+  overflow: hidden !important;
+  transform: none !important;
+  translate: none !important;
+}
+html.v2118-character-water-ui-root .bottom-nav.v2118-bottom-nav .v2098-nav-item::before,
+html.v2118-character-water-ui-root .bottom-nav.v2118-bottom-nav .v2098-nav-item::after {
+  content: none !important;
+  display: none !important;
+}
+html.v2118-character-water-ui-root .bottom-nav.v2118-bottom-nav img { width: 13px !important; height: 13px !important; max-width: 13px !important; max-height: 13px !important; display: block !important; margin: 0 auto 1px !important; filter: none !important; }
+html.v2118-character-water-ui-root .bottom-nav.v2118-bottom-nav span { display: block !important; width: 100% !important; max-width: 100% !important; font-size: 8.3px !important; line-height: 1 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: clip !important; text-shadow: none !important; filter: none !important; }
+
+html.v2118-character-water-ui-root body.v2118-expedition-open .village-world-screen .v2097-expedition-board.open,
+html.v2118-character-water-ui-root .village-world-screen.v2118-expedition-open .v2097-expedition-board.open {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  max-width: none !important;
+  height: 100svh !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: calc(var(--v2118-safe-top) + 10px) var(--v2118-safe-right) calc(var(--v2118-safe-bottom) + 10px) var(--v2118-safe-left) !important;
+  margin: 0 !important;
+  transform: none !important;
+  background: rgba(3,35,58,.39) !important;
+  backdrop-filter: blur(16px) saturate(1.12) !important;
+  pointer-events: auto !important;
+  overflow: hidden !important;
+  z-index: 216 !important;
+}
+html.v2118-character-water-ui-root body.v2118-expedition-open .village-world-screen .v2097-expedition-board.open .v2097-expedition-body.v2097-expedition-body-open,
+html.v2118-character-water-ui-root .village-world-screen.v2118-expedition-open .v2097-expedition-board.open .v2097-expedition-body.v2097-expedition-body-open {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  margin: 0 auto !important;
+  width: min(92vw, 520px) !important;
+  max-width: calc(100vw - var(--v2118-safe-left) - var(--v2118-safe-right) - 18px) !important;
+  max-height: calc(100svh - var(--v2118-safe-top) - var(--v2118-safe-bottom) - 24px) !important;
+  padding: 50px 16px 16px !important;
+  overflow-y: auto !important;
+  border-radius: 26px !important;
+  z-index: 2 !important;
+}
+html.v2118-character-water-ui-root body.v2118-expedition-open .village-world-screen :is(.v2097-village-hud,.v2097-world-controls,.v2097-joystick,.bottom-nav,.v2097-village-guide,.v2097-village-notice),
+html.v2118-character-water-ui-root body.v2118-modal-open .village-world-screen :is(.v2097-village-hud,.v2097-expedition-board:not(.open),.v2097-world-controls,.v2097-joystick,.bottom-nav,.v2097-village-guide,.v2097-village-notice),
+html.v2118-character-water-ui-root body.v2118-build-open .village-world-screen :is(.v2097-village-hud,.v2097-expedition-board,.v2097-world-controls,.v2097-joystick,.bottom-nav,.v2097-village-guide,.v2097-village-notice) { display: none !important; }
+
+html.v2118-character-water-ui-root :is(.v2118-aqua-card,.v2118-aqua-page,.v2097-character-card,.v2097-interior-card,.v2097-build-tray,.v2097-expedition-body) {
+  border: 1px solid var(--v2118-line) !important;
+  border-radius: 26px !important;
+  background-color: rgba(238,253,255,.95) !important;
+  background-image: var(--v2118-card), var(--v2118-card-asset) !important;
+  background-size: cover !important;
+  background-blend-mode: normal, soft-light !important;
+  box-shadow: var(--v2118-shadow) !important;
+  color: var(--v2118-ink) !important;
+  -webkit-text-fill-color: var(--v2118-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2118-character-water-ui-root :is(.runtime-content,.v2118-aqua-page,.v2097-interior-card,.v2097-character-card) * {
+  text-shadow: none !important;
+  filter: none !important;
+  -webkit-text-stroke: 0 transparent !important;
+}
+html.v2118-character-water-ui-root :is(.v2097-card-title,.v2097-interior-card h2,.v2097-character-card h2,.runtime-content h1,.runtime-content h2,.runtime-content h3) {
+  line-height: 1.18 !important;
+  letter-spacing: -.04em !important;
+  text-shadow: none !important;
+  filter: none !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html.v2118-character-water-ui-root :is(.v2097-character-card,.v2097-interior-card) { width: min(90vw, 470px) !important; max-height: min(82svh, 700px) !important; padding: 48px 16px 16px !important; overflow-y: auto !important; }
+html.v2118-character-water-ui-root .v2097-interior-header { display: grid !important; grid-template-columns: 50px minmax(0,1fr) !important; gap: 10px !important; align-items: center !important; margin-bottom: 10px !important; }
+html.v2118-character-water-ui-root .v2097-interior-portrait { width: 50px !important; height: 50px !important; max-width: 50px !important; max-height: 50px !important; object-fit: contain !important; border-radius: 15px !important; }
+html.v2118-character-water-ui-root .v2097-interior-image { display: none !important; width: 0 !important; height: 0 !important; }
+html.v2118-character-water-ui-root .v2097-ui-close,
+html.v2118-character-water-ui-root .v2097-menu-close { position: absolute !important; top: 12px !important; right: 12px !important; width: 34px !important; height: 34px !important; min-width: 34px !important; min-height: 34px !important; border-radius: 50% !important; border: 1px solid rgba(67,184,216,.50) !important; background-image: linear-gradient(180deg, rgba(255,255,255,.98), rgba(105,219,246,.74)), var(--v2118-close-asset) !important; background-size: cover !important; background-blend-mode: normal, soft-light !important; color: var(--v2118-ink) !important; -webkit-text-fill-color: var(--v2118-ink) !important; box-shadow: 0 8px 18px rgba(4,60,92,.16) !important; text-shadow: none !important; filter: none !important; z-index: 8 !important; }
+html.v2118-character-water-ui-root .v2097-card-actions [data-v203-interior-close]:not(.v2097-ui-close),
+html.v2118-character-water-ui-root .v2097-card-actions [data-v2017-character-close]:not(.v2097-ui-close),
+html.v2118-character-water-ui-root button[data-village-build-close]:not(.v2097-ui-close) { display: none !important; }
+
+html.v2118-character-water-ui-root .runtime-menu-screen.v2118-runtime-page-shell { display: grid !important; place-items: center !important; min-height: 100svh !important; padding: calc(var(--v2118-safe-top) + 14px) var(--v2118-safe-right) calc(var(--v2118-safe-bottom) + 56px) var(--v2118-safe-left) !important; overflow: hidden !important; }
+html.v2118-character-water-ui-root .runtime-menu-screen.v2118-runtime-page-shell .runtime-hud { display: none !important; }
+html.v2118-character-water-ui-root .runtime-menu-screen.v2118-runtime-page-shell .v2118-aqua-page { width: min(92vw, 660px) !important; min-height: min(60svh, 600px) !important; max-height: calc(100svh - var(--v2118-safe-top) - var(--v2118-safe-bottom) - 88px) !important; padding: 46px 16px 16px !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch !important; }
+html.v2118-character-water-ui-root .runtime-menu-screen.v2118-runtime-page-shell .v2097-menu-close { position: fixed !important; top: calc(var(--v2118-safe-top) + 10px) !important; right: calc(var(--v2118-safe-right) + 10px) !important; z-index: 180 !important; }
+html.v2118-character-water-ui-root .runtime-content button:not(.v2097-menu-close) { min-height: 38px !important; border-radius: 15px !important; line-height: 1.1 !important; letter-spacing: -.035em !important; text-shadow: none !important; filter: none !important; overflow: hidden !important; }
+html.v2118-character-water-ui-root .runtime-content :is(p,li,span,strong,em,small) { line-height: 1.32 !important; text-shadow: none !important; filter: none !important; }
+
+html.v2118-character-water-ui-root body[data-screen="fishing"] .fishing-screen.v2118-fishing-stability-screen { position: fixed !important; inset: 0 !important; overflow: hidden !important; background-color: #08729a !important; }
+html.v2118-character-water-ui-root body[data-screen="fishing"] .fishing-screen.v2118-fishing-stability-screen .bottom-nav { display: none !important; }
+html.v2118-character-water-ui-root body[data-screen="fishing"] .fishing-hud { position: fixed !important; top: var(--v2118-safe-top) !important; left: var(--v2118-safe-left) !important; right: auto !important; max-width: calc(100vw - var(--v2118-safe-left) - var(--v2118-safe-right) - 18px) !important; text-shadow: none !important; filter: none !important; }
+html.v2118-character-water-ui-root body[data-screen="fishing"] :is(.fishing-hud img,.fishing-loadout-strip img,.recent-catch-strip img,.hud-chip img,.v2055-reel-console img) { width: 18px !important; height: 18px !important; max-width: 18px !important; max-height: 18px !important; object-fit: contain !important; filter: none !important; }
+html.v2118-character-water-ui-root body[data-screen="fishing"] .stage-ui .cast-button { position: fixed !important; left: 50% !important; right: auto !important; bottom: calc(var(--v2118-safe-bottom) + 18px) !important; transform: translateX(-50%) !important; min-width: 138px !important; width: min(52vw, 206px) !important; min-height: 46px !important; max-height: 48px !important; border-radius: 999px !important; text-shadow: none !important; filter: none !important; z-index: 75 !important; }
+html.v2118-character-water-ui-root body[data-screen="fishing"] .reel-panel:not(.hidden) { position: fixed !important; left: 50% !important; right: auto !important; top: auto !important; bottom: calc(var(--v2118-safe-bottom) + 124px) !important; transform: translateX(-50%) !important; width: min(92vw, 560px) !important; max-width: calc(100vw - var(--v2118-safe-left) - var(--v2118-safe-right) - 14px) !important; max-height: 38svh !important; overflow-y: auto !important; border-radius: 22px !important; z-index: 78 !important; }
+html.v2118-character-water-ui-root body[data-screen="fishing"] .v2055-reel-console:not(.hidden) { position: fixed !important; left: 50% !important; right: auto !important; bottom: calc(var(--v2118-safe-bottom) + 8px) !important; transform: translateX(-50%) !important; width: min(94vw, 560px) !important; max-width: calc(100vw - var(--v2118-safe-left) - var(--v2118-safe-right) - 10px) !important; max-height: 38svh !important; overflow-y: auto !important; border-radius: 22px !important; z-index: 82 !important; }
+html.v2118-character-water-ui-root body[data-screen="fishing"] .v2053-reel-touch-zone:not(.hidden) { position: fixed !important; left: 50% !important; right: auto !important; bottom: calc(var(--v2118-safe-bottom) + 92px) !important; transform: translateX(-50%) !important; width: min(82vw, 360px) !important; max-width: calc(100vw - 28px) !important; min-height: 62px !important; border-radius: 22px !important; z-index: 80 !important; }
+html.v2118-character-water-ui-root body[data-screen="fishing"] .v2110-fishing-props { opacity: .42 !important; pointer-events: none !important; }
+html.v2118-character-water-ui-root body[data-screen="fishing"] .v2110-fishing-prop { max-width: 96px !important; max-height: 70px !important; pointer-events: none !important; }
+
+/* v2118 validation anchor. */
+html.v2118-character-water-ui-root :is(.v2118-aqua-card,.v2118-aqua-page) { border-color: var(--v2118-line) !important; }

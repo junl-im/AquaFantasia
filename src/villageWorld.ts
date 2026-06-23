@@ -215,7 +215,7 @@ const DAY_TALK: Record<WorldNpcRole, string[]> = {
 
 
 const ACTOR_TEXTURES: Record<Actor['role'], string> = {
-  player: './assets/v2047/characters/player_south.png',
+  player: './assets/v2118/characters/player/player_south_frame_01.png',
   chief: './assets/v2047/characters/chief_south.png',
   merchant: './assets/v2047/characters/merchant_south.png',
   guild: './assets/v2047/characters/guild_south.png',
@@ -225,6 +225,19 @@ const ACTOR_TEXTURES: Record<Actor['role'], string> = {
 };
 
 const ACTOR_DIRECTIONS: ActorDirection[] = ['south', 'southeast', 'east', 'northeast', 'north', 'northwest', 'west', 'southwest'];
+
+const V2118_PLAYER_MOTION_LOCK = 'v2118-player-eight-direction-motion-lock';
+const PLAYER_ACTOR_FRAME_COUNT = 4;
+const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
+  direction,
+  Array.from({ length: PLAYER_ACTOR_FRAME_COUNT }, (_, index) => `./assets/v2118/characters/player/player_${direction}_frame_${String(index + 1).padStart(2, '0')}.png`),
+])) as Record<ActorDirection, string[]>;
+
+function playerActorMotionTextureUrl(direction: ActorDirection, frameIndex = 0): string {
+  const corrected = ACTOR_DIRECTION_TEXTURE_FIX[direction] ?? direction;
+  const frames = PLAYER_ACTOR_MOTION_TEXTURES[corrected] ?? PLAYER_ACTOR_MOTION_TEXTURES.south;
+  return frames[Math.abs(frameIndex) % frames.length] ?? frames[0];
+}
 
 
 /*
@@ -271,7 +284,7 @@ const ACTOR_DIRECTION_QA_VECTORS: Array<{ movement: ActorDirection; dx: number; 
 
 
 const ACTOR_DIRECTION_TEXTURES: Record<Actor['role'], Record<ActorDirection, string>> = {
-  player: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2047/characters/player_${direction}.png`])) as Record<ActorDirection, string>,
+  player: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, playerActorMotionTextureUrl(direction, 0)])) as Record<ActorDirection, string>,
   chief: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2047/characters/chief_${direction}.png`])) as Record<ActorDirection, string>,
   merchant: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2047/characters/merchant_${direction}.png`])) as Record<ActorDirection, string>,
   guild: Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [direction, `./assets/v2047/characters/guild_${direction}.png`])) as Record<ActorDirection, string>,
@@ -330,53 +343,63 @@ const INTERIOR_ASSETS: Partial<Record<VillageBuildingType, { title: string; imag
 const CAMERA_PAD = 280;
 
 const TILE_TEXTURES: Record<VillageTileKind, string[]> = {
+  // v2.1.18: keep grass/land free of blue sea tiles. The supplied 32x32 pack is used
+  // only where its color family matches the tile kind.
   grass: [
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_030_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_037_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_039_32x32.png',
-    './assets/v2023/tiles/grass_tile_0.png', './assets/v2023/tiles/grass_flower_tile_0.png', './assets/v207/tiles/grass_tile.png'
+    './assets/v2023/tiles/grass_tile_0.png',
+    './assets/v2023/tiles/grass_flower_tile_0.png',
+    './assets/v207/tiles/grass_tile.png',
+    './assets/v207/tiles/grass_flower_tile.png',
   ],
   sand: [
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_045_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_046_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_067_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_078_32x32.png',
-    './assets/v2023/tiles/sand_tile_0.png', './assets/v2023/tiles/sand_shell_tile_0.png', './assets/v207/tiles/sand_path_tile.png'
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_045_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_046_32x32.png',
+    './assets/v2023/tiles/sand_tile_0.png',
+    './assets/v2023/tiles/sand_shell_tile_0.png',
+    './assets/v207/tiles/sand_tile.png',
+    './assets/v207/tiles/sand_shell_tile.png',
+    './assets/v207/tiles/sand_path_tile.png',
   ],
   sea: [
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_001_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_002_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_003_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_004_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_005_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_006_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_011_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_012_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_013_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_014_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_015_32x32.png',
-    './assets/v2023/tiles/water_tile_0.png', './assets/v207/tiles/water_tile.png'
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_001_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_002_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_003_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_004_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_005_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_006_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_011_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_012_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_013_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_014_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_020_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_021_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_022_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_029_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_031_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_032_32x32.png',
+    './assets/v2023/tiles/water_tile_0.png',
+    './assets/v207/tiles/water_tile.png',
   ],
   stone: [
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_055_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_057_32x32.png',
-    './assets/v2023/tiles/stone_tile_0.png', './assets/v207/tiles/stone_cracked_tile.png', './assets/v207/tiles/grass_path_tile.png', './assets/v207/tiles/curved_path_tile.png'
+    './assets/v2023/tiles/stone_tile_0.png',
+    './assets/v207/tiles/stone_tile.png',
+    './assets/v207/tiles/stone_cracked_tile.png',
+    './assets/v207/tiles/grass_path_tile.png',
+    './assets/v207/tiles/curved_path_tile.png',
   ],
   wood: [
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_055_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_056_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_057_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_058_32x32.png',
-    './assets/v207/tiles/beach_path_tile.png'
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_055_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_056_32x32.png',
+    './assets/v2118/tiles_32x32/sea_and_beach/sea_tile_057_32x32.png',
+    './assets/v207/tiles/beach_path_tile.png',
   ],
   plaza: [
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_047_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_048_32x32.png',
-    './assets/v2110/tiles_32x32/sea_and_beach/sea_tile_049_32x32.png',
-    './assets/v2023/tiles/plaza_tile_0.png', './assets/v2023/tiles/plaza_shell_tile_0.png', './assets/v207/tiles/plaza_tile.png'
+    './assets/v2023/tiles/plaza_tile_0.png',
+    './assets/v2023/tiles/plaza_shell_tile_0.png',
+    './assets/v207/tiles/plaza_tile.png',
+    './assets/v207/tiles/plaza_shell_tile.png',
   ],
 };
-
 
 const DECO_TEXTURES: Partial<Record<DecoKind, string>> = {
   tree: './assets/v2023/props/palm_cluster.png',
@@ -902,7 +925,7 @@ function footprintBaseLeftTile(building: Pick<VillageBuildingSave, 'x' | 'y' | '
 function actorSpriteGroundOffset(textureUrl: string, targetH: number): number {
   // v2.0.62: v2023/v2047 character PNGs keep a few transparent pixels under the feet.
   // Drop the visible feet onto the shadow instead of moving the tile anchor upward.
-  if (textureUrl.includes('/v2047/') || textureUrl.includes('/v2023/')) return Math.max(2.5, Math.min(4.5, targetH * 0.034));
+  if (textureUrl.includes('/v2118/characters/player/') || textureUrl.includes('/v2047/') || textureUrl.includes('/v2023/')) return Math.max(2.5, Math.min(4.5, targetH * 0.034));
   return Math.max(0, Math.min(2, targetH * 0.012));
 }
 
@@ -1054,6 +1077,8 @@ export class VillageWorld {
     this.root.dataset.v2030VillageAudit = 'moving-npc-clean-objects';
     this.root.dataset.v2031VillageAudit = 'npc-direction-object-final-audit';
     this.root.dataset.v2045VillageAudit = 'direction-asset-performance-trim';
+    this.root.dataset.v2118PlayerMotionLock = V2118_PLAYER_MOTION_LOCK;
+    this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
     this.root.dataset.v2050ContentExpansionAssetPolish = 'calmer-assets-island-expansion-routes';
@@ -1115,6 +1140,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2112-build-active', Boolean(type));
     this.root.classList.toggle('v2113-build-active', Boolean(type));
     this.root.classList.toggle('v2114-build-active', Boolean(type));
+    this.root.classList.toggle('v2118-build-active', Boolean(type));
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2094-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2097-build-tray-open', this.buildTrayOpen);
@@ -1150,6 +1176,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2115-build-tray-open', open);
     this.root.classList.toggle('v2116-build-tray-open', open);
     this.root.classList.toggle('v2117-build-tray-open', open);
+    this.root.classList.toggle('v2118-build-tray-open', open);
     document.body.classList.toggle('v2111-build-open', open);
     document.body.classList.toggle('v2112-build-open', open);
     document.body.classList.toggle('v2113-build-open', open);
@@ -1157,6 +1184,7 @@ export class VillageWorld {
     document.body.classList.toggle('v2115-build-open', open);
     document.body.classList.toggle('v2116-build-open', open);
     document.body.classList.toggle('v2117-build-open', open);
+    document.body.classList.toggle('v2118-build-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
       if (!keepSelection) this.movingBuildingId = null;
@@ -1177,17 +1205,20 @@ export class VillageWorld {
       this.root.classList.remove('v2112-build-active');
       this.root.classList.remove('v2113-build-active');
       this.root.classList.remove('v2114-build-active');
+      this.root.classList.remove('v2118-build-active');
       this.root.classList.remove('v2112-build-tray-open');
       this.root.classList.remove('v2113-build-tray-open');
       this.root.classList.remove('v2114-build-tray-open');
       this.root.classList.remove('v2116-build-tray-open');
       this.root.classList.remove('v2117-build-tray-open');
+      this.root.classList.remove('v2118-build-tray-open');
       document.body.classList.remove('v2111-build-open');
       document.body.classList.remove('v2112-build-open');
       document.body.classList.remove('v2113-build-open');
       document.body.classList.remove('v2114-build-open');
       document.body.classList.remove('v2116-build-open');
       document.body.classList.remove('v2117-build-open');
+      document.body.classList.remove('v2118-build-open');
       this.previewLayer.removeChildren();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
     }
@@ -1319,6 +1350,7 @@ export class VillageWorld {
       ...Object.values(BUILD_DEFS).map((def) => def.texture),
       ...Object.values(ACTOR_TEXTURES),
       ...Object.values(ACTOR_DIRECTION_TEXTURES).flatMap((directions) => Object.values(directions)),
+      ...Object.values(PLAYER_ACTOR_MOTION_TEXTURES).flat(),
       ...Object.values(TILE_TEXTURES).flat(),
       ...Object.values(DECO_TEXTURES),
       ...Object.values(BUILD_PROP_TEXTURES),
@@ -1334,6 +1366,7 @@ export class VillageWorld {
       ...Object.values(BUILD_PROP_TEXTURES),
       ...Object.values(ACTOR_TEXTURES),
       ...Object.values(ACTOR_DIRECTION_TEXTURES.player),
+      ...Object.values(PLAYER_ACTOR_MOTION_TEXTURES).flat(),
       ...CRITICAL_DECO_KINDS.map((kind) => DECO_TEXTURES[kind]),
       ...Object.values(BUILD_PREVIEW_TEXTURES),
       ...V2116_VILLAGE_ASSET_STEWARD_URLS,
@@ -1676,19 +1709,25 @@ export class VillageWorld {
 
   private actorTextureUrl(role: Actor['role'], direction: ActorDirection): string {
     const corrected = ACTOR_DIRECTION_TEXTURE_FIX[direction] ?? direction;
+    if (role === 'player') return playerActorMotionTextureUrl(corrected, 0);
     return ACTOR_DIRECTION_TEXTURES[role]?.[corrected] ?? ACTOR_TEXTURES[role];
+  }
+
+  private setActorSpriteTexture(actor: Actor, url: string, targetH = actor.role === 'player' ? 90 : 80): void {
+    if (!(actor.body instanceof Sprite)) return;
+    const texture = this.textures.get(url);
+    if (!texture) return;
+    if (actor.body.texture !== texture) actor.body.texture = texture;
+    const baseScale = targetH / Math.max(1, texture.height);
+    actor.body.scale.set(baseScale);
+    actor.groundOffset = actorSpriteGroundOffset(url, targetH);
+    actor.body.position.set(0, actor.groundOffset);
   }
 
   private applyActorTexture(actor: Actor, direction: ActorDirection): void {
     if (!(actor.body instanceof Sprite)) return;
-    const texture = this.textures.get(this.actorTextureUrl(actor.role, direction));
-    if (!texture) return;
-    actor.body.texture = texture;
-    const targetH = actor.role === 'player' ? 90 : 80;
-    const baseScale = targetH / Math.max(1, texture.height);
-    actor.body.scale.set(baseScale);
-    actor.groundOffset = actorSpriteGroundOffset(this.actorTextureUrl(actor.role, direction), targetH);
-    actor.body.position.set(0, actor.groundOffset);
+    const textureUrl = this.actorTextureUrl(actor.role, direction);
+    this.setActorSpriteTexture(actor, textureUrl);
   }
 
   private createActor(id: string, role: Actor['role'], name: string, tileX: number, tileY: number, color: number, mood: string): Actor {
@@ -1970,7 +2009,9 @@ export class VillageWorld {
       const limited = Math.min(radius, length);
       const nx = length > 0 ? dx / length : 0;
       const ny = length > 0 ? dy / length : 0;
-      knob.style.setProperty('--v2117-joystick-transform', `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`);
+      const knobTransform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
+      knob.style.setProperty('--v2117-joystick-transform', knobTransform);
+      knob.style.setProperty('--v2118-joystick-transform', knobTransform);
       knob.style.transform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
       const strength = Math.min(1, length / radius);
       this.joystick.x = nx * strength;
@@ -1984,6 +2025,7 @@ export class VillageWorld {
     const reset = () => {
       this.joystick = { x: 0, y: 0, active: false, pointerId: null };
       knob.style.setProperty('--v2117-joystick-transform', 'translate(-50%, -50%)');
+      knob.style.setProperty('--v2118-joystick-transform', 'translate(-50%, -50%)');
       knob.style.transform = 'translate(-50%, -50%)';
     };
     stick.addEventListener('pointerdown', (ev) => {
@@ -2348,7 +2390,7 @@ export class VillageWorld {
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
     this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open');
     document.body.classList.add('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
@@ -2391,7 +2433,7 @@ export class VillageWorld {
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
     this.root.classList.add('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open');
     document.body.classList.add('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
@@ -2404,7 +2446,7 @@ export class VillageWorld {
     if (!panel) return;
     panel.classList.remove('open');
     this.root.classList.remove('v2094-interior-open', 'v2097-interior-open', 'v218-interior-modal-open');
-    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open');
+    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open', 'v218-aqua-modal-open', 'v2111-modal-open', 'v2112-modal-open', 'v2113-modal-open', 'v2114-modal-open', 'v2115-modal-open', 'v2116-modal-open', 'v2117-modal-open', 'v2118-modal-open');
     document.body.classList.remove('v2094-modal-open');
     this.root.querySelector<HTMLElement>('.v2094-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');
@@ -2561,10 +2603,19 @@ export class VillageWorld {
     const sway = walking ? Math.sin(actor.walkPhase * 0.55) * 0.035 : 0;
     const stepSide = walking ? Math.sin(actor.walkPhase * 2.1) * 1.35 : 0;
     if (actor.body instanceof Sprite) {
+      const targetH = actor.role === 'player' ? 90 : 80;
+      if (actor.role === 'player') {
+        const frameIndex = walking ? Math.floor(actor.walkPhase / 5) % PLAYER_ACTOR_FRAME_COUNT : 0;
+        const frameUrl = playerActorMotionTextureUrl(actor.direction, frameIndex);
+        const frameTexture = this.textures.get(frameUrl);
+        if (frameTexture && actor.body.texture !== frameTexture) {
+          actor.body.texture = frameTexture;
+          actor.groundOffset = actorSpriteGroundOffset(frameUrl, targetH);
+        }
+      }
       actor.body.position.x = stepSide;
       actor.body.position.y = actor.groundOffset;
       actor.body.rotation = sway;
-      const targetH = actor.role === 'player' ? 90 : 80;
       const base = targetH / Math.max(1, actor.body.texture.height);
       const stretch = walking ? Math.sin(actor.walkPhase * 2.2) * 0.012 : 0;
       actor.body.scale.set(base * (1 + stretch * 0.35), base * (1 - stretch));

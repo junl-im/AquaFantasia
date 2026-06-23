@@ -1,0 +1,57 @@
+{
+  "version": "2.1.18",
+  "sourceZip": "aqua_fantasia_individual_assets_png.zip",
+  "sourceFramesProvided": 28,
+  "sourceDirectionGroupsProvided": 7,
+  "generatedPlayerWalkFrames": 32,
+  "clockDirectionOrder": [
+    "north",
+    "northeast",
+    "east",
+    "southeast",
+    "south",
+    "southwest",
+    "west",
+    "northwest"
+  ],
+  "mapping": {
+    "south": {
+      "sourceGroup": "fisher_direction_01",
+      "mirrored": false
+    },
+    "southeast": {
+      "sourceGroup": "fisher_direction_06",
+      "mirrored": false
+    },
+    "southwest": {
+      "sourceGroup": "fisher_direction_06",
+      "mirrored": true
+    },
+    "east": {
+      "sourceGroup": "fisher_direction_07",
+      "mirrored": false
+    },
+    "west": {
+      "sourceGroup": "fisher_direction_04",
+      "mirrored": false
+    },
+    "north": {
+      "sourceGroup": "fisher_direction_03",
+      "mirrored": false
+    },
+    "northwest": {
+      "sourceGroup": "fisher_direction_05",
+      "mirrored": false
+    },
+    "northeast": {
+      "sourceGroup": "fisher_direction_05",
+      "mirrored": true
+    }
+  },
+  "npcDirectionStatus": "Existing v2047 NPC roles already provide 8 static directions; v2.1.18 keeps their direction switching and adds validation for all core NPC roles.",
+  "note": "The uploaded zip contains 7 direction groups x 4 frames. v2.1.18 completes the 8-way player clock set by mirroring paired diagonal frames without changing actorDirectionFromVector, actorTextureUrl, or ACTOR_DIRECTION_TEXTURE_FIX.",
+  "tileSetCopied": true,
+  "tileSetPath": "public/assets/v2118/tiles_32x32/sea_and_beach",
+  "tileSetPngCount": 81,
+  "landTilePolicy": "grass uses non-blue legacy land tiles only; v2118 sea_and_beach water candidates are used only for sea/sand/wood families."
+}
