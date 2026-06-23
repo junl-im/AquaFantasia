@@ -1,5 +1,5 @@
-// v2.1.5 locks the right-bottom menu dock and restores village building hit interactions.
-const CACHE_NAME = 'aqua-fantasia-v2.1.5-ui-hitbox-menu-fix';
+// v2.1.6 repairs event routing, shared aqua UI stability, village interior panels, and fishing input conflicts.
+const CACHE_NAME = 'aqua-fantasia-v2.1.6-event-ui-fishing-stability';
 const PRECACHE = [
   "./",
   "./index.html",

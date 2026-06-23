@@ -973,7 +973,8 @@ export class VillageWorld {
     this.root.dataset.v2090BuildStateGuard = 'explicit-build-button-only';
     this.root.dataset.v2091UiCleanup = 'legacy-interior-events-pruned';
     this.root.dataset.v215VillageHitbox = 'expanded-building-body-front-footprint-hitbox';
-    this.root.classList.add('v215-village-hitbox-ready');
+    this.root.dataset.v216InteriorPanelRepair = 'v216-v2097-interior-selector-event-lock';
+    this.root.classList.add('v215-village-hitbox-ready', 'v216-village-interior-ready');
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트 기준으로 배치됩니다.');
   }
 
@@ -2183,8 +2184,8 @@ export class VillageWorld {
   private openBuildingManagePanel(building: VillageBuildingSave): void {
     const def = BUILD_DEFS[building.type];
     if (!def) return;
-    const panel = this.root.querySelector<HTMLElement>('[data-v2094-interior-panel]');
-    const image = this.root.querySelector<HTMLImageElement>('[data-v2094-interior-image]');
+    const panel = this.root.querySelector<HTMLElement>('[data-v2097-interior-panel], [data-v2094-interior-panel]');
+    const image = this.root.querySelector<HTMLImageElement>('[data-v2097-interior-image], [data-v2094-interior-image]');
     const title = this.root.querySelector<HTMLElement>('[data-v203-interior-title]');
     const body = this.root.querySelector<HTMLElement>('[data-v203-interior-body]');
     const action = this.root.querySelector<HTMLElement>('[data-v203-interior-go-fishing]');
@@ -2207,9 +2208,9 @@ export class VillageWorld {
     inventoryAction?.toggleAttribute('hidden', true);
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
-    this.root.classList.add('v2094-interior-open');
-    document.body.classList.add('v2094-modal-open');
-    this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
+    this.root.classList.add('v2094-interior-open', 'v2097-interior-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open');
+    this.root.querySelector<HTMLElement>('.v2097-world-controls, .v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
     panel.setAttribute('aria-hidden', 'false');
     this.showGuide(def.label, '건물 이동을 누르면 비용 없이 위치를 다시 잡을 수 있습니다.');
@@ -2222,8 +2223,8 @@ export class VillageWorld {
       this.showGuide(def?.label ?? '건물', def?.description ?? '아직 준비 중인 건물입니다.');
       return;
     }
-    const panel = this.root.querySelector<HTMLElement>('[data-v2094-interior-panel]');
-    const image = this.root.querySelector<HTMLImageElement>('[data-v2094-interior-image]');
+    const panel = this.root.querySelector<HTMLElement>('[data-v2097-interior-panel], [data-v2094-interior-panel]');
+    const image = this.root.querySelector<HTMLImageElement>('[data-v2097-interior-image], [data-v2094-interior-image]');
     const title = this.root.querySelector<HTMLElement>('[data-v203-interior-title]');
     const body = this.root.querySelector<HTMLElement>('[data-v203-interior-body]');
     const action = this.root.querySelector<HTMLElement>('[data-v203-interior-go-fishing]');
@@ -2249,21 +2250,21 @@ export class VillageWorld {
     inventoryAction?.toggleAttribute('hidden', !interior.inventory);
     moveAction?.toggleAttribute('hidden', false);
     panel.classList.add('open');
-    this.root.classList.add('v2094-interior-open');
-    document.body.classList.add('v2094-modal-open');
-    this.root.querySelector<HTMLElement>('.v2094-world-controls')?.setAttribute('hidden', 'true');
+    this.root.classList.add('v2094-interior-open', 'v2097-interior-open');
+    document.body.classList.add('v2094-modal-open', 'v2097-modal-open');
+    this.root.querySelector<HTMLElement>('.v2097-world-controls, .v2094-world-controls')?.setAttribute('hidden', 'true');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.setAttribute('hidden', 'true');
     panel.setAttribute('aria-hidden', 'false');
     this.showGuide(interior.title, overrideBody ?? interior.body);
   }
 
   private closeInterior(): void {
-    const panel = this.root.querySelector<HTMLElement>('[data-v2094-interior-panel]');
+    const panel = this.root.querySelector<HTMLElement>('[data-v2097-interior-panel], [data-v2094-interior-panel]');
     if (!panel) return;
     panel.classList.remove('open');
-    this.root.classList.remove('v2094-interior-open');
-    document.body.classList.remove('v2094-modal-open');
-    this.root.querySelector<HTMLElement>('.v2094-world-controls')?.removeAttribute('hidden');
+    this.root.classList.remove('v2094-interior-open', 'v2097-interior-open');
+    document.body.classList.remove('v2094-modal-open', 'v2097-modal-open');
+    this.root.querySelector<HTMLElement>('.v2097-world-controls, .v2094-world-controls')?.removeAttribute('hidden');
     this.root.querySelector<HTMLElement>('.bottom-nav')?.removeAttribute('hidden');
     this.focusedBuildingId = null;
     panel.setAttribute('aria-hidden', 'true');
