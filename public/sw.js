@@ -1,5 +1,5 @@
-// v2.1.39 keeps the root APP_VERSION file removed and prioritizes a clearer fishing playfield, visible reel gauges, transparent menu docks, wider HUD/frontier spacing, safer tile taps, and polished aqua card pages without risky tile-size migration.
-const CACHE_NAME = 'aqua-fantasia-v2.1.39-fishing-ui-system-polish';
+// v2.1.40 keeps the root APP_VERSION file removed and prioritizes a clearer fishing playfield, visible reel gauges, transparent menu docks, wider HUD/frontier spacing, safer tile taps, and polished aqua card pages without risky tile-size migration.
+const CACHE_NAME = 'aqua-fantasia-v2.1.40-fishing-menu-ui-tune';
 const ASSETS = [
   './',
   './index.html',

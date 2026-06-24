@@ -1,8 +1,8 @@
-# AquaFantasia v2.1.39
+# AquaFantasia v2.1.40
 
-## v2.1.39 Change Log
+## v2.1.40 Change Log
 
-- Added a v2.1.39 fishing/UI system polish pass focused on making the fishing game screen the first priority: no legacy guide/start cards in the live layer, clearer rod/bait loadout, readable sea-lane card, and visible reel gauges after bite.
+- Added a v2.1.40 fishing/UI system polish pass focused on making the fishing game screen the first priority: no legacy guide/start cards in the live layer, clearer rod/bait loadout, readable sea-lane card, and visible reel gauges after bite.
 - Reworked the reeling layout into a reserved portrait-safe playfield so the coach, reel panel, reel console, and touch zone do not push the 포획/텐션/저항 gauges off screen.
 - Polished the fishing start button into a clean aqua CTA labeled 캐스팅 시작 and suppressed old cast/reel frame art that could appear as stray icon fragments.
 - Further transparentized the top-right command menu and right-bottom dock table/frame backgrounds while keeping the requested button order and stable page positions.
@@ -12,7 +12,7 @@
 - Kept actual tile pixel size unchanged. Tile pixels can be reduced later, but doing it correctly needs a coordinated save-coordinate, building footprint, NPC movement, collision, and camera-boundary migration.
 - Preserved player/NPC direction locks, first-start-only opening video, construction preview/confirm flow, no village bottom dock in fishing, and root APP_VERSION removal.
 
-## v2.1.39 변경사항
+## v2.1.40 변경사항
 
 - 낚시 화면을 최우선으로 다시 다듬었습니다.
   - 예전 낚시 사용법 카드와 시작 안내 카드는 라이브 레이어에서 숨겨 새 UI와 겹치지 않게 했습니다.
