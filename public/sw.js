@@ -1,5 +1,5 @@
-// v2.1.36 keeps the root APP_VERSION file removed, polishes premium aqua-card UI, improves village placement assist, and stabilizes fishing recovery feedback.
-const CACHE_NAME = 'aqua-fantasia-v2.1.36-premium-polish-fishing-placement';
+// v2.1.37 keeps the root APP_VERSION file removed and prioritizes fishing UI visibility, transparent menu frames, HUD/frontier spacing, and cautious tile touch precision.
+const CACHE_NAME = 'aqua-fantasia-v2.1.37-fishing-ui-page-shell-polish';
 const ASSETS = [
   './',
   './index.html',

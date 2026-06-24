@@ -1,40 +1,48 @@
-# AquaFantasia v2.1.36
+# AquaFantasia v2.1.37
 
+## v2.1.37 Change Log
 
-## v2.1.36 Change Log
-
-- Added a v2.1.36 premium polish pass for aqua-card consistency, village placement assist, shop CTA contrast, and fishing recovery feedback.
+- Added a v2.1.37 fishing-first UI overhaul for the rod/bait loadout strip, sea-lane label, cast button, visible reel gauges, and legacy fishing overlay cleanup.
 - Kept the root APP_VERSION file removed; version history remains in README.md and runtime version remains in src/data.ts.
-- Added v2.1.36 UI shell tokens for fixed bottom dock zero-jitter, top-right command spacing, safe-area HUD/frontier spacing, and readable aqua-card surfaces.
-- Improved village tile click precision by widening the diamond hit search and expanding nearest valid placement snap assist from 2 to 3 tiles.
-- Clarified construction/move failure copy around visual safety spacing and preserved the central preview/confirm flow.
-- Strengthened shop purchase price visibility with a dedicated v2.1.36 gold CTA badge.
-- Tuned fishing with a wider safe zone, adaptive recovery assist when the player uses the correct wind/release input, longer failure buffer, and a recovery hint chip.
-- Preserved player/NPC direction locks, first-start-only opening video, construction preview/confirm flow, and no bottom village dock in fishing.
+- Reworked the fishing screen layout so the HUD, selected sea-lane card, loadout strip, director, coach panel, reel panel, reel console, and touch zone use separate safe mobile portrait lanes.
+- Hid old fishing guide/start-card decoration and stray fishing prop/art-frame overlays that could visually leak into the top of the game screen.
+- Improved reel gauge visibility after bite by forcing the catch/tension/stamina gauges, safe window, tension track, console, and touch zone into fixed visible layers during reeling.
+- Refined village tile touch precision more cautiously: the diamond-tile tolerance is tightened and placement snap assist is capped to nearby valid origins instead of jumping too far.
+- Documented that full tile pixel shrinking remains locked behind a save-coordinate/building-footprint migration because changing TILE_W/TILE_H alone can destabilize existing saves and object sizes.
+- Polished the top-right village command bar and right-bottom menu dock by removing/transparentizing their outer frame backgrounds while preserving button spacing and order.
+- Expanded HUD/frontier spacing and improved the expedition/opened page surface for cleaner aqua-card readability.
+- Preserved player/NPC direction locks, first-start-only opening video, construction preview/confirm flow, no village bottom dock in fishing, and root APP_VERSION removal.
 
-## v2.1.36 변경사항
+## v2.1.37 변경사항
 
-- 프리미엄 아쿠아 카드 스킨을 다시 다듬었습니다.
-  - 카드 배경, 테두리, 그림자, 버튼, X 닫기, 입력/팝업 표면을 v2.1.36 토큰으로 재고정했습니다.
-  - 우측 하단 메뉴는 모든 메뉴 페이지에서 같은 위치/크기/간격을 유지하도록 zero-jitter 고정값을 추가했습니다.
-- 마을 배치/타일 클릭을 추가 보강했습니다.
-  - 다이아몬드 타일 판정 검색 범위를 넓혀 작은 터치 오차를 더 잘 잡습니다.
-  - 건설/이동 시 가까운 설치 가능 타일 보정 범위를 3칸까지 확장했습니다.
-  - 배치 불가 문구를 시각 안전 간격 기준으로 더 명확하게 고쳤습니다.
-- HUD와 개척 바 간격을 다시 균형 조정했습니다.
-  - 너무 붙지도 떨어지지도 않게 상단 HUD, 개척 바, 우측 상단 조작 버튼 간 폭을 다시 제한했습니다.
-  - 마을 안내 토스트와 하단 메뉴의 겹침을 줄였습니다.
-- 상점 구매 금액 버튼을 다시 보강했습니다.
-  - 가격/보유 배지를 v2.1.36 금색 CTA로 고정해 배경과 섞여 보이지 않도록 했습니다.
-- 낚시게임을 한 번 더 손봤습니다.
-  - 안전 구간을 조금 넓히고 중심 판정을 완화했습니다.
-  - 장력이 너무 낮을 때 감기, 너무 높을 때 풀기를 사용하면 복구 보정이 들어가도록 했습니다.
-  - 실패까지의 복구 시간을 늘리고, 코치 패널에 복구 힌트 칩을 추가했습니다.
+- 낚시 화면 우선 개편을 적용했습니다.
+  - 로드/미끼 장비 테이블이 어색하게 보이지 않도록 투명 프레임을 제거하고 2칸 아쿠아 장비 스트립으로 재배치했습니다.
+  - 바다물길 표기가 짧게 잘리지 않도록 별도 수역 정보 카드로 분리했습니다.
+  - 예전 게임 사용법 카드와 시작 안내 카드가 현재 UI와 겹쳐 보이지 않도록 낚시 화면에서는 숨겼습니다.
+  - 낚시 시작 버튼을 아쿠아 CTA 버튼으로 다시 고정하고 오래된 버튼 이미지 프레임을 제거했습니다.
+- 입질 후 게이지 가시성을 보강했습니다.
+  - 릴링 상태에서 포획/텐션/저항 게이지, 안전 구간, 릴 콘솔, 터치존이 화면 밖으로 밀리지 않도록 고정 레이어를 다시 잡았습니다.
+  - 상단에 다른 그림 조각처럼 보이던 낚시 소품/프레임성 이미지가 낚시 UI 위로 새어 나오지 않도록 차단했습니다.
+- 마을 타일 터치 영역을 더 신중하게 조정했습니다.
+  - 이전보다 과한 주변 타일 점프를 줄이기 위해 다이아몬드 타일 판정 허용값을 살짝 조였습니다.
+  - 건설/이동 자동 보정은 가까운 설치 가능 타일 위주로 제한해 의도하지 않은 멀리 점프를 줄였습니다.
+- 타일 픽셀 자체 축소는 이번 패치에서도 바로 적용하지 않았습니다.
+  - 타일 픽셀을 줄이고 오브젝트가 차지하는 타일 수를 늘리는 방식은 좋은 방향일 수 있지만, 현재 세이브 좌표, 건물 footprint, 충돌 판정, NPC 이동, 카메라 경계까지 함께 마이그레이션해야 안전합니다.
+  - 그래서 이번에는 실제 TILE_W/TILE_H는 유지하고, 터치 판정/스냅/배치 안정화부터 먼저 진행했습니다.
+- 우측 상단/하단 메뉴 프레임을 정리했습니다.
+  - 우측 상단 메뉴바의 외부 테두리/테이블 배경을 투명화하고 버튼 간격을 다시 맞췄습니다.
+  - 우측 하단 메뉴바도 둘러싼 배경/테두리를 거의 투명하게 정리하고, 홈/가방/퀘스트/지도 위치와 크기를 고정했습니다.
+- HUD와 개척 페이지를 보강했습니다.
+  - HUD 창 길이를 조금 더 확보하고, 개척 바와 너무 붙거나 멀어지지 않도록 상단 간격을 다시 잡았습니다.
+  - 개척이 열렸을 때 중앙 아쿠아 카드 표면, 스크롤 영역, X 닫기 위치가 더 안정적으로 보이도록 정리했습니다.
+- 모든 메뉴 페이지 공통 스킨을 한 번 더 고정했습니다.
+  - 가방/퀘스트/지도/상점/도감/장비/랭킹 계열 페이지의 아쿠아 카드 표면, 버튼, 하단 여백, 하단 메뉴 충돌 방지 토큰을 보강했습니다.
 - 기존 잠금 유지:
   - v2.1.29 플레이어 방향 파일명 identity 매핑 유지
   - NPC 방향 identity 매핑 유지
   - 오프닝 영상 최초 시작 전용 유지
   - 건설 프리뷰 → 중앙 확인 팝업 → 건설/취소 플로우 유지
+  - 낚시 화면에서 마을 하단 메뉴 차단 유지
   - 루트 APP_VERSION 파일 제거 정책 유지
 
 ## 검증
@@ -42,23 +50,26 @@
 - `npm run validate`는 다음 검증을 실행합니다.
   - `tools/clean-old-patch-docs.mjs`
   - `tools/validate-clean.mjs`
-  - `tools/check-v2136-premium-polish-fishing-placement.mjs`
-- v2.1.36 검증 항목:
+  - `tools/check-v2137-premium-fishing-ui-page-shell.mjs`
+- v2.1.37 검증 항목:
   - 버전 동기화
   - CSS 괄호/중괄호/대괄호 균형
   - 플레이어 v2129 8방향 32프레임 존재 및 해시 불변
   - 플레이어 방향 파일명 identity 매핑 유지
   - NPC 8방향 자산/identity 매핑 검사
   - 오프닝 영상 최초 시작 전용 토큰 유지
-  - 우측 상단/하단 메뉴 고정 클래스 검사
+  - 낚시 로드/미끼 스트립, 바다물길 카드, 시작 버튼, 게이지 고정 레이어 검사
+  - 낚시 구형 가이드/프레임/소품 오버레이 차단 검사
+  - 우측 상단/하단 메뉴 투명 프레임 및 고정 클래스 검사
+  - HUD/개척 바 간격 및 개척 페이지 아쿠아 카드 검사
   - 마을 오브젝트 시각 안전 간격/타일 스냅 보정 검사
-  - HUD/개척 바 간격 토큰 검사
+  - 타일 픽셀 축소 보류/마이그레이션 가드 검사
   - 상점 구매 버튼 가시성 검사
-  - 낚시 adaptive recovery/assist/게이지/버튼/상태 검사
   - 건설 프리뷰/확인 팝업 플로우 검사
   - 루트 Markdown README.md 단독 유지
   - 루트 APP_VERSION 파일 미포함
   - 금지 산출물 미포함
+
 
 ## v2.1.35 Change Log
 

@@ -253,7 +253,10 @@ const V2134_MICRO_TILE_POINTER_LOCK = 'v2134-micro-tile-pointer-snap-lock';
 const V2135_OBJECT_FOOTPRINT_CLEARANCE_LOCK = 'v2135-saved-object-footprint-clearance-lock';
 const V2135_TILE_SNAP_ASSIST_LOCK = 'v2135-tile-snap-assist-nearest-valid-origin';
 const V2136_PREMIUM_PLACEMENT_ASSIST_LOCK = 'v2136-premium-placement-assist-object-spacing';
+const V2137_TILE_TOUCH_PRECISION_LOCK = 'v2137-cautious-tile-touch-precision-no-size-migration';
+const V2137_TILE_PIXEL_SIZE_MIGRATION_REQUIRED_LOCK = 'v2137-tile-pixel-size-migration-required-before-rescale';
 const V2136_FINE_PLACEMENT_SEARCH_RADIUS = 3;
+const V2137_FINE_PLACEMENT_SEARCH_RADIUS = 2;
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -938,8 +941,9 @@ function nearestDiamondTile(worldX: number, worldY: number): { x: number; y: num
       }
     }
   }
-  // v2.1.34 lineage token: bestScore <= 1.16; v2.1.36 widens the touch tolerance slightly for mobile fine adjustment.
-  return bestScore <= 1.20 ? best : base;
+  // v2.1.37: tighten the generous mobile tolerance a little so taps do not jump to a surprising neighbor tile.
+  // Full tile pixel shrink is intentionally locked behind a save/footprint migration guard.
+  return bestScore <= 1.14 ? best : base;
 }
 
 function centerOfTile(x: number, y: number): { x: number; y: number } {
@@ -2484,7 +2488,7 @@ export class VillageWorld {
     let bestY = 0;
     let bestScore = Number.POSITIVE_INFINITY;
     let found = false;
-    for (let radius = 1; radius <= V2136_FINE_PLACEMENT_SEARCH_RADIUS; radius += 1) {
+    for (let radius = 1; radius <= V2137_FINE_PLACEMENT_SEARCH_RADIUS; radius += 1) {
       for (let dy = -radius; dy <= radius; dy += 1) {
         for (let dx = -radius; dx <= radius; dx += 1) {
           const nx = clamp(x + dx, 1, MAP_SIZE - w - 1);
