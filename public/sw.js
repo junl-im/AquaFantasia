@@ -1,5 +1,5 @@
-// v2.1.47 keeps CI validate package-boundary stability and polishes page/layout overlap, fishing stage centering, menu icon containment, shop text, expedition cards, and tile hit caution.
-const CACHE_NAME = 'aqua-fantasia-v2.1.47-ui-overlap-layout-fishing-polish';
+// v2.1.48 keeps CI validate stability and polishes menu icon clipping, single-frame village controls, menu cards, fishing cockpit centering, and cautious tile hit scoring.
+const CACHE_NAME = 'aqua-fantasia-v2.1.48-ui-overlap-layout-sweep';
 const ASSETS = [
   './',
   './index.html',

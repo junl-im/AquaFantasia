@@ -1,13 +1,13 @@
 {
   "name": "aqua-fantasia",
   "private": true,
-  "version": "2.1.47",
+  "version": "2.1.48",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build --base=./",
     "preview": "vite preview --host 0.0.0.0",
-    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v2147-ui-overlap-layout-fishing-polish.mjs",
+    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v2148-ui-overlap-layout-sweep.mjs",
     "runtime:check": "node tools/check-v2014-background-dock-scroll-polish.mjs --runtime",
     "audit": "node tools/validate-clean.mjs && node tools/check-v2014-background-dock-scroll-polish.mjs --audit",
     "typecheck": "tsc --noEmit",
