@@ -1,5 +1,5 @@
-// v2.1.46 keeps the CI package-boundary fix and polishes clean generated icons, single-layer menu frames, page ghosts, shop readability, and centered fishing reeling layout.
-const CACHE_NAME = 'aqua-fantasia-v2.1.46-ui-overlap-icon-fishing-polish';
+// v2.1.47 keeps CI validate package-boundary stability and polishes page/layout overlap, fishing stage centering, menu icon containment, shop text, expedition cards, and tile hit caution.
+const CACHE_NAME = 'aqua-fantasia-v2.1.47-ui-overlap-layout-fishing-polish';
 const ASSETS = [
   './',
   './index.html',
