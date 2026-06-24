@@ -250,6 +250,8 @@ const V2131_PLAYER_NPC_DIRECTION_GUARD = 'v2131-player-npc-direction-identity-no
 const V2131_BUILD_PREVIEW_CONFIRM_LOCK = 'v2131-build-preview-confirm-toast-flow-lock';
 const V2134_OBJECT_CLEARANCE_LOCK = 'v2134-object-overlap-clearance-lock';
 const V2134_MICRO_TILE_POINTER_LOCK = 'v2134-micro-tile-pointer-snap-lock';
+const V2135_OBJECT_FOOTPRINT_CLEARANCE_LOCK = 'v2135-saved-object-footprint-clearance-lock';
+const V2135_TILE_SNAP_ASSIST_LOCK = 'v2135-tile-snap-assist-nearest-valid-origin';
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -990,6 +992,17 @@ function footprintTileKeys(x: number, y: number, w: number, h: number): string[]
   return keys;
 }
 
+function footprintClearanceTileKeys(x: number, y: number, w: number, h: number): string[] {
+  const keys: string[] = [];
+  for (let yy = y - 1; yy < y + h + 1; yy += 1) {
+    for (let xx = x - 1; xx < x + w + 1; xx += 1) {
+      const inside = xx >= x && xx < x + w && yy >= y && yy < y + h;
+      if (!inside) keys.push(tileKey(xx, yy));
+    }
+  }
+  return keys;
+}
+
 function createDefaultBuildings(): VillageBuildingSave[] {
   return [
     { id: 'b_fountain_0', type: 'fountain', x: 19, y: 19, w: 2, h: 2, builtAt: Date.now() },
@@ -1136,6 +1149,8 @@ export class VillageWorld {
     this.root.dataset.v2131BuildPreviewConfirmLock = V2131_BUILD_PREVIEW_CONFIRM_LOCK;
     this.root.dataset.v2134ObjectClearanceLock = V2134_OBJECT_CLEARANCE_LOCK;
     this.root.dataset.v2134MicroTilePointerLock = V2134_MICRO_TILE_POINTER_LOCK;
+    this.root.dataset.v2135ObjectFootprintClearanceLock = V2135_OBJECT_FOOTPRINT_CLEARANCE_LOCK;
+    this.root.dataset.v2135TileSnapAssistLock = V2135_TILE_SNAP_ASSIST_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
@@ -1152,7 +1167,7 @@ export class VillageWorld {
     this.root.dataset.v2091UiCleanup = 'legacy-interior-events-pruned';
     this.root.dataset.v218StableRollback = 'v218-raw-diamond-touch-interior-selector-repair';
     this.root.dataset.v219UiTouchShopFishingAudit = 'v219-foot-biased-touch-shop-route';
-    this.root.classList.add('v218-village-touch-repaired', 'v219-village-touch-shop-repaired', 'v2134-village-object-clearance-ready');
+    this.root.classList.add('v218-village-touch-repaired', 'v219-village-touch-shop-repaired', 'v2134-village-object-clearance-ready', 'v2135-village-placement-engine-ready');
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트와 1타일 안전 간격 기준으로 배치됩니다.');
   }
 
@@ -1367,6 +1382,12 @@ export class VillageWorld {
         if ((this.tileKinds.get(key) ?? 'grass') === 'sea') return false;
         if (used.has(key)) return false;
         if (xx <= 0 || yy <= 0 || xx >= MAP_SIZE - 1 || yy >= MAP_SIZE - 1) return false;
+      }
+      for (const key of footprintClearanceTileKeys(x, y, w, h)) {
+        const [xx, yy] = key.split(',').map(Number);
+        if (xx <= 0 || yy <= 0 || xx >= MAP_SIZE - 1 || yy >= MAP_SIZE - 1) continue;
+        if ((this.tileKinds.get(key) ?? 'grass') === 'sea') continue;
+        if (used.has(key)) return false;
       }
       return true;
     };
@@ -2190,15 +2211,20 @@ export class VillageWorld {
       const def = BUILD_DEFS[this.selectedBuild];
       // v2043 validation lineage: const origin = this.buildOriginFromPointerTile(tile.x, tile.y, def)
       const origin = this.buildOriginFromPointerTile(hit.x, hit.y, def);
-      const ok = this.canPlace(origin.x, origin.y, def, this.movingBuildingId);
-      this.updateBuildPreviewAtTile(origin.x, origin.y, true);
-      this.showTileMarker(origin.x, origin.y, ok ? 0x35f08a : 0xff4747);
+      const assisted = this.nearestPlaceableOrigin(origin.x, origin.y, def, this.movingBuildingId);
+      const finalOrigin = assisted ?? origin;
+      const ok = this.canPlace(finalOrigin.x, finalOrigin.y, def, this.movingBuildingId);
+      this.updateBuildPreviewAtTile(finalOrigin.x, finalOrigin.y, true);
+      this.showTileMarker(finalOrigin.x, finalOrigin.y, ok ? 0x35f08a : 0xff4747);
       if (!ok) {
         this.hideBuildConfirm();
         this.showGuide(this.movingBuildingId ? '이동 불가' : '설치 불가', '빨간 풋프린트 위치에는 놓을 수 없습니다. 바다, 길, 건물, 장식 또는 1타일 안전 간격과 겹치지 않는 초록 타일을 선택하세요.');
         return;
       }
-      this.showBuildConfirm({ type: this.selectedBuild, x: origin.x, y: origin.y, movingId: this.movingBuildingId });
+      if (assisted && (assisted.x !== origin.x || assisted.y !== origin.y)) {
+        this.showGuide('타일 보정', '가장 가까운 설치 가능 타일로 미세 보정했습니다. 중앙 확인창에서 위치를 확인하세요.');
+      }
+      this.showBuildConfirm({ type: this.selectedBuild, x: finalOrigin.x, y: finalOrigin.y, movingId: this.movingBuildingId });
       return;
     }
     const building = this.findBuildingNear(hit.x, hit.y, hit.worldX, hit.worldY);
@@ -2445,6 +2471,34 @@ export class VillageWorld {
       }
     }
     return true;
+  }
+
+  private nearestPlaceableOrigin(x: number, y: number, def: BuildDefinition, ignoreBuildingId: string | null = null): { x: number; y: number } | null {
+    if (this.canPlace(x, y, def, ignoreBuildingId)) return { x, y };
+    if (def.kind === 'path') return null;
+    const [w, h] = def.size;
+    let bestX = 0;
+    let bestY = 0;
+    let bestScore = Number.POSITIVE_INFINITY;
+    let found = false;
+    for (let radius = 1; radius <= 2; radius += 1) {
+      for (let dy = -radius; dy <= radius; dy += 1) {
+        for (let dx = -radius; dx <= radius; dx += 1) {
+          const nx = clamp(x + dx, 1, MAP_SIZE - w - 1);
+          const ny = clamp(y + dy, 1, MAP_SIZE - h - 1);
+          if (!this.canPlace(nx, ny, def, ignoreBuildingId)) continue;
+          const score = Math.abs(dx) + Math.abs(dy) + Math.hypot(dx, dy) * 0.1;
+          if (!found || score < bestScore) {
+            bestX = nx;
+            bestY = ny;
+            bestScore = score;
+            found = true;
+          }
+        }
+      }
+      if (found) break;
+    }
+    return found ? { x: bestX, y: bestY } : null;
   }
 
   private canPlace(x: number, y: number, def: BuildDefinition, ignoreBuildingId: string | null = null): boolean {

@@ -1,4 +1,64 @@
-# AquaFantasia v2.1.34
+# AquaFantasia v2.1.35
+
+## v2.1.35 Change Log
+
+- Added a v2.1.35 system UI and fishing engine stabilization pass.
+- Kept the root APP_VERSION file removed; version history remains in README.md and runtime version remains in src/data.ts.
+- Hardened the aqua-card skin across menu pages, popups, close buttons, inputs, shop cards, and build confirm surfaces.
+- Improved village object placement stability by applying saved-object footprint clearance during normalization and adding nearest valid tile snap assist for construction/move confirmation.
+- Rebalanced HUD/frontier spacing so the HUD, expedition bar, top-right commands, guide toast, and bottom dock avoid overlap on portrait mobile screens.
+- Strengthened shop purchase button contrast with a visible gold CTA surface.
+- Upgraded fishing UX with a command/balance strip, pressure readout, wider safe-zone tuning, softer failure buffer, and smoother wind/release control.
+- Preserved player/NPC direction locks, first-start-only opening video, construction preview/confirm flow, and no bottom village dock in fishing.
+
+## v2.1.35 변경사항
+
+- 공통 아쿠아 카드 스킨을 한 번 더 고정했습니다.
+  - 카드 배경, 테두리, 그림자, 버튼, X 닫기 버튼, 입력/팝업 표면의 톤을 통일했습니다.
+  - 메뉴/페이지 스크롤 영역과 우측 하단 메뉴가 겹치지 않도록 하단 여백을 보강했습니다.
+- 마을 배치 엔진을 보강했습니다.
+  - 저장된 기존 건물도 정규화 과정에서 1타일 안전 간격을 고려합니다.
+  - 건설/이동 위치가 살짝 빗나갔을 때 주변의 가장 가까운 설치 가능 타일로 미세 보정합니다.
+  - 타일 크기 자체 축소는 세이브 좌표/footprint 마이그레이션 위험이 있어 계속 보류하고, 클릭/스냅/안전 간격을 우선 안정화했습니다.
+- HUD와 개척 바 간격을 재조정했습니다.
+  - 너무 붙지 않게 상단 간격을 확보하고, 우측 상단 조작 버튼과 폭 충돌을 줄였습니다.
+  - 마을 안내 토스트와 하단 메뉴가 겹치지 않도록 위치를 보정했습니다.
+- 상점 구매 금액 버튼 가시성을 추가로 보강했습니다.
+  - 가격/보유 배지가 배경에 묻히지 않도록 금색 CTA 버튼 계열로 다시 고정했습니다.
+- 낚시게임을 추가 개선했습니다.
+  - 추천 입력/밸런스/위험도 표시를 추가했습니다.
+  - 안전 구간을 약간 넓히고 움직임을 완화해 모바일에서 갑작스러운 실패를 줄였습니다.
+  - 감기/풀기/중립 입력 감도를 완화하고 실패 복구 시간을 늘렸습니다.
+- 기존 잠금 유지:
+  - v2.1.29 플레이어 방향 파일명 identity 매핑 유지
+  - NPC 방향 identity 매핑 유지
+  - 오프닝 영상 최초 시작 전용 유지
+  - 건설 프리뷰 → 중앙 확인 팝업 → 건설/취소 플로우 유지
+  - 루트 APP_VERSION 파일 제거 정책 유지
+
+## 검증
+
+- `npm run validate`는 다음 검증을 실행합니다.
+  - `tools/clean-old-patch-docs.mjs`
+  - `tools/validate-clean.mjs`
+  - `tools/check-v2135-system-ui-fishing-engine.mjs`
+- v2.1.35 검증 항목:
+  - 버전 동기화
+  - CSS 괄호/중괄호/대괄호 균형
+  - 플레이어 v2129 8방향 32프레임 존재 및 해시 불변
+  - 플레이어 방향 파일명 identity 매핑 유지
+  - NPC 8방향 자산/identity 매핑 검사
+  - 오프닝 영상 최초 시작 전용 토큰 유지
+  - 우측 상단/하단 메뉴 고정 클래스 검사
+  - 마을 오브젝트 안전 간격/타일 스냅 보정 검사
+  - HUD/개척 바 간격 토큰 검사
+  - 상점 구매 버튼 가시성 검사
+  - 낚시 command/balance/pressure/게이지/버튼/상태 검사
+  - 건설 프리뷰/확인 팝업 플로우 검사
+  - 루트 Markdown README.md 단독 유지
+  - 루트 APP_VERSION 파일 미포함
+  - 금지 산출물 미포함
+
 
 ## v2.1.34 Change Log
 

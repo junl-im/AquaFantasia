@@ -43911,3 +43911,279 @@ html.v2134-object-grid-shop-fishing-ui-root body[data-screen="fishing"] .fishing
     bottom: calc(var(--v2134-safe-bottom) + 82px) !important;
   }
 }
+
+/* v2.1.35 - system UI/fishing engine stabilizer: tighter aqua cards, fixed menus, shop contrast, village spacing, and fishing command lane */
+html.v2135-system-ui-fishing-engine-root {
+  --v2135-safe-top: max(10px, env(safe-area-inset-top));
+  --v2135-safe-right: max(8px, env(safe-area-inset-right));
+  --v2135-safe-bottom: max(10px, env(safe-area-inset-bottom));
+  --v2135-safe-left: max(10px, env(safe-area-inset-left));
+  --v2135-aqua-card: linear-gradient(180deg, rgba(255,255,255,.985) 0%, rgba(223,250,255,.965) 48%, rgba(146,229,250,.94) 100%);
+  --v2135-aqua-card-dark: linear-gradient(180deg, rgba(31,159,210,.88), rgba(8,54,104,.96));
+  --v2135-aqua-line: rgba(65, 215, 246, .62);
+  --v2135-aqua-shadow: 0 18px 40px rgba(0,46,96,.20), 0 7px 16px rgba(0,123,170,.12), inset 0 1px 0 rgba(255,255,255,.96);
+  --v2135-gold-button: linear-gradient(180deg, #fffce2 0%, #ffe97d 46%, #f2b338 100%);
+}
+html.v2135-system-ui-fishing-engine-root :is(.runtime-hero-card,.runtime-panel,.shop-card,.gear-card,.mission-card,.region-card,.runtime-item-card,.runtime-dex-card,.v2097-modal-card,.v2097-build-tray,.v2130-build-confirm-card) {
+  background-image: var(--v2135-aqua-card) !important;
+  border: 1px solid var(--v2135-aqua-line) !important;
+  box-shadow: var(--v2135-aqua-shadow) !important;
+  color: #073d59 !important;
+  -webkit-text-fill-color: #073d59 !important;
+  text-shadow: none !important;
+}
+html.v2135-system-ui-fishing-engine-root :is(.runtime-hero-card,.runtime-panel,.shop-card,.gear-card,.mission-card,.region-card,.runtime-item-card,.runtime-dex-card,.v2097-modal-card,.v2097-build-tray,.v2130-build-confirm-card) :is(strong,h1,h2,h3,p,small,span,em,label) {
+  text-shadow: none !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html.v2135-system-ui-fishing-engine-root :is(.v2097-ui-close,.v2097-menu-close,.v2059-screen-close,.v2059-result-close,.game-dialog-close,.v2133-close-control) {
+  display: inline-grid !important;
+  place-items: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(162,238,255,.92)) !important;
+  border: 1px solid rgba(70,213,246,.58) !important;
+  box-shadow: 0 8px 18px rgba(0,74,112,.16), inset 0 1px 0 rgba(255,255,255,.96) !important;
+  color: #06445f !important;
+  -webkit-text-fill-color: #06445f !important;
+  transform: none !important;
+  translate: none !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="village"] .v2135-world-controls {
+  right: calc(var(--v2135-safe-right) + 2px) !important;
+  top: calc(var(--v2135-safe-top) + 2px) !important;
+  width: 188px !important;
+  max-width: 188px !important;
+  grid-template-columns: repeat(2, 90px) !important;
+  gap: 8px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  pointer-events: auto !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="village"] .v2135-world-controls button {
+  width: 90px !important;
+  min-width: 90px !important;
+  max-width: 90px !important;
+  min-height: 48px !important;
+  gap: 4px !important;
+  border-radius: 17px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(166,239,255,.93)) !important;
+  border: 1px solid rgba(80,217,247,.55) !important;
+  box-shadow: 0 12px 22px rgba(0,58,100,.15), inset 0 1px 0 rgba(255,255,255,.96) !important;
+  color: #073d59 !important;
+  -webkit-text-fill-color: #073d59 !important;
+  transform: none !important;
+  translate: none !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="village"] .v2135-world-controls button:active,
+html.v2135-system-ui-fishing-engine-root .v2135-bottom-nav .v2098-nav-item:active {
+  transform: none !important;
+  translate: none !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="village"] .v2135-village-hud {
+  top: calc(var(--v2135-safe-top) + 6px) !important;
+  left: var(--v2135-safe-left) !important;
+  max-width: calc(100vw - var(--v2135-safe-left) - var(--v2135-safe-right) - 212px) !important;
+  min-height: 52px !important;
+  z-index: 59 !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="village"] .v2135-expedition-board:not(.open) {
+  top: calc(var(--v2135-safe-top) + 68px) !important;
+  left: var(--v2135-safe-left) !important;
+  max-width: calc(100vw - var(--v2135-safe-left) - var(--v2135-safe-right) - 212px) !important;
+  min-height: 42px !important;
+  z-index: 58 !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="village"] .v2135-expedition-board.open {
+  top: calc(var(--v2135-safe-top) + 66px) !important;
+  left: var(--v2135-safe-left) !important;
+  max-width: min(440px, calc(100vw - 24px)) !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="village"] .v2097-village-guide {
+  bottom: calc(var(--v2135-safe-bottom) + 88px) !important;
+  max-width: min(466px, calc(100vw - 24px)) !important;
+}
+html.v2135-system-ui-fishing-engine-root .v2135-bottom-nav {
+  position: fixed !important;
+  right: calc(var(--v2135-safe-right) + 10px) !important;
+  bottom: calc(var(--v2135-safe-bottom) + 10px) !important;
+  width: 236px !important;
+  min-width: 236px !important;
+  max-width: 236px !important;
+  min-height: 62px !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 8px !important;
+  padding: 9px 10px !important;
+  border-radius: 24px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(169,237,255,.82)) !important;
+  border: 1px solid rgba(79,213,244,.45) !important;
+  box-shadow: 0 16px 34px rgba(0,50,92,.20), inset 0 1px 0 rgba(255,255,255,.90) !important;
+  transform: none !important;
+  translate: none !important;
+}
+html.v2135-system-ui-fishing-engine-root .v2135-bottom-nav .v2098-nav-item {
+  width: 46px !important;
+  min-width: 46px !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  padding: 4px 3px !important;
+  gap: 1px !important;
+  border-radius: 17px !important;
+  transform: none !important;
+  translate: none !important;
+}
+html.v2135-system-ui-fishing-engine-root .v2135-bottom-nav .v2098-nav-item img {
+  width: 22px !important;
+  height: 22px !important;
+  object-fit: contain !important;
+}
+html.v2135-system-ui-fishing-engine-root .v2135-bottom-nav .v2098-nav-item span {
+  font-size: 9.5px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  transform: none !important;
+}
+html.v2135-system-ui-fishing-engine-root body:not([data-screen="fishing"]) .runtime-content,
+html.v2135-system-ui-fishing-engine-root body:not([data-screen="fishing"]) .scroll-screen {
+  padding-bottom: calc(var(--v2135-safe-bottom) + 96px) !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="shop"] .v2135-shop-buy-price,
+html.v2135-system-ui-fishing-engine-root body[data-screen="shop"] .shop-price.btn-gold-cost {
+  background: var(--v2135-gold-button) !important;
+  border: 1px solid rgba(120,82,0,.48) !important;
+  box-shadow: 0 12px 24px rgba(148,93,0,.26), inset 0 1px 0 rgba(255,255,255,.95) !important;
+  color: #4d3200 !important;
+  -webkit-text-fill-color: #4d3200 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.52) !important;
+  min-width: 82px !important;
+  min-height: 44px !important;
+  border-radius: 16px !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="shop"] .shop-card.owned .v2135-shop-buy-price {
+  background: linear-gradient(180deg, rgba(236,250,255,.98), rgba(168,226,240,.94)) !important;
+  color: #316372 !important;
+  -webkit-text-fill-color: #316372 !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .bottom-nav,
+html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .v2135-bottom-nav {
+  display: none !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .fishing-screen.v2135-fishing-system-screen {
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .v2135-fishing-coach {
+  width: min(448px, calc(100vw - 24px)) !important;
+  padding: 10px 12px !important;
+  border-radius: 22px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(188,242,255,.86)) !important;
+  border: 1px solid rgba(81,215,246,.42) !important;
+  box-shadow: 0 16px 34px rgba(0,52,92,.20), inset 0 1px 0 rgba(255,255,255,.92) !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .v2135-fishing-skill-strip {
+  display: grid !important;
+  grid-template-columns: auto minmax(0,1fr) auto !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-top: 8px !important;
+  padding: 7px 9px !important;
+  border-radius: 15px !important;
+  background: rgba(255,255,255,.70) !important;
+  border: 1px solid rgba(84,215,246,.36) !important;
+  color: #073d59 !important;
+  -webkit-text-fill-color: #073d59 !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .v2135-fishing-skill-strip span,
+html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .v2135-fishing-skill-strip em {
+  font-size: 10px !important;
+  font-weight: 1000 !important;
+  color: rgba(7,61,89,.70) !important;
+  -webkit-text-fill-color: rgba(7,61,89,.70) !important;
+  white-space: nowrap !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .v2135-fishing-skill-strip strong {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 12px !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .v2135-console-readouts {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 5px !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .v2135-console-readouts span {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .fishing-screen.v2135-fishing-system-screen[data-fishing-phase="reeling"] .v2135-reel-console:not(.hidden) {
+  bottom: calc(var(--v2135-safe-bottom) + 94px) !important;
+  width: min(444px, calc(100vw - 24px)) !important;
+  max-height: 176px !important;
+  overflow: hidden !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .fishing-screen.v2135-fishing-system-screen[data-fishing-phase="reeling"] .v2135-reel-touch-zone:not(.hidden) {
+  bottom: calc(var(--v2135-safe-bottom) + 18px) !important;
+  width: min(444px, calc(100vw - 24px)) !important;
+  min-height: 66px !important;
+  border-radius: 25px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(134,231,255,.90)) !important;
+  border: 1px solid rgba(73,213,246,.50) !important;
+  box-shadow: 0 16px 30px rgba(0,58,100,.20), inset 0 1px 0 rgba(255,255,255,.94) !important;
+  transform: none !important;
+}
+html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .fishing-screen.v2135-fishing-system-screen[data-fishing-phase="reeling"] .v2135-reel-panel:not(.hidden) {
+  max-height: calc(100svh - var(--v2135-safe-top) - var(--v2135-safe-bottom) - 292px) !important;
+  overflow: hidden !important;
+}
+@media (max-width: 392px) {
+  html.v2135-system-ui-fishing-engine-root body[data-screen="village"] .v2135-world-controls {
+    width: 174px !important;
+    max-width: 174px !important;
+    grid-template-columns: repeat(2, 83px) !important;
+    gap: 7px !important;
+  }
+  html.v2135-system-ui-fishing-engine-root body[data-screen="village"] .v2135-world-controls button {
+    width: 83px !important;
+    min-width: 83px !important;
+    max-width: 83px !important;
+    min-height: 46px !important;
+  }
+  html.v2135-system-ui-fishing-engine-root body[data-screen="village"] .v2135-village-hud,
+  html.v2135-system-ui-fishing-engine-root body[data-screen="village"] .v2135-expedition-board:not(.open) {
+    max-width: calc(100vw - 196px) !important;
+  }
+  html.v2135-system-ui-fishing-engine-root .v2135-bottom-nav {
+    right: calc(var(--v2135-safe-right) + 8px) !important;
+    width: 224px !important;
+    min-width: 224px !important;
+    max-width: 224px !important;
+    gap: 6px !important;
+    padding-inline: 8px !important;
+  }
+  html.v2135-system-ui-fishing-engine-root .v2135-bottom-nav .v2098-nav-item {
+    width: 44px !important;
+    min-width: 44px !important;
+  }
+}
+@media (max-height: 700px) {
+  html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .v2135-fishing-skill-strip {
+    display: none !important;
+  }
+  html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .fishing-screen.v2135-fishing-system-screen[data-fishing-phase="reeling"] .v2135-reel-console:not(.hidden) {
+    bottom: calc(var(--v2135-safe-bottom) + 84px) !important;
+    max-height: 154px !important;
+  }
+  html.v2135-system-ui-fishing-engine-root body[data-screen="fishing"] .fishing-screen.v2135-fishing-system-screen[data-fishing-phase="reeling"] .v2135-reel-touch-zone:not(.hidden) {
+    min-height: 60px !important;
+  }
+}
