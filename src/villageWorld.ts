@@ -257,10 +257,13 @@ const V2137_TILE_TOUCH_PRECISION_LOCK = 'v2137-cautious-tile-touch-precision-no-
 const V2137_TILE_PIXEL_SIZE_MIGRATION_REQUIRED_LOCK = 'v2137-tile-pixel-size-migration-required-before-rescale';
 const V2138_TILE_TOUCH_CAUTIOUS_LOCK = 'v2138-tile-touch-cautious-score-limit-no-pixel-rescale';
 const V2138_TILE_PIXEL_SIZE_MIGRATION_REQUIRED_LOCK = 'v2138-tile-pixel-size-still-requires-save-footprint-migration';
+const V2139_TILE_TOUCH_STABILITY_LOCK = 'v2139-tile-touch-stability-no-surprise-neighbor';
+const V2139_TILE_PIXEL_SIZE_MIGRATION_PLAN_LOCK = 'v2139-tile-pixel-shrink-needs-save-footprint-npc-camera-migration';
 const V2136_FINE_PLACEMENT_SEARCH_RADIUS = 3;
 const V2137_FINE_PLACEMENT_SEARCH_RADIUS = 2;
 const V2138_FINE_PLACEMENT_SEARCH_RADIUS = 2;
 const V2138_DIAMOND_TOUCH_SCORE_LIMIT = 1.08;
+const V2139_DIAMOND_TOUCH_SCORE_LIMIT = 1.03;
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -945,9 +948,8 @@ function nearestDiamondTile(worldX: number, worldY: number): { x: number; y: num
       }
     }
   }
-  // v2.1.38: make tile taps more cautious again so micro-adjustment does not jump to a visually surprising neighbor.
-  // Full tile pixel shrink still needs a save-coordinate/building-footprint/camera-boundary migration.
-  return bestScore <= V2138_DIAMOND_TOUCH_SCORE_LIMIT ? best : base;
+  // v2.1.39: keep taps precise but avoid surprising neighbor jumps; full tile shrink still needs save/building/NPC/camera migration.
+  return bestScore <= V2139_DIAMOND_TOUCH_SCORE_LIMIT ? best : base;
 }
 
 function centerOfTile(x: number, y: number): { x: number; y: number } {
@@ -1160,6 +1162,8 @@ export class VillageWorld {
     this.root.dataset.v2131BuildPreviewConfirmLock = V2131_BUILD_PREVIEW_CONFIRM_LOCK;
     this.root.dataset.v2134ObjectClearanceLock = V2134_OBJECT_CLEARANCE_LOCK;
     this.root.dataset.v2134MicroTilePointerLock = V2134_MICRO_TILE_POINTER_LOCK;
+    this.root.dataset.v2139TileTouchStabilityLock = V2139_TILE_TOUCH_STABILITY_LOCK;
+    this.root.dataset.v2139TilePixelMigrationPlanLock = V2139_TILE_PIXEL_SIZE_MIGRATION_PLAN_LOCK;
     this.root.dataset.v2135ObjectFootprintClearanceLock = V2135_OBJECT_FOOTPRINT_CLEARANCE_LOCK;
     this.root.dataset.v2135TileSnapAssistLock = V2135_TILE_SNAP_ASSIST_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
