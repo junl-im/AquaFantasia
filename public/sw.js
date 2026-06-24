@@ -1,5 +1,5 @@
-// v2.1.43 keeps the CI package-boundary fix and adds a UI overlap, placement, fishing, menu, and HUD sweep.
-const CACHE_NAME = 'aqua-fantasia-v2.1.43-ui-overlap-placement-sweep';
+// v2.1.44 keeps the CI package-boundary fix and adds a UI overlap, placement, fishing, menu, and HUD sweep.
+const CACHE_NAME = 'aqua-fantasia-v2.1.44-ui-placement-polish-sweep';
 const ASSETS = [
   './',
   './index.html',
