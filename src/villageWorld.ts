@@ -215,7 +215,7 @@ const DAY_TALK: Record<WorldNpcRole, string[]> = {
 
 
 const ACTOR_TEXTURES: Record<Actor['role'], string> = {
-  player: './assets/v2128/characters/player/player_south_frame_01.png',
+  player: './assets/v2129/characters/player/player_south_frame_01.png',
   chief: './assets/v2047/characters/chief_south.png',
   merchant: './assets/v2047/characters/merchant_south.png',
   guild: './assets/v2047/characters/guild_south.png',
@@ -236,22 +236,22 @@ const V2124_STATE_INPUT_LOCK = 'v2124-state-input-performance-lock';
 const V2125_DIRECTION_MOTION_LOCK = 'v2125-east-motion-visual-lock';
 const V2127_DIRECTION_MOTION_AUDIT_LOCK = 'v2127-east-west-asset-motion-audit-lock';
 const V2128_TRUE_EAST_MOTION_LOCK = 'v2128-true-east-player-motion-lock';
+const V2129_PLAYER_FILENAME_DIRECTION_LOCK = 'v2129-player-filename-direction-direct-lock';
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
-  Array.from({ length: PLAYER_ACTOR_FRAME_COUNT }, (_, index) => `./assets/v2128/characters/player/player_${direction}_frame_${String(index + 1).padStart(2, '0')}.png`),
+  Array.from({ length: PLAYER_ACTOR_FRAME_COUNT }, (_, index) => `./assets/v2129/characters/player/player_${direction}_frame_${String(index + 1).padStart(2, '0')}.png`),
 ])) as Record<ActorDirection, string[]>;
 
 const PLAYER_ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
-  // v2.1.28: use the corrected v2128 player frame set.
-  // East (3 o clock) is a physically right-facing frame, so cardinal
-  // directions are identity. Keep only the user-approved 1시/11시 diagonal swap.
+  // v2.1.29: player.zip is filename-corrected by the user.
+  // Use every filename directly. Do not swap, mirror, or remap directions here.
   south: 'south',
   southeast: 'southeast',
   east: 'east',
-  northeast: 'northwest',
+  northeast: 'northeast',
   north: 'north',
-  northwest: 'northeast',
+  northwest: 'northwest',
   west: 'west',
   southwest: 'southwest',
 };
@@ -621,10 +621,7 @@ function actorDirectionQaPasses(): boolean {
 }
 
 function playerDirectionRemapQaPasses(): boolean {
-  return playerActorVisualDirection('northwest') === 'northeast'
-    && playerActorVisualDirection('northeast') === 'northwest'
-    && playerActorVisualDirection('east') === 'east'
-    && playerActorVisualDirection('west') === 'west';
+  return ACTOR_DIRECTIONS.every((direction) => playerActorVisualDirection(direction) === direction);
 }
 
 
@@ -1118,6 +1115,7 @@ export class VillageWorld {
     this.root.dataset.v2125DirectionMotionLock = V2125_DIRECTION_MOTION_LOCK;
     this.root.dataset.v2127DirectionMotionAuditLock = V2127_DIRECTION_MOTION_AUDIT_LOCK;
     this.root.dataset.v2128TrueEastMotionLock = V2128_TRUE_EAST_MOTION_LOCK;
+    this.root.dataset.v2129PlayerFilenameDirectionLock = V2129_PLAYER_FILENAME_DIRECTION_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
@@ -2073,6 +2071,7 @@ export class VillageWorld {
       knob.style.setProperty('--v2125-joystick-transform', knobTransform);
       knob.style.setProperty('--v2127-joystick-transform', knobTransform);
       knob.style.setProperty('--v2128-joystick-transform', knobTransform);
+      knob.style.setProperty('--v2129-joystick-transform', knobTransform);
       knob.style.transform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
       const strength = Math.min(1, length / radius);
       this.joystick.x = nx * strength;
@@ -2096,6 +2095,7 @@ export class VillageWorld {
       knob.style.setProperty('--v2125-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2127-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2128-joystick-transform', 'translate(-50%, -50%)');
+      knob.style.setProperty('--v2129-joystick-transform', 'translate(-50%, -50%)');
       knob.style.transform = 'translate(-50%, -50%)';
     };
     stick.addEventListener('pointerdown', (ev) => {
@@ -2669,12 +2669,12 @@ export class VillageWorld {
 
   private animateActorWalk(actor: Actor, movementAmount: number, deltaMs: number): void {
     const walking = movementAmount > 0.18;
-    if (walking) actor.walkPhase += deltaMs * 0.0068;
+    if (walking) actor.walkPhase += deltaMs * 0.0056;
     else actor.walkPhase *= 0.72;
     // v2.0.60: grounded footstep motion. The sprite's anchor stays at the feet,
     // so we do not raise the whole character off the tile.
-    const sway = walking ? Math.sin(actor.walkPhase * 0.55) * 0.035 : 0;
-    const stepSide = walking ? Math.sin(actor.walkPhase * 1.55) * 0.55 : 0;
+    const sway = walking ? Math.sin(actor.walkPhase * 0.50) * 0.026 : 0;
+    const stepSide = walking ? Math.sin(actor.walkPhase * 1.25) * 0.42 : 0;
     if (actor.body instanceof Sprite) {
       const targetH = actor.role === 'player' ? 90 : 80;
       if (actor.role === 'player') {
@@ -2692,12 +2692,12 @@ export class VillageWorld {
       actor.body.position.y = actor.groundOffset;
       actor.body.rotation = sway;
       const base = targetH / Math.max(1, actor.body.texture.height);
-      const stretch = walking ? Math.sin(actor.walkPhase * 1.55) * 0.004 : 0;
+      const stretch = walking ? Math.sin(actor.walkPhase * 1.25) * 0.0026 : 0;
       actor.body.scale.set(base * (1 + stretch * 0.35), base * (1 - stretch));
     } else {
       actor.body.rotation = sway;
     }
-    const step = walking ? Math.sin(actor.walkPhase * 1.55) : 0;
+    const step = walking ? Math.sin(actor.walkPhase * 1.25) : 0;
     const shadowPulse = walking ? 1 + Math.abs(step) * 0.028 : 1;
     actor.shadow.scale.set(shadowPulse, 1 / shadowPulse);
     actor.footContact.position.x = walking ? step * 0.65 : 0;

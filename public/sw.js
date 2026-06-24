@@ -1,5 +1,5 @@
-// v2.1.28 fixes true 3 o clock player facing, steadies walk frames, and polishes village/menu/fishing UI.
-const CACHE_NAME = 'aqua-fantasia-v2.1.28-direction-ui-fishing-correction';
+// v2.1.29 locks user-supplied filename-correct player direction frames and continues UI/fishing polish.
+const CACHE_NAME = 'aqua-fantasia-v2.1.29-player-filename-direction-lock';
 const PRECACHE = [
   "./",
   "./index.html",

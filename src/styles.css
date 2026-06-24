@@ -42175,3 +42175,131 @@ html.v2128-direction-ui-fishing-correction-root body[data-screen="fishing"] .fis
   max-height: 32px !important;
   object-fit: contain !important;
 }
+
+
+/* v2.1.29 - filename-correct player direction lock and small UI polish */
+html.v2129-player-filename-direction-root {
+  --v2129-safe-top: max(10px, env(safe-area-inset-top));
+  --v2129-safe-right: max(10px, env(safe-area-inset-right));
+  --v2129-safe-bottom: max(10px, env(safe-area-inset-bottom));
+  --v2129-safe-left: max(10px, env(safe-area-inset-left));
+  --v2129-command-width: 176px;
+  --v2129-card: linear-gradient(180deg, rgba(245,253,255,.97), rgba(210,247,255,.92));
+  --v2129-line: rgba(84, 205, 235, .42);
+  --v2129-ink: #12485f;
+  --v2129-shadow: 0 18px 44px rgba(5, 70, 105, .18), inset 0 1px 0 rgba(255,255,255,.95);
+}
+html.v2129-player-filename-direction-root body[data-screen="village"] .v2129-world-controls {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  width: var(--v2129-command-width) !important;
+  min-width: var(--v2129-command-width) !important;
+  max-width: var(--v2129-command-width) !important;
+  padding: 0 !important;
+  gap: 8px !important;
+  overflow: visible !important;
+}
+html.v2129-player-filename-direction-root body[data-screen="village"] .v2129-world-controls button {
+  width: 82px !important;
+  min-width: 82px !important;
+  max-width: 82px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  max-height: 42px !important;
+  padding: 4px 6px !important;
+  margin: 0 !important;
+  transform: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+  overflow: hidden !important;
+}
+html.v2129-player-filename-direction-root body[data-screen="village"] .v2129-world-controls :is(img, span:first-child) {
+  width: 19px !important;
+  height: 19px !important;
+  max-width: 19px !important;
+  max-height: 19px !important;
+  object-fit: contain !important;
+  overflow: hidden !important;
+}
+html.v2129-player-filename-direction-root body[data-screen="village"] .v2097-village-hud {
+  width: min(360px, calc(100vw - var(--v2129-command-width) - var(--v2129-safe-left) - var(--v2129-safe-right) - 22px)) !important;
+  max-width: calc(100vw - var(--v2129-command-width) - var(--v2129-safe-left) - var(--v2129-safe-right) - 22px) !important;
+}
+html.v2129-player-filename-direction-root body[data-screen="village"] .v2097-expedition-board:not(.open) {
+  top: calc(var(--v2129-safe-top) + 50px) !important;
+  width: min(330px, calc(100vw - var(--v2129-command-width) - var(--v2129-safe-left) - var(--v2129-safe-right) - 22px)) !important;
+  max-width: calc(100vw - var(--v2129-command-width) - var(--v2129-safe-left) - var(--v2129-safe-right) - 22px) !important;
+}
+html.v2129-player-filename-direction-root .bottom-nav.v2129-bottom-nav,
+html.v2129-player-filename-direction-root body[data-screen="village"] .bottom-nav.v2129-bottom-nav {
+  width: 214px !important;
+  min-width: 214px !important;
+  max-width: 214px !important;
+  height: 58px !important;
+  min-height: 58px !important;
+  max-height: 58px !important;
+  right: calc(var(--v2129-safe-right) + 8px) !important;
+  bottom: calc(var(--v2129-safe-bottom) + 8px) !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  padding: 5px 8px !important;
+  transform: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+html.v2129-player-filename-direction-root .bottom-nav.v2129-bottom-nav .v2098-nav-item,
+html.v2129-player-filename-direction-root .bottom-nav.v2129-bottom-nav .v2098-nav-item:active,
+html.v2129-player-filename-direction-root .bottom-nav.v2129-bottom-nav .v2098-nav-item.active,
+html.v2129-player-filename-direction-root .bottom-nav.v2129-bottom-nav .v2098-nav-item:focus {
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  transform: none !important;
+  translate: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+html.v2129-player-filename-direction-root .bottom-nav.v2129-bottom-nav img {
+  width: 26px !important;
+  height: 26px !important;
+  max-width: 26px !important;
+  max-height: 26px !important;
+}
+html.v2129-player-filename-direction-root .bottom-nav.v2129-bottom-nav span {
+  font-size: 9.4px !important;
+  line-height: 1 !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2129-player-filename-direction-root body[data-screen="village"] .v2097-joystick-knob {
+  transform: var(--v2129-joystick-transform, var(--v2128-joystick-transform, var(--v2127-joystick-transform, var(--v2125-joystick-transform, var(--v2124-joystick-transform, var(--v2123-joystick-transform, var(--v2122-joystick-transform, var(--v2121-joystick-transform, translate(-50%, -50%))))))))) !important;
+  background-image: none !important;
+}
+html.v2129-player-filename-direction-root :is(.runtime-menu-screen.v2129-runtime-page-shell .v2129-aqua-page,.v2097-character-card,.v2097-interior-card,.v2097-build-tray,.v2097-expedition-body,.game-dialog-card) {
+  background-image: var(--v2129-card) !important;
+  border: 1px solid var(--v2129-line) !important;
+  box-shadow: var(--v2129-shadow) !important;
+  color: var(--v2129-ink) !important;
+  -webkit-text-fill-color: var(--v2129-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2129-player-filename-direction-root :is(.runtime-menu-screen.v2129-runtime-page-shell .v2129-aqua-page,.v2097-character-card,.v2097-interior-card,.v2097-build-tray,.v2097-expedition-body,.game-dialog-card) * {
+  text-shadow: none !important;
+  filter: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+html.v2129-player-filename-direction-root body[data-screen="fishing"] .fishing-screen.v2129-fishing-upgrade-screen :is(.reel-panel,.v2055-reel-console,.v2053-reel-touch-zone,.v2054-reel-touch-zone) {
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  width: min(440px, calc(100vw - 28px)) !important;
+  max-width: min(440px, calc(100vw - 28px)) !important;
+}
+html.v2129-player-filename-direction-root body[data-screen="fishing"] .fishing-screen.v2129-fishing-upgrade-screen .cast-button {
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+}
