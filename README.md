@@ -1,6 +1,14 @@
-# AquaFantasia v2.1.31
+# AquaFantasia v2.1.32
 
-## v2.1.31 변경사항
+## v2.1.32 Change Log
+
+- Removed the unnecessary root `APP_VERSION` file from the full package. Runtime version data now stays in `src/data.ts`, and human-readable version history stays in `README.md`.
+- Added a premium aqua-card UI stabilization layer for cards, borders, buttons, inputs, close buttons, HUD, top controls, and the fixed right-bottom menu.
+- Added a fishing director panel with step states for cast, bite, reel, and catch so mobile portrait gameplay has a clear flow.
+- Rebalanced the fishing tension loop to be smoother and less suddenly punishing while preserving reel wind/release decision making.
+- Preserved the v2.1.29/v2.1.30/v2.1.31 player and NPC direction locks, opening-video first-start-only policy, and construction preview/confirm flow.
+
+## v2.1.32 변경사항
 
 - v2.1.29 `player.zip` 기반 플레이어 8방향 32프레임을 해시까지 다시 검증 고정했습니다.
   - `public/assets/v2129/characters/player`
@@ -46,8 +54,8 @@
 - `npm run validate`는 다음 검증을 실행합니다.
   - `tools/clean-old-patch-docs.mjs`
   - `tools/validate-clean.mjs`
-  - `tools/check-v2131-motion-ui-fishing-build-guard.mjs`
-- v2.1.31 검증 항목:
+  - `tools/check-v2132-premium-ui-fishing-stability.mjs`
+- v2.1.32 검증 항목:
   - 버전 동기화
   - CSS 괄호/중괄호/대괄호 균형
   - 플레이어 v2129 8방향 32프레임 존재 및 해시 불변

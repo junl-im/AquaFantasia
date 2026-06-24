@@ -1,5 +1,5 @@
-// v2.1.31 locks player/NPC direction mapping, fixed menus, build confirm UX, and rebuilt fishing flow.
-const CACHE_NAME = 'aqua-fantasia-v2.1.31-motion-ui-fishing-build-guard';
+// v2.1.32 stabilizes the premium aqua-card UI system, removes the root APP_VERSION file dependency, and upgrades fishing UX flow while preserving player/NPC direction locks.
+const CACHE_NAME = 'aqua-fantasia-v2.1.32-premium-ui-fishing-stability';
 const PRECACHE = [
   "./",
   "./index.html",
