@@ -1,5 +1,5 @@
-// v2.1.41 fixes CI validate at the root: npm ci may create node_modules in the workspace, but generated dependencies are allowed only as untracked install output and are still excluded from full/patch ZIP artifacts.
-const CACHE_NAME = 'aqua-fantasia-v2.1.41-ci-validate-package-boundary';
+// v2.1.42 keeps the CI package-boundary fix and adds fishing cockpit, menu page, HUD, and tile-touch polish.
+const CACHE_NAME = 'aqua-fantasia-v2.1.42-fishing-ui-page-tile-polish';
 const ASSETS = [
   './',
   './index.html',

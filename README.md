@@ -1,4 +1,22 @@
-# AquaFantasia v2.1.41
+# AquaFantasia v2.1.42
+
+## v2.1.42 Change Log
+
+- Added a v2.1.42 polish pass for the fishing cockpit, menu page shell, village HUD spacing, and cautious tile-touch precision.
+- Fishing now has a visible bite action button after a bite so the player can clearly enter the reel-gauge phase instead of relying only on hidden screen taps or auto transition.
+- The rod/bait strip, sea-lane card, cast button, reel panel, reel console, and touch zone are restyled under a new v2142 aqua card layer to reduce overlap and stray legacy UI fragments.
+- The right-top and right-bottom menu frames remain transparent while their button gaps and jitter locks are preserved.
+- Tile pixels are still not reduced; v2.1.42 tightens the diamond touch score instead because shrinking tile pixels requires save coordinates, building footprint, NPC movement, collision, and camera-boundary migration.
+- CI validate package-boundary behavior from v2.1.41 is preserved: npm ci may create node_modules in the workspace, but node_modules and generated artifacts are still blocked from full/patch ZIP packages.
+
+## v2.1.42 변경사항
+
+- 낚시 콕핏, 메뉴 페이지 셸, 마을 HUD 간격, 타일 터치 정밀도를 한 번 더 다듬었습니다.
+- 입질 후 눈에 보이는 `릴링 시작` 버튼을 추가해, 게이지 화면 진입이 자동 전환이나 숨은 화면 탭에만 의존하지 않게 했습니다.
+- 로드/미끼 스트립, 바다물길 카드, 캐스팅 버튼, 릴 패널, 릴 콘솔, 터치존을 v2142 아쿠아 카드 레이어로 재정리해 겹침과 구형 UI 조각 노출을 줄였습니다.
+- 우측 상단/하단 메뉴는 투명 프레임 정책을 유지하면서 버튼 간격과 눌림 흔들림 방지를 보강했습니다.
+- 타일 픽셀 축소는 아직 적용하지 않았습니다. 대신 다이아몬드 터치 점수를 더 신중하게 조정했습니다. 타일 픽셀 축소는 세이브 좌표, 건물 footprint, NPC 이동, 충돌 판정, 카메라 경계 마이그레이션이 함께 필요합니다.
+- v2.1.41의 CI validate 패키지 경계 수정은 유지했습니다. `npm ci`가 만든 `node_modules`는 작업환경 의존성으로 허용하지만, full/patch ZIP에는 계속 포함하지 않습니다.
 
 ## v2.1.41 Change Log
 

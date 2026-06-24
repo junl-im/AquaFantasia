@@ -261,12 +261,15 @@ const V2139_TILE_TOUCH_STABILITY_LOCK = 'v2139-tile-touch-stability-no-surprise-
 const V2139_TILE_PIXEL_SIZE_MIGRATION_PLAN_LOCK = 'v2139-tile-pixel-shrink-needs-save-footprint-npc-camera-migration';
 const V2140_TILE_TOUCH_STABILITY_LOCK = 'v2140-tile-touch-score-one-point-zero-no-neighbor-surprise';
 const V2140_TILE_PIXEL_SIZE_MIGRATION_PLAN_LOCK = 'v2140-tile-pixel-shrink-deferred-until-save-footprint-npc-camera-migration';
+const V2142_TILE_TOUCH_PRECISION_LOCK = 'v2142-tile-touch-score-zero-point-nine-eight-cautious-placement';
+const V2142_TILE_PIXEL_SIZE_MIGRATION_PLAN_LOCK = 'v2142-tile-pixel-shrink-still-deferred-save-footprint-npc-camera-migration';
 const V2136_FINE_PLACEMENT_SEARCH_RADIUS = 3;
 const V2137_FINE_PLACEMENT_SEARCH_RADIUS = 2;
 const V2138_FINE_PLACEMENT_SEARCH_RADIUS = 2;
 const V2138_DIAMOND_TOUCH_SCORE_LIMIT = 1.08;
 const V2139_DIAMOND_TOUCH_SCORE_LIMIT = 1.03;
 const V2140_DIAMOND_TOUCH_SCORE_LIMIT = 1.0;
+const V2142_DIAMOND_TOUCH_SCORE_LIMIT = 0.98;
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -951,10 +954,10 @@ function nearestDiamondTile(worldX: number, worldY: number): { x: number; y: num
       }
     }
   }
-  // v2.1.40: only accept the nearest diamond while the pointer is still inside the diamond.
-  // This keeps touch micro-adjustment precise without surprise neighbor jumps.
-  // Full tile shrink is deferred until save/building/NPC/camera migration is implemented.
-  return bestScore <= V2140_DIAMOND_TOUCH_SCORE_LIMIT ? best : base;
+  // v2.1.42: keep the tile pixels unchanged but tighten the final diamond acceptance.
+  // This reduces accidental neighbor picks without changing save/building/NPC/camera coordinates.
+  // Full tile shrink is still deferred until save/building/NPC/camera migration is implemented.
+  return bestScore <= V2142_DIAMOND_TOUCH_SCORE_LIMIT ? best : base;
 }
 
 function centerOfTile(x: number, y: number): { x: number; y: number } {
@@ -1171,6 +1174,8 @@ export class VillageWorld {
     this.root.dataset.v2139TilePixelMigrationPlanLock = V2139_TILE_PIXEL_SIZE_MIGRATION_PLAN_LOCK;
     this.root.dataset.v2140TileTouchStabilityLock = V2140_TILE_TOUCH_STABILITY_LOCK;
     this.root.dataset.v2140TilePixelMigrationPlanLock = V2140_TILE_PIXEL_SIZE_MIGRATION_PLAN_LOCK;
+    this.root.dataset.v2142TileTouchPrecisionLock = V2142_TILE_TOUCH_PRECISION_LOCK;
+    this.root.dataset.v2142TilePixelMigrationPlanLock = V2142_TILE_PIXEL_SIZE_MIGRATION_PLAN_LOCK;
     this.root.dataset.v2135ObjectFootprintClearanceLock = V2135_OBJECT_FOOTPRINT_CLEARANCE_LOCK;
     this.root.dataset.v2135TileSnapAssistLock = V2135_TILE_SNAP_ASSIST_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
