@@ -1,5 +1,5 @@
-// v2.1.27 locks player east/west visual mapping, slows walk animation, and polishes opening/menu/fishing UI.
-const CACHE_NAME = 'aqua-fantasia-v2.1.27-direction-motion-ui-fishing-audit';
+// v2.1.28 fixes true 3 o clock player facing, steadies walk frames, and polishes village/menu/fishing UI.
+const CACHE_NAME = 'aqua-fantasia-v2.1.28-direction-ui-fishing-correction';
 const PRECACHE = [
   "./",
   "./index.html",
