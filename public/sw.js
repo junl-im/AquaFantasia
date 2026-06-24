@@ -1,5 +1,5 @@
-// v2.1.32 stabilizes the premium aqua-card UI system, removes the root APP_VERSION file dependency, and upgrades fishing UX flow while preserving player/NPC direction locks.
-const CACHE_NAME = 'aqua-fantasia-v2.1.32-premium-ui-fishing-stability';
+// v2.1.34 hardens the premium aqua-card UI engine, keeps the root APP_VERSION file removed, and improves fishing input/fail-safe feedback while preserving player/NPC direction locks.
+const CACHE_NAME = 'aqua-fantasia-v2.1.34-object-grid-shop-fishing-ui-stability';
 const PRECACHE = [
   "./",
   "./index.html",

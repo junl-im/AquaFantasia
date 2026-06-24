@@ -1,4 +1,37 @@
-# AquaFantasia v2.1.32
+# AquaFantasia v2.1.34
+
+## v2.1.34 Change Log
+
+- Added a v2.1.34 object-grid/shop/fishing UI stability pass.
+- Kept the existing 40 x 40 village save grid stable, but improved tile targeting with a wider diamond-hit search instead of forcing a risky tile-size migration.
+- Added a 1-tile visual clearance rule for new building/object placement so village objects are less likely to visually overlap.
+- Rebalanced HUD and frontier/expedition bar spacing so they sit close enough to read but do not touch or collide with the top-right command bar.
+- Reworked the shop purchase price badge so buy amounts use a visible gold button-style surface instead of blending into the card background.
+- Added a clearer fishing coach lane for catch/tension/stamina, softened sudden failure pressure, and kept wind/release/neutral input stability from v2.1.33.
+- Preserved player/NPC direction locks, first-start-only opening video, and construction preview/confirm flow.
+
+## v2.1.34 변경사항
+
+- 마을 오브젝트 겹침 방지를 보강했습니다.
+  - 새 건물/오브젝트 배치 시 기존 건물/장식 주변 1타일 안전 간격을 검사합니다.
+  - 배치 불가 안내 문구에 안전 간격 사유를 포함했습니다.
+- 타일 클릭 정밀도를 개선했습니다.
+  - 저장 데이터와 기존 건물 좌표가 깨질 수 있어 이번 버전에서는 타일 픽셀 자체를 줄이는 대규모 마이그레이션은 하지 않았습니다.
+  - 대신 다이아몬드 타일 판정 검색 범위를 넓혀 모바일 터치 미세조정을 더 안정적으로 만들었습니다.
+- HUD와 개척 바 간격을 다시 조정했습니다.
+  - 너무 붙지 않게 1차 간격을 확보하고, 우측 상단 조작 버튼과 겹치지 않도록 최대 폭을 다시 제한했습니다.
+- 상점 구매 금액 표시를 고쳤습니다.
+  - 가격 배지를 금색 버튼형 표면으로 분리해 배경과 섞여 보이지 않는 문제를 줄였습니다.
+- 낚시게임을 추가 보강했습니다.
+  - 코치 패널에 포획/텐션/저항 요약 레인을 추가했습니다.
+  - 극단 장력 실패까지의 복구 여유를 조금 더 늘렸습니다.
+  - 포획 게이지 상승 체감을 조금 강화하고 실패 감소량을 완화했습니다.
+- 기존 잠금 유지:
+  - v2.1.29 플레이어 방향 파일명 identity 매핑 유지
+  - NPC 방향 identity 매핑 유지
+  - 오프닝 영상 최초 시작 전용 유지
+  - 건설 프리뷰 → 중앙 확인 팝업 → 건설/취소 플로우 유지
+  - 루트 APP_VERSION 파일 제거 정책 유지
 
 ## v2.1.32 Change Log
 
@@ -54,8 +87,8 @@
 - `npm run validate`는 다음 검증을 실행합니다.
   - `tools/clean-old-patch-docs.mjs`
   - `tools/validate-clean.mjs`
-  - `tools/check-v2132-premium-ui-fishing-stability.mjs`
-- v2.1.32 검증 항목:
+  - `tools/check-v2133-object-grid-shop-fishing-ui-stability.mjs`
+- v2.1.34 검증 항목:
   - 버전 동기화
   - CSS 괄호/중괄호/대괄호 균형
   - 플레이어 v2129 8방향 32프레임 존재 및 해시 불변
