@@ -1,5 +1,5 @@
-// v2.1.49 keeps CI validate stability and polishes UI composition, clipped icons, single-frame controls, menu cards, centered fishing cockpit, and cautious tile hit scoring.
-const CACHE_NAME = 'aqua-fantasia-v2.1.49-ui-composition-polish';
+// v2.1.50 keeps CI validate stability and tightens UI overlap, icon containment, single-frame controls, menu cards, expedition/shop spacing, centered fishing cockpit, and cautious tile hit scoring.
+const CACHE_NAME = 'aqua-fantasia-v2.1.50-ui-overlap-placement-beauty-polish';
 const ASSETS = [
   './',
   './index.html',
