@@ -1,4 +1,24 @@
-# AquaFantasia v2.1.40
+# AquaFantasia v2.1.41
+
+## v2.1.41 Change Log
+
+- Fixed the GitHub Actions validate failure root cause. `npm ci` creates `node_modules` before `npm run validate`, so validation now treats root `node_modules` as allowed workspace dependency output instead of a package-source error.
+- Added package boundary validation: `node_modules` may exist after install, but it must not be tracked by Git and must not be included in full/patch ZIP artifacts.
+- Added a root `.gitignore` guard for `node_modules/`, `dist/`, `reports/`, `backup/`, `logs/`, `_NOTES/`, `APP_VERSION`, and install logs.
+- Kept `npm-install.log` cleanup in `clean-old-patch-docs` so CI diagnostics do not remain as stale package artifacts.
+- Preserved the v2.1.40 fishing/UI/tile/HUD/menu behavior while only correcting the CI validate/package boundary problem.
+
+## v2.1.41 변경사항
+
+- GitHub Actions validate 실패 원인을 원천 수정했습니다.
+  - 실패 원인: `npm ci`가 정상적으로 `node_modules`를 만든 뒤 `npm run validate`가 실행되는데, 기존 v2.1.40 검증 스크립트가 이 정상 의존성 폴더까지 금지 산출물로 처리했습니다.
+  - 수정: `npm ci`가 만든 node_modules는 작업환경 의존성으로 허용합니다. npm ci가 만든 node_modules는 작업환경 의존성으로 허용합니다.
+- 패키지 경계 검증을 분리했습니다.
+  - node_modules가 Git에 추적되거나 full/patch ZIP에 들어가는 것은 계속 차단합니다.
+  - 즉, 로컬/CI 작업 폴더의 `node_modules`는 허용하지만 배포 산출물에는 절대 포함하지 않는 구조입니다.
+- `.gitignore`를 추가해 `node_modules/`, `dist/`, `reports/`, `backup/`, `logs/`, `_NOTES/`, `APP_VERSION`, `npm-install.log` 같은 파일이 커밋되지 않도록 고정했습니다.
+- `npm-install.log는 clean-old-patch-docs에서 제거`되도록 기존 정리 흐름을 유지했습니다.
+- 낚시/UI/타일/HUD/메뉴 동작은 v2.1.40 상태를 유지하고, 이번 패치는 validate 원천 수정과 패키지 경계 안정화에 집중했습니다.
 
 ## v2.1.40 Change Log
 

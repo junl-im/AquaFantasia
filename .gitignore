@@ -1,0 +1,13 @@
+# AquaFantasia source repository guard
+# Dependencies and generated outputs must never be committed or packed.
+node_modules/
+dist/
+reports/
+backup/
+logs/
+_NOTES/
+AquaFantasia_backup*/
+APP_VERSION
+*.log
+npm-install.log
+.DS_Store

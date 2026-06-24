@@ -1,5 +1,5 @@
-// v2.1.40 keeps the root APP_VERSION file removed and prioritizes a clearer fishing playfield, visible reel gauges, transparent menu docks, wider HUD/frontier spacing, safer tile taps, and polished aqua card pages without risky tile-size migration.
-const CACHE_NAME = 'aqua-fantasia-v2.1.40-fishing-menu-ui-tune';
+// v2.1.41 fixes CI validate at the root: npm ci may create node_modules in the workspace, but generated dependencies are allowed only as untracked install output and are still excluded from full/patch ZIP artifacts.
+const CACHE_NAME = 'aqua-fantasia-v2.1.41-ci-validate-package-boundary';
 const ASSETS = [
   './',
   './index.html',

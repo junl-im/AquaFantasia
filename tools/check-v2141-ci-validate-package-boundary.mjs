@@ -1,33 +1,71 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 
 const root = process.cwd();
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 const readJson = (file) => JSON.parse(read(file));
-const fail = (message) => { console.error(`[v2140] ${message}`); process.exit(1); };
+const fail = (message) => { console.error(`[v2141] ${message}`); process.exit(1); };
 const assertIncludes = (file, needle, label = needle) => { if (!read(file).includes(needle)) fail(`${file} missing ${label}`); };
 const assertFile = (file) => { if (!fs.existsSync(path.join(root, file))) fail(`missing file: ${file}`); };
 const sha256 = (file) => crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex');
 
 const pkg = readJson('package.json');
 const lock = readJson('package-lock.json');
-if (pkg.version !== '2.1.40') fail(`package.json version is ${pkg.version}`);
-if (lock.version !== '2.1.40' || lock.packages?.['']?.version !== '2.1.40') fail('package-lock.json version mismatch');
-assertIncludes('src/data.ts', "APP_VERSION = '2.1.40'", 'APP_VERSION 2.1.40');
-assertIncludes('src/data.ts', 'aqua-fantasia-v2.1.40-fishing-menu-ui-tune', 'v2.1.40 cache name');
-assertIncludes('public/sw.js', 'aqua-fantasia-v2.1.40-fishing-menu-ui-tune', 'service worker cache');
-assertIncludes('public/offline.html', 'v2.1.40', 'offline badge');
-assertIncludes('README.md', '# AquaFantasia v2.1.40', 'README title v2.1.40');
+if (pkg.version !== '2.1.41') fail(`package.json version is ${pkg.version}`);
+if (lock.version !== '2.1.41' || lock.packages?.['']?.version !== '2.1.41') fail('package-lock.json version mismatch');
+assertIncludes('src/data.ts', "APP_VERSION = '2.1.41'", 'APP_VERSION 2.1.41');
+assertIncludes('src/data.ts', 'aqua-fantasia-v2.1.41-ci-validate-package-boundary', 'v2.1.41 cache name');
+assertIncludes('public/sw.js', 'aqua-fantasia-v2.1.41-ci-validate-package-boundary', 'service worker cache');
+assertIncludes('public/offline.html', 'v2.1.41', 'offline badge');
+assertIncludes('README.md', '# AquaFantasia v2.1.41', 'README title v2.1.41');
 if (fs.existsSync(path.join(root, 'APP_VERSION'))) fail('root APP_VERSION file must not exist');
 
 const rootMarkdown = fs.readdirSync(root).filter((name) => /\.md$/i.test(name));
 if (rootMarkdown.length !== 1 || rootMarkdown[0] !== 'README.md') fail(`root markdown must be README.md only: ${rootMarkdown.join(', ')}`);
-// v2.1.41 backport: npm ci legitimately creates node_modules before validate in CI.
-// Keep generated source artifacts blocked, but do not fail just because dependencies are installed.
-for (const name of ['dist', 'reports', 'backup', 'logs', '_NOTES', 'AquaFantasia_backup_v1']) {
+
+// v2.1.41 root fix:
+// npm ci legitimately creates node_modules before validate in GitHub Actions.
+// That dependency folder is allowed as untracked workspace state, but generated folders
+// other than node_modules remain forbidden, and node_modules must still never be tracked/packed.
+const generatedStillForbiddenAtRoot = ['dist', 'reports', 'backup', 'logs', '_NOTES', 'AquaFantasia_backup_v1'];
+for (const name of generatedStillForbiddenAtRoot) {
   if (fs.existsSync(path.join(root, name))) fail(`forbidden generated folder/file found: ${name}`);
 }
+if (fs.existsSync(path.join(root, 'node_modules'))) {
+  const st = fs.statSync(path.join(root, 'node_modules'));
+  if (!st.isDirectory()) fail('node_modules must be a directory when present');
+}
+
+const gitignore = read('.gitignore');
+for (const token of ['node_modules/', 'dist/', 'reports/', 'backup/', 'logs/', '_NOTES/', 'APP_VERSION', '*.log', 'npm-install.log']) {
+  if (!gitignore.includes(token)) fail(`.gitignore missing ${token}`);
+}
+
+function checkTrackedGeneratedArtifacts() {
+  try {
+    const output = execFileSync('git', ['ls-files', '-z'], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+    if (!output) return;
+    const tracked = output.split('\0').filter(Boolean).map((file) => file.replace(/\\/g, '/'));
+    const bad = tracked.filter((file) => (
+      file === 'APP_VERSION' ||
+      file === 'npm-install.log' ||
+      file.endsWith('.log') ||
+      file.startsWith('node_modules/') ||
+      file.startsWith('dist/') ||
+      file.startsWith('reports/') ||
+      file.startsWith('backup/') ||
+      file.startsWith('logs/') ||
+      file.startsWith('_NOTES/') ||
+      /^AquaFantasia_backup/i.test(file)
+    ));
+    if (bad.length) fail(`generated artifact is tracked by git: ${bad.slice(0, 20).join(', ')}`);
+  } catch {
+    // ZIP validation runs outside a git checkout. In that case the ZIP artifact tests are the package boundary.
+  }
+}
+checkTrackedGeneratedArtifacts();
 
 function checkCssBalance(file) {
   const text = read(file);
@@ -91,9 +129,8 @@ for (const token of [
   '캐스팅 시작',
   'failureRecoveryTimer >= 1.62',
 ]) {
-  if (!main.includes(token)) fail(`src/main.ts missing v2.1.40 token: ${token}`);
+  if (!main.includes(token)) fail(`src/main.ts missing inherited v2.1.40 UI token: ${token}`);
 }
-
 
 for (const token of [
   'V2140_TILE_TOUCH_STABILITY_LOCK',
@@ -106,9 +143,8 @@ for (const token of [
   'const TILE_W = 80',
   'const TILE_H = 40',
 ]) {
-  if (!village.includes(token)) fail(`src/villageWorld.ts missing v2.1.40 token: ${token}`);
+  if (!village.includes(token)) fail(`src/villageWorld.ts missing inherited v2.1.40 tile token: ${token}`);
 }
-
 
 for (const token of [
   'v2140-fishing-menu-ui-tune-root',
@@ -129,23 +165,19 @@ for (const token of [
   '--v2140-reel-reserved',
   'body[data-screen="fishing"] .bottom-nav',
 ]) {
-  if (!styles.includes(token)) fail(`src/styles.css missing v2.1.40 token: ${token}`);
+  if (!styles.includes(token)) fail(`src/styles.css missing inherited v2.1.40 style token: ${token}`);
 }
-
 
 for (const token of [
-  '낚시 화면을 최우선으로 다시 다듬었습니다',
-  '로드/미끼 장비 영역과 바다물길 카드를 분리',
-  '게이지와 조작 버튼을 우선 표시',
-  '우측 상단 메뉴바의 테이블성 배경/테두리를 더 투명하게',
-  'HUD 길이가 짧아 보이지 않도록',
-  '개척 열림 페이지의 카드 표면',
-  '타일 픽셀 축소는 아직 적용하지 않았습니다',
-  '세이브 좌표, 건물 footprint, 충돌 판정, NPC 이동, 카메라 경계 마이그레이션',
+  'validate 원천 수정',
+  'npm ci가 만든 node_modules는 작업환경 의존성으로 허용',
+  'node_modules가 Git에 추적되거나 full/patch ZIP에 들어가는 것은 계속 차단',
+  'GitHub Actions validate 실패 원인',
+  '패키지 경계 검증',
+  'npm-install.log는 clean-old-patch-docs에서 제거',
 ]) {
-  if (!readme.includes(token)) fail(`README.md missing v2.1.40 note: ${token}`);
+  if (!readme.includes(token)) fail(`README.md missing v2.1.41 note: ${token}`);
 }
-
 
 const directions = ['south','southeast','east','northeast','north','northwest','west','southwest'];
 const playerDir = 'public/assets/v2129/characters/player';
@@ -193,9 +225,9 @@ if (!styles.includes('.v2131-opening-cinematic::before') || !styles.includes('co
 if (!styles.includes('display: none !important;') || !styles.includes('.v2139-hidden-legacy-guide')) fail('legacy fishing guide is not hidden by CSS');
 
 const forbidden = ['packages.applied-caas', 'applied-caas-gateway', '10.192.', 'internal.api.openai'];
-for (const file of ['package.json', 'package-lock.json', 'src/data.ts', 'src/main.ts', 'src/villageWorld.ts', 'src/styles.css', 'public/sw.js', 'public/offline.html', 'README.md']) {
+for (const file of ['package.json', 'package-lock.json', 'src/data.ts', 'src/main.ts', 'src/villageWorld.ts', 'src/styles.css', 'public/sw.js', 'public/offline.html', 'README.md', '.npmrc']) {
   const text = read(file);
   for (const token of forbidden) if (text.includes(token)) fail(`${file} contains forbidden token ${token}`);
 }
 
-console.log('[v2140] fishing/menu UI tune guard passed');
+console.log('[v2141] CI validate/package boundary guard passed');
