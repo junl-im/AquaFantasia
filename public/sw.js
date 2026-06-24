@@ -1,5 +1,5 @@
-// v2.1.44 keeps the CI package-boundary fix and adds a UI overlap, placement, fishing, menu, and HUD sweep.
-const CACHE_NAME = 'aqua-fantasia-v2.1.44-ui-placement-polish-sweep';
+// v2.1.45 keeps the CI package-boundary fix and polishes icon containment, page title ghosts, fishing sea-lane duplication, and centered reel layout.
+const CACHE_NAME = 'aqua-fantasia-v2.1.45-icon-fishing-page-polish';
 const ASSETS = [
   './',
   './index.html',

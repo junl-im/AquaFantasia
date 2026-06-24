@@ -1,4 +1,28 @@
-# AquaFantasia v2.1.44
+# AquaFantasia v2.1.45
+
+## v2.1.45 Change Log
+
+- Added a v2.1.45 icon/fishing/page polish pass for bottom dock icon containment, right-top control frame cleanup, page title ghost removal, shop text readability, expedition route card styling, and fishing cockpit centering.
+- Cleaned the Home/Bag/Quest/Map dock icon PNGs so neighboring sprite fragments no longer peek from the top or sides, then clipped each dock button with proportional translucent aqua borders.
+- Right-top village controls now keep only the proportional icon button border. The outer table-like background/frame is removed and button spacing is balanced.
+- Runtime pages hide the old generated background title pseudo-element so Bag, Quest, Map, Shop, and related pages no longer show duplicate title text behind the real HUD title.
+- Expedition route/action cards, including 항로 조사 and 후보지 차트 sections, now use the same aqua-card treatment instead of loose floating text.
+- Shop item cards use a safer grid and gold CTA price badge so item names/descriptions are not covered by the buy amount.
+- Fishing keeps a single sea-lane card, hides legacy usage/director/prop fragments, reduces prep clutter, and hard-centers the reeling panel, console, and touch zone to prevent the main game UI from drifting off the left edge.
+- Tile pixels are still not reduced. v2.1.45 tightens the diamond touch score to 0.952 but keeps the 80x40 save grid until save coordinates, building footprints, NPC movement, collision, and camera boundaries can be migrated safely.
+- The `npm ci` generated `node_modules` folder is still allowed as a local/CI working dependency, while ZIP/package boundaries continue to reject generated artifacts.
+
+## v2.1.45 변경사항
+
+- 하단 홈/가방/퀘스트/지도 아이콘에서 옆쪽/위쪽 다른 그림 조각이 보이던 PNG를 정리하고, 버튼 내부에서 다시 새지 않도록 비례형 투명 아쿠아 테두리와 클리핑을 적용했습니다.
+- 우측 상단 메뉴바는 3중 구조처럼 보이던 외부 배경/테이블 테두리를 제거하고, 아이콘을 감싸는 버튼 테두리만 작고 투명하게 남겼습니다.
+- 가방, 퀘스트, 지도, 상점 등 메뉴 페이지 뒤쪽에 중복으로 보이던 페이지 제목 pseudo-title을 제거했습니다.
+- 개척 화면의 항로 조사, 후보지 차트, 출항 후보지 카드가 덩그러니 글만 놓인 느낌이 나지 않도록 같은 아쿠아 카드 톤으로 정리했습니다.
+- 상점 아이템 카드는 글 영역과 가격 버튼 영역을 분리해 이름/설명이 구매 금액 배지에 가려지지 않도록 했습니다.
+- 낚시 화면은 바다물길 표기를 하나로 정리하고, 구형 사용법/프레임/소품 조각을 더 강하게 차단했으며, 입질 후 릴링 본 게임 패널이 왼쪽 화면 밖으로 밀려나지 않도록 중앙 고정 레이아웃을 적용했습니다.
+- 타일 픽셀 축소는 아직 적용하지 않았습니다. v2.1.45는 다이아몬드 터치 점수를 0.952로 더 신중하게 조정하지만, 80x40 세이브 그리드는 유지합니다. 타일 픽셀 축소는 세이브 좌표, 건물 footprint, NPC 이동, 충돌 판정, 카메라 경계 마이그레이션이 필요합니다.
+- `npm ci`가 만든 `node_modules`는 작업환경 의존성으로 허용하지만, full/patch ZIP과 패키지 경계에는 산출물이 들어가지 않도록 계속 차단합니다. node_modules가 Git에 추적되거나 full/patch ZIP에 들어가는 것은 계속 차단합니다.
+
 
 ## v2.1.44 Change Log
 
