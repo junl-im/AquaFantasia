@@ -271,6 +271,7 @@ const V2147_UI_OVERLAP_LAYOUT_FISHING_POLISH_LOCK = 'v2147-ui-overlap-layout-fis
 const V2148_UI_OVERLAP_LAYOUT_SWEEP_LOCK = 'v2148-ui-overlap-layout-sweep-touch-cautious-no-tile-shrink';
 const V2149_UI_COMPOSITION_POLISH_LOCK = 'v2149-ui-composition-polish-touch-cautious-no-tile-shrink';
 const V2150_UI_OVERLAP_PLACEMENT_BEAUTY_LOCK = 'v2150-ui-overlap-placement-beauty-touch-cautious-no-tile-shrink';
+const V2151_LAYOUT_COMPOSITION_FISHING_UI_LOCK = 'v2151-layout-composition-fishing-ui-touch-cautious-no-tile-shrink';
 const V2136_FINE_PLACEMENT_SEARCH_RADIUS = 3;
 const V2137_FINE_PLACEMENT_SEARCH_RADIUS = 2;
 const V2138_FINE_PLACEMENT_SEARCH_RADIUS = 2;
@@ -286,6 +287,7 @@ const V2147_DIAMOND_TOUCH_SCORE_LIMIT = 0.948;
 const V2148_DIAMOND_TOUCH_SCORE_LIMIT = 0.946;
 const V2149_DIAMOND_TOUCH_SCORE_LIMIT = 0.944;
 const V2150_DIAMOND_TOUCH_SCORE_LIMIT = 0.942;
+const V2151_DIAMOND_TOUCH_SCORE_LIMIT = 0.940;
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -970,10 +972,10 @@ function nearestDiamondTile(worldX: number, worldY: number): { x: number; y: num
       }
     }
   }
-  // v2.1.49: keep tile pixels unchanged and only tighten the diamond hit score a tiny bit.
+  // v2.1.51: keep tile pixels unchanged and only tighten the diamond hit score a tiny bit.
   // This reduces accidental neighbor picks without changing save/building/NPC/camera coordinates.
   // Full tile shrink remains deferred until save/building/NPC/camera migration is implemented.
-  return bestScore <= V2150_DIAMOND_TOUCH_SCORE_LIMIT ? best : base;
+  return bestScore <= V2151_DIAMOND_TOUCH_SCORE_LIMIT ? best : base;
 }
 
 function centerOfTile(x: number, y: number): { x: number; y: number } {
@@ -1217,6 +1219,7 @@ export class VillageWorld {
     this.root.dataset.v2148UiOverlapLayoutSweepLock = V2148_UI_OVERLAP_LAYOUT_SWEEP_LOCK;
     this.root.dataset.v2149UiCompositionPolishLock = V2149_UI_COMPOSITION_POLISH_LOCK;
     this.root.dataset.v2150UiOverlapPlacementBeautyLock = V2150_UI_OVERLAP_PLACEMENT_BEAUTY_LOCK;
+    this.root.dataset.v2151LayoutCompositionFishingUiLock = V2151_LAYOUT_COMPOSITION_FISHING_UI_LOCK;
     this.root.dataset.v219UiTouchShopFishingAudit = 'v219-foot-biased-touch-shop-route';
     this.root.classList.add('v218-village-touch-repaired', 'v219-village-touch-shop-repaired', 'v2134-village-object-clearance-ready', 'v2135-village-placement-engine-ready', 'v2136-village-placement-assist-ready', 'v2138-village-touch-cautious-ready', 'v2143-village-overlap-placement-audit-ready', 'v2145-village-icon-page-polish-ready', 'v2146-village-ui-overlap-icon-polish-ready', 'v2147-village-ui-overlap-layout-polish-ready');
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트·시각 간격·근접 타일 보정 기준으로 안전하게 배치됩니다.');
