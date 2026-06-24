@@ -1,4 +1,28 @@
-# AquaFantasia v2.1.45
+# AquaFantasia v2.1.46
+
+## v2.1.46 Change Log
+
+- Added a v2.1.46 overlap/icon/fishing polish pass with shorter reporting but the same package-boundary validation discipline.
+- Rebuilt the Home/Bag/Quest/Map dock PNGs as clean 128x128 transparent aqua icons so neighboring sprite fragments cannot peek through the top or sides.
+- Right-top village controls now use one translucent proportional button frame only. The outer table/backplate layer is removed, button pseudo-frames are suppressed, and spacing is fixed in a 3x2 grid.
+- Runtime page ghost titles are removed at the DOM data-attribute level and with a final CSS guard, so Bag, Quest, Map, Shop, and related pages keep only the real HUD title.
+- Shop cards reserve a separate text column and gold price CTA column so item names/descriptions are not covered by the purchase amount.
+- Fishing prep is decluttered to one sea-lane card, one loadout strip, one coach card, and one casting CTA. Duplicate route/priority bars and legacy frame fragments are hidden.
+- Fishing reeling mode hides prep cards entirely and hard-centers the reel panel, console, and touch zone with viewport-width bounds so the main game UI cannot drift off the left edge.
+- Tile pixels are still not reduced. v2.1.46 tightens the diamond touch score to 0.950 while keeping the 80x40 save grid until save coordinates, building footprints, NPC movement, collision, and camera boundaries can be migrated safely.
+- `npm ci` generated `node_modules` remains allowed as a local/CI working dependency, while full/patch ZIP boundaries continue to reject generated artifacts.
+
+## v2.1.46 변경사항
+
+- 최종 보고는 짧게 줄이되, 실제 패키지/검증 경계는 유지하는 v2.1.46 겹침/아이콘/낚시 정리 패스를 추가했습니다.
+- 홈/가방/퀘스트/지도 하단 아이콘 PNG를 깨끗한 128x128 투명 아쿠아 아이콘으로 다시 만들어, 옆쪽/위쪽 다른 이미지 조각이 보일 여지를 없앴습니다.
+- 우측 상단 마을 메뉴는 아이콘을 감싸는 반투명 버튼 프레임 1개만 남기고, 뒤쪽 테이블/배경 테두리와 버튼 pseudo-frame을 차단했습니다. 배열은 3x2 그리드로 고정했습니다.
+- 가방, 퀘스트, 지도, 상점 등 메뉴 페이지의 뒷배경 제목 잔상은 DOM 데이터 속성과 CSS 가드 양쪽에서 제거해 실제 HUD 제목만 보이게 했습니다.
+- 상점 아이템 카드는 글 영역과 골드 구매 버튼 영역을 확실히 분리해 이름/설명이 금액 버튼에 가려지는 느낌을 줄였습니다.
+- 낚시 준비 화면은 바다물길 카드 1개, 장비 스트립 1개, 코치 카드 1개, 캐스팅 버튼 1개만 보이도록 줄이고 중복 route/priority 바와 구형 프레임 조각을 숨겼습니다.
+- 낚시 릴링 모드에서는 준비 카드들을 모두 숨기고, 릴 패널/콘솔/터치존을 화면 중앙 기준으로 고정해 본 게임 UI가 왼쪽 화면 밖으로 밀려나지 않도록 했습니다.
+- 타일 픽셀 축소는 아직 적용하지 않았습니다. v2.1.46은 다이아몬드 터치 점수를 0.950으로 조정하지만, 80x40 세이브 그리드는 유지합니다. 타일 픽셀 축소는 세이브 좌표, 건물 footprint, NPC 이동, 충돌 판정, 카메라 경계 마이그레이션이 필요합니다.
+- `npm ci`가 만든 `node_modules`는 작업환경 의존성으로 허용하지만, full/patch ZIP과 패키지 경계에는 산출물이 들어가지 않도록 계속 차단합니다.
 
 ## v2.1.45 Change Log
 
