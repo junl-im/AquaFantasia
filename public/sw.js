@@ -1,5 +1,5 @@
-// v2.1.51 keeps CI validate stability and tightens UI overlap, icon containment, single-frame controls, menu cards, expedition/shop spacing, centered fishing cockpit, and cautious tile hit scoring.
-const CACHE_NAME = 'aqua-fantasia-v2.1.51-layout-composition-fishing-ui-polish';
+// v2.1.52 compacts the right-top action menu and locks the fishing battle gauges/buttons into a visible fixed cockpit.
+const CACHE_NAME = 'aqua-fantasia-v2.1.52-compact-top-menu-visible-fishing-gauge';
 const ASSETS = [
   './',
   './index.html',
