@@ -246,6 +246,8 @@ const V2128_TRUE_EAST_MOTION_LOCK = 'v2128-true-east-player-motion-lock';
 const V2129_PLAYER_FILENAME_DIRECTION_LOCK = 'v2129-player-filename-direction-direct-lock';
 const V2130_PLAYER_MOTION_IMMUTABLE_LOCK = 'v2130-player-motion-immutable-locked';
 const V2130_BUILD_CONFIRM_FLOW_LOCK = 'v2130-build-confirm-placement-lock';
+const V2131_PLAYER_NPC_DIRECTION_GUARD = 'v2131-player-npc-direction-identity-no-flip-guard';
+const V2131_BUILD_PREVIEW_CONFIRM_LOCK = 'v2131-build-preview-confirm-toast-flow-lock';
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -1128,6 +1130,8 @@ export class VillageWorld {
     this.root.dataset.v2129PlayerFilenameDirectionLock = V2129_PLAYER_FILENAME_DIRECTION_LOCK;
     this.root.dataset.v2130PlayerMotionImmutableLock = V2130_PLAYER_MOTION_IMMUTABLE_LOCK;
     this.root.dataset.v2130BuildConfirmFlowLock = V2130_BUILD_CONFIRM_FLOW_LOCK;
+    this.root.dataset.v2131PlayerNpcDirectionGuard = V2131_PLAYER_NPC_DIRECTION_GUARD;
+    this.root.dataset.v2131BuildPreviewConfirmLock = V2131_BUILD_PREVIEW_CONFIRM_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
@@ -1198,6 +1202,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2120-build-active', Boolean(type));
     this.root.classList.toggle('v2121-build-active', Boolean(type));
     this.root.classList.toggle('v2130-build-active', Boolean(type));
+    this.root.classList.toggle('v2131-build-active', Boolean(type));
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2094-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2097-build-tray-open', this.buildTrayOpen);
@@ -1216,7 +1221,7 @@ export class VillageWorld {
       const previewY = this.player ? clamp(this.player.tileY, 1, MAP_SIZE - def.size[1] - 1) : 29;
       this.updateBuildPreviewAtTile(previewX, previewY);
       const modeTitle = this.movingBuildingId ? '건물 이동 모드' : '설치 모드';
-      this.showGuide(modeTitle, `${def.label} 선택됨 · 화면은 어둡게 막지 않고 바닥 기준 반투명 프리뷰만 따라갑니다. 초록/빨강 타일 풋프린트를 확인하고 원하는 위치를 누르면 확인창이 뜹니다.`);
+      this.showGuide(modeTitle, `${def.label} 선택됨 · 바닥 기준 반투명 프리뷰가 잡혔습니다. 초록/빨강 풋프린트를 확인하고 원하는 타일을 누르면 중앙 확인창이 뜹니다.`);
     }
   }
 
@@ -1238,6 +1243,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2120-build-tray-open', open);
     this.root.classList.toggle('v2121-build-tray-open', open);
     this.root.classList.toggle('v2130-build-tray-open', open);
+    this.root.classList.toggle('v2131-build-tray-open', open);
     document.body.classList.toggle('v2111-build-open', open);
     document.body.classList.toggle('v2112-build-open', open);
     document.body.classList.toggle('v2113-build-open', open);
@@ -1250,6 +1256,7 @@ export class VillageWorld {
     document.body.classList.toggle('v2120-build-open', open);
     document.body.classList.toggle('v2121-build-open', open);
     document.body.classList.toggle('v2130-build-open', open);
+    document.body.classList.toggle('v2131-build-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
       if (!keepSelection) this.movingBuildingId = null;
@@ -1271,14 +1278,14 @@ export class VillageWorld {
       this.root.classList.remove('v2113-build-active');
       this.root.classList.remove('v2114-build-active');
       this.root.classList.remove('v2118-build-active');
-      this.root.classList.remove('v2119-build-active', 'v2120-build-active', 'v2121-build-active', 'v2130-build-active');
+      this.root.classList.remove('v2119-build-active', 'v2120-build-active', 'v2121-build-active', 'v2130-build-active', 'v2131-build-active');
       this.root.classList.remove('v2112-build-tray-open');
       this.root.classList.remove('v2113-build-tray-open');
       this.root.classList.remove('v2114-build-tray-open');
       this.root.classList.remove('v2116-build-tray-open');
       this.root.classList.remove('v2117-build-tray-open');
       this.root.classList.remove('v2118-build-tray-open');
-      this.root.classList.remove('v2119-build-tray-open', 'v2120-build-tray-open', 'v2121-build-tray-open', 'v2130-build-tray-open');
+      this.root.classList.remove('v2119-build-tray-open', 'v2120-build-tray-open', 'v2121-build-tray-open', 'v2130-build-tray-open', 'v2131-build-tray-open');
       document.body.classList.remove('v2111-build-open');
       document.body.classList.remove('v2112-build-open');
       document.body.classList.remove('v2113-build-open');
@@ -1286,7 +1293,7 @@ export class VillageWorld {
       document.body.classList.remove('v2116-build-open');
       document.body.classList.remove('v2117-build-open');
       document.body.classList.remove('v2118-build-open');
-      document.body.classList.remove('v2119-build-open', 'v2120-build-open', 'v2121-build-open', 'v2130-build-open');
+      document.body.classList.remove('v2119-build-open', 'v2120-build-open', 'v2121-build-open', 'v2130-build-open', 'v2131-build-open');
       this.previewLayer.removeChildren();
       this.hideBuildConfirm();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
@@ -2184,7 +2191,7 @@ export class VillageWorld {
       this.showTileMarker(origin.x, origin.y, ok ? 0x35f08a : 0xff4747);
       if (!ok) {
         this.hideBuildConfirm();
-        this.showGuide(this.movingBuildingId ? '이동 불가' : '설치 불가', '초록색 풋프린트가 보이는 위치를 선택해 주세요. 바다, 길, 건물, 장식과 겹칠 수 없습니다.');
+        this.showGuide(this.movingBuildingId ? '이동 불가' : '설치 불가', '빨간 풋프린트 위치에는 놓을 수 없습니다. 바다, 길, 건물, 장식과 겹치지 않는 초록 타일을 선택하세요.');
         return;
       }
       this.showBuildConfirm({ type: this.selectedBuild, x: origin.x, y: origin.y, movingId: this.movingBuildingId });
@@ -2328,7 +2335,7 @@ export class VillageWorld {
     const title = placement.movingId ? `${def.label}을(를) 이 위치로 옮길까요?` : `${def.label}을(를) 이 위치에 건설할까요?`;
     const body = placement.movingId
       ? '반투명 프리뷰와 초록색 풋프린트를 확인한 뒤 이동을 확정하세요.'
-      : `${def.cost.toLocaleString('ko-KR')}G 사용 · 초록색 풋프린트가 표시된 타일에 설치됩니다.`;
+      : `${def.cost.toLocaleString('ko-KR')}G 사용 · 초록색 풋프린트 위치에만 설치됩니다. 취소하면 프리뷰는 유지됩니다.`;
     node.querySelector<HTMLElement>('[data-v2130-build-confirm-mode]')!.textContent = mode;
     node.querySelector<HTMLElement>('[data-v2130-build-confirm-title]')!.textContent = title;
     node.querySelector<HTMLElement>('[data-v2130-build-confirm-body]')!.textContent = body;
@@ -2336,9 +2343,9 @@ export class VillageWorld {
     if (apply) apply.textContent = placement.movingId ? '이동' : '건설';
     node.classList.add('open');
     node.setAttribute('aria-hidden', 'false');
-    this.root.classList.add('v2130-build-confirm-open');
-    document.body.classList.add('v2130-build-confirm-open');
-    this.showGuide(mode, '확인창에서 건설 또는 취소를 선택하세요. 마을 바닥 입력은 잠시 멈춥니다.');
+    this.root.classList.add('v2130-build-confirm-open', 'v2131-build-confirm-open');
+    document.body.classList.add('v2130-build-confirm-open', 'v2131-build-confirm-open');
+    this.showGuide(mode, '중앙 확인창에서 건설/이동 또는 취소를 선택하세요. 마을 바닥 입력은 잠시 멈춥니다.');
   }
 
   private hideBuildConfirm(clearPending = true): void {
@@ -2346,13 +2353,13 @@ export class VillageWorld {
     const node = this.root.querySelector<HTMLElement>('[data-v2130-build-confirm]');
     node?.classList.remove('open');
     node?.setAttribute('aria-hidden', 'true');
-    this.root.classList.remove('v2130-build-confirm-open');
-    document.body.classList.remove('v2130-build-confirm-open');
+    this.root.classList.remove('v2130-build-confirm-open', 'v2131-build-confirm-open');
+    document.body.classList.remove('v2130-build-confirm-open', 'v2131-build-confirm-open');
   }
 
   private cancelBuildConfirmation(): void {
     this.hideBuildConfirm();
-    this.showGuide('건설 취소', '반투명 프리뷰는 유지됩니다. 다른 위치를 누르거나 건설 버튼으로 취소할 수 있어요.');
+    this.showGuide('건설 취소', '반투명 프리뷰는 유지됩니다. 다른 타일을 누르면 다시 확인창을 열 수 있고, 건설 버튼을 누르면 선택을 종료합니다.');
   }
 
   private applyPendingBuildPlacement(): void {
@@ -2372,7 +2379,7 @@ export class VillageWorld {
     }
     const def = BUILD_DEFS[building.type];
     if (!def || !this.canPlace(x, y, def, id)) {
-      this.showGuide('이동 불가', '건물, 나무, 바다, 길, 다른 구조물과 겹치지 않는 위치로 옮겨 주세요.');
+      this.showGuide('이동 불가', '빨간 풋프린트 위치에는 이동할 수 없습니다. 건물, 나무, 바다, 길, 다른 구조물과 겹치지 않는 초록 타일을 선택하세요.');
       return;
     }
     const [w, h] = def.size;
@@ -2395,7 +2402,7 @@ export class VillageWorld {
     const def = BUILD_DEFS[type];
     if (!def) return;
     if (!this.canPlace(x, y, def)) {
-      this.showGuide('설치 불가', '건물, 나무, 바다, 다른 구조물과 겹칠 수 없습니다. 길 위에는 건물을 올릴 수 없어요.');
+      this.showGuide('설치 불가', '빨간 풋프린트 위치에는 설치할 수 없습니다. 바다/나무/기존 구조물/길과 겹치지 않는 초록 타일을 선택하세요.');
       return;
     }
     if (this.save.coins < def.cost) {

@@ -1,5 +1,5 @@
-// v2.1.30 locks user-supplied construction placement confirm, NPC direction audit, and fishing/UI stabilization.
-const CACHE_NAME = 'aqua-fantasia-v2.1.30-construction-fishing-ui-audit';
+// v2.1.31 locks player/NPC direction mapping, fixed menus, build confirm UX, and rebuilt fishing flow.
+const CACHE_NAME = 'aqua-fantasia-v2.1.31-motion-ui-fishing-build-guard';
 const PRECACHE = [
   "./",
   "./index.html",
