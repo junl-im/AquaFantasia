@@ -234,6 +234,7 @@ const V2122_PLAYER_CARDINAL_MOTION_LOCK = 'v2122-player-cardinal-motion-lock';
 const V2123_PLAYER_DIRECTION_MOTION_LOCK = 'v2123-player-direction-motion-hard-lock';
 const V2124_STATE_INPUT_LOCK = 'v2124-state-input-performance-lock';
 const V2125_DIRECTION_MOTION_LOCK = 'v2125-east-motion-visual-lock';
+const V2127_DIRECTION_MOTION_AUDIT_LOCK = 'v2127-east-west-asset-motion-audit-lock';
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -241,16 +242,16 @@ const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((di
 ])) as Record<ActorDirection, string[]>;
 
 const PLAYER_ACTOR_DIRECTION_TEXTURE_FIX: Record<ActorDirection, ActorDirection> = {
-  // v2.1.25 visual lock: the corrected player frames supplied for 3시/9시
-  // now match their cardinal filenames. Keep the 1시/11시 visual correction
-  // only, because those two diagonal labels are still mirrored in the source set.
+  // v2.1.27 visual audit: the supplied player east/west filenames are visually mirrored
+  // in the runtime. Keep direction math untouched, but route the right/left cardinal
+  // movement to the frame that actually reads correctly on screen.
   south: 'south',
   southeast: 'southeast',
-  east: 'east',
+  east: 'west',
   northeast: 'northwest',
   north: 'north',
   northwest: 'northeast',
-  west: 'west',
+  west: 'east',
   southwest: 'southwest',
 };
 
@@ -621,8 +622,8 @@ function actorDirectionQaPasses(): boolean {
 function playerDirectionRemapQaPasses(): boolean {
   return playerActorVisualDirection('northwest') === 'northeast'
     && playerActorVisualDirection('northeast') === 'northwest'
-    && playerActorVisualDirection('east') === 'east'
-    && playerActorVisualDirection('west') === 'west';
+    && playerActorVisualDirection('east') === 'west'
+    && playerActorVisualDirection('west') === 'east';
 }
 
 
@@ -1114,6 +1115,7 @@ export class VillageWorld {
     this.root.dataset.v2123PlayerDirectionMotionLock = V2123_PLAYER_DIRECTION_MOTION_LOCK;
     this.root.dataset.v2124StateInputLock = V2124_STATE_INPUT_LOCK;
     this.root.dataset.v2125DirectionMotionLock = V2125_DIRECTION_MOTION_LOCK;
+    this.root.dataset.v2127DirectionMotionAuditLock = V2127_DIRECTION_MOTION_AUDIT_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
@@ -2067,6 +2069,7 @@ export class VillageWorld {
       knob.style.setProperty('--v2123-joystick-transform', knobTransform);
       knob.style.setProperty('--v2124-joystick-transform', knobTransform);
       knob.style.setProperty('--v2125-joystick-transform', knobTransform);
+      knob.style.setProperty('--v2127-joystick-transform', knobTransform);
       knob.style.transform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
       const strength = Math.min(1, length / radius);
       this.joystick.x = nx * strength;
@@ -2088,6 +2091,7 @@ export class VillageWorld {
       knob.style.setProperty('--v2123-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2124-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2125-joystick-transform', 'translate(-50%, -50%)');
+      knob.style.setProperty('--v2127-joystick-transform', 'translate(-50%, -50%)');
       knob.style.transform = 'translate(-50%, -50%)';
     };
     stick.addEventListener('pointerdown', (ev) => {
@@ -2661,12 +2665,12 @@ export class VillageWorld {
 
   private animateActorWalk(actor: Actor, movementAmount: number, deltaMs: number): void {
     const walking = movementAmount > 0.18;
-    if (walking) actor.walkPhase += deltaMs * 0.026;
+    if (walking) actor.walkPhase += deltaMs * 0.0095;
     else actor.walkPhase *= 0.72;
     // v2.0.60: grounded footstep motion. The sprite's anchor stays at the feet,
     // so we do not raise the whole character off the tile.
     const sway = walking ? Math.sin(actor.walkPhase * 0.55) * 0.035 : 0;
-    const stepSide = walking ? Math.sin(actor.walkPhase * 2.1) * 1.35 : 0;
+    const stepSide = walking ? Math.sin(actor.walkPhase * 2.1) * 0.95 : 0;
     if (actor.body instanceof Sprite) {
       const targetH = actor.role === 'player' ? 90 : 80;
       if (actor.role === 'player') {
@@ -2684,7 +2688,7 @@ export class VillageWorld {
       actor.body.position.y = actor.groundOffset;
       actor.body.rotation = sway;
       const base = targetH / Math.max(1, actor.body.texture.height);
-      const stretch = walking ? Math.sin(actor.walkPhase * 2.2) * 0.012 : 0;
+      const stretch = walking ? Math.sin(actor.walkPhase * 2.0) * 0.007 : 0;
       actor.body.scale.set(base * (1 + stretch * 0.35), base * (1 - stretch));
     } else {
       actor.body.rotation = sway;

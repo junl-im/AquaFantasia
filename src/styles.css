@@ -41619,3 +41619,284 @@ html.v2125-opening-direction-motion-ui-root body[data-screen="fishing"] .fishing
 }
 
 /* v2.1.26 CSS build syntax guard: keep nested joystick var() fallback balanced for PostCSS/Vite. */
+
+/* v2.1.27 regression audit polish: opening chrome removal, player motion pacing,
+   village command spacing, bottom dock readability, unified aqua pages, fishing stability. */
+html.v2127-direction-motion-ui-audit-root {
+  --v2127-safe-top: max(10px, env(safe-area-inset-top));
+  --v2127-safe-right: max(10px, env(safe-area-inset-right));
+  --v2127-safe-bottom: max(10px, env(safe-area-inset-bottom));
+  --v2127-safe-left: max(10px, env(safe-area-inset-left));
+  --v2127-command-width: 154px;
+  --v2127-ink: #053e56;
+  --v2127-muted: rgba(5,62,86,.72);
+  --v2127-card: linear-gradient(180deg, rgba(255,255,255,.97), rgba(220,250,255,.91));
+  --v2127-line: rgba(66,191,226,.34);
+  --v2127-shadow: 0 18px 44px rgba(0,54,86,.17), inset 0 1px 0 rgba(255,255,255,.92);
+}
+
+/* Opening video: absolutely no legacy frame/card chrome may cover the video. */
+html.v2127-direction-motion-ui-audit-root .v2127-opening-cinematic,
+html.v2127-direction-motion-ui-audit-root section.v2127-opening-cinematic {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100svh !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 0 !important;
+  background: #061827 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  display: block !important;
+  z-index: 250 !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+html.v2127-direction-motion-ui-audit-root .v2127-opening-cinematic::before,
+html.v2127-direction-motion-ui-audit-root .v2127-opening-cinematic::after,
+html.v2127-direction-motion-ui-audit-root .v2127-opening-cinematic *::before,
+html.v2127-direction-motion-ui-audit-root .v2127-opening-cinematic *::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html.v2127-direction-motion-ui-audit-root .v2127-opening-cinematic > :not(.v2127-opening-video):not(.v2127-opening-vignette):not(.v2127-opening-bubble):not(.v2127-opening-skip) {
+  display: none !important;
+}
+html.v2127-direction-motion-ui-audit-root .v2127-opening-video,
+html.v2127-direction-motion-ui-audit-root video.v2127-opening-video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  max-width: none !important;
+  max-height: none !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: #061827 !important;
+  z-index: 0 !important;
+}
+html.v2127-direction-motion-ui-audit-root .v2127-opening-vignette {
+  position: absolute !important;
+  inset: 0 !important;
+  background: radial-gradient(circle at 50% 18%, rgba(255,255,255,.14), transparent 34%), linear-gradient(180deg, rgba(0,22,40,.10), rgba(0,15,30,.35)) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+html.v2127-direction-motion-ui-audit-root .v2127-opening-bubble {
+  position: absolute !important;
+  left: 50% !important;
+  top: calc(var(--v2127-safe-top) + 12px) !important;
+  transform: translateX(-50%) !important;
+  width: min(420px, calc(100vw - 28px)) !important;
+  padding: 10px 14px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(168,242,255,.36) !important;
+  background: rgba(231,253,255,.82) !important;
+  box-shadow: 0 10px 28px rgba(0,36,60,.20), inset 0 1px 0 rgba(255,255,255,.92) !important;
+  color: var(--v2127-ink) !important;
+  -webkit-text-fill-color: var(--v2127-ink) !important;
+  z-index: 2 !important;
+  display: grid !important;
+  gap: 2px !important;
+  text-align: center !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2127-direction-motion-ui-audit-root .v2127-opening-bubble strong,
+html.v2127-direction-motion-ui-audit-root .v2127-opening-bubble i { display: none !important; }
+html.v2127-direction-motion-ui-audit-root .v2127-opening-bubble span { font-size: clamp(12px, 3.3vw, 15px) !important; font-weight: 1000 !important; }
+html.v2127-direction-motion-ui-audit-root .v2127-opening-bubble em { margin: 0 !important; font-style: normal !important; font-size: clamp(10px, 2.65vw, 12px) !important; color: var(--v2127-muted) !important; -webkit-text-fill-color: var(--v2127-muted) !important; }
+html.v2127-direction-motion-ui-audit-root .v2127-opening-skip {
+  position: absolute !important;
+  right: calc(var(--v2127-safe-right) + 8px) !important;
+  bottom: calc(var(--v2127-safe-bottom) + 8px) !important;
+  z-index: 3 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(130,230,255,.42) !important;
+  background: rgba(238,253,255,.84) !important;
+  color: var(--v2127-ink) !important;
+  -webkit-text-fill-color: var(--v2127-ink) !important;
+  padding: 8px 12px !important;
+  font-weight: 1000 !important;
+  box-shadow: 0 8px 20px rgba(0,36,60,.18) !important;
+}
+html.v2127-direction-motion-ui-audit-root .village-world-screen.v2127-village-ready .v2127-opening-cinematic,
+html.v2127-direction-motion-ui-audit-root .village-world-screen:not(.v2127-village-opening-state) .v2127-opening-cinematic { display: none !important; pointer-events: none !important; }
+
+/* Village top command rail: transparent wrapper, no clipping, better icon spacing. */
+html.v2127-direction-motion-ui-audit-root body[data-screen="village"] .v2127-world-controls {
+  width: var(--v2127-command-width) !important;
+  min-width: var(--v2127-command-width) !important;
+  max-width: var(--v2127-command-width) !important;
+  right: var(--v2127-safe-right) !important;
+  top: calc(var(--v2127-safe-top) + 2px) !important;
+  padding: 0 !important;
+  gap: 8px !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  backdrop-filter: none !important;
+}
+html.v2127-direction-motion-ui-audit-root body[data-screen="village"] .v2127-world-controls button {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 38px !important;
+  padding: 3px 4px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(100,216,244,.34) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(210,249,255,.82)) !important;
+  box-shadow: 0 8px 18px rgba(0,56,90,.13), inset 0 1px 0 rgba(255,255,255,.9) !important;
+  color: var(--v2127-ink) !important;
+  -webkit-text-fill-color: var(--v2127-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+  overflow: hidden !important;
+  transform: none !important;
+}
+html.v2127-direction-motion-ui-audit-root body[data-screen="village"] .v2127-world-controls :is(img, span:first-child) {
+  width: 18px !important;
+  height: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto 1px !important;
+  overflow: hidden !important;
+}
+html.v2127-direction-motion-ui-audit-root body[data-screen="village"] .v2127-world-controls :is(button::before, button::after) { content: none !important; display: none !important; }
+html.v2127-direction-motion-ui-audit-root body[data-screen="village"] .v2097-village-hud {
+  width: min(354px, calc(100vw - var(--v2127-command-width) - var(--v2127-safe-left) - var(--v2127-safe-right) - 22px)) !important;
+  max-width: calc(100vw - var(--v2127-command-width) - var(--v2127-safe-left) - var(--v2127-safe-right) - 22px) !important;
+}
+html.v2127-direction-motion-ui-audit-root body[data-screen="village"] .v2097-expedition-board {
+  top: calc(var(--v2127-safe-top) + 52px) !important;
+  width: min(326px, calc(100vw - var(--v2127-command-width) - var(--v2127-safe-left) - var(--v2127-safe-right) - 22px)) !important;
+  max-width: calc(100vw - var(--v2127-command-width) - var(--v2127-safe-left) - var(--v2127-safe-right) - 22px) !important;
+}
+
+/* Bottom dock: a little larger, stable both in village and menu pages. */
+html.v2127-direction-motion-ui-audit-root .bottom-nav.v2127-bottom-nav {
+  width: 188px !important;
+  min-width: 188px !important;
+  max-width: 188px !important;
+  height: 50px !important;
+  right: calc(var(--v2127-safe-right) + 8px) !important;
+  bottom: calc(var(--v2127-safe-bottom) + 8px) !important;
+  padding: 5px 6px !important;
+  gap: 5px !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+}
+html.v2127-direction-motion-ui-audit-root .bottom-nav.v2127-bottom-nav .v2098-nav-item,
+html.v2127-direction-motion-ui-audit-root .bottom-nav.v2127-bottom-nav .v2098-nav-item:active,
+html.v2127-direction-motion-ui-audit-root .bottom-nav.v2127-bottom-nav .v2098-nav-item.active,
+html.v2127-direction-motion-ui-audit-root .bottom-nav.v2127-bottom-nav .v2098-nav-item:focus {
+  min-width: 0 !important;
+  width: 100% !important;
+  height: 40px !important;
+  padding: 3px 2px !important;
+  transform: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2127-direction-motion-ui-audit-root .bottom-nav.v2127-bottom-nav img {
+  width: 22px !important;
+  height: 22px !important;
+  max-width: 22px !important;
+  max-height: 22px !important;
+  object-fit: contain !important;
+}
+html.v2127-direction-motion-ui-audit-root .bottom-nav.v2127-bottom-nav span {
+  font-size: 9px !important;
+  line-height: 1 !important;
+  text-shadow: none !important;
+  filter: none !important;
+  letter-spacing: -.02em !important;
+}
+
+/* Joystick: default center only; runtime updates v2127 variable while dragging. */
+html.v2127-direction-motion-ui-audit-root body[data-screen="village"] .v2097-joystick-knob {
+  left: 50% !important;
+  top: 50% !important;
+  transform: var(--v2127-joystick-transform, var(--v2125-joystick-transform, var(--v2124-joystick-transform, var(--v2123-joystick-transform, var(--v2122-joystick-transform, var(--v2121-joystick-transform, translate(-50%, -50%))))))) !important;
+  background-image: none !important;
+}
+html.v2127-direction-motion-ui-audit-root body[data-screen="village"] .v2097-joystick::before,
+html.v2127-direction-motion-ui-audit-root body[data-screen="village"] .v2097-joystick::after { content: none !important; display: none !important; }
+
+/* Unified aqua cards/pages: keep typography readable and layouts consistent. */
+html.v2127-direction-motion-ui-audit-root :is(.runtime-menu-screen.v2127-runtime-page-shell .v2127-aqua-page,.v2097-character-card,.v2097-interior-card,.v2097-build-tray,.v2097-expedition-body,.game-dialog-card) {
+  background-image: var(--v2127-card) !important;
+  border-color: var(--v2127-line) !important;
+  box-shadow: var(--v2127-shadow) !important;
+  color: var(--v2127-ink) !important;
+  -webkit-text-fill-color: var(--v2127-ink) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+html.v2127-direction-motion-ui-audit-root :is(.runtime-menu-screen.v2127-runtime-page-shell .v2127-aqua-page,.v2097-character-card,.v2097-interior-card,.v2097-build-tray,.v2097-expedition-body,.game-dialog-card) * {
+  text-shadow: none !important;
+  filter: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+html.v2127-direction-motion-ui-audit-root .runtime-menu-screen.v2127-runtime-page-shell .v2127-aqua-page {
+  width: min(440px, calc(100vw - 28px)) !important;
+  min-height: min(640px, calc(100svh - var(--v2127-safe-top) - var(--v2127-safe-bottom) - 92px)) !important;
+  max-height: calc(100svh - var(--v2127-safe-top) - var(--v2127-safe-bottom) - 78px) !important;
+  padding: 22px 16px 76px !important;
+  overflow-y: auto !important;
+}
+html.v2127-direction-motion-ui-audit-root :is(.v2097-ui-close,.v2097-menu-close,.v2059-result-close) {
+  right: 14px !important;
+  top: 14px !important;
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 999px !important;
+}
+
+/* Fishing: center gameplay controls, prevent legacy frames/props from covering the core loop. */
+html.v2127-direction-motion-ui-audit-root body[data-screen="fishing"] .fishing-screen.v2127-fishing-uiux-screen .bottom-nav { display: none !important; }
+html.v2127-direction-motion-ui-audit-root body[data-screen="fishing"] .fishing-screen.v2127-fishing-uiux-screen :is(.reel-panel,.v2055-reel-console,.v2053-reel-touch-zone,.v2054-reel-touch-zone) {
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  max-width: min(430px, calc(100vw - 28px)) !important;
+}
+html.v2127-direction-motion-ui-audit-root body[data-screen="fishing"] .fishing-screen.v2127-fishing-uiux-screen :is(.v2020-reel-panel-frame,.v2021-reel-tooltip-frame,.v2110-fishing-props,.v2110-fishing-prop) {
+  display: none !important;
+  pointer-events: none !important;
+}
+html.v2127-direction-motion-ui-audit-root body[data-screen="fishing"] .fishing-screen.v2127-fishing-uiux-screen :is(.fishing-hud img,.recent-catch-strip img,.fishing-loadout-strip img) {
+  max-width: 30px !important;
+  max-height: 30px !important;
+  object-fit: contain !important;
+}
+html.v2127-direction-motion-ui-audit-root body[data-screen="fishing"] .fishing-screen.v2127-fishing-uiux-screen :is(.cast-button,.v2057-reel-button,.hold-pad button) {
+  touch-action: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}

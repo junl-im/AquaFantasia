@@ -1,5 +1,5 @@
-// v2.1.26 fixes the v2.1.25 CSS build syntax regression and locks CSS balance validation.
-const CACHE_NAME = 'aqua-fantasia-v2.1.26-css-build-syntax-fix';
+// v2.1.27 locks player east/west visual mapping, slows walk animation, and polishes opening/menu/fishing UI.
+const CACHE_NAME = 'aqua-fantasia-v2.1.27-direction-motion-ui-fishing-audit';
 const PRECACHE = [
   "./",
   "./index.html",
