@@ -1,5 +1,5 @@
-// v2.1.37 keeps the root APP_VERSION file removed and prioritizes fishing UI visibility, transparent menu frames, HUD/frontier spacing, and cautious tile touch precision.
-const CACHE_NAME = 'aqua-fantasia-v2.1.37-fishing-ui-page-shell-polish';
+// v2.1.38 keeps the root APP_VERSION file removed and prioritizes the fishing cockpit layout, readable sea-lane/loadout cards, transparent menu docks, wider HUD balance, and cautious tile touch precision without tile-size migration.
+const CACHE_NAME = 'aqua-fantasia-v2.1.38-fishing-cockpit-menu-page-polish';
 const ASSETS = [
   './',
   './index.html',

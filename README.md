@@ -1,4 +1,47 @@
-# AquaFantasia v2.1.37
+# AquaFantasia v2.1.38
+
+## v2.1.38 Change Log
+
+- Added a v2.1.38 fishing cockpit polish pass focused on readable sea-lane text, cleaner rod/bait loadout placement, visible reel gauges after bite, and no stray legacy fishing art leaking into the top layer.
+- Kept the root APP_VERSION file removed; version history remains in README.md and runtime version remains in src/data.ts.
+- Tightened the fishing screen into separate portrait-safe lanes for HUD, sea-lane, loadout, guide, coach, reel panel, reel console, and reel touch zone.
+- Polished the fishing start button into a single aqua CTA and suppressed old cast button art/icon artifacts.
+- Transparentized the top-right command table and right-bottom dock frame while preserving menu order and same-position page navigation.
+- Slightly widened village HUD/frontier spacing by compacting the top-right command group instead of overlapping it.
+- Improved opened frontier page and common menu page aqua-card surfaces, scroll bottom clearance, close buttons, buttons, and shop price CTA visibility.
+- Made tile touch micro-adjustment more cautious with a stricter diamond score limit while keeping actual tile pixel size unchanged until save/footprint migration is implemented.
+- Preserved player/NPC direction locks, first-start-only opening video, construction preview/confirm flow, no village bottom dock in fishing, and root APP_VERSION removal.
+
+## v2.1.38 변경사항
+
+- 낚시 화면을 다시 최우선으로 다듬었습니다.
+  - 로드/미끼 영역은 겹치지 않는 2칸 장비 스트립으로 유지하되 위치와 높이를 더 안정화했습니다.
+  - 바다물길 표기는 한 줄에 억지로 압축하지 않고 수역명/설명을 읽을 수 있는 2줄 카드로 보정했습니다.
+  - 예전 사용법 카드, 시작 안내 카드, 버튼 프레임 이미지, 상단에 새어 보이는 낚시 소품/그림 조각을 더 강하게 차단했습니다.
+  - 낚시 시작 버튼을 현재 아쿠아 카드 스킨에 맞는 단일 CTA 버튼으로 정리했습니다.
+- 입질 후 릴링 화면을 보강했습니다.
+  - 포획/텐션/저항 게이지와 안전 구간이 화면 밖으로 밀리지 않도록 릴 패널을 스크롤 가능한 고정 콕핏으로 바꿨습니다.
+  - 릴 콘솔과 터치존은 하단 안전영역 안에서 겹치지 않도록 재배치했습니다.
+  - 작은 화면에서는 장비 스트립/최근 포획을 자동으로 숨겨 핵심 게이지를 우선 표시합니다.
+- 우측 위/아래 메뉴를 더 투명하게 정리했습니다.
+  - 우측 상단 메뉴바의 테이블성 배경/테두리를 제거하고 버튼 간격과 여백을 다시 맞췄습니다.
+  - 우측 하단 메뉴바의 둘러싼 배경/테두리를 완전 투명에 가깝게 정리하고 눌림 흔들림을 고정했습니다.
+- HUD와 개척 페이지를 다듬었습니다.
+  - 우측 상단 버튼 묶음을 조금 더 압축해서 HUD 길이를 확보했습니다.
+  - 개척 창이 열렸을 때 카드 표면, 스크롤, 여백, 닫기 버튼이 더 안정적으로 보이도록 정리했습니다.
+- 모든 메뉴 페이지 공통 디자인을 보강했습니다.
+  - 가방/퀘스트/지도/상점/장비/도감/랭킹 계열의 아쿠아 카드, 버튼, 입력/가격 배지, 하단 메뉴 충돌 방지 여백을 다시 고정했습니다.
+  - 상점 구매 금액 버튼은 골드 CTA 계열로 유지해 배경에 묻히지 않게 했습니다.
+- 타일 터치 영역은 더 신중하게 조정했습니다.
+  - 주변 타일로 튀는 느낌을 줄이기 위해 다이아몬드 판정 허용값을 더 조였습니다.
+  - 타일 픽셀 자체 축소는 아직 적용하지 않았습니다. 현재 세이브 좌표, 건물 footprint, 충돌 판정, NPC 이동, 카메라 경계 마이그레이션이 같이 필요해서 무리하게 바꾸지 않았습니다.
+- 기존 잠금 유지:
+  - player.zip 기준 플레이어 8방향 32프레임 방향 매핑 유지
+  - NPC 방향 identity 매핑 유지
+  - 오프닝 영상 최초 시작 전용 유지
+  - 건설 프리뷰 → 중앙 확인 팝업 → 건설/취소 플로우 유지
+  - 낚시 화면에서 마을 하단 메뉴 차단 유지
+  - 루트 APP_VERSION 파일 미포함 유지
 
 ## v2.1.37 Change Log
 
@@ -50,8 +93,8 @@
 - `npm run validate`는 다음 검증을 실행합니다.
   - `tools/clean-old-patch-docs.mjs`
   - `tools/validate-clean.mjs`
-  - `tools/check-v2137-premium-fishing-ui-page-shell.mjs`
-- v2.1.37 검증 항목:
+  - `tools/check-v2138-fishing-cockpit-menu-page-polish.mjs`
+- v2.1.38 검증 항목:
   - 버전 동기화
   - CSS 괄호/중괄호/대괄호 균형
   - 플레이어 v2129 8방향 32프레임 존재 및 해시 불변
