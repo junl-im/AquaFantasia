@@ -263,6 +263,7 @@ const V2140_TILE_TOUCH_STABILITY_LOCK = 'v2140-tile-touch-score-one-point-zero-n
 const V2140_TILE_PIXEL_SIZE_MIGRATION_PLAN_LOCK = 'v2140-tile-pixel-shrink-deferred-until-save-footprint-npc-camera-migration';
 const V2142_TILE_TOUCH_PRECISION_LOCK = 'v2142-tile-touch-score-zero-point-nine-eight-cautious-placement';
 const V2142_TILE_PIXEL_SIZE_MIGRATION_PLAN_LOCK = 'v2142-tile-pixel-shrink-still-deferred-save-footprint-npc-camera-migration';
+const V2143_TILE_TOUCH_OVERLAP_AUDIT_LOCK = 'v2143-tile-touch-cautious-overlap-placement-audit-no-pixel-shrink';
 const V2136_FINE_PLACEMENT_SEARCH_RADIUS = 3;
 const V2137_FINE_PLACEMENT_SEARCH_RADIUS = 2;
 const V2138_FINE_PLACEMENT_SEARCH_RADIUS = 2;
@@ -270,6 +271,7 @@ const V2138_DIAMOND_TOUCH_SCORE_LIMIT = 1.08;
 const V2139_DIAMOND_TOUCH_SCORE_LIMIT = 1.03;
 const V2140_DIAMOND_TOUCH_SCORE_LIMIT = 1.0;
 const V2142_DIAMOND_TOUCH_SCORE_LIMIT = 0.98;
+const V2143_DIAMOND_TOUCH_SCORE_LIMIT = 0.96;
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -954,10 +956,10 @@ function nearestDiamondTile(worldX: number, worldY: number): { x: number; y: num
       }
     }
   }
-  // v2.1.42: keep the tile pixels unchanged but tighten the final diamond acceptance.
+  // v2.1.43: keep tile pixels unchanged and tighten the final diamond acceptance one more notch.
   // This reduces accidental neighbor picks without changing save/building/NPC/camera coordinates.
-  // Full tile shrink is still deferred until save/building/NPC/camera migration is implemented.
-  return bestScore <= V2142_DIAMOND_TOUCH_SCORE_LIMIT ? best : base;
+  // Full tile shrink remains deferred until save/building/NPC/camera migration is implemented.
+  return bestScore <= V2143_DIAMOND_TOUCH_SCORE_LIMIT ? best : base;
 }
 
 function centerOfTile(x: number, y: number): { x: number; y: number } {
@@ -1176,6 +1178,7 @@ export class VillageWorld {
     this.root.dataset.v2140TilePixelMigrationPlanLock = V2140_TILE_PIXEL_SIZE_MIGRATION_PLAN_LOCK;
     this.root.dataset.v2142TileTouchPrecisionLock = V2142_TILE_TOUCH_PRECISION_LOCK;
     this.root.dataset.v2142TilePixelMigrationPlanLock = V2142_TILE_PIXEL_SIZE_MIGRATION_PLAN_LOCK;
+    this.root.dataset.v2143TileTouchOverlapAuditLock = V2143_TILE_TOUCH_OVERLAP_AUDIT_LOCK;
     this.root.dataset.v2135ObjectFootprintClearanceLock = V2135_OBJECT_FOOTPRINT_CLEARANCE_LOCK;
     this.root.dataset.v2135TileSnapAssistLock = V2135_TILE_SNAP_ASSIST_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
@@ -1194,7 +1197,7 @@ export class VillageWorld {
     this.root.dataset.v2091UiCleanup = 'legacy-interior-events-pruned';
     this.root.dataset.v218StableRollback = 'v218-raw-diamond-touch-interior-selector-repair';
     this.root.dataset.v219UiTouchShopFishingAudit = 'v219-foot-biased-touch-shop-route';
-    this.root.classList.add('v218-village-touch-repaired', 'v219-village-touch-shop-repaired', 'v2134-village-object-clearance-ready', 'v2135-village-placement-engine-ready', 'v2136-village-placement-assist-ready', 'v2138-village-touch-cautious-ready');
+    this.root.classList.add('v218-village-touch-repaired', 'v219-village-touch-shop-repaired', 'v2134-village-object-clearance-ready', 'v2135-village-placement-engine-ready', 'v2136-village-placement-assist-ready', 'v2138-village-touch-cautious-ready', 'v2143-village-overlap-placement-audit-ready');
     this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트·시각 간격·근접 타일 보정 기준으로 안전하게 배치됩니다.');
   }
 
@@ -2508,7 +2511,8 @@ export class VillageWorld {
     let bestY = 0;
     let bestScore = Number.POSITIVE_INFINITY;
     let found = false;
-    for (let radius = 1; radius <= V2138_FINE_PLACEMENT_SEARCH_RADIUS; radius += 1) {
+    const maxAssistRadius = Math.min(V2138_FINE_PLACEMENT_SEARCH_RADIUS, 2);
+    for (let radius = 1; radius <= maxAssistRadius; radius += 1) {
       for (let dy = -radius; dy <= radius; dy += 1) {
         for (let dx = -radius; dx <= radius; dx += 1) {
           const nx = clamp(x + dx, 1, MAP_SIZE - w - 1);

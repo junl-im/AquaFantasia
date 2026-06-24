@@ -46905,3 +46905,491 @@ html.v2142-fishing-ui-page-tile-polish-root body[data-screen="fishing"] .v2142-f
     min-height: 52px !important;
   }
 }
+
+/* v2.1.43: UI overlap, placement, fishing cockpit, HUD, and menu page sweep.
+   This layer intentionally sits after the older v2142 layer so it can neutralize legacy frames
+   without editing the player/NPC direction or frame mapping. */
+html.v2143-ui-overlap-placement-sweep-root {
+  --v2143-safe-top: max(8px, env(safe-area-inset-top));
+  --v2143-safe-right: max(8px, env(safe-area-inset-right));
+  --v2143-safe-bottom: max(8px, env(safe-area-inset-bottom));
+  --v2143-safe-left: max(8px, env(safe-area-inset-left));
+  --v2143-card-bg: linear-gradient(180deg, rgba(247, 255, 255, .96), rgba(181, 242, 255, .83) 52%, rgba(128, 224, 255, .70));
+  --v2143-card-border: rgba(127, 235, 255, .52);
+  --v2143-card-shadow: 0 16px 34px rgba(0, 47, 82, .18), inset 0 1px 0 rgba(255,255,255,.92);
+  --v2143-ink: #07334c;
+  --v2143-muted: rgba(5, 56, 80, .74);
+  --v2143-aqua-cta: linear-gradient(180deg, #f8ffff 0%, #9af2ff 42%, #31c7ef 100%);
+  --v2143-gold-cta: linear-gradient(180deg, #fff7bf 0%, #ffd35d 54%, #f8ad24 100%);
+  --v2143-fishing-reserved: 190px;
+}
+html.v2143-ui-overlap-placement-sweep-root :is(button, .image-btn, .runtime-btn, .v2098-nav-item) {
+  -webkit-tap-highlight-color: transparent;
+}
+html.v2143-ui-overlap-placement-sweep-root body:not([data-screen="fishing"]) .v2143-bottom-nav {
+  right: calc(var(--v2143-safe-right) + 8px) !important;
+  bottom: calc(var(--v2143-safe-bottom) + 8px) !important;
+  width: 230px !important;
+  height: 58px !important;
+  min-width: 230px !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 7px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  overflow: visible !important;
+  transform: none !important;
+  translate: none !important;
+  z-index: 70 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root .v2143-bottom-nav::before,
+html.v2143-ui-overlap-placement-sweep-root .v2143-bottom-nav::after {
+  content: none !important;
+  display: none !important;
+}
+html.v2143-ui-overlap-placement-sweep-root .v2143-bottom-nav .v2098-nav-item {
+  width: 50px !important;
+  height: 56px !important;
+  min-width: 50px !important;
+  min-height: 56px !important;
+  padding: 4px 3px !important;
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(124,229,255,.40)) !important;
+  border: 1px solid rgba(120,232,255,.30) !important;
+  box-shadow: 0 8px 17px rgba(0, 41, 78, .10), inset 0 1px 0 rgba(255,255,255,.78) !important;
+  transform: none !important;
+  translate: none !important;
+}
+html.v2143-ui-overlap-placement-sweep-root .v2143-bottom-nav .v2098-nav-item:active,
+html.v2143-ui-overlap-placement-sweep-root .v2143-bottom-nav .v2098-nav-item.active {
+  transform: none !important;
+  translate: none !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2136-world-controls,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2097-world-controls {
+  top: calc(var(--v2143-safe-top) + 8px) !important;
+  right: calc(var(--v2143-safe-right) + 6px) !important;
+  width: 172px !important;
+  max-width: 172px !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, 80px) !important;
+  gap: 10px 10px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  overflow: visible !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2136-world-controls::before,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2097-world-controls::before,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2136-world-controls::after,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2097-world-controls::after {
+  content: none !important;
+  display: none !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2136-world-controls button,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2097-world-controls button {
+  width: 80px !important;
+  min-width: 80px !important;
+  height: 49px !important;
+  min-height: 49px !important;
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(119,226,255,.42)) !important;
+  border: 1px solid rgba(127, 234, 255, .34) !important;
+  box-shadow: 0 8px 18px rgba(0, 38, 72, .10), inset 0 1px 0 rgba(255,255,255,.80) !important;
+  transform: none !important;
+  translate: none !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2136-village-hud,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2097-village-hud {
+  width: min(404px, calc(100vw - 188px)) !important;
+  max-width: min(404px, calc(100vw - 188px)) !important;
+  min-width: 218px !important;
+  min-height: 62px !important;
+  border-radius: 24px !important;
+  background: var(--v2143-card-bg) !important;
+  border: 1px solid var(--v2143-card-border) !important;
+  box-shadow: var(--v2143-card-shadow) !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2136-expedition-board:not(.open),
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2097-expedition-board:not(.open) {
+  top: calc(var(--v2143-safe-top) + 86px) !important;
+  width: min(404px, calc(100vw - 188px)) !important;
+  max-width: min(404px, calc(100vw - 188px)) !important;
+  min-width: 218px !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2136-expedition-board.open,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2097-expedition-body.v2097-expedition-body-open,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2098-expedition-body.v2097-expedition-body-open {
+  inset: calc(var(--v2143-safe-top) + 72px) calc(var(--v2143-safe-right) + 10px) calc(var(--v2143-safe-bottom) + 102px) calc(var(--v2143-safe-left) + 10px) !important;
+  max-width: 548px !important;
+  padding-bottom: calc(24px + var(--v2143-safe-bottom)) !important;
+  border-radius: 30px !important;
+  background: var(--v2143-card-bg) !important;
+  border: 1px solid var(--v2143-card-border) !important;
+  box-shadow: var(--v2143-card-shadow) !important;
+  overflow-y: auto !important;
+  scrollbar-width: none !important;
+}
+html.v2143-ui-overlap-placement-sweep-root .v2143-runtime-page-shell .runtime-hud,
+html.v2143-ui-overlap-placement-sweep-root .v2143-runtime-page-shell .runtime-content,
+html.v2143-ui-overlap-placement-sweep-root .v2143-runtime-page-shell :is(.runtime-panel,.runtime-hero-card,.ranking-panel,.shop-card,.gear-card,.mission-card,.dex-card,.v2076-expedition-card,.v204-window-card) {
+  border-radius: 28px !important;
+  background: var(--v2143-card-bg) !important;
+  border: 1px solid var(--v2143-card-border) !important;
+  box-shadow: var(--v2143-card-shadow) !important;
+  color: var(--v2143-ink) !important;
+  -webkit-text-fill-color: var(--v2143-ink) !important;
+}
+html.v2143-ui-overlap-placement-sweep-root .v2143-runtime-page-shell .runtime-content {
+  padding-bottom: calc(130px + var(--v2143-safe-bottom)) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: none !important;
+}
+html.v2143-ui-overlap-placement-sweep-root .v2143-runtime-page-shell :is(.shop-list,.mission-list,.gear-grid,.dex-grid,.runtime-region-grid,.runtime-card-list) {
+  gap: 12px !important;
+  padding-bottom: 10px !important;
+}
+html.v2143-ui-overlap-placement-sweep-root :is(.shop-price,.btn-gold-cost,.v950-price-btn,.compact-cost-badge,.v2136-shop-buy-price) {
+  min-width: 72px !important;
+  background: var(--v2143-gold-cta) !important;
+  border: 1px solid rgba(145, 88, 8, .38) !important;
+  color: #593500 !important;
+  -webkit-text-fill-color: #593500 !important;
+  box-shadow: 0 8px 18px rgba(129,79,8,.20), inset 0 1px 0 rgba(255,255,255,.92) !important;
+  font-weight: 1000 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .bottom-nav,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-bottom-nav,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2142-bottom-nav {
+  display: none !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .fishing-screen.v2143-fishing-focus-screen {
+  --v2143-fishing-reserved: 188px;
+  overflow: hidden !important;
+  touch-action: none !important;
+  color: var(--v2143-ink) !important;
+  -webkit-text-fill-color: var(--v2143-ink) !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] :is(.v2142-hidden-legacy-guide,.v2142-hidden-legacy-start-card,.v2142-hidden-legacy-fishing-props,.v2139-hidden-legacy-guide,.v2139-hidden-legacy-start-card,.v2139-hidden-legacy-fishing-props,.v2020-cast-button-art,.v2021-cast-pill-art,.v2020-reel-panel-frame,.v2021-reel-tooltip-frame,.v205-horizontal-gauge,.v205-vertical-gauge,.v205-resistance-art) {
+  display: none !important;
+  visibility: hidden !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-hud {
+  top: calc(var(--v2143-safe-top) + 7px) !important;
+  left: calc(var(--v2143-safe-left) + 8px) !important;
+  right: calc(var(--v2143-safe-right) + 50px) !important;
+  min-height: 42px !important;
+  padding: 5px !important;
+  gap: 6px !important;
+  border-radius: 22px !important;
+  background: rgba(255,255,255,.74) !important;
+  border: 1px solid rgba(128,234,255,.40) !important;
+  box-shadow: 0 10px 20px rgba(0,42,82,.13), inset 0 1px 0 rgba(255,255,255,.78) !important;
+  overflow: hidden !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-sea-lane-card {
+  top: calc(var(--v2143-safe-top) + 55px) !important;
+  left: calc(var(--v2143-safe-left) + 10px) !important;
+  right: calc(var(--v2143-safe-right) + 10px) !important;
+  min-height: 64px !important;
+  max-height: 90px !important;
+  padding: 9px 12px !important;
+  border-radius: 24px !important;
+  background: var(--v2143-card-bg) !important;
+  border: 1px solid var(--v2143-card-border) !important;
+  box-shadow: var(--v2143-card-shadow) !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  grid-template-rows: auto auto !important;
+  overflow: hidden !important;
+  z-index: 60 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-sea-lane-card span {
+  min-width: 74px !important;
+  padding: 4px 8px !important;
+  text-align: center !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-sea-lane-card strong,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-sea-lane-card em {
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-sea-lane-card strong { -webkit-line-clamp: 1 !important; line-height: 1.12 !important; }
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-sea-lane-card em { -webkit-line-clamp: 2 !important; line-height: 1.18 !important; }
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-loadout {
+  top: calc(var(--v2143-safe-top) + 130px) !important;
+  left: calc(var(--v2143-safe-left) + 12px) !important;
+  right: calc(var(--v2143-safe-right) + 12px) !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+  gap: 8px !important;
+  padding: 7px !important;
+  border-radius: 22px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(131,229,255,.42)) !important;
+  border: 1px solid rgba(125,232,255,.34) !important;
+  box-shadow: 0 11px 20px rgba(0,42,80,.10), inset 0 1px 0 rgba(255,255,255,.78) !important;
+  z-index: 59 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-loadout .v2142-loadout-cell,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-loadout > div {
+  min-width: 0 !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  padding: 5px 7px !important;
+  border-radius: 17px !important;
+  background: rgba(255,255,255,.66) !important;
+  border: 1px solid rgba(127,232,255,.24) !important;
+  overflow: hidden !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-loadout img {
+  width: 25px !important;
+  height: 25px !important;
+  flex: 0 0 25px !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-priority-hint {
+  top: calc(var(--v2143-safe-top) + 180px) !important;
+  left: calc(var(--v2143-safe-left) + 12px) !important;
+  right: calc(var(--v2143-safe-right) + 12px) !important;
+  min-height: 48px !important;
+  max-height: 60px !important;
+  padding: 8px 12px !important;
+  border-radius: 22px !important;
+  background: rgba(250,255,255,.78) !important;
+  border: 1px solid rgba(125,232,255,.34) !important;
+  box-shadow: 0 10px 18px rgba(0,42,80,.10), inset 0 1px 0 rgba(255,255,255,.76) !important;
+  overflow: hidden !important;
+  z-index: 61 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-bite-action {
+  position: absolute !important;
+  left: 50% !important;
+  top: calc(50% - 8px) !important;
+  width: min(330px, calc(100vw - 44px)) !important;
+  min-height: 72px !important;
+  display: none !important;
+  place-items: center !important;
+  gap: 3px !important;
+  padding: 10px 18px !important;
+  border-radius: 28px !important;
+  background: var(--v2143-aqua-cta) !important;
+  border: 1px solid rgba(124,232,255,.74) !important;
+  box-shadow: 0 20px 42px rgba(0, 54, 94, .28), inset 0 1px 0 rgba(255,255,255,.98) !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 88 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-focus-screen[data-fishing-phase="bite"] .v2143-bite-action,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-focus-screen.fishing-phase-bite .v2143-bite-action {
+  display: grid !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-cast-button {
+  bottom: calc(var(--v2143-safe-bottom) + 17px) !important;
+  width: min(390px, calc(100vw - 26px)) !important;
+  min-height: 64px !important;
+  border-radius: 28px !important;
+  background: var(--v2143-aqua-cta) !important;
+  border: 1px solid rgba(124,232,255,.66) !important;
+  box-shadow: 0 17px 34px rgba(0,48,88,.23), inset 0 1px 0 rgba(255,255,255,.98) !important;
+  transform: translateX(-50%) !important;
+  translate: none !important;
+  z-index: 75 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-cast-button img,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-cast-button .cast-icon { display: none !important; }
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-focus-screen[data-fishing-phase="reeling"] :is(.v2143-sea-lane-card,.v2143-fishing-loadout,.recent-catch-strip,.v2132-fishing-director,.v2143-cast-button,.v2143-bite-action) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(-8px) !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-focus-screen[data-fishing-phase="reeling"] .v2143-fishing-priority-hint {
+  top: calc(var(--v2143-safe-top) + 54px) !important;
+  min-height: 42px !important;
+  max-height: 48px !important;
+  z-index: 78 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-focus-screen[data-fishing-phase="reeling"] .v2143-fishing-coach {
+  top: calc(var(--v2143-safe-top) + 100px) !important;
+  min-height: 48px !important;
+  max-height: 58px !important;
+  padding: 7px 10px !important;
+  z-index: 78 !important;
+  overflow: hidden !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-focus-screen[data-fishing-phase="reeling"] .v2143-reel-panel:not(.hidden) {
+  top: calc(var(--v2143-safe-top) + 158px) !important;
+  bottom: calc(var(--v2143-safe-bottom) + var(--v2143-fishing-reserved)) !important;
+  left: 9px !important;
+  right: 9px !important;
+  width: auto !important;
+  max-width: 474px !important;
+  margin-inline: auto !important;
+  min-height: 174px !important;
+  padding: 9px !important;
+  border-radius: 26px !important;
+  background: var(--v2143-card-bg) !important;
+  border: 1px solid var(--v2143-card-border) !important;
+  box-shadow: var(--v2143-card-shadow) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: none !important;
+  z-index: 79 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-reel-panel .v205-reel-grid {
+  display: block !important;
+  min-width: 0 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-reel-panel :is(.v2040-vertical-gauge,.v205-vertical-gauge,.v205-resistance-art,.v2057-gauge-title,.v2063-fishing-step,.v2063-distance-row,.v2063-input-row,.tension-track,.surge-meter,.hold-pad,p) {
+  display: none !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-reel-panel .v2073-fishing-board {
+  display: grid !important;
+  gap: 7px !important;
+  min-width: 0 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-reel-panel .v2073-fishing-gauges {
+  display: grid !important;
+  gap: 7px !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 2 !important;
+  background: linear-gradient(180deg, rgba(250,255,255,.90), rgba(207,247,255,.74)) !important;
+  padding: 2px 0 4px !important;
+  border-radius: 18px !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-reel-panel .v2073-gauge-row {
+  min-height: 38px !important;
+  grid-template-columns: 48px minmax(0, 1fr) 44px !important;
+  gap: 8px !important;
+  padding: 6px 7px !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.74) !important;
+  min-width: 0 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-reel-panel .v2073-gauge-row i,
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-reel-panel .safe-progress {
+  height: 20px !important;
+  min-width: 0 !important;
+  display: block !important;
+  position: relative !important;
+  border-radius: 999px !important;
+  background: rgba(2, 62, 92, .14) !important;
+  overflow: hidden !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-reel-panel :is([data-v2073-catch-bar],[data-v2073-tension-bar],[data-v2073-stamina-bar],.safe-progress span) {
+  display: block !important;
+  height: 100% !important;
+  min-width: 5px !important;
+  border-radius: inherit !important;
+  background: linear-gradient(90deg, #32d8ff, #75ffbd 58%, #ffe56c) !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-focus-screen[data-fishing-phase="reeling"] .v2143-reel-console:not(.hidden) {
+  left: 9px !important;
+  right: 9px !important;
+  bottom: calc(var(--v2143-safe-bottom) + 76px) !important;
+  max-height: 120px !important;
+  padding: 8px !important;
+  border-radius: 24px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(154,237,255,.84)) !important;
+  border: 1px solid rgba(124,232,255,.54) !important;
+  box-shadow: 0 14px 26px rgba(0,42,80,.18), inset 0 1px 0 rgba(255,255,255,.94) !important;
+  overflow: hidden !important;
+  z-index: 80 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-reel-console .v2073-console-readouts {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-reel-console .v2073-console-readouts span {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-reel-console .v2057-reel-button {
+  min-height: 46px !important;
+  border-radius: 18px !important;
+  transform: none !important;
+  translate: none !important;
+}
+html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-focus-screen[data-fishing-phase="reeling"] .v2143-reel-touch-zone:not(.hidden) {
+  left: 9px !important;
+  right: 9px !important;
+  bottom: calc(var(--v2143-safe-bottom) + 12px) !important;
+  min-height: 54px !important;
+  border-radius: 24px !important;
+  background: var(--v2143-aqua-cta) !important;
+  border: 1px solid rgba(124,232,255,.62) !important;
+  box-shadow: 0 15px 28px rgba(0,48,86,.21), inset 0 1px 0 rgba(255,255,255,.98) !important;
+  z-index: 81 !important;
+}
+@media (max-width: 392px) {
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2136-world-controls,
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2097-world-controls {
+    width: 160px !important;
+    max-width: 160px !important;
+    grid-template-columns: repeat(2, 75px) !important;
+    gap: 9px !important;
+  }
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2136-village-hud,
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2097-village-hud,
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2136-expedition-board:not(.open),
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="village"] .v2097-expedition-board:not(.open) {
+    width: calc(100vw - 174px) !important;
+    max-width: calc(100vw - 174px) !important;
+    min-width: 188px !important;
+  }
+  html.v2143-ui-overlap-placement-sweep-root .v2143-bottom-nav {
+    width: 218px !important;
+    min-width: 218px !important;
+    gap: 6px !important;
+  }
+}
+@media (max-height: 720px) {
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .fishing-screen.v2143-fishing-focus-screen {
+    --v2143-fishing-reserved: 178px;
+  }
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-loadout,
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .recent-catch-strip {
+    display: none !important;
+  }
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-priority-hint {
+    top: calc(var(--v2143-safe-top) + 124px) !important;
+  }
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2132-fishing-director {
+    display: none !important;
+  }
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-focus-screen[data-fishing-phase="reeling"] .v2143-fishing-coach {
+    top: calc(var(--v2143-safe-top) + 98px) !important;
+    max-height: 52px !important;
+  }
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-focus-screen[data-fishing-phase="reeling"] .v2143-reel-panel:not(.hidden) {
+    top: calc(var(--v2143-safe-top) + 148px) !important;
+    bottom: calc(var(--v2143-safe-bottom) + var(--v2143-fishing-reserved)) !important;
+    min-height: 152px !important;
+    padding: 8px !important;
+  }
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-reel-panel .v2073-gauge-row {
+    min-height: 33px !important;
+    padding: 5px 6px !important;
+  }
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-focus-screen[data-fishing-phase="reeling"] .v2143-reel-console:not(.hidden) {
+    bottom: calc(var(--v2143-safe-bottom) + 68px) !important;
+    max-height: 108px !important;
+  }
+  html.v2143-ui-overlap-placement-sweep-root body[data-screen="fishing"] .v2143-fishing-focus-screen[data-fishing-phase="reeling"] .v2143-reel-touch-zone:not(.hidden) {
+    min-height: 50px !important;
+  }
+}

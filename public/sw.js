@@ -1,5 +1,5 @@
-// v2.1.42 keeps the CI package-boundary fix and adds fishing cockpit, menu page, HUD, and tile-touch polish.
-const CACHE_NAME = 'aqua-fantasia-v2.1.42-fishing-ui-page-tile-polish';
+// v2.1.43 keeps the CI package-boundary fix and adds a UI overlap, placement, fishing, menu, and HUD sweep.
+const CACHE_NAME = 'aqua-fantasia-v2.1.43-ui-overlap-placement-sweep';
 const ASSETS = [
   './',
   './index.html',
