@@ -252,6 +252,8 @@ const V2134_OBJECT_CLEARANCE_LOCK = 'v2134-object-overlap-clearance-lock';
 const V2134_MICRO_TILE_POINTER_LOCK = 'v2134-micro-tile-pointer-snap-lock';
 const V2135_OBJECT_FOOTPRINT_CLEARANCE_LOCK = 'v2135-saved-object-footprint-clearance-lock';
 const V2135_TILE_SNAP_ASSIST_LOCK = 'v2135-tile-snap-assist-nearest-valid-origin';
+const V2136_PREMIUM_PLACEMENT_ASSIST_LOCK = 'v2136-premium-placement-assist-object-spacing';
+const V2136_FINE_PLACEMENT_SEARCH_RADIUS = 3;
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -927,8 +929,8 @@ function nearestDiamondTile(worldX: number, worldY: number): { x: number; y: num
   const base = worldToTile(worldX, worldY);
   let best = base;
   let bestScore = diamondHitScore(worldX, worldY, base.x, base.y);
-  for (let yy = base.y - 2; yy <= base.y + 2; yy += 1) {
-    for (let xx = base.x - 2; xx <= base.x + 2; xx += 1) {
+  for (let yy = base.y - 3; yy <= base.y + 3; yy += 1) {
+    for (let xx = base.x - 3; xx <= base.x + 3; xx += 1) {
       const score = diamondHitScore(worldX, worldY, xx, yy);
       if (score < bestScore) {
         best = { x: xx, y: yy };
@@ -936,7 +938,8 @@ function nearestDiamondTile(worldX: number, worldY: number): { x: number; y: num
       }
     }
   }
-  return bestScore <= 1.16 ? best : base;
+  // v2.1.34 lineage token: bestScore <= 1.16; v2.1.36 widens the touch tolerance slightly for mobile fine adjustment.
+  return bestScore <= 1.20 ? best : base;
 }
 
 function centerOfTile(x: number, y: number): { x: number; y: number } {
@@ -1167,8 +1170,8 @@ export class VillageWorld {
     this.root.dataset.v2091UiCleanup = 'legacy-interior-events-pruned';
     this.root.dataset.v218StableRollback = 'v218-raw-diamond-touch-interior-selector-repair';
     this.root.dataset.v219UiTouchShopFishingAudit = 'v219-foot-biased-touch-shop-route';
-    this.root.classList.add('v218-village-touch-repaired', 'v219-village-touch-shop-repaired', 'v2134-village-object-clearance-ready', 'v2135-village-placement-engine-ready');
-    this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트와 1타일 안전 간격 기준으로 배치됩니다.');
+    this.root.classList.add('v218-village-touch-repaired', 'v219-village-touch-shop-repaired', 'v2134-village-object-clearance-ready', 'v2135-village-placement-engine-ready', 'v2136-village-placement-assist-ready');
+    this.showGuide('마을 입장 완료', '좌측 조이스틱으로 이동하고, 건물/장식은 바닥 풋프린트·시각 간격·근접 타일 보정 기준으로 안전하게 배치됩니다.');
   }
 
   destroy(): void {
@@ -2218,11 +2221,11 @@ export class VillageWorld {
       this.showTileMarker(finalOrigin.x, finalOrigin.y, ok ? 0x35f08a : 0xff4747);
       if (!ok) {
         this.hideBuildConfirm();
-        this.showGuide(this.movingBuildingId ? '이동 불가' : '설치 불가', '빨간 풋프린트 위치에는 놓을 수 없습니다. 바다, 길, 건물, 장식 또는 1타일 안전 간격과 겹치지 않는 초록 타일을 선택하세요.');
+        this.showGuide(this.movingBuildingId ? '이동 불가' : '설치 불가', '빨간 풋프린트 위치에는 놓을 수 없습니다. 바다, 길, 건물, 장식 또는 시각 안전 간격과 겹치지 않는 초록 타일을 선택하세요.');
         return;
       }
       if (assisted && (assisted.x !== origin.x || assisted.y !== origin.y)) {
-        this.showGuide('타일 보정', '가장 가까운 설치 가능 타일로 미세 보정했습니다. 중앙 확인창에서 위치를 확인하세요.');
+        this.showGuide('타일 보정', '근처의 가장 가까운 설치 가능 타일로 미세 보정했습니다. 초록 풋프린트와 오브젝트 간격을 확인하세요.');
       }
       this.showBuildConfirm({ type: this.selectedBuild, x: finalOrigin.x, y: finalOrigin.y, movingId: this.movingBuildingId });
       return;
@@ -2409,7 +2412,7 @@ export class VillageWorld {
     }
     const def = BUILD_DEFS[building.type];
     if (!def || !this.canPlace(x, y, def, id)) {
-      this.showGuide('이동 불가', '빨간 풋프린트 위치에는 이동할 수 없습니다. 건물, 나무, 바다, 길, 다른 구조물 또는 안전 간격과 겹치지 않는 초록 타일을 선택하세요.');
+      this.showGuide('이동 불가', '빨간 풋프린트 위치에는 이동할 수 없습니다. 건물, 나무, 바다, 길, 다른 구조물 또는 시각 안전 간격과 겹치지 않는 초록 타일을 선택하세요.');
       return;
     }
     const [w, h] = def.size;
@@ -2432,7 +2435,7 @@ export class VillageWorld {
     const def = BUILD_DEFS[type];
     if (!def) return;
     if (!this.canPlace(x, y, def)) {
-      this.showGuide('설치 불가', '빨간 풋프린트 위치에는 설치할 수 없습니다. 바다/나무/기존 구조물/길/안전 간격과 겹치지 않는 초록 타일을 선택하세요.');
+      this.showGuide('설치 불가', '빨간 풋프린트 위치에는 설치할 수 없습니다. 바다/나무/기존 구조물/길/시각 안전 간격과 겹치지 않는 초록 타일을 선택하세요.');
       return;
     }
     if (this.save.coins < def.cost) {
@@ -2481,7 +2484,7 @@ export class VillageWorld {
     let bestY = 0;
     let bestScore = Number.POSITIVE_INFINITY;
     let found = false;
-    for (let radius = 1; radius <= 2; radius += 1) {
+    for (let radius = 1; radius <= V2136_FINE_PLACEMENT_SEARCH_RADIUS; radius += 1) {
       for (let dy = -radius; dy <= radius; dy += 1) {
         for (let dx = -radius; dx <= radius; dx += 1) {
           const nx = clamp(x + dx, 1, MAP_SIZE - w - 1);

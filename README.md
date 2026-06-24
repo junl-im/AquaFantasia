@@ -1,4 +1,64 @@
-# AquaFantasia v2.1.35
+# AquaFantasia v2.1.36
+
+
+## v2.1.36 Change Log
+
+- Added a v2.1.36 premium polish pass for aqua-card consistency, village placement assist, shop CTA contrast, and fishing recovery feedback.
+- Kept the root APP_VERSION file removed; version history remains in README.md and runtime version remains in src/data.ts.
+- Added v2.1.36 UI shell tokens for fixed bottom dock zero-jitter, top-right command spacing, safe-area HUD/frontier spacing, and readable aqua-card surfaces.
+- Improved village tile click precision by widening the diamond hit search and expanding nearest valid placement snap assist from 2 to 3 tiles.
+- Clarified construction/move failure copy around visual safety spacing and preserved the central preview/confirm flow.
+- Strengthened shop purchase price visibility with a dedicated v2.1.36 gold CTA badge.
+- Tuned fishing with a wider safe zone, adaptive recovery assist when the player uses the correct wind/release input, longer failure buffer, and a recovery hint chip.
+- Preserved player/NPC direction locks, first-start-only opening video, construction preview/confirm flow, and no bottom village dock in fishing.
+
+## v2.1.36 변경사항
+
+- 프리미엄 아쿠아 카드 스킨을 다시 다듬었습니다.
+  - 카드 배경, 테두리, 그림자, 버튼, X 닫기, 입력/팝업 표면을 v2.1.36 토큰으로 재고정했습니다.
+  - 우측 하단 메뉴는 모든 메뉴 페이지에서 같은 위치/크기/간격을 유지하도록 zero-jitter 고정값을 추가했습니다.
+- 마을 배치/타일 클릭을 추가 보강했습니다.
+  - 다이아몬드 타일 판정 검색 범위를 넓혀 작은 터치 오차를 더 잘 잡습니다.
+  - 건설/이동 시 가까운 설치 가능 타일 보정 범위를 3칸까지 확장했습니다.
+  - 배치 불가 문구를 시각 안전 간격 기준으로 더 명확하게 고쳤습니다.
+- HUD와 개척 바 간격을 다시 균형 조정했습니다.
+  - 너무 붙지도 떨어지지도 않게 상단 HUD, 개척 바, 우측 상단 조작 버튼 간 폭을 다시 제한했습니다.
+  - 마을 안내 토스트와 하단 메뉴의 겹침을 줄였습니다.
+- 상점 구매 금액 버튼을 다시 보강했습니다.
+  - 가격/보유 배지를 v2.1.36 금색 CTA로 고정해 배경과 섞여 보이지 않도록 했습니다.
+- 낚시게임을 한 번 더 손봤습니다.
+  - 안전 구간을 조금 넓히고 중심 판정을 완화했습니다.
+  - 장력이 너무 낮을 때 감기, 너무 높을 때 풀기를 사용하면 복구 보정이 들어가도록 했습니다.
+  - 실패까지의 복구 시간을 늘리고, 코치 패널에 복구 힌트 칩을 추가했습니다.
+- 기존 잠금 유지:
+  - v2.1.29 플레이어 방향 파일명 identity 매핑 유지
+  - NPC 방향 identity 매핑 유지
+  - 오프닝 영상 최초 시작 전용 유지
+  - 건설 프리뷰 → 중앙 확인 팝업 → 건설/취소 플로우 유지
+  - 루트 APP_VERSION 파일 제거 정책 유지
+
+## 검증
+
+- `npm run validate`는 다음 검증을 실행합니다.
+  - `tools/clean-old-patch-docs.mjs`
+  - `tools/validate-clean.mjs`
+  - `tools/check-v2136-premium-polish-fishing-placement.mjs`
+- v2.1.36 검증 항목:
+  - 버전 동기화
+  - CSS 괄호/중괄호/대괄호 균형
+  - 플레이어 v2129 8방향 32프레임 존재 및 해시 불변
+  - 플레이어 방향 파일명 identity 매핑 유지
+  - NPC 8방향 자산/identity 매핑 검사
+  - 오프닝 영상 최초 시작 전용 토큰 유지
+  - 우측 상단/하단 메뉴 고정 클래스 검사
+  - 마을 오브젝트 시각 안전 간격/타일 스냅 보정 검사
+  - HUD/개척 바 간격 토큰 검사
+  - 상점 구매 버튼 가시성 검사
+  - 낚시 adaptive recovery/assist/게이지/버튼/상태 검사
+  - 건설 프리뷰/확인 팝업 플로우 검사
+  - 루트 Markdown README.md 단독 유지
+  - 루트 APP_VERSION 파일 미포함
+  - 금지 산출물 미포함
 
 ## v2.1.35 Change Log
 
