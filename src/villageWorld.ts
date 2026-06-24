@@ -56,6 +56,13 @@ type PointerTrack = {
 };
 
 type PointerPoint = { x: number; y: number };
+
+type PendingBuildPlacement = {
+  type: VillageBuildingType;
+  x: number;
+  y: number;
+  movingId: string | null;
+};
 type VillagePointerHit = { x: number; y: number; worldX: number; worldY: number; screenX: number; screenY: number };
 
 type DecoKind = 'tree' | 'palm' | 'lamp' | 'bench' | 'crate' | 'buoy' | 'dock' | 'flag' | 'rock' | 'flowerBed' | 'lighthouse' | 'stall' | 'pottedPalm' | 'barrels' | 'coral' | 'crystal' | 'banner' | 'woodFence' | 'ropeFence' | 'bollard' | 'stairs' | 'bridge' | 'tropicalTree' | 'palmAlt' | 'stoneWall' | 'arch' | 'questBoard' | 'statue' | 'cherryTree' | 'mapleTree' | 'pineTree' | 'crystalTree' | 'flowerTree' | 'cypressTree' | 'dog' | 'sleepingDog' | 'cat' | 'walkingCat' | 'seagull' | 'flyingSeagull' | 'duck' | 'swimmingDuck' | 'butterflyBlue' | 'butterflyPink' | 'petals' | 'sparkles' | 'waterRing' | 'shoreFoam' | 'splash' | 'steam' | 'cookingPot' | 'goldLantern' | 'fishShadowSmall' | 'fishShadowMid' | 'fishShadowBig' | 'woodSign' | 'ropeWall' | 'stoneCorner' | 'stoneCurve' | 'wideStairs' | 'ropeCorner' | 'noticeBoard' | 'plazaStairs' | 'bridgeAsset' | 'fishingBoat' | 'rowBoat' | 'ropeCoil' | 'anchorAsset' | 'treasureChest' | 'seaweedPatch' | 'driftwood' | 'crabTrap' | 'lifeRing' | 'bucketAsset' | 'tackleBoxAsset' | 'netAsset' | 'signAsset' | 'palletAsset' | 'bobberAsset' | 'shellCluster';
@@ -237,6 +244,8 @@ const V2125_DIRECTION_MOTION_LOCK = 'v2125-east-motion-visual-lock';
 const V2127_DIRECTION_MOTION_AUDIT_LOCK = 'v2127-east-west-asset-motion-audit-lock';
 const V2128_TRUE_EAST_MOTION_LOCK = 'v2128-true-east-player-motion-lock';
 const V2129_PLAYER_FILENAME_DIRECTION_LOCK = 'v2129-player-filename-direction-direct-lock';
+const V2130_PLAYER_MOTION_IMMUTABLE_LOCK = 'v2130-player-motion-immutable-locked';
+const V2130_BUILD_CONFIRM_FLOW_LOCK = 'v2130-build-confirm-placement-lock';
 const PLAYER_ACTOR_FRAME_COUNT = 4;
 const PLAYER_ACTOR_MOTION_TEXTURES = Object.fromEntries(ACTOR_DIRECTIONS.map((direction) => [
   direction,
@@ -1024,6 +1033,7 @@ export class VillageWorld {
   private focusedBuildingId: string | null = null;
   private cameraFollowUntil = 0;
   private hoverTile: { x: number; y: number } | null = null;
+  private pendingBuildPlacement: PendingBuildPlacement | null = null;
   private lastDialogAt = 0;
   private lastPassiveIncomeAt = 0;
   private lastNpcHealthCheckAt = 0;
@@ -1116,6 +1126,8 @@ export class VillageWorld {
     this.root.dataset.v2127DirectionMotionAuditLock = V2127_DIRECTION_MOTION_AUDIT_LOCK;
     this.root.dataset.v2128TrueEastMotionLock = V2128_TRUE_EAST_MOTION_LOCK;
     this.root.dataset.v2129PlayerFilenameDirectionLock = V2129_PLAYER_FILENAME_DIRECTION_LOCK;
+    this.root.dataset.v2130PlayerMotionImmutableLock = V2130_PLAYER_MOTION_IMMUTABLE_LOCK;
+    this.root.dataset.v2130BuildConfirmFlowLock = V2130_BUILD_CONFIRM_FLOW_LOCK;
     this.root.dataset.v2118NpcDirectionAudit = 'npc-eight-direction-static-assets-verified';
     this.root.dataset.v2048VillageAnchorSystem = 'bottom-center-footprint-anchor';
     this.root.dataset.v2049ContentAssetSystem = 'clean-props-content-loop-performance';
@@ -1165,7 +1177,10 @@ export class VillageWorld {
 
   setBuildMode(type: VillageBuildingType | null): void {
     this.selectedBuild = type;
-    if (!type) this.movingBuildingId = null;
+    if (!type) {
+      this.movingBuildingId = null;
+      this.hideBuildConfirm();
+    }
     if (type) {
       this.buildTrayOpen = false;
       this.hoverTile = null;
@@ -1182,6 +1197,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2119-build-active', Boolean(type));
     this.root.classList.toggle('v2120-build-active', Boolean(type));
     this.root.classList.toggle('v2121-build-active', Boolean(type));
+    this.root.classList.toggle('v2130-build-active', Boolean(type));
     this.root.classList.toggle('v2-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2094-build-tray-open', this.buildTrayOpen);
     this.root.classList.toggle('v2097-build-tray-open', this.buildTrayOpen);
@@ -1200,7 +1216,7 @@ export class VillageWorld {
       const previewY = this.player ? clamp(this.player.tileY, 1, MAP_SIZE - def.size[1] - 1) : 29;
       this.updateBuildPreviewAtTile(previewX, previewY);
       const modeTitle = this.movingBuildingId ? '건물 이동 모드' : '설치 모드';
-      this.showGuide(modeTitle, `${def.label} 선택됨 · 화면은 어둡게 막지 않고 바닥 기준 반투명 프리뷰만 따라갑니다. 초록/빨강 타일 풋프린트를 확인하고 손을 떼면 ${this.movingBuildingId ? '이동됩니다' : '설치됩니다'}.`);
+      this.showGuide(modeTitle, `${def.label} 선택됨 · 화면은 어둡게 막지 않고 바닥 기준 반투명 프리뷰만 따라갑니다. 초록/빨강 타일 풋프린트를 확인하고 원하는 위치를 누르면 확인창이 뜹니다.`);
     }
   }
 
@@ -1221,6 +1237,7 @@ export class VillageWorld {
     this.root.classList.toggle('v2119-build-tray-open', open);
     this.root.classList.toggle('v2120-build-tray-open', open);
     this.root.classList.toggle('v2121-build-tray-open', open);
+    this.root.classList.toggle('v2130-build-tray-open', open);
     document.body.classList.toggle('v2111-build-open', open);
     document.body.classList.toggle('v2112-build-open', open);
     document.body.classList.toggle('v2113-build-open', open);
@@ -1232,6 +1249,7 @@ export class VillageWorld {
     document.body.classList.toggle('v2119-build-open', open);
     document.body.classList.toggle('v2120-build-open', open);
     document.body.classList.toggle('v2121-build-open', open);
+    document.body.classList.toggle('v2130-build-open', open);
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
       if (!keepSelection) this.movingBuildingId = null;
@@ -1253,14 +1271,14 @@ export class VillageWorld {
       this.root.classList.remove('v2113-build-active');
       this.root.classList.remove('v2114-build-active');
       this.root.classList.remove('v2118-build-active');
-      this.root.classList.remove('v2119-build-active', 'v2120-build-active', 'v2121-build-active');
+      this.root.classList.remove('v2119-build-active', 'v2120-build-active', 'v2121-build-active', 'v2130-build-active');
       this.root.classList.remove('v2112-build-tray-open');
       this.root.classList.remove('v2113-build-tray-open');
       this.root.classList.remove('v2114-build-tray-open');
       this.root.classList.remove('v2116-build-tray-open');
       this.root.classList.remove('v2117-build-tray-open');
       this.root.classList.remove('v2118-build-tray-open');
-      this.root.classList.remove('v2119-build-tray-open', 'v2120-build-tray-open', 'v2121-build-tray-open');
+      this.root.classList.remove('v2119-build-tray-open', 'v2120-build-tray-open', 'v2121-build-tray-open', 'v2130-build-tray-open');
       document.body.classList.remove('v2111-build-open');
       document.body.classList.remove('v2112-build-open');
       document.body.classList.remove('v2113-build-open');
@@ -1268,8 +1286,9 @@ export class VillageWorld {
       document.body.classList.remove('v2116-build-open');
       document.body.classList.remove('v2117-build-open');
       document.body.classList.remove('v2118-build-open');
-      document.body.classList.remove('v2119-build-open', 'v2120-build-open', 'v2121-build-open');
+      document.body.classList.remove('v2119-build-open', 'v2120-build-open', 'v2121-build-open', 'v2130-build-open');
       this.previewLayer.removeChildren();
+      this.hideBuildConfirm();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));
     }
   }
@@ -1519,14 +1538,16 @@ export class VillageWorld {
         g.position.set(0, 0);
         container.addChild(g);
       }
-      const label = new Text({
-        text: def.label,
-        style: { fontFamily: 'Arial', fontSize: 14, fontWeight: '800', fill: 0x315064, stroke: { color: 0xffffff, width: 3 } },
-      });
-      label.anchor.set(0.5);
-      label.position.set(center.x, center.y + TILE_H * 0.22);
-      label.zIndex = (building.y + building.h) * 20 + 19;
-      this.labelLayer.addChild(label);
+      if (def.kind === 'building') {
+        const label = new Text({
+          text: def.label,
+          style: { fontFamily: 'Arial', fontSize: 13, fontWeight: '800', fill: 0x20384a, stroke: { color: 0xffffff, width: 1.8 } },
+        });
+        label.anchor.set(0.5);
+        label.position.set(center.x, center.y + TILE_H * 0.22);
+        label.zIndex = (building.y + building.h) * 20 + 19;
+        this.labelLayer.addChild(label);
+      }
       this.buildingLayer.addChild(container);
     }
   }
@@ -1811,7 +1832,7 @@ export class VillageWorld {
       body = g;
     }
 
-    const label = new Text({ text: name, style: { fontFamily: 'Arial', fontSize: 14, fontWeight: '900', fill: 0x254157, stroke: { color: 0xffffff, width: 4 } } });
+    const label = new Text({ text: name, style: { fontFamily: 'Arial', fontSize: 14, fontWeight: '900', fill: 0x20384a, stroke: { color: 0xffffff, width: 2 } } });
     label.anchor.set(0.5);
     label.position.set(0, role === 'player' ? -100 : -88);
     node.addChild(shadow, footContact, body, label);
@@ -2013,7 +2034,9 @@ export class VillageWorld {
     buildOpenButton?.addEventListener('pointerup', toggleBuildTrayFromButton, { capture: true });
     buildOpenButton?.addEventListener('click', toggleBuildTrayFromButton, { capture: true });
     this.root.querySelectorAll<HTMLElement>('[data-village-build-close]').forEach((node) => node.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); this.setBuildTrayOpen(false); }));
-    this.root.querySelectorAll<HTMLElement>('[data-village-build-open], [data-village-build-close], [data-build-type], [data-village-zoom-in], [data-village-zoom-out], [data-village-center], [data-village-shop], [data-village-fishing]').forEach((node) => {
+    this.root.querySelectorAll<HTMLElement>('[data-v2130-build-confirm-cancel]').forEach((node) => node.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); this.cancelBuildConfirmation(); }));
+    this.root.querySelector<HTMLButtonElement>('[data-v2130-build-confirm-apply]')?.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); this.applyPendingBuildPlacement(); });
+    this.root.querySelectorAll<HTMLElement>('[data-village-build-open], [data-village-build-close], [data-build-type], [data-village-zoom-in], [data-village-zoom-out], [data-village-center], [data-village-shop], [data-village-fishing], [data-v2130-build-confirm], [data-v2130-build-confirm-apply], [data-v2130-build-confirm-cancel]').forEach((node) => {
       node.addEventListener('pointerdown', (ev) => { ev.stopPropagation(); }, { capture: true });
       node.addEventListener('pointerup', (ev) => { ev.stopPropagation(); }, { capture: true });
     });
@@ -2072,6 +2095,7 @@ export class VillageWorld {
       knob.style.setProperty('--v2127-joystick-transform', knobTransform);
       knob.style.setProperty('--v2128-joystick-transform', knobTransform);
       knob.style.setProperty('--v2129-joystick-transform', knobTransform);
+      knob.style.setProperty('--v2130-joystick-transform', knobTransform);
       knob.style.transform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
       const strength = Math.min(1, length / radius);
       this.joystick.x = nx * strength;
@@ -2096,6 +2120,7 @@ export class VillageWorld {
       knob.style.setProperty('--v2127-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2128-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2129-joystick-transform', 'translate(-50%, -50%)');
+      knob.style.setProperty('--v2130-joystick-transform', 'translate(-50%, -50%)');
       knob.style.transform = 'translate(-50%, -50%)';
     };
     stick.addEventListener('pointerdown', (ev) => {
@@ -2157,8 +2182,12 @@ export class VillageWorld {
       const ok = this.canPlace(origin.x, origin.y, def, this.movingBuildingId);
       this.updateBuildPreviewAtTile(origin.x, origin.y, true);
       this.showTileMarker(origin.x, origin.y, ok ? 0x35f08a : 0xff4747);
-      if (this.movingBuildingId) this.tryMoveBuilding(origin.x, origin.y, this.movingBuildingId);
-      else this.tryPlace(origin.x, origin.y, this.selectedBuild);
+      if (!ok) {
+        this.hideBuildConfirm();
+        this.showGuide(this.movingBuildingId ? '이동 불가' : '설치 불가', '초록색 풋프린트가 보이는 위치를 선택해 주세요. 바다, 길, 건물, 장식과 겹칠 수 없습니다.');
+        return;
+      }
+      this.showBuildConfirm({ type: this.selectedBuild, x: origin.x, y: origin.y, movingId: this.movingBuildingId });
       return;
     }
     const building = this.findBuildingNear(hit.x, hit.y, hit.worldX, hit.worldY);
@@ -2285,7 +2314,54 @@ export class VillageWorld {
     this.root.toggleAttribute('data-v2044-build-move-placement', true);
     this.setBuildMode(building.type);
     this.updateBuildPreviewAtTile(building.x, building.y, true);
-    this.showGuide('건물 이동 모드', `${def.label} 이동 중 · 원하는 위치로 드래그하고 손을 떼면 비용 없이 이전됩니다.`);
+    this.showGuide('건물 이동 모드', `${def.label} 이동 중 · 반투명 프리뷰를 원하는 타일에 맞춘 뒤 누르면 이동 확인창이 열립니다.`);
+  }
+
+
+  private showBuildConfirm(placement: PendingBuildPlacement): void {
+    const def = BUILD_DEFS[placement.type];
+    if (!def) return;
+    this.pendingBuildPlacement = placement;
+    const node = this.root.querySelector<HTMLElement>('[data-v2130-build-confirm]');
+    if (!node) return;
+    const mode = placement.movingId ? '이동 확인' : '건설 확인';
+    const title = placement.movingId ? `${def.label}을(를) 이 위치로 옮길까요?` : `${def.label}을(를) 이 위치에 건설할까요?`;
+    const body = placement.movingId
+      ? '반투명 프리뷰와 초록색 풋프린트를 확인한 뒤 이동을 확정하세요.'
+      : `${def.cost.toLocaleString('ko-KR')}G 사용 · 초록색 풋프린트가 표시된 타일에 설치됩니다.`;
+    node.querySelector<HTMLElement>('[data-v2130-build-confirm-mode]')!.textContent = mode;
+    node.querySelector<HTMLElement>('[data-v2130-build-confirm-title]')!.textContent = title;
+    node.querySelector<HTMLElement>('[data-v2130-build-confirm-body]')!.textContent = body;
+    const apply = node.querySelector<HTMLButtonElement>('[data-v2130-build-confirm-apply]');
+    if (apply) apply.textContent = placement.movingId ? '이동' : '건설';
+    node.classList.add('open');
+    node.setAttribute('aria-hidden', 'false');
+    this.root.classList.add('v2130-build-confirm-open');
+    document.body.classList.add('v2130-build-confirm-open');
+    this.showGuide(mode, '확인창에서 건설 또는 취소를 선택하세요. 마을 바닥 입력은 잠시 멈춥니다.');
+  }
+
+  private hideBuildConfirm(clearPending = true): void {
+    if (clearPending) this.pendingBuildPlacement = null;
+    const node = this.root.querySelector<HTMLElement>('[data-v2130-build-confirm]');
+    node?.classList.remove('open');
+    node?.setAttribute('aria-hidden', 'true');
+    this.root.classList.remove('v2130-build-confirm-open');
+    document.body.classList.remove('v2130-build-confirm-open');
+  }
+
+  private cancelBuildConfirmation(): void {
+    this.hideBuildConfirm();
+    this.showGuide('건설 취소', '반투명 프리뷰는 유지됩니다. 다른 위치를 누르거나 건설 버튼으로 취소할 수 있어요.');
+  }
+
+  private applyPendingBuildPlacement(): void {
+    const placement = this.pendingBuildPlacement;
+    if (!placement) return;
+    this.hideBuildConfirm(false);
+    if (placement.movingId) this.tryMoveBuilding(placement.x, placement.y, placement.movingId);
+    else this.tryPlace(placement.x, placement.y, placement.type);
+    this.pendingBuildPlacement = null;
   }
 
   private tryMoveBuilding(x: number, y: number, id: string): void {

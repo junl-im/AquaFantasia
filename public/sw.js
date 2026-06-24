@@ -1,5 +1,5 @@
-// v2.1.29 locks user-supplied filename-correct player direction frames and continues UI/fishing polish.
-const CACHE_NAME = 'aqua-fantasia-v2.1.29-player-filename-direction-lock';
+// v2.1.30 locks user-supplied construction placement confirm, NPC direction audit, and fishing/UI stabilization.
+const CACHE_NAME = 'aqua-fantasia-v2.1.30-construction-fishing-ui-audit';
 const PRECACHE = [
   "./",
   "./index.html",
