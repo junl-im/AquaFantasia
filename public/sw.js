@@ -1,5 +1,5 @@
-// v2.1.61 centers bite callouts, trims fish dex card art, and adds a light system stability guard.
-const CACHE_NAME = 'aqua-fantasia-v2.1.61-bite-callout-dex-system-polish';
+// v2.1.62 sweeps overlap, fishing copy, HUD/menu locks, fish dex scale, and runtime polish guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.62-quality-sweep-overlap-engine-polish';
 const ASSETS = [
   './',
   './index.html',
