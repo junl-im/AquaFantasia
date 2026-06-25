@@ -1,5 +1,5 @@
-// v2.1.56 hard-locks the right-top action menu with inline important sizing and keeps fishing gauges visible during reeling.
-const CACHE_NAME = 'aqua-fantasia-v2.1.56-top-menu-hard-lock-fishing-gauge';
+// v2.1.57 hard-replaces the right-top menu with a real micro toolbar and keeps fishing battle gauges fixed above the reel buttons.
+const CACHE_NAME = 'aqua-fantasia-v2.1.57-menu-fishing-visibility-hardfix';
 const ASSETS = [
   './',
   './index.html',
