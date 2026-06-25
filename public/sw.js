@@ -1,5 +1,5 @@
-// v2.1.54 makes the right-top action menu icon-only and keeps fishing battle gauges visible above reel controls.
-const CACHE_NAME = 'aqua-fantasia-v2.1.54-mini-top-menu-visible-fishing-gauges';
+// v2.1.55 makes the right-top action menu micro spaced and keeps fishing battle gauges locked above reel buttons.
+const CACHE_NAME = 'aqua-fantasia-v2.1.55-micro-top-menu-fishing-core-gauge';
 const ASSETS = [
   './',
   './index.html',
