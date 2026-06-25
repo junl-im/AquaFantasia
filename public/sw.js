@@ -1,5 +1,5 @@
-// v2.1.68 premium layout sweep: compact fishing cockpit, aqua card text budgets, dock/menu hard lock cleanup.
-const CACHE_NAME = 'aqua-fantasia-v2.1.68-premium-layout-sweep';
+// v2.1.70 aqua layout refinement: premium menu cards, fishing cockpit spacing, top menu hard lock, dock/build flow polish.
+const CACHE_NAME = 'aqua-fantasia-v2.1.70-aqua-layout-refinement';
 const ASSETS = ['./', './index.html', './offline.html'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));

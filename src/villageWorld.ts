@@ -1098,6 +1098,8 @@ export class VillageWorld {
   private destroyed = false;
   private joystick = { x: 0, y: 0, active: false, pointerId: null as number | null };
   private joystickKnob?: HTMLElement;
+  private readonly keyboardMoveKeys = new Set<'w' | 'a' | 's' | 'd'>();
+  private readonly keyboardAbort = new AbortController();
   private readonly resizeHandler = () => this.resize();
 
   constructor(options: VillageWorldOptions) {
@@ -1182,6 +1184,7 @@ export class VillageWorld {
     this.root.dataset.v2127DirectionMotionAuditLock = V2127_DIRECTION_MOTION_AUDIT_LOCK;
     this.root.dataset.v2128TrueEastMotionLock = V2128_TRUE_EAST_MOTION_LOCK;
     this.root.dataset.v2129PlayerFilenameDirectionLock = V2129_PLAYER_FILENAME_DIRECTION_LOCK;
+    this.root.dataset.v2169KeyboardMoveLock = 'wasd-eight-direction-joystick-parity-no-direction-flip';
     this.root.dataset.v2130PlayerMotionImmutableLock = V2130_PLAYER_MOTION_IMMUTABLE_LOCK;
     this.root.dataset.v2130BuildConfirmFlowLock = V2130_BUILD_CONFIRM_FLOW_LOCK;
     this.root.dataset.v2131PlayerNpcDirectionGuard = V2131_PLAYER_NPC_DIRECTION_GUARD;
@@ -1228,6 +1231,7 @@ export class VillageWorld {
   destroy(): void {
     this.destroyed = true;
     window.removeEventListener('resize', this.resizeHandler);
+    this.keyboardAbort.abort();
     this.app?.destroy(true, { children: true, texture: false });
     this.app = undefined;
   }
@@ -2127,6 +2131,7 @@ export class VillageWorld {
       node.addEventListener('pointerup', (ev) => { ev.stopPropagation(); }, { capture: true });
     });
     this.bindJoystick();
+    this.bindKeyboardMovement();
     const routeAction = (handler: () => void) => (ev: Event) => {
       if (ev.defaultPrevented) return;
       ev.preventDefault();
@@ -2182,6 +2187,8 @@ export class VillageWorld {
       knob.style.setProperty('--v2128-joystick-transform', knobTransform);
       knob.style.setProperty('--v2129-joystick-transform', knobTransform);
       knob.style.setProperty('--v2130-joystick-transform', knobTransform);
+      knob.style.setProperty('--v2169-joystick-transform', knobTransform);
+      this.root.classList.remove('v2169-keyboard-moving');
       knob.style.transform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
       const strength = Math.min(1, length / radius);
       this.joystick.x = nx * strength;
@@ -2207,6 +2214,9 @@ export class VillageWorld {
       knob.style.setProperty('--v2128-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2129-joystick-transform', 'translate(-50%, -50%)');
       knob.style.setProperty('--v2130-joystick-transform', 'translate(-50%, -50%)');
+      knob.style.setProperty('--v2169-joystick-transform', 'translate(-50%, -50%)');
+      this.keyboardMoveKeys.clear();
+      this.root.classList.remove('v2169-keyboard-moving');
       knob.style.transform = 'translate(-50%, -50%)';
     };
     stick.addEventListener('pointerdown', (ev) => {
@@ -2226,6 +2236,101 @@ export class VillageWorld {
       reset();
     });
     stick.addEventListener('pointercancel', reset);
+  }
+
+  private bindKeyboardMovement(): void {
+    const signal = this.keyboardAbort.signal;
+    const editableSelector = 'input, textarea, select, [contenteditable="true"], [role="textbox"]';
+    const shouldIgnore = (ev: KeyboardEvent): boolean => {
+      const target = ev.target as HTMLElement | null;
+      if (ev.metaKey || ev.ctrlKey || ev.altKey) return true;
+      if (target?.closest(editableSelector)) return true;
+      if (this.destroyed) return true;
+      if (!this.root.isConnected) return true;
+      return false;
+    };
+    const normalizeKey = (key: string): 'w' | 'a' | 's' | 'd' | null => {
+      const lower = key.toLowerCase();
+      return lower === 'w' || lower === 'a' || lower === 's' || lower === 'd' ? lower : null;
+    };
+    const syncKeyboardJoystick = () => {
+      const x = (this.keyboardMoveKeys.has('d') ? 1 : 0) - (this.keyboardMoveKeys.has('a') ? 1 : 0);
+      const y = (this.keyboardMoveKeys.has('s') ? 1 : 0) - (this.keyboardMoveKeys.has('w') ? 1 : 0);
+      const length = Math.hypot(x, y);
+      if (length <= 0) {
+        if (this.joystick.pointerId === null) this.resetJoystickVisual();
+        return;
+      }
+      const nx = x / length;
+      const ny = y / length;
+      this.joystick.x = nx;
+      this.joystick.y = ny;
+      this.joystick.active = true;
+      this.joystick.pointerId = null;
+      this.cameraFollowUntil = performance.now() + 900;
+      if (this.player) this.player.path = [];
+      this.setJoystickVisual(nx, ny, 34);
+      this.root.classList.add('v2169-keyboard-moving');
+      const stick = this.root.querySelector<HTMLElement>('[data-village-joystick]');
+      if (stick) stick.dataset.v2169KeyboardDirection = this.keyboardMoveDirectionLabel(x, y);
+    };
+    window.addEventListener('keydown', (ev) => {
+      const key = normalizeKey(ev.key);
+      if (!key || shouldIgnore(ev)) return;
+      ev.preventDefault();
+      this.keyboardMoveKeys.add(key);
+      syncKeyboardJoystick();
+    }, { signal, passive: false });
+    window.addEventListener('keyup', (ev) => {
+      const key = normalizeKey(ev.key);
+      if (!key) return;
+      ev.preventDefault();
+      this.keyboardMoveKeys.delete(key);
+      syncKeyboardJoystick();
+    }, { signal, passive: false });
+    window.addEventListener('blur', () => {
+      this.keyboardMoveKeys.clear();
+      this.resetJoystickVisual();
+    }, { signal, passive: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        this.keyboardMoveKeys.clear();
+        this.resetJoystickVisual();
+      }
+    }, { signal, passive: true });
+  }
+
+  private keyboardMoveDirectionLabel(x: number, y: number): string {
+    if (x < 0 && y < 0) return 'AW 11시';
+    if (x > 0 && y < 0) return 'WD 1시';
+    if (x < 0 && y > 0) return 'AS 7시';
+    if (x > 0 && y > 0) return 'SD 5시';
+    if (x < 0) return 'A 좌';
+    if (x > 0) return 'D 우';
+    if (y < 0) return 'W 위';
+    if (y > 0) return 'S 아래';
+    return '대기';
+  }
+
+  private setJoystickVisual(nx: number, ny: number, limited: number): void {
+    const knob = this.joystickKnob;
+    if (!knob) return;
+    const knobTransform = `translate(calc(-50% + ${nx * limited}px), calc(-50% + ${ny * limited}px))`;
+    for (const token of ['v2117','v2118','v2119','v2120','v2121','v2122','v2123','v2124','v2125','v2127','v2128','v2129','v2130','v2169']) {
+      knob.style.setProperty(`--${token}-joystick-transform`, knobTransform);
+    }
+    knob.style.transform = knobTransform;
+  }
+
+  private resetJoystickVisual(): void {
+    this.joystick = { x: 0, y: 0, active: false, pointerId: null };
+    this.root.classList.remove('v2169-keyboard-moving');
+    const knob = this.joystickKnob;
+    if (!knob) return;
+    for (const token of ['v2117','v2118','v2119','v2120','v2121','v2122','v2123','v2124','v2125','v2127','v2128','v2129','v2130','v2169']) {
+      knob.style.setProperty(`--${token}-joystick-transform`, 'translate(-50%, -50%)');
+    }
+    knob.style.transform = 'translate(-50%, -50%)';
   }
 
   private movePlayerByJoystick(deltaMs: number): void {

@@ -14,6 +14,7 @@ export class ToastManager {
     this.root.dataset.v2164CenterToast = 'enabled-center-aqua-card-feedback-wrap-safe';
     this.root.dataset.v2165CenterToast = 'enabled-center-aqua-card-feedback-text-budget';
     this.root.dataset.v2166CenterToast = 'enabled-center-aqua-card-feedback-menu-rescue';
+    this.root.dataset.v2169BriefToast = 'shop-purchase-simple-feedback';
   }
 
   show(options: ToastOptions): void {
@@ -25,9 +26,10 @@ export class ToastManager {
     this.root.removeAttribute('aria-hidden');
     this.root.dataset.toastType = options.type ?? 'normal';
     const card = document.createElement('section');
-    card.className = `toast toast-item v2163-center-toast v2164-center-toast v2165-center-toast v2166-center-toast toast-${options.type ?? 'normal'}`;
+    card.className = `toast toast-item v2163-center-toast v2164-center-toast v2165-center-toast v2166-center-toast v2169-brief-toast toast-${options.type ?? 'normal'}`;
     card.setAttribute('role', 'status');
     card.setAttribute('aria-live', 'assertive');
+    card.dataset.v2169BriefToast = options.type === 'shop' ? 'shop-purchase-simple-feedback' : 'general-feedback';
     const title = document.createElement('strong');
     title.textContent = options.title;
     card.appendChild(title);
