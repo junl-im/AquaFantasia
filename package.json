@@ -1,13 +1,13 @@
 {
   "name": "aqua-fantasia",
   "private": true,
-  "version": "2.1.62",
+  "version": "2.1.63",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build --base=./",
     "preview": "vite preview --host 0.0.0.0",
-    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v2162-quality-sweep-polish.mjs",
+    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v2163-hud-fishing-toast-inventory-polish.mjs",
     "runtime:check": "node tools/check-v2014-background-dock-scroll-polish.mjs --runtime",
     "audit": "node tools/validate-clean.mjs && node tools/check-v2014-background-dock-scroll-polish.mjs --audit",
     "typecheck": "tsc --noEmit",
