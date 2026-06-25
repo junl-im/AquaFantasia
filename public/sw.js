@@ -1,5 +1,5 @@
-// v2.1.60 audits fishing UI, HUD spacing, and the 2x3 right-top menu hard lock.
-const CACHE_NAME = 'aqua-fantasia-v2.1.60-fishing-hud-menu-polish';
+// v2.1.61 centers bite callouts, trims fish dex card art, and adds a light system stability guard.
+const CACHE_NAME = 'aqua-fantasia-v2.1.61-bite-callout-dex-system-polish';
 const ASSETS = [
   './',
   './index.html',

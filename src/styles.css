@@ -54459,3 +54459,294 @@ html.v2160-fishing-hud-menu-polish-root body[data-screen="fishing"] :is(.v2020-r
     min-height: 86px !important;
   }
 }
+
+/* v2.1.61: center bite callout, fishing copy pass, fish dex scale trim, and system guard polish. */
+html.v2161-fishing-bite-dex-system-root {
+  --v2161-aqua-ink: #063d5d;
+  --v2161-aqua-card: linear-gradient(180deg, rgba(255,255,255,.98), rgba(190,245,255,.93) 54%, rgba(89,218,255,.82));
+  --v2161-aqua-deep: linear-gradient(180deg, rgba(16,156,212,.92), rgba(4,61,111,.96));
+  --v2161-gold: linear-gradient(180deg, #fff4b9, #ffd263 62%, #f29a36);
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="village"] .v2161-world-controls-aqua-lock {
+  position: fixed !important;
+  top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+  right: calc(env(safe-area-inset-right, 0px) + 8px) !important;
+  left: auto !important;
+  bottom: auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, 32px) !important;
+  grid-auto-rows: 32px !important;
+  gap: 3px !important;
+  width: 67px !important;
+  min-width: 67px !important;
+  max-width: 67px !important;
+  height: 102px !important;
+  min-height: 102px !important;
+  max-height: 102px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  z-index: 520 !important;
+  contain: layout paint style !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="village"] .v2161-world-controls-aqua-lock .v2161-top-menu-cell {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1px solid rgba(181, 243, 255, .34) !important;
+  border-radius: 10px !important;
+  background: rgba(235, 253, 255, .22) !important;
+  background-image: none !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 1px 3px rgba(0,42,78,.05) !important;
+  overflow: hidden !important;
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="village"] .v2161-world-controls-aqua-lock .v2161-top-menu-cell :is(img,span:first-child) {
+  width: 21px !important;
+  height: 21px !important;
+  min-width: 21px !important;
+  min-height: 21px !important;
+  max-width: 21px !important;
+  max-height: 21px !important;
+  display: grid !important;
+  place-items: center !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  overflow: hidden !important;
+  transform: none !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .bottom-nav,
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-bottom-nav,
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2160-bottom-nav {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-fishing-bite-focus-screen {
+  padding: 0 !important;
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-fishing-stage {
+  inset: 0 !important;
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-bite-callout {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(344px, calc(100vw - 38px)) !important;
+  min-height: 146px !important;
+  padding: 22px 20px 18px !important;
+  display: grid !important;
+  place-items: center !important;
+  gap: 9px !important;
+  border: 1px solid rgba(255, 255, 255, .68) !important;
+  border-radius: 32px !important;
+  background: radial-gradient(circle at 50% 0%, rgba(255,255,255,.92), rgba(255,255,255,0) 38%), var(--v2161-aqua-card) !important;
+  background-image: radial-gradient(circle at 50% 0%, rgba(255,255,255,.92), rgba(255,255,255,0) 38%), var(--v2161-aqua-card) !important;
+  box-shadow: 0 24px 56px rgba(0, 38, 78, .30), inset 0 2px 0 rgba(255,255,255,.74), 0 0 0 7px rgba(44,214,255,.14) !important;
+  color: var(--v2161-aqua-ink) !important;
+  -webkit-text-fill-color: var(--v2161-aqua-ink) !important;
+  text-align: center !important;
+  text-shadow: none !important;
+  z-index: 4800 !important;
+  pointer-events: auto !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  animation: v2161-bite-pop .54s cubic-bezier(.2, 1.4, .24, 1) both !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-bite-callout::before {
+  content: "뿅!" !important;
+  position: absolute !important;
+  top: 10px !important;
+  right: 14px !important;
+  padding: 5px 9px !important;
+  border-radius: 999px !important;
+  background: var(--v2161-gold) !important;
+  color: #5b3200 !important;
+  -webkit-text-fill-color: #5b3200 !important;
+  font-size: 13px !important;
+  font-weight: 1000 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.74), 0 7px 16px rgba(125,70,0,.18) !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-bite-callout::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -42% auto auto -12% !important;
+  width: 150px !important;
+  height: 150px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.34) !important;
+  z-index: -1 !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-bite-callout :is(img,picture,svg) {
+  display: none !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-bite-callout strong {
+  display: block !important;
+  max-width: 100% !important;
+  color: #053d5d !important;
+  -webkit-text-fill-color: #053d5d !important;
+  font-size: clamp(34px, 10.5vw, 48px) !important;
+  font-weight: 1000 !important;
+  line-height: .95 !important;
+  letter-spacing: -.045em !important;
+  text-shadow: 0 2px 0 rgba(255,255,255,.88) !important;
+  white-space: nowrap !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-bite-callout span {
+  display: block !important;
+  max-width: 260px !important;
+  color: #0b5471 !important;
+  -webkit-text-fill-color: #0b5471 !important;
+  font-size: clamp(13px, 3.7vw, 16px) !important;
+  font-weight: 900 !important;
+  line-height: 1.25 !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-bite-start {
+  min-width: 168px !important;
+  min-height: 44px !important;
+  padding: 0 18px !important;
+  border: 1px solid rgba(255,255,255,.74) !important;
+  border-radius: 999px !important;
+  background: var(--v2161-gold) !important;
+  color: #4e2c00 !important;
+  -webkit-text-fill-color: #4e2c00 !important;
+  font-size: 14px !important;
+  font-weight: 1000 !important;
+  box-shadow: 0 10px 20px rgba(81,45,0,.18), inset 0 2px 0 rgba(255,255,255,.70) !important;
+  text-shadow: none !important;
+  touch-action: manipulation !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-action-badge:not(.bite-callout) {
+  z-index: 3300 !important;
+  max-width: min(300px, calc(100vw - 40px)) !important;
+  background: rgba(7, 82, 122, .86) !important;
+  border: 1px solid rgba(174,241,255,.42) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 14px 28px rgba(0,28,62,.22) !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-fishing-bite-focus-screen[data-fishing-phase="bite"] :is(.v2161-sea-lane-card,.v2161-fishing-loadout,.v2161-fishing-coach,.v2161-fishing-priority-hint) {
+  filter: saturate(1.04) brightness(.98) !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-fishing-bite-focus-screen[data-fishing-phase="reeling"] :is(.v2161-bite-callout,.bite-callout) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-fishing-bite-focus-screen[data-fishing-phase="reeling"] .v2161-battle-strip {
+  z-index: 3650 !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-fishing-bite-focus-screen[data-fishing-phase="reeling"] .v2161-reel-console:not(.hidden) {
+  z-index: 3550 !important;
+}
+html.v2161-fishing-bite-dex-system-root .v2161-premium-aqua-ui-screen .runtime-dex-grid {
+  gap: 10px !important;
+  align-items: start !important;
+  content-visibility: auto !important;
+  contain-intrinsic-size: 720px !important;
+}
+html.v2161-fishing-bite-dex-system-root .v2161-premium-aqua-ui-screen .v2161-dex-card {
+  min-height: 186px !important;
+  padding: 12px 10px 13px !important;
+  display: grid !important;
+  grid-template-rows: 66px auto auto minmax(34px, auto) auto !important;
+  align-items: center !important;
+  justify-items: center !important;
+  gap: 5px !important;
+  overflow: hidden !important;
+  contain: layout paint style !important;
+}
+html.v2161-fishing-bite-dex-system-root .v2161-premium-aqua-ui-screen .v2161-dex-card > img {
+  width: clamp(46px, 14vw, 66px) !important;
+  height: clamp(42px, 13vw, 58px) !important;
+  max-width: 66px !important;
+  max-height: 58px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  padding: 3px !important;
+  margin: 0 auto !important;
+  border-radius: 18px !important;
+  background: radial-gradient(circle at 50% 45%, rgba(255,255,255,.58), rgba(103,223,255,.14) 66%, transparent) !important;
+  filter: drop-shadow(0 7px 10px rgba(0,46,87,.14)) !important;
+  transform: none !important;
+}
+html.v2161-fishing-bite-dex-system-root .v2161-premium-aqua-ui-screen .v2161-dex-card > strong,
+html.v2161-fishing-bite-dex-system-root .v2161-premium-aqua-ui-screen .v2161-dex-card > span,
+html.v2161-fishing-bite-dex-system-root .v2161-premium-aqua-ui-screen .v2161-dex-card > p,
+html.v2161-fishing-bite-dex-system-root .v2161-premium-aqua-ui-screen .v2161-dex-card > em {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-align: center !important;
+}
+html.v2161-fishing-bite-dex-system-root .v2161-premium-aqua-ui-screen .v2161-dex-card > p {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  line-height: 1.25 !important;
+}
+html.v2161-fishing-bite-dex-system-root.v2161-reduced-motion *,
+html.v2161-fishing-bite-dex-system-root .v2161-reduced-motion * {
+  scroll-behavior: auto !important;
+}
+@keyframes v2161-bite-pop {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.82); }
+  66% { opacity: 1; transform: translate(-50%, -50%) scale(1.035); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@media (max-width: 380px) {
+  html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-bite-callout {
+    width: min(318px, calc(100vw - 28px)) !important;
+    min-height: 136px !important;
+    padding: 19px 16px 15px !important;
+  }
+  html.v2161-fishing-bite-dex-system-root .v2161-premium-aqua-ui-screen .v2161-dex-card {
+    min-height: 176px !important;
+    grid-template-rows: 58px auto auto minmax(30px, auto) auto !important;
+  }
+  html.v2161-fishing-bite-dex-system-root .v2161-premium-aqua-ui-screen .v2161-dex-card > img {
+    max-width: 58px !important;
+    max-height: 50px !important;
+  }
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-release-hidden {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v2161-fishing-bite-dex-system-root body[data-screen="fishing"] .v2161-single-reel-button {
+  width: 100% !important;
+  height: 74px !important;
+  min-height: 74px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 21px !important;
+  background: var(--v2161-gold) !important;
+  color: #4c2700 !important;
+  -webkit-text-fill-color: #4c2700 !important;
+  touch-action: none !important;
+}
