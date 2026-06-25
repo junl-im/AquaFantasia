@@ -1,5 +1,5 @@
-// v2.1.59 adds a premium aqua card skin pass, hard-locks menu/dock containment, and stabilizes fishing battle visibility.
-const CACHE_NAME = 'aqua-fantasia-v2.1.59-premium-aqua-ui-fishing-layout-polish';
+// v2.1.60 audits fishing UI, HUD spacing, and the 2x3 right-top menu hard lock.
+const CACHE_NAME = 'aqua-fantasia-v2.1.60-fishing-hud-menu-polish';
 const ASSETS = [
   './',
   './index.html',
