@@ -12,6 +12,7 @@ export class ToastManager {
     this.root.setAttribute('aria-hidden', 'true');
     this.root.dataset.v2163CenterToast = 'enabled-center-aqua-card-feedback';
     this.root.dataset.v2164CenterToast = 'enabled-center-aqua-card-feedback-wrap-safe';
+    this.root.dataset.v2165CenterToast = 'enabled-center-aqua-card-feedback-text-budget';
   }
 
   show(options: ToastOptions): void {
@@ -23,7 +24,7 @@ export class ToastManager {
     this.root.removeAttribute('aria-hidden');
     this.root.dataset.toastType = options.type ?? 'normal';
     const card = document.createElement('section');
-    card.className = `toast toast-item v2163-center-toast v2164-center-toast toast-${options.type ?? 'normal'}`;
+    card.className = `toast toast-item v2163-center-toast v2164-center-toast v2165-center-toast toast-${options.type ?? 'normal'}`;
     card.setAttribute('role', 'status');
     card.setAttribute('aria-live', 'assertive');
     const title = document.createElement('strong');

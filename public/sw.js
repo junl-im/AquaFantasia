@@ -1,11 +1,6 @@
-// v2.1.64 follow-up quality sweep: HUD/frontier spacing, right-top menu hard lock, build/expedition menu hiding, fishing loadout, inventory ledgers, dex image budget, and centered feedback.
-const CACHE_NAME = 'aqua-fantasia-v2.1.64-quality-followup-polish';
-const ASSETS = [
-  './',
-  './index.html',
-  './manifest.webmanifest',
-  './offline.html'
-];
+// v2.1.65 quality sweep: compact HUD/frontier spacing, menu hide guard, fishing loadout text budget, inventory/dex/shop overflow, and centered toast stability.
+const CACHE_NAME = 'aqua-fantasia-v2.1.65-quality-sweep-polish';
+const ASSETS = ['./', './index.html', './offline.html'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
@@ -14,5 +9,5 @@ self.addEventListener('activate', (event) => {
 });
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-  event.respondWith(fetch(event.request).catch(() => caches.match(event.request).then((cached) => cached || caches.match('./offline.html'))));
+  event.respondWith(fetch(event.request).catch(() => caches.match(event.request).then((res) => res || caches.match('./offline.html'))));
 });
