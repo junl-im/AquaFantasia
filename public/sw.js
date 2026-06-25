@@ -1,5 +1,5 @@
-// v2.1.57 hard-replaces the right-top menu with a real micro toolbar and keeps fishing battle gauges fixed above the reel buttons.
-const CACHE_NAME = 'aqua-fantasia-v2.1.57-menu-fishing-visibility-hardfix';
+// v2.1.58 balances the right-top menu, clarifies shop tags, simplifies fishing controls, and removes the opening poster still.
+const CACHE_NAME = 'aqua-fantasia-v2.1.58-menu-shop-fishing-opening-polish';
 const ASSETS = [
   './',
   './index.html',
