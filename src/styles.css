@@ -57195,3 +57195,337 @@ html.v2167-premium-mobile-polish-root body[data-screen="fishing"] .v2167-single-
     min-height: 66px !important;
   }
 }
+
+/* v2.1.68: premium layout sweep for compact fishing, shop text budgets, dock/menu hard lock. */
+html.v2168-premium-layout-sweep-root {
+  --v2168-menu-cell: 34px;
+  --v2168-menu-icon: 22px;
+  --v2168-menu-gap: 3px;
+  --v2168-menu-width: 71px;
+  --v2168-menu-height: 108px;
+  --v2168-aqua-ink: #063650;
+  --v2168-card-border: rgba(202, 252, 255, .50);
+  --v2168-card-shell: linear-gradient(180deg, rgba(244, 255, 255, .94), rgba(164, 235, 252, .80) 46%, rgba(66, 176, 223, .66));
+  --v2168-card-glow: 0 18px 44px rgba(1, 44, 84, .24), inset 0 1px 0 rgba(255,255,255,.48);
+  --v2168-gold-shell: linear-gradient(180deg, #fff8cc, #efc850 72%, #bd7e1e);
+}
+html.v2168-premium-layout-sweep-root body[data-screen="village"] .v2168-world-controls-aqua-lock:not(.v2167-menu-panel-hidden) {
+  position: fixed !important;
+  top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+  right: calc(env(safe-area-inset-right, 0px) + 8px) !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, var(--v2168-menu-cell)) !important;
+  grid-auto-rows: var(--v2168-menu-cell) !important;
+  gap: var(--v2168-menu-gap) !important;
+  width: var(--v2168-menu-width) !important;
+  min-width: var(--v2168-menu-width) !important;
+  max-width: var(--v2168-menu-width) !important;
+  height: var(--v2168-menu-height) !important;
+  min-height: var(--v2168-menu-height) !important;
+  max-height: var(--v2168-menu-height) !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  z-index: 572 !important;
+  contain: layout paint style !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="village"] .v2168-world-controls-aqua-lock::before,
+html.v2168-premium-layout-sweep-root body[data-screen="village"] .v2168-world-controls-aqua-lock::after,
+html.v2168-premium-layout-sweep-root body[data-screen="village"] .v2168-top-menu-cell::before,
+html.v2168-premium-layout-sweep-root body[data-screen="village"] .v2168-top-menu-cell::after {
+  content: none !important;
+  display: none !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="village"] .v2168-world-controls-aqua-lock button,
+html.v2168-premium-layout-sweep-root body[data-screen="village"] .v2168-top-menu-cell {
+  width: var(--v2168-menu-cell) !important;
+  height: var(--v2168-menu-cell) !important;
+  min-width: var(--v2168-menu-cell) !important;
+  min-height: var(--v2168-menu-cell) !important;
+  max-width: var(--v2168-menu-cell) !important;
+  max-height: var(--v2168-menu-cell) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 1px solid rgba(202, 252, 255, .40) !important;
+  border-radius: 10px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(45,178,225,.17)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.20), 0 2px 6px rgba(0,42,80,.06) !important;
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  overflow: hidden !important;
+  contain: layout paint style !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="village"] .v2168-world-controls-aqua-lock button :is(img,span:first-child,.v2157-menu-glyph) {
+  width: var(--v2168-menu-icon) !important;
+  height: var(--v2168-menu-icon) !important;
+  min-width: var(--v2168-menu-icon) !important;
+  min-height: var(--v2168-menu-icon) !important;
+  max-width: var(--v2168-menu-icon) !important;
+  max-height: var(--v2168-menu-icon) !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="village"] .v2097-village-hud {
+  right: calc(env(safe-area-inset-right, 0px) + 90px) !important;
+  max-width: min(286px, calc(100vw - 108px)) !important;
+}
+html.v2168-premium-layout-sweep-root .v2168-premium-aqua-ui-screen .runtime-content,
+html.v2168-premium-layout-sweep-root .v2168-premium-aqua-ui-screen .v2098-menu-content {
+  padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px)) !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain !important;
+}
+html.v2168-premium-layout-sweep-root .v2168-premium-aqua-ui-screen :is(.runtime-hero-card,.runtime-panel,.v204-window-card,.runtime-item-card,.runtime-shop-card,.dex-card,.ranking-panel,.v2097-character-card,.v2097-interior-card,.v2097-build-panel,.v2130-build-confirm) {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  border: 1px solid var(--v2168-card-border) !important;
+  background: var(--v2168-card-shell) !important;
+  box-shadow: var(--v2168-card-glow) !important;
+  color: var(--v2168-aqua-ink) !important;
+  -webkit-text-fill-color: var(--v2168-aqua-ink) !important;
+  overflow: hidden !important;
+}
+html.v2168-premium-layout-sweep-root .v2168-premium-aqua-ui-screen :is(input,textarea,select),
+html.v2168-premium-layout-sweep-root [data-v2168-input-tone="aqua-readable-no-black-background"] {
+  background: linear-gradient(180deg, rgba(248,255,255,.95), rgba(195,241,252,.86)) !important;
+  color: #05344f !important;
+  -webkit-text-fill-color: #05344f !important;
+  border: 1px solid rgba(119, 222, 246, .56) !important;
+}
+html.v2168-premium-layout-sweep-root .bottom-nav.v2168-bottom-nav {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  transform: none !important;
+  translate: none !important;
+  contain: layout paint style !important;
+}
+html.v2168-premium-layout-sweep-root .v2168-bottom-nav .v2098-nav-item {
+  overflow: hidden !important;
+  transform: none !important;
+  translate: none !important;
+  contain: layout paint style !important;
+  touch-action: manipulation !important;
+}
+html.v2168-premium-layout-sweep-root .v2168-bottom-nav .v2098-nav-item:active {
+  transform: none !important;
+}
+html.v2168-premium-layout-sweep-root .v2168-bottom-nav .v2098-nav-item img,
+html.v2168-premium-layout-sweep-root [data-v2168-image-containment="overflow-hidden-contain-clip"] {
+  object-fit: contain !important;
+  object-position: center !important;
+  clip-path: inset(0 round 9px) !important;
+  transform: none !important;
+  overflow: hidden !important;
+}
+html.v2168-premium-layout-sweep-root .v2168-shop-card {
+  grid-template-columns: clamp(38px, 10.5vw, 48px) minmax(0, 1fr) minmax(60px, auto) !important;
+  gap: 8px !important;
+  min-height: 76px !important;
+  padding: 20px 9px 9px !important;
+  overflow: hidden !important;
+  border: 1px solid var(--v2168-card-border) !important;
+  background: var(--v2168-card-shell) !important;
+  box-shadow: var(--v2168-card-glow) !important;
+}
+html.v2168-premium-layout-sweep-root .v2168-shop-card .v2168-shop-tag,
+html.v2168-premium-layout-sweep-root .v2168-shop-card > em:first-child {
+  position: absolute !important;
+  top: 7px !important;
+  left: 9px !important;
+  right: auto !important;
+  max-width: calc(100% - 18px) !important;
+  padding: 3px 8px !important;
+  border-radius: 999px !important;
+  background: var(--v2168-gold-shell) !important;
+  color: #4a2d04 !important;
+  -webkit-text-fill-color: #4a2d04 !important;
+  font-size: 10.5px !important;
+  line-height: 1.05 !important;
+  font-weight: 1000 !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  z-index: 3 !important;
+}
+html.v2168-premium-layout-sweep-root .v2168-shop-card :is(strong,small,[data-v2168-text-budget]) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+html.v2168-premium-layout-sweep-root .v2168-shop-card strong {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+html.v2168-premium-layout-sweep-root .v2168-shop-card small {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+html.v2168-premium-layout-sweep-root .v2168-shop-card .v2168-shop-price {
+  min-width: 60px !important;
+  max-width: 88px !important;
+  justify-self: end !important;
+  border-radius: 999px !important;
+  background: var(--v2168-gold-shell) !important;
+  color: #4a2d04 !important;
+  -webkit-text-fill-color: #4a2d04 !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .bottom-nav,
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-bottom-nav {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-fishing-premium-screen:not([data-fishing-phase="reeling"]) .v2168-fishing-loadout {
+  top: calc(env(safe-area-inset-top, 0px) + 88px) !important;
+  width: min(360px, calc(100vw - 22px)) !important;
+  max-width: calc(100vw - 22px) !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  overflow: hidden !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-loadout-cell span {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-fishing-premium-screen:not([data-fishing-phase="reeling"]) :is(.v2168-battle-strip,.v2168-reel-panel,.v2168-reel-console,.v2168-reel-touch-zone,.v2053-reel-touch-zone) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-fishing-premium-screen[data-fishing-phase="reeling"] :is(.v2168-sea-lane-card,.v2168-fishing-loadout,.v2168-fishing-coach,.v2168-fishing-priority-hint,.recent-catch-strip,.fishing-hud,.cast-button,.bite-callout,.action-badge) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-fishing-premium-screen[data-fishing-phase="reeling"] .v2168-battle-strip {
+  position: fixed !important;
+  left: 50% !important;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 108px) !important;
+  transform: translateX(-50%) !important;
+  width: min(364px, calc(100vw - 22px)) !important;
+  max-width: calc(100vw - 22px) !important;
+  display: grid !important;
+  grid-template-rows: repeat(3, minmax(21px, auto)) !important;
+  gap: 5px !important;
+  padding: 8px 9px !important;
+  border-radius: 22px !important;
+  border: 1px solid var(--v2168-card-border) !important;
+  background: linear-gradient(180deg, rgba(239,255,255,.94), rgba(82,188,230,.74)) !important;
+  box-shadow: 0 16px 36px rgba(0, 30, 70, .30), inset 0 1px 0 rgba(255,255,255,.50) !important;
+  color: var(--v2168-aqua-ink) !important;
+  -webkit-text-fill-color: var(--v2168-aqua-ink) !important;
+  z-index: 526 !important;
+  overflow: hidden !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-battle-strip .v2153-battle-row {
+  grid-template-columns: 40px minmax(0, 1fr) 40px !important;
+  gap: 7px !important;
+  font-size: 11.3px !important;
+  min-width: 0 !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-battle-strip .v2153-battle-row i {
+  height: 10px !important;
+  overflow: hidden !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-fishing-premium-screen[data-fishing-phase="reeling"] .v2168-reel-console:not(.hidden) {
+  position: fixed !important;
+  left: 50% !important;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 12px) !important;
+  transform: translateX(-50%) !important;
+  width: min(364px, calc(100vw - 22px)) !important;
+  max-width: calc(100vw - 22px) !important;
+  min-height: 84px !important;
+  padding: 8px !important;
+  border-radius: 24px !important;
+  border: 1px solid var(--v2168-card-border) !important;
+  background: linear-gradient(180deg, rgba(240,255,255,.95), rgba(60,177,226,.80)) !important;
+  box-shadow: 0 18px 42px rgba(0, 30, 70, .34), inset 0 1px 0 rgba(255,255,255,.52) !important;
+  display: block !important;
+  z-index: 536 !important;
+  overflow: hidden !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-reel-console :is(.v2055-reel-meter,.v2073-console-readouts,.v2131-reel-console-title,.v2063-console-help) {
+  display: none !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-reel-console .v2055-reel-actions {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  height: 100% !important;
+  gap: 0 !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-release-hidden {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-single-reel-button {
+  min-height: 68px !important;
+  width: 100% !important;
+  border-radius: 20px !important;
+  background: linear-gradient(180deg, #fff7ca, #62e9ff 44%, #218bd1 100%) !important;
+  color: #06344e !important;
+  -webkit-text-fill-color: #06344e !important;
+  font-weight: 1000 !important;
+  transform: none !important;
+  touch-action: manipulation !important;
+  user-select: none !important;
+}
+@media (max-width: 380px), (max-height: 660px) {
+  html.v2168-premium-layout-sweep-root {
+    --v2168-menu-cell: 32px;
+    --v2168-menu-icon: 21px;
+    --v2168-menu-width: 67px;
+    --v2168-menu-height: 102px;
+  }
+  html.v2168-premium-layout-sweep-root body[data-screen="village"] .v2097-village-hud,
+  html.v2168-premium-layout-sweep-root body[data-screen="village"] .v2097-expedition-board:not(.open) {
+    right: calc(env(safe-area-inset-right, 0px) + 84px) !important;
+    max-width: min(270px, calc(100vw - 102px)) !important;
+  }
+  html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-fishing-premium-screen[data-fishing-phase="reeling"] .v2168-battle-strip {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 100px) !important;
+    padding: 7px 8px !important;
+  }
+  html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-fishing-premium-screen[data-fishing-phase="reeling"] .v2168-reel-console:not(.hidden) {
+    min-height: 78px !important;
+  }
+  html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-single-reel-button {
+    min-height: 62px !important;
+  }
+}
+@media (max-height: 620px) {
+  html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-fishing-premium-screen[data-fishing-phase="reeling"] .v2168-battle-strip {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 94px) !important;
+    grid-template-rows: repeat(3, minmax(19px, auto)) !important;
+    gap: 4px !important;
+    padding: 6px 8px !important;
+  }
+  html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-fishing-premium-screen[data-fishing-phase="reeling"] .v2168-reel-console:not(.hidden) {
+    min-height: 72px !important;
+    padding: 7px !important;
+  }
+  html.v2168-premium-layout-sweep-root body[data-screen="fishing"] .v2168-single-reel-button {
+    min-height: 58px !important;
+  }
+}

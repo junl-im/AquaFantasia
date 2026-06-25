@@ -1,5 +1,5 @@
-// v2.1.67 premium mobile polish: balanced right-top menu, fishing cockpit visibility, shop/page/card overlap cleanup.
-const CACHE_NAME = 'aqua-fantasia-v2.1.67-premium-mobile-ui-fishing-polish';
+// v2.1.68 premium layout sweep: compact fishing cockpit, aqua card text budgets, dock/menu hard lock cleanup.
+const CACHE_NAME = 'aqua-fantasia-v2.1.68-premium-layout-sweep';
 const ASSETS = ['./', './index.html', './offline.html'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
