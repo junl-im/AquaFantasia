@@ -1,5 +1,5 @@
-// v2.1.53 tightens the right-top action menu and adds a dedicated fixed fishing battle HUD.
-const CACHE_NAME = 'aqua-fantasia-v2.1.53-compact-top-menu-battle-hud';
+// v2.1.54 makes the right-top action menu icon-only and keeps fishing battle gauges visible above reel controls.
+const CACHE_NAME = 'aqua-fantasia-v2.1.54-mini-top-menu-visible-fishing-gauges';
 const ASSETS = [
   './',
   './index.html',
