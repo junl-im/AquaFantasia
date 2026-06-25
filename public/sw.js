@@ -1,5 +1,5 @@
-// v2.1.73 intro gate engine: bright opening preframe, hidden village chrome until ready, and engine polish guards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.73-intro-gate-engine';
+// v2.1.74 quality engine sweep: cleans opening overlay after intro, stabilizes fishing lanes, and polishes aqua UI guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.74-quality-engine-sweep';
 const ASSETS = ['./', './index.html', './offline.html'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
