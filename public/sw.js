@@ -1,5 +1,5 @@
-// v2.1.58 balances the right-top menu, clarifies shop tags, simplifies fishing controls, and removes the opening poster still.
-const CACHE_NAME = 'aqua-fantasia-v2.1.58-menu-shop-fishing-opening-polish';
+// v2.1.59 adds a premium aqua card skin pass, hard-locks menu/dock containment, and stabilizes fishing battle visibility.
+const CACHE_NAME = 'aqua-fantasia-v2.1.59-premium-aqua-ui-fishing-layout-polish';
 const ASSETS = [
   './',
   './index.html',
