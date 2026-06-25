@@ -58893,3 +58893,127 @@ html.v2172-system-content-engine-root select[data-v2172-input-tone] {
     width: min(204px, calc(100svw - 118px)) !important;
   }
 }
+
+/* v2.1.73: intro/menu gate + engine polish - prevent dark pre-video frame and hide village chrome until the opening finishes. */
+html.v2173-intro-gate-engine-root {
+  --v2173-safe-top: env(safe-area-inset-top, 0px);
+  --v2173-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --v2173-aqua-ink: #053a56;
+  --v2173-opening-glow: radial-gradient(circle at 50% 16%, rgba(187, 255, 255, .78), rgba(61, 214, 247, .32) 34%, transparent 62%);
+}
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-village-intro-gate-screen.v2173-village-opening-state {
+  background: radial-gradient(circle at 50% 4%, rgba(139, 246, 255, .48), transparent 42%), linear-gradient(180deg, #0b84bc 0%, #08669b 42%, #042e64 100%) !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-opening-cinematic {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 960 !important;
+  display: grid !important;
+  place-items: center !important;
+  overflow: hidden !important;
+  background: var(--v2173-opening-glow), linear-gradient(180deg, #0fc0e8 0%, #0879ba 48%, #063b83 100%) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  contain: layout paint style !important;
+}
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-opening-cinematic::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: -8% !important;
+  background:
+    radial-gradient(circle at 22% 22%, rgba(255,255,255,.30), transparent 22%),
+    radial-gradient(circle at 80% 10%, rgba(119,244,255,.28), transparent 26%),
+    linear-gradient(135deg, rgba(255,255,255,.10), transparent 44%) !important;
+  opacity: 1 !important;
+  animation: v2173OpeningAquaPulse 2.4s ease-in-out infinite alternate !important;
+  pointer-events: none !important;
+}
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-opening-video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  background: transparent !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity .18s ease !important;
+  filter: saturate(1.08) contrast(1.02) brightness(1.02) !important;
+  z-index: 1 !important;
+}
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-village-intro-gate-screen.v2173-opening-media-ready .v2173-opening-video,
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-village-intro-gate-screen.v2173-opening-media-fallback .v2173-opening-video,
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-village-intro-gate-screen.v2121-opening-video-ready .v2173-opening-video {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-opening-media-fallback .v2173-opening-video {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2120-opening-vignette,
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2122-opening-vignette,
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-opening-cinematic .v2120-opening-vignette {
+  z-index: 2 !important;
+  background: radial-gradient(circle at 50% 38%, transparent 42%, rgba(3, 51, 105, .24) 100%) !important;
+  opacity: .42 !important;
+  mix-blend-mode: multiply !important;
+  pointer-events: none !important;
+}
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-opening-cinematic :is(.v2119-opening-bubble,.v2121-opening-skip,.v2173-opening-skip) {
+  z-index: 3 !important;
+}
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-village-intro-gate-screen.v2173-village-opening-state :is(
+  .v2097-world-controls,
+  .v2098-world-controls,
+  .v2157-world-controls-microbar,
+  .v2097-village-hud,
+  .v2097-expedition-board,
+  .v2097-joystick,
+  .bottom-nav,
+  .v2097-village-guide,
+  .v2097-village-notice,
+  .v2097-dialog-panel
+) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-village-intro-gate-screen.v2173-village-opening-state :is(.v2-village-stage, .v2-village-bg) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v2173-intro-gate-engine-root body[data-v2173-intro-gate="opening-video-only-no-village-menu"] :is(.bottom-nav, .v2097-world-controls, .v2157-world-controls-microbar) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-village-ready :is(.v2097-world-controls, .v2097-village-hud, .v2097-expedition-board, .v2097-joystick) {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+html.v2173-intro-gate-engine-root .v2173-engine-card,
+html.v2173-intro-gate-engine-root [data-v2173-img-policy="decode-async-contain-no-drag"] {
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+}
+@keyframes v2173OpeningAquaPulse {
+  from { transform: scale(1) translate3d(0,0,0); opacity: .78; }
+  to { transform: scale(1.025) translate3d(0,-1.5%,0); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-opening-cinematic::before { animation: none !important; }
+  html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-opening-video { transition: none !important; }
+}
+@media (max-height: 640px) {
+  html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-opening-cinematic .v2119-opening-bubble { transform: translateY(-8px) scale(.94) !important; }
+  html.v2173-intro-gate-engine-root body[data-screen="village"] .v2173-opening-skip { bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important; }
+}

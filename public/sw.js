@@ -1,5 +1,5 @@
-// v2.1.72 system content engine: stronger fishing lane separation, UI audit polish, and mobile performance guards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.72-system-content-engine';
+// v2.1.73 intro gate engine: bright opening preframe, hidden village chrome until ready, and engine polish guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.73-intro-gate-engine';
 const ASSETS = ['./', './index.html', './offline.html'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
