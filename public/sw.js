@@ -1,5 +1,5 @@
-// v2.1.52 compacts the right-top action menu and locks the fishing battle gauges/buttons into a visible fixed cockpit.
-const CACHE_NAME = 'aqua-fantasia-v2.1.52-compact-top-menu-visible-fishing-gauge';
+// v2.1.53 tightens the right-top action menu and adds a dedicated fixed fishing battle HUD.
+const CACHE_NAME = 'aqua-fantasia-v2.1.53-compact-top-menu-battle-hud';
 const ASSETS = [
   './',
   './index.html',
