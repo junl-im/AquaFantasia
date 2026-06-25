@@ -1,5 +1,5 @@
-// v2.1.55 makes the right-top action menu micro spaced and keeps fishing battle gauges locked above reel buttons.
-const CACHE_NAME = 'aqua-fantasia-v2.1.55-micro-top-menu-fishing-core-gauge';
+// v2.1.56 hard-locks the right-top action menu with inline important sizing and keeps fishing gauges visible during reeling.
+const CACHE_NAME = 'aqua-fantasia-v2.1.56-top-menu-hard-lock-fishing-gauge';
 const ASSETS = [
   './',
   './index.html',
