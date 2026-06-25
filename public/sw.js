@@ -1,5 +1,5 @@
-// v2.1.63 tightens HUD/frontier spacing, enlarges right-top menu, centers toasts, and fixes fishing/inventory text clipping.
-const CACHE_NAME = 'aqua-fantasia-v2.1.63-hud-menu-fishing-toast-inventory-polish';
+// v2.1.64 follow-up quality sweep: HUD/frontier spacing, right-top menu hard lock, build/expedition menu hiding, fishing loadout, inventory ledgers, dex image budget, and centered feedback.
+const CACHE_NAME = 'aqua-fantasia-v2.1.64-quality-followup-polish';
 const ASSETS = [
   './',
   './index.html',
