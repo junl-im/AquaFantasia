@@ -1,5 +1,5 @@
-// v2.1.70 aqua layout refinement: premium menu cards, fishing cockpit spacing, top menu hard lock, dock/build flow polish.
-const CACHE_NAME = 'aqua-fantasia-v2.1.70-aqua-layout-refinement';
+// v2.1.71 fishing layout engine: separated battle gauge/button lanes, left loadout under sea lane, bite callout cleanup, and safe performance guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.71-fishing-layout-engine';
 const ASSETS = ['./', './index.html', './offline.html'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
