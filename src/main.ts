@@ -325,6 +325,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2163HudFishingToastInventoryPolish = 'v2163-hud-gap-menu-bigger-fishing-loadout-center-toast-ledger-dex';
     document.documentElement.dataset.v2164QualityFollowupPolish = 'v2164-hud-menu-build-expedition-fishing-inventory-dex-followup';
     document.documentElement.dataset.v2165QualitySweepPolish = 'v2165-overlap-layout-text-budget-shop-fishing-menu-sweep';
+    document.documentElement.dataset.v2166MenuHudAutoSalePolish = 'v2166-menu-rescue-hud-color-autosale-loop';
     document.documentElement.dataset.v2154MenuFishingVisibilitySweep = 'v2154-mini-icon-menu-visible-fishing-gauges';
     document.documentElement.dataset.v2155MenuFishingCoreVisibility = 'v2155-micro-spaced-menu-gauge-above-reel-buttons';
     this.activateV2097UiResetShell();
@@ -333,7 +334,8 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2163HudFishingToastInventoryPolish = 'v2163-hud-gap-menu-bigger-fishing-loadout-center-toast-ledger-dex';
     document.documentElement.dataset.v2164QualityFollowupPolish = 'v2164-hud-menu-build-expedition-fishing-inventory-dex-followup';
     document.documentElement.dataset.v2165QualitySweepPolish = 'v2165-overlap-layout-text-budget-shop-fishing-menu-sweep';
-    document.documentElement.classList.add('v2098-ui-recovery-root', 'v218-stable-ui-fishing-rollback-root', 'v219-ui-touch-shop-fishing-audit-root', 'v2111-aqua-shell-root', 'v2112-aqua-foundation-root', 'v2113-aqua-core-root', 'v2114-aqua-interaction-root', 'v2115-aqua-screen-shell-root', 'v2116-village-asset-polish-root', 'v2117-layout-input-fishing-root', 'v2118-character-water-ui-root', 'v2119-opening-exit-character-ui-root', 'v2120-opening-video-direction-ui-root', 'v2121-ui-continuity-polish-root', 'v2122-route-direction-ui-stability-root', 'v2123-bug-ui-fishing-stability-root', 'v2124-stability-performance-root', 'v2125-opening-direction-motion-ui-root', 'v2127-direction-motion-ui-audit-root', 'v2128-direction-ui-fishing-correction-root', 'v2129-player-filename-direction-root', 'v2130-construction-fishing-ui-root', 'v2131-motion-ui-fishing-build-root', 'v2132-premium-ui-fishing-stability-root', 'v2133-premium-ui-engine-fishing-stability-root', 'v2134-object-grid-shop-fishing-ui-root', 'v2135-system-ui-fishing-engine-root', 'v2136-premium-polish-fishing-placement-root', 'v2137-fishing-ui-page-shell-hud-menu-polish-root', 'v2138-fishing-cockpit-menu-page-polish-root', 'v2139-fishing-ui-system-polish-root', 'v2140-fishing-menu-ui-tune-root', 'v2142-fishing-ui-page-tile-polish-root', 'v2143-ui-overlap-placement-sweep-root', 'v2144-ui-placement-polish-sweep-root', 'v2145-icon-fishing-page-polish-root', 'v2146-ui-overlap-icon-fishing-polish-root', 'v2147-ui-overlap-layout-fishing-polish-root', 'v2148-ui-overlap-layout-sweep-root', 'v2149-ui-composition-polish-root', 'v2150-ui-overlap-placement-beauty-root', 'v2151-layout-composition-fishing-ui-root', 'v2152-compact-menu-fishing-gauge-root', 'v2153-tight-top-menu-fishing-battle-hud-root', 'v2154-menu-fishing-visibility-sweep-root', 'v2155-menu-fishing-core-visibility-root', 'v2156-top-menu-hard-lock-fishing-gauge-root', 'v2157-menu-fishing-visibility-hardfix-root', 'v2158-menu-shop-fishing-opening-polish-root', 'v2159-premium-aqua-ui-fishing-layout-root', 'v2160-fishing-hud-menu-polish-root', 'v2161-fishing-bite-dex-system-root', 'v2162-ui-quality-sweep-root', 'v2163-hud-fishing-toast-inventory-root', 'v2164-quality-followup-root', 'v2165-quality-sweep-root');
+    document.documentElement.dataset.v2166MenuHudAutoSalePolish = 'v2166-menu-rescue-hud-color-autosale-loop';
+    document.documentElement.classList.add('v2098-ui-recovery-root', 'v218-stable-ui-fishing-rollback-root', 'v219-ui-touch-shop-fishing-audit-root', 'v2111-aqua-shell-root', 'v2112-aqua-foundation-root', 'v2113-aqua-core-root', 'v2114-aqua-interaction-root', 'v2115-aqua-screen-shell-root', 'v2116-village-asset-polish-root', 'v2117-layout-input-fishing-root', 'v2118-character-water-ui-root', 'v2119-opening-exit-character-ui-root', 'v2120-opening-video-direction-ui-root', 'v2121-ui-continuity-polish-root', 'v2122-route-direction-ui-stability-root', 'v2123-bug-ui-fishing-stability-root', 'v2124-stability-performance-root', 'v2125-opening-direction-motion-ui-root', 'v2127-direction-motion-ui-audit-root', 'v2128-direction-ui-fishing-correction-root', 'v2129-player-filename-direction-root', 'v2130-construction-fishing-ui-root', 'v2131-motion-ui-fishing-build-root', 'v2132-premium-ui-fishing-stability-root', 'v2133-premium-ui-engine-fishing-stability-root', 'v2134-object-grid-shop-fishing-ui-root', 'v2135-system-ui-fishing-engine-root', 'v2136-premium-polish-fishing-placement-root', 'v2137-fishing-ui-page-shell-hud-menu-polish-root', 'v2138-fishing-cockpit-menu-page-polish-root', 'v2139-fishing-ui-system-polish-root', 'v2140-fishing-menu-ui-tune-root', 'v2142-fishing-ui-page-tile-polish-root', 'v2143-ui-overlap-placement-sweep-root', 'v2144-ui-placement-polish-sweep-root', 'v2145-icon-fishing-page-polish-root', 'v2146-ui-overlap-icon-fishing-polish-root', 'v2147-ui-overlap-layout-fishing-polish-root', 'v2148-ui-overlap-layout-sweep-root', 'v2149-ui-composition-polish-root', 'v2150-ui-overlap-placement-beauty-root', 'v2151-layout-composition-fishing-ui-root', 'v2152-compact-menu-fishing-gauge-root', 'v2153-tight-top-menu-fishing-battle-hud-root', 'v2154-menu-fishing-visibility-sweep-root', 'v2155-menu-fishing-core-visibility-root', 'v2156-top-menu-hard-lock-fishing-gauge-root', 'v2157-menu-fishing-visibility-hardfix-root', 'v2158-menu-shop-fishing-opening-polish-root', 'v2159-premium-aqua-ui-fishing-layout-root', 'v2160-fishing-hud-menu-polish-root', 'v2161-fishing-bite-dex-system-root', 'v2162-ui-quality-sweep-root', 'v2163-hud-fishing-toast-inventory-root', 'v2164-quality-followup-root', 'v2165-quality-sweep-root', 'v2166-menu-rescue-root');
     // v2.0.92 validation lineage only: dataset.v2092UiStable = 'v2092-live-ui-canonical' activateV2092UiStableShell html.classList.add('v2092-ui-canonical-root') v2092-ui-stable-village-screen v2092-village-hud v2092-profile-chip v2092-expedition-board v2092-expedition-toggle data-v2092-expedition-toggle v2092-expedition-body data-v2092-expedition-body v2092-expedition-body-open v2092-ui-close v2092-ui-stable-menu-screen v2092-runtime-hud v2092-menu-content data-v2092-scroll-root="true" v2092-menu-close
     // v2.0.93 validation lineage only: old html dataset markers intentionally removed from live runtime. visualPolish enginePatch v2077MenuUiCleanup v2089UiHardReset v2090UiDebtCleanup v2091UiCleanup v2092UiStable
     /* v2.0.92 validation lineage only: old html dataset markers are intentionally not attached to runtime.
@@ -445,6 +447,7 @@ class AquaFantasiaGame {
     this.installV2162QualitySweepPass();
     this.installV2164QualityFollowupPass();
     this.installV2165QualitySweepPass();
+    this.installV2166MenuHudAutoSalePass();
     this.preloadCriticalImages();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
@@ -928,9 +931,9 @@ class AquaFantasiaGame {
 
 
   private applyV2158TopMenuBalanced(root: HTMLElement): void {
-    const controls = root.querySelector<HTMLElement>('.v2097-world-controls, .v2156-world-controls, .v2157-world-controls-microbar, .v2158-world-controls-balanced, .v2160-world-controls-aqua-lock, .v2161-world-controls-aqua-lock, .v2162-world-controls-aqua-lock, .v2163-world-controls-aqua-lock, .v2164-world-controls-aqua-lock, .v2165-world-controls-aqua-lock');
+    const controls = root.querySelector<HTMLElement>('.v2097-world-controls, .v2156-world-controls, .v2157-world-controls-microbar, .v2158-world-controls-balanced, .v2160-world-controls-aqua-lock, .v2161-world-controls-aqua-lock, .v2162-world-controls-aqua-lock, .v2163-world-controls-aqua-lock, .v2164-world-controls-aqua-lock, .v2165-world-controls-aqua-lock, .v2166-world-controls-aqua-lock');
     if (!controls) return;
-    controls.classList.add('v2156-world-controls-fixed', 'v2157-world-controls-microbar', 'v2158-world-controls-balanced', 'v2159-world-controls-aqua-lock', 'v2160-world-controls-aqua-lock', 'v2161-world-controls-aqua-lock', 'v2162-world-controls-aqua-lock', 'v2163-world-controls-aqua-lock', 'v2164-world-controls-aqua-lock', 'v2165-world-controls-aqua-lock');
+    controls.classList.add('v2156-world-controls-fixed', 'v2157-world-controls-microbar', 'v2158-world-controls-balanced', 'v2159-world-controls-aqua-lock', 'v2160-world-controls-aqua-lock', 'v2161-world-controls-aqua-lock', 'v2162-world-controls-aqua-lock', 'v2163-world-controls-aqua-lock', 'v2164-world-controls-aqua-lock', 'v2165-world-controls-aqua-lock', 'v2166-world-controls-aqua-lock');
     controls.dataset.v2156HardLock = 'inline-important-compact-3x2';
     controls.dataset.v2157HardReplace = 'real-microbar-20px-3x2-no-labels';
     controls.dataset.v2158BalancedMenu = '2x3-32px-cell-21px-icon-3px-gap';
@@ -940,6 +943,7 @@ class AquaFantasiaGame {
     controls.dataset.v2163HudMenuCheck = '2x3-35px-23px-4px-no-frame-hide-on-build-expedition';
     controls.dataset.v2164QualityMenuCheck = '2x3-36px-24px-4px-no-frame-hide-on-build-expedition-confirm';
     controls.dataset.v2165QualityMenuCheck = '2x3-36px-24px-4px-no-frame-panel-hidden-text-budget';
+    controls.dataset.v2166MenuRescue = '2x3-38px-25px-visible-village-hide-only-open-panels';
     const set = (node: HTMLElement | null | undefined, entries: Array<[string, string]>) => {
       if (!node) return;
       for (const [name, value] of entries) node.style.setProperty(name, value, 'important');
@@ -951,16 +955,16 @@ class AquaFantasiaGame {
       ['left', 'auto'],
       ['bottom', 'auto'],
       ['display', 'grid'],
-      ['grid-template-columns', 'repeat(2, 36px)'],
-      ['grid-auto-rows', '36px'],
+      ['grid-template-columns', 'repeat(2, 38px)'],
+      ['grid-auto-rows', '38px'],
       ['column-gap', '4px'],
       ['row-gap', '4px'],
-      ['width', '76px'],
-      ['min-width', '76px'],
-      ['max-width', '76px'],
-      ['height', '116px'],
-      ['min-height', '116px'],
-      ['max-height', '116px'],
+      ['width', '80px'],
+      ['min-width', '80px'],
+      ['max-width', '80px'],
+      ['height', '122px'],
+      ['min-height', '122px'],
+      ['max-height', '122px'],
       ['padding', '0'],
       ['margin', '0'],
       ['border', '0'],
@@ -977,7 +981,7 @@ class AquaFantasiaGame {
       ['pointer-events', 'auto'],
     ]);
     controls.querySelectorAll<HTMLElement>('button').forEach((button) => {
-      button.classList.add('v2156-top-menu-cell', 'v2157-top-menu-cell', 'v2158-top-menu-cell', 'v2159-top-menu-cell', 'v2160-top-menu-cell', 'v2161-top-menu-cell', 'v2162-top-menu-cell', 'v2163-top-menu-cell', 'v2164-top-menu-cell', 'v2165-top-menu-cell');
+      button.classList.add('v2156-top-menu-cell', 'v2157-top-menu-cell', 'v2158-top-menu-cell', 'v2159-top-menu-cell', 'v2160-top-menu-cell', 'v2161-top-menu-cell', 'v2162-top-menu-cell', 'v2163-top-menu-cell', 'v2164-top-menu-cell', 'v2165-top-menu-cell', 'v2166-top-menu-cell');
       button.dataset.v2156HardLockCell = '24px';
       button.dataset.v2157HardReplaceCell = '20px-no-text';
       button.dataset.v2158BalancedCell = '32px-icon-21px-gap-3px';
@@ -987,18 +991,19 @@ class AquaFantasiaGame {
       button.dataset.v2163HudMenuCell = '35px-23px-single-border-no-frame-no-overlap';
       button.dataset.v2164QualityMenuCell = '36px-24px-single-border-no-frame-no-overlap';
       button.dataset.v2165QualityMenuCell = '36px-24px-single-border-panel-hidden-no-text-jitter';
+      button.dataset.v2166MenuRescueCell = '38px-25px-single-border-visible-after-panel-close';
       set(button, [
         ['all', 'unset'],
         ['box-sizing', 'border-box'],
         ['position', 'relative'],
         ['display', 'grid'],
         ['place-items', 'center'],
-        ['width', '36px'],
-        ['height', '36px'],
-        ['min-width', '36px'],
-        ['min-height', '36px'],
-        ['max-width', '36px'],
-        ['max-height', '36px'],
+        ['width', '38px'],
+        ['height', '38px'],
+        ['min-width', '38px'],
+        ['min-height', '38px'],
+        ['max-width', '38px'],
+        ['max-height', '38px'],
         ['padding', '0'],
         ['margin', '0'],
         ['border', '1px solid rgba(181, 243, 255, .34)'],
@@ -1023,12 +1028,12 @@ class AquaFantasiaGame {
       set(button.querySelector<HTMLElement>('span:first-child'), [
         ['display', 'grid'],
         ['place-items', 'center'],
-        ['width', '24px'],
-        ['height', '24px'],
-        ['min-width', '24px'],
-        ['min-height', '24px'],
-        ['max-width', '24px'],
-        ['max-height', '24px'],
+        ['width', '25px'],
+        ['height', '25px'],
+        ['min-width', '25px'],
+        ['min-height', '25px'],
+        ['max-width', '25px'],
+        ['max-height', '25px'],
         ['padding', '0'],
         ['margin', '0'],
         ['overflow', 'hidden'],
@@ -1037,12 +1042,12 @@ class AquaFantasiaGame {
       ]);
       set(button.querySelector<HTMLElement>('img'), [
         ['display', 'block'],
-        ['width', '24px'],
-        ['height', '24px'],
-        ['min-width', '24px'],
-        ['min-height', '24px'],
-        ['max-width', '24px'],
-        ['max-height', '24px'],
+        ['width', '25px'],
+        ['height', '25px'],
+        ['min-width', '25px'],
+        ['min-height', '25px'],
+        ['max-width', '25px'],
+        ['max-height', '25px'],
         ['object-fit', 'contain'],
         ['object-position', 'center'],
         ['padding', '0'],
@@ -1077,7 +1082,7 @@ class AquaFantasiaGame {
     const shouldPlayOpening = this.openingIntroPending && !this.openingIntroShown;
     const villageReadyClasses = 'v2097-village-ready v2115-village-ready v2116-village-ready v2117-village-ready v2118-village-ready v2119-village-ready v2120-village-ready v2121-village-ready v2122-village-ready v2123-village-ready v2124-village-ready v2125-village-ready v2127-village-ready v2128-village-ready v2129-village-ready v2130-village-ready v2131-village-ready';
     const villageLoadingClasses = 'v2115-village-loading-state v2116-village-loading-state v2117-village-loading-state v2118-village-loading-state v2119-village-opening-state v2120-village-opening-state v2121-village-opening-state v2122-village-opening-state v2123-village-opening-state v2124-village-opening-state v2125-village-opening-state v2127-village-opening-state v2128-village-opening-state v2129-village-opening-state v2130-village-opening-state v2131-village-opening-state';
-    root.className = `game-screen village-world-screen v2097-village-screen v2098-village-screen v2111-village-shell v2112-village-foundation v2113-village-core v2114-village-interaction v2115-village-shell v2116-village-asset-shell v2116-village-asset-polish v2117-village-layout-polish v2118-village-character-water-polish v2119-village-opening-polish v2120-village-opening-video-polish v2121-village-continuity-polish v2122-village-route-polish v2123-village-stability-polish v2124-village-stability-performance v2125-village-direction-ui v2127-village-ui-audit v2128-village-direction-polish v2129-village-filename-direction v2130-village-stability v2131-village-motion-ui-stability v2134-village-object-grid-stability v2135-village-layout-grid-stability v2136-village-premium-placement v2137-village-ui-shell-polish v2138-village-menu-hud-polish v2139-village-page-ui-polish v2144-village-placement-polish v2164-village-quality-screen v2165-village-quality-screen ${shouldPlayOpening ? villageLoadingClasses : villageReadyClasses} locked-screen`;
+    root.className = `game-screen village-world-screen v2097-village-screen v2098-village-screen v2111-village-shell v2112-village-foundation v2113-village-core v2114-village-interaction v2115-village-shell v2116-village-asset-shell v2116-village-asset-polish v2117-village-layout-polish v2118-village-character-water-polish v2119-village-opening-polish v2120-village-opening-video-polish v2121-village-continuity-polish v2122-village-route-polish v2123-village-stability-polish v2124-village-stability-performance v2125-village-direction-ui v2127-village-ui-audit v2128-village-direction-polish v2129-village-filename-direction v2130-village-stability v2131-village-motion-ui-stability v2134-village-object-grid-stability v2135-village-layout-grid-stability v2136-village-premium-placement v2137-village-ui-shell-polish v2138-village-menu-hud-polish v2139-village-page-ui-polish v2144-village-placement-polish v2164-village-quality-screen v2165-village-quality-screen v2166-village-quality-screen ${shouldPlayOpening ? villageLoadingClasses : villageReadyClasses} locked-screen`;
     root.dataset.v2097UiReset = 'canonical-v2097-village-stable';
     root.dataset.v2098UiRecovery = 'v2098-village-dock-build-recovery';
     root.dataset.v2111AquaShell = 'v2111-village-shell';
@@ -1105,6 +1110,7 @@ class AquaFantasiaGame {
     root.dataset.v2158OpeningVideoOnly = shouldPlayOpening ? 'video-only-no-poster-image' : 'direct-route';
     root.dataset.v2164QualityFollowupPolish = shouldPlayOpening ? 'opening-video-only-no-poster' : 'hud-menu-build-expedition-safe-followup';
     root.dataset.v2165QualitySweepPolish = shouldPlayOpening ? 'opening-video-only-no-poster' : 'hud-frontier-menu-panel-hide-text-budget';
+    root.dataset.v2166MenuHudAutoSalePolish = shouldPlayOpening ? 'opening-video-only-no-poster' : 'menu-visible-hud-color-autosale-loop';
     root.innerHTML = `
       <div class="v2-village-bg" aria-hidden="true"></div>
       ${shouldPlayOpening ? `<section class="v2119-opening-cinematic v2120-opening-cinematic v2121-opening-cinematic v2122-opening-cinematic v2123-opening-cinematic v2124-opening-cinematic v2125-opening-cinematic v2127-opening-cinematic v2128-opening-cinematic v2129-opening-cinematic v2130-opening-cinematic v2131-opening-cinematic v2158-opening-cinematic" aria-live="polite" aria-label="마을 로딩">
@@ -1203,7 +1209,7 @@ class AquaFantasiaGame {
           </div>
         </article>
       </section>
-      <div class="v2097-world-controls v2098-world-controls v2115-world-controls v2116-world-controls v2117-world-controls v2118-world-controls v2119-world-controls v2120-world-controls v2121-world-controls v2123-world-controls v2124-world-controls v2125-world-controls v2127-world-controls v2128-world-controls v2129-world-controls v2130-world-controls v2131-world-controls v2132-world-controls v2134-world-controls v2135-world-controls v2136-world-controls v2148-world-controls v2149-world-controls v2150-world-controls v2151-world-controls v2152-world-controls v2153-world-controls v2154-world-controls v2155-world-controls v2156-world-controls v2157-world-controls-microbar v2158-world-controls-balanced v2159-world-controls-aqua-lock v2160-world-controls-aqua-lock v2161-world-controls-aqua-lock v2162-world-controls-aqua-lock v2163-world-controls-aqua-lock v2164-world-controls-aqua-lock v2165-world-controls-aqua-lock" data-v2165-primary-order="plus-minus-build-center-shop-sail" data-v2164-primary-order="plus-minus-build-center-shop-sail" data-v2163-primary-order="plus-minus-build-center-shop-sail" data-v2162-primary-order="plus-minus-build-center-shop-sail" data-v2161-primary-order="plus-minus-build-center-shop-sail" data-v2160-primary-order="plus-minus-build-center-shop-sail" data-v2159-primary-order="plus-minus-build-center-shop-sail" data-v2158-primary-order="plus-minus-build-center-shop-sail" data-v2157-primary-order="plus-minus-build-center-shop-sail" data-v2156-primary-order="plus-minus-build-center-shop-sail" data-v2155-primary-order="plus-minus-build-center-shop-sail" data-v2154-primary-order="plus-minus-build-center-shop-sail" data-v2153-primary-order="plus-minus-build-center-shop-sail" data-v2152-primary-order="plus-minus-build-center-shop-sail" data-v2150-primary-order="plus-minus-build-center-shop-sail" data-v2151-primary-order="plus-minus-build-center-shop-sail" data-v2149-primary-order="plus-minus-build-center-shop-sail" data-v2148-primary-order="plus-minus-build-center-shop-sail" data-v2135-primary-order="plus-minus-build-center-shop-sail" data-v2136-primary-order="plus-minus-build-center-shop-sail" data-v2134-primary-order="plus-minus-build-center-shop-sail" data-v2132-primary-order="plus-minus-build-center-shop-sail" data-v2131-primary-order="plus-minus-build-center-shop-sail" data-v2127-primary-order="plus-minus-build-center-shop-sail" data-v2120-primary-order="plus-minus-build-center-shop-sail" data-v2119-primary-order="plus-minus-build-center-shop-sail" data-v2118-primary-order="plus-minus-build-center-shop-sail" data-v2117-primary-order="plus-minus-build-center-shop-sail" data-v2115-primary-order="plus-minus-build-center-shop-sail" data-v2116-primary-order="plus-minus-build-center-shop-sail" aria-label="마을 조작">
+      <div class="v2097-world-controls v2098-world-controls v2115-world-controls v2116-world-controls v2117-world-controls v2118-world-controls v2119-world-controls v2120-world-controls v2121-world-controls v2123-world-controls v2124-world-controls v2125-world-controls v2127-world-controls v2128-world-controls v2129-world-controls v2130-world-controls v2131-world-controls v2132-world-controls v2134-world-controls v2135-world-controls v2136-world-controls v2148-world-controls v2149-world-controls v2150-world-controls v2151-world-controls v2152-world-controls v2153-world-controls v2154-world-controls v2155-world-controls v2156-world-controls v2157-world-controls-microbar v2158-world-controls-balanced v2159-world-controls-aqua-lock v2160-world-controls-aqua-lock v2161-world-controls-aqua-lock v2162-world-controls-aqua-lock v2163-world-controls-aqua-lock v2164-world-controls-aqua-lock v2165-world-controls-aqua-lock v2166-world-controls-aqua-lock" data-v2166-primary-order="plus-minus-build-center-shop-sail" data-v2165-primary-order="plus-minus-build-center-shop-sail" data-v2164-primary-order="plus-minus-build-center-shop-sail" data-v2163-primary-order="plus-minus-build-center-shop-sail" data-v2162-primary-order="plus-minus-build-center-shop-sail" data-v2161-primary-order="plus-minus-build-center-shop-sail" data-v2160-primary-order="plus-minus-build-center-shop-sail" data-v2159-primary-order="plus-minus-build-center-shop-sail" data-v2158-primary-order="plus-minus-build-center-shop-sail" data-v2157-primary-order="plus-minus-build-center-shop-sail" data-v2156-primary-order="plus-minus-build-center-shop-sail" data-v2155-primary-order="plus-minus-build-center-shop-sail" data-v2154-primary-order="plus-minus-build-center-shop-sail" data-v2153-primary-order="plus-minus-build-center-shop-sail" data-v2152-primary-order="plus-minus-build-center-shop-sail" data-v2150-primary-order="plus-minus-build-center-shop-sail" data-v2151-primary-order="plus-minus-build-center-shop-sail" data-v2149-primary-order="plus-minus-build-center-shop-sail" data-v2148-primary-order="plus-minus-build-center-shop-sail" data-v2135-primary-order="plus-minus-build-center-shop-sail" data-v2136-primary-order="plus-minus-build-center-shop-sail" data-v2134-primary-order="plus-minus-build-center-shop-sail" data-v2132-primary-order="plus-minus-build-center-shop-sail" data-v2131-primary-order="plus-minus-build-center-shop-sail" data-v2127-primary-order="plus-minus-build-center-shop-sail" data-v2120-primary-order="plus-minus-build-center-shop-sail" data-v2119-primary-order="plus-minus-build-center-shop-sail" data-v2118-primary-order="plus-minus-build-center-shop-sail" data-v2117-primary-order="plus-minus-build-center-shop-sail" data-v2115-primary-order="plus-minus-build-center-shop-sail" data-v2116-primary-order="plus-minus-build-center-shop-sail" aria-label="마을 조작">
         <button type="button" data-village-zoom-in aria-label="확대"><span class="v2157-menu-glyph" aria-hidden="true">＋</span><span class="v2157-menu-label">확대</span></button>
         <button type="button" data-village-zoom-out aria-label="축소"><span class="v2157-menu-glyph" aria-hidden="true">－</span><span class="v2157-menu-label">축소</span></button>
         <button type="button" data-village-build-open aria-label="건설 메뉴 열기"><span class="v2157-menu-glyph" aria-hidden="true"><img src="./assets/v22/icons/nav_build.png" alt="" /></span><span class="v2157-menu-label">건설</span></button>
@@ -1454,7 +1460,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v2097-menu-screen v2098-menu-screen v218-runtime-page-screen v219-runtime-page-screen v2111-runtime-page-shell v2112-runtime-page-shell v2113-runtime-page-shell v2114-runtime-page-shell v2115-runtime-page-shell v2116-runtime-page-shell v2117-runtime-page-shell v2118-runtime-page-shell v2119-runtime-page-shell v2120-runtime-page-shell v2121-runtime-page-shell v2122-runtime-page-shell v2123-runtime-page-shell v2124-runtime-page-shell v2125-runtime-page-shell v2127-runtime-page-shell v2128-runtime-page-shell v2129-runtime-page-shell v2130-runtime-page-shell v2131-runtime-page-shell v2132-runtime-page-shell v2133-runtime-page-shell v2138-runtime-page-shell v2139-runtime-page-shell v2140-runtime-page-shell v2142-runtime-page-shell v2143-runtime-page-shell v2144-runtime-page-shell v2145-runtime-page-shell v2146-runtime-page-shell v2147-runtime-page-shell v2148-runtime-page-shell v2149-runtime-page-shell v2150-runtime-page-shell v2151-runtime-page-shell v2159-runtime-page-shell v2163-premium-aqua-ui-screen v2164-premium-aqua-ui-screen v2165-premium-aqua-ui-screen v2097-${active}-screen v2098-${active}-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v2097-menu-screen v2098-menu-screen v218-runtime-page-screen v219-runtime-page-screen v2111-runtime-page-shell v2112-runtime-page-shell v2113-runtime-page-shell v2114-runtime-page-shell v2115-runtime-page-shell v2116-runtime-page-shell v2117-runtime-page-shell v2118-runtime-page-shell v2119-runtime-page-shell v2120-runtime-page-shell v2121-runtime-page-shell v2122-runtime-page-shell v2123-runtime-page-shell v2124-runtime-page-shell v2125-runtime-page-shell v2127-runtime-page-shell v2128-runtime-page-shell v2129-runtime-page-shell v2130-runtime-page-shell v2131-runtime-page-shell v2132-runtime-page-shell v2133-runtime-page-shell v2138-runtime-page-shell v2139-runtime-page-shell v2140-runtime-page-shell v2142-runtime-page-shell v2143-runtime-page-shell v2144-runtime-page-shell v2145-runtime-page-shell v2146-runtime-page-shell v2147-runtime-page-shell v2148-runtime-page-shell v2149-runtime-page-shell v2150-runtime-page-shell v2151-runtime-page-shell v2159-runtime-page-shell v2163-premium-aqua-ui-screen v2164-premium-aqua-ui-screen v2165-premium-aqua-ui-screen v2166-premium-aqua-ui-screen v2097-${active}-screen v2098-${active}-screen ${active}-screen scroll-screen`;
     root.dataset.v2097UiReset = `canonical-v2097-${active}-stable`;
     root.dataset.v2098UiRecovery = `v2098-${active}-menu-recovery`;
     root.setAttribute('data-runtime-screen', active);
@@ -1463,6 +1469,7 @@ class AquaFantasiaGame {
     root.dataset.v2163PagePolish = `hud-gap-toast-ledger-dex-${active}`;
     root.dataset.v2164QualityFollowupPolish = `quality-followup-${active}`;
     root.dataset.v2165QualitySweepPolish = `quality-sweep-text-budget-${active}`;
+    root.dataset.v2166MenuHudAutoSalePolish = `menu-rescue-hud-autosale-${active}`;
     root.style.setProperty('--v89-world-bg', `url("${V3D_MENU_BG[active]}")`);
     root.style.setProperty('--v101-water-bg', `url("${V101_WATER_BG[active]}")`);
     root.innerHTML = `
@@ -1611,7 +1618,7 @@ class AquaFantasiaGame {
     const region = this.getRegion();
     this.clear();
     const root = document.createElement('main');
-    root.className = 'game-screen fishing-screen v2165-fishing-quality-screen v2164-fishing-quality-screen v2161-fishing-bite-focus-screen v2163-fishing-clarity-screen v2162-fishing-quality-screen v2160-fishing-premium-focus-screen v2159-fishing-premium-focus-screen v2158-fishing-focus-screen v2157-fishing-focus-screen v2156-fishing-focus-screen v2155-fishing-focus-screen v2154-fishing-focus-screen v2153-fishing-focus-screen v2152-fishing-focus-screen v218-fishing-stable-rollback-screen v219-fishing-hud-input-audit-screen v2111-fishing-rebuild-screen v2112-fishing-foundation-screen v2113-fishing-core-screen v2114-fishing-polish-screen v2115-fishing-skin-screen v2116-fishing-asset-screen v2117-fishing-reel-safe-screen v2118-fishing-stability-screen v2119-fishing-polish-screen v2120-fishing-polish-screen v2121-fishing-continuity-screen v2123-fishing-stability-screen v2124-fishing-stability-screen v2125-fishing-polish-screen v2127-fishing-uiux-screen v2128-fishing-upgrade-screen v2129-fishing-upgrade-screen v2130-fishing-rebuild-screen v2131-fishing-overhaul-screen v2132-fishing-premium-screen v2133-fishing-engine-screen v2134-fishing-premium-game-screen v2135-fishing-system-screen v2136-fishing-polish-screen v2137-fishing-overhaul-screen v2138-fishing-cockpit-screen v2139-fishing-focus-screen v2140-fishing-focus-screen v2142-fishing-focus-screen v2143-fishing-focus-screen v2144-fishing-focus-screen v2145-fishing-focus-screen v2146-fishing-focus-screen v2147-fishing-focus-screen v2148-fishing-focus-screen v2149-fishing-focus-screen v2150-fishing-focus-screen v2151-fishing-focus-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen v2057-fishing-aqua-touch-screen v2058-tech-modernized-screen v2059-fishing-dialog-screen v2060-grounded-motion-fishing-screen v2061-loop-ui-fishing-screen v2062-ground-contact-fishing-screen v2063-fishing-rework-screen v2063-unified-card-window-screen v2064-fishing-polish-screen v2072-fishing-playable-screen v2073-fishing-core-feel-screen v2074-growth-loop-screen v2084-fishing-bite-single-screen v2098-fishing-restored-screen locked-screen';
+    root.className = 'game-screen fishing-screen v2166-fishing-quality-screen v2165-fishing-quality-screen v2164-fishing-quality-screen v2161-fishing-bite-focus-screen v2163-fishing-clarity-screen v2162-fishing-quality-screen v2160-fishing-premium-focus-screen v2159-fishing-premium-focus-screen v2158-fishing-focus-screen v2157-fishing-focus-screen v2156-fishing-focus-screen v2155-fishing-focus-screen v2154-fishing-focus-screen v2153-fishing-focus-screen v2152-fishing-focus-screen v218-fishing-stable-rollback-screen v219-fishing-hud-input-audit-screen v2111-fishing-rebuild-screen v2112-fishing-foundation-screen v2113-fishing-core-screen v2114-fishing-polish-screen v2115-fishing-skin-screen v2116-fishing-asset-screen v2117-fishing-reel-safe-screen v2118-fishing-stability-screen v2119-fishing-polish-screen v2120-fishing-polish-screen v2121-fishing-continuity-screen v2123-fishing-stability-screen v2124-fishing-stability-screen v2125-fishing-polish-screen v2127-fishing-uiux-screen v2128-fishing-upgrade-screen v2129-fishing-upgrade-screen v2130-fishing-rebuild-screen v2131-fishing-overhaul-screen v2132-fishing-premium-screen v2133-fishing-engine-screen v2134-fishing-premium-game-screen v2135-fishing-system-screen v2136-fishing-polish-screen v2137-fishing-overhaul-screen v2138-fishing-cockpit-screen v2139-fishing-focus-screen v2140-fishing-focus-screen v2142-fishing-focus-screen v2143-fishing-focus-screen v2144-fishing-focus-screen v2145-fishing-focus-screen v2146-fishing-focus-screen v2147-fishing-focus-screen v2148-fishing-focus-screen v2149-fishing-focus-screen v2150-fishing-focus-screen v2151-fishing-focus-screen v2030-fishing-stage-reset-screen v205-fishing-asset-screen v2019-fishing-stability-screen v2027-fishing-root-repair-screen v2028-fishing-zero-overlap-screen v2029-fishing-final-layout-screen v2031-fishing-clean-screen v2032-fishing-playable-screen v2033-fishing-playable-screen v2034-fishing-integrity-screen v2035-fishing-playfield-screen v2036-fishing-gauge-safe-screen v2037-fishing-stable-screen v2038-fishing-repair-screen v2039-fishing-audit-screen v2040-fishing-playable-screen v2041-fishing-playable-screen v2042-fishing-playable-screen v2043-fishing-playable-screen v2044-fishing-playable-screen v2045-fishing-playable-screen v2046-fishing-playable-screen v2047-fishing-playable-screen v2048-fishing-playable-screen v2049-fishing-system-screen v2050-fishing-system-screen v2051-fishing-feedback-screen v2052-fishing-feedback-screen v2053-fishing-system-screen v2054-fishing-issue-sweep-screen v2055-fishing-reel-rebuild-screen v2056-motion-tile-fishing-screen v2057-fishing-aqua-touch-screen v2058-tech-modernized-screen v2059-fishing-dialog-screen v2060-grounded-motion-fishing-screen v2061-loop-ui-fishing-screen v2062-ground-contact-fishing-screen v2063-fishing-rework-screen v2063-unified-card-window-screen v2064-fishing-polish-screen v2072-fishing-playable-screen v2073-fishing-core-feel-screen v2074-growth-loop-screen v2084-fishing-bite-single-screen v2098-fishing-restored-screen locked-screen';
     root.style.setProperty('--region-glow', region.color);
     root.style.setProperty('--v89-world-bg', `url("${region.bg}")`);
     // v2048 legacy validation tokens preserved: 누르면 게이지가 올라가고, 떼면 내려갑니다 · safeTimer >= 2.0
@@ -1645,6 +1652,7 @@ class AquaFantasiaGame {
     root.dataset.v2159FishingLayout = 'prep-badges-separated-battle-gauges-visible-single-reel-button-safe-area';
     root.dataset.v2160FishingHudMenuPolish = 'safe-area-battle-strip-single-reel-button-hud-menu-audit';
     root.dataset.v2163FishingLoadoutToast = 'rod-bait-visible-center-toast-single-reel-safe';
+    root.dataset.v2166FishingQuality = 'loadout-toast-centered-safe';
     root.innerHTML = `
       <span id="fishingHint" class="sr-only">낚시 시작 버튼으로 캐스팅하세요.</span>
       <button type="button" class="v2059-screen-close v2059-fishing-close" data-v2059-fishing-close aria-label="낚시 닫기">×</button>
@@ -1693,13 +1701,13 @@ class AquaFantasiaGame {
         <div class="hud-chip" data-hud-coins><img src="./assets/v92/icons/coin.png" alt="" /><strong>${this.save.coins.toLocaleString('ko-KR')}</strong></div>
         <div class="hud-chip" data-hud-lures><img src="./assets/v205/fishing/slot_bait.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
       </div>
-      <aside class="v2137-sea-lane-card v2138-sea-lane-card v2139-sea-lane-card v2140-sea-lane-card v2142-sea-lane-card v2143-sea-lane-card v2144-sea-lane-card v2145-sea-lane-card v2146-sea-lane-card v2147-sea-lane-card v2148-sea-lane-card v2149-sea-lane-card v2150-sea-lane-card v2151-sea-lane-card v2152-sea-lane-card v2153-sea-lane-card v2154-sea-lane-card v2155-sea-lane-card v2158-sea-lane-card v2159-sea-lane-card v2160-sea-lane-card v2161-sea-lane-card v2162-sea-lane-card v2164-sea-lane-card v2165-sea-lane-card" aria-label="선택 수역 물길 정보"><span>바다물길</span><strong>${region.name}</strong><em>${region.subtitle} · ${region.tide}</em></aside>
+      <aside class="v2137-sea-lane-card v2138-sea-lane-card v2139-sea-lane-card v2140-sea-lane-card v2142-sea-lane-card v2143-sea-lane-card v2144-sea-lane-card v2145-sea-lane-card v2146-sea-lane-card v2147-sea-lane-card v2148-sea-lane-card v2149-sea-lane-card v2150-sea-lane-card v2151-sea-lane-card v2152-sea-lane-card v2153-sea-lane-card v2154-sea-lane-card v2155-sea-lane-card v2158-sea-lane-card v2159-sea-lane-card v2160-sea-lane-card v2161-sea-lane-card v2162-sea-lane-card v2164-sea-lane-card v2165-sea-lane-card v2166-sea-lane-card" aria-label="선택 수역 물길 정보"><span>바다물길</span><strong>${region.name}</strong><em>${region.subtitle} · ${region.tide}</em></aside>
       <div class="stage-ui v2028-stage-ui"></div><div class="cute-action-layer" aria-hidden="true"></div>
-      <aside class="fishing-loadout-strip v2137-fishing-loadout v2138-fishing-loadout v2139-fishing-loadout v2140-fishing-loadout v2142-fishing-loadout v2143-fishing-loadout v2144-fishing-loadout v2145-fishing-loadout v2146-fishing-loadout v2147-fishing-loadout v2148-fishing-loadout v2149-fishing-loadout v2150-fishing-loadout v2151-fishing-loadout v2152-fishing-loadout v2153-fishing-loadout v2154-fishing-loadout v2155-fishing-loadout v2158-fishing-loadout v2159-fishing-loadout v2160-fishing-loadout v2161-fishing-loadout v2162-fishing-loadout v2163-fishing-loadout v2164-fishing-loadout v2165-fishing-loadout" aria-label="낚시 장비">
-        <div class="v2142-loadout-cell v2163-loadout-cell v2164-loadout-cell v2165-loadout-cell"><img src="${ASSET.fishingSlotRod}" alt="" /><span>낚싯대 Lv.${this.save.gear.rodLevel}</span></div>
-        <div class="v2142-loadout-cell v2163-loadout-cell v2164-loadout-cell v2165-loadout-cell"><img src="${ASSET.fishingSlotBait}" alt="" /><span>미끼 ${this.save.gear.lureStock}개</span></div>
+      <aside class="fishing-loadout-strip v2137-fishing-loadout v2138-fishing-loadout v2139-fishing-loadout v2140-fishing-loadout v2142-fishing-loadout v2143-fishing-loadout v2144-fishing-loadout v2145-fishing-loadout v2146-fishing-loadout v2147-fishing-loadout v2148-fishing-loadout v2149-fishing-loadout v2150-fishing-loadout v2151-fishing-loadout v2152-fishing-loadout v2153-fishing-loadout v2154-fishing-loadout v2155-fishing-loadout v2158-fishing-loadout v2159-fishing-loadout v2160-fishing-loadout v2161-fishing-loadout v2162-fishing-loadout v2163-fishing-loadout v2164-fishing-loadout v2165-fishing-loadout v2166-fishing-loadout" aria-label="낚시 장비">
+        <div class="v2142-loadout-cell v2163-loadout-cell v2164-loadout-cell v2165-loadout-cell v2166-loadout-cell"><img src="${ASSET.fishingSlotRod}" alt="" /><span>낚싯대 Lv.${this.save.gear.rodLevel}</span></div>
+        <div class="v2142-loadout-cell v2163-loadout-cell v2164-loadout-cell v2165-loadout-cell v2166-loadout-cell"><img src="${ASSET.fishingSlotBait}" alt="" /><span>미끼 ${this.save.gear.lureStock}개</span></div>
       </aside>
-      <section class="v2153-battle-strip v2154-battle-strip v2155-battle-strip v2156-battle-strip v2157-battle-strip v2158-battle-strip v2159-battle-strip v2160-battle-strip v2161-battle-strip v2162-battle-strip v2164-battle-strip v2165-battle-strip" aria-live="polite" aria-label="낚시 실전 게이지">
+      <section class="v2153-battle-strip v2154-battle-strip v2155-battle-strip v2156-battle-strip v2157-battle-strip v2158-battle-strip v2159-battle-strip v2160-battle-strip v2161-battle-strip v2162-battle-strip v2164-battle-strip v2165-battle-strip v2166-battle-strip" aria-live="polite" aria-label="낚시 실전 게이지">
         <div class="v2153-battle-row v2153-battle-catch"><span>포획</span><i><b data-v2153-catch-bar data-v2154-catch-bar data-v2155-catch-bar data-v2156-catch-bar data-v2157-catch-bar data-v2158-catch-bar data-v2159-catch-bar data-v2160-catch-bar data-v2161-catch-bar data-v2162-catch-bar></b></i><strong data-v2153-catch-value data-v2154-catch-value data-v2155-catch-value data-v2156-catch-value data-v2157-catch-value data-v2158-catch-value data-v2159-catch-value data-v2160-catch-value data-v2161-catch-value data-v2162-catch-value>0%</strong></div>
         <div class="v2153-battle-row v2153-battle-tension"><span>텐션</span><i><em data-v2153-safe-window data-v2154-safe-window data-v2155-safe-window data-v2156-safe-window data-v2157-safe-window data-v2158-safe-window data-v2159-safe-window data-v2160-safe-window data-v2161-safe-window data-v2162-safe-window></em><b data-v2153-tension-bar data-v2154-tension-bar data-v2155-tension-bar data-v2156-tension-bar data-v2157-tension-bar data-v2158-tension-bar data-v2159-tension-bar data-v2160-tension-bar data-v2161-tension-bar data-v2162-tension-bar></b></i><strong data-v2153-tension-value data-v2154-tension-value data-v2155-tension-value data-v2156-tension-value data-v2157-tension-value data-v2158-tension-value data-v2159-tension-value data-v2160-tension-value data-v2161-tension-value data-v2162-tension-value>50%</strong></div>
         <div class="v2153-battle-row v2153-battle-stamina"><span>저항</span><i><b data-v2153-stamina-bar data-v2154-stamina-bar data-v2155-stamina-bar data-v2156-stamina-bar data-v2157-stamina-bar data-v2158-stamina-bar data-v2159-stamina-bar data-v2160-stamina-bar data-v2161-stamina-bar data-v2162-stamina-bar></b></i><strong data-v2153-stamina-value data-v2154-stamina-value data-v2155-stamina-value data-v2156-stamina-value data-v2157-stamina-value data-v2158-stamina-value data-v2159-stamina-value data-v2160-stamina-value data-v2161-stamina-value data-v2162-stamina-value>100%</strong></div>
@@ -1748,12 +1756,12 @@ class AquaFantasiaGame {
         <div class="v2055-reel-meter v2057-reel-meter"><strong data-v2055-tension-value>50%</strong><span data-v2055-tension-state>대기</span><i><em data-v2057-safe-window></em><b data-v2055-tension-bar></b></i></div>
         <div class="v2073-console-readouts v2135-console-readouts" aria-live="polite"><span data-v2073-console-mood>평온</span><span data-v2073-console-catch>포획 0%</span><span data-v2073-console-stamina>저항 100%</span><span data-v2135-pressure>위험 0%</span></div>
         <div class="v2131-reel-console-title v2132-reel-console-title"><strong>릴 콘솔</strong><span>감기/풀기 모두 손을 떼면 즉시 중립으로 돌아갑니다</span></div><div class="v2055-reel-actions v2131-reel-actions">
-          <button type="button" class="v2055-reel-wind v2057-reel-button v2158-single-reel-button v2159-single-reel-button v2160-single-reel-button v2161-single-reel-button v2162-single-reel-button v2163-single-reel-button v2164-single-reel-button v2165-single-reel-button" data-v2055-reel-wind><strong>누르고 찌 감기</strong><span>떼면 자동 풀기</span></button>
-          <button type="button" class="v2055-reel-release v2057-reel-button v2158-release-hidden v2159-release-hidden v2160-release-hidden v2161-release-hidden v2162-release-hidden v2163-release-hidden v2164-release-hidden v2165-release-hidden" data-v2055-reel-release aria-hidden="true" tabindex="-1"><strong>풀기</strong><span>실전 UI에서는 손을 떼면 자동 풀기</span></button>
+          <button type="button" class="v2055-reel-wind v2057-reel-button v2158-single-reel-button v2159-single-reel-button v2160-single-reel-button v2161-single-reel-button v2162-single-reel-button v2163-single-reel-button v2164-single-reel-button v2165-single-reel-button v2166-single-reel-button" data-v2055-reel-wind><strong>누르고 찌 감기</strong><span>떼면 자동 풀기</span></button>
+          <button type="button" class="v2055-reel-release v2057-reel-button v2158-release-hidden v2159-release-hidden v2160-release-hidden v2161-release-hidden v2162-release-hidden v2163-release-hidden v2164-release-hidden v2165-release-hidden v2166-release-hidden" data-v2055-reel-release aria-hidden="true" tabindex="-1"><strong>풀기</strong><span>실전 UI에서는 손을 떼면 자동 풀기</span></button>
         </div>
         <p class="v2063-console-help v2073-console-help">물고기 상태가 <b>광폭화</b>면 풀어서 버티고, <b>지침</b>이면 감아서 포획 게이지를 밀어 올리세요.</p>
       </section>
-      <button class="v2053-reel-touch-zone v2054-reel-touch-zone v2131-reel-touch-zone v2132-reel-touch-zone v2134-reel-touch-zone v2135-reel-touch-zone v2136-reel-touch-zone v2137-reel-touch-zone v2138-reel-touch-zone v2139-reel-touch-zone v2140-reel-touch-zone v2142-reel-touch-zone v2143-reel-touch-zone v2144-reel-touch-zone v2145-reel-touch-zone v2146-reel-touch-zone v2147-reel-touch-zone v2148-reel-touch-zone v2149-reel-touch-zone v2150-reel-touch-zone v2151-reel-touch-zone v2152-reel-touch-zone v2153-reel-touch-zone v2154-reel-touch-zone v2155-reel-touch-zone v2156-reel-touch-zone v2158-reel-touch-zone v2159-reel-touch-zone v2160-reel-touch-zone v2161-reel-touch-zone v2162-reel-touch-zone v2163-reel-touch-zone v2164-reel-touch-zone v2165-reel-touch-zone hidden" type="button" aria-label="릴 감기 터치존"><strong>릴 감기</strong><span>누르는 동안 장력 상승</span><small>손을 떼면 자동으로 내려갑니다</small><em data-v2053-input-state>대기</em></button>`;
+      <button class="v2053-reel-touch-zone v2054-reel-touch-zone v2131-reel-touch-zone v2132-reel-touch-zone v2134-reel-touch-zone v2135-reel-touch-zone v2136-reel-touch-zone v2137-reel-touch-zone v2138-reel-touch-zone v2139-reel-touch-zone v2140-reel-touch-zone v2142-reel-touch-zone v2143-reel-touch-zone v2144-reel-touch-zone v2145-reel-touch-zone v2146-reel-touch-zone v2147-reel-touch-zone v2148-reel-touch-zone v2149-reel-touch-zone v2150-reel-touch-zone v2151-reel-touch-zone v2152-reel-touch-zone v2153-reel-touch-zone v2154-reel-touch-zone v2155-reel-touch-zone v2156-reel-touch-zone v2158-reel-touch-zone v2159-reel-touch-zone v2160-reel-touch-zone v2161-reel-touch-zone v2162-reel-touch-zone v2163-reel-touch-zone v2164-reel-touch-zone v2165-reel-touch-zone v2166-reel-touch-zone hidden" type="button" aria-label="릴 감기 터치존"><strong>릴 감기</strong><span>누르는 동안 장력 상승</span><small>손을 떼면 자동으로 내려갑니다</small><em data-v2053-input-state>대기</em></button>`;
     dom.app.appendChild(root);
     const fishingInputAbort = new AbortController();
     this.fishingInputAbort = fishingInputAbort;
@@ -3317,11 +3325,11 @@ class AquaFantasiaGame {
           <article class="runtime-item-card v950-inventory-card v204-slot-card"><em class="v950-count">Lv.${this.save.gear.rodLevel}</em><img src="./assets/v205/fishing/slot_rod.png" alt="" /><strong>낚싯대</strong><span>장력 안정과 희귀어 대응</span><button class="runtime-btn cyan compact-cta btn-aqua-action" data-go-shop>강화</button></article>
         </div>
       </section>
-      <section class="v206-catch-ledger v2163-catch-ledger v2164-catch-ledger v2165-catch-ledger v204-window-card" aria-label="최근 포획 원장">
+      <section class="v206-catch-ledger v2163-catch-ledger v2164-catch-ledger v2165-catch-ledger v2166-catch-ledger v204-window-card" aria-label="최근 포획 원장">
         <div class="v206-section-title"><strong>최근 포획 원장</strong><span>많이 잡은 물고기 기준</span></div>
         ${this.recentCatchMarkup()}
       </section>
-      <section class="v2074-sale-ledger v2163-sale-ledger v2164-sale-ledger v2165-sale-ledger v204-window-card" aria-label="자동 판매와 마을 성장 연결">
+      <section class="v2074-sale-ledger v2163-sale-ledger v2164-sale-ledger v2165-sale-ledger v2166-sale-ledger v204-window-card" aria-label="자동 판매와 마을 성장 연결">
         <div class="v206-section-title"><strong>자동 판매 루프</strong><span>낚시 결과가 골드·기금·발전도로 바로 이어집니다</span></div>
         ${this.catchSaleLedgerMarkup()}
       </section>`;
@@ -3340,7 +3348,7 @@ class AquaFantasiaGame {
       const count = this.save.caught[fish.id] ?? 0;
       const open = count > 0 || fish.rarity === 'COMMON';
       const story = open ? this.fishStory(fish) : '아직 주민들에게 전해지지 않은 바다 이야기입니다.';
-      return `<article class="dex-card runtime-dex-card v2161-dex-card v2162-dex-card v2163-dex-card v2164-dex-card v2165-dex-card rarity-${fish.rarity.toLowerCase()} ${open ? '' : 'locked'}"><img class="v2162-dex-fish-art v2163-dex-fish-art v2164-dex-fish-art v2165-dex-fish-art" src="${open ? fish.img : './assets/v85/fish/fish_unknown.png'}" alt="" loading="lazy" decoding="async" draggable="false" /><strong>${open ? fish.name : '미발견'}</strong><span>${open ? `${fish.region} · ${count}마리` : '낚시터에서 발견하세요'}</span><p class="v2074-dex-story">${story}</p><em>${fish.rarity}</em></article>`;
+      return `<article class="dex-card runtime-dex-card v2161-dex-card v2162-dex-card v2163-dex-card v2164-dex-card v2165-dex-card v2166-dex-card rarity-${fish.rarity.toLowerCase()} ${open ? '' : 'locked'}"><img class="v2162-dex-fish-art v2163-dex-fish-art v2164-dex-fish-art v2165-dex-fish-art v2166-dex-fish-art" src="${open ? fish.img : './assets/v85/fish/fish_unknown.png'}" alt="" loading="lazy" decoding="async" draggable="false" /><strong>${open ? fish.name : '미발견'}</strong><span>${open ? `${fish.region} · ${count}마리` : '낚시터에서 발견하세요'}</span><p class="v2074-dex-story">${story}</p><em>${fish.rarity}</em></article>`;
     }).join('');
     content.innerHTML = `
       <section class="runtime-hero-card v2082-hero-card dex-summary">
@@ -3376,7 +3384,7 @@ class AquaFantasiaGame {
       </section>
       <section class="shop-list runtime-card-list v108-shop-grid v2042-shop-list v2043-shop-list v2044-shop-list v2049-shop-list v2050-shop-list">${goods.map((item, index) => {
         const owned = Boolean(item.onceKey && this.save.missions[item.onceKey]);
-        return `<button class="shop-card runtime-shop-card v950-shop-card v108-shop-card v2159-shop-card v2165-shop-card ${owned ? 'owned' : ''}" type="button" data-buy="${index}" ${owned ? 'aria-disabled="true"' : ''}><em class="v2158-shop-tag v2159-shop-tag">${item.tag ?? '강화'}</em><img src="${item.icon}" alt="" /><div><strong>${item.name}</strong><small>${item.desc}</small></div><span class="shop-price compact-cost-badge btn-gold-cost v2134-shop-buy-price v2135-shop-buy-price v2136-shop-buy-price v2159-shop-price v2165-shop-price">${owned ? '보유' : `${item.cost}G`}</span></button>`;
+        return `<button class="shop-card runtime-shop-card v950-shop-card v108-shop-card v2159-shop-card v2165-shop-card v2166-shop-card ${owned ? 'owned' : ''}" type="button" data-buy="${index}" ${owned ? 'aria-disabled="true"' : ''}><em class="v2158-shop-tag v2159-shop-tag">${item.tag ?? '강화'}</em><img src="${item.icon}" alt="" /><div><strong>${item.name}</strong><small>${item.desc}</small></div><span class="shop-price compact-cost-badge btn-gold-cost v2134-shop-buy-price v2135-shop-buy-price v2136-shop-buy-price v2159-shop-price v2165-shop-price v2166-shop-price">${owned ? '보유' : `${item.cost}G`}</span></button>`;
       }).join('')}</section>`;
     const buy = (index: number) => {
       const item = goods[index];
@@ -4419,6 +4427,160 @@ class AquaFantasiaGame {
         node.dataset.v2165QualitySweep = 'ready';
       });
       applyTextBudget();
+      this.repairActiveViewportBounds();
+      this.repairFixedInteractiveBounds();
+      this.repairScrollableContentFlow();
+    };
+    const schedule = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(sync);
+    };
+    schedule();
+    window.visualViewport?.addEventListener('resize', schedule, { passive: true });
+    window.visualViewport?.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('orientationchange', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule, { passive: true });
+    document.addEventListener('visibilitychange', schedule, { passive: true });
+    observer = new MutationObserver(schedule);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-screen'], childList: true, subtree: true });
+    window.addEventListener('pagehide', () => observer?.disconnect(), { once: true, passive: true });
+  }
+
+
+  private installV2166MenuHudAutoSalePass(): void {
+    let raf = 0;
+    let observer: MutationObserver | undefined;
+    const html = document.documentElement;
+    const set = (node: HTMLElement | null | undefined, entries: Array<[string, string]>) => {
+      if (!node) return;
+      for (const [name, value] of entries) node.style.setProperty(name, value, 'important');
+    };
+    const hasOpenClass = (node: Element | null | undefined, pattern: RegExp) => Boolean(node && Array.from(node.classList).some((cls) => pattern.test(cls)));
+    const isConfirmOpen = (village: HTMLElement | null) => Boolean(village?.querySelector('.v2130-build-confirm:not([aria-hidden="true"]):not(.hidden), [data-v2130-build-confirm]:not([aria-hidden="true"]):not(.hidden), .v2097-build-confirm:not([aria-hidden="true"]):not(.hidden)'));
+    const panelOpen = () => {
+      const currentScreen = document.body.dataset.screen ?? '';
+      const village = dom.app.querySelector<HTMLElement>('.village-world-screen');
+      const buildOpen = currentScreen === 'village' && (hasOpenClass(village, /build-tray-open$/) || hasOpenClass(document.body, /build-open$/));
+      const expeditionOpen = currentScreen === 'village' && (hasOpenClass(village, /expedition-open$/) || hasOpenClass(document.body, /expedition-open$/) || Boolean(village?.querySelector('.v2097-expedition-board.open .v2097-expedition-body-open')));
+      return buildOpen || expeditionOpen || (currentScreen === 'village' && isConfirmOpen(village));
+    };
+    const setControlsHidden = (hidden: boolean) => {
+      dom.app.querySelectorAll<HTMLElement>('.v2166-world-controls-aqua-lock, .v2165-world-controls-aqua-lock, .v2164-world-controls-aqua-lock, .v2163-world-controls-aqua-lock').forEach((controls) => {
+        controls.classList.add('v2166-world-controls-aqua-lock');
+        controls.dataset.v2166MenuHidden = hidden ? 'true' : 'false';
+        controls.setAttribute('aria-hidden', String(hidden));
+        if (hidden) {
+          controls.classList.add('v2166-menu-panel-hidden');
+          set(controls, [
+            ['display', 'none'],
+            ['visibility', 'hidden'],
+            ['opacity', '0'],
+            ['pointer-events', 'none'],
+          ]);
+        } else {
+          controls.classList.remove('v2166-menu-panel-hidden');
+          set(controls, [
+            ['position', 'fixed'],
+            ['top', 'calc(env(safe-area-inset-top, 0px) + 8px)'],
+            ['right', 'calc(env(safe-area-inset-right, 0px) + 8px)'],
+            ['left', 'auto'],
+            ['bottom', 'auto'],
+            ['display', 'grid'],
+            ['visibility', 'visible'],
+            ['opacity', '1'],
+            ['pointer-events', 'auto'],
+            ['grid-template-columns', 'repeat(2, 38px)'],
+            ['grid-auto-rows', '38px'],
+            ['gap', '4px'],
+            ['width', '80px'],
+            ['min-width', '80px'],
+            ['max-width', '80px'],
+            ['height', '122px'],
+            ['min-height', '122px'],
+            ['max-height', '122px'],
+            ['padding', '0'],
+            ['margin', '0'],
+            ['border', '0'],
+            ['background', 'transparent'],
+            ['background-image', 'none'],
+            ['box-shadow', 'none'],
+            ['overflow', 'visible'],
+            ['z-index', '560'],
+          ]);
+          controls.querySelectorAll<HTMLElement>('button').forEach((button) => {
+            button.classList.add('v2166-top-menu-cell');
+            button.dataset.v2166MenuRescueCell = 'restored-visible-village-38px';
+            set(button, [
+              ['display', 'grid'],
+              ['place-items', 'center'],
+              ['width', '38px'],
+              ['height', '38px'],
+              ['min-width', '38px'],
+              ['min-height', '38px'],
+              ['max-width', '38px'],
+              ['max-height', '38px'],
+              ['padding', '0'],
+              ['margin', '0'],
+              ['border', '1px solid rgba(190, 248, 255, .42)'],
+              ['border-radius', '11px'],
+              ['background', 'linear-gradient(180deg, rgba(240,255,255,.28), rgba(35,159,214,.18))'],
+              ['box-shadow', 'inset 0 1px 0 rgba(255,255,255,.23), 0 3px 8px rgba(0,44,80,.08)'],
+              ['overflow', 'hidden'],
+              ['opacity', '.96'],
+              ['pointer-events', 'auto'],
+            ]);
+            set(button.querySelector<HTMLElement>('span:first-child'), [
+              ['width', '25px'],
+              ['height', '25px'],
+              ['min-width', '25px'],
+              ['min-height', '25px'],
+              ['max-width', '25px'],
+              ['max-height', '25px'],
+              ['display', 'grid'],
+              ['place-items', 'center'],
+              ['overflow', 'hidden'],
+            ]);
+            set(button.querySelector<HTMLElement>('img'), [
+              ['width', '25px'],
+              ['height', '25px'],
+              ['min-width', '25px'],
+              ['min-height', '25px'],
+              ['max-width', '25px'],
+              ['max-height', '25px'],
+              ['object-fit', 'contain'],
+              ['object-position', 'center'],
+            ]);
+          });
+        }
+      });
+    };
+    const applyInventoryBudgets = () => {
+      dom.app.querySelectorAll<HTMLElement>('.recent-card span, .v2074-sale-grid article strong, .v2074-sale-grid article span, .v2074-sale-grid article small, .v2074-sale-grid article em').forEach((node) => {
+        const text = node.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+        if (text && !node.title) node.title = text;
+        node.dataset.v2166TextBudget = 'autosale-loop-wrap-safe';
+      });
+      dom.app.querySelectorAll<HTMLImageElement>('.v2074-sale-grid img, .recent-card img, .runtime-dex-card img, .fishing-loadout-strip img').forEach((img) => {
+        img.decoding = 'async';
+        img.loading = img.closest('.fishing-hud') ? 'eager' : 'lazy';
+        img.draggable = false;
+        img.dataset.v2166ImageBudget = 'smaller-contained';
+      });
+    };
+    const sync = () => {
+      raf = 0;
+      const viewport = window.visualViewport;
+      const vw = Math.max(1, Math.floor(viewport?.width ?? window.innerWidth));
+      const vh = Math.max(1, Math.floor(viewport?.height ?? window.innerHeight));
+      html.dataset.v2166MenuHudAutoSalePolish = 'menu-rescue-hud-color-autosale-loop';
+      html.style.setProperty('--v2166-visual-width', `${vw}px`);
+      html.style.setProperty('--v2166-visual-height', `${vh}px`);
+      html.classList.toggle('v2166-ultra-narrow', vw <= 360);
+      html.classList.toggle('v2166-short-height', vh <= 650);
+      document.body.dataset.v2166ActiveScreen = document.body.dataset.screen ?? '';
+      setControlsHidden(panelOpen());
+      applyInventoryBudgets();
       this.repairActiveViewportBounds();
       this.repairFixedInteractiveBounds();
       this.repairScrollableContentFlow();

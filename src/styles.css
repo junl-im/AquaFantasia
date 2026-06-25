@@ -56329,3 +56329,296 @@ html.v2165-quality-sweep-root #toast-root .v2165-center-toast span {
     gap: 7px !important;
   }
 }
+
+/* v2.1.66: right-top menu rescue, premium HUD color polish, and inventory auto-sale loop refinement. */
+html.v2166-menu-rescue-root {
+  --v2166-hud-ink: #04334d;
+  --v2166-hud-muted: #276f89;
+  --v2166-hud-shell: linear-gradient(180deg, rgba(239, 255, 255, .96), rgba(178, 246, 255, .88) 52%, rgba(55, 183, 226, .76));
+  --v2166-hud-line: rgba(183, 246, 255, .58);
+  --v2166-hud-shadow: 0 14px 30px rgba(0, 77, 118, .18), inset 0 1px 0 rgba(255,255,255,.54), inset 0 -10px 22px rgba(11, 126, 184, .10);
+  --v2166-menu-cell: 38px;
+  --v2166-menu-icon: 25px;
+}
+html.v2166-menu-rescue-root body[data-screen="village"] .v2097-village-hud {
+  position: fixed !important;
+  top: calc(env(safe-area-inset-top, 0px) + 7px) !important;
+  left: max(8px, env(safe-area-inset-left, 0px)) !important;
+  right: calc(env(safe-area-inset-right, 0px) + 104px) !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 350px !important;
+  min-height: 50px !important;
+  max-height: 56px !important;
+  padding: 5px !important;
+  border: 1px solid var(--v2166-hud-line) !important;
+  border-radius: 20px !important;
+  background: radial-gradient(circle at 10% 0%, rgba(255,255,255,.72), transparent 42%), var(--v2166-hud-shell) !important;
+  box-shadow: var(--v2166-hud-shadow) !important;
+  color: var(--v2166-hud-ink) !important;
+  -webkit-text-fill-color: var(--v2166-hud-ink) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.56) !important;
+  overflow: hidden !important;
+  z-index: 406 !important;
+}
+html.v2166-menu-rescue-root body[data-screen="village"] .v2097-village-hud :is(strong,span,em,b) {
+  color: var(--v2166-hud-ink) !important;
+  -webkit-text-fill-color: var(--v2166-hud-ink) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.58) !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html.v2166-menu-rescue-root body[data-screen="village"] .v2097-village-hud :is(img,.v2097-profile-chip img) {
+  width: 34px !important;
+  height: 34px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 4px 7px rgba(0,71,112,.14)) !important;
+}
+html.v2166-menu-rescue-root body[data-screen="village"] .v2097-expedition-board:not(.open) {
+  position: fixed !important;
+  top: calc(env(safe-area-inset-top, 0px) + 56px) !important;
+  left: max(8px, env(safe-area-inset-left, 0px)) !important;
+  right: calc(env(safe-area-inset-right, 0px) + 104px) !important;
+  width: auto !important;
+  max-width: 350px !important;
+  min-height: 31px !important;
+  max-height: 36px !important;
+  border-radius: 17px !important;
+  border: 1px solid rgba(174, 245, 255, .46) !important;
+  background: linear-gradient(180deg, rgba(232,253,255,.94), rgba(117,226,249,.72)) !important;
+  box-shadow: 0 10px 22px rgba(0,76,120,.12), inset 0 1px 0 rgba(255,255,255,.44) !important;
+  color: var(--v2166-hud-ink) !important;
+  -webkit-text-fill-color: var(--v2166-hud-ink) !important;
+  overflow: hidden !important;
+  z-index: 398 !important;
+}
+html.v2166-menu-rescue-root body[data-screen="village"] .v2097-expedition-toggle {
+  min-height: 31px !important;
+  padding: 4px 9px !important;
+  gap: 5px !important;
+  line-height: 1.08 !important;
+}
+html.v2166-menu-rescue-root body[data-screen="village"] .v2097-expedition-toggle :is(strong,span,em) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  color: var(--v2166-hud-ink) !important;
+  -webkit-text-fill-color: var(--v2166-hud-ink) !important;
+}
+html.v2166-menu-rescue-root body[data-screen="village"] .v2166-world-controls-aqua-lock:not(.v2166-menu-panel-hidden) {
+  position: fixed !important;
+  top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+  right: calc(env(safe-area-inset-right, 0px) + 8px) !important;
+  left: auto !important;
+  bottom: auto !important;
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  grid-template-columns: repeat(2, var(--v2166-menu-cell)) !important;
+  grid-auto-rows: var(--v2166-menu-cell) !important;
+  gap: 4px !important;
+  width: 80px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+  height: 122px !important;
+  min-height: 122px !important;
+  max-height: 122px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  z-index: 560 !important;
+  contain: layout paint style !important;
+}
+html.v2166-menu-rescue-root body[data-screen="village"] .v2166-world-controls-aqua-lock::before,
+html.v2166-menu-rescue-root body[data-screen="village"] .v2166-world-controls-aqua-lock::after {
+  content: none !important;
+  display: none !important;
+}
+html.v2166-menu-rescue-root body[data-screen="village"] .v2166-world-controls-aqua-lock .v2166-top-menu-cell,
+html.v2166-menu-rescue-root body[data-screen="village"] .v2166-world-controls-aqua-lock button {
+  width: var(--v2166-menu-cell) !important;
+  height: var(--v2166-menu-cell) !important;
+  min-width: var(--v2166-menu-cell) !important;
+  min-height: var(--v2166-menu-cell) !important;
+  max-width: var(--v2166-menu-cell) !important;
+  max-height: var(--v2166-menu-cell) !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 1px solid rgba(190,248,255,.42) !important;
+  border-radius: 11px !important;
+  background: linear-gradient(180deg, rgba(240,255,255,.28), rgba(35,159,214,.18)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.23), 0 3px 8px rgba(0,44,80,.08) !important;
+  overflow: hidden !important;
+  opacity: .96 !important;
+  transform: none !important;
+  touch-action: manipulation !important;
+}
+html.v2166-menu-rescue-root body[data-screen="village"] .v2166-world-controls-aqua-lock button :is(span:first-child,.v2157-menu-glyph),
+html.v2166-menu-rescue-root body[data-screen="village"] .v2166-world-controls-aqua-lock button img {
+  width: var(--v2166-menu-icon) !important;
+  height: var(--v2166-menu-icon) !important;
+  min-width: var(--v2166-menu-icon) !important;
+  min-height: var(--v2166-menu-icon) !important;
+  max-width: var(--v2166-menu-icon) !important;
+  max-height: var(--v2166-menu-icon) !important;
+  display: grid !important;
+  place-items: center !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  overflow: hidden !important;
+}
+html.v2166-menu-rescue-root body[data-screen="village"] .v2166-world-controls-aqua-lock button span:last-child {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+html.v2166-menu-rescue-root body[data-screen="village"] .v2166-world-controls-aqua-lock.v2166-menu-panel-hidden,
+html.v2166-menu-rescue-root body:is([class$="build-open"],[class$="expedition-open"]) .v2166-world-controls-aqua-lock,
+html.v2166-menu-rescue-root body[data-screen="village"] .village-world-screen:is(.v2097-build-tray-open,.v2098-build-tray-open,.v2111-build-tray-open,.v2112-build-tray-open,.v2113-build-tray-open,.v2114-build-tray-open,.v2115-build-tray-open,.v2116-build-tray-open,.v2117-build-tray-open,.v2118-build-tray-open,.v2119-build-tray-open,.v2120-build-tray-open,.v2121-build-tray-open,.v2130-build-tray-open,.v2131-build-tray-open,.v2097-expedition-open,.v2115-expedition-open,.v2116-expedition-open,.v2117-expedition-open,.v2118-expedition-open,.v2121-expedition-open,.v2122-expedition-open,.v2123-expedition-open,.v2124-expedition-open) .v2166-world-controls-aqua-lock {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.v2166-menu-rescue-root body[data-screen="inventory"] .v2166-catch-ledger .recent-card {
+  grid-template-columns: 30px minmax(0, 1fr) minmax(40px, auto) !important;
+  min-height: 48px !important;
+  gap: 6px !important;
+  padding: 7px 8px !important;
+  align-items: center !important;
+}
+html.v2166-menu-rescue-root body[data-screen="inventory"] .v2166-catch-ledger .recent-card img {
+  width: 28px !important;
+  height: 24px !important;
+  max-width: 28px !important;
+  max-height: 24px !important;
+  object-fit: contain !important;
+}
+html.v2166-menu-rescue-root body[data-screen="inventory"] .v2166-catch-ledger .recent-card span {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  white-space: normal !important;
+  overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+  line-height: 1.12 !important;
+  font-size: 11.5px !important;
+}
+html.v2166-menu-rescue-root body[data-screen="inventory"] .v2166-sale-ledger .v2074-sale-grid article {
+  grid-template-columns: 28px minmax(0, 1fr) minmax(54px, auto) !important;
+  min-height: 48px !important;
+  gap: 6px !important;
+  padding: 7px 8px !important;
+  align-items: center !important;
+  overflow: hidden !important;
+}
+html.v2166-menu-rescue-root body[data-screen="inventory"] .v2166-sale-ledger .v2074-sale-grid article img {
+  width: 26px !important;
+  height: 22px !important;
+  max-width: 26px !important;
+  max-height: 22px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+html.v2166-menu-rescue-root body[data-screen="inventory"] .v2166-sale-ledger .v2074-sale-grid article :is(div,strong,span,small,em) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+html.v2166-menu-rescue-root body[data-screen="inventory"] .v2166-sale-ledger .v2074-sale-grid article strong {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  white-space: normal !important;
+  line-height: 1.12 !important;
+  font-size: 11.5px !important;
+}
+html.v2166-menu-rescue-root body[data-screen="inventory"] .v2166-sale-ledger .v2074-sale-grid article span,
+html.v2166-menu-rescue-root body[data-screen="inventory"] .v2166-sale-ledger .v2074-sale-grid article small {
+  white-space: normal !important;
+  line-height: 1.1 !important;
+  font-size: 10px !important;
+}
+html.v2166-menu-rescue-root body[data-screen="inventory"] .v2166-sale-ledger .v2074-sale-grid article em {
+  min-width: 48px !important;
+  max-width: 58px !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+  font-size: 11.2px !important;
+}
+html.v2166-menu-rescue-root .v2166-premium-aqua-ui-screen .v2166-dex-card > img,
+html.v2166-menu-rescue-root .v2166-premium-aqua-ui-screen .v2166-dex-fish-art {
+  width: clamp(24px, 7.6vw, 36px) !important;
+  height: clamp(20px, 6.8vw, 30px) !important;
+  max-width: 36px !important;
+  max-height: 30px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  margin: 0 auto !important;
+}
+html.v2166-menu-rescue-root body[data-screen="fishing"] .v2166-fishing-loadout,
+html.v2166-menu-rescue-root body[data-screen="fishing"] .v2166-sea-lane-card {
+  max-width: calc(100vw - 20px) !important;
+  overflow: hidden !important;
+}
+html.v2166-menu-rescue-root #toast-root[data-v2166-center-toast="enabled-center-aqua-card-feedback-menu-rescue"] {
+  position: fixed !important;
+  inset: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: max(12px, env(safe-area-inset-top, 0px)) max(14px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px)) !important;
+  pointer-events: none !important;
+  z-index: 1200 !important;
+}
+html.v2166-menu-rescue-root #toast-root[aria-hidden="true"] { display: none !important; }
+html.v2166-menu-rescue-root #toast-root .v2166-center-toast {
+  width: min(326px, calc(100vw - 38px)) !important;
+  max-width: calc(100vw - 38px) !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+@media (max-width: 380px), (max-height: 660px) {
+  html.v2166-menu-rescue-root {
+    --v2166-menu-cell: 36px;
+    --v2166-menu-icon: 24px;
+  }
+  html.v2166-menu-rescue-root body[data-screen="village"] .v2097-village-hud {
+    right: calc(env(safe-area-inset-right, 0px) + 98px) !important;
+    max-height: 54px !important;
+  }
+  html.v2166-menu-rescue-root body[data-screen="village"] .v2097-expedition-board:not(.open) {
+    top: calc(env(safe-area-inset-top, 0px) + 54px) !important;
+    right: calc(env(safe-area-inset-right, 0px) + 98px) !important;
+  }
+  html.v2166-menu-rescue-root body[data-screen="village"] .v2166-world-controls-aqua-lock:not(.v2166-menu-panel-hidden) {
+    width: 76px !important;
+    min-width: 76px !important;
+    max-width: 76px !important;
+    height: 116px !important;
+    min-height: 116px !important;
+    max-height: 116px !important;
+  }
+}

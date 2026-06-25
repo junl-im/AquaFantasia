@@ -1,5 +1,5 @@
-// v2.1.65 quality sweep: compact HUD/frontier spacing, menu hide guard, fishing loadout text budget, inventory/dex/shop overflow, and centered toast stability.
-const CACHE_NAME = 'aqua-fantasia-v2.1.65-quality-sweep-polish';
+// v2.1.66 menu rescue: restore right-top menu on village, polish HUD colors, and refine inventory auto-sale loop layout.
+const CACHE_NAME = 'aqua-fantasia-v2.1.66-menu-rescue-hud-autosale-polish';
 const ASSETS = ['./', './index.html', './offline.html'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
