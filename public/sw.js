@@ -1,5 +1,5 @@
-// v2.1.88 premium atelier/system polish: refined aqua visual hierarchy, safer fishing loadout/result layout, stable village chrome, and mobile performance guards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.88-premium-atelier-system-polish';
+// v2.1.89 premium design/engine sweep: ocean glass card system, safer fishing shelf/bite/result layout, stable village chrome, and mobile performance guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.89-premium-design-engine-sweep';
 const ASSETS = [
   './',
   './index.html',
