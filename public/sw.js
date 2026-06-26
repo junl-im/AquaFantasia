@@ -1,5 +1,5 @@
-// v2.1.76 quality composition sweep: reinforces fishing no-overlap lanes, menu text budgets, opening gates, and mobile runtime hygiene.
-const CACHE_NAME = 'aqua-fantasia-v2.1.76-quality-composition-sweep';
+// v2.1.77 opening video first hotfix: keeps the intro as pure fullscreen video, blocks pre-village chrome, and preserves mobile UI polish.
+const CACHE_NAME = 'aqua-fantasia-v2.1.77-opening-video-first-fix';
 const ASSETS = ['./', './index.html', './offline.html'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
