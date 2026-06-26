@@ -1101,6 +1101,26 @@ export class VillageWorld {
   private readonly keyboardMoveKeys = new Set<'w' | 'a' | 's' | 'd'>();
   private readonly keyboardAbort = new AbortController();
   private readonly resizeHandler = () => this.resize();
+  private v2179OpeningRecenterGuard = 0;
+
+  private usableStageSize(): { width: number; height: number } {
+    const rect = this.stageHost.getBoundingClientRect();
+    const width = Math.floor(rect.width || this.stageHost.clientWidth || window.innerWidth || 0);
+    const height = Math.floor(rect.height || this.stageHost.clientHeight || window.innerHeight || 0);
+    return { width, height };
+  }
+
+  private ensureRendererMatchesStage(): boolean {
+    if (!this.app) return false;
+    const { width, height } = this.usableStageSize();
+    if (width < 180 || height < 260) return false;
+    const currentWidth = Math.floor(this.app.screen.width);
+    const currentHeight = Math.floor(this.app.screen.height);
+    if (Math.abs(currentWidth - width) > 1 || Math.abs(currentHeight - height) > 1) {
+      this.app.renderer.resize(width, height);
+    }
+    return true;
+  }
 
   constructor(options: VillageWorldOptions) {
     this.root = options.root;
@@ -1185,6 +1205,7 @@ export class VillageWorld {
     this.root.dataset.v2128TrueEastMotionLock = V2128_TRUE_EAST_MOTION_LOCK;
     this.root.dataset.v2129PlayerFilenameDirectionLock = V2129_PLAYER_FILENAME_DIRECTION_LOCK;
     this.root.dataset.v2169KeyboardMoveLock = 'wasd-eight-direction-joystick-parity-no-direction-flip';
+    this.root.dataset.v2179VillageEntryCameraLock = 'player-centered-after-opening-stage-size-valid';
     this.root.dataset.v2130PlayerMotionImmutableLock = V2130_PLAYER_MOTION_IMMUTABLE_LOCK;
     this.root.dataset.v2130BuildConfirmFlowLock = V2130_BUILD_CONFIRM_FLOW_LOCK;
     this.root.dataset.v2131PlayerNpcDirectionGuard = V2131_PLAYER_NPC_DIRECTION_GUARD;
@@ -1389,9 +1410,23 @@ export class VillageWorld {
 
   centerCameraOnPlayer(): void {
     if (!this.player || !this.app) return;
+    this.ensureRendererMatchesStage();
     this.camera.x = this.app.screen.width / 2 - this.player.x * this.camera.scale;
     this.camera.y = this.app.screen.height / 2 - this.player.y * this.camera.scale;
     this.applyCamera();
+  }
+
+  recenterPlayerForVillageEntry(reason = 'v2179-entry-camera-guard'): void {
+    if (!this.player || !this.app || this.destroyed) return;
+    if (!this.ensureRendererMatchesStage()) {
+      this.v2179OpeningRecenterGuard += 1;
+      if (this.v2179OpeningRecenterGuard <= 8) window.setTimeout(() => this.recenterPlayerForVillageEntry(reason), 80);
+      return;
+    }
+    this.v2179OpeningRecenterGuard = 0;
+    this.cameraFollowUntil = performance.now() + 900;
+    this.centerCameraOnPlayer();
+    this.root.dataset.v2179VillageEntryCameraLock = `${reason}:player-center-reasserted`;
   }
 
   private ensureVillageState(): void {
@@ -3284,8 +3319,9 @@ export class VillageWorld {
 
   private resize(): void {
     if (!this.app) return;
+    this.ensureRendererMatchesStage();
     if (this.camera.x === 0 && this.camera.y === 0) {
-      this.centerCameraOnPlayer();
+      this.recenterPlayerForVillageEntry('initial-valid-stage-resize');
       return;
     }
     this.applyCamera();
