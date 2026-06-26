@@ -1,5 +1,5 @@
-// v2.1.91 opening/fishing/design engine: opening video-only contract, no pre-video chrome, smaller fishing rod/bait icons, polished premium UI guards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.91-opening-fishing-design-engine';
+// v2.1.92 opening/fishing/design tuning: video-first start handoff, compact rod/bait icons, premium layout guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.92-opening-fishing-design-tuning';
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './offline.html'];
 self.addEventListener('install', (event) => { event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (event) => { event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))).then(() => self.clients.claim())); });
