@@ -1,5 +1,5 @@
-// v2.1.86 system quality UI/engine polish: resilient fishing loadout shelves, bite/result de-overlap, chrome cleanup, and stable mobile viewport guards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.86-system-quality-ui-engine-polish';
+// v2.1.87 premium design/system upgrade: refined aqua card language, fishing loadout/result safe layout, village jitter-safe chrome, and mobile performance guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.87-premium-design-system-upgrade';
 const ASSETS = [
   './',
   './index.html',
