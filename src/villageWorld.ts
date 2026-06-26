@@ -1424,9 +1424,11 @@ export class VillageWorld {
       return;
     }
     this.v2179OpeningRecenterGuard = 0;
-    this.cameraFollowUntil = performance.now() + 900;
+    // v2.1.82: entry recenter must not start the soft-follow timer; that timer was causing a visible post-entry camera tremble.
+    this.cameraFollowUntil = 0;
     this.centerCameraOnPlayer();
-    this.root.dataset.v2179VillageEntryCameraLock = `${reason}:player-center-reasserted`;
+    this.root.dataset.v2179VillageEntryCameraLock = `${reason}:player-center-reasserted-no-soft-follow-tremble`;
+    this.root.dataset.v2182VillageEntryCameraLock = 'centered-once-no-tremble';
   }
 
   private ensureVillageState(): void {

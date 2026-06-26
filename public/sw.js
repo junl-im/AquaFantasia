@@ -1,5 +1,5 @@
-// v2.1.81 content engine upgrade: preserves video-only intro, keeps village camera centered without movement fighting, and strengthens fishing/menu/card performance guards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.81-content-engine-upgrade';
+// v2.1.82 village/fishing layout stability: joystick label cleanup, no-tremble entry camera, fishing info bounds, gauge cleanup, bite/result UI polish.
+const CACHE_NAME = 'aqua-fantasia-v2.1.82-village-fishing-layout-stability';
 const ASSETS = ['./', './index.html', './offline.html'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
