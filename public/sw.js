@@ -1,5 +1,5 @@
-// v2.1.77 opening video first hotfix: keeps the intro as pure fullscreen video, blocks pre-village chrome, and preserves mobile UI polish.
-const CACHE_NAME = 'aqua-fantasia-v2.1.77-opening-video-first-fix';
+// v2.1.78 system quality engine: preserves video-only intro, strengthens fishing/menu layout, and adds mobile performance guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.78-system-quality-engine';
 const ASSETS = ['./', './index.html', './offline.html'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
