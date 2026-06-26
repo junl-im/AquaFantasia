@@ -1,5 +1,5 @@
-// v2.1.87 premium design/system upgrade: refined aqua card language, fishing loadout/result safe layout, village jitter-safe chrome, and mobile performance guards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.87-premium-design-system-upgrade';
+// v2.1.88 premium atelier/system polish: refined aqua visual hierarchy, safer fishing loadout/result layout, stable village chrome, and mobile performance guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.88-premium-atelier-system-polish';
 const ASSETS = [
   './',
   './index.html',
