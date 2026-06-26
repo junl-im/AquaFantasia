@@ -1,13 +1,13 @@
 {
   "name": "aqua-fantasia",
   "private": true,
-  "version": "2.1.85",
+  "version": "2.1.86",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build --base=./",
     "preview": "vite preview --host 0.0.0.0",
-    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v2185-quality-fishing-ui-engine-polish.mjs",
+    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v2186-system-quality-ui-engine-polish.mjs",
     "runtime:check": "node tools/check-v2014-background-dock-scroll-polish.mjs --runtime",
     "audit": "node tools/validate-clean.mjs && node tools/check-v2014-background-dock-scroll-polish.mjs --audit",
     "typecheck": "tsc --noEmit",

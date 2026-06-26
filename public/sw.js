@@ -1,5 +1,5 @@
-// v2.1.85 quality fishing UI/engine polish: stable loadout copy wrappers, raised bite callout, compact catch result, jitter-safe UI guards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.85-quality-fishing-ui-engine-polish';
+// v2.1.86 system quality UI/engine polish: resilient fishing loadout shelves, bite/result de-overlap, chrome cleanup, and stable mobile viewport guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.86-system-quality-ui-engine-polish';
 const ASSETS = [
   './',
   './index.html',
