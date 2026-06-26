@@ -1,6 +1,11 @@
-// v2.1.83 quality/system upgrade: fishing adaptive info stack, gauge lifecycle cleanup, village shake guard, menu/card performance polish.
-const CACHE_NAME = 'aqua-fantasia-v2.1.83-quality-system-upgrade';
-const ASSETS = ['./', './index.html', './offline.html'];
+// v2.1.84 fishing readability/result layout: readable rod/bait cards, raised bite callout, compact catch result, quality/performance guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.84-fishing-readability-result-layout';
+const ASSETS = [
+  './',
+  './index.html',
+  './manifest.webmanifest',
+  './assets/v2120/opening/aqua_opening_v2120.mp4'
+];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
@@ -9,5 +14,5 @@ self.addEventListener('activate', (event) => {
 });
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-  event.respondWith(fetch(event.request).catch(() => caches.match(event.request).then((res) => res || caches.match('./offline.html'))));
+  event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request).catch(() => caches.match('./'))));
 });
