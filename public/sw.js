@@ -1,5 +1,5 @@
-// v2.1.89 premium design/engine sweep: ocean glass card system, safer fishing shelf/bite/result layout, stable village chrome, and mobile performance guards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.89-premium-design-engine-sweep';
+// v2.1.90 premium design/content/engine sweep: refined ocean-glass UI, safer fishing equipment/bite/result placement, village paint stability, and mobile performance guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.90-premium-design-content-engine';
 const ASSETS = [
   './',
   './index.html',
