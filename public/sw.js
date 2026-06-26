@@ -1,5 +1,5 @@
-// v2.1.79 premium interaction engine: preserves video-only intro, strengthens fishing/menu layout, and adds mobile performance guards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.79-premium-interaction-engine';
+// v2.1.80 stability content engine: preserves video-only intro, stabilizes village entry camera, strengthens fishing/menu layout, and adds mobile performance guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.80-stability-content-engine';
 const ASSETS = ['./', './index.html', './offline.html'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));

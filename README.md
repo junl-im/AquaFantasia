@@ -1,4 +1,14 @@
-# AquaFantasia v2.1.79
+# AquaFantasia v2.1.80
+
+## v2.1.80 변경사항
+
+- v2.1.79를 기준으로 마을 진입 후 플레이어가 화면 중앙에서 벗어나는 회귀를 막는 camera stability guard를 유지하되, 반복 보정이 조작감을 건드리지 않도록 진입 직후 1회성 확인 패스로 정리했습니다.
+- 시작 로딩 진입 시 오프닝 영상만 전체화면으로 보이는 계약을 계속 유지했습니다. 말풍선, 비네트, 스킵 버튼, 우측 메뉴바, HUD, 하단 도크, 조이스틱은 오프닝 중 차단하고 `poster`는 사용하지 않습니다.
+- 낚시 실전 화면은 v2.1.80 stability content engine lane watchdog으로 게이지 영역과 하단 감기 버튼 예약 영역을 다시 계산합니다. 작은 세로 화면에서도 포획/텐션/저항 게이지가 감기 버튼과 겹치지 않도록 `--v2180-gauge-top`, `--v2180-reel-console-height`, `--v2180-safe-lane-height`를 동기화합니다.
+- 낚시 준비 화면의 바다물길/낚싯대/미끼 카드와 입질 중앙 콜아웃은 읽기 폭, 텍스트 예산, z-index를 다시 정리해 상단 HUD나 설명 배지와 겹치지 않게 했습니다.
+- 상점, 가방, 퀘스트, 지도, 건설, 도감, 개척, 결과창 계열은 premium aqua card budget을 한 번 더 적용해 긴 이름/설명/태그/가격 버튼이 서로 가리지 않도록 보강했습니다.
+- 게임 시스템/성능/기술 쪽으로 visualViewport 기반 모바일 안전 변수, requestAnimationFrame 배치 감사, long-frame 플래그, 이미지 lazy/async/no-drag, layout/paint containment, 터치 타겟 안정화 레이어를 유지/확장했습니다.
+- 플레이어 8방향 32프레임 방향 파일명/매핑, east/west 및 대각 방향 flip/alias 금지, NPC 방향 자산, 타일 픽셀 크기 유지, 오프닝 영상 최초 시작 전용 정책을 계속 보존했습니다.
 
 ## v2.1.79 변경사항
 
