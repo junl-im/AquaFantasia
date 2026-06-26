@@ -1,5 +1,5 @@
-// v2.1.84 fishing readability/result layout: readable rod/bait cards, raised bite callout, compact catch result, quality/performance guards.
-const CACHE_NAME = 'aqua-fantasia-v2.1.84-fishing-readability-result-layout';
+// v2.1.85 quality fishing UI/engine polish: stable loadout copy wrappers, raised bite callout, compact catch result, jitter-safe UI guards.
+const CACHE_NAME = 'aqua-fantasia-v2.1.85-quality-fishing-ui-engine-polish';
 const ASSETS = [
   './',
   './index.html',
