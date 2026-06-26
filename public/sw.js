@@ -1,5 +1,5 @@
-// v2.1.75 polish engine sweep: reinforces transition gates, fishing lanes, menu readability, and mobile runtime hygiene.
-const CACHE_NAME = 'aqua-fantasia-v2.1.75-polish-engine-sweep';
+// v2.1.76 quality composition sweep: reinforces fishing no-overlap lanes, menu text budgets, opening gates, and mobile runtime hygiene.
+const CACHE_NAME = 'aqua-fantasia-v2.1.76-quality-composition-sweep';
 const ASSETS = ['./', './index.html', './offline.html'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));

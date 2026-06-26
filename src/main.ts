@@ -334,6 +334,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2172SystemContentEngine = 'v2172-system-content-engine-upgrade';
     document.documentElement.dataset.v2173IntroGateEngine = 'v2173-intro-menu-gate-engine-upgrade';
     document.documentElement.dataset.v2174QualityEngineSweep = 'v2174-quality-engine-sweep';
+    document.documentElement.dataset.v2176QualityCompositionSweep = 'v2176-quality-composition-sweep';
     document.documentElement.dataset.v2154MenuFishingVisibilitySweep = 'v2154-mini-icon-menu-visible-fishing-gauges';
     document.documentElement.dataset.v2155MenuFishingCoreVisibility = 'v2155-micro-spaced-menu-gauge-above-reel-buttons';
     this.activateV2097UiResetShell();
@@ -347,7 +348,7 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v2168PremiumLayoutSweep = 'v2168-premium-layout-fishing-shop-dock-sweep';
     document.documentElement.dataset.v2169KeyboardShopFishingPolish = 'v2169-keyboard-shop-fishing-polish';
     document.documentElement.dataset.v2170AquaLayoutRefinement = 'v2170-aqua-layout-refinement-polish';
-    document.documentElement.classList.add('v2098-ui-recovery-root', 'v218-stable-ui-fishing-rollback-root', 'v219-ui-touch-shop-fishing-audit-root', 'v2111-aqua-shell-root', 'v2112-aqua-foundation-root', 'v2113-aqua-core-root', 'v2114-aqua-interaction-root', 'v2115-aqua-screen-shell-root', 'v2116-village-asset-polish-root', 'v2117-layout-input-fishing-root', 'v2118-character-water-ui-root', 'v2119-opening-exit-character-ui-root', 'v2120-opening-video-direction-ui-root', 'v2121-ui-continuity-polish-root', 'v2122-route-direction-ui-stability-root', 'v2123-bug-ui-fishing-stability-root', 'v2124-stability-performance-root', 'v2125-opening-direction-motion-ui-root', 'v2127-direction-motion-ui-audit-root', 'v2128-direction-ui-fishing-correction-root', 'v2129-player-filename-direction-root', 'v2130-construction-fishing-ui-root', 'v2131-motion-ui-fishing-build-root', 'v2132-premium-ui-fishing-stability-root', 'v2133-premium-ui-engine-fishing-stability-root', 'v2134-object-grid-shop-fishing-ui-root', 'v2135-system-ui-fishing-engine-root', 'v2136-premium-polish-fishing-placement-root', 'v2137-fishing-ui-page-shell-hud-menu-polish-root', 'v2138-fishing-cockpit-menu-page-polish-root', 'v2139-fishing-ui-system-polish-root', 'v2140-fishing-menu-ui-tune-root', 'v2142-fishing-ui-page-tile-polish-root', 'v2143-ui-overlap-placement-sweep-root', 'v2144-ui-placement-polish-sweep-root', 'v2145-icon-fishing-page-polish-root', 'v2146-ui-overlap-icon-fishing-polish-root', 'v2147-ui-overlap-layout-fishing-polish-root', 'v2148-ui-overlap-layout-sweep-root', 'v2149-ui-composition-polish-root', 'v2150-ui-overlap-placement-beauty-root', 'v2151-layout-composition-fishing-ui-root', 'v2152-compact-menu-fishing-gauge-root', 'v2153-tight-top-menu-fishing-battle-hud-root', 'v2154-menu-fishing-visibility-sweep-root', 'v2155-menu-fishing-core-visibility-root', 'v2156-top-menu-hard-lock-fishing-gauge-root', 'v2157-menu-fishing-visibility-hardfix-root', 'v2158-menu-shop-fishing-opening-polish-root', 'v2159-premium-aqua-ui-fishing-layout-root', 'v2160-fishing-hud-menu-polish-root', 'v2161-fishing-bite-dex-system-root', 'v2162-ui-quality-sweep-root', 'v2163-hud-fishing-toast-inventory-root', 'v2164-quality-followup-root', 'v2165-quality-sweep-root', 'v2166-menu-rescue-root', 'v2167-premium-mobile-polish-root', 'v2168-premium-layout-sweep-root', 'v2169-keyboard-shop-fishing-polish-root', 'v2170-aqua-layout-refinement-root', 'v2171-fishing-layout-engine-root', 'v2172-system-content-engine-root', 'v2173-intro-gate-engine-root', 'v2174-quality-engine-sweep-root');
+    document.documentElement.classList.add('v2098-ui-recovery-root', 'v218-stable-ui-fishing-rollback-root', 'v219-ui-touch-shop-fishing-audit-root', 'v2111-aqua-shell-root', 'v2112-aqua-foundation-root', 'v2113-aqua-core-root', 'v2114-aqua-interaction-root', 'v2115-aqua-screen-shell-root', 'v2116-village-asset-polish-root', 'v2117-layout-input-fishing-root', 'v2118-character-water-ui-root', 'v2119-opening-exit-character-ui-root', 'v2120-opening-video-direction-ui-root', 'v2121-ui-continuity-polish-root', 'v2122-route-direction-ui-stability-root', 'v2123-bug-ui-fishing-stability-root', 'v2124-stability-performance-root', 'v2125-opening-direction-motion-ui-root', 'v2127-direction-motion-ui-audit-root', 'v2128-direction-ui-fishing-correction-root', 'v2129-player-filename-direction-root', 'v2130-construction-fishing-ui-root', 'v2131-motion-ui-fishing-build-root', 'v2132-premium-ui-fishing-stability-root', 'v2133-premium-ui-engine-fishing-stability-root', 'v2134-object-grid-shop-fishing-ui-root', 'v2135-system-ui-fishing-engine-root', 'v2136-premium-polish-fishing-placement-root', 'v2137-fishing-ui-page-shell-hud-menu-polish-root', 'v2138-fishing-cockpit-menu-page-polish-root', 'v2139-fishing-ui-system-polish-root', 'v2140-fishing-menu-ui-tune-root', 'v2142-fishing-ui-page-tile-polish-root', 'v2143-ui-overlap-placement-sweep-root', 'v2144-ui-placement-polish-sweep-root', 'v2145-icon-fishing-page-polish-root', 'v2146-ui-overlap-icon-fishing-polish-root', 'v2147-ui-overlap-layout-fishing-polish-root', 'v2148-ui-overlap-layout-sweep-root', 'v2149-ui-composition-polish-root', 'v2150-ui-overlap-placement-beauty-root', 'v2151-layout-composition-fishing-ui-root', 'v2152-compact-menu-fishing-gauge-root', 'v2153-tight-top-menu-fishing-battle-hud-root', 'v2154-menu-fishing-visibility-sweep-root', 'v2155-menu-fishing-core-visibility-root', 'v2156-top-menu-hard-lock-fishing-gauge-root', 'v2157-menu-fishing-visibility-hardfix-root', 'v2158-menu-shop-fishing-opening-polish-root', 'v2159-premium-aqua-ui-fishing-layout-root', 'v2160-fishing-hud-menu-polish-root', 'v2161-fishing-bite-dex-system-root', 'v2162-ui-quality-sweep-root', 'v2163-hud-fishing-toast-inventory-root', 'v2164-quality-followup-root', 'v2165-quality-sweep-root', 'v2166-menu-rescue-root', 'v2167-premium-mobile-polish-root', 'v2168-premium-layout-sweep-root', 'v2169-keyboard-shop-fishing-polish-root', 'v2170-aqua-layout-refinement-root', 'v2171-fishing-layout-engine-root', 'v2172-system-content-engine-root', 'v2173-intro-gate-engine-root', 'v2174-quality-engine-sweep-root', 'v2176-quality-composition-sweep-root');
     // v2.0.92 validation lineage only: dataset.v2092UiStable = 'v2092-live-ui-canonical' activateV2092UiStableShell html.classList.add('v2092-ui-canonical-root') v2092-ui-stable-village-screen v2092-village-hud v2092-profile-chip v2092-expedition-board v2092-expedition-toggle data-v2092-expedition-toggle v2092-expedition-body data-v2092-expedition-body v2092-expedition-body-open v2092-ui-close v2092-ui-stable-menu-screen v2092-runtime-hud v2092-menu-content data-v2092-scroll-root="true" v2092-menu-close
     // v2.0.93 validation lineage only: old html dataset markers intentionally removed from live runtime. visualPolish enginePatch v2077MenuUiCleanup v2089UiHardReset v2090UiDebtCleanup v2091UiCleanup v2092UiStable
     /* v2.0.92 validation lineage only: old html dataset markers are intentionally not attached to runtime.
@@ -469,6 +470,7 @@ class AquaFantasiaGame {
     this.installV2173IntroGateEnginePass();
     this.installV2174QualityEngineSweepPass();
     this.installV2175PolishEngineSweepPass();
+    this.installV2176QualityCompositionSweepPass();
     this.preloadCriticalImages();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
@@ -5913,6 +5915,180 @@ class AquaFantasiaGame {
       raf = 0;
       normalizeViewport();
       normalizeOpeningAndVillage();
+      normalizeFishing();
+      normalizeMenus();
+    };
+    const schedule = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(sync);
+    };
+    schedule();
+    window.visualViewport?.addEventListener('resize', schedule, { passive: true });
+    window.visualViewport?.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('orientationchange', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule, { passive: true });
+    document.addEventListener('visibilitychange', schedule, { passive: true });
+    observer = new MutationObserver(schedule);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-screen'], childList: true, subtree: true });
+    window.addEventListener('pagehide', () => observer?.disconnect(), { once: true, passive: true });
+  }
+
+
+  private installV2176QualityCompositionSweepPass(): void {
+    let raf = 0;
+    let observer: MutationObserver | undefined;
+    const html = document.documentElement;
+    const setImportant = (node: HTMLElement | null | undefined, entries: Array<[string, string]>) => {
+      if (!node) return;
+      for (const [name, value] of entries) node.style.setProperty(name, value, 'important');
+    };
+    const clearImportant = (node: HTMLElement | null | undefined, props: string[]) => {
+      if (!node) return;
+      for (const prop of props) node.style.removeProperty(prop);
+    };
+    const hideNode = (node: HTMLElement, reason: string) => {
+      node.dataset.v2176HiddenReason = reason;
+      node.setAttribute('aria-hidden', 'true');
+      setImportant(node, [['display', 'none'], ['visibility', 'hidden'], ['opacity', '0'], ['pointer-events', 'none']]);
+    };
+    const restoreNode = (node: HTMLElement, reason: string) => {
+      if (node.dataset.v2176HiddenReason !== reason) return;
+      delete node.dataset.v2176HiddenReason;
+      node.removeAttribute('aria-hidden');
+      clearImportant(node, ['display', 'visibility', 'opacity', 'pointer-events']);
+    };
+    const normalizeViewport = () => {
+      const viewport = window.visualViewport;
+      const vw = Math.max(1, Math.floor(viewport?.width ?? window.innerWidth));
+      const vh = Math.max(1, Math.floor(viewport?.height ?? window.innerHeight));
+      const short = vh <= 640;
+      const tiny = vh <= 590;
+      const reelHeight = tiny ? 96 : short ? 112 : 128;
+      const gaugeTop = tiny ? 78 : short ? 90 : 108;
+      html.dataset.v2176QualityCompositionSweep = 'no-overlap-fishing-menu-opening-performance';
+      html.classList.add('v2176-quality-composition-sweep-root');
+      html.style.setProperty('--v2176-visual-width', `${vw}px`);
+      html.style.setProperty('--v2176-visual-height', `${vh}px`);
+      html.style.setProperty('--v2176-reel-console-height', `${reelHeight}px`);
+      html.style.setProperty('--v2176-gauge-top', `${gaugeTop}px`);
+      html.style.setProperty('--v2176-scroll-safe-bottom', `calc(env(safe-area-inset-bottom, 0px) + ${reelHeight + 28}px)`);
+      html.classList.toggle('v2176-ultra-narrow', vw <= 360);
+      html.classList.toggle('v2176-short-height', short);
+      html.classList.toggle('v2176-tiny-height', tiny);
+    };
+    const normalizeOpening = () => {
+      const village = dom.app.querySelector<HTMLElement>('.village-world-screen');
+      if (!village) return;
+      village.classList.add('v2176-village-composition-screen');
+      const opening = village.querySelector<HTMLElement>('.v2173-opening-cinematic, .v2119-opening-cinematic');
+      const ready = village.classList.contains('v2173-village-ready') || village.classList.contains('v2174-village-ready-clean') || village.classList.contains('v2175-village-ready-clean') || village.classList.contains('v2176-village-ready-clean');
+      const video = opening?.querySelector<HTMLVideoElement>('video');
+      if (video?.hasAttribute('poster')) video.removeAttribute('poster');
+      if (video) {
+        video.preload = 'auto';
+        video.playsInline = true;
+        video.dataset.v2176OpeningVideo = 'posterless-first-frame-aqua-gate';
+      }
+      const openingActive = !!opening && !ready;
+      village.dataset.v2176VillageGate = openingActive ? 'opening-only-aqua-gate-no-chrome' : 'ready-chrome-normalized';
+      if (opening && ready) {
+        opening.dataset.v2176OpeningCleanup = 'removed-after-village-ready';
+        opening.remove();
+      }
+      village.querySelectorAll<HTMLElement>('.v2097-world-controls, .v2098-world-controls, .v2157-world-controls-microbar, .v2097-village-hud, .v2097-expedition-board, .v2097-joystick, .bottom-nav, .v2097-village-guide, .v2097-village-notice, .v2097-dialog-panel').forEach((node) => {
+        openingActive ? hideNode(node, 'opening-gate') : restoreNode(node, 'opening-gate');
+      });
+      if (!openingActive) village.classList.add('v2176-village-ready-clean');
+    };
+    const normalizeFishing = () => {
+      const fishing = dom.app.querySelector<HTMLElement>('.fishing-screen');
+      const bodyFishing = document.body.dataset.screen === 'fishing';
+      dom.app.querySelectorAll<HTMLElement>('.bottom-nav').forEach((node) => bodyFishing ? hideNode(node, 'fishing-screen') : restoreNode(node, 'fishing-screen'));
+      if (!fishing) return;
+      const phase = fishing.dataset.fishingPhase || fishing.dataset.v2175FishingPhase || fishing.dataset.v2174FishingPhase || 'prep';
+      fishing.classList.add('v2176-fishing-composition-screen');
+      fishing.dataset.v2176FishingPhase = phase;
+      fishing.dataset.v2176FishingLanes = 'no-overlap-reserve-gauge-upper-button-bottom-loadout-left';
+      fishing.querySelectorAll<HTMLElement>('.v2137-sea-lane-card, .v2175-sea-lane-card').forEach((node) => {
+        node.classList.add('v2176-sea-lane-card');
+        node.dataset.v2176SeaLane = 'left-top-readable-waterway-card';
+      });
+      fishing.querySelectorAll<HTMLElement>('.fishing-loadout-strip, .v2175-fishing-loadout').forEach((node) => {
+        node.classList.add('v2176-fishing-loadout');
+        node.dataset.v2176Loadout = 'under-waterway-wide-rod-bait-readable-stack';
+      });
+      fishing.querySelectorAll<HTMLElement>('.v2142-loadout-cell, .v2175-loadout-cell').forEach((node) => {
+        node.classList.add('v2176-loadout-cell');
+        node.dataset.v2176LoadoutCell = 'icon-text-two-line-no-crop';
+        const label = node.textContent?.trim();
+        if (label && !node.getAttribute('title')) node.setAttribute('title', label);
+      });
+      fishing.querySelectorAll<HTMLElement>('.v2153-battle-strip, .v2175-battle-strip').forEach((node) => {
+        node.classList.add('v2176-battle-strip');
+        node.dataset.v2176BattleStrip = 'center-upper-gauge-no-overlap-reserve';
+        if (phase === 'reeling') setImportant(node, [['position', 'fixed'], ['left', '50%'], ['right', 'auto'], ['top', 'var(--v2176-gauge-top)'], ['bottom', 'auto'], ['transform', 'translateX(-50%)'], ['z-index', '68']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.v2055-reel-console, .v2175-reel-console').forEach((node) => {
+        node.classList.add('v2176-reel-console');
+        node.dataset.v2176ReelConsole = 'bottom-safe-single-button-reserved-height';
+        if (phase === 'reeling') setImportant(node, [['position', 'fixed'], ['left', '50%'], ['right', 'auto'], ['bottom', 'calc(env(safe-area-inset-bottom, 0px) + 14px)'], ['top', 'auto'], ['transform', 'translateX(-50%)'], ['z-index', '72'], ['min-height', 'var(--v2176-reel-console-height)']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('[data-v2055-reel-wind], .v2175-single-reel-button').forEach((node) => {
+        node.classList.add('v2176-single-reel-button');
+        node.dataset.v2176ReelButton = 'large-clear-press-hold-release';
+      });
+      fishing.querySelectorAll<HTMLElement>('.bite-callout, .v2175-bite-callout').forEach((node) => {
+        node.classList.add('v2176-bite-callout');
+        node.dataset.v2176BiteCallout = 'center-signal-description-one-card';
+      });
+      fishing.querySelectorAll<HTMLElement>('.action-badge, .v2175-action-badge').forEach((node) => {
+        node.classList.add('v2176-action-badge');
+        node.dataset.v2176ActionBadge = 'center-casting-message-reserved-layer';
+      });
+      fishing.querySelectorAll<HTMLElement>('.recent-catch-strip, .fishing-guide-card, .v2020-reel-panel-frame, .v2021-reel-tooltip-frame, .v205-horizontal-gauge, .v205-vertical-gauge, .v205-resistance-art, .v2040-vertical-gauge, .v2110-fishing-props').forEach((node) => {
+        if (phase === 'reeling' || phase === 'bite') hideNode(node, 'fishing-no-overlap-phase');
+        else restoreNode(node, 'fishing-no-overlap-phase');
+      });
+    };
+    const normalizeMenus = () => {
+      dom.app.querySelectorAll<HTMLElement>('.runtime-menu-screen, .runtime-panel, .runtime-card-list > *, .dex-grid > *, .mission-card, .runtime-item-card, .runtime-shop-card, .shop-card, .catch-result-card, .dialog-card').forEach((node) => {
+        node.classList.add('v2176-aqua-composition-card');
+        node.dataset.v2176CardBudget = 'premium-aqua-readable-contained';
+      });
+      dom.app.querySelectorAll<HTMLElement>('.runtime-shop-card, .shop-card').forEach((node) => {
+        node.classList.add('v2176-shop-card');
+        node.dataset.v2176ShopBudget = 'tag-name-desc-price-separated';
+      });
+      dom.app.querySelectorAll<HTMLElement>('.runtime-shop-card strong, .runtime-shop-card small, .shop-card strong, .shop-card small, .runtime-item-card strong, .runtime-item-card span, .dex-card strong, .dex-card span, .mission-card strong, .mission-card span').forEach((node) => {
+        node.classList.add('v2176-text-budget');
+        node.dataset.v2176TextBudget = 'two-line-readable-no-overlap';
+        const label = node.textContent?.trim();
+        if (label && !node.getAttribute('title')) node.setAttribute('title', label);
+      });
+      dom.app.querySelectorAll<HTMLElement>('.runtime-menu-content, .v2172-content-flow').forEach((node) => {
+        node.classList.add('v2176-scroll-safe-content');
+        node.dataset.v2176ScrollSafe = 'bottom-nav-and-button-reserved';
+      });
+      dom.app.querySelectorAll<HTMLElement>('.runtime-menu-screen button, .catch-result-card button, .dialog-card button').forEach((node) => {
+        node.classList.add('v2176-aqua-touch-button');
+        node.dataset.v2176TouchTarget = 'stable-no-shift';
+      });
+      dom.app.querySelectorAll<HTMLElement>('input, textarea, select').forEach((node) => {
+        node.classList.add('v2176-readable-input');
+        node.dataset.v2176InputTone = 'aqua-readable-no-black-regression';
+      });
+      dom.app.querySelectorAll<HTMLImageElement>('img:not([data-v2176-img-policy])').forEach((img) => {
+        img.dataset.v2176ImgPolicy = 'lazy-async-no-drag-contain';
+        img.decoding = img.decoding || 'async';
+        img.loading = img.loading || 'lazy';
+        img.draggable = false;
+      });
+    };
+    const sync = () => {
+      raf = 0;
+      normalizeViewport();
+      normalizeOpening();
       normalizeFishing();
       normalizeMenus();
     };
