@@ -1,5 +1,5 @@
-// v2.1.97 premium design continuity: active-screen ocean glass polish, opening first-frame shield, fishing two-slot gear bar stability.
-const CACHE_NAME = 'aqua-fantasia-v2.1.97-premium-design-continuity';
+// v2.1.98 premium design engine: active-screen ocean glass polish, opening first-frame shield, fishing two-slot gear bar stability.
+const CACHE_NAME = 'aqua-fantasia-v2.1.98-premium-design-engine';
 const CORE_ASSETS = [
   './',
   './index.html',
