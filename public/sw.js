@@ -1,5 +1,5 @@
-// v2.1.95 premium design engine sweep: opening video shell hardening, slim fishing loadout, active-screen polish.
-const CACHE_NAME = 'aqua-fantasia-v2.1.95-premium-design-engine-sweep';
+// v2.1.96 premium UX engine sweep: first-frame opening shell, text-first fishing loadout, design/performance polish.
+const CACHE_NAME = 'aqua-fantasia-v2.1.96-premium-ux-engine-sweep';
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './offline.html'];
 self.addEventListener('install', (event) => { event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (event) => { event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))).then(() => self.clients.claim())); });

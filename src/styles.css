@@ -64891,3 +64891,222 @@ html.v2195-premium-design-engine-root :is(input,textarea,select) {
     scroll-behavior: auto !important;
   }
 }
+
+/* v2.1.96: first-frame opening shell + text-first thin fishing loadout + premium UX performance sweep. v2196-premium-ux-engine-sweep */
+html.v2196-premium-ux-engine-root {
+  --v2196-safe-left: max(8px, env(safe-area-inset-left, 0px));
+  --v2196-safe-right: max(8px, env(safe-area-inset-right, 0px));
+  --v2196-loadout-top: calc(env(safe-area-inset-top, 0px) + 76px);
+  --v2196-loadout-width: min(488px, calc(100vw - var(--v2196-safe-left) - var(--v2196-safe-right) - 8px));
+  --v2196-loadout-icon: 9px;
+  --v2196-loadout-height: 26px;
+  --v2196-result-max-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 18px);
+  --v2196-glass: linear-gradient(180deg, rgba(255,255,255,.97), rgba(226,251,255,.94) 56%, rgba(132,226,245,.84));
+  --v2196-line: rgba(255,255,255,.78);
+  --v2196-ink: #04304b;
+  --v2196-shadow: 0 14px 30px rgba(0,42,84,.16), inset 0 1px 0 rgba(255,255,255,.82);
+}
+html.v2196-premium-ux-engine-root .v2196-opening-cinematic,
+html.v2196-premium-ux-engine-root body[data-screen="village"] .v2196-opening-cinematic {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100svh !important;
+  display: block !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  background: #000 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  isolation: isolate !important;
+  z-index: 2147483400 !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html.v2196-premium-ux-engine-root .v2196-opening-cinematic::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  display: block;
+  z-index: 3;
+  background: #000;
+  opacity: 1;
+  pointer-events: none;
+}
+html.v2196-premium-ux-engine-root .v2196-opening-cinematic.v2196-first-frame-ready::before,
+html.v2196-premium-ux-engine-root .v2196-village-opening-first-frame-screen.v2196-opening-first-frame-ready .v2196-opening-cinematic::before {
+  opacity: 0;
+}
+html.v2196-premium-ux-engine-root .v2196-opening-video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  background: #000 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+  transform: translate3d(0,0,0) !important;
+  opacity: 0 !important;
+}
+html.v2196-premium-ux-engine-root .v2196-opening-cinematic.v2196-first-frame-ready .v2196-opening-video,
+html.v2196-premium-ux-engine-root .v2196-village-opening-first-frame-screen.v2196-opening-first-frame-ready .v2196-opening-video {
+  opacity: 1 !important;
+}
+html.v2196-premium-ux-engine-root .v2196-opening-video::-webkit-media-controls,
+html.v2196-premium-ux-engine-root .v2196-opening-video::-webkit-media-controls-panel,
+html.v2196-premium-ux-engine-root .v2196-opening-video::-webkit-media-controls-play-button,
+html.v2196-premium-ux-engine-root .v2196-opening-video::-webkit-media-controls-start-playback-button,
+html.v2196-premium-ux-engine-root .v2196-opening-video::-webkit-media-controls-overlay-play-button,
+html.v2196-premium-ux-engine-root .v2196-opening-video::-webkit-media-controls-enclosure,
+html.v2196-premium-ux-engine-root .v2196-opening-video::-webkit-media-controls-timeline,
+html.v2196-premium-ux-engine-root .v2196-opening-video::-webkit-media-controls-current-time-display,
+html.v2196-premium-ux-engine-root .v2196-opening-video::-webkit-media-controls-time-remaining-display {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  -webkit-appearance: none !important;
+}
+html.v2196-premium-ux-engine-root .v2196-opening-cinematic > :not(video),
+html.v2196-premium-ux-engine-root .v2196-opening-cinematic :is(.v2119-opening-bubble,.v2120-opening-bubble,.v2121-opening-bubble,.v2122-opening-bubble,.v2123-opening-bubble,.v2124-opening-bubble,.v2125-opening-bubble,.v2127-opening-bubble,.v2128-opening-bubble,.v2129-opening-bubble,.v2130-opening-bubble,.v2131-opening-bubble,.v2177-opening-status,.v2173-opening-skip,.v2121-opening-skip,.v2120-opening-vignette,.toast-card) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-fishing-loadout {
+  position: fixed !important;
+  left: var(--v2196-safe-left) !important;
+  top: var(--v2196-loadout-top) !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: var(--v2196-loadout-width) !important;
+  max-width: calc(100vw - var(--v2196-safe-left) - var(--v2196-safe-right) - 8px) !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 4px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+  z-index: 126 !important;
+}
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-loadout-cell {
+  display: grid !important;
+  grid-template-columns: var(--v2196-loadout-icon) minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 3px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: var(--v2196-loadout-height) !important;
+  min-height: var(--v2196-loadout-height) !important;
+  max-height: var(--v2196-loadout-height) !important;
+  padding: 2px 6px !important;
+  border-radius: 11px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  contain: layout style paint !important;
+  background: var(--v2196-glass) !important;
+  border: 1px solid var(--v2196-line) !important;
+  box-shadow: 0 7px 15px rgba(0,47,95,.12), inset 0 1px 0 rgba(255,255,255,.78) !important;
+  color: var(--v2196-ink) !important;
+  -webkit-text-fill-color: var(--v2196-ink) !important;
+}
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-loadout-cell > img,
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-loadout-icon {
+  width: var(--v2196-loadout-icon) !important;
+  height: var(--v2196-loadout-icon) !important;
+  min-width: var(--v2196-loadout-icon) !important;
+  min-height: var(--v2196-loadout-icon) !important;
+  max-width: var(--v2196-loadout-icon) !important;
+  max-height: var(--v2196-loadout-icon) !important;
+  object-fit: contain !important;
+  justify-self: center !important;
+  align-self: center !important;
+  filter: drop-shadow(0 1px 1px rgba(0,55,105,.12)) !important;
+}
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-loadout-copy {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  column-gap: 3px !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+  text-overflow: clip !important;
+}
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-loadout-copy strong {
+  font-size: 9.4px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  letter-spacing: -.04em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-loadout-copy :is(em,span,small,p) {
+  font-size: 8.1px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  opacity: .86 !important;
+  color: rgba(4,48,75,.72) !important;
+  -webkit-text-fill-color: rgba(4,48,75,.72) !important;
+}
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-bite-callout {
+  top: clamp(68px, 13svh, 104px) !important;
+  width: min(308px, calc(100vw - 44px)) !important;
+  max-height: 154px !important;
+  overflow: auto !important;
+}
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-result-card {
+  width: min(318px, calc(100vw - 26px)) !important;
+  max-height: var(--v2196-result-max-height) !important;
+  padding: 8px !important;
+  overflow: auto !important;
+  border-radius: 22px !important;
+}
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-result-ribbon { font-size: 10px !important; line-height: 1.05 !important; padding: 4px 8px !important; }
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-result-shell { gap: 7px !important; padding: 7px !important; }
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-result-copy :is(h3,small,span,em) { max-width: 100% !important; overflow-wrap: anywhere !important; }
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-result-impact { gap: 5px !important; }
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-result-impact article { min-height: 38px !important; padding: 5px 6px !important; }
+html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-result-actions { gap: 6px !important; }
+html.v2196-premium-ux-engine-root .v2196-ocean-glass-card,
+html.v2196-premium-ux-engine-root :is(.runtime-menu-screen,.runtime-panel,.runtime-shop-card,.shop-card,.dialog-card,.v2130-build-confirm-card,.runtime-item-card,.dex-card,.mission-card,.catch-result-card) {
+  background: var(--v2196-glass) !important;
+  color: var(--v2196-ink) !important;
+  -webkit-text-fill-color: var(--v2196-ink) !important;
+  border-color: var(--v2196-line) !important;
+  box-shadow: var(--v2196-shadow) !important;
+}
+@media (max-height: 590px) {
+  html.v2196-premium-ux-engine-root {
+    --v2196-loadout-icon: 8px;
+    --v2196-loadout-height: 24px;
+  }
+  html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-loadout-cell { padding: 2px 5px !important; border-radius: 10px !important; }
+  html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-loadout-copy strong { font-size: 9px !important; }
+  html.v2196-premium-ux-engine-root body[data-screen="fishing"] .v2196-loadout-copy :is(em,span,small,p) { font-size: 7.8px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v2196-premium-ux-engine-root * {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
