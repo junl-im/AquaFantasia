@@ -64661,3 +64661,233 @@ html.v2194-intro-loadout-root body[data-screen="fishing"] .v2194-loadout-copy :i
     font-size: 9px !important;
   }
 }
+
+/* v2.1.95: premium design engine sweep + opening shell guard + ultra slim fishing loadout. v2195-design-engine-sweep */
+html.v2195-premium-design-engine-root {
+  --v2195-safe-left: max(10px, env(safe-area-inset-left, 0px));
+  --v2195-info-top: calc(env(safe-area-inset-top, 0px) + 10px);
+  --v2195-loadout-top: calc(env(safe-area-inset-top, 0px) + 82px);
+  --v2195-loadout-width: min(438px, calc(100vw - var(--v2195-safe-left) - 10px));
+  --v2195-loadout-icon: 12px;
+  --v2195-loadout-cell-height: 30px;
+  --v2195-ocean-glass: linear-gradient(180deg, rgba(255,255,255,.96), rgba(226,250,255,.92) 56%, rgba(129,225,244,.82));
+  --v2195-ocean-line: rgba(255,255,255,.76);
+  --v2195-ocean-ink: #04304b;
+  --v2195-shadow: 0 16px 34px rgba(0, 42, 84, .18), inset 0 1px 0 rgba(255,255,255,.82);
+}
+html.v2195-premium-design-engine-root .v2195-opening-cinematic,
+html.v2195-premium-design-engine-root body[data-screen="village"] .v2195-opening-cinematic {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100svh !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+  overflow: hidden !important;
+  z-index: 2147483300 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  isolation: isolate !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html.v2195-premium-design-engine-root .v2195-opening-cinematic::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  background: #000;
+  opacity: 1;
+  pointer-events: none;
+}
+html.v2195-premium-design-engine-root .v2195-opening-cinematic.v2195-video-ready::before,
+html.v2195-premium-design-engine-root .v2195-village-opening-shell-screen.v2195-opening-video-ready .v2195-opening-cinematic::before {
+  opacity: 0;
+}
+html.v2195-premium-design-engine-root .v2195-opening-video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  background: #000 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+  transform: translate3d(0,0,0) !important;
+}
+html.v2195-premium-design-engine-root .v2195-opening-cinematic:not(.v2195-video-ready) .v2195-opening-video {
+  opacity: 0 !important;
+}
+html.v2195-premium-design-engine-root .v2195-opening-cinematic.v2195-video-ready .v2195-opening-video,
+html.v2195-premium-design-engine-root .v2195-village-opening-shell-screen.v2195-opening-video-ready .v2195-opening-video {
+  opacity: 1 !important;
+}
+html.v2195-premium-design-engine-root .v2195-opening-video::-webkit-media-controls,
+html.v2195-premium-design-engine-root .v2195-opening-video::-webkit-media-controls-panel,
+html.v2195-premium-design-engine-root .v2195-opening-video::-webkit-media-controls-play-button,
+html.v2195-premium-design-engine-root .v2195-opening-video::-webkit-media-controls-start-playback-button,
+html.v2195-premium-design-engine-root .v2195-opening-video::-webkit-media-controls-overlay-play-button,
+html.v2195-premium-design-engine-root .v2195-opening-video::-webkit-media-controls-enclosure {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  -webkit-appearance: none !important;
+}
+html.v2195-premium-design-engine-root .v2195-opening-cinematic > :not(video),
+html.v2195-premium-design-engine-root .v2195-opening-cinematic :is(.v2119-opening-bubble,.v2120-opening-bubble,.v2120-opening-vignette,.v2173-opening-skip,.v2177-opening-status,.toast-card) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.v2195-premium-design-engine-root body[data-screen="fishing"] .v2195-fishing-loadout {
+  position: fixed !important;
+  left: var(--v2195-safe-left) !important;
+  top: var(--v2195-loadout-top) !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: var(--v2195-loadout-width) !important;
+  max-width: calc(100vw - var(--v2195-safe-left) - 10px) !important;
+  height: auto !important;
+  max-height: none !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 5px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+  z-index: 121 !important;
+}
+html.v2195-premium-design-engine-root body[data-screen="fishing"] .v2195-loadout-cell {
+  display: grid !important;
+  grid-template-columns: var(--v2195-loadout-icon) minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 4px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: var(--v2195-loadout-cell-height) !important;
+  min-height: var(--v2195-loadout-cell-height) !important;
+  max-height: var(--v2195-loadout-cell-height) !important;
+  padding: 3px 6px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  contain: layout style paint !important;
+  background: var(--v2195-ocean-glass) !important;
+  border: 1px solid var(--v2195-ocean-line) !important;
+  box-shadow: 0 8px 18px rgba(0,47,95,.13), inset 0 1px 0 rgba(255,255,255,.78) !important;
+  color: var(--v2195-ocean-ink) !important;
+  -webkit-text-fill-color: var(--v2195-ocean-ink) !important;
+}
+html.v2195-premium-design-engine-root body[data-screen="fishing"] .v2195-loadout-cell > img,
+html.v2195-premium-design-engine-root body[data-screen="fishing"] .v2195-loadout-icon {
+  width: var(--v2195-loadout-icon) !important;
+  height: var(--v2195-loadout-icon) !important;
+  max-width: var(--v2195-loadout-icon) !important;
+  max-height: var(--v2195-loadout-icon) !important;
+  min-width: var(--v2195-loadout-icon) !important;
+  min-height: var(--v2195-loadout-icon) !important;
+  object-fit: contain !important;
+  justify-self: center !important;
+  align-self: center !important;
+  filter: drop-shadow(0 1px 2px rgba(0,55,105,.14)) !important;
+}
+html.v2195-premium-design-engine-root body[data-screen="fishing"] .v2195-loadout-copy {
+  display: grid !important;
+  align-content: center !important;
+  gap: 0 !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: hidden !important;
+  white-space: normal !important;
+  line-height: 1 !important;
+  text-overflow: clip !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html.v2195-premium-design-engine-root body[data-screen="fishing"] .v2195-loadout-copy strong {
+  font-size: 10px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  letter-spacing: -.035em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v2195-premium-design-engine-root body[data-screen="fishing"] .v2195-loadout-copy :is(em,span,small,p) {
+  font-size: 8.8px !important;
+  line-height: 1 !important;
+  color: rgba(4,48,75,.72) !important;
+  -webkit-text-fill-color: rgba(4,48,75,.72) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v2195-premium-design-engine-root body[data-screen="fishing"] .v2195-bite-callout {
+  top: clamp(74px, 15svh, 118px) !important;
+  width: min(314px, calc(100vw - 42px)) !important;
+  max-height: 168px !important;
+  overflow: auto !important;
+}
+html.v2195-premium-design-engine-root body[data-screen="fishing"] .v2195-result-card {
+  width: min(326px, calc(100vw - 28px)) !important;
+  max-height: var(--v2195-result-max-height) !important;
+  padding: 9px !important;
+  overflow: auto !important;
+  border-radius: 24px !important;
+}
+html.v2195-premium-design-engine-root .v2195-ocean-glass-card,
+html.v2195-premium-design-engine-root :is(.runtime-menu-screen,.runtime-panel,.runtime-shop-card,.shop-card,.dialog-card,.v2130-build-confirm-card,.runtime-item-card,.dex-card,.mission-card,.catch-result-card) {
+  background: var(--v2195-ocean-glass) !important;
+  color: var(--v2195-ocean-ink) !important;
+  -webkit-text-fill-color: var(--v2195-ocean-ink) !important;
+  border-color: var(--v2195-ocean-line) !important;
+  box-shadow: var(--v2195-shadow) !important;
+}
+html.v2195-premium-design-engine-root .v2195-touch-button,
+html.v2195-premium-design-engine-root button {
+  min-height: 44px;
+  touch-action: manipulation;
+}
+html.v2195-premium-design-engine-root .v2195-readable-input,
+html.v2195-premium-design-engine-root :is(input,textarea,select) {
+  background: rgba(247,253,255,.96) !important;
+  color: #053450 !important;
+  -webkit-text-fill-color: #053450 !important;
+  border-color: rgba(80,210,239,.46) !important;
+}
+@media (max-height: 590px) {
+  html.v2195-premium-design-engine-root {
+    --v2195-loadout-icon: 11px;
+    --v2195-loadout-cell-height: 28px;
+  }
+  html.v2195-premium-design-engine-root body[data-screen="fishing"] .v2195-loadout-cell {
+    padding: 3px 5px !important;
+    border-radius: 11px !important;
+  }
+  html.v2195-premium-design-engine-root body[data-screen="fishing"] .v2195-loadout-copy strong {
+    font-size: 9.5px !important;
+  }
+  html.v2195-premium-design-engine-root body[data-screen="fishing"] .v2195-loadout-copy :is(em,span,small,p) {
+    font-size: 8.2px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v2195-premium-design-engine-root * {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
