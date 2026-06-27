@@ -1,4 +1,12 @@
-# AquaFantasia v2.1.96
+# AquaFantasia v2.1.97
+
+## v2.1.97 변경사항
+
+- 활성 화면 기준으로만 작동하는 v2.1.97 프리미엄 디자인 연속성 패스를 추가해 상점/메뉴/결과창/건설 카드의 오션 글래스 톤, 버튼 대비, 텍스트 예산을 더 정돈했습니다.
+- 오프닝 영상은 첫 실제 프레임 전까지 네이티브 플레이 마크나 중간 UI가 보일 여지를 줄이는 first-frame shield를 유지/보강했습니다. `poster` 정지 이미지는 계속 사용하지 않습니다.
+- 낚시 장비 정보는 위쪽 얇은 2분할 바 구조를 유지하면서 아이콘을 더 작게 잠그고, 텍스트 우선 배치와 장비 바 실제 높이 측정을 보강했습니다.
+- 낚시 입질/실전/결과 단계에서 준비 정보, 보조 설명, 게이지 잔상이 겹치지 않도록 phase cleanup과 compact result guard를 추가했습니다.
+- visualViewport, reduced-motion, image lazy/async/no-drag, layout/paint containment 가드를 유지하면서 v2.1.97 전용 검증을 추가했습니다.
 
 ## v2.1.96 변경사항
 

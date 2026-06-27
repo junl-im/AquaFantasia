@@ -65110,3 +65110,223 @@ html.v2196-premium-ux-engine-root :is(.runtime-menu-screen,.runtime-panel,.runti
     scroll-behavior: auto !important;
   }
 }
+
+/* v2.1.97: premium design continuity, active-screen ocean glass, opening first-frame shield, fishing two-slot gear bar stability. v2197-premium-design-continuity */
+html.v2197-premium-design-continuity-root {
+  --v2197-safe-left: max(8px, env(safe-area-inset-left, 0px));
+  --v2197-safe-right: max(8px, env(safe-area-inset-right, 0px));
+  --v2197-loadout-top: calc(env(safe-area-inset-top, 0px) + 76px);
+  --v2197-loadout-width: min(492px, calc(100vw - var(--v2197-safe-left) - var(--v2197-safe-right) - 8px));
+  --v2197-loadout-icon: 8px;
+  --v2197-loadout-height: 25px;
+  --v2197-bite-top: clamp(68px, 11.5svh, 102px);
+  --v2197-result-max-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 18px);
+  --v2197-glass: linear-gradient(180deg, rgba(255,255,255,.98), rgba(230,252,255,.95) 55%, rgba(132,229,247,.86));
+  --v2197-ink: #032c46;
+  --v2197-muted: rgba(5,62,92,.74);
+  --v2197-line: rgba(255,255,255,.82);
+  --v2197-shadow: 0 15px 34px rgba(0,42,84,.17), inset 0 1px 0 rgba(255,255,255,.88);
+}
+html.v2197-premium-design-continuity-root .v2197-opening-cinematic,
+html.v2197-premium-design-continuity-root body[data-screen="village"] .v2197-opening-cinematic {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100svh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+  overflow: hidden !important;
+  z-index: 2147483500 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  isolation: isolate !important;
+}
+html.v2197-premium-design-continuity-root .v2197-opening-cinematic::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: #000 !important;
+  z-index: 5 !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+html.v2197-premium-design-continuity-root .v2197-opening-cinematic.v2197-first-frame-ready::before,
+html.v2197-premium-design-continuity-root .v2197-village-opening-first-frame-screen.v2197-opening-first-frame-ready .v2197-opening-cinematic::before {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+html.v2197-premium-design-continuity-root .v2197-opening-video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  background: #000 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+html.v2197-premium-design-continuity-root .v2197-opening-cinematic.v2197-first-frame-ready .v2197-opening-video,
+html.v2197-premium-design-continuity-root .v2197-village-opening-first-frame-screen.v2197-opening-first-frame-ready .v2197-opening-video {
+  opacity: 1 !important;
+}
+html.v2197-premium-design-continuity-root .v2197-opening-video::-webkit-media-controls,
+html.v2197-premium-design-continuity-root .v2197-opening-video::-webkit-media-controls-panel,
+html.v2197-premium-design-continuity-root .v2197-opening-video::-webkit-media-controls-play-button,
+html.v2197-premium-design-continuity-root .v2197-opening-video::-webkit-media-controls-start-playback-button,
+html.v2197-premium-design-continuity-root .v2197-opening-video::-webkit-media-controls-overlay-play-button,
+html.v2197-premium-design-continuity-root .v2197-opening-video::-webkit-media-controls-enclosure,
+html.v2197-premium-design-continuity-root .v2197-opening-video::-webkit-media-controls-timeline,
+html.v2197-premium-design-continuity-root .v2197-opening-video::-webkit-media-controls-current-time-display,
+html.v2197-premium-design-continuity-root .v2197-opening-video::-webkit-media-controls-time-remaining-display {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v2197-premium-design-continuity-root .v2197-opening-cinematic > :not(video),
+html.v2197-premium-design-continuity-root .v2197-opening-cinematic :is(.v2119-opening-bubble,.v2120-opening-bubble,.v2121-opening-bubble,.v2122-opening-bubble,.v2123-opening-bubble,.v2124-opening-bubble,.v2125-opening-bubble,.v2127-opening-bubble,.v2128-opening-bubble,.v2129-opening-bubble,.v2130-opening-bubble,.v2131-opening-bubble,.v2177-opening-status,.v2173-opening-skip,.v2121-opening-skip,.v2120-opening-vignette,.toast-card) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.v2197-premium-design-continuity-root body[data-screen="fishing"] .v2197-fishing-loadout {
+  position: fixed !important;
+  left: var(--v2197-safe-left) !important;
+  top: var(--v2197-loadout-top) !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: var(--v2197-loadout-width) !important;
+  max-width: calc(100vw - var(--v2197-safe-left) - var(--v2197-safe-right) - 8px) !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 4px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+  z-index: 128 !important;
+}
+html.v2197-premium-design-continuity-root body[data-screen="fishing"] .v2197-loadout-cell {
+  display: grid !important;
+  grid-template-columns: var(--v2197-loadout-icon) minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 3px !important;
+  height: var(--v2197-loadout-height) !important;
+  min-height: var(--v2197-loadout-height) !important;
+  max-height: var(--v2197-loadout-height) !important;
+  padding: 2px 6px !important;
+  border-radius: 11px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  background: var(--v2197-glass) !important;
+  color: var(--v2197-ink) !important;
+  -webkit-text-fill-color: var(--v2197-ink) !important;
+  border: 1px solid var(--v2197-line) !important;
+  box-shadow: 0 9px 18px rgba(0,48,88,.13), inset 0 1px 0 rgba(255,255,255,.9) !important;
+  contain: layout style paint !important;
+}
+html.v2197-premium-design-continuity-root body[data-screen="fishing"] .v2197-loadout-cell > img,
+html.v2197-premium-design-continuity-root body[data-screen="fishing"] .v2197-loadout-icon {
+  width: var(--v2197-loadout-icon) !important;
+  height: var(--v2197-loadout-icon) !important;
+  min-width: var(--v2197-loadout-icon) !important;
+  min-height: var(--v2197-loadout-icon) !important;
+  max-width: var(--v2197-loadout-icon) !important;
+  max-height: var(--v2197-loadout-icon) !important;
+  object-fit: contain !important;
+  justify-self: center !important;
+  align-self: center !important;
+  filter: none !important;
+}
+html.v2197-premium-design-continuity-root body[data-screen="fishing"] .v2197-loadout-copy {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  column-gap: 3px !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+html.v2197-premium-design-continuity-root body[data-screen="fishing"] .v2197-loadout-copy strong {
+  min-width: 0 !important;
+  font-size: 9.2px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  letter-spacing: -.04em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v2197-premium-design-continuity-root body[data-screen="fishing"] .v2197-loadout-copy :is(em,span,small,p) {
+  min-width: 0 !important;
+  font-size: 8px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  opacity: .88 !important;
+  color: var(--v2197-muted) !important;
+  -webkit-text-fill-color: var(--v2197-muted) !important;
+}
+html.v2197-premium-design-continuity-root body[data-screen="fishing"] .v2197-bite-callout {
+  top: var(--v2197-bite-top) !important;
+  width: min(306px, calc(100vw - 44px)) !important;
+  max-height: 148px !important;
+  overflow: auto !important;
+  z-index: 146 !important;
+}
+html.v2197-premium-design-continuity-root body[data-screen="fishing"] .v2197-result-card {
+  width: min(316px, calc(100vw - 26px)) !important;
+  max-height: var(--v2197-result-max-height) !important;
+  padding: 8px !important;
+  border-radius: 22px !important;
+  overflow: auto !important;
+  background: var(--v2197-glass) !important;
+  box-shadow: var(--v2197-shadow) !important;
+}
+html.v2197-premium-design-continuity-root .v2197-ocean-glass-card,
+html.v2197-premium-design-continuity-root :is(.runtime-menu-screen,.runtime-panel,.runtime-shop-card,.shop-card,.dialog-card,.v2130-build-confirm-card,.runtime-item-card,.dex-card,.mission-card,.catch-result-card) {
+  background: var(--v2197-glass) !important;
+  color: var(--v2197-ink) !important;
+  -webkit-text-fill-color: var(--v2197-ink) !important;
+  border-color: var(--v2197-line) !important;
+  box-shadow: var(--v2197-shadow) !important;
+}
+html.v2197-premium-design-continuity-root .v2197-touch-target {
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+@media (max-height: 590px) {
+  html.v2197-premium-design-continuity-root {
+    --v2197-loadout-icon: 7px;
+    --v2197-loadout-height: 23px;
+  }
+  html.v2197-premium-design-continuity-root body[data-screen="fishing"] .v2197-loadout-cell { padding: 2px 5px !important; border-radius: 10px !important; }
+  html.v2197-premium-design-continuity-root body[data-screen="fishing"] .v2197-loadout-copy strong { font-size: 8.8px !important; }
+  html.v2197-premium-design-continuity-root body[data-screen="fishing"] .v2197-loadout-copy :is(em,span,small,p) { font-size: 7.6px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v2197-premium-design-continuity-root * {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
