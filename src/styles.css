@@ -64491,3 +64491,173 @@ html.v2193-premium-design-system-root select {
     scroll-behavior: auto !important;
   }
 }
+
+/* v2.1.94: opening native play-mark suppression + thin 2-column fishing loadout. v2194-intro-loadout-patch */
+html.v2194-intro-loadout-root {
+  --v2194-loadout-left: max(10px, env(safe-area-inset-left, 0px));
+  --v2194-loadout-width: min(430px, calc(100vw - var(--v2194-loadout-left) - 10px));
+  --v2194-loadout-top: calc(env(safe-area-inset-top, 0px) + 84px);
+  --v2194-loadout-icon: 16px;
+  --v2194-loadout-cell-height: 38px;
+}
+html.v2194-intro-loadout-root .v2194-opening-cinematic,
+html.v2194-intro-loadout-root body[data-screen="village"] .v2194-opening-cinematic {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100svh !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+  overflow: hidden !important;
+  z-index: 2147483200 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html.v2194-intro-loadout-root .v2194-opening-video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  background: #000 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+  transform: translate3d(0,0,0) !important;
+}
+html.v2194-intro-loadout-root .v2194-opening-cinematic:not(.v2194-video-playing):not(.v2194-video-fallback) .v2194-opening-video,
+html.v2194-intro-loadout-root .v2194-village-opening-clean-screen:not(.v2194-opening-video-playing) .v2194-opening-video {
+  opacity: 0 !important;
+}
+html.v2194-intro-loadout-root .v2194-opening-cinematic.v2194-video-playing .v2194-opening-video,
+html.v2194-intro-loadout-root .v2194-village-opening-clean-screen.v2194-opening-video-playing .v2194-opening-video {
+  opacity: 1 !important;
+}
+html.v2194-intro-loadout-root .v2194-opening-video::-webkit-media-controls,
+html.v2194-intro-loadout-root .v2194-opening-video::-webkit-media-controls-panel,
+html.v2194-intro-loadout-root .v2194-opening-video::-webkit-media-controls-play-button,
+html.v2194-intro-loadout-root .v2194-opening-video::-webkit-media-controls-start-playback-button,
+html.v2194-intro-loadout-root .v2194-opening-video::-webkit-media-controls-overlay-play-button,
+html.v2194-intro-loadout-root .v2194-opening-video::-webkit-media-controls-enclosure {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  -webkit-appearance: none !important;
+}
+html.v2194-intro-loadout-root .v2194-opening-cinematic > :not(video),
+html.v2194-intro-loadout-root .v2194-opening-cinematic :is(.v2119-opening-bubble,.v2120-opening-bubble,.v2121-opening-bubble,.v2122-opening-bubble,.v2123-opening-bubble,.v2124-opening-bubble,.v2125-opening-bubble,.v2127-opening-bubble,.v2128-opening-bubble,.v2129-opening-bubble,.v2130-opening-bubble,.v2131-opening-bubble,.v2177-opening-status,.v2173-opening-skip,.v2121-opening-skip,.v2120-opening-vignette,.v2122-opening-vignette,.v2123-opening-vignette,.v2124-opening-vignette,.v2125-opening-vignette,.v2127-opening-vignette,.v2128-opening-vignette,.v2129-opening-vignette,.v2130-opening-vignette,.v2131-opening-vignette) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.v2194-intro-loadout-root body[data-screen="fishing"] .v2194-fishing-loadout {
+  position: fixed !important;
+  left: var(--v2194-loadout-left) !important;
+  top: var(--v2194-loadout-top) !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: var(--v2194-loadout-width) !important;
+  max-width: calc(100vw - var(--v2194-loadout-left) - 10px) !important;
+  height: auto !important;
+  max-height: none !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 6px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+  z-index: 118 !important;
+}
+html.v2194-intro-loadout-root body[data-screen="fishing"] .v2194-loadout-cell {
+  display: grid !important;
+  grid-template-columns: var(--v2194-loadout-icon) minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 5px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: var(--v2194-loadout-cell-height) !important;
+  min-height: var(--v2194-loadout-cell-height) !important;
+  max-height: var(--v2194-loadout-cell-height) !important;
+  padding: 4px 7px !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(231,252,255,.94) 58%, rgba(112,225,246,.88)) !important;
+  border: 1px solid rgba(245,255,255,.88) !important;
+  box-shadow: 0 10px 22px rgba(0,47,95,.14), inset 0 1px 0 rgba(255,255,255,.86) !important;
+  color: #03324d !important;
+  -webkit-text-fill-color: #03324d !important;
+}
+html.v2194-intro-loadout-root body[data-screen="fishing"] .v2194-loadout-cell > img,
+html.v2194-intro-loadout-root body[data-screen="fishing"] .v2194-loadout-icon {
+  width: var(--v2194-loadout-icon) !important;
+  height: var(--v2194-loadout-icon) !important;
+  max-width: var(--v2194-loadout-icon) !important;
+  max-height: var(--v2194-loadout-icon) !important;
+  min-width: var(--v2194-loadout-icon) !important;
+  min-height: var(--v2194-loadout-icon) !important;
+  object-fit: contain !important;
+  justify-self: center !important;
+  align-self: center !important;
+  filter: drop-shadow(0 2px 4px rgba(0,55,105,.16)) !important;
+}
+html.v2194-intro-loadout-root body[data-screen="fishing"] .v2194-loadout-copy {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  display: grid !important;
+  align-content: center !important;
+  gap: 0 !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  text-overflow: clip !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+  line-height: 1.05 !important;
+}
+html.v2194-intro-loadout-root body[data-screen="fishing"] .v2194-loadout-copy strong {
+  font-size: 10.5px !important;
+  line-height: 1.05 !important;
+  font-weight: 1000 !important;
+  letter-spacing: -.03em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v2194-intro-loadout-root body[data-screen="fishing"] .v2194-loadout-copy :is(em,span,small,p) {
+  font-size: 9.5px !important;
+  line-height: 1.05 !important;
+  color: rgba(3,50,77,.72) !important;
+  -webkit-text-fill-color: rgba(3,50,77,.72) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+@media (max-height: 590px) {
+  html.v2194-intro-loadout-root {
+    --v2194-loadout-icon: 15px;
+    --v2194-loadout-cell-height: 34px;
+  }
+  html.v2194-intro-loadout-root body[data-screen="fishing"] .v2194-loadout-cell {
+    padding: 3px 6px !important;
+    border-radius: 13px !important;
+  }
+  html.v2194-intro-loadout-root body[data-screen="fishing"] .v2194-loadout-copy strong {
+    font-size: 10px !important;
+  }
+  html.v2194-intro-loadout-root body[data-screen="fishing"] .v2194-loadout-copy :is(em,span,small,p) {
+    font-size: 9px !important;
+  }
+}
