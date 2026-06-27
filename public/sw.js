@@ -1,5 +1,5 @@
-// v2.1.98 premium design engine: active-screen ocean glass polish, opening first-frame shield, fishing two-slot gear bar stability.
-const CACHE_NAME = 'aqua-fantasia-v2.1.98-premium-design-engine';
+// v2.1.99 premium design polish: lighter active-screen design pass, video-first opening mask hardening, fishing loadout/result readability guard.
+const CACHE_NAME = 'aqua-fantasia-v2.1.99-premium-design-polish';
 const CORE_ASSETS = [
   './',
   './index.html',
