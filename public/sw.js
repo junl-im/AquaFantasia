@@ -1,5 +1,5 @@
-// v2.1.99 premium design polish: lighter active-screen design pass, video-first opening mask hardening, fishing loadout/result readability guard.
-const CACHE_NAME = 'aqua-fantasia-v2.1.99-premium-design-polish';
+// v2.1.100 premium milestone polish: consolidated active-screen design pass, opening first-frame shield, fishing slim text-first loadout/result guard.
+const CACHE_NAME = 'aqua-fantasia-v2.1.100-premium-milestone-polish';
 const CORE_ASSETS = [
   './',
   './index.html',
