@@ -1,13 +1,13 @@
 {
   "name": "aqua-fantasia",
   "private": true,
-  "version": "2.1.102",
+  "version": "2.1.103",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build --base=./",
     "preview": "vite preview --host 0.0.0.0",
-    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v21102-premium-design-system-continuation.mjs",
+    "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v21103-opening-loadout-final-guard.mjs",
     "runtime:check": "node tools/check-v2014-background-dock-scroll-polish.mjs --runtime",
     "audit": "node tools/validate-clean.mjs && node tools/check-v2014-background-dock-scroll-polish.mjs --audit",
     "typecheck": "tsc --noEmit",

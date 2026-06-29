@@ -1,5 +1,5 @@
-// v2.1.102 premium design system continuation: active-screen ocean glass polish, opening first-frame shell, fishing split loadout/result cleanup.
-const CACHE_NAME = 'aqua-fantasia-v2.1.102-premium-design-system-continuation';
+// v2.1.103 opening/loadout final guard: native video chrome shell, strict fishing split bar, bite/result compact cleanup.
+const CACHE_NAME = 'aqua-fantasia-v2.1.103-opening-loadout-final-guard';
 const CORE_ASSETS = [
   './',
   './index.html',
