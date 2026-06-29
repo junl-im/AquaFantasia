@@ -1,5 +1,5 @@
-// v2.1.109 System UI stability polish: frame-stable fishing safe window, layout rails, premium design sweep.
-const CACHE_NAME = 'aqua-fantasia-v2.1.109-system-ui-stability-polish';
+// v2.1.110 Fishing feel/design stability: fatigue resistance, quantized safe window, micro UI hygiene.
+const CACHE_NAME = 'aqua-fantasia-v2.1.110-fishing-feel-design-stability';
 const CORE_ASSETS = [
   './',
   './index.html',

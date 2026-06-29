@@ -26,6 +26,8 @@ type FishTensionProfile = {
   escape: number;
   centerSwing: number;
   cadence: number;
+  fatigueRelief: number;
+  recoveryGrace: number;
 };
 
 type CatchGrowthSettlement = {
@@ -259,7 +261,7 @@ class AquaFantasiaGame {
   private compact = false;
   private activeFish: FishInfo = fishDex[0];
   private activeFishTextureUrl = '';
-  private activeFishProfile: FishTensionProfile = { archetype: 'steady', label: '잔잔형', tensionBias: 0, pull: 1, volatility: 1, burst: 1, resistance: 1, stamina: 1, safeWidth: 0, catchRate: 1, escape: 1, centerSwing: 1, cadence: 540 };
+  private activeFishProfile: FishTensionProfile = { archetype: 'steady', label: '잔잔형', tensionBias: 0, pull: 1, volatility: 1, burst: 1, resistance: 1, stamina: 1, safeWidth: 0, catchRate: 1, escape: 1, centerSwing: 1, cadence: 540, fatigueRelief: 1, recoveryGrace: 1 };
   private fishMood: FishMood = 'calm';
   private fishStamina = 100;
   private catchProgress = 0;
@@ -287,6 +289,8 @@ class AquaFantasiaGame {
   private lastActionBadgeAt = 0;
   private lastHapticAt = 0;
   private lastTouchRingAt = 0;
+  private lastFishingUiKey = '';
+  private lastFishingUiAnnounceAt = 0;
 
   async boot(): Promise<void> {
     this.quality.start();
@@ -550,6 +554,7 @@ class AquaFantasiaGame {
     this.installV21107UiStabilityDesignEnginePass();
     this.installV21108FishingBiteBalancePolishPass();
     this.installV21109SystemUiStabilityPolishPass();
+    this.installV21110FishingFeelDesignStabilityPass();
     this.preloadCriticalImages();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
@@ -2956,10 +2961,12 @@ class AquaFantasiaGame {
     const regionMod = this.getRegion().difficulty;
     const profile = this.activeFishProfile;
     const gearRelief = 1 + this.save.gear.rodLevel * 0.06 + this.save.gear.reelLevel * 0.05 + this.save.gear.lineLevel * 0.05;
-    const rarityMod = (this.activeFish.rarity === 'BOSS' ? 1.30 : this.activeFish.rarity === 'EPIC' ? 1.14 : this.activeFish.rarity === 'RARE' ? 1.06 : 1) * profile.volatility;
+    const staminaFatigue = Math.max(0, 100 - this.fishStamina) / 100;
+    const staminaDrag = Math.max(0.72, 1 - staminaFatigue * 0.26 * profile.fatigueRelief);
+    const rarityMod = (this.activeFish.rarity === 'BOSS' ? 1.30 : this.activeFish.rarity === 'EPIC' ? 1.14 : this.activeFish.rarity === 'RARE' ? 1.06 : 1) * profile.volatility * staminaDrag;
     this.surgeTimer += dt / 60;
-    const burstThreshold = Math.max(0.66, 0.84 - (profile.burst - 1) * 0.08);
-    const burstPulse = this.surgeTimer > Math.max(0.74, 1.08 - profile.burst * 0.12) && Math.sin(now / profile.cadence) > burstThreshold;
+    const burstThreshold = Math.max(0.66, 0.84 - (profile.burst - 1) * 0.08 + staminaFatigue * 0.10);
+    const burstPulse = this.fishStamina > 16 && this.surgeTimer > Math.max(0.74, 1.08 - profile.burst * 0.12) && Math.sin(now / profile.cadence) > burstThreshold;
     const zoneBefore = this.safeZone();
     const dangerouslyLoose = this.tension < Math.max(10, zoneBefore.left - 14);
     const dangerouslyTight = this.tension > Math.min(92, zoneBefore.right + 16);
@@ -2990,10 +2997,10 @@ class AquaFantasiaGame {
     const zone = this.safeZone();
     const recoveryInput = (this.tension < zone.left && this.reelMode === 'wind') || (this.tension > zone.right && this.reelMode === 'release');
     if (recoveryInput) {
-      const towardCenter = ((zone.left + zone.right) / 2 - this.tension) * 0.018;
+      const towardCenter = ((zone.left + zone.right) / 2 - this.tension) * 0.018 * profile.recoveryGrace;
       this.tension = Math.max(-4, Math.min(104, this.tension + towardCenter * dt));
-      this.escapePressure = Math.max(0, this.escapePressure - 0.018 * dt / 60);
-      this.failureRecoveryTimer = Math.max(0, this.failureRecoveryTimer - 0.026 * dt);
+      this.escapePressure = Math.max(0, this.escapePressure - 0.018 * profile.recoveryGrace * dt / 60);
+      this.failureRecoveryTimer = Math.max(0, this.failureRecoveryTimer - 0.026 * profile.recoveryGrace * dt);
     }
 
     const zoneAfterAssist = this.safeZone();
@@ -3245,7 +3252,7 @@ class AquaFantasiaGame {
     }
     if (coachSecondary && this.state === 'reeling') {
       coachSecondary.textContent = safe
-        ? `${this.activeFishProfile.label} · 포획 ${Math.round(catchPct)}% · 저항 ${Math.round(staminaPct)}%`
+        ? `${this.activeFishProfile.label} · 포획 ${Math.round(catchPct)}% · 저항 ${Math.round(staminaPct)}% · 피로 완화`
         : value < zone.left
           ? `느슨함 ${Math.round(value)}% · 감기 버튼을 짧게 눌러 복구`
           : `과장력 ${Math.round(value)}% · 풀기 버튼으로 즉시 완화`;
@@ -3280,7 +3287,9 @@ class AquaFantasiaGame {
   private safeZone(): { left: number; right: number } {
     const masteryBonus = Math.min(4, (this.save.mastery[this.save.region] ?? 0) * 0.08);
     const profile = this.activeFishProfile;
-    const width = Math.max(34, 51 - this.getRegion().difficulty * 1.35 + this.save.gear.lineLevel * 2.55 + masteryBonus + profile.safeWidth); // v2.1.108: fish-specific safe window for varied tension/resistance.
+    const fatigueRelief = Math.max(0, 100 - this.fishStamina) * 0.030 * profile.fatigueRelief;
+    const rawWidth = 51 - this.getRegion().difficulty * 1.35 + this.save.gear.lineLevel * 2.55 + masteryBonus + profile.safeWidth + fatigueRelief;
+    const width = Math.round(Math.max(34, Math.min(58, rawWidth)) * 2) / 2; // v2.1.110: quantized tired-fish safe window prevents gauge/text shimmer while adding fatigue-based resistance relief.
     const now = performance.now();
     const targetCenter = 55 + Math.sin(now / 2300) * (this.activeFish.rarity === 'BOSS' ? 1.9 : 0.92) * profile.centerSwing;
     if (!this.fishingSafeZoneLastAt || this.state === 'idle' || this.state === 'casting') {
@@ -3292,8 +3301,10 @@ class AquaFantasiaGame {
       this.fishingSafeZoneCenter += (targetCenter - this.fishingSafeZoneCenter) * smoothing;
       this.fishingSafeZoneLastAt = now;
     }
-    const center = this.fishingSafeZoneCenter; // v2.1.109: frame-stable safe window to reduce gauge/readout jitter.
-    return { left: Math.max(12, center - width / 2), right: Math.min(91, center + width / 2) };
+    const center = Math.round(this.fishingSafeZoneCenter * 2) / 2; // v2.1.110: half-point quantization keeps the safe window readable without changing player coordinates/assets.
+    const left = Math.round(Math.max(12, center - width / 2) * 2) / 2;
+    const right = Math.round(Math.min(91, center + width / 2) * 2) / 2;
+    return { left, right };
   }
 
   private setHint(text: string): void {
@@ -3851,11 +3862,11 @@ class AquaFantasiaGame {
     };
     const variance = ((hash % 17) - 8) / 100;
     const base = {
-      steady: { tensionBias: -2, pull: .88, volatility: .74, burst: .72, resistance: .86, stamina: .92, safeWidth: 4.8, catchRate: 1.08, escape: .82, centerSwing: .74, cadence: 620 },
-      dart: { tensionBias: 2, pull: 1.12, volatility: 1.34, burst: 1.28, resistance: 1.02, stamina: .94, safeWidth: -1.2, catchRate: 1.02, escape: 1.05, centerSwing: 1.24, cadence: 430 },
-      heavy: { tensionBias: 4, pull: 1.25, volatility: .92, burst: .96, resistance: 1.28, stamina: 1.22, safeWidth: -2.8, catchRate: .90, escape: .96, centerSwing: .84, cadence: 560 },
-      wave: { tensionBias: 0, pull: 1.02, volatility: 1.18, burst: 1.08, resistance: 1.08, stamina: 1.02, safeWidth: .4, catchRate: .98, escape: 1.00, centerSwing: 1.36, cadence: 510 },
-      boss: { tensionBias: 6, pull: 1.38, volatility: 1.34, burst: 1.42, resistance: 1.42, stamina: 1.34, safeWidth: -5.2, catchRate: .86, escape: 1.18, centerSwing: 1.48, cadence: 390 },
+      steady: { tensionBias: -2, pull: .88, volatility: .74, burst: .72, resistance: .86, stamina: .92, safeWidth: 4.8, catchRate: 1.08, escape: .82, centerSwing: .74, cadence: 620, fatigueRelief: 1.12, recoveryGrace: 1.14 },
+      dart: { tensionBias: 2, pull: 1.12, volatility: 1.34, burst: 1.28, resistance: 1.02, stamina: .94, safeWidth: -1.2, catchRate: 1.02, escape: 1.05, centerSwing: 1.24, cadence: 430, fatigueRelief: .92, recoveryGrace: .94 },
+      heavy: { tensionBias: 4, pull: 1.25, volatility: .92, burst: .96, resistance: 1.28, stamina: 1.22, safeWidth: -2.8, catchRate: .90, escape: .96, centerSwing: .84, cadence: 560, fatigueRelief: 1.22, recoveryGrace: 1.06 },
+      wave: { tensionBias: 0, pull: 1.02, volatility: 1.18, burst: 1.08, resistance: 1.08, stamina: 1.02, safeWidth: .4, catchRate: .98, escape: 1.00, centerSwing: 1.36, cadence: 510, fatigueRelief: 1.00, recoveryGrace: 1.02 },
+      boss: { tensionBias: 6, pull: 1.38, volatility: 1.34, burst: 1.42, resistance: 1.42, stamina: 1.34, safeWidth: -5.2, catchRate: .86, escape: 1.18, centerSwing: 1.48, cadence: 390, fatigueRelief: .84, recoveryGrace: .88 },
     }[archetype];
     return {
       archetype,
@@ -3871,6 +3882,8 @@ class AquaFantasiaGame {
       escape: Math.max(.70, base.escape * rarityWeight),
       centerSwing: Math.max(.56, base.centerSwing * (0.94 + region * 0.03)),
       cadence: Math.max(330, base.cadence - Math.round((region - 1) * 70)),
+      fatigueRelief: Math.max(.72, base.fatigueRelief + variance * .8),
+      recoveryGrace: Math.max(.72, base.recoveryGrace - Math.max(0, region - 1) * .035),
     };
   }
 
@@ -12960,6 +12973,138 @@ class AquaFantasiaGame {
     document.addEventListener('visibilitychange', schedule, { passive: true });
     const observer = new MutationObserver(schedule);
     observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-screen', 'data-fishing-phase', 'data-v21108-fishing-phase', 'data-v21109-fishing-phase'], childList: true, subtree: true });
+    window.addEventListener('pagehide', () => { if (timer) window.clearTimeout(timer); observer.disconnect(); }, { once: true, passive: true });
+  }
+
+
+  private installV21110FishingFeelDesignStabilityPass(): void {
+    if (document.documentElement.dataset.v21110FishingFeelDesign === 'fatigue-resistance-ui-micro-stability') return;
+    const html = document.documentElement;
+    html.dataset.v21110FishingFeelDesign = 'fatigue-resistance-ui-micro-stability';
+    html.classList.add('v21110-fishing-feel-design-root');
+    let raf = 0;
+    let timer = 0;
+    let lastRun = 0;
+    const setImportant = (el: HTMLElement, pairs: Array<[string, string]>) => {
+      for (const [name, value] of pairs) el.style.setProperty(name, value, 'important');
+    };
+    const readViewport = () => {
+      const vv = window.visualViewport;
+      return {
+        width: Math.max(1, Math.floor(vv?.width ?? window.innerWidth)),
+        height: Math.max(1, Math.floor(vv?.height ?? window.innerHeight)),
+      };
+    };
+    const phaseOf = (fishing: HTMLElement | null): string => {
+      if (!fishing) return 'none';
+      const raw = fishing.dataset.v21109FishingPhase || fishing.dataset.v21108FishingPhase || fishing.dataset.fishingPhase || document.body.dataset.v21109FishingPhase || document.body.dataset.fishingPhase || '';
+      if (fishing.querySelector('.catch-result-card,.v21109-result-card-stable,.v21107-result-card-polish')) return 'result';
+      if (/reel|battle|fight|실전/i.test(raw)) return 'reeling';
+      if (/bite|입질/i.test(raw)) return 'bite';
+      if (/success|fail|result|결과/i.test(raw)) return 'result';
+      if (/cast|wait|prep|idle|준비|대기/i.test(raw)) return 'prep';
+      return raw || 'prep';
+    };
+    const syncVars = (phase: string) => {
+      const vp = readViewport();
+      const tiny = vp.width <= 360 || vp.height <= 610;
+      const compact = tiny || vp.width <= 390 || vp.height <= 690;
+      const card = compact ? 312 : 338;
+      const battleTop = Math.round(Math.max(compact ? 118 : 126, Math.min(compact ? 152 : 166, vp.height * (compact ? 0.185 : 0.19))));
+      const biteTop = Math.round(Math.max(compact ? 206 : 224, Math.min(compact ? 292 : 336, vp.height * (compact ? 0.435 : 0.445))));
+      const alertTop = phase === 'reeling'
+        ? Math.round(Math.max(compact ? 126 : 136, Math.min(compact ? 176 : 192, vp.height * .22)))
+        : Math.round(Math.max(compact ? 116 : 126, Math.min(compact ? 158 : 174, vp.height * .20)));
+      html.style.setProperty('--v21110-card-width', `min(${card}px, calc(100vw - 28px))`);
+      html.style.setProperty('--v21110-bite-top', `clamp(${compact ? 202 : 218}px, ${biteTop}px, calc(100svh - env(safe-area-inset-bottom, 0px) - ${compact ? 198 : 214}px))`);
+      html.style.setProperty('--v21110-alert-top', `calc(env(safe-area-inset-top, 0px) + ${alertTop}px)`);
+      html.style.setProperty('--v21110-battle-top', `calc(env(safe-area-inset-top, 0px) + ${battleTop}px)`);
+      html.style.setProperty('--v21110-reel-bottom', `calc(env(safe-area-inset-bottom, 0px) + ${compact ? 8 : 10}px)`);
+      html.style.setProperty('--v21110-result-max-height', `calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - ${compact ? 24 : 30}px)`);
+      html.classList.toggle('v21110-compact-ui', compact);
+      html.dataset.v21110FishingPhase = phase;
+      document.body.dataset.v21110FishingPhase = phase;
+    };
+    const normalizeFishing = () => {
+      const fishing = dom.app.querySelector<HTMLElement>('.fishing-screen,[data-screen="fishing"],.runtime-fishing-screen');
+      const phase = phaseOf(fishing);
+      syncVars(phase);
+      if (!fishing || document.body.dataset.screen !== 'fishing') return;
+      fishing.classList.add('v21110-fishing-stability-screen');
+      fishing.dataset.v21110FishingPhase = phase;
+      fishing.querySelectorAll<HTMLElement>('.bite-callout,.v21109-bite-callout-safe,.v21108-bite-callout-lowered').forEach((node) => {
+        node.classList.add('v21110-bite-callout-inside');
+        node.dataset.v21110BiteCallout = 'lowered-inside-viewport-no-edge-clip';
+        setImportant(node, [['position', 'fixed'], ['left', '50%'], ['top', 'var(--v21110-bite-top)'], ['right', 'auto'], ['bottom', 'auto'], ['transform', 'translate3d(-50%, -50%, 0)'], ['width', 'var(--v21110-card-width)'], ['max-width', 'calc(100vw - 28px)'], ['max-height', 'min(204px, calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 64px))'], ['overflow', 'hidden'], ['z-index', '190']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.action-badge,.v21109-action-badge-stable,.v21108-action-badge-stable').forEach((node) => {
+        node.classList.add('v21110-action-badge-calm');
+        node.dataset.v21110ActionBadge = 'single-safe-lane-no-motion-pop';
+        setImportant(node, [['position', 'fixed'], ['left', '50%'], ['top', 'var(--v21110-alert-top)'], ['right', 'auto'], ['bottom', 'auto'], ['transform', 'translate3d(-50%, 0, 0)'], ['max-width', 'calc(100vw - 36px)'], ['animation', 'none'], ['will-change', 'auto'], ['z-index', '180']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.v2133-fishing-coach,.v2135-fishing-skill-strip,.v2153-battle-strip,.v2199-battle-strip,.v2198-battle-strip').forEach((node) => {
+        node.classList.add('v21110-fishing-metric-rail');
+        if (phase === 'reeling') setImportant(node, [['contain', 'layout style paint'], ['backface-visibility', 'hidden'], ['transform', 'translateZ(0)']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('[data-v2073-mood],[data-v2073-console-mood],[data-v2133-coach-secondary],[data-v2135-balance],[data-v2135-pressure],[data-v2136-assist],[data-v2134-coach-catch],[data-v2134-coach-tension],[data-v2134-coach-stamina]').forEach((node) => {
+        node.classList.add('v21110-stable-readout');
+        node.dataset.v21110StableReadout = 'fixed-line-height-tabular-metrics';
+      });
+      fishing.querySelectorAll<HTMLElement>('.v2055-reel-console,.v2199-reel-console,.v2198-reel-console,.v2053-reel-touch-zone').forEach((node) => {
+        node.classList.add('v21110-reel-touch-stable');
+        if (phase === 'reeling') setImportant(node, [['position', 'fixed'], ['left', '50%'], ['bottom', 'var(--v21110-reel-bottom)'], ['width', 'var(--v21110-card-width)'], ['max-width', 'calc(100vw - 28px)'], ['transform', 'translate3d(-50%, 0, 0)'], ['touch-action', 'none'], ['overscroll-behavior', 'contain'], ['contain', 'layout style paint']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.fishing-loadout-strip,.recent-catch-strip,.fishing-guide-card,.v2137-sea-lane-card').forEach((node) => {
+        node.classList.add('v21110-phase-clean-node');
+        if (phase === 'bite' || phase === 'reeling' || phase === 'result') setImportant(node, [['opacity', '0'], ['visibility', 'hidden'], ['pointer-events', 'none']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.catch-result-card,.v21109-result-card-stable,.v21107-result-card-polish').forEach((node) => {
+        node.classList.add('v21110-result-card-premium');
+        setImportant(node, [['width', 'var(--v21110-card-width)'], ['max-height', 'var(--v21110-result-max-height)'], ['overflow', 'hidden auto'], ['overscroll-behavior', 'contain']]);
+      });
+    };
+    const normalizeCommonDesign = () => {
+      dom.app.querySelectorAll<HTMLElement>('.game-dialog,.runtime-panel,.glass-card,.shop-card,.mission-card,.map-card,.build-card,.inventory-card,.dex-card,.catch-result-card').forEach((node) => {
+        node.classList.add('v21110-premium-card-hygiene');
+      });
+      dom.app.querySelectorAll<HTMLElement>('.game-dialog-close,.v2059-screen-close,.v2097-menu-close,.v2097-ui-close,[aria-label="닫기"]').forEach((node) => {
+        node.classList.add('v21110-close-button-unified');
+      });
+      dom.app.querySelectorAll<HTMLButtonElement>('button').forEach((node) => {
+        node.classList.add('v21110-touch-target-calm');
+      });
+      dom.app.querySelectorAll<HTMLImageElement>('img').forEach((img) => {
+        img.loading ||= 'lazy';
+        img.decoding = 'async';
+        img.draggable = false;
+        img.classList.add('v21110-image-stability');
+      });
+    };
+    const run = () => {
+      raf = 0;
+      timer = 0;
+      if (document.hidden) return;
+      lastRun = performance.now();
+      normalizeFishing();
+      normalizeCommonDesign();
+    };
+    const schedule = () => {
+      if (raf || timer) return;
+      const wait = Math.max(0, 136 - (performance.now() - lastRun));
+      if (wait > 0) {
+        timer = window.setTimeout(() => { timer = 0; raf = window.requestAnimationFrame(run); }, wait);
+        return;
+      }
+      raf = window.requestAnimationFrame(run);
+    };
+    schedule();
+    window.visualViewport?.addEventListener('resize', schedule, { passive: true });
+    window.visualViewport?.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule, { passive: true });
+    document.addEventListener('visibilitychange', schedule, { passive: true });
+    const observer = new MutationObserver(schedule);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-screen', 'data-fishing-phase', 'data-v21109-fishing-phase', 'data-v21110-fishing-phase'], childList: true, subtree: true });
     window.addEventListener('pagehide', () => { if (timer) window.clearTimeout(timer); observer.disconnect(); }, { once: true, passive: true });
   }
 
