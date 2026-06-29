@@ -519,6 +519,7 @@ class AquaFantasiaGame {
     this.installV21102PremiumDesignSystemContinuationPass();
     this.installV21103OpeningLoadoutFinalGuardPass();
     this.installV21104OverlapDesignEnginePolishPass();
+    this.installV21105PremiumSceneIntegrityPolishPass();
     this.preloadCriticalImages();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
@@ -12050,6 +12051,299 @@ class AquaFantasiaGame {
       syncViewportVars();
       normalizeOpening();
       normalizeFishing();
+      normalizeDesign();
+    };
+    const schedule = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(run);
+    };
+    schedule();
+    window.visualViewport?.addEventListener('resize', schedule, { passive: true });
+    window.visualViewport?.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('orientationchange', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule, { passive: true });
+    document.addEventListener('visibilitychange', schedule, { passive: true });
+    observer = new MutationObserver(schedule);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-screen', 'data-fishing-phase'], childList: true, subtree: true });
+    window.addEventListener('pagehide', () => observer?.disconnect(), { once: true, passive: true });
+  }
+
+
+  private installV21105PremiumSceneIntegrityPolishPass(): void {
+    let raf = 0;
+    let observer: MutationObserver | null = null;
+    let lastRun = 0;
+    const html = document.documentElement;
+    const setImportant = (node: HTMLElement | null | undefined, entries: Array<[string, string]>) => {
+      if (!node) return;
+      for (const [name, value] of entries) node.style.setProperty(name, value, 'important');
+    };
+    const removeImportant = (node: HTMLElement | null | undefined, props: string[]) => {
+      if (!node) return;
+      for (const prop of props) node.style.removeProperty(prop);
+    };
+    const hideNode = (node: HTMLElement | null | undefined, reason: string) => {
+      if (!node) return;
+      node.dataset.v21105HiddenReason = reason;
+      node.setAttribute('aria-hidden', 'true');
+      setImportant(node, [['display', 'none'], ['visibility', 'hidden'], ['opacity', '0'], ['pointer-events', 'none']]);
+    };
+    const showNode = (node: HTMLElement | null | undefined, reason: string) => {
+      if (!node) return;
+      if (node.dataset.v21105HiddenReason && node.dataset.v21105HiddenReason !== reason) return;
+      delete node.dataset.v21105HiddenReason;
+      node.removeAttribute('aria-hidden');
+      removeImportant(node, ['display', 'visibility', 'opacity', 'pointer-events']);
+    };
+    const getPhase = (screen: HTMLElement): string => {
+      if (screen.querySelector('.catch-result-card,.v21105-result-card,.v21104-result-card')) return 'result';
+      const raw = screen.dataset.fishingPhase || screen.dataset.v21105FishingPhase || screen.dataset.v21104FishingPhase || screen.dataset.v21103FishingPhase || '';
+      if (/bite|입질/i.test(raw)) return 'bite';
+      if (/reel|battle|fight|실전/i.test(raw)) return 'reeling';
+      if (/result|success|fail|결과/i.test(raw)) return 'result';
+      return raw || 'prep';
+    };
+    const isFocusedFishing = (phase: string) => ['bite', 'reeling', 'result', 'success', 'fail'].includes(phase);
+    const syncSceneVars = () => {
+      const viewport = window.visualViewport;
+      const vw = Math.max(1, Math.floor(viewport?.width ?? window.innerWidth));
+      const vh = Math.max(1, Math.floor(viewport?.height ?? window.innerHeight));
+      const offsetLeft = Math.max(0, Math.floor(viewport?.offsetLeft ?? 0));
+      const offsetRight = Math.max(0, Math.floor(viewport ? window.innerWidth - viewport.width - viewport.offsetLeft : 0));
+      const compact = vw <= 370 || vh <= 620;
+      const tiny = vw <= 340 || vh <= 560;
+      const safeLeft = Math.max(10, offsetLeft + (compact ? 10 : 12));
+      const safeRight = Math.max(10, offsetRight + (compact ? 10 : 12));
+      html.classList.add('v21105-premium-scene-integrity-root');
+      html.dataset.v21105PremiumSceneIntegrity = 'scene-scoped-fishing-village-build-design-performance';
+      html.dataset.v21105ActiveScreen = document.body.dataset.screen || 'unknown';
+      html.style.setProperty('--v21105-safe-left', `${safeLeft}px`);
+      html.style.setProperty('--v21105-safe-right', `${safeRight}px`);
+      html.style.setProperty('--v21105-inline-safe', `${Math.max(20, safeLeft + safeRight)}px`);
+      html.style.setProperty('--v21105-panel-width', `min(342px, calc(100vw - ${Math.max(20, safeLeft + safeRight)}px))`);
+      html.style.setProperty('--v21105-loadout-width', `${Math.max(276, Math.min(540, vw - safeLeft - safeRight - 8))}px`);
+      html.style.setProperty('--v21105-loadout-height', `${tiny ? 17 : compact ? 18 : 19}px`);
+      html.style.setProperty('--v21105-loadout-icon', `${tiny ? 3 : 4}px`);
+      html.style.setProperty('--v21105-sea-top', `calc(env(safe-area-inset-top, 0px) + ${tiny ? 8 : 10}px)`);
+      html.style.setProperty('--v21105-bite-top', `clamp(${tiny ? 38 : 42}px, ${tiny ? '5.4svh' : '6.1svh'}, 68px)`);
+      html.style.setProperty('--v21105-battle-top', `calc(env(safe-area-inset-top, 0px) + ${tiny ? 70 : compact ? 76 : 84}px)`);
+      html.style.setProperty('--v21105-reel-bottom', `calc(env(safe-area-inset-bottom, 0px) + ${tiny ? 6 : compact ? 8 : 12}px)`);
+      html.style.setProperty('--v21105-result-max-height', `calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - ${tiny ? 6 : 12}px)`);
+      html.style.setProperty('--v21105-menu-button', `${compact ? 32 : 34}px`);
+      html.style.setProperty('--v21105-menu-icon', `${compact ? 21 : 22}px`);
+      html.classList.toggle('v21105-compact-scene', compact);
+      html.classList.toggle('v21105-tiny-scene', tiny);
+    };
+    const normalizeOpening = () => {
+      const opening = dom.app.querySelector<HTMLElement>('.v21104-opening-cinematic,.v21103-opening-cinematic,.v21102-opening-cinematic,.v21101-opening-cinematic,.v21100-opening-cinematic,.v2199-opening-cinematic,.v2120-opening-cinematic');
+      if (!opening) return;
+      opening.classList.add('v21105-opening-shell');
+      opening.dataset.v21105Opening = 'posterless-first-frame-video-only-native-chrome-block';
+      setImportant(opening, [['background', '#000'], ['overflow', 'hidden'], ['isolation', 'isolate']]);
+      const video = opening.querySelector<HTMLVideoElement>('video');
+      if (video) {
+        video.classList.add('v21105-opening-video');
+        video.controls = false;
+        video.removeAttribute('controls');
+        video.removeAttribute('poster');
+        video.setAttribute('playsinline', 'true');
+        video.setAttribute('webkit-playsinline', 'true');
+        video.setAttribute('controlsList', 'nodownload nofullscreen noremoteplayback noplaybackrate');
+        video.setAttribute('disablepictureinpicture', 'true');
+        video.setAttribute('disableremoteplayback', 'true');
+        try { video.disablePictureInPicture = true; } catch { /* optional */ }
+        try { (video as HTMLVideoElement & { disableRemotePlayback?: boolean }).disableRemotePlayback = true; } catch { /* optional */ }
+        const controlsList = (video as HTMLVideoElement & { controlsList?: DOMTokenList }).controlsList;
+        controlsList?.add('nodownload');
+        controlsList?.add('nofullscreen');
+        controlsList?.add('noremoteplayback');
+        video.dataset.v21105OpeningVideo = 'controls-poster-pip-remote-disabled-first-frame-shell';
+        const markFirstFrame = () => {
+          if (video.readyState < 2 && video.currentTime <= 0.01) return;
+          opening.classList.add('v21105-first-frame-ready', 'v21104-first-frame-ready', 'v21103-first-frame-ready');
+          video.style.setProperty('opacity', '1', 'important');
+          html.dataset.v21105OpeningState = 'first-frame-ready-shell-clear';
+        };
+        setImportant(video, [['opacity', opening.classList.contains('v21105-first-frame-ready') ? '1' : '0.001'], ['background', '#000'], ['pointer-events', 'none'], ['-webkit-touch-callout', 'none']]);
+        if (!video.dataset.v21105FirstFrameListeners) {
+          video.dataset.v21105FirstFrameListeners = 'installed';
+          video.addEventListener('loadeddata', markFirstFrame, { passive: true });
+          video.addEventListener('canplay', markFirstFrame, { passive: true });
+          video.addEventListener('playing', markFirstFrame, { passive: true });
+          video.addEventListener('timeupdate', markFirstFrame, { passive: true });
+          video.requestVideoFrameCallback?.(() => markFirstFrame());
+          markFirstFrame();
+        }
+      }
+      dom.app.querySelectorAll<HTMLElement>('.v2119-opening-bubble,.v2120-opening-bubble,.v2121-opening-bubble,.v2122-opening-bubble,.v2123-opening-bubble,.v2124-opening-bubble,.v2125-opening-bubble,.v2127-opening-bubble,.v2128-opening-bubble,.v2129-opening-bubble,.v2130-opening-bubble,.v2131-opening-bubble,.v2177-opening-status,.v2173-opening-skip,.v2121-opening-skip,.v2120-opening-vignette,.runtime-toast,.toast-card').forEach((node) => hideNode(node, 'v21105-opening-video-only'));
+      dom.app.querySelectorAll<HTMLElement>('.top-menu-bar,.v2167-top-menu-hard-lock,.hud-bar,.pioneer-bar,.bottom-dock,.bottom-nav,.virtual-joystick,.joystick-root,.v2097-joystick,.v2097-world-controls').forEach((node) => {
+        if (!opening.contains(node)) hideNode(node, 'v21105-opening-no-chrome');
+      });
+    };
+    const normalizeFishing = () => {
+      const fishing = dom.app.querySelector<HTMLElement>('.fishing-screen,[data-screen="fishing"],.runtime-fishing-screen');
+      if (!fishing) return;
+      const phase = getPhase(fishing);
+      const focused = isFocusedFishing(phase);
+      fishing.classList.add('v21105-fishing-integrity-screen');
+      fishing.dataset.v21105FishingPhase = phase;
+      const sea = fishing.querySelector<HTMLElement>('.sea-route-card,.fishing-sea-card,.v21104-sea-lane-card,.v21103-sea-lane-card,.v21101-sea-lane-card,.v21100-sea-lane-card,.v2199-sea-lane-card,.v2137-sea-lane-card');
+      let loadoutTop = Math.max(48, Math.floor((window.visualViewport?.offsetTop ?? 0) + 58));
+      if (sea && !focused) {
+        sea.classList.add('v21105-sea-lane-card');
+        sea.dataset.v21105SeaLane = 'safe-left-no-overflow-before-loadout';
+        setImportant(sea, [['position', 'fixed'], ['left', 'var(--v21105-safe-left)'], ['top', 'var(--v21105-sea-top)'], ['right', 'auto'], ['bottom', 'auto'], ['width', 'min(312px, calc(100vw - var(--v21105-inline-safe) - 8px))'], ['max-width', 'calc(100vw - var(--v21105-inline-safe) - 8px)'], ['min-width', '0'], ['overflow', 'hidden'], ['z-index', '136']]);
+        const rect = sea.getBoundingClientRect();
+        if (rect.height > 0) loadoutTop = Math.max(loadoutTop, Math.ceil(rect.bottom + 4));
+      }
+      html.style.setProperty('--v21105-loadout-top', `min(calc(100svh - 288px), max(calc(env(safe-area-inset-top, 0px) + 56px), ${loadoutTop}px))`);
+      document.querySelectorAll<HTMLElement>('.bottom-nav,.bottom-dock,.v2097-bottom-nav,.v2098-bottom-nav').forEach((node) => {
+        if (!fishing.contains(node)) hideNode(node, 'v21105-fishing-no-village-dock');
+      });
+      fishing.querySelectorAll<HTMLElement>('.fishing-loadout-strip,.v21104-fishing-loadout,.v21103-fishing-loadout,.v21101-fishing-loadout,.v21100-fishing-loadout,.v2199-fishing-loadout,.v2198-fishing-loadout,.v2197-fishing-loadout,.v2196-fishing-loadout').forEach((strip) => {
+        strip.classList.add('v21105-fishing-loadout');
+        strip.dataset.v21105Loadout = 'two-equal-columns-micro-icons-text-first-scene-safe';
+        if (focused) { hideNode(strip, 'v21105-focused-hide-prep-loadout'); return; }
+        showNode(strip, 'v21105-focused-hide-prep-loadout');
+        setImportant(strip, [['position', 'fixed'], ['left', 'var(--v21105-safe-left)'], ['top', 'var(--v21105-loadout-top)'], ['right', 'auto'], ['bottom', 'auto'], ['width', 'var(--v21105-loadout-width)'], ['max-width', 'calc(100vw - var(--v21105-inline-safe) - 8px)'], ['display', 'grid'], ['grid-template-columns', 'minmax(0, 1fr) minmax(0, 1fr)'], ['gap', '3px'], ['padding', '0'], ['margin', '0'], ['border', '0'], ['background', 'transparent'], ['overflow', 'visible'], ['z-index', '139']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.v21105-fishing-loadout > *, .v21104-loadout-cell,.v21103-loadout-cell,.v21101-loadout-cell,.v21100-loadout-cell,.v2199-loadout-cell,.v2198-loadout-cell,.v2197-loadout-cell,.v2196-loadout-cell').forEach((cell) => {
+        cell.classList.add('v21105-loadout-cell');
+        cell.dataset.v21105LoadoutCell = 'exact-half-readable-ellipsis-no-icon-bloat';
+        setImportant(cell, [['display', 'grid'], ['grid-template-columns', 'var(--v21105-loadout-icon) minmax(0, 1fr)'], ['align-items', 'center'], ['gap', '3px'], ['height', 'var(--v21105-loadout-height)'], ['min-height', 'var(--v21105-loadout-height)'], ['max-height', 'var(--v21105-loadout-height)'], ['padding', '1px 7px'], ['overflow', 'hidden'], ['white-space', 'nowrap'], ['border-radius', '12px'], ['contain', 'layout style paint']]);
+        cell.querySelectorAll<HTMLElement>('img,svg,.icon').forEach((icon) => {
+          icon.classList.add('v21105-loadout-icon');
+          setImportant(icon, [['width', 'var(--v21105-loadout-icon)'], ['height', 'var(--v21105-loadout-icon)'], ['min-width', 'var(--v21105-loadout-icon)'], ['max-width', 'var(--v21105-loadout-icon)'], ['min-height', 'var(--v21105-loadout-icon)'], ['max-height', 'var(--v21105-loadout-icon)'], ['object-fit', 'contain'], ['filter', 'none']]);
+        });
+        cell.querySelectorAll<HTMLElement>('.v21104-loadout-copy,.v21103-loadout-copy,.v21101-loadout-copy,.v21100-loadout-copy,span,strong,em,small').forEach((copy) => {
+          copy.classList.add('v21105-loadout-copy');
+          setImportant(copy, [['min-width', '0'], ['max-width', '100%'], ['overflow', 'hidden'], ['text-overflow', 'ellipsis'], ['white-space', 'nowrap'], ['line-height', '1.02']]);
+        });
+      });
+      const prepSelectors = '.fishing-guide-card,.action-badge,.recent-catch-strip,.v2132-fishing-director,.v2133-fishing-coach,.v2134-fishing-coach,.v2135-fishing-coach,.v2136-fishing-coach,.v2138-fishing-coach,.v2140-fishing-priority-hint,.v2142-fishing-priority-hint,.v21105-fishing-loadout,.v21104-fishing-loadout,.v21103-fishing-loadout,.v21102-fishing-loadout,.v21101-fishing-loadout,.v21100-fishing-loadout,.v2199-fishing-loadout,.v2198-fishing-loadout';
+      if (focused) fishing.querySelectorAll<HTMLElement>(prepSelectors).forEach((node) => hideNode(node, 'v21105-focused-stage-clean-prep-only'));
+      fishing.querySelectorAll<HTMLElement>('.bite-callout,.v21104-bite-callout,.v21103-bite-callout,.v21101-bite-callout,.v21100-bite-callout,.v2199-bite-callout,.v2198-bite-callout,.v2197-bite-callout').forEach((node) => {
+        node.classList.add('v21105-bite-callout');
+        if (phase !== 'bite') { hideNode(node, 'v21105-bite-callout-hidden-outside-bite'); return; }
+        showNode(node, 'v21105-bite-callout-hidden-outside-bite');
+        setImportant(node, [['position', 'fixed'], ['left', '50%'], ['top', 'var(--v21105-bite-top)'], ['transform', 'translate(-50%, -50%)'], ['width', 'min(268px, calc(100vw - 44px))'], ['max-height', '98px'], ['overflow', 'auto'], ['z-index', '158']]);
+      });
+      const reelingSelectors = '.v2199-battle-strip,.v2198-battle-strip,.v2197-battle-strip,.v2153-battle-strip,.v2199-reel-console,.v2198-reel-console,.v2197-reel-console,.v2055-reel-console,.v2053-reel-touch-zone,.reel-panel,.hold-pad';
+      fishing.querySelectorAll<HTMLElement>(reelingSelectors).forEach((node) => {
+        if (phase === 'reeling') showNode(node, 'v21105-reeling-only-control');
+        else hideNode(node, 'v21105-reeling-only-control');
+      });
+      if (phase === 'reeling') {
+        fishing.querySelectorAll<HTMLElement>('.v2199-battle-strip,.v2198-battle-strip,.v2197-battle-strip,.v2153-battle-strip').forEach((node) => {
+          node.classList.add('v21105-battle-strip');
+          setImportant(node, [['position', 'fixed'], ['left', '50%'], ['top', 'var(--v21105-battle-top)'], ['transform', 'translateX(-50%)'], ['width', 'min(304px, calc(100vw - 30px))'], ['max-width', 'calc(100vw - 30px)'], ['z-index', '150']]);
+        });
+        fishing.querySelectorAll<HTMLElement>('.v2199-reel-console,.v2198-reel-console,.v2197-reel-console,.v2055-reel-console,.v2053-reel-touch-zone').forEach((node) => {
+          node.classList.add('v21105-reel-safe-control');
+          setImportant(node, [['position', 'fixed'], ['left', '50%'], ['bottom', 'var(--v21105-reel-bottom)'], ['transform', 'translateX(-50%)'], ['width', 'min(304px, calc(100vw - 30px))'], ['max-width', 'calc(100vw - 30px)'], ['z-index', '151']]);
+        });
+      }
+      fishing.querySelectorAll<HTMLElement>('.catch-result-card,.v21104-result-card,.v21103-result-card,.v21101-result-card,.v21100-result-card,.v2199-result-card,.v2198-result-card,.v2197-result-card').forEach((card) => {
+        card.classList.add('v21105-result-card');
+        card.dataset.v21105Result = 'compact-prize-card-badge-ribbon-action-safe';
+        setImportant(card, [['position', 'fixed'], ['left', '50%'], ['top', '50%'], ['transform', 'translate(-50%, -50%)'], ['width', 'min(292px, calc(100vw - 22px))'], ['max-height', 'var(--v21105-result-max-height)'], ['overflow', 'auto'], ['overscroll-behavior', 'contain'], ['padding', '8px'], ['border-radius', '22px'], ['z-index', '160']]);
+        card.querySelectorAll<HTMLElement>('img').forEach((img) => setImportant(img, [['max-width', '100%'], ['max-height', '56px'], ['object-fit', 'contain']]));
+        card.querySelectorAll<HTMLElement>('.rarity-badge,.grade-badge,.result-ribbon,.catch-rarity,[class*="rarity"],[class*="grade"],[class*="ribbon"]').forEach((badge) => setImportant(badge, [['max-height', '22px'], ['font-size', '9px'], ['line-height', '1.04'], ['padding', '3px 7px'], ['border-radius', '999px'], ['overflow', 'hidden'], ['text-overflow', 'ellipsis'], ['white-space', 'nowrap']]));
+        card.querySelectorAll<HTMLElement>('.v2196-result-actions,.v2051-result-actions,.v2057-result-actions,.v2059-result-actions,.v2074-result-actions,.v2169-result-actions').forEach((actions) => {
+          actions.classList.add('v21105-result-actions');
+          setImportant(actions, [['display', 'grid'], ['grid-template-columns', 'minmax(0, 1fr) minmax(0, 1fr)'], ['gap', '5px'], ['margin-top', '6px']]);
+        });
+        card.querySelectorAll<HTMLElement>('button').forEach((button) => setImportant(button, [['min-height', '35px'], ['padding', '7px 8px']]));
+      });
+    };
+    const normalizeVillage = () => {
+      const village = dom.app.querySelector<HTMLElement>('.village-world-screen,.village-screen,[data-screen="village"]');
+      if (!village) return;
+      village.classList.add('v21105-village-stability-screen');
+      village.dataset.v21105Village = 'paint-stable-menu-hud-joystick-textless-no-player-coordinate-change';
+      village.querySelectorAll<HTMLElement>('canvas,.village-canvas,.pixi-canvas').forEach((canvas) => {
+        canvas.classList.add('v21105-paint-stable-canvas');
+        setImportant(canvas, [['backface-visibility', 'hidden'], ['transform', 'translateZ(0)'], ['will-change', 'transform'], ['contain', 'strict']]);
+      });
+      village.querySelectorAll<HTMLElement>('.top-menu-bar,.v2167-top-menu-hard-lock,.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar').forEach((menu) => {
+        menu.classList.add('v21105-top-menu-grid-lock');
+        menu.dataset.v21105Menu = 'two-by-three-compact-one-border-no-frame';
+        setImportant(menu, [['display', 'grid'], ['grid-template-columns', 'repeat(2, var(--v21105-menu-button))'], ['grid-auto-rows', 'var(--v21105-menu-button)'], ['gap', '3px'], ['background', 'transparent'], ['padding', '0'], ['border', '0'], ['box-shadow', 'none'], ['z-index', '128']]);
+      });
+      village.querySelectorAll<HTMLElement>('.top-menu-bar button,.v2167-top-menu-hard-lock button,.v2097-world-controls button,.v2098-world-controls button,.v2157-world-controls-microbar button').forEach((button) => {
+        button.classList.add('v21105-top-menu-button');
+        setImportant(button, [['width', 'var(--v21105-menu-button)'], ['height', 'var(--v21105-menu-button)'], ['min-width', 'var(--v21105-menu-button)'], ['min-height', 'var(--v21105-menu-button)'], ['padding', '0'], ['overflow', 'hidden'], ['border-radius', '12px']]);
+        button.querySelectorAll<HTMLElement>('img,svg,.icon').forEach((icon) => setImportant(icon, [['width', 'var(--v21105-menu-icon)'], ['height', 'var(--v21105-menu-icon)'], ['object-fit', 'contain']]));
+      });
+      village.querySelectorAll<HTMLElement>('.virtual-joystick span,.virtual-joystick strong,.joystick-root span,.joystick-root strong,.v2097-joystick span,.v2097-joystick strong').forEach((label) => hideNode(label, 'v21105-joystick-textless'));
+      village.querySelectorAll<HTMLElement>('.hud-bar,.pioneer-bar,.v2097-village-hud,.v2097-expedition-board').forEach((bar) => {
+        bar.classList.add('v21105-hud-pioneer-spacing');
+        setImportant(bar, [['max-width', 'calc(100vw - 96px)'], ['overflow', 'hidden'], ['text-overflow', 'ellipsis']]);
+      });
+    };
+    const normalizeBuild = () => {
+      dom.app.querySelectorAll<HTMLElement>('.v2130-build-confirm,.v2131-build-confirm,.v2170-build-confirm,[data-v2130-build-confirm]').forEach((modal) => {
+        modal.classList.add('v21105-build-flow-modal');
+        modal.dataset.v21105BuildFlow = 'select-preview-tile-small-confirm-build-cancel';
+      });
+      dom.app.querySelectorAll<HTMLElement>('.v2130-build-confirm-card,.v2131-build-confirm-card,.v2170-build-confirm-card,.build-confirm-card').forEach((card) => {
+        card.classList.add('v21105-build-confirm-card');
+        setImportant(card, [['width', 'min(292px, calc(100vw - 34px))'], ['max-width', 'calc(100vw - 34px)'], ['padding', '14px 12px'], ['border-radius', '22px'], ['overflow', 'hidden'], ['z-index', '170']]);
+      });
+      dom.app.querySelectorAll<HTMLElement>('.v2130-build-confirm-actions,.build-confirm-actions').forEach((actions) => {
+        actions.classList.add('v21105-build-confirm-actions');
+        setImportant(actions, [['display', 'grid'], ['grid-template-columns', 'minmax(0, 1fr) minmax(0, 1fr)'], ['gap', '7px']]);
+      });
+      dom.app.querySelectorAll<HTMLElement>('[data-build-preview],.build-preview,.placement-preview,.v2130-build-preview').forEach((preview) => {
+        preview.classList.add('v21105-build-preview');
+        preview.dataset.v21105BuildPreview = 'translucent-placement-readable-valid-invalid';
+      });
+    };
+    const normalizeDesign = () => {
+      dom.app.querySelectorAll<HTMLElement>('.runtime-menu-screen,.runtime-panel,.runtime-shop-card,.shop-card,.dialog-card,.v2130-build-confirm-card,.runtime-item-card,.dex-card,.mission-card,.catch-result-card,.building-detail-card,.profile-card,.map-card,.inventory-card,.quest-card').forEach((card) => {
+        if (card.closest('.v21105-opening-shell,.v21104-opening-cinematic,.v21103-opening-cinematic,.v21101-opening-cinematic,.v21100-opening-cinematic,.v2199-opening-cinematic')) return;
+        card.classList.add('v21105-aurora-glass-card');
+        card.dataset.v21105Design = 'premium-aurora-ocean-glass-readable-mobile-card';
+        setImportant(card, [['max-width', 'calc(100vw - 20px)'], ['overflow-wrap', 'anywhere'], ['word-break', 'keep-all']]);
+      });
+      dom.app.querySelectorAll<HTMLElement>('.runtime-shop-card,.shop-card').forEach((card) => {
+        card.classList.add('v21105-shop-card-budget');
+        card.querySelectorAll<HTMLElement>('strong,p,small,span').forEach((copy) => setImportant(copy, [['min-width', '0'], ['overflow-wrap', 'anywhere']]));
+      });
+      dom.app.querySelectorAll<HTMLElement>('button,.runtime-btn,.v2097-ui-close,.v2097-menu-close,.v2059-screen-close,.v2059-result-close,.game-dialog-close,.cast-button').forEach((button) => {
+        if (button.closest('.v21105-opening-shell,.v21104-opening-cinematic,.v21103-opening-cinematic')) return;
+        button.classList.add('v21105-premium-button');
+        setImportant(button, [['touch-action', 'manipulation'], ['-webkit-tap-highlight-color', 'transparent']]);
+      });
+      dom.app.querySelectorAll<HTMLElement>('.v2097-ui-close,.v2097-menu-close,.v2059-screen-close,.v2059-result-close,.game-dialog-close,[aria-label*="닫기"]').forEach((button) => {
+        if (button.closest('.v21105-opening-shell,.v21104-opening-cinematic,.v21103-opening-cinematic')) return;
+        button.classList.add('v21105-close-x');
+      });
+      dom.app.querySelectorAll<HTMLElement>('input,textarea,select').forEach((input) => {
+        input.classList.add('v21105-readable-input');
+        input.dataset.v21105InputTone = 'bright-readable-aqua-no-black-regression';
+      });
+      dom.app.querySelectorAll<HTMLImageElement>('img').forEach((img) => {
+        if (img.closest('.v21105-opening-shell,.v21104-opening-cinematic,.v21103-opening-cinematic')) return;
+        img.draggable = false;
+        img.decoding = 'async';
+        if (!img.closest('.village-world-screen,.fishing-stage,.hud-bar,.fishing-hud')) img.loading = 'lazy';
+        if (!img.closest('.village-world-screen,.fishing-stage')) (img as HTMLImageElement & { fetchPriority?: string }).fetchPriority = 'low';
+        img.classList.add('v21105-no-drag-image');
+      });
+    };
+    const run = () => {
+      raf = 0;
+      if (document.hidden) return;
+      const now = performance.now();
+      html.dataset.v21105FrameBudget = now - lastRun > 140 && lastRun > 0 ? 'long-frame-observed-scene-throttled' : 'stable';
+      lastRun = now;
+      syncSceneVars();
+      normalizeOpening();
+      normalizeFishing();
+      normalizeVillage();
+      normalizeBuild();
       normalizeDesign();
     };
     const schedule = () => {

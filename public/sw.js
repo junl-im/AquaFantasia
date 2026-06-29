@@ -1,5 +1,5 @@
-// v2.1.104 overlap/design engine polish: active-screen collision sweep, premium cards, fishing phase cleanup.
-const CACHE_NAME = 'aqua-fantasia-v2.1.104-overlap-design-engine-polish';
+// v2.1.105 premium scene integrity polish: scene-scoped layout, fishing/village/build guards, lean runtime sweep.
+const CACHE_NAME = 'aqua-fantasia-v2.1.105-premium-scene-integrity-polish';
 const CORE_ASSETS = [
   './',
   './index.html',
