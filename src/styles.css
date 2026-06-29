@@ -67400,3 +67400,130 @@ html.v21106-fishing-jitter-stability-root body[data-screen="fishing"] :is(.v2110
   animation-duration: .01ms !important;
   animation-iteration-count: 1 !important;
 }
+
+/* v2.1.107 UI stability and premium design engine polish */
+html.v21107-ui-stability-design-root {
+  --v21107-safe-top: calc(env(safe-area-inset-top, 0px) + 10px);
+  --v21107-card-width: min(328px, calc(100vw - 28px));
+  --v21107-fishing-loadout-height: 38px;
+  --v21107-alert-top: calc(env(safe-area-inset-top, 0px) + 96px);
+  --v21107-glass: linear-gradient(180deg, rgba(250, 255, 255, .98), rgba(179, 243, 255, .82) 48%, rgba(48, 177, 224, .50));
+  --v21107-deep-line: rgba(255, 255, 255, .86);
+  --v21107-deep-shadow: 0 18px 46px rgba(0, 42, 82, .22), inset 0 1px 0 rgba(255, 255, 255, .94);
+}
+html.v21107-ui-stability-design-root body[data-screen="fishing"] .v21107-scene-stability-screen {
+  overscroll-behavior: none !important;
+  touch-action: manipulation !important;
+  contain: layout style paint !important;
+}
+html.v21107-ui-stability-design-root body[data-screen="fishing"] .v21107-scoped-ui-node {
+  box-sizing: border-box !important;
+  max-width: calc(100vw - 24px) !important;
+  min-width: 0 !important;
+  backface-visibility: hidden !important;
+  transform-style: flat !important;
+  will-change: auto !important;
+}
+html.v21107-ui-stability-design-root body[data-screen="fishing"] .v21107-loadout-deconflict {
+  width: var(--v21107-card-width) !important;
+  height: var(--v21107-fishing-loadout-height) !important;
+  min-height: var(--v21107-fishing-loadout-height) !important;
+  max-height: var(--v21107-fishing-loadout-height) !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 5px !important;
+  padding: 4px 6px !important;
+  overflow: hidden !important;
+  border-radius: 16px !important;
+  background: var(--v21107-glass) !important;
+  border: 1px solid var(--v21107-deep-line) !important;
+  box-shadow: var(--v21107-deep-shadow) !important;
+}
+html.v21107-ui-stability-design-root body[data-screen="fishing"] :is(.fishing-phase-reeling,.fishing-phase-bite,.fishing-phase-success,.fishing-phase-fail) .v21107-loadout-deconflict,
+html.v21107-ui-stability-design-root body[data-screen="fishing"][data-fishing-phase="reeling"] .v21107-loadout-deconflict,
+html.v21107-ui-stability-design-root body[data-screen="fishing"][data-fishing-phase="bite"] .v21107-loadout-deconflict,
+html.v21107-ui-stability-design-root body[data-screen="fishing"][data-fishing-phase="success"] .v21107-loadout-deconflict,
+html.v21107-ui-stability-design-root body[data-screen="fishing"][data-fishing-phase="fail"] .v21107-loadout-deconflict {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.v21107-ui-stability-design-root body[data-screen="fishing"] .v21107-loadout-cell {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  gap: 5px !important;
+  padding: 0 4px !important;
+}
+html.v21107-ui-stability-design-root body[data-screen="fishing"] .v21107-micro-loadout-icon {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px !important;
+  object-fit: contain !important;
+}
+html.v21107-ui-stability-design-root body[data-screen="fishing"] .v21107-loadout-cell :is(strong, em, span) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  line-height: 1.05 !important;
+}
+html.v21107-ui-stability-design-root body[data-screen="fishing"] .v21107-battle-anchor {
+  width: var(--v21107-card-width) !important;
+  max-width: calc(100vw - 28px) !important;
+  contain: layout style paint !important;
+  transform-style: flat !important;
+  will-change: auto !important;
+}
+html.v21107-ui-stability-design-root body[data-screen="fishing"] .v21107-quiet-alert-anchor {
+  top: var(--v21107-alert-top) !important;
+  animation: none !important;
+  transition: opacity 120ms ease, filter 120ms ease !important;
+  filter: none !important;
+  transform: translate3d(-50%, 0, 0) !important;
+}
+html.v21107-ui-stability-design-root body[data-screen="fishing"] .v21107-result-card-polish {
+  width: var(--v21107-card-width) !important;
+  max-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 34px) !important;
+  overflow: hidden auto !important;
+  overscroll-behavior: contain !important;
+  background: var(--v21107-glass) !important;
+  border: 1px solid var(--v21107-deep-line) !important;
+  box-shadow: var(--v21107-deep-shadow) !important;
+}
+html.v21107-ui-stability-design-root .v21107-premium-glass-card {
+  box-sizing: border-box !important;
+  max-width: calc(100vw - 24px) !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+  border-color: rgba(214, 251, 255, .54) !important;
+}
+html.v21107-ui-stability-design-root .v21107-touch-target {
+  -webkit-tap-highlight-color: transparent !important;
+  touch-action: manipulation !important;
+}
+html.v21107-ui-stability-design-root .v21107-no-drag-image {
+  -webkit-user-drag: none !important;
+  user-select: none !important;
+}
+html.v21107-ui-stability-design-root .v21107-quiet-touch-ring {
+  animation-duration: 420ms !important;
+  pointer-events: none !important;
+  will-change: opacity, transform !important;
+}
+html.v21107-ui-stability-design-root #toast-root[data-v21107-stable-toast="throttled-safe-area-premium-feedback"] .v21107-stable-toast {
+  width: min(326px, calc(100vw - 42px)) !important;
+  max-height: min(160px, calc(100svh - var(--v21106-toast-top, 64px) - env(safe-area-inset-bottom, 0px) - 20px)) !important;
+  overflow: hidden auto !important;
+  overscroll-behavior: contain !important;
+  animation: none !important;
+  transform: translate3d(0, 0, 0) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21107-ui-stability-design-root *,
+  html.v21107-ui-stability-design-root *::before,
+  html.v21107-ui-stability-design-root *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

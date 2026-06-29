@@ -16,7 +16,8 @@ export class ToastManager {
     this.root.dataset.v2166CenterToast = 'enabled-center-aqua-card-feedback-menu-rescue';
     this.root.dataset.v2169BriefToast = 'shop-purchase-simple-feedback';
     this.root.dataset.v21106StableToast = 'anchored-no-jitter-fishing-safe-feedback';
-    this.root.classList.add('v21106-toast-root');
+    this.root.dataset.v21107StableToast = 'throttled-safe-area-premium-feedback';
+    this.root.classList.add('v21106-toast-root', 'v21107-toast-root');
   }
 
   show(options: ToastOptions): void {
@@ -28,11 +29,12 @@ export class ToastManager {
     this.root.removeAttribute('aria-hidden');
     this.root.dataset.toastType = options.type ?? 'normal';
     const card = document.createElement('section');
-    card.className = `toast toast-item v2163-center-toast v2164-center-toast v2165-center-toast v2166-center-toast v2169-brief-toast v21106-stable-toast toast-${options.type ?? 'normal'}`;
+    card.className = `toast toast-item v2163-center-toast v2164-center-toast v2165-center-toast v2166-center-toast v2169-brief-toast v21106-stable-toast v21107-stable-toast toast-${options.type ?? 'normal'}`;
     card.setAttribute('role', 'status');
     card.setAttribute('aria-live', 'assertive');
     card.dataset.v2169BriefToast = options.type === 'shop' ? 'shop-purchase-simple-feedback' : 'general-feedback';
     card.dataset.v21106StableToast = 'single-anchor-opacity-feedback-no-pop-jitter';
+    card.dataset.v21107StableToast = 'readable-no-stack-premium-feedback';
     const title = document.createElement('strong');
     title.textContent = options.title;
     card.appendChild(title);

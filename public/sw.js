@@ -1,5 +1,5 @@
-// v2.1.106 fishing jitter stability polish: anchored bobber motion, steady alerts/toasts, scene-safe premium UI.
-const CACHE_NAME = 'aqua-fantasia-v2.1.106-fishing-jitter-stability-polish';
+// v2.1.107 UI stability design engine: throttled fishing feedback, scoped overlap polish, premium glass safety.
+const CACHE_NAME = 'aqua-fantasia-v2.1.107-ui-stability-design-engine';
 const CORE_ASSETS = [
   './',
   './index.html',
