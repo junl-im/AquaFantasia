@@ -1,5 +1,5 @@
-// v2.1.105 premium scene integrity polish: scene-scoped layout, fishing/village/build guards, lean runtime sweep.
-const CACHE_NAME = 'aqua-fantasia-v2.1.105-premium-scene-integrity-polish';
+// v2.1.106 fishing jitter stability polish: anchored bobber motion, steady alerts/toasts, scene-safe premium UI.
+const CACHE_NAME = 'aqua-fantasia-v2.1.106-fishing-jitter-stability-polish';
 const CORE_ASSETS = [
   './',
   './index.html',

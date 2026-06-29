@@ -261,6 +261,11 @@ class AquaFantasiaGame {
   private resultCardOpen = false;
   private openingIntroPending = false;
   private openingIntroShown = false;
+  private fishingBobberAnchorX = 0;
+  private fishingBobberAnchorY = 0;
+  private fishingBobberPullOffset = 0;
+  private lastActionBadgeKey = '';
+  private lastActionBadgeAt = 0;
 
   async boot(): Promise<void> {
     this.quality.start();
@@ -520,6 +525,7 @@ class AquaFantasiaGame {
     this.installV21103OpeningLoadoutFinalGuardPass();
     this.installV21104OverlapDesignEnginePolishPass();
     this.installV21105PremiumSceneIntegrityPolishPass();
+    this.installV21106FishingJitterStabilityPolishPass();
     this.preloadCriticalImages();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
@@ -2499,6 +2505,9 @@ class AquaFantasiaGame {
     const bobberTarget = Math.max(28, Math.min(50, w * 0.09));
     this.bobber.scale.set(bobberTarget / Math.max(1, this.bobber.texture.width));
     this.bobber.position.set(w * 0.34, h * 0.57);
+    this.fishingBobberAnchorX = this.bobber.x;
+    this.fishingBobberAnchorY = this.bobber.y;
+    this.fishingBobberPullOffset = 0;
     const fishTargetW = Math.min(w * 0.50, 260);
     this.catchSprite.scale.set(fishTargetW / Math.max(1, this.catchSprite.texture.width));
     this.catchSprite.position.set(w * 0.38, h * 0.51);
@@ -2603,6 +2612,9 @@ class AquaFantasiaGame {
     this.activeFish = this.pickFish();
     void this.syncCatchSpriteTexture(this.activeFish);
     this.bobber.visible = true;
+    this.fishingBobberPullOffset = 0;
+    this.fishingBobberAnchorX = this.bobber.x;
+    this.fishingBobberAnchorY = this.bobber.y;
     this.state = 'casting';
     this.setFishingPhase('casting');
     this.stageHost?.classList.add('casting-mode');
@@ -2624,6 +2636,11 @@ class AquaFantasiaGame {
     this.setFishingPhase('waiting');
     this.stageHost?.classList.remove('casting-mode');
     this.stageHost?.classList.add('waiting-mode');
+    if (this.bobber) {
+      this.fishingBobberAnchorX = this.bobber.x;
+      this.fishingBobberAnchorY = this.bobber.y;
+      this.fishingBobberPullOffset = 0;
+    }
     this.setHint('입질을 기다리세요 · 물결 신호가 뜨면 화면을 눌러 릴링하세요');
     const delay = 2200 + Math.random() * 1900 - this.save.gear.reelLevel * 60 - Math.min(420, this.save.gear.lureStock * 12);
     window.clearTimeout(this.biteTimeout);
@@ -2633,9 +2650,14 @@ class AquaFantasiaGame {
   private triggerBite(): void {
     if (this.state !== 'waiting') return;
     playSound('bite');
-    this.vibrate([30, 30, 20]);
+    this.vibrate([24, 24, 14]);
     this.state = 'bite';
     this.setFishingPhase('bite');
+    if (this.bobber) {
+      this.fishingBobberAnchorX = this.bobber.x;
+      this.fishingBobberAnchorY = this.bobber.y;
+      this.fishingBobberPullOffset = 0;
+    }
     if (this.biteText) this.biteText.visible = true;
     this.stageHost?.classList.remove('waiting-mode');
     this.stageHost?.classList.add('bite-mode');
@@ -2652,7 +2674,7 @@ class AquaFantasiaGame {
 
   private startReeling(): void {
     if (this.state !== 'bite') return;
-    this.vibrate(20);
+    this.vibrate(14);
     this.state = 'reeling';
     this.setFishingPhase('reeling');
     this.stageHost?.classList.remove('bite-mode', 'waiting-mode');
@@ -2671,6 +2693,11 @@ class AquaFantasiaGame {
     this.escapePressure = 0;
     this.failureRecoveryTimer = 0;
     this.moodShiftAt = performance.now();
+    if (this.bobber) {
+      this.fishingBobberAnchorX = this.bobber.x;
+      this.fishingBobberAnchorY = this.bobber.y;
+      this.fishingBobberPullOffset = 0;
+    }
     this.stageHost?.setAttribute('data-fish-mood', this.fishMood);
     if (this.biteText) this.biteText.visible = false;
     this.hideBiteCallout();
@@ -2812,6 +2839,7 @@ class AquaFantasiaGame {
     this.stageHost?.querySelector('.catch-result-card')?.remove();
     dom.app.querySelector('.catch-result-card')?.remove();
     this.resultCardOpen = false;
+    this.fishingBobberPullOffset = 0;
     this.fishMood = 'calm';
     this.fishStamina = 100;
     this.catchProgress = 0;
@@ -2847,20 +2875,27 @@ class AquaFantasiaGame {
         this.scheduleBite();
       }
     } else if (this.state === 'waiting' || this.state === 'bite') {
-      this.bobber.y += Math.sin(now / 250) * 0.35 * dt;
-      this.bobber.x += Math.sin(now / 620) * 0.10 * dt;
-      if (this.state === 'bite') this.bobber.y += 0.22 * dt;
+      const biteLift = this.state === 'bite' ? Math.sin(now / 100) * 0.7 : 0;
+      this.bobber.position.set(
+        this.fishingBobberAnchorX + Math.sin(now / 620) * 1.1,
+        this.fishingBobberAnchorY + Math.sin(now / 250) * 1.8 + biteLift,
+      );
+      this.bobber.rotation = Math.sin(now / 520) * 0.04;
     } else if (this.state === 'reeling') {
       const status = this.advanceFishingBattle(now, dt);
       if (this.bobber) {
-        const pull = this.reelMode === 'wind' ? -0.18 : this.reelMode === 'release' ? 0.16 : 0.08;
-        const shake = this.fishMood === 'burst' ? 0.44 : this.fishMood === 'tired' ? 0.10 : 0.22;
-        this.bobber.x += Math.sin(now / 90) * shake * dt;
-        this.bobber.y += pull * dt + Math.sin(now / 130) * 0.18 * dt;
-        this.bobber.rotation = Math.sin(now / 85) * (this.fishMood === 'burst' ? 0.34 : this.holding ? 0.24 : 0.12);
+        const pull = this.reelMode === 'wind' ? -0.16 : this.reelMode === 'release' ? 0.15 : 0.05;
+        this.fishingBobberPullOffset = Math.max(-8, Math.min(10, this.fishingBobberPullOffset + pull * dt));
+        if (this.reelMode === 'neutral') this.fishingBobberPullOffset *= 0.985;
+        const shake = this.fishMood === 'burst' ? 2.4 : this.fishMood === 'tired' ? 0.65 : 1.15;
+        this.bobber.position.set(
+          this.fishingBobberAnchorX + Math.sin(now / 120) * shake,
+          this.fishingBobberAnchorY + this.fishingBobberPullOffset + Math.sin(now / 170) * (shake * 0.42),
+        );
+        this.bobber.rotation = Math.sin(now / 120) * (this.fishMood === 'burst' ? 0.16 : this.holding ? 0.10 : 0.06);
       }
       this.stageHost?.classList.toggle('surge-alert', this.fishMood === 'burst');
-      const pulseGap = status.safe ? 520 : (this.tension < 16 || this.tension > 86 || this.fishMood === 'burst' ? 170 : 320);
+      const pulseGap = status.safe ? 820 : (this.tension < 16 || this.tension > 86 || this.fishMood === 'burst' ? 420 : 560);
       if (now - this.lastReelPulseAt > pulseGap) {
         this.lastReelPulseAt = now;
         if (status.safe) this.vibrate(6);
@@ -3012,12 +3047,19 @@ class AquaFantasiaGame {
 
   private spawnActionBadge(title: string, subtitle: string): void {
     if (!this.stageHost) return;
+    const now = performance.now();
+    const key = `${this.state}:${title}:${subtitle}`;
+    const minGap = this.state === 'reeling' ? 520 : 180;
+    if (key === this.lastActionBadgeKey && now - this.lastActionBadgeAt < minGap) return;
+    this.lastActionBadgeKey = key;
+    this.lastActionBadgeAt = now;
     this.stageHost.querySelector('.action-badge')?.remove();
     const badge = document.createElement('div');
-    badge.className = 'action-badge v930-fx v2030-action-badge v2040-action-badge v2041-action-badge v2042-action-badge v2043-action-badge v2046-action-badge v2132-action-badge v2161-action-badge v2162-action-badge v2169-action-badge v2170-action-badge v2171-action-badge';
+    badge.className = 'action-badge v930-fx v2030-action-badge v2040-action-badge v2041-action-badge v2042-action-badge v2043-action-badge v2046-action-badge v2132-action-badge v2161-action-badge v2162-action-badge v2169-action-badge v2170-action-badge v2171-action-badge v21106-stable-action-badge';
+    badge.dataset.v21106StableAlert = 'single-anchor-no-shake-notification';
     badge.innerHTML = `<strong>${title}</strong><span>${subtitle}</span>`;
     this.stageHost.appendChild(badge);
-    window.setTimeout(() => badge.remove(), 1550);
+    window.setTimeout(() => badge.remove(), this.state === 'reeling' ? 1180 : 1450);
   }
 
   private spawnSplash(): void {
@@ -12360,6 +12402,100 @@ class AquaFantasiaGame {
     observer = new MutationObserver(schedule);
     observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-screen', 'data-fishing-phase'], childList: true, subtree: true });
     window.addEventListener('pagehide', () => observer?.disconnect(), { once: true, passive: true });
+  }
+
+
+  private installV21106FishingJitterStabilityPolishPass(): void {
+    let raf = 0;
+    let lastPhase = '';
+    const html = document.documentElement;
+    const setImportant = (node: HTMLElement | null | undefined, entries: Array<[string, string]>) => {
+      if (!node) return;
+      for (const [name, value] of entries) node.style.setProperty(name, value, 'important');
+    };
+    const phaseOf = (screen: HTMLElement): string => {
+      const raw = screen.dataset.fishingPhase || screen.dataset.v21105FishingPhase || screen.dataset.v21104FishingPhase || '';
+      if (screen.querySelector('.catch-result-card,.v21105-result-card,.v21104-result-card')) return 'result';
+      if (/bite|입질/i.test(raw)) return 'bite';
+      if (/reel|battle|fight|실전/i.test(raw)) return 'reeling';
+      if (/result|success|fail|결과/i.test(raw)) return 'result';
+      return raw || 'prep';
+    };
+    const syncVars = (phase: string) => {
+      const viewport = window.visualViewport;
+      const vw = Math.max(1, Math.floor(viewport?.width ?? window.innerWidth));
+      const vh = Math.max(1, Math.floor(viewport?.height ?? window.innerHeight));
+      const compact = vw <= 370 || vh <= 620;
+      html.classList.add('v21106-fishing-jitter-stability-root');
+      html.dataset.v21106FishingJitterStability = 'anchored-bobber-toast-alert-no-shake-premium-layout';
+      html.dataset.v21106FishingPhase = phase;
+      html.style.setProperty('--v21106-alert-top', phase === 'reeling'
+        ? `calc(env(safe-area-inset-top, 0px) + ${compact ? 112 : 126}px)`
+        : phase === 'bite'
+          ? `calc(env(safe-area-inset-top, 0px) + ${compact ? 104 : 116}px)`
+          : `calc(env(safe-area-inset-top, 0px) + ${compact ? 92 : 104}px)`);
+      html.style.setProperty('--v21106-toast-top', `calc(env(safe-area-inset-top, 0px) + ${compact ? 56 : 64}px)`);
+      html.style.setProperty('--v21106-cockpit-width', `min(${compact ? 296 : 312}px, calc(100vw - 30px))`);
+      html.classList.toggle('v21106-compact-jitter-safe', compact);
+    };
+    const normalize = () => {
+      raf = 0;
+      if (document.hidden) return;
+      const fishing = dom.app.querySelector<HTMLElement>('.fishing-screen,[data-screen="fishing"],.runtime-fishing-screen');
+      const phase = fishing ? phaseOf(fishing) : 'none';
+      syncVars(phase);
+      const toastRoot = document.getElementById('toast-root');
+      toastRoot?.classList.add('v21106-toast-root');
+      toastRoot?.setAttribute('data-v21106-stable-toast', 'anchored-no-jitter-fishing-safe-feedback');
+      toastRoot?.querySelectorAll<HTMLElement>('.toast,.toast-item,.v2163-center-toast,.v21106-stable-toast').forEach((toast) => {
+        toast.classList.add('v21106-stable-toast');
+        toast.dataset.v21106StableToast = 'single-anchor-opacity-feedback-no-pop-jitter';
+      });
+      if (!fishing) return;
+      fishing.classList.add('v21106-fishing-stability-screen');
+      fishing.dataset.v21106FishingStability = 'bobber-anchor-alert-toast-cockpit-no-layout-jitter';
+      fishing.dataset.v21106FishingPhase = phase;
+      if (phase !== lastPhase) {
+        fishing.querySelectorAll<HTMLElement>('.v21106-stable-action-badge').forEach((node) => node.remove());
+        lastPhase = phase;
+      }
+      const stableSelectors = '.fishing-stage,.v21105-battle-strip,.v21105-reel-safe-control,.v2199-battle-strip,.v2198-battle-strip,.v2197-battle-strip,.v2153-battle-strip,.v2199-reel-console,.v2198-reel-console,.v2197-reel-console,.v2055-reel-console,.v2053-reel-touch-zone,.reel-panel,.hold-pad,.v21105-bite-callout,.bite-callout,.catch-result-card,.v21105-result-card';
+      fishing.querySelectorAll<HTMLElement>(stableSelectors).forEach((node) => {
+        node.classList.add('v21106-stable-fishing-node');
+        setImportant(node, [['backface-visibility', 'hidden'], ['transform-style', 'flat'], ['will-change', 'auto']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.v21105-battle-strip,.v2199-battle-strip,.v2198-battle-strip,.v2197-battle-strip,.v2153-battle-strip').forEach((node) => {
+        node.classList.add('v21106-stable-battle-strip');
+        setImportant(node, [['width', 'var(--v21106-cockpit-width)'], ['max-width', 'calc(100vw - 30px)'], ['contain', 'layout style paint']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.v21105-reel-safe-control,.v2199-reel-console,.v2198-reel-console,.v2197-reel-console,.v2055-reel-console,.v2053-reel-touch-zone,.reel-panel,.hold-pad').forEach((node) => {
+        node.classList.add('v21106-stable-reel-control');
+        setImportant(node, [['width', 'var(--v21106-cockpit-width)'], ['max-width', 'calc(100vw - 30px)'], ['contain', 'layout style paint'], ['transition', 'opacity 120ms ease']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.action-badge,.v21106-stable-action-badge').forEach((badge) => {
+        badge.classList.add('v21106-stable-action-badge');
+        badge.dataset.v21106StableAlert = 'single-anchor-no-shake-notification';
+        setImportant(badge, [['position', 'fixed'], ['left', '50%'], ['top', 'var(--v21106-alert-top)'], ['right', 'auto'], ['bottom', 'auto'], ['transform', 'translate3d(-50%,0,0)'], ['animation', 'none'], ['transition', 'opacity 120ms ease'], ['width', 'min(254px, calc(100vw - 46px))'], ['max-width', 'calc(100vw - 46px)'], ['z-index', '159']]);
+      });
+      if (phase === 'reeling') {
+        fishing.querySelectorAll<HTMLElement>('.v21105-bite-callout,.bite-callout,.fishing-loadout-strip,.recent-catch-strip,.fishing-guide-card').forEach((node) => {
+          if (!node.classList.contains('v21106-stable-action-badge')) setImportant(node, [['animation', 'none'], ['transition', 'opacity 120ms ease']]);
+        });
+      }
+    };
+    const schedule = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(normalize);
+    };
+    schedule();
+    window.visualViewport?.addEventListener('resize', schedule, { passive: true });
+    window.visualViewport?.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule, { passive: true });
+    document.addEventListener('visibilitychange', schedule, { passive: true });
+    const observer = new MutationObserver(schedule);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['data-screen', 'class', 'data-fishing-phase'], childList: true, subtree: true });
+    window.addEventListener('pagehide', () => observer.disconnect(), { once: true, passive: true });
   }
 
   private vibrate(pattern: VibratePattern): void {

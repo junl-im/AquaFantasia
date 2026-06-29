@@ -67277,3 +67277,126 @@ html.v21105-premium-scene-integrity-root .v21105-no-drag-image {
     scroll-behavior: auto !important;
   }
 }
+
+
+/* v2.1.106 fishing jitter stability polish */
+html.v21106-fishing-jitter-stability-root {
+  --v21106-alert-top: calc(env(safe-area-inset-top, 0px) + 116px);
+  --v21106-toast-top: calc(env(safe-area-inset-top, 0px) + 64px);
+  --v21106-cockpit-width: min(312px, calc(100vw - 30px));
+  --v21106-glass: linear-gradient(180deg, rgba(247,254,255,.96), rgba(181,242,255,.76) 48%, rgba(58,183,224,.48));
+  --v21106-line: rgba(255,255,255,.82);
+  --v21106-shadow: 0 18px 42px rgba(0, 43, 85, .20), inset 0 1px 0 rgba(255,255,255,.92);
+}
+html.v21106-fishing-jitter-stability-root body[data-screen="fishing"] .v21106-fishing-stability-screen {
+  overscroll-behavior: none !important;
+  touch-action: manipulation !important;
+  contain: layout style paint !important;
+}
+html.v21106-fishing-jitter-stability-root body[data-screen="fishing"] .v21106-stable-fishing-node {
+  backface-visibility: hidden !important;
+  transform-style: flat !important;
+  will-change: auto !important;
+}
+html.v21106-fishing-jitter-stability-root body[data-screen="fishing"] .v21106-stable-battle-strip,
+html.v21106-fishing-jitter-stability-root body[data-screen="fishing"] .v21106-stable-reel-control {
+  width: var(--v21106-cockpit-width) !important;
+  max-width: calc(100vw - 30px) !important;
+  contain: layout style paint !important;
+}
+html.v21106-fishing-jitter-stability-root body[data-screen="fishing"] .v21106-stable-action-badge {
+  position: fixed !important;
+  left: 50% !important;
+  top: var(--v21106-alert-top) !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  width: min(254px, calc(100vw - 46px)) !important;
+  max-width: calc(100vw - 46px) !important;
+  min-height: 42px !important;
+  max-height: 74px !important;
+  display: grid !important;
+  align-content: center !important;
+  gap: 2px !important;
+  padding: 8px 12px !important;
+  border-radius: 18px !important;
+  background: var(--v21106-glass) !important;
+  border: 1px solid var(--v21106-line) !important;
+  box-shadow: var(--v21106-shadow) !important;
+  color: #07324d !important;
+  -webkit-text-fill-color: #07324d !important;
+  text-align: center !important;
+  text-shadow: none !important;
+  animation: none !important;
+  transition: opacity 120ms ease !important;
+  pointer-events: none !important;
+  z-index: 159 !important;
+  overflow: hidden !important;
+}
+html.v21106-fishing-jitter-stability-root body[data-screen="fishing"] .v21106-stable-action-badge strong {
+  font-size: 13px !important;
+  font-weight: 1000 !important;
+  line-height: 1.04 !important;
+  color: #052c45 !important;
+  -webkit-text-fill-color: #052c45 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v21106-fishing-jitter-stability-root body[data-screen="fishing"] .v21106-stable-action-badge span {
+  font-size: 10.5px !important;
+  font-weight: 850 !important;
+  line-height: 1.16 !important;
+  color: #1d6378 !important;
+  -webkit-text-fill-color: #1d6378 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v21106-fishing-jitter-stability-root #toast-root[data-v21106-stable-toast="anchored-no-jitter-fishing-safe-feedback"] {
+  position: fixed !important;
+  inset: 0 !important;
+  display: grid !important;
+  place-items: start center !important;
+  padding: var(--v21106-toast-top) max(14px, env(safe-area-inset-right, 0px)) max(18px, env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px)) !important;
+  pointer-events: none !important;
+  z-index: 9000 !important;
+  transform: translate3d(0,0,0) !important;
+}
+html.v21106-fishing-jitter-stability-root #toast-root[aria-hidden="true"] {
+  display: none !important;
+}
+html.v21106-fishing-jitter-stability-root #toast-root .v21106-stable-toast {
+  width: min(326px, calc(100vw - 42px)) !important;
+  min-height: 76px !important;
+  max-height: min(168px, calc(100svh - var(--v21106-toast-top) - env(safe-area-inset-bottom, 0px) - 18px)) !important;
+  display: grid !important;
+  gap: 6px !important;
+  justify-items: center !important;
+  align-content: center !important;
+  padding: 14px 16px !important;
+  border-radius: 24px !important;
+  background: var(--v21106-glass) !important;
+  border: 1px solid var(--v21106-line) !important;
+  box-shadow: var(--v21106-shadow) !important;
+  color: #07324d !important;
+  -webkit-text-fill-color: #07324d !important;
+  text-align: center !important;
+  transform: translate3d(0, 0, 0) scale(1) !important;
+  animation: none !important;
+  transition: opacity 140ms ease !important;
+  pointer-events: auto !important;
+  overflow: hidden auto !important;
+  overscroll-behavior: contain !important;
+}
+html.v21106-fishing-jitter-stability-root #toast-root .v21106-stable-toast strong,
+html.v21106-fishing-jitter-stability-root #toast-root .v21106-stable-toast span {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+html.v21106-fishing-jitter-stability-root body[data-screen="fishing"] :is(.v21105-bite-callout,.bite-callout,.v21105-battle-strip,.v21105-reel-safe-control,.v21106-stable-action-badge,.v21106-stable-toast) {
+  animation-duration: .01ms !important;
+  animation-iteration-count: 1 !important;
+}
