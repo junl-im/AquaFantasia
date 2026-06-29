@@ -265,6 +265,8 @@ class AquaFantasiaGame {
   private catchProgress = 0;
   private escapePressure = 0;
   private failureRecoveryTimer = 0;
+  private fishingSafeZoneCenter = 55;
+  private fishingSafeZoneLastAt = 0;
   private moodShiftAt = performance.now();
   private fallbackTicker = 0;
   private readonly resizePixiHandler = () => this.resizePixi();
@@ -547,6 +549,7 @@ class AquaFantasiaGame {
     this.installV21106FishingJitterStabilityPolishPass();
     this.installV21107UiStabilityDesignEnginePass();
     this.installV21108FishingBiteBalancePolishPass();
+    this.installV21109SystemUiStabilityPolishPass();
     this.preloadCriticalImages();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
@@ -2633,6 +2636,8 @@ class AquaFantasiaGame {
     this.syncFishingHud();
     this.activeFish = this.pickFish();
     this.activeFishProfile = this.createFishTensionProfile(this.activeFish);
+    this.fishingSafeZoneCenter = 55 + Math.max(-4, Math.min(4, this.activeFishProfile.tensionBias * 0.22));
+    this.fishingSafeZoneLastAt = performance.now();
     void this.syncCatchSpriteTexture(this.activeFish);
     this.bobber.visible = true;
     this.fishingBobberPullOffset = 0;
@@ -2703,6 +2708,8 @@ class AquaFantasiaGame {
     this.stageHost?.classList.remove('bite-mode', 'waiting-mode');
     this.stageHost?.classList.add('reeling-mode');
     this.activeFishProfile = this.createFishTensionProfile(this.activeFish);
+    this.fishingSafeZoneCenter = 55 + Math.max(-4, Math.min(4, this.activeFishProfile.tensionBias * 0.22));
+    this.fishingSafeZoneLastAt = performance.now();
     this.tension = Math.max(34, Math.min(66, 48 + this.getRegion().difficulty * 1.2 + this.activeFishProfile.tensionBias));
     this.safeTimer = 0;
     this.surgeTimer = 0;
@@ -2869,6 +2876,8 @@ class AquaFantasiaGame {
     this.catchProgress = 0;
     this.escapePressure = 0;
     this.failureRecoveryTimer = 0;
+    this.fishingSafeZoneCenter = 55;
+    this.fishingSafeZoneLastAt = 0;
     this.state = 'idle';
     this.setFishingPhase('idle');
     this.castBtn?.classList.remove('hidden', 'pop-out');
@@ -3083,6 +3092,7 @@ class AquaFantasiaGame {
     const badge = document.createElement('div');
     badge.className = 'action-badge v930-fx v2030-action-badge v2040-action-badge v2041-action-badge v2042-action-badge v2043-action-badge v2046-action-badge v2132-action-badge v2161-action-badge v2162-action-badge v2169-action-badge v2170-action-badge v2171-action-badge v21106-stable-action-badge';
     badge.dataset.v21106StableAlert = 'single-anchor-no-shake-notification';
+    badge.dataset.v21109StableAlert = 'deduplicated-phase-scoped-feedback';
     badge.innerHTML = `<strong>${title}</strong><span>${subtitle}</span>`;
     this.stageHost.appendChild(badge);
     window.setTimeout(() => badge.remove(), this.state === 'reeling' ? 1180 : 1450);
@@ -3271,7 +3281,18 @@ class AquaFantasiaGame {
     const masteryBonus = Math.min(4, (this.save.mastery[this.save.region] ?? 0) * 0.08);
     const profile = this.activeFishProfile;
     const width = Math.max(34, 51 - this.getRegion().difficulty * 1.35 + this.save.gear.lineLevel * 2.55 + masteryBonus + profile.safeWidth); // v2.1.108: fish-specific safe window for varied tension/resistance.
-    const center = 55 + Math.sin(performance.now() / 2100) * (this.activeFish.rarity === 'BOSS' ? 2.2 : 1.0) * profile.centerSwing;
+    const now = performance.now();
+    const targetCenter = 55 + Math.sin(now / 2300) * (this.activeFish.rarity === 'BOSS' ? 1.9 : 0.92) * profile.centerSwing;
+    if (!this.fishingSafeZoneLastAt || this.state === 'idle' || this.state === 'casting') {
+      this.fishingSafeZoneCenter = targetCenter;
+      this.fishingSafeZoneLastAt = now;
+    } else {
+      const dt = Math.max(0, Math.min(96, now - this.fishingSafeZoneLastAt));
+      const smoothing = Math.min(1, dt / (this.state === 'reeling' ? 260 : 190));
+      this.fishingSafeZoneCenter += (targetCenter - this.fishingSafeZoneCenter) * smoothing;
+      this.fishingSafeZoneLastAt = now;
+    }
+    const center = this.fishingSafeZoneCenter; // v2.1.109: frame-stable safe window to reduce gauge/readout jitter.
     return { left: Math.max(12, center - width / 2), right: Math.min(91, center + width / 2) };
   }
 
@@ -3286,7 +3307,8 @@ class AquaFantasiaGame {
     document.querySelectorAll('.bite-callout').forEach((node) => node.remove());
     this.hideBiteCallout();
     const callout = document.createElement('div');
-    callout.className = 'bite-callout v2030-bite-callout v2041-bite-callout v2042-bite-callout v2043-bite-callout v2046-bite-callout v2048-bite-callout v2064-bite-callout v2161-bite-callout v2162-bite-callout v2163-bite-callout v2171-bite-callout v2184-bite-callout v2185-bite-callout v2192-bite-callout v2193-bite-callout';
+    callout.className = 'bite-callout v2030-bite-callout v2041-bite-callout v2042-bite-callout v2043-bite-callout v2046-bite-callout v2048-bite-callout v2064-bite-callout v2161-bite-callout v2162-bite-callout v2163-bite-callout v2171-bite-callout v2184-bite-callout v2185-bite-callout v2192-bite-callout v2193-bite-callout v21109-bite-callout-safe';
+    callout.dataset.v21109BiteCallout = 'screen-inside-lowered-safe-anchor';
     callout.innerHTML = `<strong>${title}</strong><span>${subtitle}</span><button type="button" class="v2046-bite-start v2048-bite-start v2131-bite-start v2161-bite-start v2162-bite-start v2163-bite-start">릴링 시작</button>`;
     callout.addEventListener('pointerdown', (ev) => {
       ev.preventDefault();
@@ -12803,6 +12825,141 @@ class AquaFantasiaGame {
     document.addEventListener('visibilitychange', schedule, { passive: true });
     const observer = new MutationObserver(schedule);
     observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-screen', 'data-fishing-phase', 'data-v21108-fishing-phase'], childList: true, subtree: true });
+    window.addEventListener('pagehide', () => { if (timer) window.clearTimeout(timer); observer.disconnect(); }, { once: true, passive: true });
+  }
+
+
+  private installV21109SystemUiStabilityPolishPass(): void {
+    let raf = 0;
+    let timer = 0;
+    let lastRun = 0;
+    const html = document.documentElement;
+    const setImportant = (node: HTMLElement | null | undefined, entries: Array<[string, string]>) => {
+      if (!node) return;
+      for (const [name, value] of entries) node.style.setProperty(name, value, 'important');
+    };
+    const readViewport = () => {
+      const viewport = window.visualViewport;
+      return {
+        width: Math.max(1, Math.floor(viewport?.width ?? window.innerWidth)),
+        height: Math.max(1, Math.floor(viewport?.height ?? window.innerHeight)),
+        offsetTop: Math.max(0, Math.floor(viewport?.offsetTop ?? 0)),
+        offsetLeft: Math.max(0, Math.floor(viewport?.offsetLeft ?? 0)),
+      };
+    };
+    const phaseOf = (fishing: HTMLElement | null): FishingState | 'result' | 'prep' | 'none' => {
+      if (!fishing) return 'none';
+      const raw = fishing.dataset.v21109FishingPhase || fishing.dataset.v21108FishingPhase || fishing.dataset.fishingPhase || document.body.dataset.fishingPhase || '';
+      if (fishing.querySelector('.catch-result-card,.v21107-result-card-polish,.v21105-result-card')) return 'result';
+      if (/reel|battle|fight|실전/i.test(raw)) return 'reeling';
+      if (/bite|입질/i.test(raw)) return 'bite';
+      if (/success|fail|result|결과/i.test(raw)) return 'result';
+      return (raw as FishingState) || 'prep';
+    };
+    const syncRootVars = (phase: string) => {
+      const vp = readViewport();
+      const tiny = vp.width <= 360 || vp.height <= 610;
+      const compact = tiny || vp.width <= 390 || vp.height <= 680;
+      const battleTop = Math.max(96, Math.min(compact ? 138 : 154, Math.round(vp.height * (compact ? 0.16 : 0.17))));
+      const biteTop = Math.max(compact ? 190 : 204, Math.min(compact ? 278 : 318, Math.round(vp.height * (compact ? 0.405 : 0.415))));
+      html.classList.add('v21109-system-ui-stability-root');
+      html.dataset.v21109SystemUiStability = 'safe-window-frame-lock-fishing-ui-design-sweep';
+      html.dataset.v21109FishingPhase = phase;
+      html.style.setProperty('--v21109-viewport-top', `${vp.offsetTop}px`);
+      html.style.setProperty('--v21109-viewport-left', `${vp.offsetLeft}px`);
+      html.style.setProperty('--v21109-card-width', `min(${compact ? 316 : 342}px, calc(100vw - 28px))`);
+      html.style.setProperty('--v21109-bite-top', `clamp(${compact ? 188 : 204}px, ${biteTop}px, calc(100svh - env(safe-area-inset-bottom, 0px) - ${compact ? 224 : 236}px))`);
+      html.style.setProperty('--v21109-alert-top', phase === 'reeling'
+        ? `calc(env(safe-area-inset-top, 0px) + ${compact ? 128 : 142}px)`
+        : `calc(env(safe-area-inset-top, 0px) + ${compact ? 112 : 124}px)`);
+      html.style.setProperty('--v21109-battle-top', `calc(env(safe-area-inset-top, 0px) + ${battleTop}px)`);
+      html.style.setProperty('--v21109-reel-bottom', `calc(env(safe-area-inset-bottom, 0px) + ${compact ? 10 : 12}px)`);
+      html.style.setProperty('--v21109-result-max-height', `calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - ${compact ? 28 : 34}px)`);
+      html.classList.toggle('v21109-compact-ui', compact);
+    };
+    const normalizeFishing = () => {
+      const fishing = dom.app.querySelector<HTMLElement>('.fishing-screen,[data-screen="fishing"],.runtime-fishing-screen');
+      const phase = phaseOf(fishing);
+      syncRootVars(String(phase));
+      if (!fishing || document.body.dataset.screen !== 'fishing') return;
+      fishing.classList.add('v21109-fishing-stability-screen');
+      fishing.dataset.v21109FishingPhase = String(phase);
+      document.body.dataset.v21109FishingPhase = String(phase);
+      fishing.querySelectorAll<HTMLElement>('.bite-callout,.v21108-bite-callout-lowered,.v21109-bite-callout-safe').forEach((node) => {
+        node.classList.add('v21109-bite-callout-safe');
+        node.dataset.v21109BiteCallout = 'screen-inside-lowered-safe-anchor';
+        setImportant(node, [['position', 'fixed'], ['left', '50%'], ['top', 'var(--v21109-bite-top)'], ['right', 'auto'], ['bottom', 'auto'], ['transform', 'translate3d(-50%, -50%, 0)'], ['width', 'var(--v21109-card-width)'], ['max-width', 'calc(100vw - 28px)'], ['max-height', 'min(214px, calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 72px))'], ['z-index', '188']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.action-badge,.v21108-action-badge-stable,.v21106-stable-action-badge').forEach((node) => {
+        node.classList.add('v21109-action-badge-stable');
+        node.dataset.v21109StableAlert = 'phase-scoped-fixed-safe-feedback';
+        setImportant(node, [['position', 'fixed'], ['left', '50%'], ['top', 'var(--v21109-alert-top)'], ['right', 'auto'], ['bottom', 'auto'], ['transform', 'translate3d(-50%, 0, 0)'], ['max-width', 'calc(100vw - 36px)'], ['animation', 'none'], ['z-index', '178']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.v2153-battle-strip,.v2199-battle-strip,.v2198-battle-strip').forEach((node) => {
+        node.classList.add('v21109-battle-strip-stable');
+        if (phase === 'reeling') setImportant(node, [['position', 'fixed'], ['left', '50%'], ['top', 'var(--v21109-battle-top)'], ['right', 'auto'], ['bottom', 'auto'], ['width', 'var(--v21109-card-width)'], ['max-width', 'calc(100vw - 28px)'], ['transform', 'translate3d(-50%, 0, 0)'], ['z-index', '88'], ['contain', 'layout style paint']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.v2055-reel-console,.v2199-reel-console,.v2198-reel-console,.v2053-reel-touch-zone').forEach((node) => {
+        node.classList.add('v21109-reel-console-stable');
+        if (phase === 'reeling') setImportant(node, [['position', 'fixed'], ['left', '50%'], ['right', 'auto'], ['bottom', 'var(--v21109-reel-bottom)'], ['top', 'auto'], ['width', 'var(--v21109-card-width)'], ['max-width', 'calc(100vw - 28px)'], ['transform', 'translate3d(-50%, 0, 0)'], ['z-index', '92'], ['contain', 'layout style paint']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.fishing-loadout-strip,.v21107-loadout-deconflict,.recent-catch-strip,.fishing-guide-card').forEach((node) => {
+        node.classList.add('v21109-phase-clean-node');
+        if (phase === 'bite' || phase === 'reeling' || phase === 'result') setImportant(node, [['opacity', '0'], ['visibility', 'hidden'], ['pointer-events', 'none']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.catch-result-card,.v21107-result-card-polish,.v21105-result-card').forEach((node) => {
+        node.classList.add('v21109-result-card-stable');
+        setImportant(node, [['width', 'var(--v21109-card-width)'], ['max-height', 'var(--v21109-result-max-height)'], ['overflow', 'hidden auto'], ['overscroll-behavior', 'contain'], ['contain', 'layout style paint']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('[data-v2073-mood],[data-v2073-console-mood],[data-v2133-coach-secondary],[data-v2135-balance],[data-v2135-pressure]').forEach((node) => {
+        node.classList.add('v21109-readout-stable');
+        node.dataset.v21109Readout = 'ellipsis-no-layout-push';
+      });
+    };
+    const normalizeCommonDesign = () => {
+      dom.app.querySelectorAll<HTMLElement>('.glass-card,.runtime-panel,.shop-card,.mission-card,.map-card,.build-card,.game-dialog,.v2097-runtime-panel,.catch-result-card').forEach((node) => {
+        node.classList.add('v21109-premium-glass-card');
+        setImportant(node, [['box-sizing', 'border-box'], ['max-width', 'calc(100vw - 24px)'], ['overflow-wrap', 'anywhere'], ['word-break', 'keep-all']]);
+      });
+      dom.app.querySelectorAll<HTMLElement>('button,.runtime-btn,.game-dialog-close,.v2059-screen-close,.v2097-menu-close,.v2097-ui-close').forEach((button) => {
+        button.classList.add('v21109-touch-target');
+      });
+      dom.app.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input,textarea').forEach((input) => {
+        input.classList.add('v21109-readable-input');
+      });
+      dom.app.querySelectorAll<HTMLImageElement>('img').forEach((img) => {
+        img.loading ||= 'lazy';
+        img.decoding = 'async';
+        img.draggable = false;
+        img.classList.add('v21109-no-drag-image');
+      });
+    };
+    const run = () => {
+      raf = 0;
+      timer = 0;
+      if (document.hidden) return;
+      lastRun = performance.now();
+      normalizeFishing();
+      normalizeCommonDesign();
+    };
+    const schedule = () => {
+      if (raf || timer) return;
+      const now = performance.now();
+      const wait = Math.max(0, 112 - (now - lastRun));
+      if (wait > 0) {
+        timer = window.setTimeout(() => { timer = 0; raf = window.requestAnimationFrame(run); }, wait);
+        return;
+      }
+      raf = window.requestAnimationFrame(run);
+    };
+    schedule();
+    window.visualViewport?.addEventListener('resize', schedule, { passive: true });
+    window.visualViewport?.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule, { passive: true });
+    document.addEventListener('visibilitychange', schedule, { passive: true });
+    const observer = new MutationObserver(schedule);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-screen', 'data-fishing-phase', 'data-v21108-fishing-phase', 'data-v21109-fishing-phase'], childList: true, subtree: true });
     window.addEventListener('pagehide', () => { if (timer) window.clearTimeout(timer); observer.disconnect(); }, { once: true, passive: true });
   }
 

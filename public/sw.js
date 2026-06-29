@@ -1,5 +1,5 @@
-// v2.1.108 Fishing bite/balance polish: lowered bite callout, fish-specific tension and resistance, UI stability.
-const CACHE_NAME = 'aqua-fantasia-v2.1.108-fishing-bite-balance-polish';
+// v2.1.109 System UI stability polish: frame-stable fishing safe window, layout rails, premium design sweep.
+const CACHE_NAME = 'aqua-fantasia-v2.1.109-system-ui-stability-polish';
 const CORE_ASSETS = [
   './',
   './index.html',

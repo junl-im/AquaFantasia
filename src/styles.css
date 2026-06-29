@@ -67640,3 +67640,176 @@ html.v21108-fishing-bite-balance-root body[data-screen="fishing"] .v21108-fish-p
     scroll-behavior: auto !important;
   }
 }
+
+/* v2.1.109 system UI stability, fishing safe-window frame lock, and premium design sweep */
+html.v21109-system-ui-stability-root {
+  --v21109-card-width: min(342px, calc(100vw - 28px));
+  --v21109-bite-top: clamp(204px, 41svh, calc(100svh - env(safe-area-inset-bottom, 0px) - 236px));
+  --v21109-alert-top: calc(env(safe-area-inset-top, 0px) + 124px);
+  --v21109-battle-top: calc(env(safe-area-inset-top, 0px) + 144px);
+  --v21109-reel-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  --v21109-result-max-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 34px);
+  --v21109-glass: linear-gradient(180deg, rgba(253,255,255,.98), rgba(185,245,255,.88) 46%, rgba(43,177,230,.54));
+  --v21109-line: rgba(226, 252, 255, .72);
+  --v21109-ink: #052e49;
+  --v21109-muted: #1c6680;
+  --v21109-shadow: 0 22px 52px rgba(0, 34, 76, .24), inset 0 1px 0 rgba(255,255,255,.9);
+}
+html.v21109-system-ui-stability-root body[data-screen="fishing"] .v21109-fishing-stability-screen {
+  overscroll-behavior: none !important;
+  touch-action: manipulation !important;
+  contain: layout style paint !important;
+}
+html.v21109-system-ui-stability-root body[data-screen="fishing"] .v21109-bite-callout-safe {
+  position: fixed !important;
+  left: 50% !important;
+  top: var(--v21109-bite-top) !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  width: var(--v21109-card-width) !important;
+  max-width: calc(100vw - 28px) !important;
+  max-height: min(214px, calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 72px)) !important;
+  padding: 17px 17px 15px !important;
+  border-radius: 25px !important;
+  display: grid !important;
+  align-content: center !important;
+  gap: 8px !important;
+  overflow: hidden !important;
+  background: var(--v21109-glass) !important;
+  border: 1px solid var(--v21109-line) !important;
+  box-shadow: var(--v21109-shadow) !important;
+  color: var(--v21109-ink) !important;
+  -webkit-text-fill-color: var(--v21109-ink) !important;
+  text-align: center !important;
+  text-shadow: none !important;
+  filter: none !important;
+  animation: none !important;
+  pointer-events: auto !important;
+  z-index: 188 !important;
+}
+html.v21109-system-ui-stability-root body[data-screen="fishing"] .v21109-bite-callout-safe strong {
+  margin: 0 !important;
+  font-size: clamp(27px, 7.2vw, 37px) !important;
+  line-height: .98 !important;
+  letter-spacing: -.04em !important;
+  color: #052f4a !important;
+  -webkit-text-fill-color: #052f4a !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.82) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v21109-system-ui-stability-root body[data-screen="fishing"] .v21109-bite-callout-safe span {
+  margin: 0 !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  font-size: 12px !important;
+  line-height: 1.24 !important;
+  color: var(--v21109-muted) !important;
+  -webkit-text-fill-color: var(--v21109-muted) !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+html.v21109-system-ui-stability-root body[data-screen="fishing"] .v21109-bite-callout-safe .v2046-bite-start {
+  min-height: 40px !important;
+  margin-top: 2px !important;
+  border-radius: 17px !important;
+  background: linear-gradient(180deg, #fff8b4, #69e9ff 55%, #1eb1e9) !important;
+  border: 1px solid rgba(255,255,255,.78) !important;
+  color: #052e49 !important;
+  -webkit-text-fill-color: #052e49 !important;
+  font-weight: 1000 !important;
+  box-shadow: 0 10px 22px rgba(0,67,100,.18), inset 0 1px 0 rgba(255,255,255,.82) !important;
+}
+html.v21109-system-ui-stability-root body[data-screen="fishing"] .v21109-action-badge-stable {
+  position: fixed !important;
+  left: 50% !important;
+  top: var(--v21109-alert-top) !important;
+  right: auto !important;
+  bottom: auto !important;
+  max-width: calc(100vw - 36px) !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  animation: none !important;
+  filter: none !important;
+  z-index: 178 !important;
+  backface-visibility: hidden !important;
+}
+html.v21109-system-ui-stability-root body[data-screen="fishing"] .v21109-battle-strip-stable {
+  width: var(--v21109-card-width) !important;
+  max-width: calc(100vw - 28px) !important;
+  max-height: min(132px, calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 226px)) !important;
+  overflow: hidden !important;
+  contain: layout style paint !important;
+  transform-style: flat !important;
+  will-change: auto !important;
+}
+html.v21109-system-ui-stability-root body[data-screen="fishing"] .v21109-reel-console-stable {
+  width: var(--v21109-card-width) !important;
+  max-width: calc(100vw - 28px) !important;
+  max-height: min(196px, calc(100svh - var(--v21109-battle-top) - env(safe-area-inset-bottom, 0px) - 118px)) !important;
+  contain: layout style paint !important;
+  transform-style: flat !important;
+  will-change: auto !important;
+}
+html.v21109-system-ui-stability-root body[data-screen="fishing"] .v21109-phase-clean-node {
+  transition: opacity 120ms ease, visibility 120ms ease !important;
+}
+html.v21109-system-ui-stability-root body[data-screen="fishing"] :is(.fishing-phase-bite,.fishing-phase-reeling,.fishing-phase-success,.fishing-phase-fail) .v21109-phase-clean-node,
+html.v21109-system-ui-stability-root body[data-screen="fishing"][data-v21109-fishing-phase="bite"] .v21109-phase-clean-node,
+html.v21109-system-ui-stability-root body[data-screen="fishing"][data-v21109-fishing-phase="reeling"] .v21109-phase-clean-node,
+html.v21109-system-ui-stability-root body[data-screen="fishing"][data-v21109-fishing-phase="result"] .v21109-phase-clean-node {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v21109-system-ui-stability-root body[data-screen="fishing"] .v21109-result-card-stable {
+  width: var(--v21109-card-width) !important;
+  max-height: var(--v21109-result-max-height) !important;
+  overflow: hidden auto !important;
+  overscroll-behavior: contain !important;
+  contain: layout style paint !important;
+  background: var(--v21109-glass) !important;
+  border: 1px solid var(--v21109-line) !important;
+  box-shadow: var(--v21109-shadow) !important;
+}
+html.v21109-system-ui-stability-root .v21109-readout-stable {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v21109-system-ui-stability-root .v21109-premium-glass-card {
+  box-sizing: border-box !important;
+  max-width: calc(100vw - 24px) !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+  border-color: rgba(218,252,255,.58) !important;
+  box-shadow: 0 16px 40px rgba(0,35,78,.18), inset 0 1px 0 rgba(255,255,255,.78) !important;
+}
+html.v21109-system-ui-stability-root .v21109-touch-target {
+  min-height: max(34px, min(44px, 11vw)) !important;
+  -webkit-tap-highlight-color: transparent !important;
+  touch-action: manipulation !important;
+}
+html.v21109-system-ui-stability-root .v21109-readable-input {
+  background: rgba(246,253,255,.96) !important;
+  color: #062f48 !important;
+  -webkit-text-fill-color: #062f48 !important;
+  border-color: rgba(126,225,245,.48) !important;
+}
+html.v21109-system-ui-stability-root .v21109-no-drag-image {
+  -webkit-user-drag: none !important;
+  user-select: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21109-system-ui-stability-root *,
+  html.v21109-system-ui-stability-root *::before,
+  html.v21109-system-ui-stability-root *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
