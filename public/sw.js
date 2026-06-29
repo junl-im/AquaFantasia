@@ -1,5 +1,5 @@
-// v2.1.103 opening/loadout final guard: native video chrome shell, strict fishing split bar, bite/result compact cleanup.
-const CACHE_NAME = 'aqua-fantasia-v2.1.103-opening-loadout-final-guard';
+// v2.1.104 overlap/design engine polish: active-screen collision sweep, premium cards, fishing phase cleanup.
+const CACHE_NAME = 'aqua-fantasia-v2.1.104-overlap-design-engine-polish';
 const CORE_ASSETS = [
   './',
   './index.html',

@@ -518,6 +518,7 @@ class AquaFantasiaGame {
     this.installV21101PremiumDesignContinuityPass();
     this.installV21102PremiumDesignSystemContinuationPass();
     this.installV21103OpeningLoadoutFinalGuardPass();
+    this.installV21104OverlapDesignEnginePolishPass();
     this.preloadCriticalImages();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
@@ -11802,6 +11803,251 @@ class AquaFantasiaGame {
       html.dataset.v21103FrameBudget = now - lastRun > 110 && lastRun > 0 ? 'long-frame-observed' : 'stable';
       lastRun = now;
       syncViewport();
+      normalizeOpening();
+      normalizeFishing();
+      normalizeDesign();
+    };
+    const schedule = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(run);
+    };
+    schedule();
+    window.visualViewport?.addEventListener('resize', schedule, { passive: true });
+    window.visualViewport?.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('orientationchange', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule, { passive: true });
+    document.addEventListener('visibilitychange', schedule, { passive: true });
+    observer = new MutationObserver(schedule);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-screen', 'data-fishing-phase'], childList: true, subtree: true });
+    window.addEventListener('pagehide', () => observer?.disconnect(), { once: true, passive: true });
+  }
+
+
+  private installV21104OverlapDesignEnginePolishPass(): void {
+    let raf = 0;
+    let observer: MutationObserver | null = null;
+    let lastRun = 0;
+    const html = document.documentElement;
+    const setImportant = (node: HTMLElement | null | undefined, entries: Array<[string, string]>) => {
+      if (!node) return;
+      for (const [name, value] of entries) node.style.setProperty(name, value, 'important');
+    };
+    const removeImportant = (node: HTMLElement | null | undefined, props: string[]) => {
+      if (!node) return;
+      for (const prop of props) node.style.removeProperty(prop);
+    };
+    const hideNode = (node: HTMLElement | null | undefined, reason: string) => {
+      if (!node) return;
+      node.dataset.v21104HiddenReason = reason;
+      node.setAttribute('aria-hidden', 'true');
+      setImportant(node, [['display', 'none'], ['visibility', 'hidden'], ['opacity', '0'], ['pointer-events', 'none']]);
+    };
+    const showNode = (node: HTMLElement | null | undefined, reason: string) => {
+      if (!node) return;
+      if (node.dataset.v21104HiddenReason && node.dataset.v21104HiddenReason !== reason) return;
+      delete node.dataset.v21104HiddenReason;
+      node.removeAttribute('aria-hidden');
+      removeImportant(node, ['display', 'visibility', 'opacity', 'pointer-events']);
+    };
+    const getFishingPhase = (screen: HTMLElement): string => {
+      const base = screen.dataset.fishingPhase || screen.dataset.v21104FishingPhase || screen.dataset.v21103FishingPhase || screen.dataset.v21102FishingPhase || screen.dataset.v21101FishingPhase || 'idle';
+      if (screen.querySelector('.catch-result-card')) return 'result';
+      return base;
+    };
+    const focusedFishing = (phase: string) => ['bite', 'reeling', 'result', 'success', 'fail'].includes(phase);
+    const syncViewportVars = () => {
+      const viewport = window.visualViewport;
+      const vw = Math.max(1, Math.floor(viewport?.width ?? window.innerWidth));
+      const vh = Math.max(1, Math.floor(viewport?.height ?? window.innerHeight));
+      const offsetLeft = Math.max(0, Math.floor(viewport?.offsetLeft ?? 0));
+      const offsetRight = Math.max(0, Math.floor(viewport ? window.innerWidth - viewport.width - viewport.offsetLeft : 0));
+      const compact = vh <= 610 || vw <= 370;
+      const safeLeft = Math.max(10, offsetLeft + (compact ? 10 : 12));
+      const safeRight = Math.max(10, offsetRight + (compact ? 10 : 12));
+      html.classList.add('v21104-overlap-design-engine-root');
+      html.dataset.v21104OverlapDesignEngine = 'active-screen-collision-sweep-premium-performance';
+      html.dataset.v21104ActiveScreen = document.body.dataset.screen || 'unknown';
+      html.style.setProperty('--v21104-safe-left', `${safeLeft}px`);
+      html.style.setProperty('--v21104-safe-right', `${safeRight}px`);
+      html.style.setProperty('--v21104-loadout-width', `${Math.max(282, Math.min(560, vw - safeLeft - safeRight - 8))}px`);
+      html.style.setProperty('--v21104-loadout-height', `${compact ? 18 : 19}px`);
+      html.style.setProperty('--v21104-loadout-icon', `${compact ? 3 : 4}px`);
+      html.style.setProperty('--v21104-bite-top', `clamp(${compact ? 40 : 44}px, ${compact ? '5.8svh' : '6.4svh'}, 70px)`);
+      html.style.setProperty('--v21104-battle-top', `calc(env(safe-area-inset-top, 0px) + ${compact ? 74 : 82}px)`);
+      html.style.setProperty('--v21104-reel-bottom', `calc(env(safe-area-inset-bottom, 0px) + ${compact ? 8 : 12}px)`);
+      html.style.setProperty('--v21104-result-max-height', `calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - ${compact ? 8 : 14}px)`);
+      html.classList.toggle('v21104-compact-viewport', compact);
+    };
+    const normalizeOpening = () => {
+      const opening = dom.app.querySelector<HTMLElement>('.v21103-opening-cinematic,.v21102-opening-cinematic,.v21101-opening-cinematic,.v21100-opening-cinematic,.v2199-opening-cinematic,.v2120-opening-cinematic');
+      if (!opening) return;
+      opening.classList.add('v21104-opening-cinematic');
+      opening.dataset.v21104Opening = 'video-only-first-frame-inert-no-native-ui';
+      const video = opening.querySelector<HTMLVideoElement>('video');
+      if (video) {
+        video.classList.add('v21104-opening-video');
+        video.controls = false;
+        video.removeAttribute('controls');
+        video.removeAttribute('poster');
+        video.muted = true;
+        video.defaultMuted = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.preload = 'auto';
+        video.setAttribute('muted', '');
+        video.setAttribute('autoplay', '');
+        video.setAttribute('playsinline', 'true');
+        video.setAttribute('webkit-playsinline', 'true');
+        video.setAttribute('controlsList', 'nodownload nofullscreen noremoteplayback noplaybackrate');
+        const videoControlsList = (video as HTMLVideoElement & { controlsList?: DOMTokenList }).controlsList;
+        videoControlsList?.add('nodownload');
+        videoControlsList?.add('nofullscreen');
+        videoControlsList?.add('noremoteplayback');
+        video.setAttribute('disablepictureinpicture', 'true');
+        video.setAttribute('disableremoteplayback', 'true');
+        try { video.disablePictureInPicture = true; } catch { /* optional */ }
+        try { (video as HTMLVideoElement & { disableRemotePlayback?: boolean }).disableRemotePlayback = true; } catch { /* optional */ }
+        video.dataset.v21104OpeningVideo = 'posterless-native-controls-pip-remote-blocked-shell';
+        const markReady = () => {
+          if (video.readyState < 2 && video.currentTime <= 0.01) return;
+          opening.classList.add('v21104-first-frame-ready', 'v21103-first-frame-ready');
+          opening.closest<HTMLElement>('.village-world-screen')?.classList.add('v21104-opening-first-frame-ready', 'v21103-opening-first-frame-ready');
+          video.style.setProperty('opacity', '1', 'important');
+          html.dataset.v21104OpeningState = 'first-frame-ready-shell-cleared';
+        };
+        setImportant(video, [['pointer-events', 'none'], ['user-select', 'none'], ['-webkit-user-select', 'none'], ['-webkit-touch-callout', 'none'], ['background', '#000'], ['opacity', opening.classList.contains('v21104-first-frame-ready') ? '1' : '0.001']]);
+        if (!video.dataset.v21104FirstFrameListeners) {
+          video.dataset.v21104FirstFrameListeners = 'installed';
+          video.addEventListener('loadeddata', markReady, { passive: true });
+          video.addEventListener('canplay', markReady, { passive: true });
+          video.addEventListener('playing', markReady, { passive: true });
+          video.addEventListener('timeupdate', markReady, { passive: true });
+          video.requestVideoFrameCallback?.(() => markReady());
+          video.addEventListener('error', () => { opening.classList.add('v21104-video-fallback'); video.style.setProperty('opacity', '0', 'important'); }, { once: true, passive: true });
+          markReady();
+        }
+      }
+      dom.app.querySelectorAll<HTMLElement>('.v2119-opening-bubble,.v2120-opening-bubble,.v2121-opening-bubble,.v2122-opening-bubble,.v2123-opening-bubble,.v2124-opening-bubble,.v2125-opening-bubble,.v2127-opening-bubble,.v2128-opening-bubble,.v2129-opening-bubble,.v2130-opening-bubble,.v2131-opening-bubble,.v2177-opening-status,.v2173-opening-skip,.v2121-opening-skip,.v2120-opening-vignette,.toast-card,.runtime-toast,.v21104-opening-cinematic > :not(video),.v21103-opening-cinematic > :not(video)').forEach((node) => {
+        if (!opening.contains(node) || node.parentElement === opening) hideNode(node, 'v21104-opening-video-only');
+      });
+      dom.app.querySelectorAll<HTMLElement>('.top-menu-bar,.v2167-top-menu-hard-lock,.hud-bar,.pioneer-bar,.bottom-dock,.virtual-joystick,.joystick-root,.runtime-toast,.toast-card').forEach((node) => {
+        if (!opening.contains(node)) hideNode(node, 'v21104-opening-chrome-hidden');
+      });
+    };
+    const normalizeFishing = () => {
+      const fishing = dom.app.querySelector<HTMLElement>('.fishing-screen,[data-screen="fishing"],.runtime-fishing-screen');
+      if (!fishing) return;
+      const phase = getFishingPhase(fishing);
+      const focused = focusedFishing(phase);
+      fishing.classList.add('v21104-fishing-overlap-screen');
+      fishing.dataset.v21104FishingPhase = phase;
+      let loadoutTop = Math.max(50, Math.floor((window.visualViewport?.offsetTop ?? 0) + 62));
+      const sea = fishing.querySelector<HTMLElement>('.sea-route-card,.fishing-sea-card,.v21104-sea-lane-card,.v21103-sea-lane-card,.v21101-sea-lane-card,.v21100-sea-lane-card,.v2199-sea-lane-card,.v2137-sea-lane-card');
+      if (sea && !focused) {
+        sea.classList.add('v21104-sea-lane-card');
+        sea.dataset.v21104Lane = 'safe-left-readable-no-overflow';
+        setImportant(sea, [['position', 'fixed'], ['left', 'var(--v21104-safe-left)'], ['right', 'auto'], ['max-width', 'calc(100vw - var(--v21104-safe-left) - var(--v21104-safe-right) - 8px)'], ['min-width', '0'], ['overflow', 'hidden'], ['z-index', '136']]);
+        const rect = sea.getBoundingClientRect();
+        if (rect.height > 0) loadoutTop = Math.max(loadoutTop, Math.ceil(rect.bottom + 4));
+      }
+      html.style.setProperty('--v21104-loadout-top', `min(calc(100svh - 292px), max(calc(env(safe-area-inset-top, 0px) + 64px), ${loadoutTop}px))`);
+      document.querySelectorAll<HTMLElement>('.bottom-nav,.bottom-dock,.v2097-bottom-nav,.v2098-bottom-nav').forEach((node) => {
+        if (!fishing.contains(node)) hideNode(node, 'v21104-fishing-no-village-dock');
+      });
+      fishing.querySelectorAll<HTMLElement>('.fishing-loadout-strip,.v21103-fishing-loadout,.v21101-fishing-loadout,.v21100-fishing-loadout,.v2199-fishing-loadout,.v2198-fishing-loadout,.v2197-fishing-loadout,.v2196-fishing-loadout').forEach((strip) => {
+        strip.classList.add('v21104-fishing-loadout');
+        strip.dataset.v21104Loadout = 'strict-half-half-hairline-icons-safe-under-sea-lane';
+        if (focused) { hideNode(strip, 'v21104-focused-stage-hide-prep-loadout'); return; }
+        showNode(strip, 'v21104-focused-stage-hide-prep-loadout');
+        setImportant(strip, [['position', 'fixed'], ['left', 'var(--v21104-safe-left)'], ['top', 'var(--v21104-loadout-top)'], ['right', 'auto'], ['bottom', 'auto'], ['width', 'var(--v21104-loadout-width)'], ['max-width', 'calc(100vw - var(--v21104-safe-left) - var(--v21104-safe-right) - 8px)'], ['display', 'grid'], ['grid-template-columns', 'minmax(0, 1fr) minmax(0, 1fr)'], ['gap', '3px'], ['padding', '0'], ['margin', '0'], ['border', '0'], ['background', 'transparent'], ['overflow', 'visible'], ['z-index', '139']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.v21104-fishing-loadout > *, .v21103-loadout-cell,.v21101-loadout-cell,.v21100-loadout-cell,.v2199-loadout-cell,.v2198-loadout-cell,.v2197-loadout-cell,.v2196-loadout-cell').forEach((cell) => {
+        cell.classList.add('v21104-loadout-cell');
+        cell.dataset.v21104LoadoutCell = 'exact-half-text-first-no-left-overflow';
+        setImportant(cell, [['display', 'grid'], ['grid-template-columns', 'var(--v21104-loadout-icon) minmax(0, 1fr)'], ['align-items', 'center'], ['gap', '3px'], ['height', 'var(--v21104-loadout-height)'], ['min-height', 'var(--v21104-loadout-height)'], ['max-height', 'var(--v21104-loadout-height)'], ['padding', '1px 7px'], ['overflow', 'hidden'], ['white-space', 'nowrap'], ['border-radius', '12px'], ['contain', 'layout style paint']]);
+        cell.querySelectorAll<HTMLElement>('img,svg,.icon').forEach((icon) => {
+          icon.classList.add('v21104-loadout-icon');
+          setImportant(icon, [['width', 'var(--v21104-loadout-icon)'], ['height', 'var(--v21104-loadout-icon)'], ['min-width', 'var(--v21104-loadout-icon)'], ['min-height', 'var(--v21104-loadout-icon)'], ['max-width', 'var(--v21104-loadout-icon)'], ['max-height', 'var(--v21104-loadout-icon)'], ['object-fit', 'contain'], ['filter', 'none']]);
+        });
+        cell.querySelectorAll<HTMLElement>('.v21103-loadout-copy,.v21101-loadout-copy,.v21100-loadout-copy,.v2199-loadout-copy,.v2198-loadout-copy,.v2197-loadout-copy,.v2196-loadout-copy,span').forEach((copy) => {
+          copy.classList.add('v21104-loadout-copy');
+          setImportant(copy, [['display', 'grid'], ['grid-template-columns', 'auto minmax(0, 1fr)'], ['align-items', 'center'], ['column-gap', '4px'], ['min-width', '0'], ['max-width', '100%'], ['overflow', 'hidden'], ['white-space', 'nowrap'], ['line-height', '1']]);
+          copy.querySelectorAll<HTMLElement>('strong').forEach((node) => setImportant(node, [['font-size', '9px'], ['line-height', '1'], ['font-weight', '1000'], ['letter-spacing', '-.04em'], ['overflow', 'hidden'], ['text-overflow', 'ellipsis'], ['white-space', 'nowrap']]));
+          copy.querySelectorAll<HTMLElement>('em,span,small,p').forEach((node) => setImportant(node, [['font-size', '7.2px'], ['line-height', '1'], ['overflow', 'hidden'], ['text-overflow', 'ellipsis'], ['white-space', 'nowrap']]));
+        });
+      });
+      const prepSelectors = '.fishing-guide-card,.action-badge,.recent-catch-strip,.v2132-fishing-director,.v2133-fishing-coach,.v2134-fishing-coach,.v2135-fishing-coach,.v2136-fishing-coach,.v2138-fishing-coach,.v2140-fishing-priority-hint,.v2142-fishing-priority-hint,.v21104-fishing-loadout,.v21103-fishing-loadout,.v21102-fishing-loadout,.v21101-fishing-loadout,.v21100-fishing-loadout,.v2199-fishing-loadout,.v2198-fishing-loadout';
+      if (focused) fishing.querySelectorAll<HTMLElement>(prepSelectors).forEach((node) => hideNode(node, 'v21104-focused-stage-clean-prep-overlap'));
+      fishing.querySelectorAll<HTMLElement>('.bite-callout,.v21103-bite-callout,.v21101-bite-callout,.v21100-bite-callout,.v2199-bite-callout,.v2198-bite-callout,.v2197-bite-callout').forEach((node) => {
+        node.classList.add('v21104-bite-callout');
+        if (phase !== 'bite') { hideNode(node, 'v21104-bite-hidden-unless-active'); return; }
+        showNode(node, 'v21104-bite-hidden-unless-active');
+        setImportant(node, [['position', 'fixed'], ['left', '50%'], ['top', 'var(--v21104-bite-top)'], ['transform', 'translate(-50%, -50%)'], ['width', 'min(274px, calc(100vw - 42px))'], ['max-height', '104px'], ['overflow', 'auto'], ['z-index', '158']]);
+      });
+      const reelingSelectors = '.v2199-battle-strip,.v2198-battle-strip,.v2197-battle-strip,.v2153-battle-strip,.v2199-reel-console,.v2198-reel-console,.v2197-reel-console,.v2055-reel-console,.v2053-reel-touch-zone,.reel-panel,.hold-pad';
+      fishing.querySelectorAll<HTMLElement>(reelingSelectors).forEach((node) => {
+        if (phase === 'reeling') showNode(node, 'v21104-no-reeling-artifact-cleanup');
+        else hideNode(node, 'v21104-no-reeling-artifact-cleanup');
+      });
+      if (phase === 'reeling') {
+        fishing.querySelectorAll<HTMLElement>('.v2199-battle-strip,.v2198-battle-strip,.v2197-battle-strip,.v2153-battle-strip').forEach((node) => {
+          node.classList.add('v21104-battle-strip');
+          setImportant(node, [['position', 'fixed'], ['left', '50%'], ['top', 'var(--v21104-battle-top)'], ['transform', 'translateX(-50%)'], ['width', 'min(308px, calc(100vw - 28px))'], ['max-width', 'calc(100vw - 28px)'], ['z-index', '150']]);
+        });
+        fishing.querySelectorAll<HTMLElement>('.v2199-reel-console,.v2198-reel-console,.v2197-reel-console,.v2055-reel-console,.v2053-reel-touch-zone').forEach((node) => {
+          node.classList.add('v21104-reel-safe-control');
+          setImportant(node, [['position', 'fixed'], ['left', '50%'], ['bottom', 'var(--v21104-reel-bottom)'], ['transform', 'translateX(-50%)'], ['width', 'min(308px, calc(100vw - 28px))'], ['max-width', 'calc(100vw - 28px)'], ['z-index', '151']]);
+        });
+      }
+      fishing.querySelectorAll<HTMLElement>('.catch-result-card,.v21103-result-card,.v21101-result-card,.v21100-result-card,.v2199-result-card,.v2198-result-card,.v2197-result-card').forEach((node) => {
+        node.classList.add('v21104-result-card');
+        node.dataset.v21104Result = 'compact-premium-two-column-actions-no-bottom-push';
+        setImportant(node, [['position', 'fixed'], ['left', '50%'], ['top', '50%'], ['transform', 'translate(-50%, -50%)'], ['width', 'min(294px, calc(100vw - 22px))'], ['max-height', 'var(--v21104-result-max-height)'], ['overflow', 'auto'], ['padding', '8px'], ['border-radius', '22px'], ['z-index', '160'], ['overscroll-behavior', 'contain']]);
+        node.querySelectorAll<HTMLElement>('img').forEach((img) => setImportant(img, [['max-height', '58px'], ['object-fit', 'contain']]));
+        node.querySelectorAll<HTMLElement>('.rarity-badge,.grade-badge,.result-ribbon,.catch-rarity,[class*="rarity"],[class*="grade"],[class*="ribbon"]').forEach((badge) => setImportant(badge, [['max-height', '24px'], ['font-size', '9.5px'], ['line-height', '1.04'], ['padding', '3px 7px'], ['border-radius', '999px'], ['overflow', 'hidden']]));
+        node.querySelectorAll<HTMLElement>('.v2196-result-actions,.v2051-result-actions,.v2057-result-actions,.v2059-result-actions,.v2074-result-actions,.v2169-result-actions').forEach((actions) => {
+          actions.classList.add('v21104-result-actions');
+          setImportant(actions, [['display', 'grid'], ['grid-template-columns', 'minmax(0, 1fr) minmax(0, 1fr)'], ['gap', '5px'], ['margin-top', '6px']]);
+        });
+        node.querySelectorAll<HTMLElement>('button').forEach((button) => setImportant(button, [['min-height', '36px'], ['padding', '7px 8px']]));
+      });
+    };
+    const normalizeDesign = () => {
+      dom.app.querySelectorAll<HTMLElement>('.runtime-menu-screen,.runtime-panel,.runtime-shop-card,.shop-card,.dialog-card,.v2130-build-confirm-card,.runtime-item-card,.dex-card,.mission-card,.catch-result-card,.building-detail-card,.profile-card,.map-card').forEach((node) => {
+        if (node.closest('.v21104-opening-cinematic,.v21103-opening-cinematic,.v21101-opening-cinematic,.v21100-opening-cinematic,.v2199-opening-cinematic')) return;
+        node.classList.add('v21104-ocean-depth-card');
+        node.dataset.v21104Design = 'premium-ocean-glass-readable-safe-card';
+        setImportant(node, [['max-width', 'calc(100vw - 20px)'], ['overflow-wrap', 'anywhere'], ['word-break', 'keep-all']]);
+      });
+      dom.app.querySelectorAll<HTMLElement>('button,.runtime-btn,.v2097-ui-close,.v2097-menu-close,.v2059-screen-close,.v2059-result-close,.game-dialog-close,.cast-button').forEach((node) => {
+        if (node.closest('.v21104-opening-cinematic,.v21103-opening-cinematic,.v21101-opening-cinematic,.v21100-opening-cinematic,.v2199-opening-cinematic')) return;
+        node.classList.add('v21104-premium-button');
+        setImportant(node, [['touch-action', 'manipulation'], ['-webkit-tap-highlight-color', 'transparent']]);
+      });
+      dom.app.querySelectorAll<HTMLElement>('.v2097-ui-close,.v2097-menu-close,.v2059-screen-close,.v2059-result-close,.game-dialog-close,[aria-label*="닫기"]').forEach((node) => {
+        if (node.closest('.v21104-opening-cinematic,.v21103-opening-cinematic,.v21101-opening-cinematic,.v21100-opening-cinematic,.v2199-opening-cinematic')) return;
+        node.classList.add('v21104-close-x');
+      });
+      dom.app.querySelectorAll<HTMLElement>('input,textarea,select').forEach((node) => {
+        node.classList.add('v21104-readable-input');
+        node.dataset.v21104InputTone = 'bright-aqua-readable-no-black-regression';
+      });
+      dom.app.querySelectorAll<HTMLImageElement>('img').forEach((img) => {
+        if (img.closest('.v21104-opening-cinematic,.v21103-opening-cinematic')) return;
+        img.draggable = false;
+        img.decoding = 'async';
+        if (!img.closest('.village-world-screen,.fishing-stage,.hud-bar,.fishing-hud')) img.loading = 'lazy';
+        img.classList.add('v21104-no-drag-image');
+      });
+    };
+    const run = () => {
+      raf = 0;
+      if (document.hidden) return;
+      const now = performance.now();
+      html.dataset.v21104FrameBudget = now - lastRun > 120 && lastRun > 0 ? 'long-frame-observed-throttled' : 'stable';
+      lastRun = now;
+      syncViewportVars();
       normalizeOpening();
       normalizeFishing();
       normalizeDesign();

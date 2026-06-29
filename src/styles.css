@@ -66731,3 +66731,308 @@ html.v21103-opening-loadout-final-guard-root body[data-screen="fishing"] :is(.v2
   pointer-events: none !important;
 }
 
+
+
+/* v2.1.104: active-screen overlap sweep, premium ocean design, fishing phase cleanup. v21104-overlap-design-engine-polish */
+html.v21104-overlap-design-engine-root {
+  --v21104-safe-left: max(10px, env(safe-area-inset-left, 0px));
+  --v21104-safe-right: max(10px, env(safe-area-inset-right, 0px));
+  --v21104-loadout-top: calc(env(safe-area-inset-top, 0px) + 66px);
+  --v21104-loadout-width: min(560px, calc(100vw - var(--v21104-safe-left) - var(--v21104-safe-right) - 8px));
+  --v21104-loadout-height: 19px;
+  --v21104-loadout-icon: 4px;
+  --v21104-bite-top: clamp(44px, 6.4svh, 70px);
+  --v21104-battle-top: calc(env(safe-area-inset-top, 0px) + 82px);
+  --v21104-reel-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  --v21104-result-max-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 14px);
+  --v21104-glass: linear-gradient(180deg, rgba(255,255,255,.985), rgba(239,254,255,.965) 42%, rgba(111,226,249,.9));
+  --v21104-ink: #03263d;
+  --v21104-muted: rgba(5,58,88,.76);
+  --v21104-line: rgba(255,255,255,.88);
+  --v21104-shadow: 0 16px 34px rgba(0,42,84,.16), inset 0 1px 0 rgba(255,255,255,.94);
+}
+html.v21104-overlap-design-engine-root .v21104-opening-cinematic,
+html.v21104-overlap-design-engine-root .v21103-opening-cinematic,
+html.v21104-overlap-design-engine-root .v21101-opening-cinematic,
+html.v21104-overlap-design-engine-root .v21100-opening-cinematic {
+  position: fixed !important;
+  inset: 0 !important;
+  overflow: hidden !important;
+  background: #000 !important;
+  z-index: 9999 !important;
+  isolation: isolate !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html.v21104-overlap-design-engine-root .v21104-opening-cinematic::before,
+html.v21104-overlap-design-engine-root .v21104-opening-cinematic::after,
+html.v21104-overlap-design-engine-root .v21103-opening-cinematic::before,
+html.v21104-overlap-design-engine-root .v21103-opening-cinematic::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 3 !important;
+  pointer-events: none !important;
+  background: #000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+html.v21104-overlap-design-engine-root .v21104-opening-cinematic.v21104-first-frame-ready::before,
+html.v21104-overlap-design-engine-root .v21104-opening-cinematic.v21104-first-frame-ready::after,
+html.v21104-overlap-design-engine-root .v21103-opening-cinematic.v21104-first-frame-ready::before,
+html.v21104-overlap-design-engine-root .v21103-opening-cinematic.v21104-first-frame-ready::after,
+html.v21104-overlap-design-engine-root .village-world-screen.v21104-opening-first-frame-ready .v21104-opening-cinematic::before,
+html.v21104-overlap-design-engine-root .village-world-screen.v21104-opening-first-frame-ready .v21104-opening-cinematic::after {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+html.v21104-overlap-design-engine-root .v21104-opening-video,
+html.v21104-overlap-design-engine-root .v21103-opening-video,
+html.v21104-overlap-design-engine-root .v21101-opening-video,
+html.v21104-overlap-design-engine-root .v21100-opening-video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: #000 !important;
+  opacity: .001 !important;
+  pointer-events: none !important;
+  -webkit-touch-callout: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+html.v21104-overlap-design-engine-root .v21104-opening-cinematic.v21104-first-frame-ready .v21104-opening-video,
+html.v21104-overlap-design-engine-root .v21103-opening-cinematic.v21104-first-frame-ready .v21104-opening-video,
+html.v21104-overlap-design-engine-root .village-world-screen.v21104-opening-first-frame-ready .v21104-opening-video {
+  opacity: 1 !important;
+}
+html.v21104-overlap-design-engine-root .v21104-opening-video::-webkit-media-controls,
+html.v21104-overlap-design-engine-root .v21104-opening-video::-webkit-media-controls-panel,
+html.v21104-overlap-design-engine-root .v21104-opening-video::-webkit-media-controls-play-button,
+html.v21104-overlap-design-engine-root .v21104-opening-video::-webkit-media-controls-start-playback-button,
+html.v21104-overlap-design-engine-root .v21104-opening-video::-webkit-media-controls-overlay-play-button,
+html.v21104-overlap-design-engine-root .v21104-opening-video::-webkit-media-controls-enclosure,
+html.v21104-overlap-design-engine-root .v21103-opening-video::-webkit-media-controls-start-playback-button,
+html.v21104-overlap-design-engine-root .v21103-opening-video::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v21104-overlap-design-engine-root .v21104-opening-cinematic > :not(video),
+html.v21104-overlap-design-engine-root .v21103-opening-cinematic > :not(video),
+html.v21104-overlap-design-engine-root .v21104-opening-cinematic :is(.v2119-opening-bubble,.v2120-opening-bubble,.v2121-opening-bubble,.v2122-opening-bubble,.v2123-opening-bubble,.v2124-opening-bubble,.v2125-opening-bubble,.v2177-opening-status,.v2173-opening-skip,.v2120-opening-vignette,.toast-card,.runtime-toast) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .bottom-nav,
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .bottom-dock,
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v2097-bottom-nav,
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v2098-bottom-nav {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-sea-lane-card {
+  left: var(--v21104-safe-left) !important;
+  right: auto !important;
+  max-width: calc(100vw - var(--v21104-safe-left) - var(--v21104-safe-right) - 8px) !important;
+  overflow: hidden !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+  z-index: 136 !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-fishing-loadout {
+  position: fixed !important;
+  left: var(--v21104-safe-left) !important;
+  top: var(--v21104-loadout-top) !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: var(--v21104-loadout-width) !important;
+  max-width: calc(100vw - var(--v21104-safe-left) - var(--v21104-safe-right) - 8px) !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 3px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+  z-index: 139 !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-loadout-cell {
+  display: grid !important;
+  grid-template-columns: var(--v21104-loadout-icon) minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 3px !important;
+  height: var(--v21104-loadout-height) !important;
+  min-height: var(--v21104-loadout-height) !important;
+  max-height: var(--v21104-loadout-height) !important;
+  padding: 1px 7px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  background: var(--v21104-glass) !important;
+  color: var(--v21104-ink) !important;
+  -webkit-text-fill-color: var(--v21104-ink) !important;
+  border: 1px solid var(--v21104-line) !important;
+  box-shadow: 0 8px 15px rgba(0,48,88,.11), inset 0 1px 0 rgba(255,255,255,.94) !important;
+  contain: layout style paint !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-loadout-cell > img,
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-loadout-icon {
+  width: var(--v21104-loadout-icon) !important;
+  height: var(--v21104-loadout-icon) !important;
+  min-width: var(--v21104-loadout-icon) !important;
+  min-height: var(--v21104-loadout-icon) !important;
+  max-width: var(--v21104-loadout-icon) !important;
+  max-height: var(--v21104-loadout-icon) !important;
+  object-fit: contain !important;
+  filter: none !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-loadout-copy {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  column-gap: 4px !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-loadout-copy strong {
+  min-width: 0 !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  letter-spacing: -.04em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-loadout-copy :is(em,span,small,p) {
+  min-width: 0 !important;
+  font-size: 7.2px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  color: var(--v21104-muted) !important;
+  -webkit-text-fill-color: var(--v21104-muted) !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-bite-callout {
+  top: var(--v21104-bite-top) !important;
+  width: min(274px, calc(100vw - 42px)) !important;
+  max-height: 104px !important;
+  overflow: auto !important;
+  z-index: 158 !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-battle-strip {
+  position: fixed !important;
+  left: 50% !important;
+  top: var(--v21104-battle-top) !important;
+  transform: translateX(-50%) !important;
+  width: min(308px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  z-index: 150 !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-reel-safe-control {
+  position: fixed !important;
+  left: 50% !important;
+  bottom: var(--v21104-reel-bottom) !important;
+  transform: translateX(-50%) !important;
+  width: min(308px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  z-index: 151 !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-result-card {
+  width: min(294px, calc(100vw - 22px)) !important;
+  max-height: var(--v21104-result-max-height) !important;
+  padding: 8px !important;
+  border-radius: 22px !important;
+  overflow: auto !important;
+  overscroll-behavior: contain !important;
+  background: var(--v21104-glass) !important;
+  color: var(--v21104-ink) !important;
+  -webkit-text-fill-color: var(--v21104-ink) !important;
+  border-color: var(--v21104-line) !important;
+  box-shadow: var(--v21104-shadow) !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-result-card img {
+  max-height: 58px !important;
+  object-fit: contain !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-result-card :is(.rarity-badge,.grade-badge,.result-ribbon,.catch-rarity,[class*="rarity"],[class*="grade"],[class*="ribbon"]) {
+  max-height: 24px !important;
+  font-size: 9.5px !important;
+  line-height: 1.04 !important;
+  padding: 3px 7px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+}
+html.v21104-overlap-design-engine-root body[data-screen="fishing"] .v21104-result-actions {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 5px !important;
+  margin-top: 6px !important;
+}
+html.v21104-overlap-design-engine-root .v21104-ocean-depth-card,
+html.v21104-overlap-design-engine-root :is(.runtime-menu-screen,.runtime-panel,.runtime-shop-card,.shop-card,.dialog-card,.v2130-build-confirm-card,.runtime-item-card,.dex-card,.mission-card,.catch-result-card,.building-detail-card,.profile-card,.map-card) {
+  max-width: calc(100vw - 20px) !important;
+  background: var(--v21104-glass) !important;
+  color: var(--v21104-ink) !important;
+  -webkit-text-fill-color: var(--v21104-ink) !important;
+  border-color: var(--v21104-line) !important;
+  box-shadow: var(--v21104-shadow) !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html.v21104-overlap-design-engine-root .v21104-premium-button {
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html.v21104-overlap-design-engine-root .v21104-close-x {
+  display: grid !important;
+  place-items: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+  border-radius: 999px !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(147,235,251,.86)) !important;
+  color: #07344f !important;
+  -webkit-text-fill-color: #07344f !important;
+  border: 1px solid rgba(255,255,255,.82) !important;
+  box-shadow: 0 8px 18px rgba(0,31,70,.16), inset 0 1px 0 rgba(255,255,255,.92) !important;
+}
+html.v21104-overlap-design-engine-root .v21104-readable-input {
+  background: rgba(242,253,255,.96) !important;
+  color: #03283f !important;
+  -webkit-text-fill-color: #03283f !important;
+  border-color: rgba(255,255,255,.86) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.94), 0 8px 16px rgba(0,55,96,.08) !important;
+}
+html.v21104-overlap-design-engine-root .v21104-no-drag-image {
+  -webkit-user-drag: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21104-overlap-design-engine-root * {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
