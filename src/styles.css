@@ -66249,3 +66249,236 @@ html.v21101-premium-design-continuity-root .v21101-readable-input {
     transition-duration: .01ms !important;
   }
 }
+
+/* v2.1.102: premium design system continuation, opening first-frame shell, fishing split loadout and compact UI. v21102-premium-design-system-continuation */
+html.v21102-premium-design-system-continuation-root {
+  --v21102-safe-left: max(12px, env(safe-area-inset-left, 0px));
+  --v21102-safe-right: max(12px, env(safe-area-inset-right, 0px));
+  --v21102-loadout-top-min: calc(env(safe-area-inset-top, 0px) + 66px);
+  --v21102-loadout-top: var(--v21102-loadout-top-min);
+  --v21102-loadout-width: min(568px, calc(100vw - var(--v21102-safe-left) - var(--v21102-safe-right) - 8px));
+  --v21102-loadout-height: 22px;
+  --v21102-loadout-icon: 5px;
+  --v21102-bite-top: clamp(52px, 8.2svh, 82px);
+  --v21102-result-max-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 12px);
+  --v21102-glass: linear-gradient(180deg, rgba(255,255,255,.99), rgba(240,254,255,.98) 48%, rgba(129,232,250,.92));
+  --v21102-ink: #03263d;
+  --v21102-muted: rgba(5,58,88,.76);
+  --v21102-line: rgba(255,255,255,.9);
+  --v21102-shadow: 0 14px 30px rgba(0,42,84,.14), inset 0 1px 0 rgba(255,255,255,.94);
+}
+html.v21102-premium-design-system-continuation-root .v21102-opening-cinematic,
+html.v21102-premium-design-system-continuation-root .v21101-opening-cinematic,
+html.v21102-premium-design-system-continuation-root .v21100-opening-cinematic {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100svh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+  overflow: hidden !important;
+  z-index: 2147483640 !important;
+  box-shadow: none !important;
+  isolation: isolate !important;
+  touch-action: none !important;
+}
+html.v21102-premium-design-system-continuation-root .v21102-opening-cinematic::before,
+html.v21102-premium-design-system-continuation-root .v21102-opening-cinematic::after,
+html.v21102-premium-design-system-continuation-root .v21101-opening-cinematic::before,
+html.v21102-premium-design-system-continuation-root .v21101-opening-cinematic::after,
+html.v21102-premium-design-system-continuation-root .v21100-opening-cinematic::before,
+html.v21102-premium-design-system-continuation-root .v21100-opening-cinematic::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -4px !important;
+  z-index: 2147483642 !important;
+  background: #000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: none !important;
+}
+html.v21102-premium-design-system-continuation-root .v21102-opening-cinematic.v21102-first-frame-ready::before,
+html.v21102-premium-design-system-continuation-root .v21102-opening-cinematic.v21102-first-frame-ready::after,
+html.v21102-premium-design-system-continuation-root .village-world-screen.v21102-opening-first-frame-ready .v21102-opening-cinematic::before,
+html.v21102-premium-design-system-continuation-root .village-world-screen.v21102-opening-first-frame-ready .v21102-opening-cinematic::after,
+html.v21102-premium-design-system-continuation-root .v21101-opening-cinematic.v21102-first-frame-ready::before,
+html.v21102-premium-design-system-continuation-root .v21101-opening-cinematic.v21102-first-frame-ready::after,
+html.v21102-premium-design-system-continuation-root .v21100-opening-cinematic.v21102-first-frame-ready::before,
+html.v21102-premium-design-system-continuation-root .v21100-opening-cinematic.v21102-first-frame-ready::after {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+html.v21102-premium-design-system-continuation-root .v21102-opening-video,
+html.v21102-premium-design-system-continuation-root .v21101-opening-video,
+html.v21102-premium-design-system-continuation-root .v21100-opening-video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  background: #000 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  opacity: .001 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+html.v21102-premium-design-system-continuation-root .v21102-opening-cinematic.v21102-first-frame-ready .v21102-opening-video,
+html.v21102-premium-design-system-continuation-root .village-world-screen.v21102-opening-first-frame-ready .v21102-opening-video,
+html.v21102-premium-design-system-continuation-root .v21102-opening-cinematic.v21102-first-frame-ready .v21101-opening-video,
+html.v21102-premium-design-system-continuation-root .v21102-opening-cinematic.v21102-first-frame-ready .v21100-opening-video {
+  opacity: 1 !important;
+}
+html.v21102-premium-design-system-continuation-root .v21102-opening-video::-webkit-media-controls,
+html.v21102-premium-design-system-continuation-root .v21102-opening-video::-webkit-media-controls-panel,
+html.v21102-premium-design-system-continuation-root .v21102-opening-video::-webkit-media-controls-play-button,
+html.v21102-premium-design-system-continuation-root .v21102-opening-video::-webkit-media-controls-start-playback-button,
+html.v21102-premium-design-system-continuation-root .v21102-opening-video::-webkit-media-controls-overlay-play-button,
+html.v21102-premium-design-system-continuation-root .v21102-opening-video::-webkit-media-controls-enclosure,
+html.v21102-premium-design-system-continuation-root .v21101-opening-video::-webkit-media-controls-start-playback-button,
+html.v21102-premium-design-system-continuation-root .v21101-opening-video::-webkit-media-controls-overlay-play-button,
+html.v21102-premium-design-system-continuation-root .v21100-opening-video::-webkit-media-controls-start-playback-button,
+html.v21102-premium-design-system-continuation-root .v21100-opening-video::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v21102-premium-design-system-continuation-root .v21102-opening-cinematic > :not(video),
+html.v21102-premium-design-system-continuation-root .v21101-opening-cinematic > :not(video),
+html.v21102-premium-design-system-continuation-root .v21100-opening-cinematic > :not(video),
+html.v21102-premium-design-system-continuation-root .v21102-opening-cinematic :is(.v2119-opening-bubble,.v2120-opening-bubble,.v2121-opening-bubble,.v2122-opening-bubble,.v2123-opening-bubble,.v2124-opening-bubble,.v2125-opening-bubble,.v2177-opening-status,.v2173-opening-skip,.v2120-opening-vignette,.toast-card,.runtime-toast) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.v21102-premium-design-system-continuation-root body[data-screen="fishing"] .v21102-fishing-loadout {
+  position: fixed !important;
+  left: var(--v21102-safe-left) !important;
+  top: var(--v21102-loadout-top) !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: var(--v21102-loadout-width) !important;
+  max-width: calc(100vw - var(--v21102-safe-left) - var(--v21102-safe-right) - 8px) !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 5px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+  z-index: 138 !important;
+}
+html.v21102-premium-design-system-continuation-root body[data-screen="fishing"] .v21102-loadout-cell {
+  display: grid !important;
+  grid-template-columns: var(--v21102-loadout-icon) minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 4px !important;
+  height: var(--v21102-loadout-height) !important;
+  min-height: var(--v21102-loadout-height) !important;
+  max-height: var(--v21102-loadout-height) !important;
+  padding: 2px 8px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  background: var(--v21102-glass) !important;
+  color: var(--v21102-ink) !important;
+  -webkit-text-fill-color: var(--v21102-ink) !important;
+  border: 1px solid var(--v21102-line) !important;
+  box-shadow: 0 8px 15px rgba(0,48,88,.1), inset 0 1px 0 rgba(255,255,255,.94) !important;
+  contain: layout style paint !important;
+}
+html.v21102-premium-design-system-continuation-root body[data-screen="fishing"] .v21102-loadout-cell > img,
+html.v21102-premium-design-system-continuation-root body[data-screen="fishing"] .v21102-loadout-icon {
+  width: var(--v21102-loadout-icon) !important;
+  height: var(--v21102-loadout-icon) !important;
+  min-width: var(--v21102-loadout-icon) !important;
+  min-height: var(--v21102-loadout-icon) !important;
+  max-width: var(--v21102-loadout-icon) !important;
+  max-height: var(--v21102-loadout-icon) !important;
+  object-fit: contain !important;
+  filter: none !important;
+}
+html.v21102-premium-design-system-continuation-root body[data-screen="fishing"] .v21102-loadout-copy {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  column-gap: 4px !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+html.v21102-premium-design-system-continuation-root body[data-screen="fishing"] .v21102-loadout-copy strong {
+  min-width: 0 !important;
+  font-size: 9.5px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  letter-spacing: -.035em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v21102-premium-design-system-continuation-root body[data-screen="fishing"] .v21102-loadout-copy :is(em,span,small,p) {
+  min-width: 0 !important;
+  font-size: 7.9px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  color: var(--v21102-muted) !important;
+  -webkit-text-fill-color: var(--v21102-muted) !important;
+}
+html.v21102-premium-design-system-continuation-root body[data-screen="fishing"] .v21102-bite-callout {
+  top: var(--v21102-bite-top) !important;
+  width: min(292px, calc(100vw - 44px)) !important;
+  max-height: 124px !important;
+  overflow: auto !important;
+  z-index: 155 !important;
+}
+html.v21102-premium-design-system-continuation-root body[data-screen="fishing"] .v21102-result-card {
+  width: min(306px, calc(100vw - 24px)) !important;
+  max-height: var(--v21102-result-max-height) !important;
+  padding: 8px !important;
+  border-radius: 22px !important;
+  overflow: auto !important;
+  background: var(--v21102-glass) !important;
+  box-shadow: var(--v21102-shadow) !important;
+}
+html.v21102-premium-design-system-continuation-root .v21102-ocean-glass-card,
+html.v21102-premium-design-system-continuation-root :is(.runtime-menu-screen,.runtime-panel,.runtime-shop-card,.shop-card,.dialog-card,.v2130-build-confirm-card,.runtime-item-card,.dex-card,.mission-card,.catch-result-card) {
+  background: var(--v21102-glass) !important;
+  color: var(--v21102-ink) !important;
+  -webkit-text-fill-color: var(--v21102-ink) !important;
+  border-color: var(--v21102-line) !important;
+  box-shadow: var(--v21102-shadow) !important;
+}
+html.v21102-premium-design-system-continuation-root .v21102-touch-target {
+  min-height: 44px !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html.v21102-premium-design-system-continuation-root .v21102-readable-input {
+  background: rgba(240,253,255,.94) !important;
+  color: #03283f !important;
+  -webkit-text-fill-color: #03283f !important;
+  border-color: rgba(255,255,255,.84) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21102-premium-design-system-continuation-root * {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

@@ -516,6 +516,7 @@ class AquaFantasiaGame {
     this.installV2199PremiumDesignPolishPass();
     this.installV21100PremiumMilestonePolishPass();
     this.installV21101PremiumDesignContinuityPass();
+    this.installV21102PremiumDesignSystemContinuationPass();
     this.preloadCriticalImages();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
@@ -11391,6 +11392,203 @@ class AquaFantasiaGame {
       if (document.hidden) return;
       const now = performance.now();
       html.dataset.v21101FrameBudget = now - lastRun > 110 && lastRun > 0 ? 'long-frame-observed' : 'stable';
+      lastRun = now;
+      syncViewport();
+      normalizeOpening();
+      normalizeFishing();
+      normalizeDesign();
+    };
+    const schedule = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(run);
+    };
+    schedule();
+    window.visualViewport?.addEventListener('resize', schedule, { passive: true });
+    window.visualViewport?.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('orientationchange', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule, { passive: true });
+    document.addEventListener('visibilitychange', schedule, { passive: true });
+    observer = new MutationObserver(schedule);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-screen', 'data-fishing-phase'], childList: true, subtree: true });
+    window.addEventListener('pagehide', () => observer?.disconnect(), { once: true, passive: true });
+  }
+
+  private installV21102PremiumDesignSystemContinuationPass(): void {
+    let raf = 0;
+    let observer: MutationObserver | null = null;
+    let lastRun = 0;
+    const html = document.documentElement;
+    const setImportant = (node: HTMLElement | null | undefined, entries: Array<[string, string]>) => {
+      if (!node) return;
+      for (const [name, value] of entries) node.style.setProperty(name, value, 'important');
+    };
+    const removeImportant = (node: HTMLElement | null | undefined, props: string[]) => {
+      if (!node) return;
+      for (const prop of props) node.style.removeProperty(prop);
+    };
+    const hideNode = (node: HTMLElement | null | undefined, reason: string) => {
+      if (!node) return;
+      node.dataset.v21102HiddenReason = reason;
+      node.setAttribute('aria-hidden', 'true');
+      setImportant(node, [['display', 'none'], ['visibility', 'hidden'], ['opacity', '0'], ['pointer-events', 'none']]);
+    };
+    const showNode = (node: HTMLElement | null | undefined, reason: string) => {
+      if (!node) return;
+      if (node.dataset.v21102HiddenReason && node.dataset.v21102HiddenReason !== reason) return;
+      delete node.dataset.v21102HiddenReason;
+      node.removeAttribute('aria-hidden');
+      removeImportant(node, ['display', 'visibility', 'opacity', 'pointer-events']);
+    };
+    const phaseOf = (fishing: HTMLElement) => fishing.dataset.fishingPhase || fishing.dataset.v21101FishingPhase || fishing.dataset.v21100FishingPhase || fishing.dataset.v2199FishingPhase || 'idle';
+    const isFocusedFishing = (phase: string) => ['bite', 'reeling', 'result', 'success', 'fail'].includes(phase);
+    const syncViewport = () => {
+      const viewport = window.visualViewport;
+      const vw = Math.max(1, Math.floor(viewport?.width ?? window.innerWidth));
+      const vh = Math.max(1, Math.floor(viewport?.height ?? window.innerHeight));
+      const offsetLeft = Math.max(0, Math.floor(viewport?.offsetLeft ?? 0));
+      const offsetRight = Math.max(0, Math.floor(viewport ? window.innerWidth - viewport.width - viewport.offsetLeft : 0));
+      const compact = vh <= 600 || vw <= 360;
+      const safeLeft = Math.max(12, offsetLeft + (vw <= 372 ? 10 : 12));
+      const safeRight = Math.max(12, offsetRight + (vw <= 372 ? 10 : 12));
+      const loadoutWidth = Math.max(292, Math.min(568, vw - safeLeft - safeRight - 8));
+      html.classList.add('v21102-premium-design-system-continuation-root');
+      html.dataset.v21102PremiumDesignSystem = 'active-screen-ocean-glass-opening-fishing-continuation';
+      html.style.setProperty('--v21102-safe-left', `${safeLeft}px`);
+      html.style.setProperty('--v21102-safe-right', `${safeRight}px`);
+      html.style.setProperty('--v21102-loadout-width', `${loadoutWidth}px`);
+      html.style.setProperty('--v21102-loadout-height', `${compact ? 20 : 22}px`);
+      html.style.setProperty('--v21102-loadout-icon', `${compact ? 4 : 5}px`);
+      html.style.setProperty('--v21102-loadout-top-min', `calc(env(safe-area-inset-top, 0px) + ${compact ? 62 : 66}px)`);
+      html.style.setProperty('--v21102-bite-top', `clamp(${compact ? 46 : 52}px, ${compact ? '7.2svh' : '8.2svh'}, 82px)`);
+      html.style.setProperty('--v21102-result-max-height', `calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - ${compact ? 8 : 12}px)`);
+      html.classList.toggle('v21102-compact-viewport', compact);
+    };
+    const normalizeOpening = () => {
+      const opening = dom.app.querySelector<HTMLElement>('.v21101-opening-cinematic,.v21100-opening-cinematic,.v2199-opening-cinematic,.v2198-opening-cinematic,.v2197-opening-cinematic,.v2196-opening-cinematic,.v2120-opening-cinematic');
+      if (!opening) return;
+      opening.classList.add('v21102-opening-cinematic');
+      opening.dataset.v21102Opening = 'video-only-first-frame-shell-no-native-ui';
+      const video = opening.querySelector<HTMLVideoElement>('video');
+      if (video) {
+        video.classList.add('v21102-opening-video');
+        video.controls = false;
+        video.muted = true;
+        video.defaultMuted = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.preload = 'auto';
+        video.removeAttribute('poster');
+        video.setAttribute('muted', '');
+        video.setAttribute('autoplay', '');
+        video.setAttribute('playsinline', 'true');
+        video.setAttribute('webkit-playsinline', 'true');
+        video.setAttribute('controlsList', 'nodownload nofullscreen noremoteplayback noplaybackrate');
+        video.setAttribute('disablepictureinpicture', 'true');
+        video.setAttribute('disableremoteplayback', 'true');
+        video.setAttribute('tabindex', '-1');
+        video.dataset.v21102OpeningVideo = 'native-play-mark-masked-until-first-frame';
+        const markReady = () => {
+          if (video.readyState < 2 && video.currentTime <= 0.01) return;
+          opening.classList.add('v21102-first-frame-ready', 'v21101-first-frame-ready', 'v21100-first-frame-ready', 'v2199-first-frame-ready');
+          opening.closest<HTMLElement>('.village-world-screen')?.classList.add('v21102-opening-first-frame-ready', 'v21101-opening-first-frame-ready', 'v21100-opening-first-frame-ready');
+          video.style.setProperty('opacity', '1', 'important');
+          html.dataset.v21102PremiumDesignSystem = 'opening-first-frame-shell-cleared';
+        };
+        setImportant(video, [['pointer-events', 'none'], ['user-select', 'none'], ['-webkit-user-select', 'none'], ['-webkit-touch-callout', 'none'], ['opacity', opening.classList.contains('v21102-first-frame-ready') ? '1' : '0.001']]);
+        if (!video.dataset.v21102FirstFrameListeners) {
+          video.dataset.v21102FirstFrameListeners = 'installed';
+          video.addEventListener('loadeddata', markReady, { passive: true });
+          video.addEventListener('canplay', markReady, { passive: true });
+          video.addEventListener('playing', markReady, { passive: true });
+          video.addEventListener('timeupdate', markReady, { passive: true });
+          video.requestVideoFrameCallback?.(() => markReady());
+          video.addEventListener('error', () => { opening.classList.add('v21102-video-fallback'); video.style.setProperty('opacity', '0', 'important'); }, { once: true, passive: true });
+        }
+      }
+      dom.app.querySelectorAll<HTMLElement>('.v2119-opening-bubble,.v2120-opening-bubble,.v2121-opening-bubble,.v2122-opening-bubble,.v2123-opening-bubble,.v2124-opening-bubble,.v2125-opening-bubble,.v2127-opening-bubble,.v2128-opening-bubble,.v2129-opening-bubble,.v2130-opening-bubble,.v2131-opening-bubble,.v2177-opening-status,.v2173-opening-skip,.v2121-opening-skip,.v2120-opening-vignette,.toast-card,.runtime-toast,.v21102-opening-cinematic > :not(video),.v21101-opening-cinematic > :not(video)').forEach((node) => {
+        if (!opening.contains(node) || node.parentElement === opening) hideNode(node, 'v21102-opening-video-only');
+      });
+      ['.top-menu-bar,.v2167-top-menu-hard-lock,.hud-bar,.pioneer-bar,.bottom-dock,.virtual-joystick,.joystick-root,.runtime-toast,.toast-card'].forEach((selector) => {
+        dom.app.querySelectorAll<HTMLElement>(selector).forEach((node) => { if (!opening.contains(node)) hideNode(node, 'v21102-opening-chrome-hidden'); });
+      });
+    };
+    const normalizeFishing = () => {
+      const fishing = dom.app.querySelector<HTMLElement>('.fishing-screen,[data-screen="fishing"],.runtime-fishing-screen');
+      if (!fishing) return;
+      const phase = phaseOf(fishing);
+      const focused = isFocusedFishing(phase);
+      fishing.classList.add('v21102-fishing-premium-screen');
+      fishing.dataset.v21102FishingPhase = phase;
+      const sea = fishing.querySelector<HTMLElement>('.sea-route-card,.fishing-sea-card,.v21101-sea-lane-card,.v21100-sea-lane-card,.v2199-sea-lane-card,.v2137-sea-lane-card');
+      let top = Math.max(52, Math.floor((window.visualViewport?.offsetTop ?? 0) + 64));
+      if (sea && !focused) {
+        sea.classList.add('v21102-sea-lane-card');
+        setImportant(sea, [['left', 'var(--v21102-safe-left)'], ['right', 'auto'], ['max-width', 'calc(100vw - var(--v21102-safe-left) - var(--v21102-safe-right) - 8px)'], ['overflow', 'hidden'], ['contain', 'layout style paint']]);
+        const rect = sea.getBoundingClientRect();
+        if (rect.height > 0) top = Math.max(top, Math.ceil(rect.bottom + 3));
+      }
+      html.style.setProperty('--v21102-loadout-top', `min(calc(100svh - 286px), max(var(--v21102-loadout-top-min), ${top}px))`);
+      fishing.querySelectorAll<HTMLElement>('.fishing-loadout-strip,.v21101-fishing-loadout,.v21100-fishing-loadout,.v2199-fishing-loadout,.v2198-fishing-loadout,.v2197-fishing-loadout,.v2196-fishing-loadout').forEach((strip) => {
+        strip.classList.add('v21102-fishing-loadout');
+        strip.dataset.v21102Loadout = 'thin-two-slot-text-first-continuation';
+        if (focused) { hideNode(strip, 'v21102-focused-stage-hide-loadout'); return; }
+        showNode(strip, 'v21102-focused-stage-hide-loadout');
+        setImportant(strip, [['position', 'fixed'], ['left', 'var(--v21102-safe-left)'], ['top', 'var(--v21102-loadout-top)'], ['right', 'auto'], ['bottom', 'auto'], ['width', 'var(--v21102-loadout-width)'], ['max-width', 'calc(100vw - var(--v21102-safe-left) - var(--v21102-safe-right) - 8px)'], ['display', 'grid'], ['grid-template-columns', 'minmax(0, 1fr) minmax(0, 1fr)'], ['gap', '5px'], ['padding', '0'], ['margin', '0'], ['border', '0'], ['background', 'transparent'], ['overflow', 'visible'], ['z-index', '137']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.v21102-fishing-loadout > *, .v21101-loadout-cell,.v21100-loadout-cell,.v2199-loadout-cell,.v2198-loadout-cell,.v2197-loadout-cell,.v2196-loadout-cell').forEach((cell) => {
+        cell.classList.add('v21102-loadout-cell');
+        cell.dataset.v21102LoadoutCell = 'two-slot-text-first-micro-icon-readable';
+        setImportant(cell, [['display', 'grid'], ['grid-template-columns', 'var(--v21102-loadout-icon) minmax(0, 1fr)'], ['align-items', 'center'], ['gap', '4px'], ['height', 'var(--v21102-loadout-height)'], ['min-height', 'var(--v21102-loadout-height)'], ['max-height', 'var(--v21102-loadout-height)'], ['padding', '2px 8px'], ['overflow', 'hidden'], ['white-space', 'nowrap'], ['border-radius', '12px'], ['contain', 'layout style paint']]);
+        cell.querySelectorAll<HTMLElement>('img,svg,.icon').forEach((icon) => {
+          icon.classList.add('v21102-loadout-icon');
+          setImportant(icon, [['width', 'var(--v21102-loadout-icon)'], ['height', 'var(--v21102-loadout-icon)'], ['min-width', 'var(--v21102-loadout-icon)'], ['min-height', 'var(--v21102-loadout-icon)'], ['max-width', 'var(--v21102-loadout-icon)'], ['max-height', 'var(--v21102-loadout-icon)'], ['object-fit', 'contain'], ['filter', 'none']]);
+        });
+        const copy = cell.querySelector<HTMLElement>('.v21101-loadout-copy,.v21100-loadout-copy,.v2199-loadout-copy,.v2198-loadout-copy,.v2197-loadout-copy,.v2196-loadout-copy,span');
+        if (copy) {
+          copy.classList.add('v21102-loadout-copy');
+          setImportant(copy, [['display', 'grid'], ['grid-template-columns', 'auto minmax(0, 1fr)'], ['align-items', 'center'], ['column-gap', '4px'], ['min-width', '0'], ['max-width', '100%'], ['overflow', 'hidden'], ['white-space', 'nowrap'], ['line-height', '1']]);
+          copy.querySelectorAll<HTMLElement>('strong').forEach((node) => setImportant(node, [['font-size', '9.5px'], ['line-height', '1'], ['font-weight', '1000'], ['letter-spacing', '-.035em'], ['overflow', 'hidden'], ['text-overflow', 'ellipsis'], ['white-space', 'nowrap']]));
+          copy.querySelectorAll<HTMLElement>('em,span,small,p').forEach((node) => setImportant(node, [['font-size', '7.9px'], ['line-height', '1'], ['overflow', 'hidden'], ['text-overflow', 'ellipsis'], ['white-space', 'nowrap']]));
+        }
+      });
+      if (focused) fishing.querySelectorAll<HTMLElement>('.fishing-guide-card,.action-badge,.recent-catch-strip,.v21102-fishing-loadout,.v21101-fishing-loadout,.v21100-fishing-loadout,.v2199-fishing-loadout,.v2198-fishing-loadout').forEach((node) => hideNode(node, 'v21102-focused-stage-clean'));
+      fishing.querySelectorAll<HTMLElement>('.bite-callout,.v21101-bite-callout,.v21100-bite-callout,.v2199-bite-callout,.v2198-bite-callout,.v2197-bite-callout').forEach((node) => {
+        node.classList.add('v21102-bite-callout');
+        if (phase !== 'bite') { hideNode(node, 'v21102-bite-hidden-unless-active'); return; }
+        showNode(node, 'v21102-bite-hidden-unless-active');
+        setImportant(node, [['position', 'fixed'], ['left', '50%'], ['top', 'var(--v21102-bite-top)'], ['transform', 'translate(-50%, -50%)'], ['width', 'min(292px, calc(100vw - 44px))'], ['max-height', '124px'], ['overflow', 'auto'], ['z-index', '155']]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.catch-result-card,.v21101-result-card,.v21100-result-card,.v2199-result-card,.v2198-result-card,.v2197-result-card').forEach((node) => {
+        node.classList.add('v21102-result-card');
+        node.dataset.v21102Result = 'compact-premium-readable-safe-modal';
+        setImportant(node, [['position', 'fixed'], ['left', '50%'], ['top', '50%'], ['transform', 'translate(-50%, -50%)'], ['width', 'min(306px, calc(100vw - 24px))'], ['max-height', 'var(--v21102-result-max-height)'], ['overflow', 'auto'], ['padding', '8px'], ['border-radius', '22px'], ['z-index', '155']]);
+        node.querySelectorAll<HTMLElement>('img').forEach((img) => setImportant(img, [['max-height', '70px'], ['object-fit', 'contain']]));
+      });
+      if (phase !== 'reeling') fishing.querySelectorAll<HTMLElement>('.v2199-battle-strip,.v2198-battle-strip,.v2197-battle-strip,.v2153-battle-strip,.v2199-reel-console,.v2198-reel-console,.v2197-reel-console,.v2055-reel-console,.v2053-reel-touch-zone').forEach((node) => hideNode(node, 'v21102-no-reeling-cleanup'));
+      else fishing.querySelectorAll<HTMLElement>('.v2199-battle-strip,.v2198-battle-strip,.v2197-battle-strip,.v2153-battle-strip,.v2199-reel-console,.v2198-reel-console,.v2197-reel-console,.v2055-reel-console,.v2053-reel-touch-zone').forEach((node) => showNode(node, 'v21102-no-reeling-cleanup'));
+    };
+    const normalizeDesign = () => {
+      html.dataset.v21102ActiveScreen = document.body.dataset.screen || 'unknown';
+      dom.app.querySelectorAll<HTMLElement>('.runtime-menu-screen,.runtime-panel,.runtime-shop-card,.shop-card,.dialog-card,.v2130-build-confirm-card,.runtime-item-card,.dex-card,.mission-card,.catch-result-card').forEach((node) => {
+        if (node.closest('.v21102-opening-cinematic,.v21101-opening-cinematic,.v21100-opening-cinematic,.v2199-opening-cinematic')) return;
+        node.classList.add('v21102-ocean-glass-card');
+        node.dataset.v21102Card = 'premium-ocean-glass-system-readable';
+      });
+      dom.app.querySelectorAll<HTMLElement>('button,.runtime-btn,.v2097-ui-close,.cast-button').forEach((node) => {
+        if (node.closest('.v21102-opening-cinematic,.v21101-opening-cinematic,.v21100-opening-cinematic,.v2199-opening-cinematic')) return;
+        node.classList.add('v21102-touch-target');
+      });
+      dom.app.querySelectorAll<HTMLElement>('input, textarea, select').forEach((node) => {
+        node.classList.add('v21102-readable-input');
+        node.dataset.v21102InputTone = 'aqua-readable-no-black-regression';
+      });
+    };
+    const run = () => {
+      raf = 0;
+      if (document.hidden) return;
+      const now = performance.now();
+      html.dataset.v21102FrameBudget = now - lastRun > 110 && lastRun > 0 ? 'long-frame-observed' : 'stable';
       lastRun = now;
       syncViewport();
       normalizeOpening();

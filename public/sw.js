@@ -1,5 +1,5 @@
-// v2.1.101 premium design continuity: lighter active-screen polish, first-frame opening mask, fishing split loadout and compact result guard.
-const CACHE_NAME = 'aqua-fantasia-v2.1.101-premium-design-continuity';
+// v2.1.102 premium design system continuation: active-screen ocean glass polish, opening first-frame shell, fishing split loadout/result cleanup.
+const CACHE_NAME = 'aqua-fantasia-v2.1.102-premium-design-system-continuation';
 const CORE_ASSETS = [
   './',
   './index.html',
