@@ -67527,3 +67527,116 @@ html.v21107-ui-stability-design-root #toast-root[data-v21107-stable-toast="throt
     scroll-behavior: auto !important;
   }
 }
+
+/* v2.1.108 fishing bite callout and fish-specific balance polish */
+html.v21108-fishing-bite-balance-root {
+  --v21108-card-width: min(328px, calc(100vw - 28px));
+  --v21108-bite-callout-top: clamp(176px, 39svh, 286px);
+  --v21108-alert-top: calc(env(safe-area-inset-top, 0px) + 112px);
+  --v21108-viewport-top: 0px;
+  --v21108-glass: linear-gradient(180deg, rgba(252,255,255,.98), rgba(171,243,255,.88) 48%, rgba(44,171,224,.54));
+  --v21108-line: rgba(255,255,255,.88);
+  --v21108-shadow: 0 20px 48px rgba(0,35,82,.25), inset 0 1px 0 rgba(255,255,255,.94);
+  --v21108-ink: #062d48;
+  --v21108-muted: #1c647c;
+}
+html.v21108-fishing-bite-balance-root body[data-screen="fishing"] .v21108-fishing-balance-screen {
+  overscroll-behavior: none !important;
+  touch-action: manipulation !important;
+}
+html.v21108-fishing-bite-balance-root body[data-screen="fishing"] .v21108-bite-callout-lowered {
+  position: fixed !important;
+  left: 50% !important;
+  top: var(--v21108-bite-callout-top) !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  width: var(--v21108-card-width) !important;
+  max-width: calc(100vw - 28px) !important;
+  max-height: min(210px, calc(100svh - var(--v21108-viewport-top) - env(safe-area-inset-bottom, 0px) - 36px)) !important;
+  display: grid !important;
+  align-content: center !important;
+  gap: 8px !important;
+  padding: 18px 18px 16px !important;
+  border-radius: 26px !important;
+  background: var(--v21108-glass) !important;
+  border: 1px solid var(--v21108-line) !important;
+  box-shadow: var(--v21108-shadow) !important;
+  color: var(--v21108-ink) !important;
+  -webkit-text-fill-color: var(--v21108-ink) !important;
+  text-align: center !important;
+  text-shadow: none !important;
+  pointer-events: auto !important;
+  z-index: 184 !important;
+  animation: none !important;
+  filter: none !important;
+  overflow: hidden !important;
+}
+html.v21108-fishing-bite-balance-root body[data-screen="fishing"] .v21108-bite-callout-lowered::before {
+  width: 38px !important;
+  height: 38px !important;
+  right: 14px !important;
+  top: 10px !important;
+  border: 1px solid rgba(255,255,255,.88) !important;
+  box-shadow: 0 8px 16px rgba(0,43,85,.18) !important;
+  font-size: 24px !important;
+}
+html.v21108-fishing-bite-balance-root body[data-screen="fishing"] .v21108-bite-callout-lowered strong {
+  font-size: clamp(27px, 7.4vw, 38px) !important;
+  line-height: .98 !important;
+  color: #06304b !important;
+  -webkit-text-fill-color: #06304b !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.86) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v21108-fishing-bite-balance-root body[data-screen="fishing"] .v21108-bite-callout-lowered span {
+  font-size: 12px !important;
+  line-height: 1.22 !important;
+  color: var(--v21108-muted) !important;
+  -webkit-text-fill-color: var(--v21108-muted) !important;
+  text-shadow: none !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+html.v21108-fishing-bite-balance-root body[data-screen="fishing"] .v21108-bite-callout-lowered .v2046-bite-start {
+  min-height: 40px !important;
+  margin-top: 2px !important;
+  border-radius: 17px !important;
+  background: linear-gradient(180deg, #fff8b7, #67e7ff 55%, #21b2e8) !important;
+  color: #05304b !important;
+  -webkit-text-fill-color: #05304b !important;
+  border: 1px solid rgba(255,255,255,.78) !important;
+  font-weight: 1000 !important;
+  box-shadow: 0 10px 22px rgba(0,67,100,.18), inset 0 1px 0 rgba(255,255,255,.82) !important;
+}
+html.v21108-fishing-bite-balance-root body[data-screen="fishing"] .v21108-action-badge-stable {
+  top: var(--v21108-alert-top) !important;
+  z-index: 174 !important;
+  animation: none !important;
+  transform: translate3d(-50%, 0, 0) !important;
+}
+html.v21108-fishing-bite-balance-root body[data-screen="fishing"] .v21108-fishing-cockpit-polish {
+  max-width: calc(100vw - 28px) !important;
+  backface-visibility: hidden !important;
+  transform-style: flat !important;
+  will-change: auto !important;
+}
+html.v21108-fishing-bite-balance-root body[data-screen="fishing"] .v21108-fish-pattern-readout {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21108-fishing-bite-balance-root *,
+  html.v21108-fishing-bite-balance-root *::before,
+  html.v21108-fishing-bite-balance-root *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

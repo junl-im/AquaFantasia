@@ -1,5 +1,5 @@
-// v2.1.107 UI stability design engine: throttled fishing feedback, scoped overlap polish, premium glass safety.
-const CACHE_NAME = 'aqua-fantasia-v2.1.107-ui-stability-design-engine';
+// v2.1.108 Fishing bite/balance polish: lowered bite callout, fish-specific tension and resistance, UI stability.
+const CACHE_NAME = 'aqua-fantasia-v2.1.108-fishing-bite-balance-polish';
 const CORE_ASSETS = [
   './',
   './index.html',
