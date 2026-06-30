@@ -4,6 +4,7 @@ import path from 'node:path';
 const root = process.cwd();
 const removed = [];
 const skipDirs = new Set(['node_modules', '.git']);
+const allowedRootMarkdown = new Set(['README.md', 'AI_HANDOFF_CARDVILLE.md']);
 
 function relOf(p) {
   return path.relative(root, p).replace(/\\/g, '/');
@@ -14,6 +15,10 @@ function removeEntry(p) {
   const rel = relOf(p);
   fs.rmSync(p, { recursive: true, force: true });
   removed.push(rel);
+}
+
+function isAllowedRootMarkdown(rel, name) {
+  return !rel.includes('/') && allowedRootMarkdown.has(name);
 }
 
 function isBackupDir(rel, name) {
@@ -31,7 +36,7 @@ function isForbiddenGeneratedDir(rel, name) {
 function isForbiddenTempFile(rel, name) {
   if (name.endsWith('.log')) return true;
   if (/_NOTES\.md$/i.test(name)) return true;
-  if (name.endsWith('.md') && rel !== 'README.md') return true;
+  if (name.endsWith('.md') && !isAllowedRootMarkdown(rel, name)) return true;
   return false;
 }
 

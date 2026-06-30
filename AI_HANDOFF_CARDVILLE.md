@@ -3,13 +3,13 @@
 ## 현재 기준
 
 - 프로젝트명: AquaFantasia / 아쿠아 판타지아
-- 기준 패키지 버전: `2.1.111`
+- 기준 패키지 버전: `2.1.112`
 - 기준 기록일: `2026-06-30 KST`
 - 실행 형태: Vite + TypeScript 모바일 세로 전용 웹 게임
 - 주요 배포 흐름: GitHub Actions `validate-and-deploy`에서 `npm ci` → `npm run validate` → `npm run typecheck` → `npm run build` → GitHub Pages 배포
 - 사용자 작업 환경: GitHub Desktop, Firebase 무료 플랜
 - 업로드 원본: `.git` 폴더 제외 통파일 zip
-- 산출물 zip 파일명 규칙: 짧게 쓰되 버전 숫자를 반드시 포함한다. 예: `AF-v2.1.111-full.zip`, `AF-v2.1.111-patch.zip`
+- 산출물 zip 파일명 규칙: 짧게 쓰되 버전 숫자를 반드시 포함한다. 예: `AF-v2.1.112-full.zip`, `AF-v2.1.112-patch.zip`
 
 ## 절대 유지 규칙
 
@@ -45,10 +45,83 @@
 
 - 낚시 상태: `idle`, `casting`, `waiting`, `bite`, `reeling`, `success`, `fail`
 - v2.1.110 핵심 기능은 유지됨: 낚시 안전 구간 0.5 단위 양자화, 물고기 피로도 기반 저항 완화, 입질/액션 배지/게이지/릴 콘솔/결과창 safe-area 재정렬
+- v2.1.112 핵심: 기능/게임 로직은 건드리지 않고, GitHub Actions에서 AI_HANDOFF_CARDVILLE.md가 삭제되던 검증 순서/패치 누락 문제를 해결
 - v2.1.111 핵심: 기능/게임 로직은 건드리지 않고, 누락 자산 참조와 인수인계/검증 정책만 보강
 - 마을 핵심: Pixi 월드, 80 x 80 계열 타일, 건물 설치/이동, 경로 탐색, NPC, 수동 조이스틱/키보드 이동
 - 저장 핵심: `localStorage` 키 `aqua-fantasia-save-v650`, 이전 키 일부 마이그레이션, 저장값 sanitize 후 저장
 - Firebase 핵심: `window.AQUA_FIREBASE_CONFIG`에 `apiKey`가 있을 때만 `firebase/app`, `firebase/auth`를 동적 import하고 익명 로그인 시도. 설정이 없으면 로컬 저장으로 진행
+
+
+## v2.1.112 GitHub Actions validate 실패 원인 및 AI_HANDOFF_CARDVILLE.md 삭제 재발 방지 기록
+
+### 발생한 실패
+
+- GitHub Actions `validate`에서 다음 순서로 실패했다.
+  1. `npm run validate` 실행
+  2. `tools/clean-old-patch-docs.mjs` 실행
+  3. 구버전 정리 로직이 `AI_HANDOFF_CARDVILLE.md`를 오래된 패치 문서로 오판해 삭제
+  4. `tools/validate-clean.mjs`는 구버전 문구 기준으로 통과
+  5. `tools/check-v21111-asset-policy-handoff.mjs`가 `AI_HANDOFF_CARDVILLE.md`를 읽으려다 `ENOENT` 발생
+
+### 직접 원인
+
+- v2.1.111 패치 zip에 `tools/check-v21111-asset-policy-handoff.mjs`는 포함됐지만, 그보다 먼저 실행되는 `tools/clean-old-patch-docs.mjs`와 `tools/validate-clean.mjs` 수정본이 포함되지 않았다.
+- 따라서 GitHub 저장소에는 `AI_HANDOFF_CARDVILLE.md`를 보존하지 않는 구버전 정리 스크립트가 남아 있었다.
+- 로컬 통파일 기준에서는 수정본이 있었더라도, 사용자가 실제로 적용한 패치 zip 기준으로는 필수 스크립트가 빠져 CI가 실패했다.
+
+### v2.1.112 해결 내용
+
+- `tools/clean-old-patch-docs.mjs`를 루트의 `README.md`와 `AI_HANDOFF_CARDVILLE.md`만 명시적으로 보존하도록 수정했다.
+- `tools/validate-clean.mjs`를 `README.md`와 `AI_HANDOFF_CARDVILLE.md`가 둘 다 있어야 통과하도록 강화했다. 더 이상 handoff 문서는 optional이 아니다.
+- `tools/check-v21112-ci-handoff-clean.mjs`를 추가해 다음을 확인한다.
+  - `package.json` validate 흐름이 v2.1.112 검증 스크립트를 사용함
+  - 정리 스크립트가 `AI_HANDOFF_CARDVILLE.md`를 보존함
+  - validate-clean이 handoff 문서를 필수로 요구함
+  - SVG 파일/런타임 참조 금지 유지
+  - CSS 자산 참조 누락 없음 유지
+  - 정상 동작 가능성이 높은 낚시/마을/오프닝 핵심 토큰이 유지됨
+- v2.1.112 패치 zip에는 반드시 아래 파일을 포함한다. `src/styles.css`는 v2.1.111 CSS 자산 경로 수정이 누락된 저장소에도 안전하게 적용되도록 포함한다.
+  - `package.json`
+  - `package-lock.json`
+  - `src/data.ts`
+  - `src/styles.css`
+  - `public/sw.js`
+  - `public/offline.html`
+  - `README.md`
+  - `AI_HANDOFF_CARDVILLE.md`
+  - `tools/clean-old-patch-docs.mjs`
+  - `tools/validate-clean.mjs`
+  - `tools/check-v21112-ci-handoff-clean.mjs`
+
+### 재발 방지 규칙
+
+- 인수인계 문서를 검사하는 스크립트를 추가하거나 변경할 때는, 반드시 그보다 먼저 실행되는 cleanup/validate 스크립트도 같이 확인하고 패치 zip에 포함한다.
+- `AI_HANDOFF_CARDVILLE.md`는 삭제 대상이 아니라 필수 문서다.
+- `README.md`와 `AI_HANDOFF_CARDVILLE.md` 외 새 `.md` 문서는 만들지 않는다.
+- 게임 로직, 낚시 수치, 마을 이동/건설, Firebase 저장 흐름은 이번 hotfix에서 건드리지 않았다.
+- SVG 이미지 절대 금지와 잘 작동되는 기능 불필요 수정 금지를 계속 유지한다.
+
+## v2.1.112 검수 결과
+
+### 통과한 항목
+
+```bash
+npm run validate
+npm run validate
+node tools/clean-old-patch-docs.mjs
+node tools/validate-clean.mjs
+node tools/check-v21112-ci-handoff-clean.mjs
+```
+
+- `npm run validate` 2회 연속 통과.
+- 반복 validate 이후에도 `AI_HANDOFF_CARDVILLE.md`가 삭제되지 않는 것을 확인.
+- 별도 smoke copy에서 `SOME_NOTES.md`, `npm-install.log`, `reports/`를 만든 뒤 cleanup 실행 시 임시 파일만 삭제되고 `README.md`, `AI_HANDOFF_CARDVILLE.md`는 보존되는 것을 확인.
+
+### 현재 환경 제한으로 미완료/주의
+
+- `npm run ci:registry:check`는 샌드박스 DNS 제한으로 `EAI_AGAIN registry.npmjs.org` 실패. package-lock 오염이 아니라 네트워크 접근 문제로 판단.
+- `npm run typecheck`는 `node_modules` 미설치 상태라 `howler`, `pixi.js`, `firebase`, `vite` 모듈 해석 실패. GitHub Actions의 `npm ci` 성공 후 재확인 필요.
+- GitHub Actions에서 `npm ci`, `npm run typecheck`, `npm run build`까지 최종 확인한다.
 
 ## v2.1.111 이번 패치에서 실제 변경한 항목
 

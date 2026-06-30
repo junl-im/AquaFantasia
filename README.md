@@ -1,4 +1,23 @@
-# AquaFantasia v2.1.111
+# AquaFantasia v2.1.112
+
+
+## v2.1.112 변경사항
+
+- GitHub Actions `validate` 실패 원인을 수정했습니다. 이전 패치 zip에 `tools/clean-old-patch-docs.mjs`, `tools/validate-clean.mjs`가 빠져 있어, 저장소의 구버전 정리 스크립트가 `AI_HANDOFF_CARDVILLE.md`를 오래된 문서로 오판해 삭제했습니다.
+- `tools/clean-old-patch-docs.mjs`를 루트의 `README.md`와 `AI_HANDOFF_CARDVILLE.md`만 보존하도록 명시적으로 고쳤습니다.
+- `tools/validate-clean.mjs`를 `README.md`와 `AI_HANDOFF_CARDVILLE.md`가 둘 다 있어야 통과하도록 강화했습니다. 이제 인수인계 파일이 삭제되면 더 이른 단계에서 명확히 실패합니다.
+- 신규 검증 스크립트 `tools/check-v21112-ci-handoff-clean.mjs`를 추가해 버전 동기화, SVG 금지, CSS 자산 존재, 인수인계 삭제 재발 방지, 정리/검증 스크립트 동기화를 확인합니다.
+- 게임 로직, 낚시 수치, 마을 이동/건설, Firebase 저장 흐름, 정상 작동 가능성이 높은 런타임 기능은 수정하지 않았습니다.
+
+## v2.1.112 GitHub Actions 실패 원인/해결 기록 - 2026-06-30 KST
+
+- 실패 로그 핵심: `clean-old-patch-docs`가 `AI_HANDOFF_CARDVILLE.md`를 삭제했고, 이후 `check-v21111-asset-policy-handoff.mjs`가 같은 파일을 읽으려다 `ENOENT`로 실패했습니다.
+- 직접 원인: v2.1.111 패치 zip에 신규 검증 스크립트는 들어갔지만, 이 스크립트와 짝이 되는 `clean-old-patch-docs.mjs`, `validate-clean.mjs` 수정본이 포함되지 않았습니다. 따라서 GitHub 저장소에는 구버전 정리 로직이 남아 있었습니다.
+- 해결: v2.1.112 패치 zip에는 `tools/clean-old-patch-docs.mjs`, `tools/validate-clean.mjs`, `tools/check-v21112-ci-handoff-clean.mjs`를 반드시 포함합니다. 또한 v2.1.111 CSS 자산 경로 수정 누락 가능성까지 막기 위해 `src/styles.css`도 패치 zip에 포함합니다.
+- 재발 방지: 앞으로 `AI_HANDOFF_CARDVILLE.md`를 요구하는 검증을 추가할 때는, 그보다 먼저 실행되는 정리 스크립트가 해당 파일을 보존하는지 함께 패치해야 합니다.
+- 검수 완료: `npm run validate` 2회 연속 통과, cleanup smoke test에서 임시 `.md`/`.log`/`reports`는 삭제하고 `README.md`/`AI_HANDOFF_CARDVILLE.md`는 보존됨을 확인했습니다.
+- 제한 사항: 현재 샌드박스는 `registry.npmjs.org` DNS 접근이 `EAI_AGAIN`으로 실패하고 `node_modules`가 없어 `npm run typecheck`는 의존성 해석 실패 상태입니다. GitHub Actions에서 `npm ci` 이후 재검수해야 합니다.
+- 절대 유지: SVG 이미지 금지, 잘 작동되는 기능 불필요 수정 금지, 산출물 zip 파일명 버전 숫자 포함.
 
 
 ## v2.1.111 변경사항

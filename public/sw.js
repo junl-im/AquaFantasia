@@ -1,5 +1,5 @@
-// v2.1.111 Asset policy/handoff guard: SVG ban, existing asset references, no gameplay touch.
-const CACHE_NAME = 'aqua-fantasia-v2.1.111-asset-policy-handoff';
+// v2.1.112 CI handoff clean guard: prevents AI_HANDOFF_CARDVILLE.md deletion, no gameplay touch.
+const CACHE_NAME = 'aqua-fantasia-v2.1.112-ci-handoff-clean';
 const CORE_ASSETS = [
   './',
   './index.html',
