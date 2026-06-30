@@ -301,6 +301,10 @@ class AquaFantasiaGame {
     document.documentElement.classList.add('portrait-only-game');
     installPortraitCssGuards();
     document.documentElement.dataset.version = APP_VERSION;
+    document.documentElement.classList.add('v21113-ui-ux-stability-root');
+    document.documentElement.dataset.v21113UiUxStability = 'safe-area-card-touch-scroll-design-sweep';
+    document.documentElement.classList.add('v21114-interaction-layout-design-root');
+    document.documentElement.dataset.v21114InteractionLayoutDesign = 'panel-nav-readability-scroll-polish';
     // v2.1.25 UI policy: keep opening video first-start-only without legacy chrome, lock player direction/motion, and refine top/bottom menu spacing.
     document.documentElement.dataset.v2098UiRecovery = 'v2098-dock-fishing-build-recovery';
     document.documentElement.dataset.v218StableRollback = 'v218-stable-ui-fishing-rollback';

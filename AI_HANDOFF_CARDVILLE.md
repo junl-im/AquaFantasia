@@ -3,13 +3,13 @@
 ## 현재 기준
 
 - 프로젝트명: AquaFantasia / 아쿠아 판타지아
-- 기준 패키지 버전: `2.1.112`
+- 기준 패키지 버전: `2.1.114`
 - 기준 기록일: `2026-06-30 KST`
 - 실행 형태: Vite + TypeScript 모바일 세로 전용 웹 게임
 - 주요 배포 흐름: GitHub Actions `validate-and-deploy`에서 `npm ci` → `npm run validate` → `npm run typecheck` → `npm run build` → GitHub Pages 배포
 - 사용자 작업 환경: GitHub Desktop, Firebase 무료 플랜
 - 업로드 원본: `.git` 폴더 제외 통파일 zip
-- 산출물 zip 파일명 규칙: 짧게 쓰되 버전 숫자를 반드시 포함한다. 예: `AF-v2.1.112-full.zip`, `AF-v2.1.112-patch.zip`
+- 산출물 zip 파일명 규칙: 짧게 쓰되 버전 숫자를 반드시 포함한다. 예: `AF-v2.1.114-full.zip`, `AF-v2.1.114-patch.zip`
 
 ## 절대 유지 규칙
 
@@ -45,11 +45,100 @@
 
 - 낚시 상태: `idle`, `casting`, `waiting`, `bite`, `reeling`, `success`, `fail`
 - v2.1.110 핵심 기능은 유지됨: 낚시 안전 구간 0.5 단위 양자화, 물고기 피로도 기반 저항 완화, 입질/액션 배지/게이지/릴 콘솔/결과창 safe-area 재정렬
+- v2.1.114 핵심: 기능/게임 로직은 건드리지 않고, 상점/가방/미션/도감/건설/결과창 카드 폭, 긴 문구 줄바꿈, 하단 내비 safe-area, 낚시 결과창 스크롤 경계를 마지막 CSS 스코프와 검증 스크립트로 보강
+- v2.1.113 핵심: 기능/게임 로직은 건드리지 않고, 모바일 세로 UI/UX 안정성 스윕을 마지막 CSS 스코프와 검증 스크립트로 보강
 - v2.1.112 핵심: 기능/게임 로직은 건드리지 않고, GitHub Actions에서 AI_HANDOFF_CARDVILLE.md가 삭제되던 검증 순서/패치 누락 문제를 해결
 - v2.1.111 핵심: 기능/게임 로직은 건드리지 않고, 누락 자산 참조와 인수인계/검증 정책만 보강
 - 마을 핵심: Pixi 월드, 80 x 80 계열 타일, 건물 설치/이동, 경로 탐색, NPC, 수동 조이스틱/키보드 이동
 - 저장 핵심: `localStorage` 키 `aqua-fantasia-save-v650`, 이전 키 일부 마이그레이션, 저장값 sanitize 후 저장
 - Firebase 핵심: `window.AQUA_FIREBASE_CONFIG`에 `apiKey`가 있을 때만 `firebase/app`, `firebase/auth`를 동적 import하고 익명 로그인 시도. 설정이 없으면 로컬 저장으로 진행
+
+
+## v2.1.114 인터랙션 레이아웃/디자인 스윕 기록
+
+### 적용 범위
+
+- 이번 패치는 v2.1.113 기준 `npm run validate` 통과를 확인한 뒤 진행했다.
+- 정상 작동 가능성이 높은 게임 시스템, 낚시 판정/보상 수치, 마을 좌표/충돌/건설 로직, Firebase 저장/익명 연동 흐름은 수정하지 않았다.
+- 엔진/의존성 업그레이드는 현재 샌드박스에서 `npm ci`, `typecheck`, `build`를 확인할 수 없어 보류했다. 작동 중인 기능을 깨지 않기 위해 검증 가능한 UI/UX CSS와 검증 스크립트 중심으로만 패치했다.
+- `src/main.ts`에는 루트 스코프용 `v21114-interaction-layout-design-root` 클래스와 `data-v21114-interaction-layout-design` 토큰만 추가했다.
+- `src/styles.css` 마지막 레이어에 다음 UI/UX 보정을 추가했다.
+  - 상점/가방/미션/도감/건설/프로필/결과창 계열 패널의 safe-area 기반 최대 폭/높이 제한
+  - 목록/카드 내부 긴 한글 문구 줄바꿈과 overflow-x 차단
+  - 버튼/CTA의 긴 문구 균형 줄바꿈, 터치 피드백, 좁은 화면 버튼 크기 보정
+  - 낚시 입질 콜아웃/액션 배지/결과창의 폭과 내부 스크롤 경계 보강
+  - 하단 내비게이션 폭을 좌우 safe-area 안으로 고정하고 각 버튼이 균등하게 줄어들도록 보정
+  - `100svh` 미지원 환경 fallback과 reduced-motion 환경 피드백 완화
+- `public/sw.js`, `public/offline.html`, `src/data.ts`, `package.json`, `package-lock.json`의 버전/캐시명을 v2.1.114로 동기화했다.
+- 신규 검증 스크립트 `tools/check-v21114-interaction-layout-design-sweep.mjs`를 추가해 v2.1.114 토큰, SVG 금지, CSS 자산 존재, README/handoff 보존, v2.1.112 삭제 재발 방지 정책을 함께 확인한다.
+
+### 재발 방지/주의
+
+- UI/UX 스윕은 반드시 루트 클래스 스코프 안에서만 작동해야 한다. 전역 무차별 수정은 금지한다.
+- SVG 이미지 절대 금지는 계속 유지한다. 새 이미지가 필요하면 PNG/WEBP만 사용한다.
+- `README.md`와 `AI_HANDOFF_CARDVILLE.md` 외 새 문서를 만들지 않는다.
+- 다음 AI는 실제 모바일 화면 캡처가 있을 때 v2.1.114 마지막 CSS 레이어가 상점/가방/미션/도감/낚시 결과창에서 스크롤을 과하게 숨기지 않는지 우선 확인한다.
+- 패치 zip에는 `package.json`에서 참조하는 신규 검증 스크립트와 기존 cleanup/validate 스크립트를 함께 포함한다. v2.1.112 실패처럼 CI에 구버전 스크립트가 남는 상황을 다시 만들면 안 된다.
+
+### v2.1.114 필수 검수
+
+```bash
+npm run validate
+```
+
+네트워크 가능한 환경에서는 이어서 아래를 확인한다.
+
+```bash
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+현재 샌드박스 검수 결과 `npm run validate`는 통과했다. `npm run ci:registry:check`는 `EAI_AGAIN registry.npmjs.org`로 실패할 수 있고, `node_modules`가 없어 install/typecheck/build는 GitHub Actions 결과를 최종 기준으로 본다.
+
+
+## v2.1.113 UI/UX 안정성 스윕 기록
+
+### 적용 범위
+
+- 이번 패치는 정상 작동 가능성이 높은 게임 시스템/낚시 수치/마을 이동/건설/Firebase 저장 흐름을 건드리지 않았다.
+- `src/main.ts`에는 루트 스코프용 `v21113-ui-ux-stability-root` 클래스와 `data-v21113-ui-ux-stability` 토큰만 추가했다.
+- `src/styles.css` 마지막 레이어에 모바일 세로 UI/UX 보정만 추가했다.
+  - 카드/모달/상점/도감/미션/결과창의 최대 폭과 텍스트 줄바꿈 보호
+  - 버튼/닫기/CTA의 최소 터치 높이와 focus-visible 표시
+  - 입력창 16px 이상 유지로 모바일 확대/가독성 문제 완화
+  - 이미지/캔버스/비디오 폭 제한과 이미지 드래그 방지
+  - 낚시 결과창 내부 스크롤/overscroll containment
+  - 하단 도크 safe-area 폭 보정
+  - reduced-motion 환경에서 애니메이션 부담 완화
+- `public/sw.js`, `public/offline.html`, `src/data.ts`, `package.json`, `package-lock.json`의 버전/캐시명을 v2.1.113으로 동기화했다.
+- 신규 검증 스크립트 `tools/check-v21113-ui-ux-stability-sweep.mjs`를 추가해 v2.1.113 토큰, SVG 금지, CSS 자산 존재, README/handoff 보존, v2.1.112 삭제 재발 방지 정책을 함께 확인한다.
+
+### 재발 방지/주의
+
+- UI/UX 스윕은 반드시 루트 클래스 스코프 안에서만 작동해야 한다. 전역 무차별 수정은 금지한다.
+- 정상 기능을 건드리지 않는 원칙 때문에 이번에는 낚시 상태머신, 보상 수치, 마을 좌표/충돌, Firebase 연동 로직을 수정하지 않았다.
+- SVG 이미지 절대 금지는 계속 유지한다. 새 이미지가 필요하면 PNG/WEBP만 사용한다.
+- `README.md`와 `AI_HANDOFF_CARDVILLE.md` 외 새 문서를 만들지 않는다.
+- 다음 AI는 실제 모바일 화면 캡처가 있을 때 v2.1.113 CSS 마지막 레이어가 기존 v2.1.110 낚시 안전 레인을 과하게 덮지 않는지 우선 확인한다.
+
+### v2.1.113 필수 검수
+
+```bash
+npm run validate
+```
+
+네트워크 가능한 환경에서는 이어서 아래를 확인한다.
+
+```bash
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+현재 샌드박스 검수 결과 `npm run validate`는 통과했다. `npm run ci:registry:check`는 `EAI_AGAIN registry.npmjs.org`로 실패했고, `node_modules`가 없어 install/typecheck/build는 GitHub Actions 결과를 최종 기준으로 본다.
 
 
 ## v2.1.112 GitHub Actions validate 실패 원인 및 AI_HANDOFF_CARDVILLE.md 삭제 재발 방지 기록

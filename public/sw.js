@@ -1,5 +1,5 @@
-// v2.1.112 CI handoff clean guard: prevents AI_HANDOFF_CARDVILLE.md deletion, no gameplay touch.
-const CACHE_NAME = 'aqua-fantasia-v2.1.112-ci-handoff-clean';
+// v2.1.114 interaction layout/design sweep: panel density, nav safe rails, and readability polish, no gameplay touch.
+const CACHE_NAME = 'aqua-fantasia-v2.1.114-interaction-layout-design-sweep';
 const CORE_ASSETS = [
   './',
   './index.html',

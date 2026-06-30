@@ -1,3 +1,38 @@
+# AquaFantasia v2.1.114
+
+
+## v2.1.114 변경사항
+
+- 상점/가방/미션/도감/건설/결과창 계열 카드의 폭, 최대 높이, safe-area 기준을 한 번 더 다듬었습니다. 정상 작동 가능성이 높은 게임 로직, 낚시 수치, 마을 이동/건설, Firebase 저장 흐름은 건드리지 않았습니다.
+- `src/main.ts`에 `v21114-interaction-layout-design-root` 루트 클래스를 추가해 v2.1.114 보정 CSS가 명확한 스코프 안에서만 작동하도록 했습니다.
+- `src/styles.css` 마지막 레이어에 긴 문구 줄바꿈, 버튼 터치 피드백, 하단 내비 폭 보정, 낚시 결과창 스크롤 경계, 좁은 화면 반응형 카드 반경/버튼 크기 보정을 추가했습니다.
+- 신규 검증 스크립트 `tools/check-v21114-interaction-layout-design-sweep.mjs`로 버전 동기화, SVG 금지, CSS 자산 존재, README/handoff 보존, v2.1.114 UI/UX 토큰을 확인합니다.
+- 엔진/의존성 업그레이드는 현재 샌드박스에서 `npm ci`, `typecheck`, `build`를 확인할 수 없어 이번 패치에서는 보류했습니다. 작동 중인 기능을 깨지 않기 위해 검증 가능한 CSS/검증/기록 중심으로만 진행했습니다.
+
+## v2.1.114 분석/인수인계 기록 - 2026-06-30 KST
+
+- v2.1.113 통파일 기준 `npm run validate`가 먼저 통과하는 것을 확인한 뒤 작업했습니다.
+- 이번 패치 후보 중 실제 런타임 상태머신, 보상 수치, 좌표/충돌, Firebase 흐름, 패키지 의존성 업그레이드는 위험도가 높아 수정하지 않았습니다.
+- 안전 개선 범위는 UI/UX 마지막 CSS 스코프입니다. 목표는 모바일 세로 화면에서 카드/목록/하단 내비/결과창이 화면 밖으로 밀리거나 긴 한글 문구가 버튼과 겹치는 문제를 줄이는 것입니다.
+- `npm run validate` 통과를 확인했습니다. 네트워크 제한 때문에 `npm run ci:registry:check`, `npm run ci:install`, `npm run typecheck`, `npm run build`는 GitHub Actions 결과를 최종 기준으로 봅니다.
+- 다음 패치 후보는 실제 모바일 화면 캡처 기반 낚시/상점/가방/미션 겹침 점검, 마을 조이스틱/건설 프리뷰 터치감 점검, 검증 가능한 범위 안의 콘텐츠 루프 보상 분석입니다.
+
+
+## v2.1.113 변경사항
+
+- 모바일 세로 화면 UI/UX 안정성 스윕을 추가했습니다. 게임 시스템 수치, 낚시 판정, 마을 이동/건설, Firebase 저장 흐름은 건드리지 않았습니다.
+- `src/main.ts`에 `v21113-ui-ux-stability-root` 루트 클래스를 추가해 v2.1.113 보정 CSS가 명확한 스코프 안에서만 작동하도록 했습니다.
+- `src/styles.css` 마지막 레이어에 카드 폭, 터치 타겟, focus-visible, 입력창 가독성, 이미지/캔버스/비디오 폭 제한, 낚시 결과창 스크롤 경계, 하단 도크 safe-area 보정을 추가했습니다.
+- 신규 검증 스크립트 `tools/check-v21113-ui-ux-stability-sweep.mjs`로 버전 동기화, SVG 금지, CSS 자산 존재, README/handoff 보존, v2.1.113 UI/UX 토큰을 확인합니다.
+- v2.1.112에서 해결한 `AI_HANDOFF_CARDVILLE.md` 삭제 재발 방지와 `README.md`/`AI_HANDOFF_CARDVILLE.md` 외 문서 금지 정책을 유지했습니다.
+
+## v2.1.113 분석/인수인계 기록 - 2026-06-30 KST
+
+- 안전한 개선 범위로 판단한 항목만 적용했습니다. 이번 패치는 마지막 CSS/루트 토큰 중심이며, 정상 작동 가능성이 높은 런타임 상태머신과 콘텐츠 수치는 수정하지 않았습니다.
+- UI/UX 개선 핵심은 좁은 모바일 세로 화면에서 카드가 화면 밖으로 밀리는 문제, 버튼 터치 영역이 작게 느껴지는 문제, 결과창/모달 내부 스크롤이 배경 스크롤과 섞이는 문제, 입력창 확대/가독성 문제를 줄이는 것입니다.
+- `npm run validate` 통과를 확인했습니다. `npm run ci:registry:check`는 현재 샌드박스 DNS 제한으로 `EAI_AGAIN registry.npmjs.org` 실패했고, `node_modules`가 없어 `typecheck`/`build`는 GitHub Actions에서 최종 확인해야 합니다.
+- 다음 패치 후보는 실제 모바일 낚시 UI 스크린샷 기준 겹침 점검, 마을 조이스틱/건설 프리뷰 터치감 점검, 콘텐츠 루프 보상/성장 밸런스 검토입니다.
+
 # AquaFantasia v2.1.112
 
 

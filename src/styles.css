@@ -67967,3 +67967,222 @@ html.v21110-fishing-feel-design-root .v21110-image-stability {
     scroll-behavior: auto !important;
   }
 }
+
+/* v2.1.113 UI/UX stability sweep: safe-area cards, touch targets, scroll containment, and mobile readability. */
+html.v21113-ui-ux-stability-root {
+  --v21113-safe-x: max(12px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  --v21113-card-width: min(360px, calc(100vw - 24px));
+  --v21113-wide-card-width: min(560px, calc(100vw - 24px));
+  --v21113-bottom-safe: calc(env(safe-area-inset-bottom, 0px) + 10px);
+  --v21113-top-safe: calc(env(safe-area-inset-top, 0px) + 10px);
+  --v21113-glass-line: rgba(219, 251, 255, .64);
+  --v21113-glass-shadow: 0 18px 48px rgba(0, 36, 76, .22), inset 0 1px 0 rgba(255, 255, 255, .72);
+  --v21113-ink: #05314c;
+  --v21113-muted: #1d6884;
+}
+html.v21113-ui-ux-stability-root,
+html.v21113-ui-ux-stability-root body {
+  min-width: 0;
+  overscroll-behavior-x: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+html.v21113-ui-ux-stability-root body[data-screen] #app,
+html.v21113-ui-ux-stability-root body[data-screen] .game-screen,
+html.v21113-ui-ux-stability-root body[data-screen] .runtime-menu-screen {
+  min-width: 0;
+  isolation: isolate;
+}
+html.v21113-ui-ux-stability-root :is(.game-dialog,.runtime-panel,.runtime-hero-card,.runtime-item-card,.runtime-shop-card,.runtime-menu-screen,.glass-card,.shop-card,.mission-card,.map-card,.build-card,.inventory-card,.dex-card,.profile-card,.building-detail-card,.catch-result-card,.v204-window-card,.v2097-modal-card,.v2115-aqua-card,.v2116-aqua-card,.v2117-aqua-card,.v2118-aqua-card,.v2119-aqua-card,.v2120-aqua-card,.v2121-aqua-card,.v2123-aqua-card,.v2124-aqua-card,.v2125-aqua-card,.v2127-aqua-card,.v2128-aqua-card,.v2129-aqua-card,.v2130-aqua-card,.v2131-aqua-card) {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  max-width: var(--v21113-wide-card-width) !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+  border-color: var(--v21113-glass-line) !important;
+  box-shadow: var(--v21113-glass-shadow) !important;
+}
+html.v21113-ui-ux-stability-root :is(.runtime-card-list,.v2076-expedition-grid,.v2050-expedition-grid,.v950-inventory-card,.mission-card,.runtime-mission-card,.dex-card) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+html.v21113-ui-ux-stability-root :is(button,.runtime-btn,.compact-cta,.btn-aqua-action,.dialog-btn,.game-dialog-close,.v2059-screen-close,.v2097-menu-close,.v2097-ui-close,[role="button"]) {
+  min-width: 0;
+  min-height: max(34px, min(44px, 11vw));
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+html.v21113-ui-ux-stability-root :is(button,.runtime-btn,.compact-cta,.btn-aqua-action,.dialog-btn,.game-dialog-close,.v2059-screen-close,.v2097-menu-close,.v2097-ui-close,[role="button"]):focus-visible {
+  outline: 2px solid rgba(103, 235, 255, .92);
+  outline-offset: 2px;
+}
+html.v21113-ui-ux-stability-root :is(input,textarea,select) {
+  min-width: 0;
+  max-width: 100%;
+  font-size: max(16px, 1em);
+  color: var(--v21113-ink);
+  -webkit-text-fill-color: var(--v21113-ink);
+}
+html.v21113-ui-ux-stability-root :is(img,canvas,video) {
+  max-width: 100%;
+}
+html.v21113-ui-ux-stability-root img {
+  height: auto;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+html.v21113-ui-ux-stability-root body[data-screen="fishing"] :is(.bite-callout,.action-badge,.v21110-bite-callout-inside,.v21110-action-badge-calm,.v21109-bite-callout-safe,.v21109-action-badge-stable,.v2153-battle-strip,.v2199-battle-strip,.v2198-battle-strip,.v2055-reel-console,.v2199-reel-console,.v2198-reel-console,.v2053-reel-touch-zone,.reel-panel,.catch-result-card) {
+  max-width: calc(100vw - 24px) !important;
+  box-sizing: border-box !important;
+  transform-style: flat !important;
+  backface-visibility: hidden;
+}
+html.v21113-ui-ux-stability-root body[data-screen="fishing"] :is(.catch-result-card,.v21110-result-card-premium,.v21109-result-card-stable) {
+  width: var(--v21113-card-width) !important;
+  max-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 24px) !important;
+  overflow: hidden auto !important;
+  overscroll-behavior: contain !important;
+}
+html.v21113-ui-ux-stability-root body[data-screen="fishing"] :is(.fishing-loadout-strip,.recent-catch-strip,.fishing-guide-card) {
+  max-width: calc(100vw - 24px) !important;
+  min-width: 0 !important;
+}
+html.v21113-ui-ux-stability-root :is(.runtime-eyebrow,.hud-chip,.v2157-menu-label,.v21110-stable-readout,.v21109-readout-stable,.v2185-loadout-copy,.v2192-loadout-copy,.v2199-loadout-copy) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v21113-ui-ux-stability-root body[data-screen="village"] :is(.bottom-nav,.fixed-root-nav,.v2097-bottom-nav,.v2098-bottom-nav),
+html.v21113-ui-ux-stability-root body[data-screen="map"] :is(.bottom-nav,.fixed-root-nav,.v2097-bottom-nav,.v2098-bottom-nav),
+html.v21113-ui-ux-stability-root body[data-screen="shop"] :is(.bottom-nav,.fixed-root-nav,.v2097-bottom-nav,.v2098-bottom-nav),
+html.v21113-ui-ux-stability-root body[data-screen="inventory"] :is(.bottom-nav,.fixed-root-nav,.v2097-bottom-nav,.v2098-bottom-nav),
+html.v21113-ui-ux-stability-root body[data-screen="mission"] :is(.bottom-nav,.fixed-root-nav,.v2097-bottom-nav,.v2098-bottom-nav) {
+  max-width: calc(100vw - 20px) !important;
+  margin-inline: auto !important;
+}
+@supports not (height: 100svh) {
+  html.v21113-ui-ux-stability-root body[data-screen="fishing"] :is(.catch-result-card,.v21110-result-card-premium,.v21109-result-card-stable) {
+    max-height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 24px) !important;
+  }
+}
+@media (max-width: 380px), (max-height: 640px) {
+  html.v21113-ui-ux-stability-root {
+    --v21113-card-width: min(318px, calc(100vw - 22px));
+    --v21113-wide-card-width: min(100%, calc(100vw - 22px));
+  }
+  html.v21113-ui-ux-stability-root :is(.game-dialog,.runtime-panel,.catch-result-card,.shop-card,.mission-card,.map-card,.inventory-card,.dex-card) {
+    border-radius: min(24px, 7vw) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21113-ui-ux-stability-root *,
+  html.v21113-ui-ux-stability-root *::before,
+  html.v21113-ui-ux-stability-root *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* v2.1.114 interaction layout/design sweep: panel rails, readable long labels, safe nav, and gentle performance hygiene. */
+html.v21114-interaction-layout-design-root {
+  --v21114-safe-x: max(12px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  --v21114-panel-max: min(590px, calc(100vw - (var(--v21114-safe-x) * 2)));
+  --v21114-card-max: min(376px, calc(100vw - (var(--v21114-safe-x) * 2)));
+  --v21114-panel-y: calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 22px);
+  --v21114-soft-line: rgba(205, 249, 255, .58);
+  --v21114-soft-surface: linear-gradient(180deg, rgba(255, 255, 255, .88), rgba(208, 246, 255, .62));
+}
+html.v21114-interaction-layout-design-root :is(.runtime-menu-screen,.game-dialog,.runtime-panel,.shop-card,.mission-card,.map-card,.inventory-card,.dex-card,.profile-card,.building-detail-card,.catch-result-card,.v204-window-card,.v2097-modal-card) {
+  width: min(100%, var(--v21114-panel-max)) !important;
+  max-width: var(--v21114-panel-max) !important;
+  max-height: calc(100svh - var(--v21114-panel-y)) !important;
+  scrollbar-gutter: stable;
+}
+html.v21114-interaction-layout-design-root :is(.runtime-item-card,.runtime-shop-card,.build-card,.v950-inventory-card,.runtime-mission-card,.v2115-aqua-card,.v2116-aqua-card,.v2117-aqua-card,.v2118-aqua-card,.v2119-aqua-card,.v2120-aqua-card,.v2121-aqua-card,.v2123-aqua-card,.v2124-aqua-card,.v2125-aqua-card,.v2127-aqua-card,.v2128-aqua-card,.v2129-aqua-card,.v2130-aqua-card,.v2131-aqua-card) {
+  max-width: var(--v21114-card-max) !important;
+  border-color: var(--v21114-soft-line) !important;
+}
+html.v21114-interaction-layout-design-root :is(.runtime-card-list,.v2076-expedition-grid,.v2050-expedition-grid,.mission-list,.inventory-list,.dex-list,.shop-list,.build-list) {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain !important;
+  gap: clamp(8px, 2.6vw, 14px) !important;
+}
+html.v21114-interaction-layout-design-root :is(.runtime-card-list,.mission-list,.inventory-list,.dex-list,.shop-list,.build-list) > * {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+}
+html.v21114-interaction-layout-design-root :is(.runtime-btn,.compact-cta,.btn-aqua-action,.dialog-btn,.game-dialog-close,.v2059-screen-close,.v2097-menu-close,.v2097-ui-close,button,[role="button"]) {
+  border-color: rgba(216, 250, 255, .62);
+  text-wrap: balance;
+  letter-spacing: -.01em;
+}
+html.v21114-interaction-layout-design-root :is(.runtime-btn,.compact-cta,.btn-aqua-action,.dialog-btn):not(:disabled):active {
+  transform: translateY(1px) scale(.992);
+  filter: saturate(1.04) brightness(1.02);
+}
+html.v21114-interaction-layout-design-root :is(.runtime-eyebrow,.hud-chip,.v2157-menu-label,.v21110-stable-readout,.v21109-readout-stable,.v2185-loadout-copy,.v2192-loadout-copy,.v2199-loadout-copy,.mission-title,.shop-title,.dex-title,.inventory-title) {
+  line-height: 1.2;
+  text-wrap: balance;
+  overflow-wrap: anywhere !important;
+}
+html.v21114-interaction-layout-design-root body[data-screen="fishing"] :is(.catch-result-card,.v21110-result-card-premium,.v21109-result-card-stable) {
+  width: var(--v21114-card-max) !important;
+  padding-inline: clamp(14px, 4vw, 22px) !important;
+  max-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 20px) !important;
+}
+html.v21114-interaction-layout-design-root body[data-screen="fishing"] :is(.bite-callout,.action-badge,.v21110-bite-callout-inside,.v21110-action-badge-calm,.v21109-bite-callout-safe,.v21109-action-badge-stable) {
+  max-width: min(360px, calc(100vw - 24px)) !important;
+  overflow-wrap: anywhere !important;
+  text-wrap: balance;
+}
+html.v21114-interaction-layout-design-root body[data-screen="village"] :is(.bottom-nav,.fixed-root-nav,.v2097-bottom-nav,.v2098-bottom-nav),
+html.v21114-interaction-layout-design-root body[data-screen="map"] :is(.bottom-nav,.fixed-root-nav,.v2097-bottom-nav,.v2098-bottom-nav),
+html.v21114-interaction-layout-design-root body[data-screen="shop"] :is(.bottom-nav,.fixed-root-nav,.v2097-bottom-nav,.v2098-bottom-nav),
+html.v21114-interaction-layout-design-root body[data-screen="inventory"] :is(.bottom-nav,.fixed-root-nav,.v2097-bottom-nav,.v2098-bottom-nav),
+html.v21114-interaction-layout-design-root body[data-screen="mission"] :is(.bottom-nav,.fixed-root-nav,.v2097-bottom-nav,.v2098-bottom-nav) {
+  width: min(610px, calc(100vw - (var(--v21114-safe-x) * 2))) !important;
+  max-width: calc(100vw - (var(--v21114-safe-x) * 2)) !important;
+  overflow: hidden !important;
+}
+html.v21114-interaction-layout-design-root :is(.bottom-nav,.fixed-root-nav,.v2097-bottom-nav,.v2098-bottom-nav) :is(button,.runtime-btn,[role="button"]) {
+  min-width: 0 !important;
+  flex: 1 1 0 !important;
+  white-space: normal !important;
+}
+html.v21114-interaction-layout-design-root :is(.game-dialog,.runtime-panel,.catch-result-card) :is(p,span,strong,small,em,li) {
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+@supports not (height: 100svh) {
+  html.v21114-interaction-layout-design-root :is(.runtime-menu-screen,.game-dialog,.runtime-panel,.shop-card,.mission-card,.map-card,.inventory-card,.dex-card,.profile-card,.building-detail-card,.catch-result-card,.v204-window-card,.v2097-modal-card) {
+    max-height: calc(100vh - var(--v21114-panel-y)) !important;
+  }
+  html.v21114-interaction-layout-design-root body[data-screen="fishing"] :is(.catch-result-card,.v21110-result-card-premium,.v21109-result-card-stable) {
+    max-height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 20px) !important;
+  }
+}
+@media (max-width: 390px), (max-height: 660px) {
+  html.v21114-interaction-layout-design-root {
+    --v21114-safe-x: max(10px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+    --v21114-panel-y: calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 18px);
+  }
+  html.v21114-interaction-layout-design-root :is(.runtime-menu-screen,.game-dialog,.runtime-panel,.shop-card,.mission-card,.map-card,.inventory-card,.dex-card,.profile-card,.building-detail-card,.catch-result-card) {
+    border-radius: min(22px, 6.4vw) !important;
+  }
+  html.v21114-interaction-layout-design-root :is(.runtime-btn,.compact-cta,.btn-aqua-action,.dialog-btn,button,[role="button"]) {
+    min-height: 36px;
+    font-size: max(12px, .86em);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21114-interaction-layout-design-root :is(.runtime-btn,.compact-cta,.btn-aqua-action,.dialog-btn):not(:disabled):active {
+    transform: none;
+    filter: none;
+  }
+}
