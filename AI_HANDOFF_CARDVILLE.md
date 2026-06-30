@@ -3,13 +3,13 @@
 ## 현재 기준
 
 - 프로젝트명: AquaFantasia / 아쿠아 판타지아
-- 기준 패키지 버전: `2.1.117`
+- 기준 패키지 버전: `2.1.118`
 - 기준 기록일: `2026-06-30 KST`
 - 실행 형태: Vite + TypeScript 모바일 세로 전용 웹 게임
 - 주요 배포 흐름: GitHub Actions `validate-and-deploy`에서 `npm ci` → `npm run validate` → `npm run typecheck` → `npm run build` → GitHub Pages 배포
 - 사용자 작업 환경: GitHub Desktop, Firebase 무료 플랜
 - 업로드 원본: `.git` 폴더 제외 통파일 zip
-- 산출물 zip 파일명 규칙: 짧게 쓰되 버전 숫자를 반드시 포함한다. 예: `AF-v2.1.117-full.zip`, `AF-v2.1.117-patch.zip`
+- 산출물 zip 파일명 규칙: 짧게 쓰되 버전 숫자를 반드시 포함한다. 예: `AF-v2.1.118-full.zip`, `AF-v2.1.118-patch.zip`
 
 ## 절대 유지 규칙
 
@@ -45,6 +45,7 @@
 
 - 낚시 상태: `idle`, `casting`, `waiting`, `bite`, `reeling`, `success`, `fail`
 - v2.1.110 핵심 기능은 유지됨: 낚시 안전 구간 0.5 단위 양자화, 물고기 피로도 기반 저항 완화, 입질/액션 배지/게이지/릴 콘솔/결과창 safe-area 재정렬
+- v2.1.118 핵심: v2.1.117 마을 우측 상단 메뉴 개선을 실제 런타임 inline important 기준으로 hard-lock하고, 카드/아이콘 이미지를 containment 처리해 다른 그림 비침/카드 밖 튐/긴 문구 겹침 위험을 줄임. 게임 로직과 버튼 이벤트는 건드리지 않음
 - v2.1.117 핵심: 마을 우측 상단 메뉴 아이콘은 버튼 크기/2x3 배치를 유지한 채 내부 아이콘만 24~25px로 키우고, clipping/isolation/pseudo 제거로 위쪽 다른 그림 비침을 방지. 마을 이동/건설/상점/출항 동작은 건드리지 않음
 - v2.1.116 핵심: 낚싯대/미끼 loadout 꿈틀거림, 연속 성공 구버전 스킨, `물었다!` 창 자동 전환/흔들림, 성공 결과창 크기 흔들림을 UI hotfix로 보정. 낚시 판정/보상/밸런스는 건드리지 않음
 - v2.1.115 핵심: 기능/게임 로직은 건드리지 않고, RuntimeQualityManager의 viewport 이벤트를 RAF batching/signature 비교로 가볍게 만들고, 키보드/주소창 변동 시 패널·입력창·safe-area 보정을 마지막 CSS 스코프와 검증 스크립트로 보강
@@ -56,6 +57,54 @@
 - 저장 핵심: `localStorage` 키 `aqua-fantasia-save-v650`, 이전 키 일부 마이그레이션, 저장값 sanitize 후 저장
 - Firebase 핵심: `window.AQUA_FIREBASE_CONFIG`에 `apiKey`가 있을 때만 `firebase/app`, `firebase/auth`를 동적 import하고 익명 로그인 시도. 설정이 없으면 로컬 저장으로 진행
 
+
+
+## v2.1.118 UI 자산/아이콘 containment 패치 기록
+
+### 사용자 요청과 확인한 불안정 후보
+
+- 요청: 다양한 불안정, 겹침, 배치, 배정, 체크, 디자인/UX를 계속 다듬고 개선.
+- 확인한 실제 후보: v2.1.117의 마을 우측 상단 메뉴 개선은 CSS와 런타임 패스가 모두 있었지만, 이전 누적 패스가 inline important 스타일을 많이 쓰는 구조라 일부 기기에서 마지막 CSS 의도와 실제 computed 값이 달라질 수 있다.
+- 특히 아이콘 시인성 문제는 CSS만으로 끝내기보다 실제 런타임 inline important 값까지 같은 토큰으로 동기화하는 편이 안전하다.
+
+### 적용 내용
+
+- `src/main.ts`
+  - 루트 스코프 `v21118-ui-asset-containment-root`와 `data-v21118-ui-asset-containment` 추가.
+  - `installV21118UiAssetContainmentPass()` 추가.
+  - 마을 우측 상단 메뉴 셀은 34px, 2x3, gap 3px 그대로 유지.
+  - 아이콘은 일반 화면 25px, 초소형 화면 24px로 런타임 inline important 값까지 hard-lock.
+  - 메뉴 버튼에 `clip-path`, `isolation`, `overflow:hidden`, pseudo 제거, object-position center를 다시 고정.
+  - RAF 예약과 `lastSignature` guard로 같은 화면/viewport 상태에서 불필요한 반복 스타일 쓰기를 줄임.
+  - 런타임 이미지에는 `v21118-contained-image`, `decoding=async`, `loading=lazy`, `draggable=false`를 적용.
+- `src/styles.css`
+  - `v2.1.118 UI asset containment` 마지막 스코프 추가.
+  - 마을 메뉴 컨테이너/버튼/아이콘/라벨을 런타임 토큰과 같은 값으로 다시 고정.
+  - 상점/가방/장비/미션/도감/모달 계열 카드의 이미지와 텍스트가 카드 밖으로 새거나 서로 겹치는 위험을 줄임.
+- `tools/check-v21118-ui-asset-containment.mjs`
+  - 버전/캐시/README/handoff 동기화, v2.1.118 root/runtime/CSS 토큰, SVG 금지, CSS 자산 존재, README/handoff만 문서 허용을 확인한다.
+
+### 절대 건드리지 않은 것
+
+- 낚시 판정/보상/밸런스
+- 물고기 데이터
+- 마을 이동/좌표/충돌/조이스틱
+- 건설/확대/축소/상점/출항 이벤트
+- Firebase 저장/익명 로그인 fallback
+- 오프닝 video-only 정책
+- 플레이어 방향 파일명/flip 금지 정책
+- 의존성/엔진 버전 업그레이드
+
+### v2.1.118 필수 검수
+
+1. GitHub Actions에서 `npm run validate` 통과.
+2. 실제 모바일 마을 화면 우측 상단 메뉴가 기존 위치/크기를 유지하는지 확인.
+3. 메뉴 아이콘이 실제 화면에서 더 또렷하고, 위쪽에 다른 그림/프레임이 비치지 않는지 확인.
+4. 상점/가방/장비/미션/도감 카드 이미지가 카드 밖으로 튀지 않는지 확인.
+5. 확대/축소, 원점, 건설, 상점, 출항 버튼 이벤트가 정상인지 확인.
+6. `.svg`, `.svgz`, `image/svg`, 인라인 `<svg>` 런타임 참조가 추가되지 않았는지 확인.
+
+현재 샌드박스 검수 결과 작업본 `npm run validate`, `tools/*.mjs` 문법 검사, v2.1.118 full zip 새 압축 해제본 `npm run validate`, v2.1.117 full + v2.1.118 patch 덮어쓰기본 `npm run validate`가 통과했다. full/patch zip 경로 안전성, `.git`/`node_modules`/`dist`/`reports`/`.log`/SVG 미포함, `.md`가 `README.md`와 `AI_HANDOFF_CARDVILLE.md`뿐인 것도 확인했다. `npm run typecheck`는 현재 샌드박스에 `node_modules`가 없어 `howler`, `pixi.js`, `firebase`, `vite` 모듈 해석 실패로 완료하지 못했다. 전체 `npm ci`, `typecheck`, `build`는 GitHub Actions 결과를 최종 기준으로 본다.
 
 ## v2.1.117 마을 우측 상단 메뉴 아이콘 시인성 hotfix 기록
 

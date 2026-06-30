@@ -1,4 +1,23 @@
-# AquaFantasia v2.1.117
+# AquaFantasia v2.1.118
+
+
+## v2.1.118 변경사항
+
+- v2.1.117의 마을 우측 상단 아이콘 개선을 실제 런타임 기준으로 한 번 더 고정했습니다. 특히 기존 누적 보정의 `inline important` 스타일이 CSS 보정을 다시 덮을 수 있는 위험을 줄였습니다.
+- 마을 우측 상단 버튼은 계속 34px 2x3 배치와 3px gap을 유지하고, 아이콘만 일반 화면 25px/초소형 화면 24px로 명확히 고정했습니다.
+- 메뉴 컨테이너/버튼/아이콘에 `contain`, `clip-path`, `isolation`, pseudo 제거, object-position 중앙 고정을 적용해 아이콘 주변에 다른 그림이 비치는 현상을 추가 방지했습니다.
+- 상점/가방/장비/미션/도감/모달 계열 카드 안의 이미지는 `v21118-contained-image`로 non-drag/lazy/contain 처리해 카드 밖으로 튀거나 긴 문구와 겹치는 위험을 줄였습니다.
+- SVG 금지, README/handoff만 기록, 정상 기능 불필요 수정 금지 정책을 유지했습니다.
+- 신규 검증 스크립트 `tools/check-v21118-ui-asset-containment.mjs`로 버전 동기화, 마을 메뉴 런타임 hard-lock, 카드 이미지 containment, SVG 금지, CSS 자산 존재 여부를 확인합니다.
+
+## v2.1.118 분석/인수인계 기록 - 2026-06-30 KST
+
+- 이번 작업은 사용자의 광범위 개선 요청에 대해 실제 불안정 후보를 먼저 찾는 방식으로 진행했습니다.
+- 확인한 후보: 마을 우측 상단 메뉴는 v2.1.117에서 CSS와 런타임 보정이 들어갔지만, 프로젝트에 누적된 이전 보정 패스가 inline important 스타일을 여러 번 쓰는 구조입니다. 일부 기기/렌더 순서에서 CSS 마지막 레이어보다 런타임 inline important 값이 체감상 우선될 수 있어, v2.1.118에서 별도 런타임 hard-lock을 추가했습니다.
+- 새 패스 `installV21118UiAssetContainmentPass()`는 RAF 예약과 signature guard를 사용해 같은 viewport/screen 상태에서는 불필요한 반복 스타일 쓰기를 줄입니다.
+- 마을 메뉴 버튼의 실제 이벤트, 좌표, 개수, 위치, 34px 셀, 2x3 배치는 유지했습니다. 아이콘 시인성/bleed/containment만 보강했습니다.
+- 카드 이미지 containment는 화면 장식/아이콘/상품/도감 이미지를 카드 안에 가두는 UI 보정이며, 물고기 데이터/장비 수치/보상/마을 좌표/Firebase 저장 흐름은 변경하지 않았습니다.
+- 작업본 `npm run validate`, `tools/*.mjs` 문법 검사, v2.1.118 full zip 새 압축 해제본 `npm run validate`, v2.1.117 full + v2.1.118 patch 덮어쓰기본 `npm run validate`를 확인했습니다. `npm run typecheck`는 현재 샌드박스에 `node_modules`가 없어 `howler`, `pixi.js`, `firebase`, `vite` 모듈 해석 실패로 완료하지 못했습니다. GitHub Actions의 `npm ci` 이후 결과를 최종 기준으로 봅니다.
 
 ## v2.1.117 변경사항
 

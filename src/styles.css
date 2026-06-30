@@ -68652,3 +68652,143 @@ html.v21117-village-menu-icon-clarity-root body[data-screen="village"] .v2157-me
 @media (max-width: 360px), (max-height: 610px) {
   html.v21117-village-menu-icon-clarity-root { --v21117-menu-icon: 24px; }
 }
+
+/* v2.1.118 UI asset containment: runtime icon hard-lock plus card/image no-bleed polish without changing gameplay systems. */
+html.v21118-ui-asset-containment-root {
+  --v21118-village-menu-cell: 34px;
+  --v21118-village-menu-gap: 3px;
+  --v21118-village-menu-icon: 25px;
+  --v21118-card-image-radius: 18px;
+}
+html.v21118-ui-asset-containment-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity,.v21118-world-controls-contained) {
+  display: grid !important;
+  grid-template-columns: repeat(2, var(--v21118-village-menu-cell)) !important;
+  grid-auto-rows: var(--v21118-village-menu-cell) !important;
+  gap: var(--v21118-village-menu-gap) !important;
+  width: calc((var(--v21118-village-menu-cell) * 2) + var(--v21118-village-menu-gap)) !important;
+  height: calc((var(--v21118-village-menu-cell) * 3) + (var(--v21118-village-menu-gap) * 2)) !important;
+  min-width: calc((var(--v21118-village-menu-cell) * 2) + var(--v21118-village-menu-gap)) !important;
+  max-width: calc((var(--v21118-village-menu-cell) * 2) + var(--v21118-village-menu-gap)) !important;
+  min-height: calc((var(--v21118-village-menu-cell) * 3) + (var(--v21118-village-menu-gap) * 2)) !important;
+  max-height: calc((var(--v21118-village-menu-cell) * 3) + (var(--v21118-village-menu-gap) * 2)) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  contain: layout paint style !important;
+}
+html.v21118-ui-asset-containment-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity,.v21118-world-controls-contained) button,
+html.v21118-ui-asset-containment-root body[data-screen="village"] .v21118-top-menu-cell-contained {
+  box-sizing: border-box !important;
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  width: var(--v21118-village-menu-cell) !important;
+  height: var(--v21118-village-menu-cell) !important;
+  min-width: var(--v21118-village-menu-cell) !important;
+  min-height: var(--v21118-village-menu-cell) !important;
+  max-width: var(--v21118-village-menu-cell) !important;
+  max-height: var(--v21118-village-menu-cell) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 1px solid rgba(221, 253, 255, .55) !important;
+  border-radius: 11px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.36), rgba(32,161,218,.22)) !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.36), rgba(32,161,218,.22)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.34), 0 2px 7px rgba(0,42,80,.09) !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  clip-path: inset(0 round 11px) !important;
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  opacity: .99 !important;
+  contain: layout paint style !important;
+  touch-action: manipulation !important;
+}
+html.v21118-ui-asset-containment-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity,.v21118-world-controls-contained) button::before,
+html.v21118-ui-asset-containment-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity,.v21118-world-controls-contained) button::after {
+  content: none !important;
+  display: none !important;
+}
+html.v21118-ui-asset-containment-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity,.v21118-world-controls-contained) button :is(span:first-child,.v2157-menu-glyph,img,.icon),
+html.v21118-ui-asset-containment-root body[data-screen="village"] .v21118-menu-icon-contained {
+  display: grid !important;
+  place-items: center !important;
+  width: var(--v21118-village-menu-icon) !important;
+  height: var(--v21118-village-menu-icon) !important;
+  min-width: var(--v21118-village-menu-icon) !important;
+  min-height: var(--v21118-village-menu-icon) !important;
+  max-width: var(--v21118-village-menu-icon) !important;
+  max-height: var(--v21118-village-menu-icon) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  font-size: var(--v21118-village-menu-icon) !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  text-align: center !important;
+  transform: translateZ(0) !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 40, 78, .28)) !important;
+}
+html.v21118-ui-asset-containment-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity,.v21118-world-controls-contained) button img,
+html.v21118-ui-asset-containment-root body[data-screen="village"] .v21118-menu-icon-contained:is(img) {
+  display: block !important;
+}
+html.v21118-ui-asset-containment-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity,.v21118-world-controls-contained) button > span:last-child,
+html.v21118-ui-asset-containment-root body[data-screen="village"] .v2157-menu-label {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+html.v21118-ui-asset-containment-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity,.v21118-world-controls-contained) button:active {
+  filter: brightness(1.06) saturate(1.06) !important;
+}
+html.v21118-ui-asset-containment-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity,.v21118-world-controls-contained) button:focus-visible {
+  outline: 2px solid rgba(255, 248, 167, .92) !important;
+  outline-offset: 2px !important;
+}
+html.v21118-ui-asset-containment-root body[data-screen] :is(.runtime-item-card,.gear-card,.v950-gear-card,.v950-inventory-card,.v204-slot-card,.mission-card,.dex-card,.shop-card,.v204-window-card,.runtime-hero-card,.v2097-modal-card,.v2097-interior-card,.v2097-character-card) {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+html.v21118-ui-asset-containment-root body[data-screen] :is(.runtime-item-card,.gear-card,.v950-gear-card,.v950-inventory-card,.v204-slot-card,.mission-card,.dex-card,.shop-card,.v204-window-card,.runtime-hero-card,.v2097-modal-card,.v2097-interior-card,.v2097-character-card) img,
+html.v21118-ui-asset-containment-root body[data-screen] img.v21118-contained-image {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  overflow: hidden !important;
+  -webkit-user-drag: none !important;
+}
+html.v21118-ui-asset-containment-root body[data-screen] :is(.runtime-item-card,.gear-card,.v950-gear-card,.v950-inventory-card,.v204-slot-card,.mission-card,.dex-card,.shop-card,.v204-window-card,.runtime-hero-card) :is(strong,span,p,h2,h3,em,small) {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+@media (max-width: 360px), (max-height: 610px) {
+  html.v21118-ui-asset-containment-root { --v21118-village-menu-icon: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21118-ui-asset-containment-root body[data-screen] :is(.v21118-top-menu-cell-contained,.v21118-menu-icon-contained,.v21118-contained-image) {
+    transition-duration: .001ms !important;
+    animation: none !important;
+  }
+}

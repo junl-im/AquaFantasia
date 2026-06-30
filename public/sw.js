@@ -1,5 +1,5 @@
-// v2.1.117 village menu icon clarity: top-right icon visibility, single clipped button skin, and same-origin cache containment.
-const CACHE_NAME = 'aqua-fantasia-v2.1.117-village-menu-icon-clarity';
+// v2.1.118 UI asset containment: village menu runtime icon hard-lock, card image containment, and same-origin cache containment.
+const CACHE_NAME = 'aqua-fantasia-v2.1.118-ui-asset-containment';
 const CORE_ASSETS = [
   './',
   './index.html',

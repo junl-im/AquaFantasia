@@ -309,6 +309,8 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v21116FishingUiStabilityHotfix = 'stable-loadout-bite-combo-result-aqua-skin';
     document.documentElement.classList.add('v21117-village-menu-icon-clarity-root');
     document.documentElement.dataset.v21117VillageMenuIconClarity = 'top-right-icons-larger-same-cell-clipped-clean';
+    document.documentElement.classList.add('v21118-ui-asset-containment-root');
+    document.documentElement.dataset.v21118UiAssetContainment = 'runtime-menu-icons-card-images-no-bleed';
     // v2.1.25 UI policy: keep opening video first-start-only without legacy chrome, lock player direction/motion, and refine top/bottom menu spacing.
     document.documentElement.dataset.v2098UiRecovery = 'v2098-dock-fishing-build-recovery';
     document.documentElement.dataset.v218StableRollback = 'v218-stable-ui-fishing-rollback';
@@ -564,6 +566,7 @@ class AquaFantasiaGame {
     this.installV21109SystemUiStabilityPolishPass();
     this.installV21110FishingFeelDesignStabilityPass();
     this.installV21117VillageMenuIconClarityPass();
+    this.installV21118UiAssetContainmentPass();
     this.preloadCriticalImages();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
@@ -578,7 +581,7 @@ class AquaFantasiaGame {
 
   private activateV2097UiResetShell(): void {
     const html = document.documentElement;
-    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v218StableRollback', 'v219UiTouchShopFishingAudit', 'v2111AquaShell', 'v2112AquaFoundation', 'v2113AquaCoreSteward', 'v2114InteractionShellPolish', 'v2115AquaScreenShell', 'v2116VillageAssetPolish', 'v2117LayoutInputFishing', 'v2118CharacterWaterUi', 'v2119OpeningExitCharacterUi', 'v2120OpeningVideoDirectionUi', 'v2121UiContinuityPolish', 'v2122RouteDirectionUi', 'v2123StabilityPolish', 'v2124StabilityPerformance', 'v2125OpeningDirectionMotionUi', 'v2127DirectionMotionUiAudit', 'v2128DirectionUiFishingCorrection', 'v2129PlayerFilenameDirection', 'v2130ConstructionFishingUi', 'v2131MotionUiFishingBuildGuard', 'v2132PremiumUiFishingStability', 'v2133PremiumUiEngineFishingStability', 'v2143UiOverlapPlacementSweep', 'v2144UiPlacementPolishSweep', 'v2145IconFishingPagePolish', 'v2146UiOverlapIconFishingPolish', 'v2147UiOverlapLayoutFishingPolish', 'v2148UiOverlapLayoutSweep', 'v2149UiCompositionPolish', 'v2150UiOverlapPlacementBeauty', 'v2161FishingBiteDexSystem', 'v21117VillageMenuIconClarity']);
+    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v218StableRollback', 'v219UiTouchShopFishingAudit', 'v2111AquaShell', 'v2112AquaFoundation', 'v2113AquaCoreSteward', 'v2114InteractionShellPolish', 'v2115AquaScreenShell', 'v2116VillageAssetPolish', 'v2117LayoutInputFishing', 'v2118CharacterWaterUi', 'v2119OpeningExitCharacterUi', 'v2120OpeningVideoDirectionUi', 'v2121UiContinuityPolish', 'v2122RouteDirectionUi', 'v2123StabilityPolish', 'v2124StabilityPerformance', 'v2125OpeningDirectionMotionUi', 'v2127DirectionMotionUiAudit', 'v2128DirectionUiFishingCorrection', 'v2129PlayerFilenameDirection', 'v2130ConstructionFishingUi', 'v2131MotionUiFishingBuildGuard', 'v2132PremiumUiFishingStability', 'v2133PremiumUiEngineFishingStability', 'v2143UiOverlapPlacementSweep', 'v2144UiPlacementPolishSweep', 'v2145IconFishingPagePolish', 'v2146UiOverlapIconFishingPolish', 'v2147UiOverlapLayoutFishingPolish', 'v2148UiOverlapLayoutSweep', 'v2149UiCompositionPolish', 'v2150UiOverlapPlacementBeauty', 'v2161FishingBiteDexSystem', 'v21117VillageMenuIconClarity', 'v21118UiAssetContainment']);
     for (const key of Object.keys(html.dataset)) {
       if (keep.has(key)) continue;
       const value = html.dataset[key] ?? '';
@@ -6023,6 +6026,142 @@ class AquaFantasiaGame {
     window.addEventListener('pagehide', () => observer?.disconnect(), { once: true, passive: true });
   }
 
+
+
+  private installV21118UiAssetContainmentPass(): void {
+    let raf = 0;
+    let lastSignature = '';
+    const html = document.documentElement;
+    const set = (node: HTMLElement | null | undefined, entries: Array<[string, string]>) => {
+      if (!node) return;
+      for (const [name, value] of entries) {
+        if (node.style.getPropertyValue(name) !== value || node.style.getPropertyPriority(name) !== 'important') {
+          node.style.setProperty(name, value, 'important');
+        }
+      }
+    };
+    const isCompact = () => {
+      const viewport = window.visualViewport;
+      const width = Math.floor(viewport?.width ?? window.innerWidth);
+      const height = Math.floor(viewport?.height ?? window.innerHeight);
+      return width <= 360 || height <= 610;
+    };
+    const normalize = () => {
+      html.classList.add('v21118-ui-asset-containment-root');
+      html.dataset.v21118UiAssetContainment = 'runtime-menu-icons-card-images-no-bleed';
+      const compact = isCompact();
+      const icon = `${compact ? 24 : 25}px`;
+      const signature = `${document.body.dataset.screen || 'unknown'}:${compact ? 'compact' : 'regular'}:${window.visualViewport?.width ?? window.innerWidth}:${window.visualViewport?.height ?? window.innerHeight}`;
+      html.style.setProperty('--v21118-village-menu-cell', '34px');
+      html.style.setProperty('--v21118-village-menu-gap', '3px');
+      html.style.setProperty('--v21118-village-menu-icon', icon);
+      html.style.setProperty('--v21117-menu-icon', icon);
+      html.classList.toggle('v21118-compact-ui', compact);
+      if (signature === lastSignature && document.body.dataset.screen !== 'village') return;
+      lastSignature = signature;
+      dom.app.querySelectorAll<HTMLImageElement>('img').forEach((img) => {
+        img.draggable = false;
+        img.decoding = 'async';
+        if (!img.loading) img.loading = 'lazy';
+        img.classList.add('v21118-contained-image');
+      });
+      if (document.body.dataset.screen !== 'village') return;
+      dom.app.querySelectorAll<HTMLElement>('.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity').forEach((controls) => {
+        if (controls.classList.contains('v2167-menu-panel-hidden') || controls.dataset.v2167MenuHidden === 'true') return;
+        controls.classList.add('v21118-world-controls-contained');
+        controls.dataset.v21118MenuContainment = 'runtime-important-34-cell-25-icon-no-bleed';
+        set(controls, [
+          ['display', 'grid'],
+          ['grid-template-columns', 'repeat(2, var(--v21118-village-menu-cell))'],
+          ['grid-auto-rows', 'var(--v21118-village-menu-cell)'],
+          ['gap', 'var(--v21118-village-menu-gap)'],
+          ['width', 'calc((var(--v21118-village-menu-cell) * 2) + var(--v21118-village-menu-gap))'],
+          ['height', 'calc((var(--v21118-village-menu-cell) * 3) + (var(--v21118-village-menu-gap) * 2))'],
+          ['padding', '0'],
+          ['margin', '0'],
+          ['border', '0'],
+          ['background', 'transparent'],
+          ['background-image', 'none'],
+          ['box-shadow', 'none'],
+          ['overflow', 'visible'],
+          ['contain', 'layout paint style'],
+        ]);
+        controls.querySelectorAll<HTMLElement>('button').forEach((button) => {
+          button.classList.add('v21118-top-menu-cell-contained');
+          button.dataset.v21118TopMenuCell = 'same-34-cell-icon-visible-bleed-clipped';
+          set(button, [
+            ['box-sizing', 'border-box'],
+            ['position', 'relative'],
+            ['display', 'grid'],
+            ['place-items', 'center'],
+            ['width', 'var(--v21118-village-menu-cell)'],
+            ['height', 'var(--v21118-village-menu-cell)'],
+            ['min-width', 'var(--v21118-village-menu-cell)'],
+            ['min-height', 'var(--v21118-village-menu-cell)'],
+            ['max-width', 'var(--v21118-village-menu-cell)'],
+            ['max-height', 'var(--v21118-village-menu-cell)'],
+            ['padding', '0'],
+            ['margin', '0'],
+            ['border', '1px solid rgba(221, 253, 255, .55)'],
+            ['border-radius', '11px'],
+            ['background', 'linear-gradient(180deg, rgba(255,255,255,.36), rgba(32,161,218,.22))'],
+            ['background-image', 'linear-gradient(180deg, rgba(255,255,255,.36), rgba(32,161,218,.22))'],
+            ['box-shadow', 'inset 0 1px 0 rgba(255,255,255,.34), 0 2px 7px rgba(0,42,80,.09)'],
+            ['overflow', 'hidden'],
+            ['isolation', 'isolate'],
+            ['clip-path', 'inset(0 round 11px)'],
+            ['transform', 'none'],
+            ['translate', 'none'],
+            ['scale', '1'],
+            ['opacity', '.99'],
+            ['contain', 'layout paint style'],
+            ['touch-action', 'manipulation'],
+          ]);
+          button.querySelectorAll<HTMLElement>('span:first-child,.v2157-menu-glyph,img,.icon').forEach((glyph) => {
+            const isImage = glyph.tagName.toLowerCase() === 'img';
+            glyph.classList.add('v21118-menu-icon-contained');
+            set(glyph, [
+              ['display', isImage ? 'block' : 'grid'],
+              ['place-items', 'center'],
+              ['width', 'var(--v21118-village-menu-icon)'],
+              ['height', 'var(--v21118-village-menu-icon)'],
+              ['min-width', 'var(--v21118-village-menu-icon)'],
+              ['min-height', 'var(--v21118-village-menu-icon)'],
+              ['max-width', 'var(--v21118-village-menu-icon)'],
+              ['max-height', 'var(--v21118-village-menu-icon)'],
+              ['padding', '0'],
+              ['margin', '0'],
+              ['border', '0'],
+              ['background', 'transparent'],
+              ['background-image', 'none'],
+              ['box-shadow', 'none'],
+              ['overflow', 'hidden'],
+              ['object-fit', 'contain'],
+              ['object-position', 'center center'],
+              ['font-size', 'var(--v21118-village-menu-icon)'],
+              ['line-height', '1'],
+              ['text-align', 'center'],
+              ['transform', 'translateZ(0)'],
+              ['filter', 'drop-shadow(0 1px 2px rgba(0, 40, 78, .28))'],
+            ]);
+          });
+        });
+      });
+    };
+    const schedule = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => { raf = 0; normalize(); });
+    };
+    schedule();
+    window.visualViewport?.addEventListener('resize', schedule, { passive: true });
+    window.visualViewport?.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule, { passive: true });
+    document.addEventListener('visibilitychange', schedule, { passive: true });
+    const observer = new MutationObserver(schedule);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-screen'], childList: true, subtree: true });
+    window.addEventListener('pagehide', () => observer.disconnect(), { once: true, passive: true });
+  }
 
   private preloadCriticalImages(): void {
     const critical = [ASSET.homeBg, './assets/v1110/home/village_islands_user_bg.webp', './assets/v1110/home/village_islands_user_bg.png', ASSET.homeBanner, ASSET.player, ASSET.float, './assets/v91/characters/chibi_fisher_face_icon.png'];
