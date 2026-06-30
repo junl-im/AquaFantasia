@@ -11,23 +11,30 @@ export class RuntimeQualityManager {
   private lowFpsFrames = 0;
   private highFpsFrames = 0;
   private lastAppliedQuality: RuntimeQualityTier | '' = '';
+  private viewportRaf = 0;
+  private lastViewportSignature = '';
 
   start(): void {
     if (this.started) return;
     this.started = true;
     this.quality = this.detectInitialTier();
+    this.installV21115RuntimeViewportInputGuard();
     this.applyQuality('initial');
     this.last = performance.now();
     this.raf = requestAnimationFrame(this.tick);
-    window.addEventListener('resize', this.syncViewportVars, { passive: true });
-    window.visualViewport?.addEventListener('resize', this.syncViewportVars, { passive: true });
-    window.visualViewport?.addEventListener('scroll', this.syncViewportVars, { passive: true });
-    window.addEventListener('orientationchange', this.syncViewportVars, { passive: true });
+    window.addEventListener('resize', this.scheduleViewportSync, { passive: true });
+    window.visualViewport?.addEventListener('resize', this.scheduleViewportSync, { passive: true });
+    window.visualViewport?.addEventListener('scroll', this.scheduleViewportSync, { passive: true });
+    window.addEventListener('orientationchange', this.scheduleViewportSync, { passive: true });
+    window.addEventListener('pageshow', this.scheduleViewportSync, { passive: true });
+    document.addEventListener('focusin', this.scheduleViewportSync, { passive: true });
+    document.addEventListener('focusout', this.scheduleViewportSync, { passive: true });
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {
         this.last = performance.now();
         this.samples = [];
         this.applyQuality('resume');
+        this.scheduleViewportSync();
       }
     }, { passive: true });
   }
@@ -110,24 +117,52 @@ export class RuntimeQualityManager {
     root.style.setProperty('--water-fx-blend', this.quality === 'lite' ? '.78' : this.quality === 'high' ? '1.04' : '.92');
     root.style.setProperty('--ui-motion-scale', this.quality === 'lite' ? '.58' : '1');
     root.style.setProperty('--premium-depth-alpha', this.quality === 'lite' ? '.42' : this.quality === 'high' ? '.72' : '.58');
-    this.syncViewportVars();
+    this.syncViewportVars(true);
     if (changed) {
       window.dispatchEvent(new CustomEvent('aqua-runtime-quality-change', { detail: { tier: this.quality, reason, dprCap: this.recommendedDprCap() } }));
     }
   }
 
-  private syncViewportVars = (): void => {
+  private installV21115RuntimeViewportInputGuard(): void {
+    const root = document.documentElement;
+    root.classList.add('v21115-runtime-viewport-input-root');
+    root.dataset.v21115RuntimeViewportInput = 'raf-batched-viewport-keyboard-input-safe-performance-guard';
+  }
+
+  private scheduleViewportSync = (): void => {
+    if (this.viewportRaf) return;
+    this.viewportRaf = requestAnimationFrame(() => {
+      this.viewportRaf = 0;
+      this.syncViewportVars(false);
+    });
+  };
+
+  private syncViewportVars(force = false): void {
     const vv = window.visualViewport;
     const width = Math.max(1, Math.floor(vv?.width ?? window.innerWidth));
     const height = Math.max(1, Math.floor(vv?.height ?? window.innerHeight));
     const portraitWidth = clamp(width, 300, 500);
     const offsetLeft = Math.max(0, Math.floor(vv?.offsetLeft ?? 0));
     const offsetTop = Math.max(0, Math.floor(vv?.offsetTop ?? 0));
+    const innerHeight = Math.max(1, Math.floor(window.innerHeight || height));
+    const keyboardInset = Math.max(0, Math.floor(innerHeight - height - offsetTop));
+    const keyboardVisible = keyboardInset > 96 || height < innerHeight * 0.82;
+    const compactViewport = width <= 390 || height <= 660;
+    const signature = [width, height, portraitWidth, offsetLeft, offsetTop, keyboardInset, keyboardVisible ? 1 : 0, compactViewport ? 1 : 0].join('|');
+    if (!force && signature === this.lastViewportSignature) return;
+    this.lastViewportSignature = signature;
+
     const root = document.documentElement;
     root.style.setProperty('--runtime-viewport-width', `${width}px`);
     root.style.setProperty('--runtime-viewport-height', `${height}px`);
     root.style.setProperty('--runtime-shell-width', `${portraitWidth}px`);
     root.style.setProperty('--runtime-visual-left', `${offsetLeft}px`);
     root.style.setProperty('--runtime-visual-top', `${offsetTop}px`);
-  };
+    root.style.setProperty('--v21115-visual-height', `${height}px`);
+    root.style.setProperty('--v21115-visual-width', `${width}px`);
+    root.style.setProperty('--v21115-keyboard-inset', `${keyboardInset}px`);
+    root.classList.toggle('v21115-keyboard-visible', keyboardVisible);
+    root.classList.toggle('v21115-compact-viewport', compactViewport);
+    root.dataset.v21115Keyboard = keyboardVisible ? 'visible' : 'hidden';
+  }
 }

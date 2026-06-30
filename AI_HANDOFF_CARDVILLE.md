@@ -3,13 +3,13 @@
 ## 현재 기준
 
 - 프로젝트명: AquaFantasia / 아쿠아 판타지아
-- 기준 패키지 버전: `2.1.114`
+- 기준 패키지 버전: `2.1.116`
 - 기준 기록일: `2026-06-30 KST`
 - 실행 형태: Vite + TypeScript 모바일 세로 전용 웹 게임
 - 주요 배포 흐름: GitHub Actions `validate-and-deploy`에서 `npm ci` → `npm run validate` → `npm run typecheck` → `npm run build` → GitHub Pages 배포
 - 사용자 작업 환경: GitHub Desktop, Firebase 무료 플랜
 - 업로드 원본: `.git` 폴더 제외 통파일 zip
-- 산출물 zip 파일명 규칙: 짧게 쓰되 버전 숫자를 반드시 포함한다. 예: `AF-v2.1.114-full.zip`, `AF-v2.1.114-patch.zip`
+- 산출물 zip 파일명 규칙: 짧게 쓰되 버전 숫자를 반드시 포함한다. 예: `AF-v2.1.116-full.zip`, `AF-v2.1.116-patch.zip`
 
 ## 절대 유지 규칙
 
@@ -45,6 +45,8 @@
 
 - 낚시 상태: `idle`, `casting`, `waiting`, `bite`, `reeling`, `success`, `fail`
 - v2.1.110 핵심 기능은 유지됨: 낚시 안전 구간 0.5 단위 양자화, 물고기 피로도 기반 저항 완화, 입질/액션 배지/게이지/릴 콘솔/결과창 safe-area 재정렬
+- v2.1.116 핵심: 낚싯대/미끼 loadout 꿈틀거림, 연속 성공 구버전 스킨, `물었다!` 창 자동 전환/흔들림, 성공 결과창 크기 흔들림을 UI hotfix로 보정. 낚시 판정/보상/밸런스는 건드리지 않음
+- v2.1.115 핵심: 기능/게임 로직은 건드리지 않고, RuntimeQualityManager의 viewport 이벤트를 RAF batching/signature 비교로 가볍게 만들고, 키보드/주소창 변동 시 패널·입력창·safe-area 보정을 마지막 CSS 스코프와 검증 스크립트로 보강
 - v2.1.114 핵심: 기능/게임 로직은 건드리지 않고, 상점/가방/미션/도감/건설/결과창 카드 폭, 긴 문구 줄바꿈, 하단 내비 safe-area, 낚시 결과창 스크롤 경계를 마지막 CSS 스코프와 검증 스크립트로 보강
 - v2.1.113 핵심: 기능/게임 로직은 건드리지 않고, 모바일 세로 UI/UX 안정성 스윕을 마지막 CSS 스코프와 검증 스크립트로 보강
 - v2.1.112 핵심: 기능/게임 로직은 건드리지 않고, GitHub Actions에서 AI_HANDOFF_CARDVILLE.md가 삭제되던 검증 순서/패치 누락 문제를 해결
@@ -52,6 +54,112 @@
 - 마을 핵심: Pixi 월드, 80 x 80 계열 타일, 건물 설치/이동, 경로 탐색, NPC, 수동 조이스틱/키보드 이동
 - 저장 핵심: `localStorage` 키 `aqua-fantasia-save-v650`, 이전 키 일부 마이그레이션, 저장값 sanitize 후 저장
 - Firebase 핵심: `window.AQUA_FIREBASE_CONFIG`에 `apiKey`가 있을 때만 `firebase/app`, `firebase/auth`를 동적 import하고 익명 로그인 시도. 설정이 없으면 로컬 저장으로 진행
+
+
+## v2.1.116 낚시 UI 안정성 hotfix 기록
+
+### 사용자 제보와 원인
+
+- 제보: 낚시대/미끼 버튼이 혼자 꿈틀거림.
+- 제보: 연속 성공 테이블이 구버전이고 Aqua 스킨 이미지가 적용되지 않음.
+- 제보: `물었다!` 창이 너무 왔다갔다 열림.
+- 제보: 성공창이 화면에서 커졌다 작아졌다 함.
+- 확인한 핵심 원인: `triggerBite()`가 `showBiteCallout()` 직후 1.2초 자동 `startReeling()`을 실행해 callout이 사용자가 읽기 전에 사라질 수 있었다. 또한 누적 CSS/normalizer 레이어가 loadout/combo/result에 transform/animation/old skin을 섞어 줄 가능성이 있었다.
+
+### 적용 내용
+
+- `src/main.ts`
+  - 루트 스코프 `v21116-fishing-ui-stability-hotfix-root`와 `data-v21116-fishing-ui-stability-hotfix` 추가.
+  - 낚시 장비 strip/cell에 `v21116-loadout-stable`, `v21116-loadout-cell` 토큰 추가.
+  - 연속 성공 badge에 `v21116-combo-badge` 토큰 추가.
+  - 캐스팅 버튼에 `v21116-cast-button-stable` 토큰 추가.
+  - `triggerBite()`의 1.2초 자동 릴링 전환 제거. 이제 `물었다!` 이후 플레이어가 직접 바다 화면 또는 `릴링 시작` 버튼으로 릴링을 시작한다.
+  - 낚시 root/stage pointer/touch 처리에서 `.bite-callout`을 제외해 callout 터치와 바다 터치가 충돌하지 않게 했다.
+  - `showBiteCallout()`은 stage 내부 기존 callout을 재사용하고 stage 밖 잔상만 제거한다. 버튼에는 1회성 pointerdown 리스너만 붙인다.
+  - `showResultCard()`는 이미 결과창이 열려 있으면 기존 card를 제거하고 빈 화면으로 return하는 순서를 피하도록 수정했다. `v21116-result-card-stable` 토큰을 추가했다.
+- `src/styles.css`
+  - v2.1.116 마지막 스코프에서 낚싯대/미끼 loadout의 animation/transform/will-change를 고정.
+  - loadout, combo badge, bite callout, result card에 PNG 기반 Aqua premium skin을 적용. SVG 금지 유지.
+  - 결과창은 fixed center, 고정 폭, 최대 높이, stable scrollbar, 결과 물고기 이미지 크기, 버튼 2열 grid를 고정해 크기 흔들림을 줄였다.
+- `tools/check-v21116-fishing-ui-stability-hotfix.mjs`
+  - 버전/캐시/README/handoff 동기화, 사용자 제보 hotfix 토큰, 자동 릴링 제거, callout 재사용, result card 안정 순서, SVG 금지, CSS 자산 존재를 검사한다.
+
+### 절대 유지한 것
+
+- 낚시 판정/게이지 수치/보상/물고기 데이터는 수정하지 않았다.
+- 마을 이동/좌표/충돌/건설 로직은 수정하지 않았다.
+- Firebase 저장/익명 로그인 fallback 흐름은 수정하지 않았다.
+- 오프닝 video-only, 플레이어 8방향 파일명/flip 금지 정책은 유지했다.
+- 정상 작동 기능을 재작성하지 않고, 사용자 제보 UI 흔들림 지점만 직접 보정했다.
+
+### v2.1.116 필수 검수
+
+```bash
+npm run validate
+```
+
+네트워크 가능한 환경에서는 이어서 아래를 확인한다.
+
+```bash
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+현재 샌드박스 검수 결과 작업본 `npm run validate`는 통과했다. `tools/*.mjs` 문법 검사도 통과했다. v2.1.116 full zip 새 압축 해제본과 v2.1.115 full + v2.1.116 patch 덮어쓰기본 모두 `npm run validate`가 통과했다. full/patch zip 경로 안전성, `.git`/`node_modules`/`dist`/`reports`/`.log`/SVG 미포함, `.md`가 `README.md`와 `AI_HANDOFF_CARDVILLE.md`뿐인 것도 확인했다. `npm run ci:registry:check`는 DNS 제한으로 `EAI_AGAIN registry.npmjs.org` 실패했다. 전체 `npm ci`, `typecheck`, `build`는 GitHub Actions 결과를 최종 기준으로 본다.
+
+
+## v2.1.115 런타임 viewport/input 가드 기록
+
+### 적용 범위
+
+- 이번 패치는 v2.1.114 기준 `npm run validate` 통과를 확인한 뒤 진행했다.
+- 정상 작동 가능성이 높은 게임 시스템, 낚시 판정/보상 수치, 물고기 데이터, 마을 좌표/충돌/건설 로직, Firebase 저장/익명 연동 흐름은 수정하지 않았다.
+- 엔진/의존성 업그레이드는 현재 샌드박스에서 `npm ci`, `typecheck`, `build`를 확인할 수 없어 보류했다. 대신 검증 가능한 런타임 viewport 처리, 입력 UI 안정성, 서비스워커 캐시 안정성만 적용했다.
+- `src/core/RuntimeQualityManager.ts` 변경 내용:
+  - `v21115-runtime-viewport-input-root` 루트 클래스와 `data-v21115-runtime-viewport-input` 토큰 추가
+  - `visualViewport`/resize/orientation/pageshow/focusin/focusout 이벤트를 즉시 CSS 쓰기가 아닌 `requestAnimationFrame` batching으로 처리
+  - viewport width/height/offset/keyboard inset 상태가 이전과 같으면 CSS 변수를 다시 쓰지 않는 signature guard 추가
+  - `--v21115-visual-height`, `--v21115-visual-width`, `--v21115-keyboard-inset`, `v21115-keyboard-visible`, `v21115-compact-viewport` 상태 추가
+- `src/styles.css` 마지막 레이어에 다음 UI/UX 보정을 추가했다.
+  - 키보드 표시 상태에서 메뉴/모달/패널/상점/가방/도감/미션/결과창 최대 높이를 visual viewport 기준으로 보정
+  - 입력창 focus 시 scroll-margin을 키보드 inset 기준으로 보정
+  - 카드 목록에 stable scrollbar gutter와 overflow-anchor 방지 적용
+  - 버튼/입력/CTA에 touch-action manipulation 적용
+  - compact viewport에서 긴 제목/칩/버튼 높이와 줄간격을 한 번 더 보정
+- `public/sw.js` 변경 내용:
+  - `CACHE_NAME`을 v2.1.115로 동기화
+  - 캐시 정리 함수를 중복 없이 분리
+  - 같은 출처 요청만 앱 캐시에 저장
+  - `response.ok` 성공 응답만 캐시해 외부/Firebase/실패 응답이 앱 캐시에 섞이지 않도록 보강
+- 신규 검증 스크립트 `tools/check-v21115-runtime-viewport-input-guard.mjs`를 추가해 v2.1.115 토큰, 서비스워커 same-origin 캐시 정책, SVG 금지, CSS 자산 존재, README/handoff 보존, v2.1.112 삭제 재발 방지 정책을 함께 확인한다.
+
+### 재발 방지/주의
+
+- RuntimeQualityManager의 FPS 품질 티어 로직은 정상 작동 가능성이 높으므로 함부로 재작성하지 않는다. 이번 변경은 viewport 변수 쓰기 빈도와 키보드 상태 변수에 한정한다.
+- `v21115-keyboard-visible` CSS는 입력창/모달/목록 보정용이다. 낚시 판정, 릴링 수치, 마을 이동 좌표에는 연결하지 않는다.
+- 서비스워커는 앱 내부 정적 자산 캐시에 집중한다. Firebase/외부 API를 오프라인 캐시에 섞지 않는다.
+- SVG 이미지 절대 금지는 계속 유지한다. 새 이미지가 필요하면 PNG/WEBP만 사용한다.
+- `README.md`와 `AI_HANDOFF_CARDVILLE.md` 외 새 문서를 만들지 않는다.
+- 패치 zip에는 `package.json`에서 참조하는 신규 검증 스크립트와 기존 cleanup/validate 스크립트를 함께 포함한다.
+
+### v2.1.115 필수 검수
+
+```bash
+npm run validate
+```
+
+네트워크 가능한 환경에서는 이어서 아래를 확인한다.
+
+```bash
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+현재 샌드박스 검수 결과 작업본 `npm run validate`는 통과했다. `tsc --noEmit --target ES2022 --lib DOM,DOM.Iterable,ES2022 src/core/RuntimeQualityManager.ts` 단독 검사는 통과했다. v2.1.115 full zip 새 압축 해제본과 v2.1.114 full + v2.1.115 patch 덮어쓰기본 모두 `npm run validate`가 통과했다. `npm run ci:registry:check`는 `EAI_AGAIN registry.npmjs.org`로 실패했으며, `node_modules` 미설치 때문에 전체 install/typecheck/build는 GitHub Actions 결과를 최종 기준으로 본다.
 
 
 ## v2.1.114 인터랙션 레이아웃/디자인 스윕 기록

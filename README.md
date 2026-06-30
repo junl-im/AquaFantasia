@@ -1,4 +1,47 @@
-# AquaFantasia v2.1.114
+# AquaFantasia v2.1.116
+
+
+## v2.1.116 변경사항
+
+- 낚시 화면에서 낚싯대/미끼 장비칸이 혼자 꿈틀거리던 증상을 막기 위해 `fishing-loadout-strip`과 내부 장비 셀의 animation/transform/will-change를 마지막 스코프에서 고정했습니다.
+- 연속 성공 배지가 구버전 테이블처럼 보이던 문제를 보정해 Aqua premium hud capsule PNG 스킨을 적용하고, 한 줄 고정/말줄임/흔들림 방지 스타일을 추가했습니다.
+- `물었다!` 창이 1.2초 뒤 자동 릴링으로 전환되며 열렸다 닫히는 느낌을 주던 흐름을 제거했습니다. 이제 플레이어가 바다 화면 또는 `릴링 시작` 버튼을 눌러 전환하며, 창 자체는 단일 인스턴스로 안정적으로 유지됩니다.
+- 성공 결과창은 Aqua panel PNG 스킨을 적용하고 fixed center, 고정 폭/최대 높이, fish image 크기, 버튼 그리드, idle animation 제거를 적용해 커졌다 작아지는 느낌을 줄였습니다.
+- 게임 판정, 낚시 보상/밸런스, 물고기 데이터, 마을 이동/건설, Firebase 저장 흐름, 오프닝 video-only 정책은 건드리지 않았습니다.
+- 신규 검증 스크립트 `tools/check-v21116-fishing-ui-stability-hotfix.mjs`로 위 네 가지 사용자 제보 증상과 SVG 금지, README/handoff 보존, CSS 자산 존재 여부를 함께 확인합니다.
+
+## v2.1.116 분석/인수인계 기록 - 2026-06-30 KST
+
+- 사용자 제보 증상: 낚싯대/미끼 버튼 꿈틀거림, 연속 성공 테이블 구버전 스킨, Aqua 스킨 미적용, `물었다!` 창 흔들림/자동 닫힘 느낌, 성공창 크기 흔들림.
+- 실제 코드상 `triggerBite()`에 1.2초 후 자동 `startReeling()` 타이머가 있어 `물었다!` 창이 사용자가 읽기 전에 닫히는 체감이 생길 수 있었습니다. v2.1.116에서 자동 전환을 제거하고 플레이어 입력으로만 릴링이 시작되게 했습니다.
+- `.bite-callout` 내부 터치를 루트 낚시 터치 처리에서 제외해, 창을 누르는 것과 바다 화면을 누르는 것이 충돌하지 않게 했습니다. 실제 릴링 시작은 `릴링 시작` 버튼이 처리합니다.
+- `showBiteCallout()`은 기존 stage 내부 callout이 있으면 재사용하고, stage 밖에 남은 잔상만 제거하도록 바꿨습니다. 이로써 동일 state에서 remove/create가 반복되는 위험을 줄였습니다.
+- `showResultCard()`는 이미 결과창이 열려 있으면 기존 창을 지우고 빈 상태로 return하지 않도록 순서를 바꿨고, `v21116-result-card-stable` 데이터 토큰을 추가했습니다.
+- 이번 패치는 UI/UX 안정화 hotfix이며, 수치/밸런스/성장 루프는 변경하지 않았습니다.
+- 작업본 `npm run validate`, `tools/*.mjs` 문법 검사, v2.1.116 full zip 새 압축 해제본 `npm run validate`, v2.1.115 full + v2.1.116 patch 덮어쓰기본 `npm run validate`를 확인했습니다. `npm run ci:registry:check`는 샌드박스 DNS 제한으로 `EAI_AGAIN registry.npmjs.org` 실패했습니다.
+
+
+
+## v2.1.115 변경사항
+
+- 모바일 주소창/키보드 변화, in-app 브라우저 viewport 흔들림, 입력창 focus 시 패널 높이 계산이 잦아지는 문제를 줄이기 위해 `RuntimeQualityManager`에 v2.1.115 런타임 viewport/input 가드를 추가했습니다.
+- `visualViewport` resize/scroll, orientationchange, pageshow, input focus 이벤트를 즉시 스타일 쓰기로 처리하지 않고 `requestAnimationFrame`으로 묶고, 이전 값과 같으면 CSS 변수를 다시 쓰지 않도록 했습니다.
+- 루트에 `v21115-runtime-viewport-input-root`, `v21115-keyboard-visible`, `v21115-compact-viewport` 상태를 부여하고, CSS 마지막 레이어에서 입력창 scroll-margin, 패널 max-height, safe-area 하단 여백, 터치 조작 안정성을 보강했습니다.
+- 서비스워커는 같은 출처 요청만 앱 캐시에 저장하고, 성공 응답만 캐시하도록 정리했습니다. Firebase/외부 요청을 앱 오프라인 캐시에 섞지 않는 안정성 보강입니다.
+- 신규 검증 스크립트 `tools/check-v21115-runtime-viewport-input-guard.mjs`로 버전 동기화, viewport/input 가드 토큰, 서비스워커 same-origin 캐시 정책, SVG 금지, CSS 자산 존재, README/handoff 보존을 확인합니다.
+- 게임 로직, 낚시 판정/보상 수치, 물고기 데이터, 마을 좌표/충돌/건설, Firebase 저장 흐름, 오프닝 video-only 정책은 건드리지 않았습니다.
+
+## v2.1.115 분석/인수인계 기록 - 2026-06-30 KST
+
+- v2.1.114 기준 `npm run validate` 통과를 먼저 확인한 뒤 작업했습니다.
+- 이번 패치의 실제 개선 대상은 기능 밸런스가 아니라 모바일 런타임 안정성입니다. 특히 키보드가 올라올 때 입력창/모달/목록 스크롤 위치가 흔들리거나, 주소창 변화로 viewport 이벤트가 반복되며 스타일 재계산이 늘어나는 위험을 줄였습니다.
+- `src/core/RuntimeQualityManager.ts`에 한정해 viewport 이벤트를 RAF batching + signature 비교 방식으로 바꿨고, 기존 품질 티어 판정/낚시 FPS downshift 로직은 유지했습니다.
+- `src/styles.css`는 `v21115-runtime-viewport-input-root` 스코프 안에서만 작동하는 마지막 레이어를 추가했습니다. 전역 UI 재작성이나 기존 정상 레이어 삭제는 하지 않았습니다.
+- `public/sw.js`는 v2.1.115 캐시명으로 동기화하면서 same-origin 성공 응답만 캐시하도록 정리했습니다. 이 변경은 앱 내부 정적 자산 캐시 안정화 목적이며, Firebase/외부 네트워크 흐름을 가로채지 않게 하기 위한 것입니다.
+- `npm run validate` 통과와 `tsc --noEmit --target ES2022 --lib DOM,DOM.Iterable,ES2022 src/core/RuntimeQualityManager.ts` 단독 문법/타입 검사를 확인했습니다.
+- v2.1.115 full zip을 새로 풀어 `npm run validate` 통과, v2.1.114 full에 v2.1.115 patch zip을 덮어씌운 뒤 `npm run validate` 통과를 확인했습니다.
+- 네트워크 제한 때문에 `npm run ci:registry:check`는 `EAI_AGAIN registry.npmjs.org`로 실패했고, 전체 `npm run ci:install`, `npm run typecheck`, `npm run build`는 GitHub Actions에서 최종 확인해야 합니다.
+
 
 
 ## v2.1.114 변경사항
