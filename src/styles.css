@@ -68538,3 +68538,117 @@ html.v21116-fishing-ui-stability-hotfix-root body[data-screen="fishing"] .catch-
     transform-style: flat !important;
   }
 }
+
+/* v2.1.117 village top-right menu icon clarity: bigger icons inside the same 34px cells, clipped cleanly so no stray art bleeds above the button. */
+html.v21117-village-menu-icon-clarity-root {
+  --v21117-menu-cell: 34px;
+  --v21117-menu-gap: 3px;
+  --v21117-menu-icon: 25px;
+}
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity) {
+  display: grid !important;
+  grid-template-columns: repeat(2, var(--v21117-menu-cell)) !important;
+  grid-auto-rows: var(--v21117-menu-cell) !important;
+  gap: var(--v21117-menu-gap) !important;
+  width: calc((var(--v21117-menu-cell) * 2) + var(--v21117-menu-gap)) !important;
+  height: calc((var(--v21117-menu-cell) * 3) + (var(--v21117-menu-gap) * 2)) !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  contain: layout paint style !important;
+}
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity)::before,
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity)::after {
+  content: none !important;
+  display: none !important;
+}
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock,.v21117-world-controls-icon-clarity) button,
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] .v21117-top-menu-cell {
+  box-sizing: border-box !important;
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  width: var(--v21117-menu-cell) !important;
+  height: var(--v21117-menu-cell) !important;
+  min-width: var(--v21117-menu-cell) !important;
+  min-height: var(--v21117-menu-cell) !important;
+  max-width: var(--v21117-menu-cell) !important;
+  max-height: var(--v21117-menu-cell) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 1px solid rgba(214, 252, 255, .48) !important;
+  border-radius: 11px !important;
+  background: linear-gradient(180deg, rgba(247,255,255,.34), rgba(33,167,222,.20)) !important;
+  background-image: linear-gradient(180deg, rgba(247,255,255,.34), rgba(33,167,222,.20)) !important;
+  background-clip: padding-box !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 2px 7px rgba(0,42,80,.08) !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  clip-path: inset(0 round 11px) !important;
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  opacity: .98 !important;
+  contain: layout paint style !important;
+  touch-action: manipulation !important;
+}
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] .v21117-top-menu-cell::before,
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] .v21117-top-menu-cell::after,
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock) button::before,
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock) button::after {
+  content: none !important;
+  display: none !important;
+}
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock) button :is(span:first-child,.v2157-menu-glyph,img,.icon),
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] .v21117-menu-icon-clarity {
+  display: grid !important;
+  place-items: center !important;
+  width: var(--v21117-menu-icon) !important;
+  height: var(--v21117-menu-icon) !important;
+  min-width: var(--v21117-menu-icon) !important;
+  min-height: var(--v21117-menu-icon) !important;
+  max-width: var(--v21117-menu-icon) !important;
+  max-height: var(--v21117-menu-icon) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  font-size: var(--v21117-menu-icon) !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  text-align: center !important;
+  transform: translateZ(0) !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 40, 78, .24)) !important;
+}
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock) button img,
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] .v21117-menu-icon-clarity:is(img) {
+  display: block !important;
+}
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock) button :is(span:first-child,.v2157-menu-glyph)::before,
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock) button :is(span:first-child,.v2157-menu-glyph)::after {
+  content: none !important;
+  display: none !important;
+}
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v2167-world-controls-aqua-lock,.v2168-world-controls-aqua-lock,.v2170-world-controls-aqua-lock,.v21105-top-menu-grid-lock) button > span:last-child,
+html.v21117-village-menu-icon-clarity-root body[data-screen="village"] .v2157-menu-label {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+@media (max-width: 360px), (max-height: 610px) {
+  html.v21117-village-menu-icon-clarity-root { --v21117-menu-icon: 24px; }
+}

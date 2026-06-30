@@ -3,13 +3,13 @@
 ## 현재 기준
 
 - 프로젝트명: AquaFantasia / 아쿠아 판타지아
-- 기준 패키지 버전: `2.1.116`
+- 기준 패키지 버전: `2.1.117`
 - 기준 기록일: `2026-06-30 KST`
 - 실행 형태: Vite + TypeScript 모바일 세로 전용 웹 게임
 - 주요 배포 흐름: GitHub Actions `validate-and-deploy`에서 `npm ci` → `npm run validate` → `npm run typecheck` → `npm run build` → GitHub Pages 배포
 - 사용자 작업 환경: GitHub Desktop, Firebase 무료 플랜
 - 업로드 원본: `.git` 폴더 제외 통파일 zip
-- 산출물 zip 파일명 규칙: 짧게 쓰되 버전 숫자를 반드시 포함한다. 예: `AF-v2.1.116-full.zip`, `AF-v2.1.116-patch.zip`
+- 산출물 zip 파일명 규칙: 짧게 쓰되 버전 숫자를 반드시 포함한다. 예: `AF-v2.1.117-full.zip`, `AF-v2.1.117-patch.zip`
 
 ## 절대 유지 규칙
 
@@ -45,6 +45,7 @@
 
 - 낚시 상태: `idle`, `casting`, `waiting`, `bite`, `reeling`, `success`, `fail`
 - v2.1.110 핵심 기능은 유지됨: 낚시 안전 구간 0.5 단위 양자화, 물고기 피로도 기반 저항 완화, 입질/액션 배지/게이지/릴 콘솔/결과창 safe-area 재정렬
+- v2.1.117 핵심: 마을 우측 상단 메뉴 아이콘은 버튼 크기/2x3 배치를 유지한 채 내부 아이콘만 24~25px로 키우고, clipping/isolation/pseudo 제거로 위쪽 다른 그림 비침을 방지. 마을 이동/건설/상점/출항 동작은 건드리지 않음
 - v2.1.116 핵심: 낚싯대/미끼 loadout 꿈틀거림, 연속 성공 구버전 스킨, `물었다!` 창 자동 전환/흔들림, 성공 결과창 크기 흔들림을 UI hotfix로 보정. 낚시 판정/보상/밸런스는 건드리지 않음
 - v2.1.115 핵심: 기능/게임 로직은 건드리지 않고, RuntimeQualityManager의 viewport 이벤트를 RAF batching/signature 비교로 가볍게 만들고, 키보드/주소창 변동 시 패널·입력창·safe-area 보정을 마지막 CSS 스코프와 검증 스크립트로 보강
 - v2.1.114 핵심: 기능/게임 로직은 건드리지 않고, 상점/가방/미션/도감/건설/결과창 카드 폭, 긴 문구 줄바꿈, 하단 내비 safe-area, 낚시 결과창 스크롤 경계를 마지막 CSS 스코프와 검증 스크립트로 보강
@@ -55,6 +56,51 @@
 - 저장 핵심: `localStorage` 키 `aqua-fantasia-save-v650`, 이전 키 일부 마이그레이션, 저장값 sanitize 후 저장
 - Firebase 핵심: `window.AQUA_FIREBASE_CONFIG`에 `apiKey`가 있을 때만 `firebase/app`, `firebase/auth`를 동적 import하고 익명 로그인 시도. 설정이 없으면 로컬 저장으로 진행
 
+
+## v2.1.117 마을 우측 상단 메뉴 아이콘 시인성 hotfix 기록
+
+### 사용자 제보와 원인
+
+- 제보: 마을 화면 우측 위 버튼들 아이콘 크기가 작아 잘 보이지 않음.
+- 제보: 아이콘 위쪽에 다른 그림이 보이는 느낌이 있어 보정 필요.
+- 원인 후보: 누적 메뉴 보정 패스가 34px 셀 안에 21~22px 아이콘을 쓰고 있었고, 버튼이 투명/반투명 단일 프레임으로 처리되어 월드 배경 또는 이전 pseudo 프레임이 상단에서 비쳐 보이는 체감이 생길 수 있었다.
+
+### 적용 내용
+
+- `src/main.ts`
+  - 루트 스코프 `v21117-village-menu-icon-clarity-root`와 데이터 토큰 `data-v21117-village-menu-icon-clarity` 추가.
+  - `installV21117VillageMenuIconClarityPass()` 추가. 이 패스는 마을 화면 우측 상단 메뉴에만 작동한다.
+  - 메뉴 셀은 34px, 2x3 배치, 3px gap을 유지한다.
+  - 아이콘은 일반 화면 25px, 매우 작은 화면 24px로 키워 아이콘과 테두리 간격을 줄인다.
+  - 버튼에 `overflow:hidden`, `clip-path`, `isolation:isolate`, background-image 제거, pseudo-element 제거 토큰을 적용한다.
+  - 메뉴 텍스트 라벨은 기존처럼 시각적으로 숨겨 아이콘 중심 배치를 유지한다.
+- `src/styles.css`
+  - `v2.1.117 village top-right menu icon clarity` 마지막 스코프 추가.
+  - 우측 상단 메뉴 컨테이너/버튼/아이콘/라벨을 마을 화면에 한정해 보정한다.
+  - SVG 이미지 추가 없음. 기존 PNG 아이콘만 사용.
+- `tools/check-v21117-village-menu-icon-clarity.mjs`
+  - 버전/캐시/README/handoff 동기화, v2.1.117 root/runtime/CSS 토큰, SVG 금지, CSS 자산 존재, README/handoff만 문서 허용을 확인한다.
+
+### 절대 건드리지 않은 것
+
+- 마을 이동/조이스틱/키보드 이동
+- 확대/축소/원점/건설/상점/출항 이벤트
+- 건설 좌표/충돌/경로 탐색/NPC/카메라
+- 낚시 판정/보상/밸런스
+- Firebase 저장/익명 로그인 fallback
+- 오프닝 video-only 정책
+- 플레이어 방향 파일명/flip 금지 정책
+
+### v2.1.117 필수 검수
+
+1. GitHub Actions에서 `npm run validate` 통과.
+2. 실제 모바일 마을 화면에서 우측 상단 6개 버튼이 기존 위치/크기를 유지하는지 확인.
+3. 아이콘이 이전보다 또렷하게 보이는지 확인.
+4. 아이콘 위쪽에 다른 그림, 프레임, 잘린 잔상이 남지 않는지 확인.
+5. 확대/축소, 건설, 원점, 상점, 출항 버튼이 정상 동작하는지 확인.
+6. `.svg`, `.svgz`, `image/svg`, 인라인 `<svg>` 런타임 참조가 추가되지 않았는지 확인.
+
+현재 샌드박스 검수 결과 작업본 `npm run validate`, `tools/*.mjs` 문법 검사, v2.1.117 full zip 새 압축 해제본 `npm run validate`, v2.1.116 full + v2.1.117 patch 덮어쓰기본 `npm run validate`가 통과했다. full/patch zip 경로 안전성, `.git`/`node_modules`/`dist`/`reports`/`.log`/SVG 미포함, `.md`가 `README.md`와 `AI_HANDOFF_CARDVILLE.md`뿐인 것도 확인했다. `npm run typecheck`는 현재 샌드박스에 `node_modules`가 없어 `howler`, `pixi.js`, `firebase`, `vite` 모듈 해석 실패로 완료하지 못했다. 전체 `npm ci`, `typecheck`, `build`는 GitHub Actions 결과를 최종 기준으로 본다.
 
 ## v2.1.116 낚시 UI 안정성 hotfix 기록
 

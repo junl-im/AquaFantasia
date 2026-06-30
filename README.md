@@ -1,5 +1,22 @@
-# AquaFantasia v2.1.116
+# AquaFantasia v2.1.117
 
+## v2.1.117 변경사항
+
+- 마을 화면 우측 상단 2x3 조작 버튼의 전체 셀 크기는 34px 그대로 유지하면서 내부 아이콘만 24~25px로 키웠습니다.
+- 아이콘과 테두리 사이 여백을 줄여 시인성을 높이되, 버튼이 더 커져 보이거나 HUD를 더 많이 가리지 않도록 했습니다.
+- 버튼/아이콘에 `overflow:hidden`, `clip-path`, `isolation:isolate`, pseudo-element 제거를 적용해 아이콘 위쪽에 다른 그림이 비쳐 보이는 현상을 막았습니다.
+- 기존 마을 이동, 건설, 확대/축소, 원점 이동, 상점, 출항 동작은 변경하지 않았습니다.
+- SVG 금지, README/handoff만 기록, 정상 기능 불필요 수정 금지 정책을 유지했습니다.
+- 신규 검증 스크립트 `tools/check-v21117-village-menu-icon-clarity.mjs`로 버전 동기화, 우측 상단 메뉴 아이콘 토큰, bleed 방지 CSS, SVG 금지, CSS 자산 존재 여부를 확인합니다.
+
+## v2.1.117 분석/인수인계 기록 - 2026-06-30 KST
+
+- 사용자 제보: 마을 우측 위 버튼 아이콘이 작아 잘 안 보이고, 아이콘 위쪽에 다른 그림이 보이는 느낌이 있음.
+- 기존 메뉴 계열은 누적 보정 패스에서 34px 버튼에 21~22px 아이콘을 쓰고 있었고, 투명/반투명 배경과 여러 pseudo/프레임 레이어가 겹쳐 상단 가장자리에서 다른 이미지가 비치는 체감이 생길 수 있었습니다.
+- v2.1.117은 버튼 전체 크기와 2x3 배치, 터치 타겟 위치는 유지하면서 내부 아이콘 변수와 마지막 런타임 보정만 추가했습니다.
+- 새 패스 `installV21117VillageMenuIconClarityPass()`는 마을 화면에서만 작동하며, 기존 정상 기능/게임 수치/마을 좌표/건설 로직/Firebase/낚시 판정은 건드리지 않습니다.
+- 작업본 `npm run validate`, `tools/*.mjs` 문법 검사, v2.1.117 full zip 새 압축 해제본 `npm run validate`, v2.1.116 full + v2.1.117 patch 덮어쓰기본 `npm run validate`를 확인했습니다.
+- `npm run typecheck`는 현재 샌드박스에 `node_modules`가 없어 `howler`, `pixi.js`, `firebase`, `vite` 모듈 해석 실패로 완료하지 못했습니다. GitHub Actions의 `npm ci` 이후 결과를 최종 기준으로 봅니다.
 
 ## v2.1.116 변경사항
 

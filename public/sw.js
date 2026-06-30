@@ -1,5 +1,5 @@
-// v2.1.116 fishing UI stability hotfix: stable loadout, bite callout, combo badge, result card, and same-origin cache containment.
-const CACHE_NAME = 'aqua-fantasia-v2.1.116-fishing-ui-stability-hotfix';
+// v2.1.117 village menu icon clarity: top-right icon visibility, single clipped button skin, and same-origin cache containment.
+const CACHE_NAME = 'aqua-fantasia-v2.1.117-village-menu-icon-clarity';
 const CORE_ASSETS = [
   './',
   './index.html',
