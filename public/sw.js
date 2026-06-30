@@ -1,5 +1,5 @@
-// v2.1.110 Fishing feel/design stability: fatigue resistance, quantized safe window, micro UI hygiene.
-const CACHE_NAME = 'aqua-fantasia-v2.1.110-fishing-feel-design-stability';
+// v2.1.111 Asset policy/handoff guard: SVG ban, existing asset references, no gameplay touch.
+const CACHE_NAME = 'aqua-fantasia-v2.1.111-asset-policy-handoff';
 const CORE_ASSETS = [
   './',
   './index.html',

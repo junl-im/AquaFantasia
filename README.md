@@ -1,5 +1,28 @@
-# AquaFantasia v2.1.110
+# AquaFantasia v2.1.111
 
+
+## v2.1.111 변경사항
+
+- 사용자 추가 원칙을 고정했습니다: 잘 작동되는 기능은 불필요하게 건드리지 않고, SVG 이미지는 절대 사용하지 않습니다.
+- 이전 분석에서 발견한 CSS 누락 자산 참조 3개만 실제 존재하는 PNG/WEBP 자산으로 교정했습니다. 게임 로직, 낚시 수치, 마을 이동, Firebase 흐름은 수정하지 않았습니다.
+- 신규 검증 스크립트 `tools/check-v21111-asset-policy-handoff.mjs`를 추가해 버전 동기화, SVG 파일/런타임 참조 금지, CSS 자산 존재 여부, package-lock 레지스트리 청결, 인수인계 규칙을 확인합니다.
+- 서비스워커/오프라인 페이지/패키지 버전을 v2.1.111로 동기화하고, 산출물 zip 파일명에는 앞으로 버전 숫자를 포함하도록 기록했습니다.
+- `README.md`와 `AI_HANDOFF_CARDVILLE.md` 외 불필요한 문서 생성 금지 정책을 유지했습니다.
+
+## v2.1.111 분석/인수인계 기록 - 2026-06-30 KST
+
+- 이번 패치는 기능 확장이 아니라 안전 패치입니다. 기존 정상 작동 가능성이 높은 런타임 기능은 건드리지 않았습니다.
+- 수정한 CSS 경로는 `/assets/v12/buttons/btn_orange_wide_blank.webp` → `/assets/v12/buttons/btn_orange_normal_wide_blank.webp`, `./assets/v2110/ui/main_aqua_cards/ui_card_001.png` → `./assets/v2110/ui/main_aqua_cards/ui_main_001.png`, `./assets/v2110/ui/buttons_and_badges/ui_badge_001.png` → `./assets/v2110/ui/buttons_and_badges/ui_button_001.png`입니다.
+- `npm run validate`는 v2.1.111 기준으로 통과해야 합니다. 네트워크가 막힌 환경에서는 `npm ci`, `typecheck`, `build`를 끝까지 확인하지 못할 수 있으므로 GitHub Actions에서 최종 확인합니다.
+- 다음 패치 후보는 GitHub Actions 결과 확인, 실제 모바일 세로 화면 낚시 UI 검수, 마을 건설/조이스틱 터치 검수입니다.
+
+
+## v2.1.110 분석/인수인계 기록 - 2026-06-30 KST
+
+- 업로드된 통파일을 기준으로 구조, GitHub Actions, Firebase fallback, 서비스워커, 버전 동기화, 정적 자산 참조를 1차 분석했습니다.
+- 앞으로 진행 기록은 `README.md`와 `AI_HANDOFF_CARDVILLE.md`에만 남기도록 문서 허용 정책을 조정했습니다.
+- `npm run validate`는 통과했습니다. 현재 샌드박스 DNS 제한으로 `npm ci`, `typecheck`, `build`는 완료하지 못했으므로 GitHub Actions에서 재확인이 필요합니다.
+- 다음 패치 후보는 CSS 누락 자산 참조 3개 확인, 낚시 UI 실기기 겹침 재검수, 마을 건설/조이스틱 터치 검수입니다.
 
 ## v2.1.110 변경사항
 
