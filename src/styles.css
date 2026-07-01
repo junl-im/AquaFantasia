@@ -69848,3 +69848,279 @@ html.v21124-root-cause-ux-repair-root body[data-screen="fishing"] .catch-result-
     transition: none !important;
   }
 }
+
+/* v2.1.125 legacy debt reducer: hand off noisy old style finalizers to one light final anchor. */
+html.v21125-legacy-debt-reducer-root {
+  --v21125-nav-right: calc(env(safe-area-inset-right, 0px) + 8px);
+  --v21125-nav-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+  --v21125-nav-width: min(232px, calc(100vw - 18px));
+  --v21125-page-width: min(430px, calc(100vw - 20px));
+  --v21125-loadout-top: calc(env(safe-area-inset-top, 0px) + 94px);
+  --v21125-combo-bottom: calc(env(safe-area-inset-bottom, 0px) + 92px);
+}
+html.v21125-legacy-debt-reducer-root body[data-screen]:not([data-screen="fishing"]) .bottom-nav.v21125-bottom-nav-final,
+html.v21125-legacy-debt-reducer-root body[data-screen]:not([data-screen="fishing"]) .v2097-bottom-nav.v21125-bottom-nav-final,
+html.v21125-legacy-debt-reducer-root body[data-screen]:not([data-screen="fishing"]) .v2098-bottom-nav.v21125-bottom-nav-final {
+  display: grid !important;
+  position: fixed !important;
+  right: var(--v21125-nav-right) !important;
+  bottom: var(--v21125-nav-bottom) !important;
+  left: auto !important;
+  top: auto !important;
+  width: var(--v21125-nav-width) !important;
+  max-width: calc(100vw - 18px) !important;
+  height: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  animation: none !important;
+  transition: none !important;
+  z-index: 870 !important;
+  contain: layout paint style !important;
+  will-change: auto !important;
+}
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .bottom-nav.v21125-bottom-nav-final,
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .v2097-bottom-nav.v21125-bottom-nav-final,
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .v2098-bottom-nav.v21125-bottom-nav-final {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+html.v21125-legacy-debt-reducer-root .v21125-village-guide-popup {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(356px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  translate: none !important;
+  scale: 1 !important;
+  z-index: 795 !important;
+  pointer-events: auto !important;
+  contain: layout paint style !important;
+  animation: none !important;
+  transition: none !important;
+}
+.v21125-guide-card {
+  display: grid;
+  gap: 10px;
+  padding: 18px 16px 16px;
+  border-radius: 26px;
+  border: 1px solid rgba(202, 248, 255, 0.34);
+  background: linear-gradient(180deg, rgba(39, 177, 221, 0.92), rgba(8, 42, 92, 0.96));
+  color: #f6fdff;
+  box-shadow: 0 22px 56px rgba(0, 14, 34, 0.38), inset 0 2px 0 rgba(255,255,255,0.25);
+  text-align: left;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.v21125-guide-eyebrow {
+  justify-self: start;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.86);
+  color: #075171;
+  font-size: 11px;
+  font-weight: 1000;
+}
+.v21125-guide-card strong { font-size: 17px; line-height: 1.24; text-shadow: 0 2px 10px rgba(0,0,0,0.26); }
+.v21125-guide-card p { margin: 0; color: rgba(239, 252, 255, 0.9); font-size: 13px; line-height: 1.42; font-weight: 800; }
+.v21125-guide-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.v21125-guide-steps span { min-width: 0; padding: 7px 6px; border-radius: 14px; background: rgba(255,255,255,0.14); text-align: center; font-size: 12px; font-weight: 1000; }
+.v21125-guide-actions { display: grid; grid-template-columns: 1fr 1fr auto; gap: 7px; }
+.v21125-guide-actions button {
+  min-height: 38px;
+  border: 0;
+  border-radius: 14px;
+  padding: 0 10px;
+  background: linear-gradient(180deg, #fff8b2, #52e6fb);
+  color: #07405b;
+  font-weight: 1000;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.5), 0 8px 18px rgba(0,0,0,0.2);
+}
+html.v21125-legacy-debt-reducer-root body[data-screen] .runtime-menu-screen.v21125-runtime-page-final {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: var(--v21125-visual-height, 100svh) !important;
+  min-height: var(--v21125-visual-height, 100svh) !important;
+  margin: 0 !important;
+  padding-left: max(10px, env(safe-area-inset-left, 0px)) !important;
+  padding-right: max(10px, env(safe-area-inset-right, 0px)) !important;
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 126px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  animation: none !important;
+  transition: none !important;
+}
+html.v21125-legacy-debt-reducer-root body[data-screen] .v21125-page-column-final {
+  width: var(--v21125-page-width) !important;
+  max-width: var(--v21125-page-width) !important;
+  min-width: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  box-sizing: border-box !important;
+  overflow-anchor: none !important;
+}
+html.v21125-legacy-debt-reducer-root body[data-screen="village"] .v21125-expedition-final.v2097-expedition-body-open {
+  display: block !important;
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 50% !important;
+  bottom: auto !important;
+  width: min(386px, calc(100vw - 22px)) !important;
+  max-width: calc(100vw - 22px) !important;
+  max-height: calc(var(--v21125-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 34px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  translate: none !important;
+  scale: 1 !important;
+  animation: none !important;
+  transition: none !important;
+  z-index: 855 !important;
+  pointer-events: auto !important;
+  box-sizing: border-box !important;
+  contain: layout paint style !important;
+  will-change: auto !important;
+}
+html.v21125-legacy-debt-reducer-root body[data-screen="village"] .v21125-village-modal-final {
+  max-width: calc(100vw - 22px) !important;
+  max-height: calc(var(--v21125-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 34px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  box-sizing: border-box !important;
+  animation: none !important;
+  transition: none !important;
+  z-index: 855 !important;
+}
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .v21125-water-final {
+  animation: none !important;
+  transition: none !important;
+  transform: translateZ(0) !important;
+  translate: none !important;
+  scale: 1 !important;
+  will-change: auto !important;
+  backface-visibility: hidden !important;
+  contain: paint !important;
+  pointer-events: none !important;
+}
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .v21125-sea-lane-final {
+  position: fixed !important;
+  left: max(10px, env(safe-area-inset-left, 0px)) !important;
+  top: calc(env(safe-area-inset-top, 0px) + 58px) !important;
+  width: min(258px, calc(100vw - 20px)) !important;
+  max-width: calc(100vw - 20px) !important;
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  animation: none !important;
+  transition: none !important;
+  z-index: 522 !important;
+  contain: layout paint style !important;
+}
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .fishing-screen.v21125-fishing-focused .v21125-sea-lane-final,
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .fishing-screen.v21125-fishing-focused .v21125-loadout-final {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .v21125-loadout-final {
+  position: fixed !important;
+  left: 50% !important;
+  top: var(--v21125-loadout-top) !important;
+  width: min(318px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  translate: none !important;
+  scale: 1 !important;
+  animation: none !important;
+  transition: none !important;
+  z-index: 532 !important;
+  contain: layout paint style !important;
+  will-change: auto !important;
+}
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .v21125-loadout-child-final {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  flex-shrink: 0 !important;
+}
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .combo-badge.v21125-combo-final:not(.hidden) {
+  position: fixed !important;
+  left: 50% !important;
+  bottom: var(--v21125-combo-bottom) !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  translate: none !important;
+  scale: 1 !important;
+  animation: none !important;
+  transition: none !important;
+  z-index: 722 !important;
+}
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .bite-callout.v21125-bite-final,
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .catch-result-card.v21125-result-final {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 50% !important;
+  bottom: auto !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  translate: none !important;
+  scale: 1 !important;
+  animation: none !important;
+  transition: none !important;
+  contain: layout paint style !important;
+}
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .bite-callout.v21125-bite-final {
+  width: min(332px, calc(100vw - 30px)) !important;
+  max-width: calc(100vw - 30px) !important;
+  z-index: 902 !important;
+}
+html.v21125-legacy-debt-reducer-root body[data-screen="fishing"] .catch-result-card.v21125-result-final {
+  width: min(356px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  max-height: calc(var(--v21125-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 32px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  z-index: 912 !important;
+}
+@media (max-width: 360px), (max-height: 610px) {
+  html.v21125-legacy-debt-reducer-root {
+    --v21125-nav-width: min(216px, calc(100vw - 14px));
+    --v21125-page-width: min(420px, calc(100vw - 16px));
+    --v21125-loadout-top: calc(env(safe-area-inset-top, 0px) + 82px);
+    --v21125-combo-bottom: calc(env(safe-area-inset-bottom, 0px) + 84px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21125-legacy-debt-reducer-root body[data-screen] :is(.v21125-owned-final,.v21125-bottom-nav-final,.v21125-runtime-page-final,.v21125-page-column-final,.v21125-expedition-final,.v21125-village-modal-final,.v21125-village-guide-popup,.v21125-water-final,.v21125-sea-lane-final,.v21125-loadout-final,.v21125-combo-final,.v21125-bite-final,.v21125-result-final) {
+    animation: none !important;
+    transition: none !important;
+  }
+}

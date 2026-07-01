@@ -1,5 +1,5 @@
-// v2.1.124 system UX/performance: first-village guide, centered pages, fishing jitter guard, and same-origin cache containment.
-const CACHE_NAME = 'aqua-fantasia-v2.1.124-root-cause-ux-repair';
+// v2.1.125 legacy debt reducer: light finalizer, observer handoff, jitter guard, and same-origin cache containment.
+const CACHE_NAME = 'aqua-fantasia-v2.1.125-legacy-debt-reducer';
 const CORE_ASSETS = [
   './',
   './index.html',

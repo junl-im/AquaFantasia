@@ -1,4 +1,58 @@
-# AquaFantasia v2.1.124
+# AquaFantasia v2.1.125
+
+## v2.1.125 변경사항
+
+- 코드 꼬임/예전 보정 코드 재개입 문제를 다시 점검하고, v2.1.124의 `style` mutation finalizer가 예전 observer와 서로 다시 쓰기를 반복할 수 있는 부분을 줄였습니다.
+- 새 패스 `installV21125LegacyDebtReducerPass()`를 추가했습니다. 이 패스는 v2.1.124 감시를 최신 경량 finalizer에게 인수인계하고, 동일 값 반복 쓰기를 `WeakMap` signature와 실제 inline style 확인으로 줄입니다.
+- `v21125-legacy-debt-reducer-root`, `v21125-owned-final`, `data-v21125Owner` 토큰을 추가해 다음 AI가 최신 UI 소유권을 쉽게 확인할 수 있게 했습니다.
+- 하단 메뉴는 `v21125-bottom-nav-final`로 마을/상점/가방/퀘스트/지도/도감/장비/랭킹에서 같은 우측 하단 기준을 유지하고, 낚시 화면에서는 확실히 숨깁니다.
+- 초반 마을 가이드는 `v21125-village-guide-popup`와 새 localStorage 키 `aqua-v21125-guide-dismissed`로 다시 제공합니다. 내용은 낚시 → 보상 확인 → 개척 순서이며 중앙 고정입니다.
+- 상점, 가방, 퀘스트, 지도, 도감, 장비, 랭킹은 `v21125-runtime-page-final`, `v21125-page-column-final`로 safe-area 중앙 컬럼을 다시 유지합니다.
+- 개척 팝업과 건설/확인 모달은 `v21125-expedition-final`, `v21125-village-modal-final`로 중앙 fixed, 내부 스크롤, overscroll containment를 유지합니다.
+- 낚시 물길/수중 효과, 낚싯대·미끼 strip, 연속 성공 표기, `물었다!` 팝업, 성공 결과창은 `v21125-water-final`, `v21125-sea-lane-final`, `v21125-loadout-final`, `v21125-combo-final`, `v21125-bite-final`, `v21125-result-final`로 한 번 더 최신 기준을 부여했습니다.
+- 신규 검증 스크립트 `tools/check-v21125-legacy-debt-reducer.mjs`를 추가해 버전 동기화, v2.1.124 observer handoff, 최신 경량 finalizer, UI 토큰, 문서 계약, SVG 금지, 패키징 청결을 확인합니다.
+- 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 오프닝 video-only 정책, 플레이어 8방향 파일명/flip 금지 정책은 변경하지 않았습니다.
+- 작업본 `npm run validate`는 통과했습니다. 샌드박스에서는 DNS/네트워크와 `node_modules` 부재로 `ci:registry:check`, `ci:install`, `typecheck`, `build`가 최종 완료되지 않았으므로 GitHub Actions에서 `npm ci` 후 확인합니다.
+
+## v2.1.125 분석/인수인계 기록 - 2026-07-01 KST
+
+- 사용자가 특히 우려한 부분은 코드 꼬임과 예전 코드가 계속 살아나 최신 UI 보정이 반영되지 않는 문제입니다.
+- 확인한 구조는 여러 세대의 observer가 동일 DOM의 `class`와 inline `style`을 계속 건드리는 형태입니다. v2.1.124는 `style` 재개입을 잡았지만, 그 감시 자체가 다시 style 쓰기를 유발해 랙/깜박임 체감이 남을 수 있습니다.
+- v2.1.125는 v2.1.124를 삭제하지 않고, v2.1.124 normalize/observer가 `v21125LegacyDebtReducer === active`일 때 물러나도록 인수인계했습니다. GitHub Desktop에서 되돌리기 쉬운 안전 패치입니다.
+- 최신 `setImportant`는 캐시된 signature와 실제 style 적용 상태를 둘 다 확인합니다. 그래서 예전 코드가 값을 바꿨을 때만 복구하고, 이미 맞는 값은 다시 쓰지 않아 불필요한 mutation churn을 줄입니다.
+- 사용 환경은 GitHub Desktop과 Firebase 무료 플랜입니다. Firebase 설정이 없으면 로컬 저장 fallback이 계속 살아 있어야 하며, 유료 서버 기능이나 필수 서버 의존성을 추가하지 않습니다.
+- 다음 AI는 작업 후 반드시 `npm run validate`를 먼저 확인하고, 가능하면 GitHub Actions에서 `npm run ci:registry:check`, `npm run ci:install`, `npm run typecheck`, `npm run build`까지 확인합니다.
+
+## 운영/산출 고정 규칙
+
+- 기록 파일은 `README.md`와 `AI_HANDOFF_CARDVILLE.md`만 유지합니다. 패치 노트, 임시 보고서, 분석 메모 같은 별도 `.md` 파일은 만들지 않습니다.
+- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.125-full.zip`, `AF-v2.1.125-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크 순서로 작성합니다.
+- 로컬 결과 확인 기본 명령:
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+- zip 내부 점검 명령:
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.125-full.zip AF-v2.1.125-patch.zip
+```
 
 ## v2.1.124 변경사항
 
