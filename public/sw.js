@@ -1,5 +1,5 @@
-// v2.1.120 screen composition handoff: UI shell readability, safe-area nav, and same-origin cache containment.
-const CACHE_NAME = 'aqua-fantasia-v2.1.120-screen-composition-handoff';
+// v2.1.122 system UX/performance: first-village guide, centered pages, fishing jitter guard, and same-origin cache containment.
+const CACHE_NAME = 'aqua-fantasia-v2.1.122-system-ux-performance';
 const CORE_ASSETS = [
   './',
   './index.html',

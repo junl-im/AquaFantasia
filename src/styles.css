@@ -68930,3 +68930,374 @@ html.v21120-screen-composition-handoff-root body[data-screen="village"] :is(.v20
     animation: none !important;
   }
 }
+
+/* v2.1.121 micro UI/a11y/perf polish: button labels, focus ring, scroll reserve, card render containment, and tight-screen rhythm. */
+html.v21121-micro-ui-a11y-perf-root {
+  --v21121-visual-width: 100vw;
+  --v21121-visual-height: 100svh;
+  --v21121-scroll-reserve: calc(92px + env(safe-area-inset-bottom, 0px));
+  --v21121-focus-ring: rgba(255, 247, 157, .95);
+  --v21121-card-glow: 0 8px 24px rgba(0, 55, 105, .14), inset 0 1px 0 rgba(255,255,255,.2);
+}
+html.v21121-micro-ui-a11y-perf-root body[data-screen] :is(.v21121-shell-polish,.runtime-menu-screen,.runtime-panel,.dialog-card,.v2097-build-tray,.v2130-build-confirm-card,.catch-result-card,.bite-callout) {
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  isolation: isolate !important;
+}
+html.v21121-micro-ui-a11y-perf-root body[data-screen] :is(.v21121-scroll-reserve,.runtime-content,.v2097-menu-content,.v2098-menu-content,.runtime-card-list,.shop-list,.mission-list,.dex-grid,.inventory-grid,.gear-grid) {
+  scroll-padding-bottom: var(--v21121-scroll-reserve) !important;
+  overscroll-behavior: contain !important;
+}
+html.v21121-micro-ui-a11y-perf-root body[data-screen]:not([data-screen="fishing"]) :is(.v21121-scroll-reserve,.runtime-content,.v2097-menu-content,.v2098-menu-content) {
+  padding-bottom: max(var(--v21121-scroll-reserve), env(safe-area-inset-bottom, 0px)) !important;
+}
+html.v21121-micro-ui-a11y-perf-root body[data-screen] :is(.v21121-card-perf,.runtime-item-card,.runtime-shop-card,.shop-card,.mission-card,.dex-card,.gear-card,.v950-gear-card,.v950-inventory-card,.v204-slot-card) {
+  contain: layout paint style !important;
+  content-visibility: auto !important;
+  contain-intrinsic-size: 160px !important;
+  box-shadow: var(--v21121-card-glow) !important;
+  transform: translateZ(0) !important;
+}
+html.v21121-micro-ui-a11y-perf-root body[data-screen] :is(.v21121-control-a11y,button,[role="button"],a[href]) {
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+html.v21121-micro-ui-a11y-perf-root body[data-screen] :is(.v21121-control-a11y,button,[role="button"],a[href]):focus-visible {
+  outline: 2px solid var(--v21121-focus-ring) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 4px rgba(25, 174, 226, .24), var(--v21121-card-glow) !important;
+}
+html.v21121-micro-ui-a11y-perf-root body[data-screen] :is(.v21121-control-a11y,button,[role="button"]):active {
+  filter: brightness(1.06) saturate(1.05) !important;
+}
+html.v21121-micro-ui-a11y-perf-root body[data-screen] .bottom-nav.v21120-safe-nav :is(button,.v21121-control-a11y) {
+  min-height: 42px !important;
+}
+@media (max-width: 360px), (max-height: 610px) {
+  html.v21121-micro-ui-a11y-perf-root {
+    --v21121-scroll-reserve: calc(82px + env(safe-area-inset-bottom, 0px));
+  }
+  html.v21121-micro-ui-a11y-perf-root body[data-screen] :is(.v21121-card-perf,.runtime-item-card,.runtime-shop-card,.shop-card,.mission-card,.dex-card,.gear-card,.v950-gear-card,.v950-inventory-card,.v204-slot-card) {
+    contain-intrinsic-size: 136px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21121-micro-ui-a11y-perf-root body[data-screen] :is(.v21121-card-perf,.v21121-control-a11y,.v21121-shell-polish) {
+    transition-duration: .001ms !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* v2.1.122 system UX/performance patch: first-village guide, centered pages, fixed nav anchor, and no-flicker fishing anchors. */
+html.v21122-system-ux-performance-root {
+  --v21122-visual-width: 100vw;
+  --v21122-visual-height: 100svh;
+  --v21122-page-width: min(430px, calc(100vw - 18px));
+  --v21122-nav-width: min(232px, calc(100vw - 18px));
+  --v21122-nav-right: calc(env(safe-area-inset-right, 0px) + 8px);
+  --v21122-nav-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+  --v21122-loadout-top: calc(env(safe-area-inset-top, 0px) + 94px);
+  --v21122-combo-bottom: calc(env(safe-area-inset-bottom, 0px) + 104px);
+  --v21122-panel-bg: linear-gradient(180deg, rgba(13, 126, 171, .92), rgba(3, 49, 89, .9));
+  --v21122-panel-border: rgba(204, 255, 255, .36);
+}
+html.v21122-system-ux-performance-root body[data-screen]:not([data-screen="fishing"]) .bottom-nav.v21122-bottom-nav-lock {
+  position: fixed !important;
+  right: var(--v21122-nav-right) !important;
+  bottom: var(--v21122-nav-bottom) !important;
+  left: auto !important;
+  top: auto !important;
+  width: var(--v21122-nav-width) !important;
+  max-width: calc(100vw - 18px) !important;
+  min-width: 0 !important;
+  transform: none !important;
+  translate: none !important;
+  z-index: 620 !important;
+  box-sizing: border-box !important;
+  contain: layout paint style !important;
+}
+html.v21122-system-ux-performance-root body[data-screen]:not([data-screen="fishing"]) .bottom-nav.v21122-bottom-nav-lock button {
+  min-width: 0 !important;
+  min-height: 42px !important;
+  transform: none !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="shop"] .runtime-menu-screen.v21122-runtime-centered,
+html.v21122-system-ux-performance-root body[data-screen="inventory"] .runtime-menu-screen.v21122-runtime-centered,
+html.v21122-system-ux-performance-root body[data-screen="mission"] .runtime-menu-screen.v21122-runtime-centered,
+html.v21122-system-ux-performance-root body[data-screen="map"] .runtime-menu-screen.v21122-runtime-centered,
+html.v21122-system-ux-performance-root body[data-screen="dex"] .runtime-menu-screen.v21122-runtime-centered,
+html.v21122-system-ux-performance-root body[data-screen="gear"] .runtime-menu-screen.v21122-runtime-centered,
+html.v21122-system-ux-performance-root body[data-screen="ranking"] .runtime-menu-screen.v21122-runtime-centered {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-width: 0 !important;
+  height: var(--v21122-visual-height, 100svh) !important;
+  min-height: var(--v21122-visual-height, 100svh) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) max(9px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 118px) max(9px, env(safe-area-inset-left, 0px)) !important;
+  box-sizing: border-box !important;
+  scroll-padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 126px) !important;
+  overscroll-behavior: contain !important;
+}
+html.v21122-system-ux-performance-root body[data-screen] .v21122-page-column,
+html.v21122-system-ux-performance-root body[data-screen] :is(.runtime-hud,.runtime-content,.runtime-card-list,.shop-list,.mission-list,.dex-grid,.inventory-grid,.gear-grid).v21122-page-column {
+  width: var(--v21122-page-width) !important;
+  max-width: var(--v21122-page-width) !important;
+  min-width: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  translate: none !important;
+  box-sizing: border-box !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="village"] .v21122-expedition-stable.open {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 600 !important;
+  pointer-events: none !important;
+  transform: none !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="village"] .v21122-expedition-body-stable.v2097-expedition-body-open {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 50% !important;
+  bottom: auto !important;
+  width: min(368px, calc(100vw - 22px)) !important;
+  max-width: calc(100vw - 22px) !important;
+  max-height: calc(var(--v21122-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 42px) !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  translate: none !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  pointer-events: auto !important;
+  z-index: 610 !important;
+  box-sizing: border-box !important;
+  overscroll-behavior: contain !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="village"] .v21122-village-guide-popup {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: min(346px, calc(100vw - 26px)) !important;
+  max-width: calc(100vw - 26px) !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  z-index: 560 !important;
+  pointer-events: auto !important;
+  animation: none !important;
+  contain: layout paint style !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="village"] .v21122-guide-card {
+  display: grid !important;
+  gap: 10px !important;
+  padding: 16px !important;
+  color: #efffff !important;
+  background: var(--v21122-panel-bg) !important;
+  border: 1px solid var(--v21122-panel-border) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 20px 56px rgba(0, 27, 66, .36), inset 0 1px 0 rgba(255,255,255,.22) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.22) !important;
+  backdrop-filter: blur(16px) saturate(1.22) !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="village"] .v21122-guide-eyebrow {
+  justify-self: start !important;
+  padding: 4px 9px !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: .04em !important;
+  color: #07304a !important;
+  background: linear-gradient(135deg, #bffff9, #ffe681) !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="village"] .v21122-guide-card strong {
+  font-size: 18px !important;
+  line-height: 1.18 !important;
+  text-shadow: 0 2px 8px rgba(0, 25, 63, .24) !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="village"] .v21122-guide-card p {
+  margin: 0 !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  color: rgba(236, 252, 255, .9) !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="village"] .v21122-guide-card ol {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="village"] .v21122-guide-card li {
+  padding: 8px 5px !important;
+  border-radius: 14px !important;
+  text-align: center !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  color: #eafcff !important;
+  background: rgba(255, 255, 255, .12) !important;
+  border: 1px solid rgba(255, 255, 255, .13) !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="village"] .v21122-guide-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr auto !important;
+  gap: 7px !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="village"] .v21122-guide-actions button {
+  min-width: 0 !important;
+  min-height: 38px !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  font-weight: 900 !important;
+  color: #06314f !important;
+  background: linear-gradient(135deg, #c7fff7, #ffeb8a) !important;
+  box-shadow: 0 8px 18px rgba(0, 25, 63, .24) !important;
+}
+html.v21122-system-ux-performance-root body:is(.v2097-expedition-open,.v2097-build-open) .v21122-village-guide-popup {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="fishing"] :is(.water-overlay,.caustic-overlay,.fishing-3d-ambient,.underwater-webgl-host,.v3d-caustics,.v3d-bubbles,.v3d-depth-fog).v21122-water-fx-stable {
+  animation: none !important;
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  will-change: auto !important;
+  contain: paint !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="fishing"] :is(.water-overlay,.caustic-overlay).v21122-water-fx-stable {
+  transition: opacity 140ms ease !important;
+  opacity: .44 !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .v21122-sea-lane-stable {
+  position: fixed !important;
+  left: max(10px, env(safe-area-inset-left, 0px)) !important;
+  right: auto !important;
+  top: calc(env(safe-area-inset-top, 0px) + 58px) !important;
+  bottom: auto !important;
+  width: min(258px, calc(100vw - 20px)) !important;
+  max-width: calc(100vw - 20px) !important;
+  transform: none !important;
+  translate: none !important;
+  animation: none !important;
+  transition: opacity 120ms ease !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 430 !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .fishing-screen.v21122-fishing-phase-focused .v21122-sea-lane-stable,
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .fishing-screen[data-v21122-fishing-phase="bite"] .v21122-sea-lane-stable,
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .fishing-screen[data-v21122-fishing-phase="reeling"] .v21122-sea-lane-stable,
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .fishing-screen[data-v21122-fishing-phase="result"] .v21122-sea-lane-stable,
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .fishing-screen[data-v21122-fishing-phase="success"] .v21122-sea-lane-stable,
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .fishing-screen[data-v21122-fishing-phase="fail"] .v21122-sea-lane-stable {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .fishing-loadout-strip.v21122-loadout-stable {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: var(--v21122-loadout-top) !important;
+  bottom: auto !important;
+  width: min(318px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  translate: none !important;
+  animation: none !important;
+  transition: opacity 120ms ease !important;
+  z-index: 440 !important;
+  contain: layout paint style !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .v21122-loadout-stable .v21122-loadout-cell-stable,
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .v21122-loadout-stable :is(img,span,strong,em,b,div) {
+  animation: none !important;
+  transform: none !important;
+  translate: none !important;
+  transition-property: opacity, filter !important;
+  transition-duration: 120ms !important;
+  flex-shrink: 0 !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .fishing-screen.v21122-fishing-phase-focused .fishing-loadout-strip.v21122-loadout-stable,
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .fishing-screen[data-v21122-fishing-phase="bite"] .fishing-loadout-strip.v21122-loadout-stable,
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .fishing-screen[data-v21122-fishing-phase="reeling"] .fishing-loadout-strip.v21122-loadout-stable,
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .fishing-screen[data-v21122-fishing-phase="result"] .fishing-loadout-strip.v21122-loadout-stable,
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .fishing-screen[data-v21122-fishing-phase="success"] .fishing-loadout-strip.v21122-loadout-stable,
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .fishing-screen[data-v21122-fishing-phase="fail"] .fishing-loadout-strip.v21122-loadout-stable {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .combo-badge.v21122-combo-anchor:not(.hidden) {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: var(--v21122-combo-bottom) !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  translate: none !important;
+  animation: none !important;
+  z-index: 560 !important;
+  pointer-events: none !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .bite-callout.v21122-bite-center-lock,
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .catch-result-card.v21122-result-center-lock {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 50% !important;
+  bottom: auto !important;
+  width: min(352px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  translate: none !important;
+  animation: none !important;
+  transition: opacity 120ms ease !important;
+  z-index: 700 !important;
+  box-sizing: border-box !important;
+  contain: layout paint style !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .bite-callout.v21122-bite-center-lock {
+  width: min(330px, calc(100vw - 30px)) !important;
+  z-index: 690 !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .catch-result-card.v21122-result-center-lock {
+  max-height: calc(var(--v21122-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 34px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+}
+html.v21122-system-ux-performance-root body[data-screen="fishing"] .bottom-nav {
+  display: none !important;
+}
+@media (max-width: 360px), (max-height: 610px) {
+  html.v21122-system-ux-performance-root {
+    --v21122-nav-width: min(216px, calc(100vw - 14px));
+    --v21122-loadout-top: calc(env(safe-area-inset-top, 0px) + 82px);
+    --v21122-combo-bottom: calc(env(safe-area-inset-bottom, 0px) + 92px);
+  }
+  html.v21122-system-ux-performance-root body[data-screen="village"] .v21122-guide-card {
+    gap: 8px !important;
+    padding: 13px !important;
+  }
+  html.v21122-system-ux-performance-root body[data-screen="village"] .v21122-guide-card ol {
+    grid-template-columns: 1fr !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21122-system-ux-performance-root body[data-screen] :is(.v21122-village-guide-popup,.v21122-expedition-body-stable,.v21122-runtime-centered,.v21122-page-column,.v21122-bottom-nav-lock,.v21122-water-fx-stable,.v21122-loadout-stable,.v21122-sea-lane-stable,.v21122-bite-center-lock,.v21122-result-center-lock,.v21122-combo-anchor) {
+    animation: none !important;
+    transition-duration: .001ms !important;
+  }
+}

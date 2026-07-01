@@ -1,24 +1,39 @@
 # AquaFantasia AI HANDOFF CARDVILLE
 
+- 기준 패키지 버전: `2.1.122`
+
 ## 작업중인 내용
 
-- 현재 작업 기준: `v2.1.120` screen composition + handoff contract 패치.
-- 목표: 기존 정상 기능을 흔들지 않고 모바일 세로 UI/UX, 카드 겹침, safe-area, 텍스트/미디어 containment, 검수/산출 규칙을 보강한다.
+- 현재 작업 기준: `v2.1.122` system UX/performance 패치.
+- 목표: 전체 체감 랙, 초반 목표 부재, 개척 팝업 반절 표시, 상점/가방/퀘스트/지도/도감 우측 쏠림, 낚시 물길 바/낚싯대/미끼/`물었다!` 팝업 깜박임과 위치 흔들림을 안전하게 보정한다.
+- 원칙: 기존 정상 기능과 게임 수치는 건드리지 않고, 최종 런타임 앵커와 마지막 CSS 스코프로 UI 기준점을 하나로 모은다.
 - 작업 환경: GitHub Desktop, Firebase 무료 플랜. Firebase 설정이 없으면 로컬 저장 fallback으로 계속 동작해야 한다.
 - 기록 파일은 반드시 `AI_HANDOFF_CARDVILLE.md`와 `README.md` 두 개만 사용한다.
 
 ## 기록
 
-- v2.1.119 기준 `npm run validate` 통과 후 v2.1.120 작업을 시작했다.
-- 새 런타임 패스 `installV21120ScreenCompositionHandoffPass()`를 추가해 카드/패널/건설창/낚시 입질창/결과창/하단 내비에 읽기/터치/미디어 containment 토큰을 부여한다.
-- 새 CSS 마지막 스코프는 긴 한글 문구 줄바꿈, 미디어 카드 밖 튐 방지, 하단 내비 폭 안정화, 초소형 화면 보정, reduced-motion/contrast 대응만 추가한다.
-- 새 검증 스크립트는 문서 2개 제한, 결과 확인 명령, GitHub Desktop/Firebase 무료 플랜 기록, SVG 금지, 오프닝 video-only, 플레이어 방향 파일명/flip 금지 정책을 함께 확인한다.
+- v2.1.121 기준 `npm run validate` 통과 후 v2.1.122 작업을 시작했다.
+- 구조 원인: 여러 세대의 런타임 UI 보정 패스가 같은 DOM 요소에 서로 다른 inline important 좌표/CSS 좌표를 다시 쓰는 구조라, 화면 상태 전환 시 하단 메뉴/페이지 shell/낚시 물길/장비 strip/입질 팝업/결과창이 흔들릴 수 있다.
+- 새 런타임 패스 `installV21122SystemUxPerformancePass()`를 추가했다.
+- 첫 마을 진입용 `v21122-village-guide-popup`을 추가했다. 중앙 카드에서 `낚시 가기`, `개척 보기`, `닫기`를 제공하고 닫기 상태는 `localStorage` 키 `aqua-v21122-guide-dismissed`에 저장한다.
+- 상점, 가방, 퀘스트, 지도, 도감, 장비, 랭킹 페이지에 `v21122-runtime-centered`, `v21122-page-column`을 부여해 safe-area 안의 중앙 컬럼으로 고정한다.
+- 우측 아래 메뉴바는 `v21122-bottom-nav-lock`으로 낚시 외 화면에서 같은 right/bottom/width 기준을 쓰도록 고정한다.
+- 개척 팝업은 `v21122-expedition-body-stable`로 fixed center, safe-area max-height, 내부 scroll, overscroll contain을 적용해 반절만 보이는 문제를 줄인다.
+- 낚시 물길 바는 `v21122-sea-lane-stable`, 물 효과는 `v21122-water-fx-stable`로 animation/transform churn을 줄이고, bite/reeling/result/success/fail 단계에서는 물길 바를 숨겨 성공 중 깜박임을 줄인다.
+- 낚싯대/미끼 strip은 `v21122-loadout-stable`과 `v21122-loadout-cell-stable`로 transform/animation을 막고 fixed size로 보정한다.
+- `물었다!` 팝업은 `v21122-bite-center-lock`, 성공 결과창은 `v21122-result-center-lock`, 연속 성공 표기는 `v21122-combo-anchor`로 각각 중앙/하단 기준점을 고정한다.
+- 새 패스는 visualViewport 변수를 `--v21122-visual-width`, `--v21122-visual-height`로 동기화하고, signature guard + 140ms throttle을 사용해 MutationObserver 반복 비용을 줄인다.
+- `README.md`, `AI_HANDOFF_CARDVILLE.md`, `public/offline.html`, `public/sw.js`, `src/data.ts`, `package.json`, `package-lock.json`을 v2.1.122 기준으로 동기화했다.
+- 신규 검증 스크립트 `tools/check-v21122-system-ux-performance.mjs`를 추가해 버전/캐시/UI 토큰/문서 계약/SVG 금지/패키징 청결을 확인한다.
+- 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 로직, Firebase fallback, 오프닝 video-only 정책, 플레이어 8방향 파일명/flip 금지 정책은 변경하지 않는다.
 
 ## 다음 업데이트 예상 내역
 
-- 실제 모바일 기기에서 마을 건설창, 상점/가방/미션/도감 카드, 낚시 `물었다!`/성공 결과창, 하단 내비 safe-area를 화면 캡처 기준으로 재검수한다.
-- 가능하면 GitHub Actions의 `npm ci`, `typecheck`, `build` 결과를 확인해 의존성/엔진 업그레이드 가능 범위를 다시 판단한다.
-- 다음 기능 후보는 낚시 성장 루프 안내, 마을 건설 UX, 도감/미션 보상 피드백이며, 정상 동작 중인 판정/좌표/저장 로직은 근거 없이 재작성하지 않는다.
+- 실제 모바일 기기에서 첫 마을 가이드가 조이스틱/건설/개척 조작을 과하게 가리지 않는지 확인.
+- 상점/가방/퀘스트/지도/도감 각 화면의 중앙 정렬, 카드 폭, 하단 메뉴와 마지막 버튼 간격을 캡처 기준으로 재검수.
+- 낚시 중 물길 바 숨김 타이밍이 자연스러운지, `물었다!` 팝업과 성공 결과창 중앙 고정이 너무 답답하지 않은지 확인.
+- 전체 체감 랙은 다음 패치에서 RuntimeQualityManager와 WebGL/DOM effect budget을 더 낮추는 방향으로 검토.
+- GitHub Actions 결과 확인 후 안전한 범위에서 Vite/Firebase/Pixi minor 업데이트 가능성 검토. 단, Firebase 무료 플랜과 로컬 fallback은 유지.
 
 ## 필수 결과 확인 명령
 
@@ -43,52 +58,26 @@ for zpath in sys.argv[1:]:
     print(zpath)
     print('markdown:', md)
     print('banned:', banned[:20], 'count=', len(banned))
-PY AF-v2.1.120-full.zip AF-v2.1.120-patch.zip
+PY AF-v2.1.122-full.zip AF-v2.1.122-patch.zip
 ```
 
-## 산출/응답 고정 형식
+## 고정 작업환경/산출 규칙
 
-1. 작업중인 내용
-2. 기록
-3. 다음 업데이트 예상 내역
-4. 마지막에 버전 숫자를 표기한 짧은 파일명 링크 두 개: `AF-v2.1.120-full.zip`, `AF-v2.1.120-patch.zip`
+- GitHub Desktop 사용 기준.
+- Firebase는 무료 플랜 기준. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제 금지.
+- Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 한다.
+- 문서 기록은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용한다. 추가 `.md`, 임시 리포트, 로그 파일을 산출물에 넣지 않는다.
+- 결과물은 항상 두 개다: `AF-v2.1.122-full.zip`, `AF-v2.1.122-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크.
 
-## 현재 기준
+## 프로젝트/작업 구조
 
-- 프로젝트명: AquaFantasia / 아쿠아 판타지아
-- 기준 패키지 버전: `2.1.120`
-- 기준 기록일: `2026-07-01 KST`
-- 실행 형태: Vite + TypeScript 모바일 세로 전용 웹 게임
-- 주요 배포 흐름: GitHub Actions `validate-and-deploy`에서 `npm ci` → `npm run validate` → `npm run typecheck` → `npm run build` → GitHub Pages 배포
-- 사용자 작업 환경: GitHub Desktop, Firebase 무료 플랜
-- 업로드 원본: `.git` 폴더 제외 통파일 zip
-- 산출물 zip 파일명 규칙: 짧게 쓰되 버전 숫자를 반드시 포함한다. 예: `AF-v2.1.120-full.zip`, `AF-v2.1.120-patch.zip`
-
-## 절대 유지 규칙
-
-1. 잘 작동되는 기능은 건드리지 않는다. 기존 정상 기능은 근거 없이 재작성하지 않는다.
-2. SVG 이미지 절대 금지. `.svg`, `.svgz`, `image/svg`, 인라인 `<svg>` 런타임 참조를 추가하지 않는다.
-3. 불필요한 문서/임시 파일을 만들지 않는다.
-4. 인수인계/진행상황 기록은 이 파일 `AI_HANDOFF_CARDVILLE.md`와 `README.md`에만 남긴다.
-5. GitHub Actions가 자동 실행되므로 `package.json`의 검증 흐름을 깨지 않는다.
-6. `node_modules/`, `dist/`, `reports/`, 로그, 백업 폴더, 임시 노트는 패키지/커밋에 포함하지 않는다.
-7. Firebase 무료 플랜 기준으로, 명시적 설정 없이 유료 기능/서버 강제 의존 구조를 만들지 않는다.
-8. 현재 앱은 Firebase 설정이 없으면 로컬 저장으로 동작하는 구조를 유지해야 한다.
-9. 오프닝 영상은 poster 정지 이미지 없이 video-only 계약을 유지한다.
-10. 플레이어 8방향 방향 파일명과 flip 금지 정책을 유지한다.
-11. 낚시 UI는 모바일 세로 safe-area 기준으로 겹침, 화면 밖 밀림, 잔상 cleanup을 우선 검수한다.
-
-## 현재 파일/구조 요약
-
-- 루트 핵심 파일: `package.json`, `package-lock.json`, `vite.config.ts`, `tsconfig.json`, `firebase.json`, `index.html`, `README.md`, `AI_HANDOFF_CARDVILLE.md`
-- GitHub Actions: `.github/workflows/pages.yml`
-- 소스: `src/`
-  - `src/main.ts`: 게임 전체 화면 전환, 낚시 루프, UI 보정 패스, 서비스워커 등록
-  - `src/villageWorld.ts`: Pixi 기반 마을/건설/이동/카메라/조이스틱/타일/충돌
-  - `src/data.ts`: 앱 버전, 캐시명, 지역/물고기/기본 저장 데이터
-  - `src/storage.ts`: 로컬 저장, 저장값 정규화, Firebase 익명 연동 시도
-  - `src/styles.css`: 누적 UI/레이아웃/모바일 세로 보정 CSS
-  - `src/core/`: 세로 화면 가드, 런타임 품질 관리자, WebGL 수중 배경 레이어
+- 앱 버전: `src/data.ts`의 `APP_VERSION`
+- 캐시 이름: `src/data.ts`의 `CACHE_NAME`, `public/sw.js`의 `CACHE_NAME`
+- 진입점: `src/main.ts`
+- 스타일: `src/styles.css`
+- 마을 월드/플레이어 방향 처리: `src/villageWorld.ts`
+- 저장/Firebase fallback: `src/storage.ts`
 - 정적 자산: `public/assets/`
 - 서비스워커: `public/sw.js`
 - 오프라인 페이지: `public/offline.html`
@@ -97,21 +86,119 @@ PY AF-v2.1.120-full.zip AF-v2.1.120-patch.zip
 ## 현재 버전 핵심 기능 상태
 
 - 낚시 상태: `idle`, `casting`, `waiting`, `bite`, `reeling`, `success`, `fail`
-- v2.1.110 핵심 기능은 유지됨: 낚시 안전 구간 0.5 단위 양자화, 물고기 피로도 기반 저항 완화, 입질/액션 배지/게이지/릴 콘솔/결과창 safe-area 재정렬
+- v2.1.122 핵심: 초반 추적형 가이드, 개척 팝업 중앙 고정, 메뉴 페이지 중앙 정렬, 하단 메뉴 동일 앵커, 낚시 물길 바/낚싯대/미끼/`물었다!` 팝업/성공 결과창 흔들림 보정. 게임 수치와 판정은 건드리지 않음
+- v2.1.121 핵심: 모바일 세로 버튼 라벨/focus/active, 스크롤 하단 reserve, 카드 content-visibility/containment를 보강. 낚시 판정, 보상, 마을 좌표, 건설 로직, Firebase fallback은 건드리지 않음
 - v2.1.120 핵심: 모바일 세로 화면 구성/가독성/카드 미디어 containment/하단 내비 safe-area 폭/인수인계 검증 계약을 보강. 낚시 판정, 보상, 마을 좌표, 건설 로직, Firebase fallback은 건드리지 않음
 - v2.1.119 핵심: 모바일 터치/모달/스크롤 safety 패스를 추가해 건설창, 건설 확인창, 낚시 입질창/결과창, 카드형 메뉴의 data-no-swipe, overscroll containment, visual viewport safe-area 최대 높이를 보강. 게임 로직과 버튼 이벤트는 건드리지 않음
 - v2.1.118 핵심: v2.1.117 마을 우측 상단 메뉴 개선을 실제 런타임 inline important 기준으로 hard-lock하고, 카드/아이콘 이미지를 containment 처리해 다른 그림 비침/카드 밖 튐/긴 문구 겹침 위험을 줄임. 게임 로직과 버튼 이벤트는 건드리지 않음
 - v2.1.117 핵심: 마을 우측 상단 메뉴 아이콘은 버튼 크기/2x3 배치를 유지한 채 내부 아이콘만 24~25px로 키우고, clipping/isolation/pseudo 제거로 위쪽 다른 그림 비침을 방지. 마을 이동/건설/상점/출항 동작은 건드리지 않음
 - v2.1.116 핵심: 낚싯대/미끼 loadout 꿈틀거림, 연속 성공 구버전 스킨, `물었다!` 창 자동 전환/흔들림, 성공 결과창 크기 흔들림을 UI hotfix로 보정. 낚시 판정/보상/밸런스는 건드리지 않음
-- v2.1.115 핵심: 기능/게임 로직은 건드리지 않고, RuntimeQualityManager의 viewport 이벤트를 RAF batching/signature 비교로 가볍게 만들고, 키보드/주소창 변동 시 패널·입력창·safe-area 보정을 마지막 CSS 스코프와 검증 스크립트로 보강
-- v2.1.114 핵심: 기능/게임 로직은 건드리지 않고, 상점/가방/미션/도감/건설/결과창 카드 폭, 긴 문구 줄바꿈, 하단 내비 safe-area, 낚시 결과창 스크롤 경계를 마지막 CSS 스코프와 검증 스크립트로 보강
-- v2.1.113 핵심: 기능/게임 로직은 건드리지 않고, 모바일 세로 UI/UX 안정성 스윕을 마지막 CSS 스코프와 검증 스크립트로 보강
-- v2.1.112 핵심: 기능/게임 로직은 건드리지 않고, GitHub Actions에서 AI_HANDOFF_CARDVILLE.md가 삭제되던 검증 순서/패치 누락 문제를 해결
-- v2.1.111 핵심: 기능/게임 로직은 건드리지 않고, 누락 자산 참조와 인수인계/검증 정책만 보강
 - 마을 핵심: Pixi 월드, 80 x 80 계열 타일, 건물 설치/이동, 경로 탐색, NPC, 수동 조이스틱/키보드 이동
 - 저장 핵심: `localStorage` 키 `aqua-fantasia-save-v650`, 이전 키 일부 마이그레이션, 저장값 sanitize 후 저장
 - Firebase 핵심: `window.AQUA_FIREBASE_CONFIG`에 `apiKey`가 있을 때만 `firebase/app`, `firebase/auth`를 동적 import하고 익명 로그인 시도. 설정이 없으면 로컬 저장으로 진행
 
+
+## v2.1.122 system UX/performance 패치 기록
+
+### 사용자 요청과 확인한 불안정 후보
+
+- 요청: 전체적으로 랙이 있고, 처음 마을에 들어오면 뭘 해야 할지 감이 오지 않으므로 중앙 추적형 가이드 팝업이 필요하다.
+- 요청: 개척 팝업이 반절만 나오고, 상점/가방/퀘스트/지도/도감 페이지가 우측으로 쏠려 있으며, 마을과 다른 페이지의 우측 아래 메뉴바 위치가 다르다.
+- 요청: 낚시 물길 바, 낚싯대, 미끼가 깜박이거나 커졌다 작아졌다 보이고, 연속 성공 표기는 캐스팅 시작과 가까운 아래쪽으로 옮기되 붙이지 않는다.
+- 요청: `물었다!` 팝업이 최상단/중간을 왔다갔다 하므로 중앙에만 뜨고 깜박이지 않게 한다. 낚시 중/성공 후에도 물길 바가 계속 깜박이는 현상을 줄인다.
+- 확인한 구조 원인: 이전 버전들의 누적 UI 보정 패스가 같은 요소에 서로 다른 좌표/크기/animation/transform 값을 반복 적용하고 있었다. v2.1.122는 마지막 런타임 패스와 마지막 CSS 스코프로 최종 기준점을 고정한다.
+
+### 적용 내용
+
+- `src/main.ts`
+  - 루트 스코프 `v21122-system-ux-performance-root`와 `data-v21122-system-ux-performance` 추가.
+  - `installV21122SystemUxPerformancePass()` 추가.
+  - 첫 마을 가이드 `v21122-village-guide-popup` 추가.
+  - 페이지 중앙 정렬 `v21122-runtime-centered`, `v21122-page-column` 추가.
+  - 하단 메뉴 고정 `v21122-bottom-nav-lock` 추가.
+  - 개척 팝업 중앙 고정 `v21122-expedition-body-stable` 추가.
+  - 낚시 안정화 `v21122-water-fx-stable`, `v21122-sea-lane-stable`, `v21122-loadout-stable`, `v21122-loadout-cell-stable`, `v21122-bite-center-lock`, `v21122-result-center-lock`, `v21122-combo-anchor` 추가.
+  - visualViewport 변수, RAF, MutationObserver, signature guard, 140ms throttle로 반복 스타일 쓰기 부담을 줄임.
+- `src/styles.css`
+  - `v2.1.122 system UX/performance patch` 마지막 스코프 추가.
+  - 초반 가이드 카드 디자인, runtime page center column, 개척 팝업 center modal, 하단 nav fixed anchor, 낚시 물길/장비/입질/결과/콤보 고정 스타일, 초소형 화면/reduced-motion 대응 적용.
+- `tools/check-v21122-system-ux-performance.mjs`
+  - 버전/캐시/README/handoff 동기화, v2.1.122 runtime/CSS 토큰, 운영 계약, SVG 금지, 문서 2개 제한, CSS 자산 존재, package-lock 레지스트리 청결을 확인한다.
+
+### 절대 건드리지 않은 것
+
+- 낚시 판정/보상/밸런스
+- 물고기 데이터
+- 마을 이동/좌표/충돌/조이스틱/건설 설치 로직
+- 건설/확대/축소/상점/출항 버튼 이벤트
+- Firebase 저장/익명 로그인 fallback
+- 오프닝 video-only 정책
+- 플레이어 방향 파일명/flip 금지 정책
+- 의존성/엔진 메이저 업그레이드
+
+### v2.1.122 필수 검수
+
+1. `npm run validate` 통과.
+2. GitHub Actions에서 `npm run ci:registry:check`, `npm run ci:install`, `npm run typecheck`, `npm run build` 확인.
+3. 첫 마을 진입 시 가이드가 중앙에 보이고, 닫기 후 재표시가 과하지 않은지 확인.
+4. `개척` 팝업이 반절만 보이지 않고 중앙에서 스크롤 가능한지 확인.
+5. 상점/가방/퀘스트/지도/도감이 우측으로 쏠리지 않고 safe-area 안 중앙 컬럼으로 보이는지 확인.
+6. 마을/페이지의 우측 아래 메뉴바 위치와 폭이 일관적인지 확인.
+7. 낚시 물길 바가 idle/prep에서는 안정적으로 보이고, bite/reeling/result/success/fail 단계에서 깜박이지 않는지 확인.
+8. 낚싯대/미끼 장비 strip이 커졌다 작아졌다 하지 않는지 확인.
+9. `물었다!` 팝업과 성공 결과창이 중앙에 고정되고 깜박이지 않는지 확인.
+10. full/patch zip 내부에 `.git`, `node_modules`, `dist`, `reports`, `.log`, SVG 파일이 없는지 확인.
+11. `.md`는 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 있어야 한다.
+
+현재 샌드박스에서는 작업본 `npm run validate`를 기준으로 확인한다. `node_modules`가 없으면 `typecheck`/`build`는 GitHub Actions의 `npm ci` 이후 결과를 최종 기준으로 본다.
+
+
+## v2.1.121 micro UI/a11y/perf polish 패치 기록
+
+### 사용자 요청과 확인한 불안정 후보
+
+- 요청: 모든 구석구석을 꼼꼼하게 체크하고 UI/UX/디자인, 게임 시스템, 성능, 기술, 콘텐츠, 엔진 업그레이드를 계속 이어간다.
+- 확인한 실제 후보: v2.1.120은 화면 구성/기록 계약을 보강했지만, 작은 모바일 화면에서 마지막 카드와 액션 버튼이 하단 내비 뒤에 숨어 보일 수 있고, 버튼 focus/active/aria-label 일관성과 카드 목록 렌더링 부담은 추가 보강 여지가 있다.
+
+### 적용 내용
+
+- `src/main.ts`
+  - 루트 스코프 `v21121-micro-ui-a11y-perf-root`와 `data-v21121-micro-ui-a11y-perf` 추가.
+  - `installV21121MicroUiA11yPerfPass()` 추가.
+  - 패널/건설창/낚시 입질창/결과창에 `v21121-shell-polish`, 스크롤 영역에 `v21121-scroll-reserve`, 카드에 `v21121-card-perf`, 조작 요소에 `v21121-control-a11y`를 런타임으로 부여.
+  - 라벨이 없는 조작 요소에는 안전한 `aria-label` fallback을 부여.
+  - visual viewport 폭/높이를 `--v21121-visual-width`, `--v21121-visual-height`로 동기화.
+  - RAF 예약, MutationObserver, signature guard로 반복 스타일 쓰기를 줄임.
+- `src/styles.css`
+  - `v2.1.121 micro UI/a11y/perf polish` 마지막 스코프 추가.
+  - 하단 내비 뒤 가림 방지 scroll reserve, focus-visible 링, active 터치 피드백, 카드 render containment, tight-screen/reduced-motion 대응 적용.
+- `README.md`, `AI_HANDOFF_CARDVILLE.md`
+  - v2.1.121 작업중인 내용, 기록, 다음 업데이트 예상 내역, 결과 확인 명령, 산출물 zip 점검 명령, GitHub Desktop/Firebase 무료 플랜 환경, full/patch 산출 규칙을 상단에 갱신.
+- `tools/check-v21121-micro-ui-a11y-perf.mjs`
+  - 버전/캐시/README/handoff 동기화, v2.1.121 runtime/CSS 토큰, 운영 계약, SVG 금지, 문서 2개 제한, CSS 자산 존재, package-lock 레지스트리 청결을 확인한다.
+
+### 절대 건드리지 않은 것
+
+- 낚시 판정/보상/밸런스
+- 물고기 데이터
+- 마을 이동/좌표/충돌/조이스틱/건설 설치 로직
+- 건설/확대/축소/상점/출항 버튼 이벤트
+- Firebase 저장/익명 로그인 fallback
+- 오프닝 video-only 정책
+- 플레이어 방향 파일명/flip 금지 정책
+- 의존성/엔진 메이저 업그레이드
+
+### v2.1.121 필수 검수
+
+1. `npm run validate` 통과.
+2. GitHub Actions에서 `npm run ci:registry:check`, `npm run ci:install`, `npm run typecheck`, `npm run build` 확인.
+3. 실제 모바일 메뉴 화면에서 마지막 카드/버튼이 하단 내비 뒤로 숨지 않는지 확인.
+4. 상점/가방/미션/도감 긴 목록에서 스크롤이 과하게 튀지 않는지 확인.
+5. 버튼/링크 focus-visible 링과 active 피드백이 과하지 않고 알아보기 쉬운지 확인.
+6. full/patch zip 내부에 `.git`, `node_modules`, `dist`, `reports`, `.log`, SVG 파일이 없는지 확인.
+7. `.md`는 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 있어야 한다.
+
+현재 샌드박스에서는 작업본 `npm run validate`를 기준으로 확인한다. `node_modules`가 없으면 `typecheck`/`build`는 GitHub Actions의 `npm ci` 이후 결과를 최종 기준으로 본다.
 
 
 ## v2.1.120 화면 구성/인수인계 계약 패치 기록
