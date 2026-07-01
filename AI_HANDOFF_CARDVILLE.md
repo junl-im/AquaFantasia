@@ -3,8 +3,8 @@
 ## 현재 기준
 
 - 프로젝트명: AquaFantasia / 아쿠아 판타지아
-- 기준 패키지 버전: `2.1.118`
-- 기준 기록일: `2026-06-30 KST`
+- 기준 패키지 버전: `2.1.119`
+- 기준 기록일: `2026-07-01 KST`
 - 실행 형태: Vite + TypeScript 모바일 세로 전용 웹 게임
 - 주요 배포 흐름: GitHub Actions `validate-and-deploy`에서 `npm ci` → `npm run validate` → `npm run typecheck` → `npm run build` → GitHub Pages 배포
 - 사용자 작업 환경: GitHub Desktop, Firebase 무료 플랜
@@ -45,6 +45,7 @@
 
 - 낚시 상태: `idle`, `casting`, `waiting`, `bite`, `reeling`, `success`, `fail`
 - v2.1.110 핵심 기능은 유지됨: 낚시 안전 구간 0.5 단위 양자화, 물고기 피로도 기반 저항 완화, 입질/액션 배지/게이지/릴 콘솔/결과창 safe-area 재정렬
+- v2.1.119 핵심: 모바일 터치/모달/스크롤 safety 패스를 추가해 건설창, 건설 확인창, 낚시 입질창/결과창, 카드형 메뉴의 data-no-swipe, overscroll containment, visual viewport safe-area 최대 높이를 보강. 게임 로직과 버튼 이벤트는 건드리지 않음
 - v2.1.118 핵심: v2.1.117 마을 우측 상단 메뉴 개선을 실제 런타임 inline important 기준으로 hard-lock하고, 카드/아이콘 이미지를 containment 처리해 다른 그림 비침/카드 밖 튐/긴 문구 겹침 위험을 줄임. 게임 로직과 버튼 이벤트는 건드리지 않음
 - v2.1.117 핵심: 마을 우측 상단 메뉴 아이콘은 버튼 크기/2x3 배치를 유지한 채 내부 아이콘만 24~25px로 키우고, clipping/isolation/pseudo 제거로 위쪽 다른 그림 비침을 방지. 마을 이동/건설/상점/출항 동작은 건드리지 않음
 - v2.1.116 핵심: 낚싯대/미끼 loadout 꿈틀거림, 연속 성공 구버전 스킨, `물었다!` 창 자동 전환/흔들림, 성공 결과창 크기 흔들림을 UI hotfix로 보정. 낚시 판정/보상/밸런스는 건드리지 않음
@@ -58,6 +59,50 @@
 - Firebase 핵심: `window.AQUA_FIREBASE_CONFIG`에 `apiKey`가 있을 때만 `firebase/app`, `firebase/auth`를 동적 import하고 익명 로그인 시도. 설정이 없으면 로컬 저장으로 진행
 
 
+
+## v2.1.119 모바일 interaction safety 패치 기록
+
+### 사용자 요청과 확인한 불안정 후보
+
+- 요청: 이전 대화가 끊긴 뒤 인수인계 문서 기준으로 개발 계속 진행.
+- 확인한 실제 후보: v2.1.118 기준 validate는 통과했고 정상 기능은 유지되어야 한다. 다음 안전 개선 후보는 모바일 세로 환경에서 모달/카드/건설창/낚시 결과창의 터치와 스와이프/스크롤 전파가 섞이는 문제다.
+- 특히 하단 내비 스와이프, 건설창 스크롤, 낚시 입질/결과창 터치가 같은 화면 위에 겹치는 구조라 `data-no-swipe`, overscroll containment, visual viewport 기반 max-height 보강이 안전하다.
+
+### 적용 내용
+
+- `src/main.ts`
+  - 루트 스코프 `v21119-interaction-safe-root`와 `data-v21119-interaction-safety` 추가.
+  - `installV21119InteractionSafetyPass()` 추가.
+  - 모달/카드/건설창/입질창/결과창에 `v21119-touch-shield`, `v21119-scroll-safe`, `v21119-safe-dialog-card`, `data-no-swipe`를 런타임으로 적용.
+  - visual viewport 폭/높이를 `--v21119-visual-width`, `--v21119-visual-height`로 동기화.
+  - RAF 예약, MutationObserver, `lastSignature` guard로 불필요한 반복 스타일 쓰기를 줄임.
+- `src/styles.css`
+  - `v2.1.119 interaction safety` 마지막 스코프 추가.
+  - 터치 하이라이트 제거, overscroll containment, stable scrollbar gutter, safe-area dialog max-height, compact touch target 보정 적용.
+- `tools/check-v21119-interaction-safety.mjs`
+  - 버전/캐시/README/handoff 동기화, v2.1.119 root/runtime/CSS 토큰, SVG 금지, CSS 자산 존재, README/handoff만 문서 허용을 확인한다.
+
+### 절대 건드리지 않은 것
+
+- 낚시 판정/보상/밸런스
+- 물고기 데이터
+- 마을 이동/좌표/충돌/조이스틱/건설 설치 로직
+- 건설/확대/축소/상점/출항 버튼 이벤트
+- Firebase 저장/익명 로그인 fallback
+- 오프닝 video-only 정책
+- 플레이어 방향 파일명/flip 금지 정책
+- 의존성/엔진 버전 업그레이드
+
+### v2.1.119 필수 검수
+
+1. GitHub Actions에서 `npm run validate` 통과.
+2. 실제 모바일 마을 화면에서 건설창을 스크롤해도 배경/하단 내비 스와이프가 섞이지 않는지 확인.
+3. 건설 확인창이 safe-area 안에 머물고 버튼 터치가 정확한지 확인.
+4. 낚시 `물었다!` 창과 성공 결과창이 주소창/키보드 변화에도 화면 밖으로 밀리지 않는지 확인.
+5. 하단 내비, 상점/가방/미션/도감 카드형 메뉴의 버튼 터치가 정상인지 확인.
+6. `.svg`, `.svgz`, `image/svg`, 인라인 `<svg>` 런타임 참조가 추가되지 않았는지 확인.
+
+현재 샌드박스 검수 결과 작업본 `npm run validate`와 `tools/check-v21119-interaction-safety.mjs` 단독 실행이 통과했다. full/patch zip 경로 안전성, `.git`/`node_modules`/`dist`/`reports`/`.log`/SVG 미포함, `.md`가 `README.md`와 `AI_HANDOFF_CARDVILLE.md`뿐인 것도 확인했다. `npm run typecheck`는 현재 샌드박스에 `node_modules`가 없어 완료하지 못했다. 전체 `npm ci`, `typecheck`, `build`는 GitHub Actions 결과를 최종 기준으로 본다.
 
 ## v2.1.118 UI 자산/아이콘 containment 패치 기록
 

@@ -68792,3 +68792,62 @@ html.v21118-ui-asset-containment-root body[data-screen] :is(.runtime-item-card,.
     animation: none !important;
   }
 }
+
+/* v2.1.119 interaction safety: mobile touch shield, modal scroll containment, and safe-area dialog sizing without gameplay changes. */
+html.v21119-interaction-safe-root {
+  --v21119-visual-width: 100vw;
+  --v21119-visual-height: 100svh;
+  --v21119-touch-target-min: 40px;
+  --v21119-dialog-gap: 28px;
+}
+html.v21119-interaction-safe-root body[data-screen] :is(.v21119-touch-shield,.v21119-scroll-safe) {
+  box-sizing: border-box !important;
+  overscroll-behavior: contain !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html.v21119-interaction-safe-root body[data-screen] :is(.v21119-scroll-safe,.runtime-menu-screen,.runtime-panel,.runtime-card-list,.v2097-build-tray,.v2097-build-grid,.v2130-build-confirm-card,.catch-result-card,.dialog-card) {
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-gutter: stable both-edges !important;
+  overflow-anchor: none !important;
+}
+html.v21119-interaction-safe-root body[data-screen] :is(.v21119-touch-shield,.v21119-scroll-safe) :is(button,[role="button"],a) {
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+html.v21119-interaction-safe-root body[data-screen] :is(.v21119-touch-target,.v21119-touch-shield button,.v21119-touch-shield [role="button"]) {
+  min-height: min(var(--v21119-touch-target-min), 12svh) !important;
+  min-width: min(var(--v21119-touch-target-min), 18vw) !important;
+}
+html.v21119-interaction-safe-root body[data-screen="village"] :is(.v2097-build-backdrop,.v2130-build-confirm) {
+  touch-action: none !important;
+  overscroll-behavior: none !important;
+}
+html.v21119-interaction-safe-root body[data-screen="village"] :is(.v2097-build-tray,.v2130-build-confirm-card),
+html.v21119-interaction-safe-root body[data-screen="fishing"] :is(.bite-callout,.catch-result-card),
+html.v21119-interaction-safe-root body[data-screen] .v21119-safe-dialog-card {
+  max-width: calc(100vw - 24px) !important;
+  max-height: calc(var(--v21119-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - var(--v21119-dialog-gap)) !important;
+  overscroll-behavior: contain !important;
+  isolation: isolate !important;
+}
+html.v21119-interaction-safe-root body[data-screen="fishing"] :is(.bite-callout,.catch-result-card) {
+  overflow: hidden auto !important;
+}
+html.v21119-interaction-safe-root body[data-screen] :is(.bottom-nav button,.toast button,.v21119-touch-target) {
+  -webkit-touch-callout: none !important;
+}
+@media (max-width: 360px), (max-height: 610px) {
+  html.v21119-interaction-safe-root {
+    --v21119-touch-target-min: 38px;
+    --v21119-dialog-gap: 22px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21119-interaction-safe-root body[data-screen] :is(.v21119-touch-shield,.v21119-scroll-safe,.v21119-touch-target) {
+    transition-duration: .001ms !important;
+    animation: none !important;
+  }
+}

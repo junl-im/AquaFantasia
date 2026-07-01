@@ -311,6 +311,8 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v21117VillageMenuIconClarity = 'top-right-icons-larger-same-cell-clipped-clean';
     document.documentElement.classList.add('v21118-ui-asset-containment-root');
     document.documentElement.dataset.v21118UiAssetContainment = 'runtime-menu-icons-card-images-no-bleed';
+    document.documentElement.classList.add('v21119-interaction-safe-root');
+    document.documentElement.dataset.v21119InteractionSafety = 'mobile-touch-modal-scroll-safe-area-guard';
     // v2.1.25 UI policy: keep opening video first-start-only without legacy chrome, lock player direction/motion, and refine top/bottom menu spacing.
     document.documentElement.dataset.v2098UiRecovery = 'v2098-dock-fishing-build-recovery';
     document.documentElement.dataset.v218StableRollback = 'v218-stable-ui-fishing-rollback';
@@ -567,6 +569,7 @@ class AquaFantasiaGame {
     this.installV21110FishingFeelDesignStabilityPass();
     this.installV21117VillageMenuIconClarityPass();
     this.installV21118UiAssetContainmentPass();
+    this.installV21119InteractionSafetyPass();
     this.preloadCriticalImages();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
@@ -581,7 +584,7 @@ class AquaFantasiaGame {
 
   private activateV2097UiResetShell(): void {
     const html = document.documentElement;
-    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v218StableRollback', 'v219UiTouchShopFishingAudit', 'v2111AquaShell', 'v2112AquaFoundation', 'v2113AquaCoreSteward', 'v2114InteractionShellPolish', 'v2115AquaScreenShell', 'v2116VillageAssetPolish', 'v2117LayoutInputFishing', 'v2118CharacterWaterUi', 'v2119OpeningExitCharacterUi', 'v2120OpeningVideoDirectionUi', 'v2121UiContinuityPolish', 'v2122RouteDirectionUi', 'v2123StabilityPolish', 'v2124StabilityPerformance', 'v2125OpeningDirectionMotionUi', 'v2127DirectionMotionUiAudit', 'v2128DirectionUiFishingCorrection', 'v2129PlayerFilenameDirection', 'v2130ConstructionFishingUi', 'v2131MotionUiFishingBuildGuard', 'v2132PremiumUiFishingStability', 'v2133PremiumUiEngineFishingStability', 'v2143UiOverlapPlacementSweep', 'v2144UiPlacementPolishSweep', 'v2145IconFishingPagePolish', 'v2146UiOverlapIconFishingPolish', 'v2147UiOverlapLayoutFishingPolish', 'v2148UiOverlapLayoutSweep', 'v2149UiCompositionPolish', 'v2150UiOverlapPlacementBeauty', 'v2161FishingBiteDexSystem', 'v21117VillageMenuIconClarity', 'v21118UiAssetContainment']);
+    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v218StableRollback', 'v219UiTouchShopFishingAudit', 'v2111AquaShell', 'v2112AquaFoundation', 'v2113AquaCoreSteward', 'v2114InteractionShellPolish', 'v2115AquaScreenShell', 'v2116VillageAssetPolish', 'v2117LayoutInputFishing', 'v2118CharacterWaterUi', 'v2119OpeningExitCharacterUi', 'v2120OpeningVideoDirectionUi', 'v2121UiContinuityPolish', 'v2122RouteDirectionUi', 'v2123StabilityPolish', 'v2124StabilityPerformance', 'v2125OpeningDirectionMotionUi', 'v2127DirectionMotionUiAudit', 'v2128DirectionUiFishingCorrection', 'v2129PlayerFilenameDirection', 'v2130ConstructionFishingUi', 'v2131MotionUiFishingBuildGuard', 'v2132PremiumUiFishingStability', 'v2133PremiumUiEngineFishingStability', 'v2143UiOverlapPlacementSweep', 'v2144UiPlacementPolishSweep', 'v2145IconFishingPagePolish', 'v2146UiOverlapIconFishingPolish', 'v2147UiOverlapLayoutFishingPolish', 'v2148UiOverlapLayoutSweep', 'v2149UiCompositionPolish', 'v2150UiOverlapPlacementBeauty', 'v2161FishingBiteDexSystem', 'v21117VillageMenuIconClarity', 'v21118UiAssetContainment', 'v21119InteractionSafety']);
     for (const key of Object.keys(html.dataset)) {
       if (keep.has(key)) continue;
       const value = html.dataset[key] ?? '';
@@ -6162,6 +6165,97 @@ class AquaFantasiaGame {
     observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-screen'], childList: true, subtree: true });
     window.addEventListener('pagehide', () => observer.disconnect(), { once: true, passive: true });
   }
+
+  private installV21119InteractionSafetyPass(): void {
+    let raf = 0;
+    let lastSignature = '';
+    const html = document.documentElement;
+    const shieldSelector = '.v2097-build-tray,.v2097-build-backdrop,.v2130-build-confirm,.v2130-build-confirm-card,.bite-callout,.catch-result-card,.dialog-card,.runtime-menu-screen,.runtime-panel,.runtime-card-list,.runtime-shop-card,.shop-card,.mission-card,.dex-card,.runtime-item-card';
+    const scrollSelector = '.v2097-build-tray,.v2097-build-grid,.v2130-build-confirm-card,.catch-result-card,.runtime-menu-screen,.runtime-panel,.runtime-card-list,.shop-list,.mission-list,.dex-grid,.inventory-grid,.dialog-card';
+    const buttonSelector = '.v21119-touch-shield button,.v21119-touch-shield [role="button"],.bottom-nav button,.toast button';
+    const set = (node: HTMLElement | null | undefined, entries: Array<[string, string]>) => {
+      if (!node) return;
+      for (const [name, value] of entries) {
+        if (node.style.getPropertyValue(name) !== value || node.style.getPropertyPriority(name) !== 'important') {
+          node.style.setProperty(name, value, 'important');
+        }
+      }
+    };
+    const normalize = () => {
+      html.classList.add('v21119-interaction-safe-root');
+      html.dataset.v21119InteractionSafety = 'mobile-touch-modal-scroll-safe-area-guard';
+      const viewport = window.visualViewport;
+      const width = Math.floor(viewport?.width ?? window.innerWidth);
+      const height = Math.floor(viewport?.height ?? window.innerHeight);
+      const compact = width <= 360 || height <= 610;
+      html.style.setProperty('--v21119-visual-width', `${width}px`);
+      html.style.setProperty('--v21119-visual-height', `${height}px`);
+      html.classList.toggle('v21119-compact-touch', compact);
+      const screen = document.body.dataset.screen || 'unknown';
+      const shieldCount = dom.app.querySelectorAll(shieldSelector).length;
+      const signature = `${screen}:${width}:${height}:${compact ? 'compact' : 'regular'}:${shieldCount}:${dom.app.childElementCount}`;
+      if (signature === lastSignature) return;
+      lastSignature = signature;
+      dom.app.querySelectorAll<HTMLElement>(shieldSelector).forEach((node) => {
+        node.classList.add('v21119-touch-shield');
+        node.setAttribute('data-no-swipe', 'true');
+        node.dataset.v21119TouchShield = 'modal-touch-scroll-contained';
+        set(node, [
+          ['box-sizing', 'border-box'],
+          ['overscroll-behavior', 'contain'],
+          ['-webkit-tap-highlight-color', 'transparent'],
+        ]);
+      });
+      dom.app.querySelectorAll<HTMLElement>(scrollSelector).forEach((node) => {
+        node.classList.add('v21119-scroll-safe');
+        node.setAttribute('data-no-swipe', 'true');
+        set(node, [
+          ['overscroll-behavior', 'contain'],
+          ['-webkit-overflow-scrolling', 'touch'],
+          ['scrollbar-gutter', 'stable both-edges'],
+          ['overflow-anchor', 'none'],
+        ]);
+      });
+      dom.app.querySelectorAll<HTMLElement>(buttonSelector).forEach((node) => {
+        node.classList.add('v21119-touch-target');
+        node.setAttribute('data-no-swipe', 'true');
+        set(node, [
+          ['touch-action', 'manipulation'],
+          ['-webkit-tap-highlight-color', 'transparent'],
+          ['user-select', 'none'],
+          ['-webkit-user-select', 'none'],
+        ]);
+      });
+      dom.app.querySelectorAll<HTMLElement>('.v2097-build-backdrop,.v2130-build-confirm').forEach((node) => {
+        set(node, [
+          ['touch-action', 'none'],
+          ['overscroll-behavior', 'none'],
+        ]);
+      });
+      dom.app.querySelectorAll<HTMLElement>('.bite-callout,.catch-result-card,.v2130-build-confirm-card').forEach((node) => {
+        node.classList.add('v21119-safe-dialog-card');
+        set(node, [
+          ['max-width', 'calc(100vw - 24px)'],
+          ['max-height', 'calc(var(--v21119-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 28px)'],
+          ['overscroll-behavior', 'contain'],
+        ]);
+      });
+    };
+    const schedule = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => { raf = 0; normalize(); });
+    };
+    schedule();
+    window.visualViewport?.addEventListener('resize', schedule, { passive: true });
+    window.visualViewport?.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule, { passive: true });
+    document.addEventListener('visibilitychange', schedule, { passive: true });
+    const observer = new MutationObserver(schedule);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-screen'], childList: true, subtree: true });
+    window.addEventListener('pagehide', () => observer.disconnect(), { once: true, passive: true });
+  }
+
 
   private preloadCriticalImages(): void {
     const critical = [ASSET.homeBg, './assets/v1110/home/village_islands_user_bg.webp', './assets/v1110/home/village_islands_user_bg.png', ASSET.homeBanner, ASSET.player, ASSET.float, './assets/v91/characters/chibi_fisher_face_icon.png'];

@@ -1,5 +1,5 @@
-// v2.1.118 UI asset containment: village menu runtime icon hard-lock, card image containment, and same-origin cache containment.
-const CACHE_NAME = 'aqua-fantasia-v2.1.118-ui-asset-containment';
+// v2.1.119 interaction safety: mobile touch shield, modal scroll containment, and same-origin cache containment.
+const CACHE_NAME = 'aqua-fantasia-v2.1.119-interaction-safety';
 const CORE_ASSETS = [
   './',
   './index.html',

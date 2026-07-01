@@ -1,3 +1,23 @@
+# AquaFantasia v2.1.119
+
+
+## v2.1.119 변경사항
+
+- 모바일 세로 화면에서 모달/카드/건설창/결과창을 누를 때 배경 스와이프나 페이지 스크롤이 섞이는 위험을 줄이는 interaction safety 패스를 추가했습니다.
+- `src/main.ts`에 `installV21119InteractionSafetyPass()`를 추가해 활성 화면의 모달, 카드 목록, 건설 확인창, 낚시 입질/결과창에 `data-no-swipe`, touch shield, scroll-safe 토큰을 런타임으로 부여합니다.
+- visual viewport 높이를 `--v21119-visual-height`로 동기화해 키보드/주소창 변화가 있는 모바일 브라우저에서도 입질창, 결과창, 건설 확인창의 최대 높이가 safe-area 안에 머물도록 했습니다.
+- `src/styles.css` 마지막 스코프에 터치 하이라이트 제거, overscroll containment, stable scrollbar gutter, 버튼 터치 타겟 최소값, compact viewport 보정을 추가했습니다.
+- 낚시 판정/보상/물고기 데이터, 마을 좌표/충돌/건설 로직, Firebase 저장 fallback, 오프닝 video-only 정책, 플레이어 8방향 파일명/flip 금지 정책은 변경하지 않았습니다.
+- 신규 검증 스크립트 `tools/check-v21119-interaction-safety.mjs`로 버전 동기화, 런타임 토큰, CSS safe-area/scroll 토큰, SVG 금지, README/handoff 보존을 확인합니다.
+
+## v2.1.119 분석/인수인계 기록 - 2026-07-01 KST
+
+- v2.1.118 기준 `npm run validate` 통과를 먼저 확인한 뒤 작업했습니다.
+- 이번 패치는 사용자 제보가 없던 정상 기능을 재작성하지 않고, 누적 UI 보정이 많은 모바일 웹 게임에서 자주 생기는 터치/스크롤 전파 문제만 마지막 런타임 패스와 CSS 스코프로 보강했습니다.
+- 새 패스는 MutationObserver와 RAF batching, signature guard를 사용해 화면/viewport/대상 개수가 바뀔 때만 스타일 토큰을 다시 씁니다.
+- 건설창, 건설 확인창, 낚시 `물었다!` 창, 성공 결과창, 카드형 메뉴에 `data-no-swipe`를 부여해 하단 내비 스와이프 및 배경 제스처와 충돌할 가능성을 낮췄습니다.
+- `npm run validate` 통과와 신규 검증 스크립트 단독 실행을 확인했습니다. `npm run typecheck`/`npm run build`는 현재 샌드박스에 `node_modules`가 없어 GitHub Actions의 `npm ci` 이후 결과를 최종 기준으로 봅니다.
+
 # AquaFantasia v2.1.118
 
 
