@@ -1,5 +1,5 @@
-// v2.1.126 stale code pruner: hand off legacy observer loops, keep one final UI owner, and lower effect churn.
-const CACHE_NAME = 'aqua-fantasia-v2.1.126-stale-code-pruner';
+// v2.1.129 direct state UI sync: render-time guide/page/expedition/fishing anchors without style observer loops.
+const CACHE_NAME = 'aqua-fantasia-v2.1.129-direct-state-ui-sync';
 const CORE_ASSETS = [
   './',
   './index.html',

@@ -1,6 +1,173 @@
+# AI_HANDOFF_CARDVILLE
+
+- 기준 패키지 버전: `2.1.129`
+- 현재 작업 기준: `v2.1.129`
+- 작업 환경: GitHub Desktop, Firebase 무료 플랜, 로컬 저장 fallback 유지.
+- 필수 산출물: `AF-v2.1.129-full.zip`, `AF-v2.1.129-patch.zip`.
+- 문서 파일 제한: 산출물 안의 `.md`는 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 허용.
+
+## 작업중인 내용
+
+- 현재 작업 기준은 `v2.1.129 direct state UI sync` 패치다.
+- 목표는 사용자가 반복 지적한 미반영 체감 문제를 줄이는 것이다. 초반 가이드, 개척 팝업 반절 표시, 상점/가방/퀘스트/지도/도감 우측 쏠림, 하단 메뉴 위치 불일치, 낚시 물길 깜박임, 낚싯대/미끼 scale 흔들림, 연속 성공 위치, `물었다!` 팝업 중앙 고정, 성공 결과창 중앙 고정을 직접 상태 동기화 방식으로 다룬다.
+- 중요 원칙: 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 오프닝 video-only, 플레이어 8방향 파일명/flip 금지는 변경하지 않는다.
+- 사용자가 특히 우려한 부분은 코드 꼬임과 예전 코드가 계속 살아나는 문제다. v2.1.129는 v2.1.128의 style observer 계열 보정이 최신 정책을 방해하지 않도록 handoff하고, `style observer` loop 없이 render/state 전환 시점에서 직접 동기화한다.
+
+## 기록
+
+### v2.1.129 direct state UI sync 패치 기록
+
+- v2.1.128 기준에서 시작했다.
+- 사용자가 “앞전 요청건이 전혀 반영 안 된 것 같다”고 다시 피드백했다.
+- 원인 분석: 이전 패치들은 observer/finalizer가 나중에 DOM을 보정하는 구조였다. 그래서 첫 마을 진입, 페이지 생성 직후, 낚시 phase 전환 직후에는 사용자가 보는 첫 화면에 초반 가이드, 중앙 정렬, 개척 팝업, 물길/낚싯대/미끼/물었다/결과창 보정이 늦게 보일 수 있었다.
+- 추가 원인 분석: style attribute를 감시하는 보정 루프가 남으면 예전 코드가 inline style을 다시 쓰고 최신 코드가 다시 복구하는 churn이 생겨 랙/깜박임 체감으로 이어질 수 있었다.
+- 새 패스 `installV21129DirectStateUiPass()`를 추가했다.
+- 부팅 초기에 `v21129-direct-state-ui-root`, `dataset.v21129DirectStateUi = active`, `dataset.v21129UiPolicy = source-render-state-sync-no-style-observer-loop`를 기록한다.
+- v2.1.128 direct source repair는 v2.1.129가 활성화된 경우 `handoff-to-v21129-direct-state-sync` 상태로 물러난다.
+- v21129는 `style` 속성 MutationObserver를 설치하지 않는다. class, 화면, 낚시 phase, childList, visualViewport 변화만 보고 필요한 때 `syncV21129DirectUi()`를 실행한다.
+- `startGame`, `go`, `mountBottomNav`, `renderFishing`, `setFishingPhase`, `showBiteCallout`, `showResultCard`에서 `syncV21129DirectUi()`를 직접 호출한다.
+- 첫 마을 중앙 초반 가이드는 `v21129-village-guide-popup`, `aqua-v21129-guide-dismissed`로 제공한다. 기존 v21122/v21124/v21125/v21126/v21128 가이드는 제거해 중복과 미노출 혼선을 막는다.
+- 하단 메뉴는 `v21129-bottom-nav-final`로 마을/상점/가방/퀘스트/지도/도감/장비/랭킹에서 같은 우측 하단 기준을 쓰고, 낚시 화면에서는 숨긴다.
+- 상점/가방/퀘스트/지도/도감/장비/랭킹은 `v21129-runtime-page-final`, `v21129-page-column-final`로 safe-area 중앙 컬럼을 유지한다.
+- 개척 팝업은 `v21129-expedition-final`로 중앙 fixed, safe-area max-height, 내부 scroll, overscroll contain을 적용해 반절만 보이는 회귀를 막는다.
+- 건설/확인 모달은 `v21129-village-modal-final`로 작은 화면 스크롤과 max-height를 유지한다.
+- 낚시 물길/수중 효과는 `v21129-water-final`, `v21129-sea-lane-final`로 관리하고 bite/reeling/result/success/fail 집중 단계에서는 숨겨 물길 깜박임을 줄인다.
+- 낚싯대/미끼 strip은 `v21129-loadout-final`, 내부 요소는 `v21129-loadout-child-final`로 transform/scale/transition/animation을 막는다.
+- 연속 성공 표기는 `v21129-combo-final`로 캐스팅 버튼 근처 하단에 간격을 두고 배치한다.
+- `물었다!` 팝업은 `v21129-bite-final`, 성공 결과창은 `v21129-result-final`로 중앙 fixed 기준을 유지한다.
+- `README.md`, `AI_HANDOFF_CARDVILLE.md`, `public/offline.html`, `public/sw.js`, `src/data.ts`, `package.json`, `package-lock.json`을 v2.1.129 기준으로 동기화했다.
+- 신규 검증 스크립트 `tools/check-v21129-direct-state-ui-sync.mjs`를 추가했다.
+
+## 다음 업데이트 예상 내역
+
+- 실제 모바일에서 초반 가이드가 오프닝 이후 첫 마을 중앙에 즉시 뜨는지 확인한다.
+- 개척 팝업이 반절만 보이지 않고 중앙 fixed + 내부 스크롤로 유지되는지 확인한다.
+- 상점/가방/퀘스트/지도/도감 페이지가 우측으로 쏠리지 않고 중앙 safe-area 컬럼을 유지하는지 캡처 기준으로 확인한다.
+- 낚시 중 물길 바, 낚싯대/미끼 strip, `물었다!`, 성공 결과창이 깜박이거나 최상단으로 점프하지 않는지 확인한다.
+- 체감 랙이 남으면 다음 패치에서 `RuntimeQualityManager`, Pixi ticker, DOM/WebGL effect budget을 직접 줄인다.
+- 오래된 observer 패스 실제 삭제는 GitHub Actions와 모바일 실기기 검증 후 단계적으로 판단한다.
+- Firebase/Pixi/Vite minor 업데이트는 GitHub Actions에서 `npm ci`, `typecheck`, `build` 통과 후만 검토한다. Firebase 무료 플랜과 로컬 fallback은 유지한다.
+
+## 필수 결과 확인 명령
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## 산출물 zip 점검 명령
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.129-full.zip AF-v2.1.129-patch.zip
+```
+
+## 고정 작업환경/산출 규칙
+
+- GitHub Desktop 사용 기준.
+- Firebase는 무료 플랜 기준. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제 금지.
+- Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 한다.
+- 문서 기록은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용한다. 추가 `.md`, 임시 리포트, 로그 파일을 산출물에 넣지 않는다.
+- 결과물은 항상 두 개다: `AF-v2.1.129-full.zip`, `AF-v2.1.129-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크.
+
+# 이전 인수인계 기록
+
 # AquaFantasia AI HANDOFF CARDVILLE
 
-- 기준 패키지 버전: `2.1.126`
+- 기준 패키지 버전: `2.1.128`
+
+
+## 작업중인 내용
+
+- 현재 작업 기준: `v2.1.128` direct source UI repair / stale observer handoff 패치.
+- 목표: 코드 꼬임, 예전 보정 코드와 observer가 계속 살아나 최신 UI를 다시 흔드는 문제, 체감 랙, UI 겹침/쏠림/깜박임을 줄인다.
+- 핵심 원인: v2.1.126은 v2.1.23/v2.1.25 감시 루프를 handoff했지만, v2.1.22/v2.1.24/v2.1.26 계열도 최신 패스 기준에서는 시작부터 물러나는 것이 더 안전하다. 그래서 v2.1.128은 `v21128DirectSourceUiRepair === active`를 부팅 초기에 세우고, 최신 direct source repair 하나가 최종 UI 소유권을 갖게 한다.
+- 원칙: 정상 동작하는 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 로직, Firebase fallback은 건드리지 않는다. UI/UX/성능 흔들림과 레거시 보정 루프만 다룬다.
+- 작업 환경: GitHub Desktop, Firebase 무료 플랜. Firebase 설정이 없으면 로컬 저장 fallback으로 계속 동작해야 한다.
+- 기록 파일은 반드시 `AI_HANDOFF_CARDVILLE.md`와 `README.md` 두 개만 사용한다.
+
+## v2.1.128 direct source UI repair 패치 기록
+
+## 기록
+
+- v2.1.126 기준 `npm run validate` 통과 상태에서 작업을 시작했다.
+- 사용자가 강조한 내용은 모든 구석구석 점검, UI/UX/디자인, 코드 꼬임, 예전 코드가 계속 살아나는 문제다.
+- 실제 확인 결과 v2.1.126까지는 최신 finalizer가 있었지만, v2.1.22/v2.1.24/v2.1.26 계열 보정도 최신 governor 기준에서 명확히 물러나게 하는 것이 더 안전했다.
+- 새 런타임 패스 `installV21128DirectSourceUiRepairPass()`를 추가했다.
+- boot 단계에서 `v21128-direct-source-ui-repair-root`, `dataset.v21128DirectSourceUiRepair = active`를 먼저 세워 예전 observer가 시작부터 최신 패스에게 물러날 수 있게 했다.
+- v2.1.22/v2.1.23/v2.1.24/v2.1.25 guard에 v2.1.128 활성 상태를 포함했고, v2.1.26 패스는 v2.1.128이 활성화된 경우 observer를 설치하지 않고 handoff한다.
+- v2.1.128 direct source repair는 `dataset.v21128ObserverOwner = direct-source-single-governor-css-first-inline-last-resort`, `dataset.v21128StaleHandoff = v21122-v21126-observer-loops-muted`, `dataset.v21128MutationDebt`를 기록한다.
+- 최신 소유권 토큰 `v21128-owned-final`, `data-v21128Owner`를 추가했다.
+- 같은 inline style을 반복 쓰지 않도록 `WeakMap<HTMLElement, string>` signature와 실제 important style 적용 여부를 같이 확인한다.
+- 하단 메뉴는 `v21128-bottom-nav-final`로 비낚시 화면에서 같은 우측 하단 기준을 사용하고 낚시 화면에서는 숨긴다.
+- 첫 마을 중앙 가이드는 `renderVillage()` 원본 DOM에 직접 삽입하고, 오프닝 영상 종료 직후 `mountV21128Guide()`로 다시 확인한다. 새 키는 `aqua-v21128-guide-dismissed`다.
+- 상점/가방/퀘스트/지도/도감/장비/랭킹은 `createRuntimeMenuScreen()`에서 생성 즉시 `v21128-runtime-page-final`, `v21128-page-column-final`, `v21128-direct-menu-root`, `v21128-direct-menu-column`을 부여해 우측 쏠림을 먼저 막는다.
+- 개척 팝업은 `renderVillage()` 원본 markup에 `v21128-expedition-final`, `v21128-expedition-direct`를 직접 부여해 반절 표시 회귀를 먼저 막고, 중앙 fixed, safe-area max-height, 내부 스크롤을 유지한다.
+- 낚시 물길/수중 효과는 실제 낚시 화면 markup에 `v21128-water-final`을 직접 부여하고, `fishing-phase-bite/reeling/success/fail` CSS로 바로 숨겨 성공 중 물길 깜박임을 막는다.
+- 낚싯대/미끼 strip은 생성 시점부터 `v21128-loadout-final`, 내부 요소는 `v21128-loadout-child-final`로 transform/scale/transition/animation을 막는다.
+- 연속 성공 표기는 생성 시점부터 `v21128-combo-final`, `물었다!` 팝업은 `v21128-bite-final`, 성공 결과창은 `v21128-result-final`로 기준을 유지해 최상단 점프와 깜박임을 줄인다.
+- `README.md`, `AI_HANDOFF_CARDVILLE.md`, `public/offline.html`, `public/sw.js`, `src/data.ts`, `package.json`, `package-lock.json`을 v2.1.128 기준으로 동기화했다.
+- 신규 검증 스크립트 `tools/check-v21128-direct-source-ui-repair.mjs`를 추가해 버전/캐시/UI 토큰/observer handoff/성능 budget/문서 계약/SVG 금지/패키징 청결을 확인한다.
+- 작업본 `npm run validate` 통과를 필수 기준으로 한다.
+- `npm run ci:registry:check`는 샌드박스 DNS 제한으로 실패할 수 있다.
+- `npm run ci:install`은 샌드박스 네트워크 제한으로 timeout될 수 있다.
+- `npm run typecheck`와 `npm run build`는 의존성 설치 후 GitHub Actions에서 최종 확인한다.
+
+## 다음 업데이트 예상 내역
+
+- 실제 모바일에서 v2.1.128 이후 v2.1.22~v2.1.26 observer가 더 이상 최신 UI를 다시 흔들지 않는지 확인한다.
+- 하단 메뉴 위치, 상점/가방/퀘스트/지도/도감 중앙 정렬, 개척 팝업 반절 표시, 낚시 물길/낚싯대/미끼/`물었다!`/성공 결과창을 캡처 기준으로 재검수한다.
+- 체감 랙이 남으면 RuntimeQualityManager의 fps downshift 기준, Pixi ticker workload, WebGL/DOM effect budget을 더 직접적으로 줄인다.
+- 오래된 observer 패스를 실제 삭제할 수 있는지는 GitHub Actions와 모바일 실기기 검증 후 단계적으로 판단한다.
+- Firebase/Pixi/Vite 업데이트는 GitHub Actions에서 `npm ci`, `typecheck`, `build` 확인 후 안전한 minor 범위만 검토한다. Firebase 무료 플랜과 로컬 fallback은 유지한다.
+
+## 필수 결과 확인 명령
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## 산출물 zip 점검 명령
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.128-full.zip AF-v2.1.128-patch.zip
+```
+
+## 고정 작업환경/산출 규칙
+
+- GitHub Desktop 사용 기준.
+- Firebase는 무료 플랜 기준. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제 금지.
+- Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 한다.
+- 문서 기록은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용한다. 추가 `.md`, 임시 리포트, 로그 파일을 산출물에 넣지 않는다.
+- 결과물은 항상 두 개다: `AF-v2.1.128-full.zip`, `AF-v2.1.128-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크.
 
 ## 작업중인 내용
 

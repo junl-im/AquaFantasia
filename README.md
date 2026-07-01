@@ -1,3 +1,67 @@
+# AquaFantasia v2.1.129
+
+## v2.1.129 변경사항
+
+- 사용자가 “앞전 요청건이 전혀 반영 안 된 것 같다”고 반복 피드백한 원인을 다시 분석하고, observer가 나중에 보정하는 방식 대신 화면 생성/상태 전환 시점에 즉시 동기화되는 `installV21129DirectStateUiPass()`를 추가했습니다.
+- v2.1.28의 direct source repair는 v2.1.129가 활성화되면 `handoff-to-v21129-direct-state-sync` 상태로 물러납니다. 이렇게 해서 예전 style observer loop가 최신 UI를 다시 흔드는 경로를 줄였습니다.
+- 부팅 초기에 `v21129-direct-state-ui-root`, `v21129DirectStateUi = active`, `v21129UiPolicy = source-render-state-sync-no-style-observer-loop`를 세워 다음 AI가 최신 UI 소유권을 바로 확인할 수 있게 했습니다.
+- v2.1.129 finalizer는 `style` 속성 MutationObserver를 쓰지 않습니다. `class`, `data-screen`, `data-fishing-phase`, childList, visualViewport 변화만 감시하고, 실제 상태 변화가 있을 때만 `syncV21129DirectUi()`를 실행합니다.
+- 첫 마을 중앙 가이드는 새 키 `aqua-v21129-guide-dismissed`로 다시 제공하며, 기존 v21122/v21124/v21125/v21126/v21128 가이드 DOM은 제거합니다. 안내는 낚시 가기, 개척 보기, 닫기 버튼을 제공합니다.
+- 하단 메뉴는 `v21129-bottom-nav-final`로 마을/상점/가방/퀘스트/지도/도감/장비/랭킹에서 같은 우측 하단 기준을 유지하고, 낚시 화면에서는 숨깁니다.
+- 상점, 가방, 퀘스트, 지도, 도감, 장비, 랭킹은 생성 시점과 상태 동기화 시점 모두에서 `v21129-runtime-page-final`, `v21129-page-column-final`을 유지해 우측 쏠림을 줄입니다.
+- 개척 팝업은 `v21129-expedition-final`로 중앙 fixed, safe-area max-height, 내부 스크롤, overscroll containment를 유지해 반절만 보이는 회귀를 막습니다.
+- 낚시 물길/수중 효과는 `v21129-water-final`, `v21129-sea-lane-final`로 관리하고, `bite`, `reeling`, `result`, `success`, `fail` 집중 단계에서는 숨겨 깜박임을 줄입니다.
+- 낚싯대·미끼 strip은 `v21129-loadout-final`, 내부 요소는 `v21129-loadout-child-final`로 transform/scale/animation/transition을 차단해 커졌다 작아졌다 하는 흔들림을 줄입니다.
+- 연속 성공 표기는 `v21129-combo-final`로 캐스팅 버튼 근처 하단에 간격을 두고 유지합니다.
+- `물었다!` 팝업은 `v21129-bite-final`, 성공 결과창은 `v21129-result-final`로 중앙 fixed 기준을 유지해 최상단 점프와 깜박임을 줄입니다.
+- 신규 검증 스크립트 `tools/check-v21129-direct-state-ui-sync.mjs`를 추가해 버전 동기화, v2.1.128 handoff, no style observer loop, 직접 상태 동기화 호출, UI 토큰, 문서 계약, SVG 금지, 패키징 청결을 확인합니다.
+- 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 오프닝 video-only 정책, 플레이어 8방향 파일명/flip 금지 정책은 변경하지 않았습니다.
+
+## v2.1.129 분석/인수인계 기록 - 2026-07-01 KST
+
+- 핵심 피드백: 초반 가이드, 개척 팝업, 메뉴 페이지 중앙 정렬, 낚시 물길/낚싯대/미끼/물었다/성공 결과창이 실제 화면에서 반영되지 않는 것처럼 보였습니다.
+- 원인: 이전 패치들은 DOM이 만들어진 뒤 observer/finalizer가 보정하는 구조가 많았습니다. 첫 진입, 화면 전환, 낚시 상태 전환 직후에는 사용자가 보는 첫 프레임에 반영이 늦을 수 있었습니다.
+- 추가 원인: v2.1.128의 observer는 style attribute까지 감시하는 계열 handoff 흐름과 함께 남아 있어, 예전 코드가 inline style을 다시 쓰면 최신 보정과 style observer loop가 서로 부하를 만들 수 있었습니다.
+- v2.1.129는 화면 생성 코드와 상태 전환 지점에서 `syncV21129DirectUi()`를 직접 호출합니다. 호출 지점은 `startGame`, `go`, `mountBottomNav`, `renderFishing`, `setFishingPhase`, `showBiteCallout`, `showResultCard`입니다.
+- 이 패치는 “또 다른 덮어쓰기 observer”가 아니라 `no-style-observer-loop` 정책입니다. style 감시는 제거하고, source render + state sync로 보이는 첫 프레임을 맞추는 것이 목표입니다.
+- 사용 환경은 GitHub Desktop과 Firebase 무료 플랜입니다. Firebase 설정이 없거나 익명 로그인 실패 시에도 로컬 저장 fallback이 살아 있어야 합니다.
+- 다음 AI는 작업 후 `npm run validate`를 먼저 확인하고, 가능하면 GitHub Actions에서 `npm run ci:registry:check`, `npm run ci:install`, `npm run typecheck`, `npm run build`를 확인해야 합니다.
+
+## 운영/산출 고정 규칙
+
+- 기록 파일은 `README.md`와 `AI_HANDOFF_CARDVILLE.md`만 유지합니다. 패치 노트, 임시 보고서, 분석 메모 같은 별도 `.md` 파일은 만들지 않습니다.
+- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.129-full.zip`, `AF-v2.1.129-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크 순서로 작성합니다.
+- GitHub Desktop 사용 기준입니다.
+- Firebase는 무료 플랜 기준입니다. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제를 추가하지 않습니다.
+- Firebase config가 없거나 Firebase 익명 로그인이 실패해도 로컬 저장 fallback이 계속 동작해야 합니다.
+
+## 결과 확인 명령
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## zip 내부 점검 명령
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.129-full.zip AF-v2.1.129-patch.zip
+```
+
 # AquaFantasia v2.1.126
 
 ## v2.1.126 변경사항
