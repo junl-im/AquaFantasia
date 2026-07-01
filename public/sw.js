@@ -1,5 +1,5 @@
-// v2.1.125 legacy debt reducer: light finalizer, observer handoff, jitter guard, and same-origin cache containment.
-const CACHE_NAME = 'aqua-fantasia-v2.1.125-legacy-debt-reducer';
+// v2.1.126 stale code pruner: hand off legacy observer loops, keep one final UI owner, and lower effect churn.
+const CACHE_NAME = 'aqua-fantasia-v2.1.126-stale-code-pruner';
 const CORE_ASSETS = [
   './',
   './index.html',

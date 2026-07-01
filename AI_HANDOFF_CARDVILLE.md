@@ -1,48 +1,50 @@
 # AquaFantasia AI HANDOFF CARDVILLE
 
-- 기준 패키지 버전: `2.1.125`
+- 기준 패키지 버전: `2.1.126`
 
 ## 작업중인 내용
 
-- 현재 작업 기준: `v2.1.125` legacy debt reducer / observer handoff 패치.
-- 목표: 코드 꼬임과 예전 보정 코드 재개입으로 생기는 체감 랙, UI 흔들림, 하단 메뉴 기준 불일치, 개척 팝업 반절 표시, 페이지 우측 쏠림, 낚시 물길/장비/입질/결과 깜박임을 줄인다.
-- 핵심 원인: v2.1.124는 style 재개입을 잡았지만, 그 감시가 예전 observer와 다시 style 쓰기를 주고받는 구조가 될 수 있었다. 여러 세대 패스를 대량 삭제하지 않고 최신 경량 finalizer가 마지막 소유권을 갖도록 인수인계한다.
-- 원칙: 정상 동작하는 낚시 판정/보상/밸런스, 마을 좌표/충돌/건설 로직, Firebase fallback은 건드리지 않고 UI/UX/성능 흔들림만 수정한다.
+- 현재 작업 기준: `v2.1.126` stale code pruner / single finalizer handoff 패치.
+- 목표: 코드 꼬임, 예전 보정 코드와 observer가 계속 살아나 최신 UI를 다시 흔드는 문제, 체감 랙, UI 겹침/쏠림/깜박임을 줄인다.
+- 핵심 원인: v2.1.125는 v2.1.124의 style 감시를 인수인계했지만, v2.1.23 계열 runtime deconflict observer와 v2.1.25 observer가 동시에 살아 있으면 최신 기준을 계속 스케줄할 수 있었다. 그래서 v2.1.126은 v2.1.23/v2.1.25 감시 루프가 `v21126StaleCodePruner === active` 상태에서 물러나도록 명시 guard를 추가하고, v2.1.126 finalizer 하나가 최종 UI 소유권을 갖게 한다.
+- 원칙: 정상 동작하는 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 로직, Firebase fallback은 건드리지 않는다. UI/UX/성능 흔들림과 레거시 보정 루프만 다룬다.
 - 작업 환경: GitHub Desktop, Firebase 무료 플랜. Firebase 설정이 없으면 로컬 저장 fallback으로 계속 동작해야 한다.
 - 기록 파일은 반드시 `AI_HANDOFF_CARDVILLE.md`와 `README.md` 두 개만 사용한다.
 
-## v2.1.125 legacy debt reducer 패치 기록
+## v2.1.126 stale code pruner 패치 기록
 
 ## 기록
 
-- v2.1.124 기준 `npm run validate` 통과 상태에서 작업을 시작했다.
-- 사용자가 특히 강조한 내용은 코드 꼬임, 예전 코드가 계속 살아나 최신 UI 보정이 안 먹는 문제다.
-- v2.1.124의 observer는 `style` 속성을 감시하지만, 예전 보정 패스가 같은 요소에 계속 inline important style을 쓰면 최신 패스도 다시 style을 쓰고, 그 결과 mutation churn과 랙/깜박임이 남을 수 있다.
-- 새 런타임 패스 `installV21125LegacyDebtReducerPass()`를 추가했다.
-- v2.1.124 `normalize`와 observer는 `html.dataset.v21125LegacyDebtReducer === 'active'`일 때 물러나도록 했다. 삭제가 아니라 handoff 방식이라 GitHub Desktop에서 추적/되돌리기가 쉽다.
-- 새 루트 스코프 `v21125-legacy-debt-reducer-root`, dataset `v21125LegacyDebtReducer`, 최신 소유권 `v21125-owned-final`, `data-v21125Owner`를 추가했다.
-- 새 `setImportant`는 WeakMap signature와 실제 inline style 적용 상태를 함께 확인한다. 이미 맞는 값이면 다시 쓰지 않고, 예전 코드가 값을 바꾼 경우에만 복구한다.
-- 하단 메뉴는 `v21125-bottom-nav-final`로 모든 비낚시 화면에서 같은 우측 하단 기준을 쓰고, 낚시 화면에서는 숨긴다.
-- 초반 가이드는 `v21125-village-guide-popup`, `aqua-v21125-guide-dismissed`로 새로 제공한다. 기존 v21122/v21124 가이드 DOM은 제거해 중복 안내를 막는다.
-- 상점/가방/퀘스트/지도/도감/장비/랭킹 페이지는 `v21125-runtime-page-final`, `v21125-page-column-final`로 중앙 컬럼과 safe-area padding을 유지한다.
-- 개척 팝업은 `v21125-expedition-final`, 건설/확인 모달은 `v21125-village-modal-final`로 중앙 fixed, safe-area max-height, 내부 스크롤을 유지한다.
-- 낚시 물길/수중 효과는 `v21125-water-final`, `v21125-sea-lane-final`로 animation/transition churn을 줄이고, 집중 단계에서는 물길/장비 strip을 숨긴다.
-- 낚싯대/미끼 strip은 `v21125-loadout-final`, 내부 요소는 `v21125-loadout-child-final`로 transform/scale/transition/animation을 막는다.
-- 연속 성공 표기는 `v21125-combo-final`, `물었다!` 팝업은 `v21125-bite-final`, 성공 결과창은 `v21125-result-final`로 중앙/하단 기준을 유지한다.
-- `README.md`, `AI_HANDOFF_CARDVILLE.md`, `public/offline.html`, `public/sw.js`, `src/data.ts`, `package.json`, `package-lock.json`을 v2.1.125 기준으로 동기화했다.
-- 신규 검증 스크립트 `tools/check-v21125-legacy-debt-reducer.mjs`를 추가해 버전/캐시/UI 토큰/observer handoff/문서 계약/SVG 금지/패키징 청결을 확인한다.
+- v2.1.125 기준 `npm run validate` 통과 상태에서 작업을 시작했다.
+- 사용자가 강조한 내용은 모든 구석구석 점검, UI/UX/디자인, 코드 꼬임, 예전 코드가 계속 살아나는 문제다.
+- 실제 확인 결과 v2.1.123 runtime deconflict observer는 v2.1.125 이후에도 계속 schedule될 수 있었고, v2.1.125 observer도 최신 기준을 담당하지만 별도 루프로 남아 있었다.
+- 새 런타임 패스 `installV21126StaleCodePrunerPass()`를 추가했다.
+- boot 단계에서 `v21126-stale-code-pruner-root`, `dataset.v21126StaleCodePruner = active`를 먼저 세워 v2.1.23/v2.1.25 이전 observer가 최신 패스에게 물러날 수 있게 했다.
+- v2.1.23 schedule/normalize와 v2.1.25 normalize/observer에 `if (html.dataset.v21126StaleCodePruner === 'active') return;` guard를 추가했다.
+- v2.1.26 finalizer는 `dataset.v21123RuntimeDeconflict = handoff-to-v21126-single-finalizer`, `dataset.v21125LegacyDebtReducer = handoff-to-v21126-single-finalizer`, `dataset.v21126ObserverOwner = single-finalizer-css-first-inline-last-resort`를 기록한다.
+- 최신 소유권 토큰 `v21126-owned-final`, `data-v21126Owner`를 추가했다.
+- 같은 inline style을 반복 쓰지 않도록 `WeakMap<HTMLElement, string>` signature와 실제 important style 적용 여부를 같이 확인한다.
+- 하단 메뉴는 `v21126-bottom-nav-final`로 비낚시 화면에서 같은 우측 하단 기준을 사용하고 낚시 화면에서는 숨긴다.
+- 첫 마을 중앙 가이드는 `v21126-village-guide-popup`, `aqua-v21126-guide-dismissed`로 새로 제공한다. 기존 v21122/v21124/v21125 가이드 DOM은 제거해 중복과 미노출 혼선을 줄인다.
+- 상점/가방/퀘스트/지도/도감/장비/랭킹은 `v21126-runtime-page-final`, `v21126-page-column-final`로 중앙 컬럼을 유지한다.
+- 개척 팝업은 `v21126-expedition-final`, 건설/확인 모달은 `v21126-village-modal-final`로 중앙 fixed, safe-area max-height, 내부 스크롤을 유지한다.
+- 낚시 물길/수중 효과는 `v21126-water-final`로 animation/transition/filter를 끄고, bite/reeling/result/success/fail 집중 단계에서는 `display:none`으로 숨겨 성공 시 물길 깜박임을 막는다.
+- 낚싯대/미끼 strip은 `v21126-loadout-final`, 내부 요소는 `v21126-loadout-child-final`로 transform/scale/transition/animation을 막는다.
+- 연속 성공 표기는 `v21126-combo-final`, `물었다!` 팝업은 `v21126-bite-final`, 성공 결과창은 `v21126-result-final`로 기준을 유지한다.
+- `README.md`, `AI_HANDOFF_CARDVILLE.md`, `public/offline.html`, `public/sw.js`, `src/data.ts`, `package.json`, `package-lock.json`을 v2.1.126 기준으로 동기화했다.
+- 신규 검증 스크립트 `tools/check-v21126-stale-code-pruner.mjs`를 추가해 버전/캐시/UI 토큰/observer handoff/성능 budget/문서 계약/SVG 금지/패키징 청결을 확인한다.
 - 작업본 `npm run validate` 통과.
 - `npm run ci:registry:check`는 샌드박스 DNS 제한으로 `EAI_AGAIN registry.npmjs.org` 실패.
 - `npm run ci:install`은 샌드박스 네트워크 제한으로 timeout.
-- `npm run typecheck`는 현재 `node_modules`가 없어 `howler`, `pixi.js`, `firebase`, `vite` 모듈 해석 실패. 문법 단계는 통과했고 의존성 설치 후 GitHub Actions에서 최종 확인한다.
+- `npm run typecheck`는 현재 `node_modules`가 없어 `howler`, `pixi.js`, `firebase`, `vite` 모듈 해석 실패. 이번 작업의 TypeScript 구문 단계는 해당 외부 모듈 해석 전까지 진행되었고, 의존성 설치 후 GitHub Actions에서 최종 확인한다.
 - `npm run build`는 현재 `vite`가 설치되어 있지 않아 실패. GitHub Actions에서 `npm ci` 후 최종 확인한다.
 
 ## 다음 업데이트 예상 내역
 
-- 실제 모바일에서 v2.1.125 이후 가이드, 개척 팝업, 메뉴 페이지, 낚시 UI가 이전 observer 때문에 다시 밀리지 않는지 캡처 기준으로 확인한다.
-- 체감 랙이 여전히 남으면 RuntimeQualityManager, Pixi ticker, WebGL/DOM effect budget을 더 직접적으로 줄인다.
-- 오래된 observer 패스를 실제로 하나씩 제거할 수 있는지 검토하되, 삭제는 GitHub Actions와 모바일 실기기 확인 후 진행한다.
-- 상점/가방/퀘스트/지도/도감의 카드 폭, 하단 메뉴 여백, 긴 한글 문구 줄바꿈을 계속 다듬는다.
+- 실제 모바일에서 v2.1.126 이후 v2.1.23/v2.1.25 observer가 더 이상 최신 UI를 다시 흔들지 않는지 확인한다.
+- 하단 메뉴 위치, 상점/가방/퀘스트/지도/도감 중앙 정렬, 개척 팝업 반절 표시, 낚시 물길/낚싯대/미끼/`물었다!`/성공 결과창을 캡처 기준으로 재검수한다.
+- 체감 랙이 남으면 RuntimeQualityManager의 fps downshift 기준, Pixi ticker workload, WebGL/DOM effect budget을 더 직접적으로 줄인다.
+- 오래된 observer 패스를 실제 삭제할 수 있는지는 GitHub Actions와 모바일 실기기 검증 후 단계적으로 판단한다.
 - Firebase/Pixi/Vite 업데이트는 GitHub Actions에서 `npm ci`, `typecheck`, `build` 확인 후 안전한 minor 범위만 검토한다. Firebase 무료 플랜과 로컬 fallback은 유지한다.
 
 ## 필수 결과 확인 명령
@@ -68,7 +70,7 @@ for zpath in sys.argv[1:]:
     print(zpath)
     print('markdown:', md)
     print('banned:', banned[:20], 'count=', len(banned))
-PY AF-v2.1.125-full.zip AF-v2.1.125-patch.zip
+PY AF-v2.1.126-full.zip AF-v2.1.126-patch.zip
 ```
 
 ## 고정 작업환경/산출 규칙
@@ -77,7 +79,7 @@ PY AF-v2.1.125-full.zip AF-v2.1.125-patch.zip
 - Firebase는 무료 플랜 기준. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제 금지.
 - Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 한다.
 - 문서 기록은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용한다. 추가 `.md`, 임시 리포트, 로그 파일을 산출물에 넣지 않는다.
-- 결과물은 항상 두 개다: `AF-v2.1.125-full.zip`, `AF-v2.1.125-patch.zip`.
+- 결과물은 항상 두 개다: `AF-v2.1.126-full.zip`, `AF-v2.1.126-patch.zip`.
 - 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크.
 
 ## 프로젝트/작업 구조
@@ -96,8 +98,8 @@ PY AF-v2.1.125-full.zip AF-v2.1.125-patch.zip
 ## 현재 버전 핵심 기능 상태
 
 - 낚시 상태: `idle`, `casting`, `waiting`, `bite`, `reeling`, `success`, `fail`
-- v2.1.125 핵심: v2.1.124 style 감시를 경량 finalizer로 인수인계하고, 같은 값 반복 쓰기를 줄여 코드 꼬임/예전 보정 재개입/체감 랙/깜박임을 완화. 게임 수치와 판정은 건드리지 않음.
-- v2.1.124 핵심: style 재개입을 감시해 초반 가이드, 페이지 중앙 정렬, 개척 팝업, 하단 메뉴, 낚시 물길 바, 낚싯대/미끼 strip, 연속 성공, `물었다!`, 성공 결과창을 최신 기준으로 재고정. v2.1.125에서 경량 handoff됨.
+- v2.1.126 핵심: v2.1.23/v2.1.25 observer 루프를 최신 단일 finalizer로 handoff하고, UI 기준점을 v21126으로 통일해 코드 꼬임/예전 보정 재개입/체감 랙/깜박임을 더 줄인다. 게임 수치와 판정은 건드리지 않음.
+- v2.1.125 핵심: v2.1.124 style 감시를 경량 finalizer로 인수인계하고, 같은 값 반복 쓰기를 줄여 코드 꼬임/예전 보정 재개입/체감 랙/깜박임을 완화. v2.1.126에서 단일 finalizer handoff됨.
 
 # 이전 인수인계 기록
 
@@ -937,3 +939,4 @@ npm run build
 5. 단순 패치 적용 가능한 패치 zip
 
 항상 사용자가 받은 zip 안에 `AI_HANDOFF_CARDVILLE.md`와 `README.md`가 최신 상태인지 확인한다. zip 파일명은 짧게 하되 버전 숫자를 포함한다.
+
