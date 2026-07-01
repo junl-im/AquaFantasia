@@ -1,5 +1,5 @@
-// v2.1.119 interaction safety: mobile touch shield, modal scroll containment, and same-origin cache containment.
-const CACHE_NAME = 'aqua-fantasia-v2.1.119-interaction-safety';
+// v2.1.120 screen composition handoff: UI shell readability, safe-area nav, and same-origin cache containment.
+const CACHE_NAME = 'aqua-fantasia-v2.1.120-screen-composition-handoff';
 const CORE_ASSETS = [
   './',
   './index.html',

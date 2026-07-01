@@ -1,15 +1,68 @@
 # AquaFantasia AI HANDOFF CARDVILLE
 
+## 작업중인 내용
+
+- 현재 작업 기준: `v2.1.120` screen composition + handoff contract 패치.
+- 목표: 기존 정상 기능을 흔들지 않고 모바일 세로 UI/UX, 카드 겹침, safe-area, 텍스트/미디어 containment, 검수/산출 규칙을 보강한다.
+- 작업 환경: GitHub Desktop, Firebase 무료 플랜. Firebase 설정이 없으면 로컬 저장 fallback으로 계속 동작해야 한다.
+- 기록 파일은 반드시 `AI_HANDOFF_CARDVILLE.md`와 `README.md` 두 개만 사용한다.
+
+## 기록
+
+- v2.1.119 기준 `npm run validate` 통과 후 v2.1.120 작업을 시작했다.
+- 새 런타임 패스 `installV21120ScreenCompositionHandoffPass()`를 추가해 카드/패널/건설창/낚시 입질창/결과창/하단 내비에 읽기/터치/미디어 containment 토큰을 부여한다.
+- 새 CSS 마지막 스코프는 긴 한글 문구 줄바꿈, 미디어 카드 밖 튐 방지, 하단 내비 폭 안정화, 초소형 화면 보정, reduced-motion/contrast 대응만 추가한다.
+- 새 검증 스크립트는 문서 2개 제한, 결과 확인 명령, GitHub Desktop/Firebase 무료 플랜 기록, SVG 금지, 오프닝 video-only, 플레이어 방향 파일명/flip 금지 정책을 함께 확인한다.
+
+## 다음 업데이트 예상 내역
+
+- 실제 모바일 기기에서 마을 건설창, 상점/가방/미션/도감 카드, 낚시 `물었다!`/성공 결과창, 하단 내비 safe-area를 화면 캡처 기준으로 재검수한다.
+- 가능하면 GitHub Actions의 `npm ci`, `typecheck`, `build` 결과를 확인해 의존성/엔진 업그레이드 가능 범위를 다시 판단한다.
+- 다음 기능 후보는 낚시 성장 루프 안내, 마을 건설 UX, 도감/미션 보상 피드백이며, 정상 동작 중인 판정/좌표/저장 로직은 근거 없이 재작성하지 않는다.
+
+## 필수 결과 확인 명령
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## 산출물 zip 점검 명령
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.120-full.zip AF-v2.1.120-patch.zip
+```
+
+## 산출/응답 고정 형식
+
+1. 작업중인 내용
+2. 기록
+3. 다음 업데이트 예상 내역
+4. 마지막에 버전 숫자를 표기한 짧은 파일명 링크 두 개: `AF-v2.1.120-full.zip`, `AF-v2.1.120-patch.zip`
+
 ## 현재 기준
 
 - 프로젝트명: AquaFantasia / 아쿠아 판타지아
-- 기준 패키지 버전: `2.1.119`
+- 기준 패키지 버전: `2.1.120`
 - 기준 기록일: `2026-07-01 KST`
 - 실행 형태: Vite + TypeScript 모바일 세로 전용 웹 게임
 - 주요 배포 흐름: GitHub Actions `validate-and-deploy`에서 `npm ci` → `npm run validate` → `npm run typecheck` → `npm run build` → GitHub Pages 배포
 - 사용자 작업 환경: GitHub Desktop, Firebase 무료 플랜
 - 업로드 원본: `.git` 폴더 제외 통파일 zip
-- 산출물 zip 파일명 규칙: 짧게 쓰되 버전 숫자를 반드시 포함한다. 예: `AF-v2.1.118-full.zip`, `AF-v2.1.118-patch.zip`
+- 산출물 zip 파일명 규칙: 짧게 쓰되 버전 숫자를 반드시 포함한다. 예: `AF-v2.1.120-full.zip`, `AF-v2.1.120-patch.zip`
 
 ## 절대 유지 규칙
 
@@ -45,6 +98,7 @@
 
 - 낚시 상태: `idle`, `casting`, `waiting`, `bite`, `reeling`, `success`, `fail`
 - v2.1.110 핵심 기능은 유지됨: 낚시 안전 구간 0.5 단위 양자화, 물고기 피로도 기반 저항 완화, 입질/액션 배지/게이지/릴 콘솔/결과창 safe-area 재정렬
+- v2.1.120 핵심: 모바일 세로 화면 구성/가독성/카드 미디어 containment/하단 내비 safe-area 폭/인수인계 검증 계약을 보강. 낚시 판정, 보상, 마을 좌표, 건설 로직, Firebase fallback은 건드리지 않음
 - v2.1.119 핵심: 모바일 터치/모달/스크롤 safety 패스를 추가해 건설창, 건설 확인창, 낚시 입질창/결과창, 카드형 메뉴의 data-no-swipe, overscroll containment, visual viewport safe-area 최대 높이를 보강. 게임 로직과 버튼 이벤트는 건드리지 않음
 - v2.1.118 핵심: v2.1.117 마을 우측 상단 메뉴 개선을 실제 런타임 inline important 기준으로 hard-lock하고, 카드/아이콘 이미지를 containment 처리해 다른 그림 비침/카드 밖 튐/긴 문구 겹침 위험을 줄임. 게임 로직과 버튼 이벤트는 건드리지 않음
 - v2.1.117 핵심: 마을 우측 상단 메뉴 아이콘은 버튼 크기/2x3 배치를 유지한 채 내부 아이콘만 24~25px로 키우고, clipping/isolation/pseudo 제거로 위쪽 다른 그림 비침을 방지. 마을 이동/건설/상점/출항 동작은 건드리지 않음
@@ -58,6 +112,54 @@
 - 저장 핵심: `localStorage` 키 `aqua-fantasia-save-v650`, 이전 키 일부 마이그레이션, 저장값 sanitize 후 저장
 - Firebase 핵심: `window.AQUA_FIREBASE_CONFIG`에 `apiKey`가 있을 때만 `firebase/app`, `firebase/auth`를 동적 import하고 익명 로그인 시도. 설정이 없으면 로컬 저장으로 진행
 
+
+
+## v2.1.120 화면 구성/인수인계 계약 패치 기록
+
+### 사용자 요청과 확인한 불안정 후보
+
+- 요청: 모든 구석구석을 꼼꼼하게 체크하고, UI/UX/디자인을 특히 신경 쓰면서 계속 패치한다.
+- 요청: 작업 기록은 통파일 안의 `AI_HANDOFF_CARDVILLE.md`와 `README.md`만으로 다음 AI가 이어갈 수 있어야 하며, 결과 확인 명령과 작업환경도 매 패치 포함해야 한다.
+- 확인한 실제 후보: v2.1.119는 터치/모달/스크롤 안전성은 보강했지만, 누적 UI 패스가 많은 구조라 카드 내부 긴 문구, 미디어 containment, 하단 내비 safe-area 폭, 산출물/검수 계약 누락이 다시 불안정해질 수 있다.
+
+### 적용 내용
+
+- `src/main.ts`
+  - 루트 스코프 `v21120-screen-composition-handoff-root`와 `data-v21120-screen-composition-handoff` 추가.
+  - `installV21120ScreenCompositionHandoffPass()` 추가.
+  - 카드/패널/건설창/낚시 입질창/결과창에 `v21120-readable-panel`, 텍스트에 `v21120-readable-text`, 미디어에 `v21120-contained-media`, 내비에 `v21120-safe-nav`, 버튼에 `v21120-action-button`을 런타임으로 부여.
+  - visual viewport 폭/높이를 `--v21120-visual-width`, `--v21120-visual-height`로 동기화.
+  - RAF 예약, MutationObserver, signature guard로 반복 스타일 쓰기를 줄임.
+- `src/styles.css`
+  - `v2.1.120 screen composition handoff` 마지막 스코프 추가.
+  - 긴 한글 문구 줄바꿈, 카드 경계선, 미디어 containment, 하단 내비 폭 안정화, 초소형 화면 보정, reduced-motion/contrast 대응 적용.
+- `README.md`, `AI_HANDOFF_CARDVILLE.md`
+  - 작업중인 내용, 기록, 다음 업데이트 예상 내역, 결과 확인 명령, 산출물 zip 점검 명령, GitHub Desktop/Firebase 무료 플랜 환경, full/patch 산출 규칙을 상단에 고정.
+- `tools/check-v21120-screen-composition-handoff.mjs`
+  - 버전/캐시/README/handoff 동기화, v2.1.120 runtime/CSS 토큰, 운영 계약, SVG 금지, 문서 2개 제한, CSS 자산 존재, package-lock 레지스트리 청결을 확인한다.
+
+### 절대 건드리지 않은 것
+
+- 낚시 판정/보상/밸런스
+- 물고기 데이터
+- 마을 이동/좌표/충돌/조이스틱/건설 설치 로직
+- 건설/확대/축소/상점/출항 버튼 이벤트
+- Firebase 저장/익명 로그인 fallback
+- 오프닝 video-only 정책
+- 플레이어 방향 파일명/flip 금지 정책
+- 의존성/엔진 메이저 업그레이드
+
+### v2.1.120 필수 검수
+
+1. `npm run validate` 통과.
+2. GitHub Actions에서 `npm run ci:registry:check`, `npm run ci:install`, `npm run typecheck`, `npm run build` 확인.
+3. 실제 모바일 마을 화면에서 하단 내비와 우측 상단 메뉴가 safe-area 안에 있고 버튼이 겹치지 않는지 확인.
+4. 상점/가방/미션/도감 카드에서 긴 한글 문구와 이미지가 카드 밖으로 튀지 않는지 확인.
+5. 낚시 `물었다!` 창과 성공 결과창이 화면 밖으로 밀리지 않고, 버튼 터치가 정확한지 확인.
+6. full/patch zip 내부에 `.git`, `node_modules`, `dist`, `reports`, `.log`, SVG 파일이 없는지 확인.
+7. `.md`는 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 있어야 한다.
+
+현재 샌드박스에서는 작업본 `npm run validate`를 기준으로 확인한다. `node_modules`가 없으면 `typecheck`/`build`는 GitHub Actions의 `npm ci` 이후 결과를 최종 기준으로 본다.
 
 
 ## v2.1.119 모바일 interaction safety 패치 기록

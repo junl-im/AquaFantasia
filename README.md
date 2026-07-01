@@ -1,3 +1,54 @@
+# AquaFantasia v2.1.120
+
+## v2.1.120 변경사항
+
+- 모바일 세로 UI 전체를 다시 훑어 화면 구성, 카드 텍스트 줄바꿈, 미디어 containment, 하단 내비 safe-area 폭을 보강하는 `installV21120ScreenCompositionHandoffPass()`를 추가했습니다.
+- 새 런타임 패스는 기존 게임 로직을 재작성하지 않고 활성 화면의 카드/패널/건설창/낚시 입질창/결과창/하단 내비에 `v21120-readable-panel`, `v21120-safe-nav`, `v21120-action-button`, `v21120-contained-media` 토큰을 부여합니다.
+- `src/styles.css` 마지막 스코프에 읽기 쉬운 텍스트 줄바꿈, 카드 경계선, 미디어 카드 밖 튐 방지, 초소형 화면 하단 내비 폭 보정, reduced-motion/contrast 대응을 추가했습니다.
+- `AI_HANDOFF_CARDVILLE.md`와 `README.md` 상단에 다음 AI가 바로 이어갈 수 있는 산출/검수/작업환경 계약을 고정했고, 결과 확인용 명령 묶음을 문서에 포함했습니다.
+- 검증 스크립트 `tools/check-v21120-screen-composition-handoff.mjs`를 추가해 버전 동기화, UI shell 토큰, 인수인계 필수 섹션, 결과 명령, GitHub Desktop/Firebase 무료 플랜 기록, SVG 금지, 문서 2개 제한을 함께 확인합니다.
+- 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 로직, Firebase fallback, 오프닝 video-only 정책, 플레이어 8방향 파일명/flip 금지 정책은 변경하지 않았습니다.
+
+## v2.1.120 분석/인수인계 기록 - 2026-07-01 KST
+
+- v2.1.119 기준 `npm run validate` 통과와 `README.md`/`AI_HANDOFF_CARDVILLE.md` 외 불필요 문서가 없음을 먼저 확인했습니다.
+- 사용자가 요청한 “모든 구석구석 체크, UI/UX/디자인 중점, 다음 AI가 문서만 보고 이어갈 수 있는 기록”을 반영해, 이번 패치는 기능 수치보다 화면 구성 안정성과 기록 계약을 우선했습니다.
+- 확인한 실제 불안정 후보는 누적 보정 패스가 많은 구조에서 카드 내부 긴 한글 문구, 이미지/비디오 containment, 하단 내비 폭, 초소형 viewport safe-area가 다시 흔들릴 수 있는 점입니다.
+- 새 패스는 RAF batching, visualViewport 변수, signature guard를 사용합니다. 화면/viewport/대상 개수가 변할 때만 스타일 토큰을 다시 써 성능 부담을 줄였습니다.
+- 사용 환경은 GitHub Desktop과 Firebase 무료 플랜입니다. Firebase 설정이 없으면 로컬 저장 fallback을 유지해야 하며, 유료 서버 기능이나 필수 서버 의존성을 추가하지 않습니다.
+- 다음 AI는 작업 후 반드시 `npm run validate`를 먼저 확인하고, 가능하면 GitHub Actions에서 `npm run ci:registry:check`, `npm run ci:install`, `npm run typecheck`, `npm run build`까지 확인합니다.
+
+## 운영/산출 고정 규칙
+
+- 기록 파일은 `README.md`와 `AI_HANDOFF_CARDVILLE.md`만 유지합니다. 패치 노트, 임시 보고서, 분석 메모 같은 별도 `.md` 파일은 만들지 않습니다.
+- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.120-full.zip`, `AF-v2.1.120-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크 순서로 작성합니다.
+- 로컬 결과 확인 기본 명령:
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+- zip 내부 점검 명령:
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.120-full.zip AF-v2.1.120-patch.zip
+```
+
 # AquaFantasia v2.1.119
 
 

@@ -68851,3 +68851,82 @@ html.v21119-interaction-safe-root body[data-screen] :is(.bottom-nav button,.toas
     animation: none !important;
   }
 }
+
+
+/* v2.1.120 screen composition handoff: readable cards, contained media, safe bottom navigation, and mobile no-overlap polish. */
+html.v21120-screen-composition-handoff-root {
+  --v21120-visual-width: 100vw;
+  --v21120-visual-height: 100svh;
+  --v21120-card-hairline: rgba(218, 250, 255, .28);
+  --v21120-readable-shadow: 0 1px 2px rgba(0, 28, 55, .42);
+  --v21120-safe-nav-gap: max(8px, env(safe-area-inset-bottom, 0px));
+}
+html.v21120-screen-composition-handoff-root body[data-screen] :is(.v21120-readable-panel,.runtime-menu-screen,.runtime-panel,.runtime-card-list,.dialog-card,.v2097-build-tray,.v2130-build-confirm-card,.bite-callout,.catch-result-card) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  isolation: isolate !important;
+  overflow-wrap: anywhere !important;
+  border-color: var(--v21120-card-hairline) !important;
+}
+html.v21120-screen-composition-handoff-root body[data-screen] .v21120-readable-panel :is(h1,h2,h3,strong,p,span,small,em,button,label),
+html.v21120-screen-composition-handoff-root body[data-screen] .v21120-readable-text {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+  text-wrap: pretty;
+}
+html.v21120-screen-composition-handoff-root body[data-screen] .v21120-readable-panel :is(h1,h2,h3,strong),
+html.v21120-screen-composition-handoff-root body[data-screen] .v21120-readable-panel button {
+  text-shadow: var(--v21120-readable-shadow) !important;
+}
+html.v21120-screen-composition-handoff-root body[data-screen] :is(.v21120-contained-media,.v21120-readable-panel img,.v21120-readable-panel video,.v21120-readable-panel canvas) {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  -webkit-user-drag: none !important;
+}
+html.v21120-screen-composition-handoff-root body[data-screen] :is(.v21120-safe-nav,.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav) {
+  box-sizing: border-box !important;
+  width: min(460px, calc(100vw - 16px)) !important;
+  max-width: min(460px, calc(100vw - 16px)) !important;
+  margin-inline: auto !important;
+  overscroll-behavior: contain !important;
+}
+html.v21120-screen-composition-handoff-root body[data-screen] :is(.v21120-action-button,.bottom-nav button,.runtime-menu-screen button,.runtime-panel button,.catch-result-card button,.dialog-card button,.v2130-build-confirm-card button,.bite-callout button) {
+  min-width: 0 !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+html.v21120-screen-composition-handoff-root body[data-screen="fishing"] :is(.bite-callout,.catch-result-card),
+html.v21120-screen-composition-handoff-root body[data-screen="village"] :is(.v2097-build-tray,.v2130-build-confirm-card) {
+  max-height: calc(var(--v21120-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 24px) !important;
+}
+html.v21120-screen-composition-handoff-root body[data-screen="village"] :is(.v2097-world-controls,.v2098-world-controls,.v2157-world-controls-microbar,.v21118-world-controls-contained) {
+  contain: layout paint style !important;
+  isolation: isolate !important;
+}
+@media (max-width: 360px), (max-height: 610px) {
+  html.v21120-screen-composition-handoff-root {
+    --v21120-readable-shadow: 0 1px 1px rgba(0, 28, 55, .34);
+  }
+  html.v21120-screen-composition-handoff-root body[data-screen] :is(.v21120-safe-nav,.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav) {
+    width: min(452px, calc(100vw - 12px)) !important;
+    max-width: min(452px, calc(100vw - 12px)) !important;
+  }
+}
+@media (prefers-contrast: more) {
+  html.v21120-screen-composition-handoff-root body[data-screen] .v21120-readable-panel {
+    border-color: rgba(235, 255, 255, .52) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21120-screen-composition-handoff-root body[data-screen] :is(.v21120-readable-panel,.v21120-contained-media,.v21120-action-button,.v21120-safe-nav) {
+    transition-duration: .001ms !important;
+    animation: none !important;
+  }
+}
