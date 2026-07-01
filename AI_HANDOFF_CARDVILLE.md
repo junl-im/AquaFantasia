@@ -1,5 +1,104 @@
 # AquaFantasia AI HANDOFF CARDVILLE
 
+- 기준 패키지 버전: `2.1.124`
+
+## 작업중인 내용
+
+- 현재 작업 기준: `v2.1.124` root-cause UX repair 패치.
+- 목표: 사용자가 지적한 미반영 의심 사항을 루트 원인 기준으로 다시 잡는다. 특히 체감 랙, 초반 가이드, 개척 팝업 반절 표시, 페이지 우측 쏠림, 하단 메뉴 위치 불일치, 낚시 물길 바/낚싯대/미끼 깜박임, 연속 성공 위치, `물었다!` 팝업 흔들림을 최신 기준으로 고정한다.
+- 핵심 원인: v2.1.123 final owner는 class/화면 전환 중심으로 보정했지만, 예전 observer가 inline `style`을 나중에 다시 쓰는 `style 재개입`은 감시하지 않아 최신 보정이 다시 적용되지 않을 수 있었다.
+- 원칙: 정상 동작하는 낚시 판정/보상/밸런스, 마을 좌표/충돌/건설 로직, Firebase fallback은 건드리지 않고 UI/UX/성능 흔들림만 수정한다.
+- 작업 환경: GitHub Desktop, Firebase 무료 플랜. Firebase 설정이 없으면 로컬 저장 fallback으로 계속 동작해야 한다.
+- 기록 파일은 반드시 `AI_HANDOFF_CARDVILLE.md`와 `README.md` 두 개만 사용한다.
+
+## v2.1.124 root-cause UX repair 패치 기록
+
+## 기록
+
+- v2.1.123 기준 `npm run validate` 통과 상태에서 사용자가 “앞전 요청건이 전혀 반영 안된 것 같다”고 피드백했다.
+- 실제 구조를 다시 보니 여러 세대의 observer가 같은 DOM 요소에 inline important style을 반복 적용하고 있었다.
+- v2.1.123 observer는 `style` 속성 변화를 감시하지 않았고, signature가 같으면 normalize를 건너뛰는 구조라 예전 보정이 나중에 살아나면 최신 위치가 다시 밀릴 수 있었다.
+- 새 런타임 패스 `installV21124RootCauseUxRepairPass()`를 추가했다.
+- 루트 스코프 `v21124-root-cause-ux-repair-root`, dataset `v21124RootCauseUxRepair`를 추가했다.
+- 초반 가이드는 `v21124-village-guide-popup`와 새 localStorage 키 `aqua-v21124-guide-dismissed`로 다시 만든다. 기존 v21122 dismiss 상태 때문에 안 보이는 문제를 피한다.
+- 하단 메뉴는 `v21124-bottom-nav-final`로 마을/상점/가방/퀘스트/지도/도감/장비/랭킹에서 같은 우측 하단 기준을 쓴다. 낚시 화면에서는 숨긴다.
+- 상점/가방/퀘스트/지도/도감/장비/랭킹은 `v21124-runtime-page-final`, `v21124-page-column-final`로 safe-area 중앙 컬럼을 재고정한다.
+- 개척 팝업은 `v21124-expedition-final`로 중앙 fixed, safe-area max-height, 내부 scroll, overscroll contain을 적용한다.
+- 건설 확인/건설 트레이는 `v21124-village-modal-final`로 작은 화면 스크롤과 max-height를 보강한다.
+- 낚시 물길 바/수중 효과는 `v21124-water-final`, `v21124-sea-lane-final`로 no animation/no transition 처리하고, bite/reeling/result/success/fail 단계에서는 display none으로 숨긴다.
+- 낚싯대/미끼 strip은 `v21124-loadout-final`, 내부는 `v21124-loadout-child-final`로 transform/scale/animation/transition을 차단한다.
+- 연속 성공 표기는 `v21124-combo-final`로 캐스팅 시작 버튼 근처 하단에 간격을 두고 배치한다.
+- `물었다!` 팝업은 `v21124-bite-final`, 성공 결과창은 `v21124-result-final`로 중앙 fixed, no animation/no transition 기준을 적용한다.
+- observer는 `style` attribute까지 감시하고 RAF + 45ms 후행 normalize로 예전 코드가 늦게 style을 다시 써도 최신 기준을 재적용한다.
+- `README.md`, `AI_HANDOFF_CARDVILLE.md`, `public/offline.html`, `public/sw.js`, `src/data.ts`, `package.json`, `package-lock.json`을 v2.1.124 기준으로 동기화했다.
+- 신규 검증 스크립트 `tools/check-v21124-root-cause-ux-repair.mjs`를 추가해 버전/캐시/UI 토큰/문서 계약/SVG 금지/패키징 청결을 확인한다.
+
+## 다음 업데이트 예상 내역
+
+- 실제 모바일에서 새 초반 가이드가 첫 마을 진입 시 중앙에 보이는지 확인한다.
+- 개척 팝업이 작은 화면에서 반절만 보이지 않고 중앙/스크롤 상태를 유지하는지 확인한다.
+- 상점/가방/퀘스트/지도/도감이 우측으로 쏠리지 않고 중앙 컬럼을 유지하는지 캡처 기준으로 확인한다.
+- 낚시 물길 바가 bite/reeling/result/success/fail 단계에서 계속 깜박이지 않는지 확인한다.
+- 낚싯대/미끼 strip의 커짐/작아짐, `물었다!` 팝업 상단 이동, 성공 결과창 중 물길 바 노출을 실제 플레이에서 재검수한다.
+- 다음 패치에서는 RuntimeQualityManager, WebGL/DOM effect budget, Pixi ticker 부담을 더 직접적으로 줄이는 성능 패치를 검토한다.
+- GitHub Actions 결과 확인 후 안전한 범위에서 Vite/Firebase/Pixi minor 업데이트 가능성 검토. 단, Firebase 무료 플랜과 로컬 fallback은 유지한다.
+
+## 필수 결과 확인 명령
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## 산출물 zip 점검 명령
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.124-full.zip AF-v2.1.124-patch.zip
+```
+
+## 고정 작업환경/산출 규칙
+
+- GitHub Desktop 사용 기준.
+- Firebase는 무료 플랜 기준. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제 금지.
+- Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 한다.
+- 문서 기록은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용한다. 추가 `.md`, 임시 리포트, 로그 파일을 산출물에 넣지 않는다.
+- 결과물은 항상 두 개다: `AF-v2.1.124-full.zip`, `AF-v2.1.124-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크.
+
+## 프로젝트/작업 구조
+
+- 앱 버전: `src/data.ts`의 `APP_VERSION`
+- 캐시 이름: `src/data.ts`의 `CACHE_NAME`, `public/sw.js`의 `CACHE_NAME`
+- 진입점: `src/main.ts`
+- 스타일: `src/styles.css`
+- 마을 월드/플레이어 방향 처리: `src/villageWorld.ts`
+- 저장/Firebase fallback: `src/storage.ts`
+- 정적 자산: `public/assets/`
+- 서비스워커: `public/sw.js`
+- 오프라인 페이지: `public/offline.html`
+- 검증 스크립트: `tools/`
+
+## 현재 버전 핵심 기능 상태
+
+- 낚시 상태: `idle`, `casting`, `waiting`, `bite`, `reeling`, `success`, `fail`
+- v2.1.124 핵심: style 재개입을 감시해 초반 가이드, 페이지 중앙 정렬, 개척 팝업, 하단 메뉴, 낚시 물길 바, 낚싯대/미끼 strip, 연속 성공, `물었다!`, 성공 결과창을 최신 기준으로 재고정. 게임 수치와 판정은 건드리지 않음
+- v2.1.123 핵심: 예전 UI 보정 코드가 다시 개입하는 회귀를 줄이기 위해 최신 final owner anchor를 부여. 단, style 재개입 감시는 v2.1.124에서 보강됨
+
+# 이전 인수인계 기록
+
 - 기준 패키지 버전: `2.1.123`
 
 ## 작업중인 내용

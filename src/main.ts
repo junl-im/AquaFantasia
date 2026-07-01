@@ -321,6 +321,8 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v21122SystemUxPerformance = 'guide-page-centering-fishing-jitter-single-anchor';
     document.documentElement.classList.add('v21123-runtime-deconflict-root');
     document.documentElement.dataset.v21123RuntimeDeconflict = 'latest-anchor-owns-layout-and-fishing-ui';
+    document.documentElement.classList.add('v21124-root-cause-ux-repair-root');
+    document.documentElement.dataset.v21124RootCauseUxRepair = 'style-mutation-finalizer-guide-page-fishing-nav';
     // v2.1.25 UI policy: keep opening video first-start-only without legacy chrome, lock player direction/motion, and refine top/bottom menu spacing.
     document.documentElement.dataset.v2098UiRecovery = 'v2098-dock-fishing-build-recovery';
     document.documentElement.dataset.v218StableRollback = 'v218-stable-ui-fishing-rollback';
@@ -582,6 +584,7 @@ class AquaFantasiaGame {
     this.installV21121MicroUiA11yPerfPass();
     this.installV21122SystemUxPerformancePass();
     this.installV21123RuntimeDeconflictPass();
+    this.installV21124RootCauseUxRepairPass();
     this.preloadCriticalImages();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
@@ -596,7 +599,7 @@ class AquaFantasiaGame {
 
   private activateV2097UiResetShell(): void {
     const html = document.documentElement;
-    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v218StableRollback', 'v219UiTouchShopFishingAudit', 'v2111AquaShell', 'v2112AquaFoundation', 'v2113AquaCoreSteward', 'v2114InteractionShellPolish', 'v2115AquaScreenShell', 'v2116VillageAssetPolish', 'v2117LayoutInputFishing', 'v2118CharacterWaterUi', 'v2119OpeningExitCharacterUi', 'v2120OpeningVideoDirectionUi', 'v2121UiContinuityPolish', 'v2122RouteDirectionUi', 'v2123StabilityPolish', 'v2124StabilityPerformance', 'v2125OpeningDirectionMotionUi', 'v2127DirectionMotionUiAudit', 'v2128DirectionUiFishingCorrection', 'v2129PlayerFilenameDirection', 'v2130ConstructionFishingUi', 'v2131MotionUiFishingBuildGuard', 'v2132PremiumUiFishingStability', 'v2133PremiumUiEngineFishingStability', 'v2143UiOverlapPlacementSweep', 'v2144UiPlacementPolishSweep', 'v2145IconFishingPagePolish', 'v2146UiOverlapIconFishingPolish', 'v2147UiOverlapLayoutFishingPolish', 'v2148UiOverlapLayoutSweep', 'v2149UiCompositionPolish', 'v2150UiOverlapPlacementBeauty', 'v2161FishingBiteDexSystem', 'v21117VillageMenuIconClarity', 'v21118UiAssetContainment', 'v21119InteractionSafety', 'v21120ScreenCompositionHandoff', 'v21121MicroUiA11yPerf', 'v21122SystemUxPerformance', 'v21123RuntimeDeconflict']);
+    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v218StableRollback', 'v219UiTouchShopFishingAudit', 'v2111AquaShell', 'v2112AquaFoundation', 'v2113AquaCoreSteward', 'v2114InteractionShellPolish', 'v2115AquaScreenShell', 'v2116VillageAssetPolish', 'v2117LayoutInputFishing', 'v2118CharacterWaterUi', 'v2119OpeningExitCharacterUi', 'v2120OpeningVideoDirectionUi', 'v2121UiContinuityPolish', 'v2122RouteDirectionUi', 'v2123StabilityPolish', 'v2124StabilityPerformance', 'v2125OpeningDirectionMotionUi', 'v2127DirectionMotionUiAudit', 'v2128DirectionUiFishingCorrection', 'v2129PlayerFilenameDirection', 'v2130ConstructionFishingUi', 'v2131MotionUiFishingBuildGuard', 'v2132PremiumUiFishingStability', 'v2133PremiumUiEngineFishingStability', 'v2143UiOverlapPlacementSweep', 'v2144UiPlacementPolishSweep', 'v2145IconFishingPagePolish', 'v2146UiOverlapIconFishingPolish', 'v2147UiOverlapLayoutFishingPolish', 'v2148UiOverlapLayoutSweep', 'v2149UiCompositionPolish', 'v2150UiOverlapPlacementBeauty', 'v2161FishingBiteDexSystem', 'v21117VillageMenuIconClarity', 'v21118UiAssetContainment', 'v21119InteractionSafety', 'v21120ScreenCompositionHandoff', 'v21121MicroUiA11yPerf', 'v21122SystemUxPerformance', 'v21123RuntimeDeconflict', 'v21124RootCauseUxRepair']);
     for (const key of Object.keys(html.dataset)) {
       if (keep.has(key)) continue;
       const value = html.dataset[key] ?? '';
@@ -1646,7 +1649,7 @@ class AquaFantasiaGame {
   private createRuntimeMenuScreen(active: Exclude<Screen, 'login' | 'fishing'>, title: string, subtitle: string): HTMLElement {
     this.clear();
     const root = document.createElement('main');
-    root.className = `game-screen runtime-menu-screen v2097-menu-screen v2098-menu-screen v218-runtime-page-screen v219-runtime-page-screen v2111-runtime-page-shell v2112-runtime-page-shell v2113-runtime-page-shell v2114-runtime-page-shell v2115-runtime-page-shell v2116-runtime-page-shell v2117-runtime-page-shell v2118-runtime-page-shell v2119-runtime-page-shell v2120-runtime-page-shell v2121-runtime-page-shell v2122-runtime-page-shell v2123-runtime-page-shell v2124-runtime-page-shell v2125-runtime-page-shell v2127-runtime-page-shell v2128-runtime-page-shell v2129-runtime-page-shell v2130-runtime-page-shell v2131-runtime-page-shell v2132-runtime-page-shell v2133-runtime-page-shell v2138-runtime-page-shell v2139-runtime-page-shell v2140-runtime-page-shell v2142-runtime-page-shell v2143-runtime-page-shell v2144-runtime-page-shell v2145-runtime-page-shell v2146-runtime-page-shell v2147-runtime-page-shell v2148-runtime-page-shell v2149-runtime-page-shell v2150-runtime-page-shell v2151-runtime-page-shell v2159-runtime-page-shell v2163-premium-aqua-ui-screen v2164-premium-aqua-ui-screen v2165-premium-aqua-ui-screen v2166-premium-aqua-ui-screen v2167-premium-aqua-ui-screen v2168-premium-aqua-ui-screen v2169-premium-aqua-ui-screen v2170-premium-aqua-ui-screen v2097-${active}-screen v2098-${active}-screen ${active}-screen scroll-screen`;
+    root.className = `game-screen runtime-menu-screen v2097-menu-screen v2098-menu-screen v218-runtime-page-screen v219-runtime-page-screen v2111-runtime-page-shell v2112-runtime-page-shell v2113-runtime-page-shell v2114-runtime-page-shell v2115-runtime-page-shell v2116-runtime-page-shell v2117-runtime-page-shell v2118-runtime-page-shell v2119-runtime-page-shell v2120-runtime-page-shell v2121-runtime-page-shell v2122-runtime-page-shell v2123-runtime-page-shell v2124-runtime-page-shell v2125-runtime-page-shell v2127-runtime-page-shell v2128-runtime-page-shell v2129-runtime-page-shell v2130-runtime-page-shell v2131-runtime-page-shell v2132-runtime-page-shell v2133-runtime-page-shell v2138-runtime-page-shell v2139-runtime-page-shell v2140-runtime-page-shell v2142-runtime-page-shell v2143-runtime-page-shell v2144-runtime-page-shell v2145-runtime-page-shell v2146-runtime-page-shell v2147-runtime-page-shell v2148-runtime-page-shell v2149-runtime-page-shell v2150-runtime-page-shell v2151-runtime-page-shell v2159-runtime-page-shell v2163-premium-aqua-ui-screen v2164-premium-aqua-ui-screen v2165-premium-aqua-ui-screen v2166-premium-aqua-ui-screen v2167-premium-aqua-ui-screen v2168-premium-aqua-ui-screen v2169-premium-aqua-ui-screen v2170-premium-aqua-ui-screen v2097-${active}-screen v2098-${active}-screen ${active}-screen scroll-screen v21124-page-shell-owned`;
     root.dataset.v2097UiReset = `canonical-v2097-${active}-stable`;
     root.dataset.v2098UiRecovery = `v2098-${active}-menu-recovery`;
     root.setAttribute('data-runtime-screen', active);
@@ -1669,7 +1672,7 @@ class AquaFantasiaGame {
         <div class="v2097-menu-title"><span>Lv.${this.playerLevel()} · ${this.escapeHtml(this.playerName())}</span><strong>${title}</strong><em>루미나 베이</em></div>
         <div class="v2097-hidden-metrics" aria-hidden="true"><span><img src="./assets/v22/icons/nav_fishing.png" alt="" />${this.save.coins.toLocaleString('ko-KR')}G</span><span><img src="./assets/v209/props/shell_garden.png" alt="" />기금 ${this.save.village.fund.toLocaleString('ko-KR')}</span><span><img src="./assets/v22/icons/nav_bag.png" alt="" />${this.save.gear.lureStock}</span></div>
       </header>
-      <div class="runtime-content v2097-menu-content v2098-menu-content v2111-aqua-page v2112-aqua-page v2113-aqua-page v2114-aqua-page v2115-aqua-page v2116-aqua-page v2117-aqua-page v2118-aqua-page v2119-aqua-page v2120-aqua-page v2121-aqua-page v2122-aqua-page v2123-aqua-page v2124-aqua-page v2125-aqua-page v2127-aqua-page v2128-aqua-page v2129-aqua-page v2130-aqua-page v2131-aqua-page v2132-aqua-page v2133-aqua-page v2138-aqua-page v2139-aqua-page v2140-aqua-page v2142-aqua-page v2143-aqua-page v2148-aqua-page v2149-aqua-page v2150-aqua-page v2151-aqua-page v2097-${active}-content v2098-${active}-content" data-v2097-scroll-root="true" data-v2098-scroll-root="true" data-v2146-page-title-removed="true" data-v2147-page-title-clean="true" data-v2148-page-title-clean="true" data-v2149-page-title-clean="true" data-v2150-page-title-clean="true" data-v2151-page-title-clean="true" data-v2159-page-title-clean="true"></div>`;
+      <div class="runtime-content v21124-page-column-owned v2097-menu-content v2098-menu-content v2111-aqua-page v2112-aqua-page v2113-aqua-page v2114-aqua-page v2115-aqua-page v2116-aqua-page v2117-aqua-page v2118-aqua-page v2119-aqua-page v2120-aqua-page v2121-aqua-page v2122-aqua-page v2123-aqua-page v2124-aqua-page v2125-aqua-page v2127-aqua-page v2128-aqua-page v2129-aqua-page v2130-aqua-page v2131-aqua-page v2132-aqua-page v2133-aqua-page v2138-aqua-page v2139-aqua-page v2140-aqua-page v2142-aqua-page v2143-aqua-page v2148-aqua-page v2149-aqua-page v2150-aqua-page v2151-aqua-page v2097-${active}-content v2098-${active}-content" data-v2097-scroll-root="true" data-v2098-scroll-root="true" data-v2146-page-title-removed="true" data-v2147-page-title-clean="true" data-v2148-page-title-clean="true" data-v2149-page-title-clean="true" data-v2150-page-title-clean="true" data-v2151-page-title-clean="true" data-v2159-page-title-clean="true"></div>`;
     root.querySelectorAll<HTMLButtonElement>('[data-v2084-profile-shortcut]').forEach((btn) => btn.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); void this.go('village'); }));
     root.querySelectorAll<HTMLButtonElement>('[data-v2097-menu-close]').forEach((btn) => btn.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); void this.go('village'); }));
     this.mountUnderwaterWebgl(root, active === 'ranking' ? 'deep' : active === 'village' || active === 'shop' || active === 'map' ? 'town' : 'reef', V101_WATER_BG[active]);
@@ -1905,9 +1908,9 @@ class AquaFantasiaGame {
         <div class="hud-chip" data-hud-coins><img src="./assets/v92/icons/coin.png" alt="" /><strong>${this.save.coins.toLocaleString('ko-KR')}</strong></div>
         <div class="hud-chip" data-hud-lures><img src="./assets/v205/fishing/slot_bait.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
       </div>
-      <aside class="v2137-sea-lane-card v2138-sea-lane-card v2139-sea-lane-card v2140-sea-lane-card v2142-sea-lane-card v2143-sea-lane-card v2144-sea-lane-card v2145-sea-lane-card v2146-sea-lane-card v2147-sea-lane-card v2148-sea-lane-card v2149-sea-lane-card v2150-sea-lane-card v2151-sea-lane-card v2152-sea-lane-card v2153-sea-lane-card v2154-sea-lane-card v2155-sea-lane-card v2158-sea-lane-card v2159-sea-lane-card v2160-sea-lane-card v2161-sea-lane-card v2162-sea-lane-card v2164-sea-lane-card v2165-sea-lane-card v2166-sea-lane-card v2167-sea-lane-card v2168-sea-lane-card v2171-sea-lane-card v2172-sea-lane-card v2174-sea-lane-card" aria-label="선택 수역 물길 정보"><span>바다물길</span><strong>${region.name}</strong><em>${region.subtitle} · ${region.tide}</em></aside>
+      <aside class="v21124-sea-lane-owned v2137-sea-lane-card v2138-sea-lane-card v2139-sea-lane-card v2140-sea-lane-card v2142-sea-lane-card v2143-sea-lane-card v2144-sea-lane-card v2145-sea-lane-card v2146-sea-lane-card v2147-sea-lane-card v2148-sea-lane-card v2149-sea-lane-card v2150-sea-lane-card v2151-sea-lane-card v2152-sea-lane-card v2153-sea-lane-card v2154-sea-lane-card v2155-sea-lane-card v2158-sea-lane-card v2159-sea-lane-card v2160-sea-lane-card v2161-sea-lane-card v2162-sea-lane-card v2164-sea-lane-card v2165-sea-lane-card v2166-sea-lane-card v2167-sea-lane-card v2168-sea-lane-card v2171-sea-lane-card v2172-sea-lane-card v2174-sea-lane-card" aria-label="선택 수역 물길 정보"><span>바다물길</span><strong>${region.name}</strong><em>${region.subtitle} · ${region.tide}</em></aside>
       <div class="stage-ui v2028-stage-ui"></div><div class="cute-action-layer" aria-hidden="true"></div>
-      <aside class="fishing-loadout-strip v21116-loadout-stable v2199-fishing-loadout v2198-fishing-loadout v2197-fishing-loadout v2196-fishing-loadout v2195-fishing-loadout v2194-fishing-loadout v2137-fishing-loadout v2138-fishing-loadout v2139-fishing-loadout v2140-fishing-loadout v2142-fishing-loadout v2143-fishing-loadout v2144-fishing-loadout v2145-fishing-loadout v2146-fishing-loadout v2147-fishing-loadout v2148-fishing-loadout v2149-fishing-loadout v2150-fishing-loadout v2151-fishing-loadout v2152-fishing-loadout v2153-fishing-loadout v2154-fishing-loadout v2155-fishing-loadout v2158-fishing-loadout v2159-fishing-loadout v2160-fishing-loadout v2161-fishing-loadout v2162-fishing-loadout v2163-fishing-loadout v2164-fishing-loadout v2165-fishing-loadout v2166-fishing-loadout v2167-fishing-loadout v2168-fishing-loadout v2169-fishing-loadout v2170-fishing-loadout v2171-fishing-loadout v2172-fishing-loadout v2174-fishing-loadout" aria-label="낚시 장비">
+      <aside class="fishing-loadout-strip v21124-loadout-owned v21116-loadout-stable v2199-fishing-loadout v2198-fishing-loadout v2197-fishing-loadout v2196-fishing-loadout v2195-fishing-loadout v2194-fishing-loadout v2137-fishing-loadout v2138-fishing-loadout v2139-fishing-loadout v2140-fishing-loadout v2142-fishing-loadout v2143-fishing-loadout v2144-fishing-loadout v2145-fishing-loadout v2146-fishing-loadout v2147-fishing-loadout v2148-fishing-loadout v2149-fishing-loadout v2150-fishing-loadout v2151-fishing-loadout v2152-fishing-loadout v2153-fishing-loadout v2154-fishing-loadout v2155-fishing-loadout v2158-fishing-loadout v2159-fishing-loadout v2160-fishing-loadout v2161-fishing-loadout v2162-fishing-loadout v2163-fishing-loadout v2164-fishing-loadout v2165-fishing-loadout v2166-fishing-loadout v2167-fishing-loadout v2168-fishing-loadout v2169-fishing-loadout v2170-fishing-loadout v2171-fishing-loadout v2172-fishing-loadout v2174-fishing-loadout" aria-label="낚시 장비">
         <div class="v21116-loadout-cell v2199-loadout-cell v2198-loadout-cell v2197-loadout-cell v2196-loadout-cell v2195-loadout-cell v2194-loadout-cell v2193-loadout-cell v2142-loadout-cell v2163-loadout-cell v2164-loadout-cell v2165-loadout-cell v2166-loadout-cell v2167-loadout-cell v2168-loadout-cell v2169-loadout-cell v2170-loadout-cell v2171-loadout-cell v2172-loadout-cell v2174-loadout-cell v2185-loadout-cell v2192-loadout-cell"><img src="${ASSET.fishingSlotRod}" alt="" /><span class="v2199-loadout-copy v2198-loadout-copy v2197-loadout-copy v2196-loadout-copy v2195-loadout-copy v2194-loadout-copy v2193-loadout-copy v2185-loadout-copy v2192-loadout-copy"><strong>낚싯대</strong><em>Lv.${this.save.gear.rodLevel} · 장력 안정</em></span></div>
         <div class="v21116-loadout-cell v2199-loadout-cell v2198-loadout-cell v2197-loadout-cell v2196-loadout-cell v2195-loadout-cell v2194-loadout-cell v2193-loadout-cell v2142-loadout-cell v2163-loadout-cell v2164-loadout-cell v2165-loadout-cell v2166-loadout-cell v2167-loadout-cell v2168-loadout-cell v2169-loadout-cell v2170-loadout-cell v2171-loadout-cell v2172-loadout-cell v2174-loadout-cell v2185-loadout-cell v2192-loadout-cell"><img src="${ASSET.fishingSlotBait}" alt="" /><span class="v2199-loadout-copy v2198-loadout-copy v2197-loadout-copy v2196-loadout-copy v2195-loadout-copy v2194-loadout-copy v2193-loadout-copy v2185-loadout-copy v2192-loadout-copy"><strong>미끼</strong><em>${this.save.gear.lureStock}개 · 캐스팅 소모</em></span></div>
       </aside>
@@ -1916,7 +1919,7 @@ class AquaFantasiaGame {
         <div class="v2153-battle-row v2153-battle-tension"><span>텐션</span><i><em data-v2153-safe-window data-v2154-safe-window data-v2155-safe-window data-v2156-safe-window data-v2157-safe-window data-v2158-safe-window data-v2159-safe-window data-v2160-safe-window data-v2161-safe-window data-v2162-safe-window data-v2168-safe-window></em><b data-v2153-tension-bar data-v2154-tension-bar data-v2155-tension-bar data-v2156-tension-bar data-v2157-tension-bar data-v2158-tension-bar data-v2159-tension-bar data-v2160-tension-bar data-v2161-tension-bar data-v2162-tension-bar data-v2168-tension-bar></b></i><strong data-v2153-tension-value data-v2154-tension-value data-v2155-tension-value data-v2156-tension-value data-v2157-tension-value data-v2158-tension-value data-v2159-tension-value data-v2160-tension-value data-v2161-tension-value data-v2162-tension-value data-v2168-tension-value>50%</strong></div>
         <div class="v2153-battle-row v2153-battle-stamina"><span>저항</span><i><b data-v2153-stamina-bar data-v2154-stamina-bar data-v2155-stamina-bar data-v2156-stamina-bar data-v2157-stamina-bar data-v2158-stamina-bar data-v2159-stamina-bar data-v2160-stamina-bar data-v2161-stamina-bar data-v2162-stamina-bar data-v2168-stamina-bar></b></i><strong data-v2153-stamina-value data-v2154-stamina-value data-v2155-stamina-value data-v2156-stamina-value data-v2157-stamina-value data-v2158-stamina-value data-v2159-stamina-value data-v2160-stamina-value data-v2161-stamina-value data-v2162-stamina-value data-v2168-stamina-value>100%</strong></div>
       </section>
-      <div class="combo-badge v21116-combo-badge hidden" id="comboBadge" data-combo-label="연속 성공">연속 성공 x${Math.max(2, this.save.currentStreak)}</div>
+      <div class="combo-badge v21124-combo-owned v21116-combo-badge hidden" id="comboBadge" data-combo-label="연속 성공">연속 성공 x${Math.max(2, this.save.currentStreak)}</div>
       <section class="recent-catch-strip v205-recent-catch v2029-recent-catch-card v2030-recent-catch-card v2031-recent-catch-card v2032-recent-catch-card v2033-recent-catch-card v2034-recent-catch-card v2035-recent-catch-card v2036-recent-catch-card v2037-recent-catch-card v2038-recent-catch-card v2039-recent-catch-card v2040-recent-catch-card" aria-label="최근 포획">
         ${this.recentCatchMarkup()}
       </section>
@@ -2200,7 +2203,7 @@ class AquaFantasiaGame {
       { screen: 'map', icon: './assets/v22/icons/nav_map.png', label: '지도' },
     ];
     const nav = document.createElement('nav');
-    nav.className = 'bottom-nav v2098-bottom-nav v2111-bottom-nav v2112-bottom-nav v2113-bottom-nav v2114-bottom-nav v2115-bottom-nav v2116-bottom-nav v2117-bottom-nav v2118-bottom-nav v2119-bottom-nav v2120-bottom-nav v2121-bottom-nav v2122-bottom-nav v2123-bottom-nav v2124-bottom-nav v2125-bottom-nav v2127-bottom-nav v2128-bottom-nav v2129-bottom-nav v2130-bottom-nav v2131-bottom-nav v2132-bottom-nav v2133-bottom-nav v2135-bottom-nav v2136-bottom-nav v2137-bottom-nav v2138-bottom-nav v2139-bottom-nav v2140-bottom-nav v2142-bottom-nav v2143-bottom-nav v2145-bottom-nav v2146-bottom-nav v2147-bottom-nav v2148-bottom-nav v2149-bottom-nav v2150-bottom-nav v2151-bottom-nav v2152-bottom-nav v2153-bottom-nav v2154-bottom-nav v2159-bottom-nav v2160-bottom-nav v2161-bottom-nav v2167-bottom-nav v2168-bottom-nav';
+    nav.className = 'bottom-nav v21124-bottom-nav-owned v2098-bottom-nav v2111-bottom-nav v2112-bottom-nav v2113-bottom-nav v2114-bottom-nav v2115-bottom-nav v2116-bottom-nav v2117-bottom-nav v2118-bottom-nav v2119-bottom-nav v2120-bottom-nav v2121-bottom-nav v2122-bottom-nav v2123-bottom-nav v2124-bottom-nav v2125-bottom-nav v2127-bottom-nav v2128-bottom-nav v2129-bottom-nav v2130-bottom-nav v2131-bottom-nav v2132-bottom-nav v2133-bottom-nav v2135-bottom-nav v2136-bottom-nav v2137-bottom-nav v2138-bottom-nav v2139-bottom-nav v2140-bottom-nav v2142-bottom-nav v2143-bottom-nav v2145-bottom-nav v2146-bottom-nav v2147-bottom-nav v2148-bottom-nav v2149-bottom-nav v2150-bottom-nav v2151-bottom-nav v2152-bottom-nav v2153-bottom-nav v2154-bottom-nav v2159-bottom-nav v2160-bottom-nav v2161-bottom-nav v2167-bottom-nav v2168-bottom-nav';
     nav.dataset.v2098Dock = 'right-bottom-home-bag-quest-map';
     nav.dataset.v2113Dock = 'right-bottom-compact-aqua';
     nav.dataset.v2114Dock = 'right-bottom-crisp-compact';
@@ -2862,7 +2865,7 @@ class AquaFantasiaGame {
     document.querySelectorAll('.catch-result-card').forEach((node) => node.remove());
     const card = document.createElement('div');
     this.resultCardOpen = true;
-    card.className = `catch-result-card v21116-result-card-stable v930-result v2064-result-card v2021-result-card v2036-result-card v2037-result-card v2038-result-card v2039-result-card v2040-result-card v2041-result-card v2042-result-card v2043-result-card v2044-result-card v2045-result-card v2051-result-card v2053-result-card v2054-result-card v2055-result-card v2057-result-card v2059-result-card v2169-result-card v2170-result-card v2171-result-card v2184-result-card v2185-result-card v2192-result-card v2193-result-card rarity-${this.activeFish.rarity.toLowerCase()}`;
+    card.className = `catch-result-card v21124-result-owned v21116-result-card-stable v930-result v2064-result-card v2021-result-card v2036-result-card v2037-result-card v2038-result-card v2039-result-card v2040-result-card v2041-result-card v2042-result-card v2043-result-card v2044-result-card v2045-result-card v2051-result-card v2053-result-card v2054-result-card v2055-result-card v2057-result-card v2059-result-card v2169-result-card v2170-result-card v2171-result-card v2184-result-card v2185-result-card v2192-result-card v2193-result-card rarity-${this.activeFish.rarity.toLowerCase()}`;
     card.dataset.v21116ResultCard = 'locked-size-aqua-stable';
     const impactRows = [
       ['판매', `+${settlement.reward.toLocaleString('ko-KR')}G`],
@@ -3348,7 +3351,7 @@ class AquaFantasiaGame {
     });
     const existing = this.stageHost?.querySelector<HTMLElement>('.bite-callout');
     const callout = existing ?? document.createElement('div');
-    callout.className = 'bite-callout v21116-bite-callout-stable v2030-bite-callout v2041-bite-callout v2042-bite-callout v2043-bite-callout v2046-bite-callout v2048-bite-callout v2064-bite-callout v2161-bite-callout v2162-bite-callout v2163-bite-callout v2171-bite-callout v2184-bite-callout v2185-bite-callout v2192-bite-callout v2193-bite-callout v21109-bite-callout-safe';
+    callout.className = 'bite-callout v21124-bite-owned v21116-bite-callout-stable v2030-bite-callout v2041-bite-callout v2042-bite-callout v2043-bite-callout v2046-bite-callout v2048-bite-callout v2064-bite-callout v2161-bite-callout v2162-bite-callout v2163-bite-callout v2171-bite-callout v2184-bite-callout v2185-bite-callout v2192-bite-callout v2193-bite-callout v21109-bite-callout-safe';
     callout.dataset.v21109BiteCallout = 'screen-inside-lowered-safe-anchor';
     callout.dataset.v21116BiteCallout = 'single-stable-player-trigger-only';
     callout.innerHTML = `<strong>${title}</strong><span>${subtitle}</span><button type="button" class="v21116-bite-start v2046-bite-start v2048-bite-start v2131-bite-start v2161-bite-start v2162-bite-start v2163-bite-start">릴링 시작</button>`;
@@ -7156,6 +7159,432 @@ class AquaFantasiaGame {
     window.addEventListener('pagehide', () => { observer.disconnect(); if (timer) window.clearTimeout(timer); }, { once: true, passive: true });
   }
 
+
+
+  private installV21124RootCauseUxRepairPass(): void {
+    let raf = 0;
+    let trailingTimer = 0;
+    let lastViewport = '';
+    const html = document.documentElement;
+    const pageScreens = new Set(['shop', 'inventory', 'mission', 'map', 'dex', 'gear', 'ranking']);
+    const focusedFishingPhases = /bite|reeling|result|success|fail/i;
+    const setImportant = (node: HTMLElement | null | undefined, entries: Array<[string, string]>) => {
+      if (!node) return;
+      for (const [name, value] of entries) {
+        if (node.style.getPropertyValue(name) !== value || node.style.getPropertyPriority(name) !== 'important') {
+          node.style.setProperty(name, value, 'important');
+        }
+      }
+    };
+    const removeProps = (node: HTMLElement | null | undefined, props: string[]) => {
+      if (!node) return;
+      for (const prop of props) {
+        if (node.style.getPropertyValue(prop)) node.style.removeProperty(prop);
+      }
+    };
+    const owns = (node: HTMLElement | null | undefined, token: string) => {
+      if (!node) return;
+      node.classList.add('v21124-root-owner');
+      node.dataset.v21124Owner = token;
+      node.dataset.v21124RootCauseUxRepair = 'true';
+    };
+    const guideDismissed = () => {
+      try { return localStorage.getItem('aqua-v21124-guide-dismissed') === '1'; }
+      catch { return false; }
+    };
+    const dismissGuide = () => {
+      try { localStorage.setItem('aqua-v21124-guide-dismissed', '1'); }
+      catch { /* ignore storage restrictions */ }
+      dom.app.querySelectorAll('.v21124-village-guide-popup,.v21122-village-guide-popup').forEach((node) => node.remove());
+    };
+    const phaseOf = (fishing: HTMLElement): string => {
+      const result = fishing.querySelector<HTMLElement>('.catch-result-card:not(.hidden)');
+      if (result) return 'result';
+      const bite = fishing.querySelector<HTMLElement>('.bite-callout:not(.hidden)');
+      if (bite) return 'bite';
+      if (fishing.querySelector('.v2055-reel-console:not(.hidden),.reel-panel:not(.hidden),.v2053-reel-touch-zone:not(.hidden),.v2054-reel-touch-zone:not(.hidden)')) return 'reeling';
+      const raw = fishing.dataset.fishingPhase || document.body.dataset.fishingPhase || fishing.dataset.v21123FishingPhase || fishing.dataset.v21122FishingPhase || fishing.dataset.v21110FishingPhase || fishing.dataset.v21109FishingPhase || fishing.dataset.v21108FishingPhase || '';
+      if (focusedFishingPhases.test(raw)) return raw.toLowerCase();
+      if (/casting|waiting|idle|prep/i.test(raw)) return raw.toLowerCase();
+      return 'prep';
+    };
+    const normalizeGuide = (screen: string) => {
+      const village = dom.app.querySelector<HTMLElement>('.village-world-screen');
+      if (!village) return;
+      village.querySelectorAll('.v21122-village-guide-popup').forEach((node) => node.remove());
+      const blocked = screen !== 'village' || guideDismissed() || village.querySelector('.v2199-opening-cinematic,.v2097-expedition-body-open,.v2097-build-tray,.v2130-build-confirm-card') || document.body.classList.contains('v2097-expedition-open') || document.body.classList.contains('v2097-build-open');
+      if (blocked) {
+        village.querySelectorAll('.v21124-village-guide-popup').forEach((node) => node.remove());
+        return;
+      }
+      let guide = village.querySelector<HTMLElement>('.v21124-village-guide-popup');
+      if (!guide) {
+        guide = document.createElement('section');
+        guide.className = 'v21124-village-guide-popup v21124-root-owner';
+        guide.dataset.noSwipe = 'true';
+        guide.dataset.v21124Owner = 'first-village-tracking-guide';
+        guide.setAttribute('role', 'dialog');
+        guide.setAttribute('aria-live', 'polite');
+        guide.setAttribute('aria-label', '처음 마을 추천 진행 가이드');
+        guide.innerHTML = `<div class="v21124-guide-card">
+          <span class="v21124-guide-eyebrow">처음 추천 루트</span>
+          <strong>낚시 → 가방·퀘스트 → 개척 순서로 진행해요</strong>
+          <p>골드와 기금을 먼저 모으면 상점, 장비, 개척 목표가 자연스럽게 열립니다. 지금 할 일을 중앙에서 바로 선택할 수 있어요.</p>
+          <div class="v21124-guide-steps"><span>1 낚시</span><span>2 보상 확인</span><span>3 개척</span></div>
+          <div class="v21124-guide-actions"><button type="button" data-v21124-guide-fishing>낚시 가기</button><button type="button" data-v21124-guide-expedition>개척 보기</button><button type="button" data-v21124-guide-dismiss>닫기</button></div>
+        </div>`;
+        guide.querySelector<HTMLButtonElement>('[data-v21124-guide-fishing]')?.addEventListener('click', () => { dismissGuide(); void this.go('fishing' as Screen); });
+        guide.querySelector<HTMLButtonElement>('[data-v21124-guide-expedition]')?.addEventListener('click', () => {
+          const toggle = village.querySelector<HTMLButtonElement>('[data-v2097-expedition-toggle]');
+          if (toggle) toggle.click();
+        });
+        guide.querySelector<HTMLButtonElement>('[data-v21124-guide-dismiss]')?.addEventListener('click', dismissGuide);
+        village.appendChild(guide);
+      }
+      owns(guide, 'first-village-tracking-guide');
+      setImportant(guide, [
+        ['display', 'block'],
+        ['position', 'fixed'],
+        ['left', '50%'],
+        ['top', '50%'],
+        ['right', 'auto'],
+        ['bottom', 'auto'],
+        ['width', 'min(356px, calc(100vw - 28px))'],
+        ['max-width', 'calc(100vw - 28px)'],
+        ['transform', 'translate3d(-50%, -50%, 0)'],
+        ['translate', 'none'],
+        ['animation', 'none'],
+        ['transition', 'none'],
+        ['z-index', '790'],
+        ['pointer-events', 'auto'],
+        ['contain', 'layout paint style'],
+      ]);
+    };
+    const normalizeNav = (screen: string) => {
+      dom.app.querySelectorAll<HTMLElement>('.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav').forEach((nav) => {
+        owns(nav, 'single-bottom-right-nav-all-pages');
+        nav.classList.add('v21124-bottom-nav-final');
+        nav.dataset.v21124BottomNav = 'same-right-bottom-anchor-on-village-and-pages';
+        if (screen === 'fishing') {
+          setImportant(nav, [['display', 'none'], ['pointer-events', 'none'], ['opacity', '0'], ['visibility', 'hidden']]);
+          return;
+        }
+        setImportant(nav, [
+          ['display', 'grid'],
+          ['position', 'fixed'],
+          ['right', 'var(--v21124-nav-right, calc(env(safe-area-inset-right, 0px) + 8px))'],
+          ['bottom', 'var(--v21124-nav-bottom, calc(env(safe-area-inset-bottom, 0px) + 8px))'],
+          ['left', 'auto'],
+          ['top', 'auto'],
+          ['width', 'var(--v21124-nav-width, min(232px, calc(100vw - 18px)))'],
+          ['max-width', 'calc(100vw - 18px)'],
+          ['height', 'auto'],
+          ['opacity', '1'],
+          ['visibility', 'visible'],
+          ['pointer-events', 'auto'],
+          ['transform', 'none'],
+          ['translate', 'none'],
+          ['animation', 'none'],
+          ['transition', 'none'],
+          ['z-index', '860'],
+          ['contain', 'layout paint style'],
+        ]);
+        nav.querySelectorAll<HTMLElement>('button,img,span').forEach((child) => setImportant(child, [['transform', 'none'], ['translate', 'none'], ['animation', 'none'], ['transition', 'none']]));
+      });
+    };
+    const normalizePages = (screen: string) => {
+      if (!pageScreens.has(screen)) return;
+      dom.app.querySelectorAll<HTMLElement>('.runtime-menu-screen').forEach((root) => {
+        owns(root, 'centered-runtime-page-not-right-biased');
+        root.classList.add('v21124-runtime-page-final');
+        root.dataset.v21124Page = 'fixed-full-viewport-centered-column';
+        setImportant(root, [
+          ['position', 'fixed'],
+          ['inset', '0'],
+          ['left', '0'],
+          ['right', '0'],
+          ['top', '0'],
+          ['bottom', '0'],
+          ['width', '100vw'],
+          ['max-width', '100vw'],
+          ['height', 'var(--v21124-visual-height, 100svh)'],
+          ['min-height', 'var(--v21124-visual-height, 100svh)'],
+          ['margin', '0'],
+          ['padding-left', 'max(10px, env(safe-area-inset-left, 0px))'],
+          ['padding-right', 'max(10px, env(safe-area-inset-right, 0px))'],
+          ['padding-bottom', 'calc(env(safe-area-inset-bottom, 0px) + 126px)'],
+          ['overflow-x', 'hidden'],
+          ['overflow-y', 'auto'],
+          ['box-sizing', 'border-box'],
+          ['transform', 'none'],
+          ['translate', 'none'],
+        ]);
+      });
+      dom.app.querySelectorAll<HTMLElement>('.runtime-hud,.runtime-content,.runtime-panel,.runtime-card-list,.runtime-hero-card,.shop-list,.mission-list,.dex-grid,.inventory-grid,.gear-grid,.v204-map-shell,.v206-route-ready,.v2076-expedition-card,.v206-inventory-dashboard,.v206-catch-ledger,.v2074-sale-ledger,.v204-quest-board,.v206-quest-npc-board').forEach((node) => {
+        owns(node, 'page-column-center');
+        node.classList.add('v21124-page-column-final');
+        setImportant(node, [
+          ['width', 'var(--v21124-page-width, min(430px, calc(100vw - 20px)))'],
+          ['max-width', 'var(--v21124-page-width, min(430px, calc(100vw - 20px)))'],
+          ['min-width', '0'],
+          ['margin-left', 'auto'],
+          ['margin-right', 'auto'],
+          ['left', 'auto'],
+          ['right', 'auto'],
+          ['transform', 'none'],
+          ['translate', 'none'],
+          ['box-sizing', 'border-box'],
+          ['overflow-anchor', 'none'],
+        ]);
+      });
+    };
+    const normalizeVillage = (screen: string) => {
+      const village = dom.app.querySelector<HTMLElement>('.village-world-screen');
+      if (!village) return;
+      village.classList.add('v21124-village-owned');
+      const modalOpen = screen === 'village' && Boolean(village.querySelector('.v2097-expedition-body-open,.v2130-build-confirm-card,.v2097-build-tray') || document.body.classList.contains('v2097-expedition-open') || document.body.classList.contains('v2097-build-open'));
+      document.body.classList.toggle('v21124-village-modal-open', modalOpen);
+      village.querySelectorAll<HTMLElement>('.v2097-expedition-board').forEach((board) => {
+        owns(board, 'expedition-board-overlay-host');
+        if (board.classList.contains('open')) setImportant(board, [['position', 'fixed'], ['inset', '0'], ['pointer-events', 'none'], ['z-index', '840'], ['transform', 'none'], ['translate', 'none']]);
+      });
+      village.querySelectorAll<HTMLElement>('.v2097-expedition-body,.v2097-expedition-body-open').forEach((panel) => {
+        owns(panel, 'expedition-full-visible-center');
+        panel.classList.add('v21124-expedition-final');
+        panel.dataset.noSwipe = 'true';
+        if (panel.classList.contains('v2097-expedition-body-open')) {
+          setImportant(panel, [
+            ['display', 'block'],
+            ['position', 'fixed'],
+            ['left', '50%'],
+            ['right', 'auto'],
+            ['top', '50%'],
+            ['bottom', 'auto'],
+            ['width', 'min(386px, calc(100vw - 22px))'],
+            ['max-width', 'calc(100vw - 22px)'],
+            ['max-height', 'calc(var(--v21124-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 34px)'],
+            ['overflow-x', 'hidden'],
+            ['overflow-y', 'auto'],
+            ['overscroll-behavior', 'contain'],
+            ['transform', 'translate3d(-50%, -50%, 0)'],
+            ['translate', 'none'],
+            ['animation', 'none'],
+            ['transition', 'none'],
+            ['z-index', '850'],
+            ['pointer-events', 'auto'],
+            ['box-sizing', 'border-box'],
+            ['contain', 'layout paint style'],
+          ]);
+        }
+      });
+      village.querySelectorAll<HTMLElement>('.v2130-build-confirm-card,.v2097-build-tray').forEach((panel) => {
+        owns(panel, 'village-build-modal-center-scroll');
+        panel.classList.add('v21124-village-modal-final');
+        panel.dataset.noSwipe = 'true';
+        setImportant(panel, [
+          ['max-width', 'calc(100vw - 22px)'],
+          ['max-height', 'calc(var(--v21124-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 34px)'],
+          ['overflow-x', 'hidden'],
+          ['overflow-y', 'auto'],
+          ['overscroll-behavior', 'contain'],
+          ['box-sizing', 'border-box'],
+          ['animation', 'none'],
+          ['transition', 'none'],
+          ['z-index', '850'],
+        ]);
+      });
+      normalizeGuide(screen);
+    };
+    const normalizeFishing = (screen: string) => {
+      const fishing = dom.app.querySelector<HTMLElement>('.fishing-screen');
+      if (!fishing || screen !== 'fishing') return;
+      const phase = phaseOf(fishing);
+      const focused = focusedFishingPhases.test(phase);
+      fishing.classList.add('v21124-fishing-final-screen');
+      fishing.classList.toggle('v21124-fishing-focused', focused);
+      fishing.dataset.v21124FishingPhase = phase;
+      document.body.dataset.v21124FishingPhase = phase;
+      fishing.querySelectorAll<HTMLElement>('.water-overlay,.caustic-overlay,.fishing-3d-ambient,.underwater-webgl-host,.v3d-caustics,.v3d-bubbles,.v3d-depth-fog').forEach((node) => {
+        owns(node, 'water-effect-budget-no-flicker');
+        node.classList.add('v21124-water-final');
+        setImportant(node, [
+          ['animation', 'none'],
+          ['transition', 'none'],
+          ['transform', 'translateZ(0)'],
+          ['translate', 'none'],
+          ['will-change', 'auto'],
+          ['backface-visibility', 'hidden'],
+          ['contain', 'paint'],
+          ['pointer-events', 'none'],
+          ['opacity', focused ? '0.22' : '0.38'],
+        ]);
+      });
+      fishing.querySelectorAll<HTMLElement>('[class*="sea-lane-card"],.v21124-sea-lane-owned').forEach((node) => {
+        owns(node, 'sea-lane-hide-during-focused-phases');
+        node.classList.add('v21124-sea-lane-final');
+        setImportant(node, [
+          ['position', 'fixed'],
+          ['display', focused ? 'none' : 'block'],
+          ['left', 'max(10px, env(safe-area-inset-left, 0px))'],
+          ['right', 'auto'],
+          ['top', 'calc(env(safe-area-inset-top, 0px) + 58px)'],
+          ['bottom', 'auto'],
+          ['width', 'min(258px, calc(100vw - 20px))'],
+          ['max-width', 'calc(100vw - 20px)'],
+          ['opacity', focused ? '0' : '1'],
+          ['visibility', focused ? 'hidden' : 'visible'],
+          ['pointer-events', 'none'],
+          ['transform', 'none'],
+          ['translate', 'none'],
+          ['scale', '1'],
+          ['animation', 'none'],
+          ['transition', 'none'],
+          ['z-index', '520'],
+          ['contain', 'layout paint style'],
+        ]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.fishing-loadout-strip,[class*="-fishing-loadout"],[class*="-loadout-copy"]').forEach((node) => {
+        owns(node, 'loadout-fixed-no-scale-no-flicker');
+        node.classList.add('v21124-loadout-final');
+        setImportant(node, [
+          ['position', 'fixed'],
+          ['display', focused ? 'none' : 'grid'],
+          ['left', '50%'],
+          ['right', 'auto'],
+          ['top', 'var(--v21124-loadout-top, calc(env(safe-area-inset-top, 0px) + 94px))'],
+          ['bottom', 'auto'],
+          ['width', 'min(318px, calc(100vw - 28px))'],
+          ['max-width', 'calc(100vw - 28px)'],
+          ['opacity', focused ? '0' : '1'],
+          ['visibility', focused ? 'hidden' : 'visible'],
+          ['pointer-events', focused ? 'none' : 'auto'],
+          ['transform', 'translate3d(-50%, 0, 0)'],
+          ['translate', 'none'],
+          ['scale', '1'],
+          ['animation', 'none'],
+          ['transition', 'none'],
+          ['z-index', '530'],
+          ['contain', 'layout paint style'],
+        ]);
+        node.querySelectorAll<HTMLElement>('*').forEach((child) => {
+          child.classList.add('v21124-loadout-child-final');
+          removeProps(child, ['transform-origin']);
+          setImportant(child, [['animation', 'none'], ['transition', 'none'], ['transform', 'none'], ['translate', 'none'], ['scale', '1'], ['flex-shrink', '0']]);
+        });
+      });
+      fishing.querySelectorAll<HTMLElement>('.combo-badge').forEach((node) => {
+        owns(node, 'combo-near-cast-button-with-gap');
+        node.classList.add('v21124-combo-final');
+        setImportant(node, [
+          ['position', 'fixed'],
+          ['left', '50%'],
+          ['right', 'auto'],
+          ['top', 'auto'],
+          ['bottom', 'var(--v21124-combo-bottom, calc(env(safe-area-inset-bottom, 0px) + 92px))'],
+          ['width', 'fit-content'],
+          ['max-width', 'calc(100vw - 32px)'],
+          ['transform', 'translate3d(-50%, 0, 0)'],
+          ['translate', 'none'],
+          ['animation', 'none'],
+          ['transition', 'none'],
+          ['pointer-events', 'none'],
+          ['z-index', '720'],
+        ]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.bite-callout').forEach((node) => {
+        owns(node, 'bite-center-no-jitter');
+        node.classList.add('v21124-bite-final');
+        removeProps(node, ['margin', 'margin-top', 'margin-bottom']);
+        setImportant(node, [
+          ['display', node.classList.contains('hidden') ? 'none' : 'grid'],
+          ['position', 'fixed'],
+          ['left', '50%'],
+          ['right', 'auto'],
+          ['top', '50%'],
+          ['bottom', 'auto'],
+          ['width', 'min(332px, calc(100vw - 30px))'],
+          ['max-width', 'calc(100vw - 30px)'],
+          ['transform', 'translate3d(-50%, -50%, 0)'],
+          ['translate', 'none'],
+          ['scale', '1'],
+          ['animation', 'none'],
+          ['transition', 'none'],
+          ['z-index', '900'],
+          ['contain', 'layout paint style'],
+        ]);
+      });
+      fishing.querySelectorAll<HTMLElement>('.catch-result-card').forEach((node) => {
+        owns(node, 'result-center-no-water-flicker');
+        node.classList.add('v21124-result-final');
+        setImportant(node, [
+          ['position', 'fixed'],
+          ['left', '50%'],
+          ['right', 'auto'],
+          ['top', '50%'],
+          ['bottom', 'auto'],
+          ['width', 'min(356px, calc(100vw - 28px))'],
+          ['max-width', 'calc(100vw - 28px)'],
+          ['max-height', 'calc(var(--v21124-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 32px)'],
+          ['overflow-x', 'hidden'],
+          ['overflow-y', 'auto'],
+          ['overscroll-behavior', 'contain'],
+          ['transform', 'translate3d(-50%, -50%, 0)'],
+          ['translate', 'none'],
+          ['scale', '1'],
+          ['animation', 'none'],
+          ['transition', 'none'],
+          ['z-index', '910'],
+          ['contain', 'layout paint style'],
+        ]);
+      });
+    };
+    const normalize = () => {
+      const viewport = window.visualViewport;
+      const width = Math.floor(viewport?.width ?? window.innerWidth);
+      const height = Math.floor(viewport?.height ?? window.innerHeight);
+      const screen = document.body.dataset.screen || 'unknown';
+      const viewportKey = `${width}:${height}:${screen}`;
+      html.classList.add('v21124-root-cause-ux-repair-root');
+      html.dataset.v21124RootCauseUxRepair = 'style-mutation-finalizer-guide-page-fishing-nav';
+      if (viewportKey !== lastViewport) {
+        html.style.setProperty('--v21124-visual-width', `${width}px`);
+        html.style.setProperty('--v21124-visual-height', `${height}px`);
+        lastViewport = viewportKey;
+      }
+      document.body.dataset.v21124ActiveScreen = screen;
+      normalizeNav(screen);
+      normalizeVillage(screen);
+      normalizePages(screen);
+      normalizeFishing(screen);
+    };
+    const schedule = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        normalize();
+        if (trailingTimer) window.clearTimeout(trailingTimer);
+        trailingTimer = window.setTimeout(normalize, 45);
+      });
+    };
+    schedule();
+    window.visualViewport?.addEventListener('resize', schedule, { passive: true });
+    window.visualViewport?.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule, { passive: true });
+    document.addEventListener('visibilitychange', schedule, { passive: true });
+    const observer = new MutationObserver((records) => {
+      for (const record of records) {
+        if (record.type === 'attributes') {
+          const target = record.target as HTMLElement;
+          if (record.attributeName === 'style' && !target.matches('.bottom-nav,.runtime-menu-screen,.runtime-hud,.runtime-content,.runtime-card-list,.runtime-panel,.shop-list,.mission-list,.dex-grid,.inventory-grid,.gear-grid,.v2097-expedition-body,.v2097-expedition-body-open,.v2130-build-confirm-card,.v2097-build-tray,.fishing-screen,.water-overlay,.caustic-overlay,.fishing-3d-ambient,.underwater-webgl-host,.v3d-caustics,.v3d-bubbles,.v3d-depth-fog,[class*="sea-lane-card"],.fishing-loadout-strip,[class*="-fishing-loadout"],[class*="-loadout-copy"],.combo-badge,.bite-callout,.catch-result-card,.v21124-village-guide-popup')) continue;
+        }
+        schedule();
+        return;
+      }
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'style', 'data-screen', 'data-fishing-phase', 'data-v21108-fishing-phase', 'data-v21109-fishing-phase', 'data-v21110-fishing-phase', 'data-v21122-fishing-phase', 'data-v21123-fishing-phase'], childList: true, subtree: true });
+    window.addEventListener('pagehide', () => { observer.disconnect(); if (trailingTimer) window.clearTimeout(trailingTimer); }, { once: true, passive: true });
+  }
 
   private preloadCriticalImages(): void {
     const critical = [ASSET.homeBg, './assets/v1110/home/village_islands_user_bg.webp', './assets/v1110/home/village_islands_user_bg.png', ASSET.homeBanner, ASSET.player, ASSET.float, './assets/v91/characters/chibi_fisher_face_icon.png'];

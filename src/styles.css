@@ -69545,3 +69545,306 @@ html.v21123-runtime-deconflict-root body[data-screen="fishing"] .catch-result-ca
     transition-duration: .001ms !important;
   }
 }
+
+/* v2.1.124 root-cause UX repair: style-mutation finalizer for guide/page/nav/fishing jitter. */
+html.v21124-root-cause-ux-repair-root {
+  --v21124-page-width: min(430px, calc(100vw - 20px));
+  --v21124-nav-right: calc(env(safe-area-inset-right, 0px) + 8px);
+  --v21124-nav-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+  --v21124-nav-width: min(232px, calc(100vw - 18px));
+  --v21124-loadout-top: calc(env(safe-area-inset-top, 0px) + 94px);
+  --v21124-combo-bottom: calc(env(safe-area-inset-bottom, 0px) + 92px);
+}
+html.v21124-root-cause-ux-repair-root body[data-screen] .v21124-root-owner {
+  box-sizing: border-box !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen]:not([data-screen="fishing"]) :is(.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav).v21124-bottom-nav-final {
+  display: grid !important;
+  position: fixed !important;
+  right: var(--v21124-nav-right) !important;
+  bottom: var(--v21124-nav-bottom) !important;
+  left: auto !important;
+  top: auto !important;
+  width: var(--v21124-nav-width) !important;
+  max-width: calc(100vw - 18px) !important;
+  height: auto !important;
+  transform: none !important;
+  translate: none !important;
+  animation: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  z-index: 860 !important;
+  contain: layout paint style !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="fishing"] :is(.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav).v21124-bottom-nav-final {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen] :is(.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav).v21124-bottom-nav-final :is(button,img,span) {
+  transform: none !important;
+  translate: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="shop"] .runtime-menu-screen.v21124-runtime-page-final,
+html.v21124-root-cause-ux-repair-root body[data-screen="inventory"] .runtime-menu-screen.v21124-runtime-page-final,
+html.v21124-root-cause-ux-repair-root body[data-screen="mission"] .runtime-menu-screen.v21124-runtime-page-final,
+html.v21124-root-cause-ux-repair-root body[data-screen="map"] .runtime-menu-screen.v21124-runtime-page-final,
+html.v21124-root-cause-ux-repair-root body[data-screen="dex"] .runtime-menu-screen.v21124-runtime-page-final,
+html.v21124-root-cause-ux-repair-root body[data-screen="gear"] .runtime-menu-screen.v21124-runtime-page-final,
+html.v21124-root-cause-ux-repair-root body[data-screen="ranking"] .runtime-menu-screen.v21124-runtime-page-final {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: var(--v21124-visual-height, 100svh) !important;
+  min-height: var(--v21124-visual-height, 100svh) !important;
+  margin: 0 !important;
+  padding-left: max(10px, env(safe-area-inset-left, 0px)) !important;
+  padding-right: max(10px, env(safe-area-inset-right, 0px)) !important;
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 126px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  transform: none !important;
+  translate: none !important;
+  box-sizing: border-box !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen] .v21124-page-column-final {
+  width: var(--v21124-page-width) !important;
+  max-width: var(--v21124-page-width) !important;
+  min-width: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  translate: none !important;
+  box-sizing: border-box !important;
+  overflow-anchor: none !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="village"] .v21124-expedition-final.v2097-expedition-body-open {
+  display: block !important;
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 50% !important;
+  bottom: auto !important;
+  width: min(386px, calc(100vw - 22px)) !important;
+  max-width: calc(100vw - 22px) !important;
+  max-height: calc(var(--v21124-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 34px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  translate: none !important;
+  animation: none !important;
+  transition: none !important;
+  z-index: 850 !important;
+  pointer-events: auto !important;
+  contain: layout paint style !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="village"] :is(.v2130-build-confirm-card,.v2097-build-tray).v21124-village-modal-final {
+  max-width: calc(100vw - 22px) !important;
+  max-height: calc(var(--v21124-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 34px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  box-sizing: border-box !important;
+  animation: none !important;
+  transition: none !important;
+  z-index: 850 !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="village"] .v21124-village-guide-popup {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(356px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  translate: none !important;
+  animation: none !important;
+  transition: none !important;
+  z-index: 790 !important;
+  pointer-events: auto !important;
+  contain: layout paint style !important;
+}
+html.v21124-root-cause-ux-repair-root body.v21124-village-modal-open .v21124-village-guide-popup {
+  display: none !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="village"] .v21124-guide-card {
+  display: grid !important;
+  gap: 10px !important;
+  padding: 16px !important;
+  border-radius: 24px !important;
+  color: #efffff !important;
+  background: linear-gradient(180deg, rgba(20, 110, 154, .88), rgba(4, 32, 78, .94)) !important;
+  border: 1px solid rgba(198, 249, 255, .26) !important;
+  box-shadow: 0 22px 58px rgba(0, 24, 62, .38), inset 0 1px 0 rgba(255,255,255,.2) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.2) !important;
+  backdrop-filter: blur(16px) saturate(1.2) !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="village"] .v21124-guide-eyebrow {
+  justify-self: start !important;
+  padding: 4px 9px !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  font-weight: 1000 !important;
+  color: #06314f !important;
+  background: linear-gradient(135deg, #c7fff7, #ffeb8a) !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="village"] .v21124-guide-card strong {
+  font-size: 18px !important;
+  line-height: 1.2 !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="village"] .v21124-guide-card p {
+  margin: 0 !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  color: rgba(238, 252, 255, .9) !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="village"] .v21124-guide-steps,
+html.v21124-root-cause-ux-repair-root body[data-screen="village"] .v21124-guide-actions {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="village"] .v21124-guide-steps span {
+  padding: 8px 5px !important;
+  border-radius: 14px !important;
+  text-align: center !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  color: #eafcff !important;
+  background: rgba(255, 255, 255, .12) !important;
+  border: 1px solid rgba(255, 255, 255, .13) !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="village"] .v21124-guide-actions button {
+  min-width: 0 !important;
+  min-height: 38px !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  font-weight: 1000 !important;
+  color: #06314f !important;
+  background: linear-gradient(135deg, #c7fff7, #ffeb8a) !important;
+  box-shadow: 0 8px 18px rgba(0, 25, 63, .24) !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="fishing"] .v21124-water-final {
+  animation: none !important;
+  transition: none !important;
+  transform: translateZ(0) !important;
+  translate: none !important;
+  will-change: auto !important;
+  backface-visibility: hidden !important;
+  contain: paint !important;
+  pointer-events: none !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="fishing"] .v21124-sea-lane-final {
+  position: fixed !important;
+  left: max(10px, env(safe-area-inset-left, 0px)) !important;
+  top: calc(env(safe-area-inset-top, 0px) + 58px) !important;
+  width: min(258px, calc(100vw - 20px)) !important;
+  max-width: calc(100vw - 20px) !important;
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  animation: none !important;
+  transition: none !important;
+  z-index: 520 !important;
+  contain: layout paint style !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="fishing"] .fishing-screen.v21124-fishing-focused .v21124-sea-lane-final {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="fishing"] .v21124-loadout-final {
+  position: fixed !important;
+  left: 50% !important;
+  top: var(--v21124-loadout-top) !important;
+  width: min(318px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  translate: none !important;
+  scale: 1 !important;
+  animation: none !important;
+  transition: none !important;
+  z-index: 530 !important;
+  contain: layout paint style !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="fishing"] .v21124-loadout-final .v21124-loadout-child-final {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  flex-shrink: 0 !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="fishing"] .fishing-screen.v21124-fishing-focused .v21124-loadout-final {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="fishing"] .combo-badge.v21124-combo-final:not(.hidden) {
+  position: fixed !important;
+  left: 50% !important;
+  bottom: var(--v21124-combo-bottom) !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  animation: none !important;
+  transition: none !important;
+  z-index: 720 !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="fishing"] .bite-callout.v21124-bite-final,
+html.v21124-root-cause-ux-repair-root body[data-screen="fishing"] .catch-result-card.v21124-result-final {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 50% !important;
+  bottom: auto !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  translate: none !important;
+  scale: 1 !important;
+  animation: none !important;
+  transition: none !important;
+  contain: layout paint style !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="fishing"] .bite-callout.v21124-bite-final {
+  width: min(332px, calc(100vw - 30px)) !important;
+  max-width: calc(100vw - 30px) !important;
+  z-index: 900 !important;
+}
+html.v21124-root-cause-ux-repair-root body[data-screen="fishing"] .catch-result-card.v21124-result-final {
+  width: min(356px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+  max-height: calc(var(--v21124-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 32px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  z-index: 910 !important;
+}
+@media (max-width: 360px), (max-height: 610px) {
+  html.v21124-root-cause-ux-repair-root {
+    --v21124-nav-width: min(216px, calc(100vw - 14px));
+    --v21124-page-width: min(420px, calc(100vw - 16px));
+    --v21124-loadout-top: calc(env(safe-area-inset-top, 0px) + 82px);
+    --v21124-combo-bottom: calc(env(safe-area-inset-bottom, 0px) + 84px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v21124-root-cause-ux-repair-root body[data-screen] :is(.v21124-root-owner,.v21124-bottom-nav-final,.v21124-runtime-page-final,.v21124-page-column-final,.v21124-expedition-final,.v21124-village-modal-final,.v21124-village-guide-popup,.v21124-water-final,.v21124-sea-lane-final,.v21124-loadout-final,.v21124-combo-final,.v21124-bite-final,.v21124-result-final) {
+    animation: none !important;
+    transition: none !important;
+  }
+}

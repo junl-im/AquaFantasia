@@ -1,4 +1,60 @@
-# AquaFantasia v2.1.123
+# AquaFantasia v2.1.124
+
+## v2.1.124 변경사항
+
+- 사용자가 지적한 “앞전 요청이 반영되지 않아 보임” 문제를 루트 원인 기준으로 다시 점검했습니다.
+- 확인한 핵심 원인은 v2.1.123 final owner 패스가 `class`/화면 전환은 감시했지만, 예전 런타임 observer들이 나중에 다시 쓰는 inline `style` 재개입은 감시하지 않아 최신 보정이 재적용되지 않을 수 있다는 점입니다.
+- 새 패스 `installV21124RootCauseUxRepairPass()`를 추가했습니다. 이 패스는 `style` mutation까지 감시하고, 하단 메뉴/페이지 shell/개척 팝업/낚시 물길 바/낚싯대·미끼/연속 성공/`물었다!`/결과창을 최신 기준으로 다시 고정합니다.
+- 초반 마을 가이드는 기존 `aqua-v21122-guide-dismissed` 영향으로 안 보일 수 있어, 새 키 `aqua-v21124-guide-dismissed`와 새 UI `v21124-village-guide-popup`로 다시 제공합니다. 내용은 낚시 → 가방·퀘스트 → 개척 순서입니다.
+- 상점, 가방, 퀘스트, 지도, 도감, 장비, 랭킹 화면은 `v21124-runtime-page-final`, `v21124-page-column-final`로 우측 쏠림을 다시 잡고, safe-area 안 중앙 컬럼을 강제합니다.
+- 개척 팝업은 `v21124-expedition-final`로 fixed center, safe-area max-height, 내부 scroll, overscroll containment를 다시 적용해 반절만 보이는 회귀를 막습니다.
+- 마을과 각 메뉴 페이지의 우측 하단 메뉴바는 `v21124-bottom-nav-final`로 같은 right/bottom/width/z-index 기준을 사용합니다. 낚시 화면에서는 메뉴바를 확실히 숨깁니다.
+- 낚시 물길 바와 수중 효과는 `v21124-water-final`, `v21124-sea-lane-final`로 animation/transition을 차단하고, bite/reeling/result/success/fail 단계에서는 물길 바를 display none으로 숨깁니다.
+- 낚싯대·미끼 strip과 내부 요소는 `v21124-loadout-final`, `v21124-loadout-child-final`로 transform/scale/animation/transition을 차단해 커졌다 작아졌다 하는 깜박임을 다시 막습니다.
+- 연속 성공 표기는 `v21124-combo-final`로 캐스팅 버튼 근처 하단에 gap을 두고 배치합니다.
+- `물었다!` 팝업과 성공 결과창은 `v21124-bite-final`, `v21124-result-final`로 중앙 fixed, no animation/transition 기준을 적용합니다.
+- 신규 검증 스크립트 `tools/check-v21124-root-cause-ux-repair.mjs`를 추가해 버전 동기화, style mutation finalizer, 초반 가이드, 페이지 중앙 정렬, 개척 팝업, 낚시 UI 고정, 문서 계약, SVG 금지, 패키징 청결을 확인합니다.
+- 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 오프닝 video-only 정책, 플레이어 8방향 파일명/flip 금지 정책은 변경하지 않았습니다.
+
+## v2.1.124 분석/인수인계 기록 - 2026-07-01 KST
+
+- v2.1.123 기준으로 사용자가 체감한 미반영 의심 사항을 다시 분석했습니다.
+- v2.1.123은 최신 anchor를 부여했지만 observer의 `attributeFilter`에 `style`이 없어, 예전 보정 코드가 inline style을 나중에 다시 쓰면 최신 기준이 재적용되지 않을 수 있었습니다.
+- 이번 v2.1.124는 기존 패스를 대량 삭제하지 않고, 최신 패스가 `style` 재개입까지 감지하여 다시 마지막 기준을 갖도록 보강했습니다.
+- 체감 랙 완화는 불필요한 애니메이션/transition/scale churn을 줄이는 쪽으로 우선 처리했습니다. WebGL/Pixi/Firebase/Vite 같은 엔진 메이저 변경은 GitHub Actions 검증 전에는 보류합니다.
+- 사용 환경은 GitHub Desktop과 Firebase 무료 플랜입니다. Firebase 설정이 없으면 로컬 저장 fallback이 계속 살아 있어야 하며, 유료 서버 기능이나 필수 서버 의존성을 추가하지 않습니다.
+- 다음 AI는 작업 후 반드시 `npm run validate`를 먼저 확인하고, 가능하면 GitHub Actions에서 `npm run ci:registry:check`, `npm run ci:install`, `npm run typecheck`, `npm run build`까지 확인합니다.
+
+## 운영/산출 고정 규칙
+
+- 기록 파일은 `README.md`와 `AI_HANDOFF_CARDVILLE.md`만 유지합니다. 패치 노트, 임시 보고서, 분석 메모 같은 별도 `.md` 파일은 만들지 않습니다.
+- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.124-full.zip`, `AF-v2.1.124-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크 순서로 작성합니다.
+- 로컬 결과 확인 기본 명령:
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+- zip 내부 점검 명령:
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.124-full.zip AF-v2.1.124-patch.zip
+```
 
 ## v2.1.123 변경사항
 
