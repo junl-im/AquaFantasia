@@ -1,5 +1,5 @@
-// v2.1.130 direct source regression guard: render-time guide/page/expedition/fishing anchors without style observer loops.
-const CACHE_NAME = 'aqua-fantasia-v2.1.130-direct-source-regression-guard';
+// v2.1.132 observer budget governor: mute legacy observer loops before they install and keep direct UI anchors light.
+const CACHE_NAME = 'aqua-fantasia-v2.1.132-observer-budget-governor';
 const CORE_ASSETS = [
   './',
   './index.html',

@@ -1,3 +1,118 @@
+# AquaFantasia v2.1.132
+
+## v2.1.132 변경사항
+
+- 새 패스 `installV21132ObserverBudgetGovernorPass()`와 `syncV21132ObserverBudgetGovernorUi()`를 추가했습니다.
+- 부팅 초기에 `v21132-observer-budget-governor-root`, `dataset.v21132ObserverBudgetGovernor = active`를 먼저 세워 오래된 observer 루프가 설치되기 전에 물러나도록 했습니다.
+- v2.1.31 stale observer quarantine 패스는 v2.1.132 활성 상태에서 `handoff-to-v21132-observer-budget-governor`로 물러나며 별도 observer를 설치하지 않습니다.
+- v2.1.75~v2.1.110 계열의 오래된 디자인/품질/낚시 안정화 observer 시작점에 `v21132ObserverBudgetGovernor` guard를 넣어 중복 감시 루프와 예전 보정 코드가 최신 UI를 다시 흔드는 위험을 줄였습니다.
+- v2.1.132 최신 패스도 `style` 속성 MutationObserver를 사용하지 않습니다. `class`, `data-screen`, `data-fishing-phase`, childList, visualViewport 변화만 감시합니다.
+- 초반 마을 가이드, 우측 하단 메뉴바, 상점/가방/퀘스트/지도/도감 중앙 정렬, 개척 팝업, 낚시 물길/낚싯대/미끼/연속 성공/물었다/결과창을 `v21132` 단일 경량 governor 기준으로 다시 묶었습니다.
+- 낚시 집중 단계에서는 물길/수중효과/장비 strip 숨김 기준을 유지하고, `물었다!`와 성공 결과창은 중앙 fixed 기준을 유지합니다.
+- 신규 검증 스크립트 `tools/check-v21132-observer-budget-governor.mjs`를 추가해 버전, 캐시, old observer mute guard, no-style-observer 정책, UI 토큰, 문서 계약, zip 청결 조건을 확인합니다.
+
+## v2.1.132 분석/인수인계 기록 - 2026-07-01 KST
+
+- 사용자는 UI/UX, 디자인, 코드 꼬임, 예전 보정 코드가 다시 살아나는 문제를 계속 최우선으로 요청했습니다.
+- v2.1.131 full 기준에서 시작했습니다.
+- 실제 원인상 v2.1.131은 v2.1.22~v2.1.30 계열 일부를 격리했지만, 더 오래된 v2.1.75~v2.1.110 계열 observer가 여전히 설치되어 화면 생성 이후 UI class/style을 다시 만질 여지가 남아 있었습니다.
+- 이번 v2.1.132는 새 보정 레이어를 많이 쌓는 대신, 중복 observer 설치를 초기에 막는 observer budget governor 성격의 패치입니다.
+- 정상 동작하는 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase 저장/익명 로그인 fallback, 오프닝 video-only, 플레이어 8방향 파일명/flip 금지 정책은 변경하지 않았습니다.
+
+## 운영/산출 고정 규칙
+
+- 작업 환경: GitHub Desktop 사용 기준.
+- Firebase는 무료 플랜 기준입니다. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제는 금지합니다.
+- Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 합니다.
+- 문서 파일은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용합니다. 추가 `.md`, 임시 리포트, 로그 파일은 산출물에 넣지 않습니다.
+- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.132-full.zip`, `AF-v2.1.132-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크입니다.
+
+## 결과 확인 명령
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## zip 내부 점검 명령
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.132-full.zip AF-v2.1.132-patch.zip
+```
+
+# 이전 README 기록
+
+# AquaFantasia v2.1.131
+
+## v2.1.131 변경사항
+
+- 새 패스 `installV21131StaleObserverQuarantinePass()`와 `syncV21131StaleObserverQuarantineUi()`를 추가했습니다.
+- 부팅 초기에 `v21131-stale-observer-quarantine-root`와 `dataset.v21131StaleObserverQuarantine = active`를 먼저 세워 v2.1.22~v2.1.30 계열 보정 observer가 설치되기 전에 handoff하도록 했습니다.
+- v2.1.131 최신 패스는 `style` 속성 MutationObserver를 사용하지 않습니다. `class`, `data-screen`, `data-fishing-phase`, childList, visualViewport 변화만 감시합니다.
+- v2.1.30 direct source 패스도 v2.1.131 활성 상태에서는 `handoff-to-v21131-stale-observer-quarantine`으로 물러나고 layout write를 하지 않도록 했습니다.
+- 초반 마을 가이드, 우측 하단 메뉴바, 상점/가방/퀘스트/지도/도감 중앙 정렬, 개척 팝업, 낚시 물길/낚싯대/미끼/연속 성공/물었다/결과창을 v21131 단일 governor 기준으로 다시 묶었습니다.
+- 낚시 집중 단계에서는 물길/수중효과/장비 strip이 숨김 기준을 유지하고, `물었다!`와 성공 결과창은 중앙 fixed 기준을 유지합니다.
+- 신규 검증 스크립트 `tools/check-v21131-stale-observer-quarantine.mjs`를 추가해 버전, 캐시, old observer handoff, no-style-observer 정책, UI 토큰, 문서 계약, zip 청결 조건을 확인합니다.
+
+## v2.1.131 분석/인수인계 기록 - 2026-07-01 KST
+
+- 사용자는 UI/UX, 디자인, 코드 꼬임, 예전 보정 코드가 다시 살아나는 문제를 계속 최우선으로 요청했습니다.
+- v2.1.130 full 기준에서 시작했습니다.
+- 실제 원인상 v2.1.130은 최신 direct source guard가 있었지만, v2.1.22~v2.1.25 계열 observer가 부팅 중 설치될 여지가 남아 있었습니다.
+- 이번 v2.1.131은 최신 패스를 문서상 최신으로 표시하는 데 그치지 않고, 예전 보정 패스 시작점에 `v21131StaleObserverQuarantine` guard를 넣어 legacy observer 설치 자체를 줄이는 방향입니다.
+- 정상 동작하는 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase 저장/익명 로그인 fallback, 오프닝 video-only, 플레이어 8방향 파일명/flip 금지 정책은 변경하지 않았습니다.
+
+## 운영/산출 고정 규칙
+
+- 작업 환경: GitHub Desktop 사용 기준.
+- Firebase는 무료 플랜 기준입니다. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제는 금지합니다.
+- Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 합니다.
+- 문서 파일은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용합니다. 추가 `.md`, 임시 리포트, 로그 파일은 산출물에 넣지 않습니다.
+- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.131-full.zip`, `AF-v2.1.131-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크입니다.
+
+## 결과 확인 명령
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## zip 내부 점검 명령
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.131-full.zip AF-v2.1.131-patch.zip
+```
+
+# 이전 README 기록
+
 # AquaFantasia v2.1.130
 
 ## v2.1.130 변경사항
@@ -1117,4 +1232,5 @@ PY AF-v2.1.120-full.zip AF-v2.1.120-patch.zip
 - 게임 접속 오프닝에서 영상 전에 보이던 poster 정지 이미지를 제거했습니다. 오프닝은 최초 시작 전용 영상만 표시합니다.
 - 타일 픽셀 크기는 유지합니다. v2.1.58은 다이아몬드 터치 점수만 `0.926`으로 소폭 조정하며, 타일 축소는 세이브 좌표/건물 footprint/NPC 이동/충돌/카메라 경계 마이그레이션 전까지 보류합니다.
 - 루트 버전 파일 `APP_VERSION`은 만들지 않습니다. 버전 기록은 README와 런타임 상수에서 관리합니다.
+
 
