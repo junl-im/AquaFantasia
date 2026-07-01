@@ -1,5 +1,5 @@
-// v2.1.122 system UX/performance: first-village guide, centered pages, fishing jitter guard, and same-origin cache containment.
-const CACHE_NAME = 'aqua-fantasia-v2.1.122-system-ux-performance';
+// v2.1.123 system UX/performance: first-village guide, centered pages, fishing jitter guard, and same-origin cache containment.
+const CACHE_NAME = 'aqua-fantasia-v2.1.123-runtime-deconflict';
 const CORE_ASSETS = [
   './',
   './index.html',

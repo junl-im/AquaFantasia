@@ -1,34 +1,33 @@
-# AquaFantasia v2.1.122
+# AquaFantasia v2.1.123
 
-## v2.1.122 변경사항
+## v2.1.123 변경사항
 
-- 체감 랙과 화면 흔들림을 줄이기 위해 `installV21122SystemUxPerformancePass()`를 추가했습니다.
-- 첫 마을 진입 시 무엇을 해야 할지 알 수 있도록 화면 중앙에 추적형 가이드 팝업 `v21122-village-guide-popup`을 추가했습니다. 가이드는 `낚시 가기`, `개척 보기`, `닫기`를 제공하며 닫으면 `localStorage`의 `aqua-v21122-guide-dismissed`로 재표시를 막습니다.
-- 누적 UI 패스가 같은 요소를 서로 다르게 재배치하던 문제를 줄이기 위해 v2.1.122 최종 앵커를 추가했습니다. 하단 메뉴는 `v21122-bottom-nav-lock`, 일반 페이지는 `v21122-runtime-centered`/`v21122-page-column`, 개척 팝업은 `v21122-expedition-body-stable` 기준으로 고정됩니다.
-- 상점, 가방, 퀘스트, 지도, 도감, 장비, 랭킹 화면이 우측으로 쏠려 보이는 문제를 줄이기 위해 runtime page shell을 safe-area 안의 단일 중앙 컬럼으로 보정했습니다.
-- `개척`을 눌렀을 때 팝업형 페이지가 반절만 보이는 문제를 줄이기 위해 열린 개척 본문을 viewport 중앙 fixed panel로 고정하고 max-height/scroll/overscroll을 보강했습니다.
-- 낚시 물길 바 깜박임은 `v21122-water-fx-stable`, `v21122-sea-lane-stable`로 animation/transform churn을 막고, 입질/릴링/결과 단계에서는 물길 바를 숨겨 성공 중 계속 깜박이는 현상을 줄였습니다.
-- 낚싯대/미끼 장비 strip이 커졌다 작아졌다 보이는 문제를 줄이기 위해 `v21122-loadout-stable`과 내부 셀 `v21122-loadout-cell-stable`에 고정 크기/고정 transform/no animation을 적용했습니다.
-- `물었다!` 팝업은 `v21122-bite-center-lock`으로 fixed center에 고정해 최상단/중간을 왔다갔다 하지 않도록 보정했습니다.
-- 성공 결과창은 `v21122-result-center-lock`으로 중앙 고정, safe-area max-height, 내부 scroll을 적용했습니다.
-- 연속 성공 표기는 `v21122-combo-anchor`로 캐스팅 버튼 가까운 하단 위치에 고정하되 버튼에 붙지 않도록 `--v21122-combo-bottom` 간격을 확보했습니다.
-- 신규 검증 스크립트 `tools/check-v21122-system-ux-performance.mjs`를 추가해 버전 동기화, 초반 가이드, 페이지 중앙 정렬, 개척 팝업, 낚시 물길/장비/물었다 팝업 안정 토큰, 문서 계약, SVG 금지, 패키징 청결을 확인합니다.
+- 코드 꼬임/예전 보정 코드 재개입 문제를 줄이기 위해 `installV21123RuntimeDeconflictPass()`를 추가했습니다.
+- v2.1.122까지 누적된 UI 보정 패스는 유지하되, 최신 패스가 마지막 소유권을 갖도록 `v21123-owned-anchor`, `data-v21123-owner`, `data-v21123-latest-anchor` 토큰을 부여했습니다.
+- 하단 메뉴는 `v21123-bottom-nav-final`로 낚시 외 모든 화면에서 동일한 우측 하단 fixed anchor를 쓰고, 낚시 화면에서는 확실히 숨기도록 정리했습니다.
+- 상점, 가방, 퀘스트, 지도, 도감, 장비, 랭킹 화면은 `v21123-runtime-page-final`과 `v21123-page-column-final`로 safe-area 안의 중앙 컬럼을 다시 고정해 우측 쏠림과 페이지 shell 흔들림을 줄였습니다.
+- 개척 팝업은 `v21123-expedition-final`로 중앙 fixed panel, safe-area max-height, 내부 스크롤, overscroll containment를 한 번 더 고정했습니다.
+- 건설 확인/건설 트레이 계열은 `v21123-village-modal-final`로 최대 높이와 내부 스크롤을 보강하고, 모달이 열렸을 때 첫 마을 가이드가 뒤에서 겹치지 않도록 `v21123-guide-final`을 제어했습니다.
+- 낚시 물길/수중 효과는 `v21123-water-budget-final`, `v21123-sea-lane-final`로 animation/transition churn을 차단하고, 입질/릴링/결과/성공/실패 단계에서는 물길 바를 display none 기준으로 숨겨 성공 중 깜박임 재발을 줄였습니다.
+- 낚싯대/미끼 장비 strip은 `v21123-loadout-final`, 내부 요소는 `v21123-loadout-child-final`로 transform/scale/transition/animation을 차단해 커졌다 작아졌다 보이는 현상을 줄였습니다.
+- 연속 성공 표기는 `v21123-combo-final`로 캐스팅 버튼 가까운 하단 기준으로 다시 잡고, `물었다!` 팝업과 성공 결과창은 `v21123-bite-final`, `v21123-result-final`로 중앙 고정/무전환 기준을 적용했습니다.
+- 새 패스는 visualViewport 변수 `--v21123-visual-width`, `--v21123-visual-height`와 signature guard, RAF + 80ms 후행 보정을 사용해 예전 observer가 늦게 개입해도 최신 앵커가 다시 마지막 기준이 되도록 했습니다.
+- 신규 검증 스크립트 `tools/check-v21123-runtime-deconflict.mjs`를 추가해 버전 동기화, 최신 runtime/CSS 토큰, 문서 계약, SVG 금지, 패키징 청결, player 방향/오프닝 video-only 회귀 방지를 확인합니다.
 - 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 오프닝 video-only 정책, 플레이어 8방향 파일명/flip 금지 정책은 변경하지 않았습니다.
 
-## v2.1.122 분석/인수인계 기록 - 2026-07-01 KST
+## v2.1.123 분석/인수인계 기록 - 2026-07-01 KST
 
-- v2.1.121 기준 `npm run validate` 통과와 `README.md`/`AI_HANDOFF_CARDVILLE.md` 외 불필요 문서가 없음을 먼저 확인했습니다.
-- 사용자가 제보한 실제 문제는 전체 랙, 초반 목표 부재, 개척 팝업 반절 표시, 상점/가방/퀘스트/지도/도감 우측 쏠림, 낚시 물길 바/낚싯대/미끼 깜박임, 하단 메뉴 위치 불일치, `물었다!` 팝업 위치 흔들림입니다.
-- 확인한 구조적 원인은 여러 세대의 런타임 UI 보정 패스가 같은 DOM 요소에 서로 다른 inline important 좌표와 CSS 좌표를 반복 적용하는 점입니다. 특히 낚시 물길/장비 strip/입질 팝업/결과창/하단 내비는 화면 상태 전환 때 여러 패스가 다시 만지는 구조라 jitter가 발생하기 쉽습니다.
-- v2.1.122는 기존 로직을 재작성하지 않고 최종 runtime pass와 마지막 CSS 스코프로 single source of truth anchor를 부여합니다.
-- 새 패스는 visualViewport 폭/높이를 `--v21122-visual-width`, `--v21122-visual-height`로 동기화하고, signature guard와 140ms throttle을 사용해 MutationObserver가 과도하게 스타일을 다시 쓰는 비용을 낮췄습니다.
+- v2.1.122 기준 `npm run validate` 통과와 `README.md`/`AI_HANDOFF_CARDVILLE.md` 외 불필요 문서가 없음을 먼저 확인했습니다.
+- 사용자가 특히 우려한 내용은 코드 꼬임, 예전 보정 코드가 계속 살아나 최신 UI를 다시 흐트러뜨리는 문제입니다.
+- 확인한 구조적 원인은 여러 세대의 런타임 UI 보정 패스가 같은 DOM 요소에 서로 다른 inline important 좌표와 CSS 좌표를 반복 적용하는 점입니다. 특히 하단 메뉴, runtime page shell, 개척 팝업, 낚시 물길 바, 장비 strip, `물었다!` 팝업, 성공 결과창은 누적 패스의 충돌 후보입니다.
+- v2.1.123는 기존 패스 삭제가 아니라 최신 final owner 패스를 추가하는 방식입니다. 대량 삭제보다 안전하고, GitHub Desktop으로 되돌리기도 쉽습니다.
 - 사용 환경은 GitHub Desktop과 Firebase 무료 플랜입니다. Firebase 설정이 없으면 로컬 저장 fallback을 유지해야 하며, 유료 서버 기능이나 필수 서버 의존성을 추가하지 않습니다.
 - 다음 AI는 작업 후 반드시 `npm run validate`를 먼저 확인하고, 가능하면 GitHub Actions에서 `npm run ci:registry:check`, `npm run ci:install`, `npm run typecheck`, `npm run build`까지 확인합니다.
 
 ## 운영/산출 고정 규칙
 
 - 기록 파일은 `README.md`와 `AI_HANDOFF_CARDVILLE.md`만 유지합니다. 패치 노트, 임시 보고서, 분석 메모 같은 별도 `.md` 파일은 만들지 않습니다.
-- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.122-full.zip`, `AF-v2.1.122-patch.zip`.
+- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.123-full.zip`, `AF-v2.1.123-patch.zip`.
 - 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크 순서로 작성합니다.
 - 로컬 결과 확인 기본 명령:
 
@@ -53,7 +52,7 @@ for zpath in sys.argv[1:]:
     print(zpath)
     print('markdown:', md)
     print('banned:', banned[:20], 'count=', len(banned))
-PY AF-v2.1.122-full.zip AF-v2.1.122-patch.zip
+PY AF-v2.1.123-full.zip AF-v2.1.123-patch.zip
 ```
 
 # AquaFantasia v2.1.121
