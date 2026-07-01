@@ -1,3 +1,63 @@
+# AquaFantasia v2.1.130
+
+## v2.1.130 변경사항
+
+- 사용자 요청의 핵심인 “앞전 요청이 전혀 반영되지 않은 것처럼 보이는 문제”를 다시 기준으로 잡고, v2.1.129의 direct state sync 위에 **direct source regression guard**를 추가했습니다.
+- 새 패스 `installV21130DirectSourceRegressionGuardPass()`와 `syncV21130DirectSourceUi()`를 추가했습니다. v2.1.130이 활성화되면 v2.1.129는 `handoff-to-v21130-direct-source-regression-guard` 상태로 물러나며 observer를 설치하지 않습니다.
+- 초반 마을 가이드는 렌더 원본에 `v21130-village-guide-popup`, `aqua-v21130-guide-dismissed` 기준으로 직접 들어갑니다. 오프닝 직후에도 중앙 고정 가이드가 바로 보이도록 direct source class를 부여했습니다.
+- 하단 메뉴는 `v21130-bottom-nav-final`로 마을과 상점/가방/퀘스트/지도/도감/장비/랭킹에서 같은 우측 하단 기준을 공유합니다. 낚시 화면에서는 숨김 기준을 유지합니다.
+- 상점/가방/퀘스트/지도/도감/장비/랭킹 페이지는 생성 시점부터 `v21130-runtime-page-final`, `v21130-page-column-final`을 붙여 우측 쏠림과 첫 프레임 흔들림을 줄였습니다.
+- 개척 팝업은 생성 원본에 `v21130-expedition-final`, `v21130-expedition-direct`를 부여하고, 중앙 fixed, safe-area max-height, 내부 스크롤 기준을 유지합니다.
+- 낚시 화면은 생성 원본에 `v21130-fishing-final-screen`, `v21130-water-final`, `v21130-loadout-final`, `v21130-combo-final`, `v21130-bite-final`, `v21130-result-final` 계열을 부여해 물길/장비/물었다/결과창이 첫 프레임부터 최신 기준을 받도록 했습니다.
+- `style` 속성 MutationObserver는 v2.1.130 최신 패스에서 사용하지 않습니다. class, screen, fishing phase, childList, viewport 변화만 보고 동기화합니다.
+- 신규 검증 스크립트 `tools/check-v21130-direct-source-regression-guard.mjs`를 추가해 버전, 캐시, source render 토큰, v2.1.129 handoff, no-style-observer 정책, 문서 계약, zip 청결 조건을 확인합니다.
+- 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 오프닝 video-only 정책, 플레이어 8방향 파일명/flip 금지 정책은 변경하지 않았습니다.
+
+## v2.1.130 분석/인수인계 기록 - 2026-07-01 KST
+
+- 핵심 원인: v2.1.129는 style observer loop를 줄였지만, 여전히 실제 원본 렌더 DOM에는 v21128/v21129 토큰이 많이 남아 있었습니다. 사용자가 보는 첫 프레임 기준에서는 observer/sync가 돌기 전이라 반영이 늦게 보일 수 있었습니다.
+- v2.1.130은 원본 렌더에 v21130 class를 직접 부여하고, v2.1.129 최신 패스는 handoff만 하도록 하여 “예전 코드가 다시 살아나는 듯한 체감”을 더 줄입니다.
+- 이번 패치는 GitHub Desktop에서 diff 확인이 쉬운 방식으로 작성했습니다. 기존 로직 삭제 대신 최신 소유권을 명확히 하고, 예전 루프가 최신 패스를 방해하지 않게 하는 안전 패치입니다.
+- 사용 환경은 GitHub Desktop과 Firebase 무료 플랜입니다. Firebase 설정이 없거나 익명 로그인 실패 시에도 로컬 저장 fallback이 살아 있어야 합니다.
+- 다음 AI는 작업 후 `npm run validate`를 먼저 확인하고, 가능하면 GitHub Actions에서 `npm run ci:registry:check`, `npm run ci:install`, `npm run typecheck`, `npm run build`를 확인해야 합니다.
+
+## 운영/산출 고정 규칙
+
+- 기록 파일은 `README.md`와 `AI_HANDOFF_CARDVILLE.md`만 유지합니다. 패치 노트, 임시 보고서, 분석 메모 같은 별도 `.md` 파일은 만들지 않습니다.
+- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.130-full.zip`, `AF-v2.1.130-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크 순서로 작성합니다.
+- GitHub Desktop 사용 기준입니다.
+- Firebase는 무료 플랜 기준입니다. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제를 추가하지 않습니다.
+- Firebase config가 없거나 Firebase 익명 로그인이 실패해도 로컬 저장 fallback이 계속 동작해야 합니다.
+
+## 결과 확인 명령
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## zip 내부 점검 명령
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.130-full.zip AF-v2.1.130-patch.zip
+```
+
+# 이전 기록
+
 # AquaFantasia v2.1.129
 
 ## v2.1.129 변경사항

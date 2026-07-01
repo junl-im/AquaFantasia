@@ -1,5 +1,5 @@
-// v2.1.129 direct state UI sync: render-time guide/page/expedition/fishing anchors without style observer loops.
-const CACHE_NAME = 'aqua-fantasia-v2.1.129-direct-state-ui-sync';
+// v2.1.130 direct source regression guard: render-time guide/page/expedition/fishing anchors without style observer loops.
+const CACHE_NAME = 'aqua-fantasia-v2.1.130-direct-source-regression-guard';
 const CORE_ASSETS = [
   './',
   './index.html',

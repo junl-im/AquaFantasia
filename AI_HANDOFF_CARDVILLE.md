@@ -1,5 +1,84 @@
 # AI_HANDOFF_CARDVILLE
 
+- 기준 패키지 버전: `2.1.130`
+- 현재 작업 기준: `v2.1.130`
+- 작업 환경: GitHub Desktop, Firebase 무료 플랜, 로컬 저장 fallback 유지.
+- 필수 산출물: `AF-v2.1.130-full.zip`, `AF-v2.1.130-patch.zip`.
+- 문서 파일 제한: 산출물 안의 `.md`는 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 허용.
+
+## 작업중인 내용
+
+- 현재 작업 기준은 `v2.1.130 direct source regression guard` 패치다.
+- 목표는 사용자가 반복 지적한 “초반 가이드/개척 팝업/페이지 중앙 정렬/낚시 물길/장비/물었다/결과창 보정이 전혀 반영되지 않은 것처럼 보이는 문제”를 줄이는 것이다.
+- 핵심 원칙: 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 오프닝 video-only, 플레이어 8방향 파일명/flip 금지는 변경하지 않는다.
+- 사용자가 특히 우려한 부분은 코드 꼬임과 예전 보정 코드가 계속 살아나는 문제다. v2.1.130은 v2.1.129를 최신 패스에게 handoff시키고, 원본 렌더 class와 직접 상태 동기화 기준을 `v21130`으로 끌어올린다.
+
+## 기록
+
+### v2.1.130 direct source regression guard 패치 기록
+
+- v2.1.129 full 기준에서 시작했다.
+- 새 패스 `installV21130DirectSourceRegressionGuardPass()`와 `syncV21130DirectSourceUi()`를 추가했다.
+- 부팅 초기에 `v21130-direct-source-regression-root`, `dataset.v21130DirectSourceRegressionGuard = active`, `dataset.v21130UiPolicy = direct-source-render-first-single-light-sync-no-style-observer`를 기록한다.
+- v2.1.129 direct state sync는 v2.1.130 활성 상태에서 `handoff-to-v21130-direct-source-regression-guard`로 물러나며 observer를 설치하지 않는다.
+- v2.1.130 최신 패스는 `style` 속성 MutationObserver를 설치하지 않는다. class, data-screen, data-fishing-phase, childList, visualViewport 변화만 감시한다.
+- 첫 마을 중앙 가이드는 원본 렌더에서 `v21130-village-guide-popup`, `data-v21130-direct-guide`, `aqua-v21130-guide-dismissed` 기준으로 직접 제공한다.
+- 하단 메뉴는 `v21130-bottom-nav-final`, `data-v21130BottomNav` 기준을 추가했다.
+- 상점/가방/퀘스트/지도/도감/장비/랭킹은 생성 원본에서 `v21130-runtime-page-final`, `v21130-page-column-final`을 가진다.
+- 개척 팝업은 생성 원본에서 `v21130-expedition-final`, `v21130-expedition-direct`를 가진다.
+- 낚시 화면은 생성 원본에서 `v21130-fishing-final-screen`, 물길/장비/연속성공/물었다/결과창 `v21130-*` 토큰을 가진다.
+- `README.md`, `AI_HANDOFF_CARDVILLE.md`, `public/offline.html`, `public/sw.js`, `src/data.ts`, `package.json`, `package-lock.json`을 v2.1.130 기준으로 동기화했다.
+- 신규 검증 스크립트 `tools/check-v21130-direct-source-regression-guard.mjs`를 추가했다.
+
+## 다음 업데이트 예상 내역
+
+- 실제 모바일에서 초반 가이드가 오프닝 이후 첫 마을 중앙에 즉시 뜨는지 확인한다.
+- 개척 팝업이 반절만 보이지 않고 중앙 fixed + 내부 스크롤로 유지되는지 확인한다.
+- 상점/가방/퀘스트/지도/도감 페이지가 우측으로 쏠리지 않고 중앙 safe-area 컬럼을 유지하는지 캡처 기준으로 확인한다.
+- 낚시 중 물길 바, 낚싯대/미끼 strip, `물었다!`, 성공 결과창이 깜박이거나 최상단으로 점프하지 않는지 확인한다.
+- 체감 랙이 남으면 다음 패치에서 `RuntimeQualityManager`, Pixi ticker, DOM/WebGL effect budget을 직접 줄인다.
+- 오래된 observer 패스 실제 삭제는 GitHub Actions와 모바일 실기기 검증 후 단계적으로 판단한다.
+- Firebase/Pixi/Vite minor 업데이트는 GitHub Actions에서 `npm ci`, `typecheck`, `build` 통과 후만 검토한다. Firebase 무료 플랜과 로컬 fallback은 유지한다.
+
+## 필수 결과 확인 명령
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## 산출물 zip 점검 명령
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.130-full.zip AF-v2.1.130-patch.zip
+```
+
+## 고정 작업환경/산출 규칙
+
+- GitHub Desktop 사용 기준.
+- Firebase는 무료 플랜 기준. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제 금지.
+- Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 한다.
+- 문서 기록은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용한다. 추가 `.md`, 임시 리포트, 로그 파일을 산출물에 넣지 않는다.
+- 결과물은 항상 두 개다: `AF-v2.1.130-full.zip`, `AF-v2.1.130-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크.
+
+# 이전 인수인계 기록
+
+# AI_HANDOFF_CARDVILLE
+
 - 기준 패키지 버전: `2.1.129`
 - 현재 작업 기준: `v2.1.129`
 - 작업 환경: GitHub Desktop, Firebase 무료 플랜, 로컬 저장 fallback 유지.
