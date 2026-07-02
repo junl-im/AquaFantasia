@@ -3,17 +3,28 @@
 - 기준 패키지 버전: `2.1.134`
 - 현재 작업 기준: `v2.1.134`
 - 작업 환경: GitHub Desktop, Firebase 무료 플랜, 로컬 저장 fallback 유지.
-- 필수 산출물: `AF-v2.1.134-full.zip`, `AF-v2.1.134-patch.zip`.
+- 필수 산출물: `AF-v2.1.134-g2-full.zip`, `AF-v2.1.134-g2-patch.zip`.
 - 문서 파일 제한: 산출물 안의 `.md`는 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 허용.
 
 ## 작업중인 내용
 
 - 현재 작업 기준은 `v2.1.134 render budget ui write ledger` 패치다.
 - 목표는 사용자가 반복 요청한 UI/UX 흔들림, 체감 랙, 코드 꼬임, 예전 보정 코드가 계속 살아나는 문제를 줄이는 것이다.
-- 핵심 원칙: `style` observer loop와 반복 inline style 덮어쓰기를 늘리지 않고, v2.1.133 single governor ledger 위에 낚시 UI write budget과 Pixi/fallback render budget을 둔다.
+- 핵심 원칙: `style` observer loop와 반복 inline style 덮어쓰기를 늘리지 않고, 그룹 1/그룹 2에서 실효 없는 옛 보정 함수를 삭제하고, 남은 v2.1.134 기존 render budget 로직 자리에서 낚시 UI write budget과 Pixi/fallback render budget을 유지한다.
 - 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 오프닝 video-only, 플레이어 8방향 파일명/flip 금지는 변경하지 않는다.
 
 ## 기록
+
+### v2.1.134 group 2 dead-code deletion / 그룹 2 삭제 + opening exit fix record - 2026-07-02 KST
+
+- 사용자 신규 원칙에 따라 새 버전 번호가 붙은 `install...Pass()`/`sync...Ui()` 함수는 추가하지 않았다.
+- 그룹 2 함수 `v2.1.122`, `123`, `124`, `125`, `126`, `128`, `129`, `130`, `131`, `132`, `133`은 생성자 호출은 남아 있었지만 최신 v2.1.134가 동일 UI/성능 책임을 이미 직접 수행하고 있었고, 각 그룹 2 패스는 최신 owner에 의해 실효가 없는 것으로 추적했다.
+- 그룹 2 함수 정의 11개와 생성자 호출 11줄을 실제 삭제했다.
+- 그룹 2에 포함된 `syncV21129DirectUi`, `syncV21130DirectSourceUi`, `syncV21131StaleObserverQuarantineUi`, `syncV21132ObserverBudgetGovernorUi`, `syncV21133SingleGovernorLedgerUi` 정의와 직접 호출 줄을 실제 삭제했다.
+- 부팅 초기에 남아 있던 그룹 2 root marker/dataset 기록과 `handoff-to-*` 문자열을 제거하고, v2.1.134 기존 render budget owner가 단독으로 남도록 통합했다.
+- CSS는 그룹 2 토큰 중 런타임 파일에서 더 이상 참조되지 않는 `v21123` 전용 selector block만 안전하게 삭제했다. 다른 그룹 2 토큰은 원본 렌더 class, v2.1.134 cleanup selector, 기존 UI 연결과 일부 연결되어 있어 애매한 CSS는 지우지 않았다.
+- 인트로 영상이 다음 화면으로 넘어가지 않는 문제를 기존 `renderVillage()` 오프닝 로직 자리에서 수정했다. 오프닝 video의 `loop`를 제거하고, `ended`, `error`, `play()` 실패, 최대 9초 fallback에서 `finishVillageOpeningAfterMinimum()`을 호출하도록 했다.
+- `npm run validate` 통과를 확인해야 한다.
 
 ### v2.1.134 group 1 dead-code deletion record - 2026-07-02 KST
 
@@ -76,7 +87,7 @@ for zpath in sys.argv[1:]:
     print(zpath)
     print('markdown:', md)
     print('banned:', banned[:20], 'count=', len(banned))
-PY AF-v2.1.134-full.zip AF-v2.1.134-patch.zip
+PY AF-v2.1.134-g2-full.zip AF-v2.1.134-g2-patch.zip
 ```
 
 ## 고정 작업환경/산출 규칙
@@ -85,7 +96,7 @@ PY AF-v2.1.134-full.zip AF-v2.1.134-patch.zip
 - Firebase는 무료 플랜 기준. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제 금지.
 - Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 한다.
 - 문서 기록은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용한다. 추가 `.md`, 임시 리포트, 로그 파일을 산출물에 넣지 않는다.
-- 결과물은 항상 두 개다: `AF-v2.1.134-full.zip`, `AF-v2.1.134-patch.zip`.
+- 결과물은 항상 두 개다: `AF-v2.1.134-g2-full.zip`, `AF-v2.1.134-g2-patch.zip`.
 - 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크.
 
 # 이전 인수인계 기록
@@ -106,6 +117,17 @@ PY AF-v2.1.134-full.zip AF-v2.1.134-patch.zip
 - 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 오프닝 video-only, 플레이어 8방향 파일명/flip 금지는 변경하지 않는다.
 
 ## 기록
+
+### v2.1.134 group 2 dead-code deletion / 그룹 2 삭제 + opening exit fix record - 2026-07-02 KST
+
+- 사용자 신규 원칙에 따라 새 버전 번호가 붙은 `install...Pass()`/`sync...Ui()` 함수는 추가하지 않았다.
+- 그룹 2 함수 `v2.1.122`, `123`, `124`, `125`, `126`, `128`, `129`, `130`, `131`, `132`, `133`은 생성자 호출은 남아 있었지만 최신 v2.1.134가 동일 UI/성능 책임을 이미 직접 수행하고 있었고, 각 그룹 2 패스는 최신 owner에 의해 실효가 없는 것으로 추적했다.
+- 그룹 2 함수 정의 11개와 생성자 호출 11줄을 실제 삭제했다.
+- 그룹 2에 포함된 `syncV21129DirectUi`, `syncV21130DirectSourceUi`, `syncV21131StaleObserverQuarantineUi`, `syncV21132ObserverBudgetGovernorUi`, `syncV21133SingleGovernorLedgerUi` 정의와 직접 호출 줄을 실제 삭제했다.
+- 부팅 초기에 남아 있던 그룹 2 root marker/dataset 기록과 `handoff-to-*` 문자열을 제거하고, v2.1.134 기존 render budget owner가 단독으로 남도록 통합했다.
+- CSS는 그룹 2 토큰 중 런타임 파일에서 더 이상 참조되지 않는 `v21123` 전용 selector block만 안전하게 삭제했다. 다른 그룹 2 토큰은 원본 렌더 class, v2.1.134 cleanup selector, 기존 UI 연결과 일부 연결되어 있어 애매한 CSS는 지우지 않았다.
+- 인트로 영상이 다음 화면으로 넘어가지 않는 문제를 기존 `renderVillage()` 오프닝 로직 자리에서 수정했다. 오프닝 video의 `loop`를 제거하고, `ended`, `error`, `play()` 실패, 최대 9초 fallback에서 `finishVillageOpeningAfterMinimum()`을 호출하도록 했다.
+- `npm run validate` 통과를 확인해야 한다.
 
 ### v2.1.133 single governor ledger 패치 기록
 
@@ -187,6 +209,17 @@ PY AF-v2.1.133-full.zip AF-v2.1.133-patch.zip
 
 ## 기록
 
+### v2.1.134 group 2 dead-code deletion / 그룹 2 삭제 + opening exit fix record - 2026-07-02 KST
+
+- 사용자 신규 원칙에 따라 새 버전 번호가 붙은 `install...Pass()`/`sync...Ui()` 함수는 추가하지 않았다.
+- 그룹 2 함수 `v2.1.122`, `123`, `124`, `125`, `126`, `128`, `129`, `130`, `131`, `132`, `133`은 생성자 호출은 남아 있었지만 최신 v2.1.134가 동일 UI/성능 책임을 이미 직접 수행하고 있었고, 각 그룹 2 패스는 최신 owner에 의해 실효가 없는 것으로 추적했다.
+- 그룹 2 함수 정의 11개와 생성자 호출 11줄을 실제 삭제했다.
+- 그룹 2에 포함된 `syncV21129DirectUi`, `syncV21130DirectSourceUi`, `syncV21131StaleObserverQuarantineUi`, `syncV21132ObserverBudgetGovernorUi`, `syncV21133SingleGovernorLedgerUi` 정의와 직접 호출 줄을 실제 삭제했다.
+- 부팅 초기에 남아 있던 그룹 2 root marker/dataset 기록과 `handoff-to-*` 문자열을 제거하고, v2.1.134 기존 render budget owner가 단독으로 남도록 통합했다.
+- CSS는 그룹 2 토큰 중 런타임 파일에서 더 이상 참조되지 않는 `v21123` 전용 selector block만 안전하게 삭제했다. 다른 그룹 2 토큰은 원본 렌더 class, v2.1.134 cleanup selector, 기존 UI 연결과 일부 연결되어 있어 애매한 CSS는 지우지 않았다.
+- 인트로 영상이 다음 화면으로 넘어가지 않는 문제를 기존 `renderVillage()` 오프닝 로직 자리에서 수정했다. 오프닝 video의 `loop`를 제거하고, `ended`, `error`, `play()` 실패, 최대 9초 fallback에서 `finishVillageOpeningAfterMinimum()`을 호출하도록 했다.
+- `npm run validate` 통과를 확인해야 한다.
+
 ### v2.1.132 observer budget governor 패치 기록
 
 - v2.1.131 full 기준에서 시작했다.
@@ -266,6 +299,17 @@ PY AF-v2.1.132-full.zip AF-v2.1.132-patch.zip
 
 ## 기록
 
+### v2.1.134 group 2 dead-code deletion / 그룹 2 삭제 + opening exit fix record - 2026-07-02 KST
+
+- 사용자 신규 원칙에 따라 새 버전 번호가 붙은 `install...Pass()`/`sync...Ui()` 함수는 추가하지 않았다.
+- 그룹 2 함수 `v2.1.122`, `123`, `124`, `125`, `126`, `128`, `129`, `130`, `131`, `132`, `133`은 생성자 호출은 남아 있었지만 최신 v2.1.134가 동일 UI/성능 책임을 이미 직접 수행하고 있었고, 각 그룹 2 패스는 최신 owner에 의해 실효가 없는 것으로 추적했다.
+- 그룹 2 함수 정의 11개와 생성자 호출 11줄을 실제 삭제했다.
+- 그룹 2에 포함된 `syncV21129DirectUi`, `syncV21130DirectSourceUi`, `syncV21131StaleObserverQuarantineUi`, `syncV21132ObserverBudgetGovernorUi`, `syncV21133SingleGovernorLedgerUi` 정의와 직접 호출 줄을 실제 삭제했다.
+- 부팅 초기에 남아 있던 그룹 2 root marker/dataset 기록과 `handoff-to-*` 문자열을 제거하고, v2.1.134 기존 render budget owner가 단독으로 남도록 통합했다.
+- CSS는 그룹 2 토큰 중 런타임 파일에서 더 이상 참조되지 않는 `v21123` 전용 selector block만 안전하게 삭제했다. 다른 그룹 2 토큰은 원본 렌더 class, v2.1.134 cleanup selector, 기존 UI 연결과 일부 연결되어 있어 애매한 CSS는 지우지 않았다.
+- 인트로 영상이 다음 화면으로 넘어가지 않는 문제를 기존 `renderVillage()` 오프닝 로직 자리에서 수정했다. 오프닝 video의 `loop`를 제거하고, `ended`, `error`, `play()` 실패, 최대 9초 fallback에서 `finishVillageOpeningAfterMinimum()`을 호출하도록 했다.
+- `npm run validate` 통과를 확인해야 한다.
+
 ### v2.1.131 stale observer quarantine 패치 기록
 
 - v2.1.130 full 기준에서 시작했다.
@@ -343,6 +387,17 @@ PY AF-v2.1.131-full.zip AF-v2.1.131-patch.zip
 - 사용자가 특히 우려한 부분은 코드 꼬임과 예전 보정 코드가 계속 살아나는 문제다. v2.1.130은 v2.1.129를 최신 패스에게 handoff시키고, 원본 렌더 class와 직접 상태 동기화 기준을 `v21130`으로 끌어올린다.
 
 ## 기록
+
+### v2.1.134 group 2 dead-code deletion / 그룹 2 삭제 + opening exit fix record - 2026-07-02 KST
+
+- 사용자 신규 원칙에 따라 새 버전 번호가 붙은 `install...Pass()`/`sync...Ui()` 함수는 추가하지 않았다.
+- 그룹 2 함수 `v2.1.122`, `123`, `124`, `125`, `126`, `128`, `129`, `130`, `131`, `132`, `133`은 생성자 호출은 남아 있었지만 최신 v2.1.134가 동일 UI/성능 책임을 이미 직접 수행하고 있었고, 각 그룹 2 패스는 최신 owner에 의해 실효가 없는 것으로 추적했다.
+- 그룹 2 함수 정의 11개와 생성자 호출 11줄을 실제 삭제했다.
+- 그룹 2에 포함된 `syncV21129DirectUi`, `syncV21130DirectSourceUi`, `syncV21131StaleObserverQuarantineUi`, `syncV21132ObserverBudgetGovernorUi`, `syncV21133SingleGovernorLedgerUi` 정의와 직접 호출 줄을 실제 삭제했다.
+- 부팅 초기에 남아 있던 그룹 2 root marker/dataset 기록과 `handoff-to-*` 문자열을 제거하고, v2.1.134 기존 render budget owner가 단독으로 남도록 통합했다.
+- CSS는 그룹 2 토큰 중 런타임 파일에서 더 이상 참조되지 않는 `v21123` 전용 selector block만 안전하게 삭제했다. 다른 그룹 2 토큰은 원본 렌더 class, v2.1.134 cleanup selector, 기존 UI 연결과 일부 연결되어 있어 애매한 CSS는 지우지 않았다.
+- 인트로 영상이 다음 화면으로 넘어가지 않는 문제를 기존 `renderVillage()` 오프닝 로직 자리에서 수정했다. 오프닝 video의 `loop`를 제거하고, `ended`, `error`, `play()` 실패, 최대 9초 fallback에서 `finishVillageOpeningAfterMinimum()`을 호출하도록 했다.
+- `npm run validate` 통과를 확인해야 한다.
 
 ### v2.1.130 direct source regression guard 패치 기록
 
@@ -422,6 +477,17 @@ PY AF-v2.1.130-full.zip AF-v2.1.130-patch.zip
 - 사용자가 특히 우려한 부분은 코드 꼬임과 예전 코드가 계속 살아나는 문제다. v2.1.129는 v2.1.128의 style observer 계열 보정이 최신 정책을 방해하지 않도록 handoff하고, `style observer` loop 없이 render/state 전환 시점에서 직접 동기화한다.
 
 ## 기록
+
+### v2.1.134 group 2 dead-code deletion / 그룹 2 삭제 + opening exit fix record - 2026-07-02 KST
+
+- 사용자 신규 원칙에 따라 새 버전 번호가 붙은 `install...Pass()`/`sync...Ui()` 함수는 추가하지 않았다.
+- 그룹 2 함수 `v2.1.122`, `123`, `124`, `125`, `126`, `128`, `129`, `130`, `131`, `132`, `133`은 생성자 호출은 남아 있었지만 최신 v2.1.134가 동일 UI/성능 책임을 이미 직접 수행하고 있었고, 각 그룹 2 패스는 최신 owner에 의해 실효가 없는 것으로 추적했다.
+- 그룹 2 함수 정의 11개와 생성자 호출 11줄을 실제 삭제했다.
+- 그룹 2에 포함된 `syncV21129DirectUi`, `syncV21130DirectSourceUi`, `syncV21131StaleObserverQuarantineUi`, `syncV21132ObserverBudgetGovernorUi`, `syncV21133SingleGovernorLedgerUi` 정의와 직접 호출 줄을 실제 삭제했다.
+- 부팅 초기에 남아 있던 그룹 2 root marker/dataset 기록과 `handoff-to-*` 문자열을 제거하고, v2.1.134 기존 render budget owner가 단독으로 남도록 통합했다.
+- CSS는 그룹 2 토큰 중 런타임 파일에서 더 이상 참조되지 않는 `v21123` 전용 selector block만 안전하게 삭제했다. 다른 그룹 2 토큰은 원본 렌더 class, v2.1.134 cleanup selector, 기존 UI 연결과 일부 연결되어 있어 애매한 CSS는 지우지 않았다.
+- 인트로 영상이 다음 화면으로 넘어가지 않는 문제를 기존 `renderVillage()` 오프닝 로직 자리에서 수정했다. 오프닝 video의 `loop`를 제거하고, `ended`, `error`, `play()` 실패, 최대 9초 fallback에서 `finishVillageOpeningAfterMinimum()`을 호출하도록 했다.
+- `npm run validate` 통과를 확인해야 한다.
 
 ### v2.1.129 direct state UI sync 패치 기록
 
@@ -511,6 +577,17 @@ PY AF-v2.1.129-full.zip AF-v2.1.129-patch.zip
 
 ## 기록
 
+### v2.1.134 group 2 dead-code deletion / 그룹 2 삭제 + opening exit fix record - 2026-07-02 KST
+
+- 사용자 신규 원칙에 따라 새 버전 번호가 붙은 `install...Pass()`/`sync...Ui()` 함수는 추가하지 않았다.
+- 그룹 2 함수 `v2.1.122`, `123`, `124`, `125`, `126`, `128`, `129`, `130`, `131`, `132`, `133`은 생성자 호출은 남아 있었지만 최신 v2.1.134가 동일 UI/성능 책임을 이미 직접 수행하고 있었고, 각 그룹 2 패스는 최신 owner에 의해 실효가 없는 것으로 추적했다.
+- 그룹 2 함수 정의 11개와 생성자 호출 11줄을 실제 삭제했다.
+- 그룹 2에 포함된 `syncV21129DirectUi`, `syncV21130DirectSourceUi`, `syncV21131StaleObserverQuarantineUi`, `syncV21132ObserverBudgetGovernorUi`, `syncV21133SingleGovernorLedgerUi` 정의와 직접 호출 줄을 실제 삭제했다.
+- 부팅 초기에 남아 있던 그룹 2 root marker/dataset 기록과 `handoff-to-*` 문자열을 제거하고, v2.1.134 기존 render budget owner가 단독으로 남도록 통합했다.
+- CSS는 그룹 2 토큰 중 런타임 파일에서 더 이상 참조되지 않는 `v21123` 전용 selector block만 안전하게 삭제했다. 다른 그룹 2 토큰은 원본 렌더 class, v2.1.134 cleanup selector, 기존 UI 연결과 일부 연결되어 있어 애매한 CSS는 지우지 않았다.
+- 인트로 영상이 다음 화면으로 넘어가지 않는 문제를 기존 `renderVillage()` 오프닝 로직 자리에서 수정했다. 오프닝 video의 `loop`를 제거하고, `ended`, `error`, `play()` 실패, 최대 9초 fallback에서 `finishVillageOpeningAfterMinimum()`을 호출하도록 했다.
+- `npm run validate` 통과를 확인해야 한다.
+
 - v2.1.126 기준 `npm run validate` 통과 상태에서 작업을 시작했다.
 - 사용자가 강조한 내용은 모든 구석구석 점검, UI/UX/디자인, 코드 꼬임, 예전 코드가 계속 살아나는 문제다.
 - 실제 확인 결과 v2.1.126까지는 최신 finalizer가 있었지만, v2.1.22/v2.1.24/v2.1.26 계열 보정도 최신 governor 기준에서 명확히 물러나게 하는 것이 더 안전했다.
@@ -589,6 +666,17 @@ PY AF-v2.1.128-full.zip AF-v2.1.128-patch.zip
 ## v2.1.126 stale code pruner 패치 기록
 
 ## 기록
+
+### v2.1.134 group 2 dead-code deletion / 그룹 2 삭제 + opening exit fix record - 2026-07-02 KST
+
+- 사용자 신규 원칙에 따라 새 버전 번호가 붙은 `install...Pass()`/`sync...Ui()` 함수는 추가하지 않았다.
+- 그룹 2 함수 `v2.1.122`, `123`, `124`, `125`, `126`, `128`, `129`, `130`, `131`, `132`, `133`은 생성자 호출은 남아 있었지만 최신 v2.1.134가 동일 UI/성능 책임을 이미 직접 수행하고 있었고, 각 그룹 2 패스는 최신 owner에 의해 실효가 없는 것으로 추적했다.
+- 그룹 2 함수 정의 11개와 생성자 호출 11줄을 실제 삭제했다.
+- 그룹 2에 포함된 `syncV21129DirectUi`, `syncV21130DirectSourceUi`, `syncV21131StaleObserverQuarantineUi`, `syncV21132ObserverBudgetGovernorUi`, `syncV21133SingleGovernorLedgerUi` 정의와 직접 호출 줄을 실제 삭제했다.
+- 부팅 초기에 남아 있던 그룹 2 root marker/dataset 기록과 `handoff-to-*` 문자열을 제거하고, v2.1.134 기존 render budget owner가 단독으로 남도록 통합했다.
+- CSS는 그룹 2 토큰 중 런타임 파일에서 더 이상 참조되지 않는 `v21123` 전용 selector block만 안전하게 삭제했다. 다른 그룹 2 토큰은 원본 렌더 class, v2.1.134 cleanup selector, 기존 UI 연결과 일부 연결되어 있어 애매한 CSS는 지우지 않았다.
+- 인트로 영상이 다음 화면으로 넘어가지 않는 문제를 기존 `renderVillage()` 오프닝 로직 자리에서 수정했다. 오프닝 video의 `loop`를 제거하고, `ended`, `error`, `play()` 실패, 최대 9초 fallback에서 `finishVillageOpeningAfterMinimum()`을 호출하도록 했다.
+- `npm run validate` 통과를 확인해야 한다.
 
 - v2.1.125 기준 `npm run validate` 통과 상태에서 작업을 시작했다.
 - 사용자가 강조한 내용은 모든 구석구석 점검, UI/UX/디자인, 코드 꼬임, 예전 코드가 계속 살아나는 문제다.
@@ -693,6 +781,17 @@ PY AF-v2.1.126-full.zip AF-v2.1.126-patch.zip
 
 ## 기록
 
+### v2.1.134 group 2 dead-code deletion / 그룹 2 삭제 + opening exit fix record - 2026-07-02 KST
+
+- 사용자 신규 원칙에 따라 새 버전 번호가 붙은 `install...Pass()`/`sync...Ui()` 함수는 추가하지 않았다.
+- 그룹 2 함수 `v2.1.122`, `123`, `124`, `125`, `126`, `128`, `129`, `130`, `131`, `132`, `133`은 생성자 호출은 남아 있었지만 최신 v2.1.134가 동일 UI/성능 책임을 이미 직접 수행하고 있었고, 각 그룹 2 패스는 최신 owner에 의해 실효가 없는 것으로 추적했다.
+- 그룹 2 함수 정의 11개와 생성자 호출 11줄을 실제 삭제했다.
+- 그룹 2에 포함된 `syncV21129DirectUi`, `syncV21130DirectSourceUi`, `syncV21131StaleObserverQuarantineUi`, `syncV21132ObserverBudgetGovernorUi`, `syncV21133SingleGovernorLedgerUi` 정의와 직접 호출 줄을 실제 삭제했다.
+- 부팅 초기에 남아 있던 그룹 2 root marker/dataset 기록과 `handoff-to-*` 문자열을 제거하고, v2.1.134 기존 render budget owner가 단독으로 남도록 통합했다.
+- CSS는 그룹 2 토큰 중 런타임 파일에서 더 이상 참조되지 않는 `v21123` 전용 selector block만 안전하게 삭제했다. 다른 그룹 2 토큰은 원본 렌더 class, v2.1.134 cleanup selector, 기존 UI 연결과 일부 연결되어 있어 애매한 CSS는 지우지 않았다.
+- 인트로 영상이 다음 화면으로 넘어가지 않는 문제를 기존 `renderVillage()` 오프닝 로직 자리에서 수정했다. 오프닝 video의 `loop`를 제거하고, `ended`, `error`, `play()` 실패, 최대 9초 fallback에서 `finishVillageOpeningAfterMinimum()`을 호출하도록 했다.
+- `npm run validate` 통과를 확인해야 한다.
+
 - v2.1.123 기준 `npm run validate` 통과 상태에서 사용자가 “앞전 요청건이 전혀 반영 안된 것 같다”고 피드백했다.
 - 실제 구조를 다시 보니 여러 세대의 observer가 같은 DOM 요소에 inline important style을 반복 적용하고 있었다.
 - v2.1.123 observer는 `style` 속성 변화를 감시하지 않았고, signature가 같으면 normalize를 건너뛰는 구조라 예전 보정이 나중에 살아나면 최신 위치가 다시 밀릴 수 있었다.
@@ -788,6 +887,17 @@ PY AF-v2.1.124-full.zip AF-v2.1.124-patch.zip
 - 기록 파일은 반드시 `AI_HANDOFF_CARDVILLE.md`와 `README.md` 두 개만 사용한다.
 
 ## 기록
+
+### v2.1.134 group 2 dead-code deletion / 그룹 2 삭제 + opening exit fix record - 2026-07-02 KST
+
+- 사용자 신규 원칙에 따라 새 버전 번호가 붙은 `install...Pass()`/`sync...Ui()` 함수는 추가하지 않았다.
+- 그룹 2 함수 `v2.1.122`, `123`, `124`, `125`, `126`, `128`, `129`, `130`, `131`, `132`, `133`은 생성자 호출은 남아 있었지만 최신 v2.1.134가 동일 UI/성능 책임을 이미 직접 수행하고 있었고, 각 그룹 2 패스는 최신 owner에 의해 실효가 없는 것으로 추적했다.
+- 그룹 2 함수 정의 11개와 생성자 호출 11줄을 실제 삭제했다.
+- 그룹 2에 포함된 `syncV21129DirectUi`, `syncV21130DirectSourceUi`, `syncV21131StaleObserverQuarantineUi`, `syncV21132ObserverBudgetGovernorUi`, `syncV21133SingleGovernorLedgerUi` 정의와 직접 호출 줄을 실제 삭제했다.
+- 부팅 초기에 남아 있던 그룹 2 root marker/dataset 기록과 `handoff-to-*` 문자열을 제거하고, v2.1.134 기존 render budget owner가 단독으로 남도록 통합했다.
+- CSS는 그룹 2 토큰 중 런타임 파일에서 더 이상 참조되지 않는 `v21123` 전용 selector block만 안전하게 삭제했다. 다른 그룹 2 토큰은 원본 렌더 class, v2.1.134 cleanup selector, 기존 UI 연결과 일부 연결되어 있어 애매한 CSS는 지우지 않았다.
+- 인트로 영상이 다음 화면으로 넘어가지 않는 문제를 기존 `renderVillage()` 오프닝 로직 자리에서 수정했다. 오프닝 video의 `loop`를 제거하고, `ended`, `error`, `play()` 실패, 최대 9초 fallback에서 `finishVillageOpeningAfterMinimum()`을 호출하도록 했다.
+- `npm run validate` 통과를 확인해야 한다.
 
 - v2.1.122 기준 `npm run validate` 통과 후 v2.1.123 작업을 시작했다.
 - 구조 원인: 여러 세대의 런타임 UI 보정 패스가 같은 DOM 요소에 서로 다른 inline important 좌표/CSS 좌표를 다시 쓰는 구조라, 화면 상태 전환 시 예전 코드가 최신 UI를 다시 밀어내거나 깜박임을 만들 수 있다.

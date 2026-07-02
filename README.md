@@ -2,14 +2,20 @@
 
 ## v2.1.134 변경사항
 
+- 그룹 2 dead-code cleanup을 진행했습니다. 새 버전형 `install...Pass()`/`sync...Ui()`는 추가하지 않았습니다.
+- `v2.1.122`, `123`, `124`, `125`, `126`, `128`, `129`, `130`, `131`, `132`, `133` install pass 정의와 생성자 호출을 삭제했습니다.
+- 그룹 2에 포함된 `syncV21129DirectUi`, `syncV21130DirectSourceUi`, `syncV21131StaleObserverQuarantineUi`, `syncV21132ObserverBudgetGovernorUi`, `syncV21133SingleGovernorLedgerUi` 정의와 직접 호출을 삭제했습니다.
+- 남아 있던 `handoff-to-*` 문자열과 그룹 2 root marker/dataset 기록을 제거하고, v2.1.134 render budget ui write ledger가 기존 자리에서 단독 owner가 되도록 통합했습니다.
+- 인트로 영상이 다음 화면으로 넘어가지 않는 문제를 기존 `renderVillage()` 오프닝 로직에서 수정했습니다. video `loop`를 제거하고, `ended`/`error`/`play()` 실패/최대 9초 fallback으로 마을 ready 전환을 보장합니다.
+
 - 새 패스 `installV21134RenderBudgetUiWriteLedgerPass()`와 `syncV21134RenderBudgetUiWriteLedgerUi()`를 추가했습니다.
-- v2.1.133 single governor ledger는 호환 신호만 유지하고 최신 UI 소유권은 v2.1.134 render budget ui write ledger로 handoff합니다.
+- v2.1.134 render budget ui write ledger가 최신 UI/성능 소유권을 단독으로 담당하도록 그룹 2 패스를 삭제·통합했습니다.
 - v2.1.134 최신 패스도 `style` 속성 MutationObserver를 사용하지 않습니다. `class`, `data-screen`, `data-fishing-phase`, `aria-hidden`, childList, visualViewport 변화만 감시합니다.
 - 실제 체감 랙 원인 중 하나였던 낚시 전투 중 `updateTensionUI()`의 다량 DOM query/text/style write를 줄였습니다. 장력/포획/저항/안전구간/위험도를 반올림 signature로 묶고, 화면 표시값이 변하지 않으면 UI write를 건너뜁니다.
 - Pixi ticker와 HTML fallback ticker에 v2.1.134 FPS budget을 적용했습니다. lite/compact/reduced-motion/save-data 환경에서는 idle/focused 단계별로 더 낮은 FPS 예산을 사용하고, high/balanced에서는 조작감을 유지하는 선에서 예산을 제한합니다.
 - 초반 마을 중앙 가이드, 우측 하단 메뉴바, 상점/가방/퀘스트/지도/도감 중앙 정렬, 개척 팝업, 낚시 물길/낚싯대/미끼/연속 성공/물었다/결과창을 `v21134` 단일 기준 토큰으로 다시 묶었습니다.
 - 첫 마을 가이드는 새 저장 키 `aqua-v21134-guide-dismissed`를 사용하고, 기존 v21122~v21133 가이드 DOM은 제거합니다.
-- 신규 검증 스크립트 `tools/check-v21134-render-budget-ui-write-ledger.mjs`를 추가해 버전, 캐시, v2.1.133 handoff, no-style-observer 정책, render budget, UI write budget, 문서 계약, zip 청결 조건을 확인합니다.
+- 신규 검증 스크립트 `tools/check-v21134-render-budget-ui-write-ledger.mjs`를 추가해 버전, 캐시, 그룹 2 삭제, no-style-observer 정책, render budget, UI write budget, 문서 계약, zip 청결 조건을 확인합니다.
 
 ## v2.1.134 분석/인수인계 기록 - 2026-07-02 KST
 
@@ -37,7 +43,7 @@
 - Firebase는 무료 플랜 기준입니다. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제는 금지합니다.
 - Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 합니다.
 - 문서 파일은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용합니다. 추가 `.md`, 임시 리포트, 로그 파일은 산출물에 넣지 않습니다.
-- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.134-full.zip`, `AF-v2.1.134-patch.zip`.
+- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.134-g2-full.zip`, `AF-v2.1.134-g2-patch.zip`.
 - 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크입니다.
 
 ## 결과 확인 명령
@@ -63,7 +69,7 @@ for zpath in sys.argv[1:]:
     print(zpath)
     print('markdown:', md)
     print('banned:', banned[:20], 'count=', len(banned))
-PY AF-v2.1.134-full.zip AF-v2.1.134-patch.zip
+PY AF-v2.1.134-g2-full.zip AF-v2.1.134-g2-patch.zip
 ```
 
 # 이전 README 기록
@@ -76,7 +82,7 @@ PY AF-v2.1.134-full.zip AF-v2.1.134-patch.zip
 - v2.1.132는 오래된 observer mute 호환성을 유지하되, 최신 UI 소유권은 v2.1.133 single governor ledger로 handoff합니다.
 - v2.1.133 최신 패스는 `style` 속성 MutationObserver를 사용하지 않습니다. `class`, `data-screen`, `data-fishing-phase`, `aria-hidden`, childList, visualViewport 변화만 감시합니다.
 - 동일 화면/낚시 phase/가이드 상태/모달 상태/viewport signature가 변하지 않으면 sync를 건너뛰어, 반복 DOM 감시와 불필요한 layout write 부담을 줄였습니다.
-- `v21132MutedLegacyObservers`에 누적된 예전 observer mute 목록을 계량해 `dataset.v21133MutedLegacyObserverCount`와 `dataset.v21133ObserverBudget`으로 남깁니다. 다음 AI가 코드 꼬임과 예전 보정 코드 생존 여부를 바로 확인할 수 있습니다.
+- `v21132MutedLegacyObservers`에 누적된 예전 observer 삭제/통합 목록을 계량해 `dataset.v21133MutedLegacyObserverCount`와 `dataset.v21133ObserverBudget`으로 남깁니다. 다음 AI가 코드 꼬임과 예전 보정 코드 생존 여부를 바로 확인할 수 있습니다.
 - 첫 마을 중앙 가이드, 우측 하단 메뉴바, 상점/가방/퀘스트/지도/도감 중앙 정렬, 개척 팝업, 낚시 물길/낚싯대/미끼/연속 성공/물었다/결과창을 `v21133` 단일 기준 토큰으로 다시 묶었습니다.
 - 낚시 집중 단계에서는 물길/수중효과/장비 strip 숨김 기준을 유지하고, `물었다!`와 성공 결과창은 중앙 fixed 기준을 유지합니다.
 - 신규 검증 스크립트 `tools/check-v21133-single-governor-ledger.mjs`를 추가해 버전, 캐시, v2.1.132 handoff, no-style-observer 정책, single governor ledger 토큰, 문서 계약, zip 청결 조건을 확인합니다.
