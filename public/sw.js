@@ -1,5 +1,5 @@
-// v2.1.133 single governor ledger: keep legacy observer mutes, move latest UI ownership to one light sync, and avoid style observer loops.
-const CACHE_NAME = 'aqua-fantasia-v2.1.133-single-governor-ledger';
+// v2.1.134 render budget ui write ledger: keep legacy observer mutes, move latest UI ownership to one light sync, and avoid style observer loops.
+const CACHE_NAME = 'aqua-fantasia-v2.1.134-render-budget-ui-write-ledger';
 const CORE_ASSETS = [
   './',
   './index.html',

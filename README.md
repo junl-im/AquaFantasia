@@ -1,3 +1,61 @@
+# AquaFantasia v2.1.134
+
+## v2.1.134 변경사항
+
+- 새 패스 `installV21134RenderBudgetUiWriteLedgerPass()`와 `syncV21134RenderBudgetUiWriteLedgerUi()`를 추가했습니다.
+- v2.1.133 single governor ledger는 호환 신호만 유지하고 최신 UI 소유권은 v2.1.134 render budget ui write ledger로 handoff합니다.
+- v2.1.134 최신 패스도 `style` 속성 MutationObserver를 사용하지 않습니다. `class`, `data-screen`, `data-fishing-phase`, `aria-hidden`, childList, visualViewport 변화만 감시합니다.
+- 실제 체감 랙 원인 중 하나였던 낚시 전투 중 `updateTensionUI()`의 다량 DOM query/text/style write를 줄였습니다. 장력/포획/저항/안전구간/위험도를 반올림 signature로 묶고, 화면 표시값이 변하지 않으면 UI write를 건너뜁니다.
+- Pixi ticker와 HTML fallback ticker에 v2.1.134 FPS budget을 적용했습니다. lite/compact/reduced-motion/save-data 환경에서는 idle/focused 단계별로 더 낮은 FPS 예산을 사용하고, high/balanced에서는 조작감을 유지하는 선에서 예산을 제한합니다.
+- 초반 마을 중앙 가이드, 우측 하단 메뉴바, 상점/가방/퀘스트/지도/도감 중앙 정렬, 개척 팝업, 낚시 물길/낚싯대/미끼/연속 성공/물었다/결과창을 `v21134` 단일 기준 토큰으로 다시 묶었습니다.
+- 첫 마을 가이드는 새 저장 키 `aqua-v21134-guide-dismissed`를 사용하고, 기존 v21122~v21133 가이드 DOM은 제거합니다.
+- 신규 검증 스크립트 `tools/check-v21134-render-budget-ui-write-ledger.mjs`를 추가해 버전, 캐시, v2.1.133 handoff, no-style-observer 정책, render budget, UI write budget, 문서 계약, zip 청결 조건을 확인합니다.
+
+## v2.1.134 분석/인수인계 기록 - 2026-07-02 KST
+
+- 사용자는 UI/UX, 디자인, 코드 꼬임, 예전 보정 코드가 다시 살아나는 문제를 계속 최우선으로 요청했습니다.
+- v2.1.133 full 기준에서 시작했습니다.
+- v2.1.133은 observer debt ledger와 단일 governor는 잡았지만, 낚시 전투 중 `updateTensionUI()`가 거의 매 tick마다 많은 DOM query/text/style write를 수행하는 구조가 남아 있었습니다.
+- 이번 패치는 보정 observer를 더 쌓는 대신, 전투 UI 표시값이 실제로 변한 경우에만 UI를 다시 쓰도록 하여 물길/장비/입질/결과창 안정화와 체감 성능 개선을 동시에 노렸습니다.
+- 정상 동작하는 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase 저장/익명 로그인 fallback, 오프닝 video-only, 플레이어 8방향 파일명/flip 금지 정책은 변경하지 않았습니다.
+
+## 운영/산출 고정 규칙
+
+- 작업 환경: GitHub Desktop 사용 기준.
+- Firebase는 무료 플랜 기준입니다. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제는 금지합니다.
+- Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 합니다.
+- 문서 파일은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용합니다. 추가 `.md`, 임시 리포트, 로그 파일은 산출물에 넣지 않습니다.
+- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.134-full.zip`, `AF-v2.1.134-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크입니다.
+
+## 결과 확인 명령
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## zip 내부 점검 명령
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.134-full.zip AF-v2.1.134-patch.zip
+```
+
+# 이전 README 기록
+
 # AquaFantasia v2.1.133
 
 ## v2.1.133 변경사항
@@ -1290,5 +1348,6 @@ PY AF-v2.1.120-full.zip AF-v2.1.120-patch.zip
 - 게임 접속 오프닝에서 영상 전에 보이던 poster 정지 이미지를 제거했습니다. 오프닝은 최초 시작 전용 영상만 표시합니다.
 - 타일 픽셀 크기는 유지합니다. v2.1.58은 다이아몬드 터치 점수만 `0.926`으로 소폭 조정하며, 타일 축소는 세이브 좌표/건물 footprint/NPC 이동/충돌/카메라 경계 마이그레이션 전까지 보류합니다.
 - 루트 버전 파일 `APP_VERSION`은 만들지 않습니다. 버전 기록은 README와 런타임 상수에서 관리합니다.
+
 
 
