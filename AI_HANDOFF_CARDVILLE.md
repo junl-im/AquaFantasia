@@ -15,6 +15,17 @@
 
 ## 기록
 
+### v2.1.134 group 1 dead-code deletion record - 2026-07-02 KST
+
+- 사용자 신규 원칙에 따라 새 버전 번호가 붙은 `install...Pass()`/`sync...Ui()` 함수는 추가하지 않았다.
+- `v2.1.75 ~ v2.1.110`, `v2.1.117` 그룹 1 함수 37개는 부팅 초기에 이미 `dataset.v21132ObserverBudgetGovernor = active`가 설정된 뒤 생성자에서 호출되므로, 각 함수 첫 guard에서 즉시 return되는 것을 확인했다.
+- 그룹 1 함수 내부 헬퍼/상수는 함수 스코프 안에 닫혀 있어 그룹 밖 살아있는 함수 21개에서 직접 재사용될 수 없음을 확인했다.
+- 그룹 1 함수 정의 37개와 생성자 호출 37줄을 실제 삭제했다.
+- 삭제된 함수가 만들던 version-specific CSS selector 중 런타임 파일(`src/main.ts`, `src/data.ts`, `index.html`, `public/offline.html`, `public/sw.js`)에서 더 이상 참조되지 않는 selector rule 424개를 `src/styles.css`에서 실제 삭제했다.
+- 그룹 밖 최신 함수가 아직 참조하는 과거 class/data token, 생성자 root marker와 연결될 수 있는 selector, 공통 UI selector는 안전하지 않아 삭제하지 않았다.
+- `npm run validate` 통과를 확인했다.
+- 그룹 2(`v2.1.122`, `123`, `124`, `125`, `126`, `128`, `129`, `130`, `131`, `132`, `133`)은 아직 건드리지 않았다. 사용자가 진행 지시하면 별도 그룹으로만 처리한다.
+
 ### v2.1.134 render budget ui write ledger 패치 기록
 
 - v2.1.133 full 기준에서 시작했다.

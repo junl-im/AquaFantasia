@@ -19,6 +19,18 @@
 - 이번 패치는 보정 observer를 더 쌓는 대신, 전투 UI 표시값이 실제로 변한 경우에만 UI를 다시 쓰도록 하여 물길/장비/입질/결과창 안정화와 체감 성능 개선을 동시에 노렸습니다.
 - 정상 동작하는 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase 저장/익명 로그인 fallback, 오프닝 video-only, 플레이어 8방향 파일명/flip 금지 정책은 변경하지 않았습니다.
 
+
+## v2.1.134 group 1 dead-code deletion record - 2026-07-02 KST
+
+- 새 `install...Pass()`/`sync...Ui()` 레이어를 추가하지 않고, 기존 dead-code cleanup만 수행했습니다.
+- `v2.1.75 ~ v2.1.110`, `v2.1.117` 그룹 1 함수 37개는 부팅 초기에 활성화된 `v21132ObserverBudgetGovernor` guard로 즉시 return되는 것을 확인했습니다.
+- 그룹 1 함수 내부 헬퍼/상수는 함수 내부 스코프라 그룹 밖 살아있는 함수에서 직접 재사용될 수 없음을 확인했습니다.
+- 함수 정의 37개와 생성자 호출 37줄을 삭제했습니다.
+- 런타임 파일에서 더 이상 참조되지 않는 그룹 1 version-specific CSS selector rule 424개를 삭제했습니다.
+- 그룹 밖 최신 함수가 아직 참조하는 과거 class/data token, 생성자 root marker와 연결될 수 있는 selector, 공통 UI selector는 안전하지 않아 남겼습니다.
+- `npm run validate` 통과를 확인했습니다.
+- 그룹 2 삭제는 아직 진행하지 않았습니다.
+
 ## 운영/산출 고정 규칙
 
 - 작업 환경: GitHub Desktop 사용 기준.
