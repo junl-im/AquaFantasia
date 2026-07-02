@@ -71645,3 +71645,135 @@ html.v21132-observer-budget-governor-root body[data-screen="fishing"] .combo-bad
     transition: none !important;
   }
 }
+
+/* v2.1.133 single governor ledger: one light UI owner, no style observer loop, no repeated inline layout writes. */
+html.v21133-single-governor-ledger-root {
+  --v21133-nav-right: calc(env(safe-area-inset-right, 0px) + 8px);
+  --v21133-nav-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+  --v21133-nav-width: min(232px, calc(100vw - 18px));
+  --v21133-page-width: min(430px, calc(100vw - 20px));
+  --v21133-combo-bottom: calc(env(safe-area-inset-bottom, 0px) + 102px);
+}
+html.v21133-single-governor-ledger-root :is(.v21122-village-guide-popup,.v21124-village-guide-popup,.v21125-village-guide-popup,.v21126-village-guide-popup,.v21128-village-guide-popup,.v21129-village-guide-popup,.v21130-village-guide-popup,.v21131-village-guide-popup,.v21132-village-guide-popup) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+.v21133-village-guide-popup {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(350px, calc(100vw - 28px)) !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  z-index: 1255 !important;
+  pointer-events: auto !important;
+  animation: none !important;
+  transition: none !important;
+  contain: layout paint style !important;
+}
+.v21133-guide-card {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.5);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(20, 170, 210, .94), rgba(19, 79, 142, .94));
+  color: #fff;
+  box-shadow: 0 24px 60px rgba(0, 34, 70, .34), inset 0 1px 0 rgba(255,255,255,.38);
+  text-align: left;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.v21133-guide-eyebrow { justify-self: start; padding: 4px 8px; border-radius: 999px; background: rgba(255,255,255,.92); color: #075171; font-size: 11px; font-weight: 1000; }
+.v21133-guide-card strong { font-size: 17px; line-height: 1.24; text-shadow: 0 2px 10px rgba(0,0,0,.24); }
+.v21133-guide-card p { margin: 0; color: rgba(239, 252, 255, .92); font-size: 13px; line-height: 1.42; font-weight: 800; }
+.v21133-guide-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.v21133-guide-steps span { min-width: 0; padding: 7px 6px; border-radius: 14px; background: rgba(255,255,255,.15); text-align: center; font-size: 12px; font-weight: 1000; }
+.v21133-guide-actions { display: grid; grid-template-columns: 1fr 1fr auto; gap: 7px; }
+.v21133-guide-actions button { min-height: 38px; border: 0; border-radius: 14px; padding: 0 10px; background: linear-gradient(180deg, #fff8b2, #52e6fb); color: #07405b; font-weight: 1000; box-shadow: inset 0 2px 0 rgba(255,255,255,.5), 0 8px 18px rgba(0,0,0,.2); }
+html.v21133-single-governor-ledger-root body[data-screen]:not([data-screen="fishing"]) :is(.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav).v21133-bottom-nav-final {
+  display: grid !important;
+  position: fixed !important;
+  right: var(--v21133-nav-right) !important;
+  bottom: var(--v21133-nav-bottom) !important;
+  left: auto !important;
+  top: auto !important;
+  width: var(--v21133-nav-width) !important;
+  max-width: calc(100vw - 18px) !important;
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  animation: none !important;
+  transition: none !important;
+  contain: layout paint style !important;
+  will-change: auto !important;
+  z-index: 1196 !important;
+}
+html.v21133-single-governor-ledger-root body[data-screen="fishing"] :is(.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav).v21133-bottom-nav-final { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
+html.v21133-single-governor-ledger-root body[data-screen] .runtime-menu-screen.v21133-runtime-page-final {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-height: var(--v21133-visual-height, 100svh) !important;
+  margin: 0 !important;
+  padding-inline: max(10px, env(safe-area-inset-left, 0px)) max(10px, env(safe-area-inset-right, 0px)) !important;
+  box-sizing: border-box !important;
+  justify-items: center !important;
+  overflow-x: hidden !important;
+}
+html.v21133-single-governor-ledger-root body[data-screen] .v21133-page-column-final {
+  width: var(--v21133-page-width) !important;
+  max-width: var(--v21133-page-width) !important;
+  margin-inline: auto !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  animation: none !important;
+  transition: none !important;
+  overflow-wrap: anywhere !important;
+  word-break: keep-all !important;
+}
+html.v21133-single-governor-ledger-root body[data-screen="village"] .v21133-expedition-final.v2097-expedition-body-open {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(388px, calc(100vw - 22px)) !important;
+  max-height: calc(var(--v21133-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 34px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  animation: none !important;
+  transition: none !important;
+  z-index: 1208 !important;
+  contain: layout paint style !important;
+}
+html.v21133-single-governor-ledger-root body[data-screen="village"] .v21133-village-modal-final { max-width: calc(100vw - 22px) !important; max-height: calc(var(--v21133-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 34px) !important; overflow-x: hidden !important; overflow-y: auto !important; overscroll-behavior: contain !important; box-sizing: border-box !important; animation: none !important; transition: none !important; z-index: 1208 !important; }
+html.v21133-single-governor-ledger-root body[data-screen="fishing"] .fishing-screen.v21133-fishing-focused :is(.v21133-water-budget-final,.v21133-loadout-final),
+body[data-v21133-fishing-phase="bite"] .v21133-water-budget-final,
+body[data-v21133-fishing-phase="reeling"] .v21133-water-budget-final,
+body[data-v21133-fishing-phase="result"] .v21133-water-budget-final,
+body[data-v21133-fishing-phase="success"] .v21133-water-budget-final,
+body[data-v21133-fishing-phase="fail"] .v21133-water-budget-final,
+body[data-v21133-fishing-phase="bite"] .v21133-loadout-final,
+body[data-v21133-fishing-phase="reeling"] .v21133-loadout-final,
+body[data-v21133-fishing-phase="result"] .v21133-loadout-final,
+body[data-v21133-fishing-phase="success"] .v21133-loadout-final,
+body[data-v21133-fishing-phase="fail"] .v21133-loadout-final { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
+html.v21133-single-governor-ledger-root body[data-screen="fishing"] :is(.v21133-water-budget-final,.v21133-loadout-final,.v21133-loadout-child-final,.v21133-combo-final,.v21133-bite-final,.v21133-result-final) { animation: none !important; transition: none !important; will-change: auto !important; }
+html.v21133-single-governor-ledger-root body[data-screen="fishing"] :is(.v21133-bite-final,.v21133-result-final) { position: fixed !important; left: 50% !important; right: auto !important; top: 50% !important; bottom: auto !important; transform: translate3d(-50%, -50%, 0) !important; translate: none !important; scale: 1 !important; contain: layout paint style !important; }
+html.v21133-single-governor-ledger-root body[data-screen="fishing"] .v21133-bite-final { width: min(332px, calc(100vw - 30px)) !important; max-width: calc(100vw - 30px) !important; z-index: 1224 !important; }
+html.v21133-single-governor-ledger-root body[data-screen="fishing"] .v21133-result-final { width: min(356px, calc(100vw - 28px)) !important; max-width: calc(100vw - 28px) !important; max-height: calc(var(--v21133-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 32px) !important; overflow-x: hidden !important; overflow-y: auto !important; overscroll-behavior: contain !important; z-index: 1234 !important; }
+html.v21133-single-governor-ledger-root body[data-screen="fishing"] .combo-badge.v21133-combo-final:not(.hidden) { position: fixed !important; left: 50% !important; bottom: var(--v21133-combo-bottom) !important; transform: translate3d(-50%, 0, 0) !important; z-index: 1214 !important; }
+@media (max-width: 370px), (max-height: 650px) {
+  html.v21133-single-governor-ledger-root {
+    --v21133-nav-width: min(214px, calc(100vw - 14px));
+    --v21133-page-width: min(420px, calc(100vw - 16px));
+    --v21133-combo-bottom: calc(env(safe-area-inset-bottom, 0px) + 88px);
+  }
+  html.v21133-single-governor-ledger-root body[data-screen] :is(.v21133-village-guide-popup,.v21133-expedition-final,.v21133-village-modal-final,.v21133-bite-final,.v21133-result-final) { max-width: calc(100vw - 16px) !important; }
+}

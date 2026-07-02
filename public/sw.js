@@ -1,5 +1,5 @@
-// v2.1.132 observer budget governor: mute legacy observer loops before they install and keep direct UI anchors light.
-const CACHE_NAME = 'aqua-fantasia-v2.1.132-observer-budget-governor';
+// v2.1.133 single governor ledger: keep legacy observer mutes, move latest UI ownership to one light sync, and avoid style observer loops.
+const CACHE_NAME = 'aqua-fantasia-v2.1.133-single-governor-ledger';
 const CORE_ASSETS = [
   './',
   './index.html',

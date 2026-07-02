@@ -1,3 +1,61 @@
+# AquaFantasia v2.1.133
+
+## v2.1.133 변경사항
+
+- 새 패스 `installV21133SingleGovernorLedgerPass()`와 `syncV21133SingleGovernorLedgerUi()`를 추가했습니다.
+- v2.1.132는 오래된 observer mute 호환성을 유지하되, 최신 UI 소유권은 v2.1.133 single governor ledger로 handoff합니다.
+- v2.1.133 최신 패스는 `style` 속성 MutationObserver를 사용하지 않습니다. `class`, `data-screen`, `data-fishing-phase`, `aria-hidden`, childList, visualViewport 변화만 감시합니다.
+- 동일 화면/낚시 phase/가이드 상태/모달 상태/viewport signature가 변하지 않으면 sync를 건너뛰어, 반복 DOM 감시와 불필요한 layout write 부담을 줄였습니다.
+- `v21132MutedLegacyObservers`에 누적된 예전 observer mute 목록을 계량해 `dataset.v21133MutedLegacyObserverCount`와 `dataset.v21133ObserverBudget`으로 남깁니다. 다음 AI가 코드 꼬임과 예전 보정 코드 생존 여부를 바로 확인할 수 있습니다.
+- 첫 마을 중앙 가이드, 우측 하단 메뉴바, 상점/가방/퀘스트/지도/도감 중앙 정렬, 개척 팝업, 낚시 물길/낚싯대/미끼/연속 성공/물었다/결과창을 `v21133` 단일 기준 토큰으로 다시 묶었습니다.
+- 낚시 집중 단계에서는 물길/수중효과/장비 strip 숨김 기준을 유지하고, `물었다!`와 성공 결과창은 중앙 fixed 기준을 유지합니다.
+- 신규 검증 스크립트 `tools/check-v21133-single-governor-ledger.mjs`를 추가해 버전, 캐시, v2.1.132 handoff, no-style-observer 정책, single governor ledger 토큰, 문서 계약, zip 청결 조건을 확인합니다.
+
+## v2.1.133 분석/인수인계 기록 - 2026-07-01 KST
+
+- 사용자는 UI/UX, 디자인, 코드 꼬임, 예전 보정 코드가 다시 살아나는 문제를 계속 최우선으로 요청했습니다.
+- v2.1.132 full 기준에서 시작했습니다.
+- 실제 원인상 v2.1.132는 오래된 observer 설치를 상당수 막았지만, 최신 v2.1.132 자체도 sync를 계속 실행할 수 있어 다음 패치에서 다시 보정 루프가 쌓이는 구조가 될 수 있었습니다.
+- 이번 v2.1.133은 새로운 강제 inline style 덮어쓰기를 늘리지 않고, 최신 governor 하나가 class/data 토큰과 observer debt ledger를 관리하도록 바꿨습니다.
+- 정상 동작하는 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase 저장/익명 로그인 fallback, 오프닝 video-only, 플레이어 8방향 파일명/flip 금지 정책은 변경하지 않았습니다.
+
+## 운영/산출 고정 규칙
+
+- 작업 환경: GitHub Desktop 사용 기준.
+- Firebase는 무료 플랜 기준입니다. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제는 금지합니다.
+- Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 합니다.
+- 문서 파일은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용합니다. 추가 `.md`, 임시 리포트, 로그 파일은 산출물에 넣지 않습니다.
+- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.133-full.zip`, `AF-v2.1.133-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크입니다.
+
+## 결과 확인 명령
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## zip 내부 점검 명령
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.133-full.zip AF-v2.1.133-patch.zip
+```
+
+# 이전 README 기록
+
 # AquaFantasia v2.1.132
 
 ## v2.1.132 변경사항

@@ -340,9 +340,13 @@ class AquaFantasiaGame {
     document.documentElement.dataset.v21131UiPolicy = 'handoff-to-v21132-observer-budget-governor';
     document.documentElement.classList.add('v21132-observer-budget-governor-root');
     document.documentElement.dataset.v21132ObserverBudgetGovernor = 'active';
-    document.documentElement.dataset.v21132UiPolicy = 'early-boot-mutes-legacy-observers-direct-light-ui-sync';
+    document.documentElement.dataset.v21132UiPolicy = 'handoff-to-v21133-single-governor-ledger';
     document.documentElement.dataset.v21132MutedLegacyObservers = '';
-    // v2.1.32 UI policy: latest observer budget governor owns one light sync; old observer loops are handoff only.
+    document.documentElement.classList.add('v21133-single-governor-ledger-root');
+    document.documentElement.dataset.v21133SingleGovernorLedger = 'active';
+    document.documentElement.dataset.v21133UiPolicy = 'single-light-observer-ledger-no-style-loop-no-extra-layout-write';
+    document.documentElement.dataset.v21133LatestUiOwner = 'direct-source-state-sync-plus-observer-budget-ledger';
+    // v2.1.33 UI policy: v21132 keeps legacy mute compatibility, v21133 owns the single light sync and observer debt ledger.
     // v2.1.30 UI policy: direct source render owns guide/pages/expedition/nav/fishing first frame; old state sync is handoff only.
     document.documentElement.dataset.v2098UiRecovery = 'v2098-dock-fishing-build-recovery';
     document.documentElement.dataset.v218StableRollback = 'v218-stable-ui-fishing-rollback';
@@ -612,6 +616,7 @@ class AquaFantasiaGame {
     this.installV21130DirectSourceRegressionGuardPass();
     this.installV21131StaleObserverQuarantinePass();
     this.installV21132ObserverBudgetGovernorPass();
+    this.installV21133SingleGovernorLedgerPass();
     this.preloadCriticalImages();
     this.installImmersiveRetryHooks();
     this.toast = new ToastManager(dom.toastRoot, (screen) => this.go(screen));
@@ -626,7 +631,7 @@ class AquaFantasiaGame {
 
   private activateV2097UiResetShell(): void {
     const html = document.documentElement;
-    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v218StableRollback', 'v219UiTouchShopFishingAudit', 'v2111AquaShell', 'v2112AquaFoundation', 'v2113AquaCoreSteward', 'v2114InteractionShellPolish', 'v2115AquaScreenShell', 'v2116VillageAssetPolish', 'v2117LayoutInputFishing', 'v2118CharacterWaterUi', 'v2119OpeningExitCharacterUi', 'v2120OpeningVideoDirectionUi', 'v2121UiContinuityPolish', 'v2122RouteDirectionUi', 'v2123StabilityPolish', 'v2124StabilityPerformance', 'v2125OpeningDirectionMotionUi', 'v2127DirectionMotionUiAudit', 'v2128DirectionUiFishingCorrection', 'v2129PlayerFilenameDirection', 'v2130ConstructionFishingUi', 'v2131MotionUiFishingBuildGuard', 'v2132PremiumUiFishingStability', 'v2133PremiumUiEngineFishingStability', 'v2143UiOverlapPlacementSweep', 'v2144UiPlacementPolishSweep', 'v2145IconFishingPagePolish', 'v2146UiOverlapIconFishingPolish', 'v2147UiOverlapLayoutFishingPolish', 'v2148UiOverlapLayoutSweep', 'v2149UiCompositionPolish', 'v2150UiOverlapPlacementBeauty', 'v2161FishingBiteDexSystem', 'v21117VillageMenuIconClarity', 'v21118UiAssetContainment', 'v21119InteractionSafety', 'v21120ScreenCompositionHandoff', 'v21121MicroUiA11yPerf', 'v21122SystemUxPerformance', 'v21123RuntimeDeconflict', 'v21124RootCauseUxRepair', 'v21125LegacyDebtReducer', 'v21126StaleCodePruner', 'v21128DirectSourceUiRepair', 'v21129DirectStateUi', 'v21130DirectSourceRegressionGuard', 'v21131StaleObserverQuarantine', 'v21132ObserverBudgetGovernor']);
+    const keep = new Set(['version', 'cacheName', 'initialOrientation', 'orientationPolicy', 'v2097UiReset', 'v2098UiRecovery', 'v218StableRollback', 'v219UiTouchShopFishingAudit', 'v2111AquaShell', 'v2112AquaFoundation', 'v2113AquaCoreSteward', 'v2114InteractionShellPolish', 'v2115AquaScreenShell', 'v2116VillageAssetPolish', 'v2117LayoutInputFishing', 'v2118CharacterWaterUi', 'v2119OpeningExitCharacterUi', 'v2120OpeningVideoDirectionUi', 'v2121UiContinuityPolish', 'v2122RouteDirectionUi', 'v2123StabilityPolish', 'v2124StabilityPerformance', 'v2125OpeningDirectionMotionUi', 'v2127DirectionMotionUiAudit', 'v2128DirectionUiFishingCorrection', 'v2129PlayerFilenameDirection', 'v2130ConstructionFishingUi', 'v2131MotionUiFishingBuildGuard', 'v2132PremiumUiFishingStability', 'v2133PremiumUiEngineFishingStability', 'v2143UiOverlapPlacementSweep', 'v2144UiPlacementPolishSweep', 'v2145IconFishingPagePolish', 'v2146UiOverlapIconFishingPolish', 'v2147UiOverlapLayoutFishingPolish', 'v2148UiOverlapLayoutSweep', 'v2149UiCompositionPolish', 'v2150UiOverlapPlacementBeauty', 'v2161FishingBiteDexSystem', 'v21117VillageMenuIconClarity', 'v21118UiAssetContainment', 'v21119InteractionSafety', 'v21120ScreenCompositionHandoff', 'v21121MicroUiA11yPerf', 'v21122SystemUxPerformance', 'v21123RuntimeDeconflict', 'v21124RootCauseUxRepair', 'v21125LegacyDebtReducer', 'v21126StaleCodePruner', 'v21128DirectSourceUiRepair', 'v21129DirectStateUi', 'v21130DirectSourceRegressionGuard', 'v21131StaleObserverQuarantine', 'v21132ObserverBudgetGovernor', 'v21133SingleGovernorLedger', 'v21133UiPolicy', 'v21133LatestUiOwner']);
     for (const key of Object.keys(html.dataset)) {
       if (keep.has(key)) continue;
       const value = html.dataset[key] ?? '';
@@ -706,6 +711,7 @@ class AquaFantasiaGame {
     this.syncV21130DirectSourceUi(`go-${screen}`);
     this.syncV21131StaleObserverQuarantineUi(`go-${screen}`);
     this.syncV21132ObserverBudgetGovernorUi(`go-${screen}`);
+    this.syncV21133SingleGovernorLedgerUi(`go-${screen}`);
   }
 
   private async startGame(linkServer = false): Promise<void> {
@@ -721,6 +727,7 @@ class AquaFantasiaGame {
     this.syncV21130DirectSourceUi('start-game-village');
     this.syncV21131StaleObserverQuarantineUi('start-game-village');
     this.syncV21132ObserverBudgetGovernorUi('start-game-village');
+    this.syncV21133SingleGovernorLedgerUi('start-game-village');
     void this.enterImmersiveMode().catch(() => undefined);
     if (linkServer) {
       void tryAnonymousServerLink(this.save).then((result) => {
@@ -9241,6 +9248,10 @@ class AquaFantasiaGame {
     }
   }
   private installV21132ObserverBudgetGovernorPass(): void {
+    if (document.documentElement.dataset.v21133SingleGovernorLedger === 'active') {
+      document.documentElement.dataset.v21132UiPolicy = 'handoff-to-v21133-single-governor-ledger';
+      return;
+    }
     const html = document.documentElement;
     html.classList.add('v21132-observer-budget-governor-root');
     html.dataset.v21132ObserverBudgetGovernor = 'active';
@@ -9461,6 +9472,146 @@ class AquaFantasiaGame {
         node.classList.add('v21132-result-final');
         set(node, [['position', 'fixed'], ['left', '50%'], ['right', 'auto'], ['top', '50%'], ['bottom', 'auto'], ['width', 'min(356px, calc(100vw - 28px))'], ['max-width', 'calc(100vw - 28px)'], ['max-height', 'calc(var(--v21132-visual-height, 100svh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 32px)'], ['overflow-x', 'hidden'], ['overflow-y', 'auto'], ['overscroll-behavior', 'contain'], ['transform', 'translate3d(-50%, -50%, 0)'], ['translate', 'none'], ['scale', '1'], ['animation', 'none'], ['transition', 'none'], ['z-index', '1230'], ['contain', 'layout paint style']]);
       });
+    }
+  }
+
+  private installV21133SingleGovernorLedgerPass(): void {
+    const html = document.documentElement;
+    html.classList.add('v21133-single-governor-ledger-root');
+    html.dataset.v21133SingleGovernorLedger = 'active';
+    html.dataset.v21133UiPolicy = 'single-light-observer-ledger-no-style-loop-no-extra-layout-write';
+    html.dataset.v21133LatestUiOwner = 'direct-source-state-sync-plus-observer-budget-ledger';
+    html.dataset.v21132UiPolicy = 'handoff-to-v21133-single-governor-ledger';
+    let raf = 0;
+    let lastSignature = '';
+    const schedule = (reason: string) => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        const screen = document.body.dataset.screen || this.screen || 'unknown';
+        const phase = document.body.dataset.fishingPhase || dom.app.querySelector<HTMLElement>('.fishing-screen')?.dataset.fishingPhase || 'idle';
+        const guide = (() => { try { return localStorage.getItem('aqua-v21133-guide-dismissed') === '1' ? 'dismissed' : 'openable'; } catch { return 'openable'; } })();
+        const modal = document.body.classList.contains('v2097-expedition-open') || document.body.classList.contains('v2097-build-open') ? 'modal' : 'clear';
+        const signature = `${screen}|${phase}|${guide}|${modal}|${Math.round((window.visualViewport?.width ?? window.innerWidth) / 8)}x${Math.round((window.visualViewport?.height ?? window.innerHeight) / 8)}`;
+        if (signature === lastSignature && reason !== 'install') {
+          html.dataset.v21133LastSkippedReason = reason;
+          return;
+        }
+        lastSignature = signature;
+        this.syncV21133SingleGovernorLedgerUi(reason);
+      });
+    };
+    const observer = new MutationObserver((records) => {
+      for (const record of records) {
+        if (record.type === 'attributes' && record.attributeName === 'style') continue;
+        schedule(record.type === 'childList' ? 'child-list' : `attr-${record.attributeName ?? 'unknown'}`);
+        break;
+      }
+    });
+    observer.observe(dom.app, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'data-screen', 'data-fishing-phase', 'aria-hidden'] });
+    window.visualViewport?.addEventListener('resize', () => schedule('visual-viewport-resize'), { passive: true });
+    window.visualViewport?.addEventListener('scroll', () => schedule('visual-viewport-scroll'), { passive: true });
+    window.addEventListener('resize', () => schedule('window-resize'), { passive: true });
+    schedule('install');
+  }
+
+  private syncV21133SingleGovernorLedgerUi(reason = 'manual'): void {
+    const html = document.documentElement;
+    const viewport = window.visualViewport;
+    const vw = Math.max(1, Math.floor(viewport?.width ?? window.innerWidth));
+    const vh = Math.max(1, Math.floor(viewport?.height ?? window.innerHeight));
+    const screen = document.body.dataset.screen || this.screen || 'unknown';
+    html.classList.add('v21133-single-governor-ledger-root');
+    html.dataset.v21133SingleGovernorLedger = 'active';
+    html.dataset.v21133LastSyncReason = reason;
+    html.dataset.v21133LatestUiOwner = 'direct-source-state-sync-plus-observer-budget-ledger';
+    html.style.setProperty('--v21133-visual-width', `${vw}px`);
+    html.style.setProperty('--v21133-visual-height', `${vh}px`);
+    html.style.setProperty('--v21133-nav-right', 'calc(env(safe-area-inset-right, 0px) + 8px)');
+    html.style.setProperty('--v21133-nav-bottom', 'calc(env(safe-area-inset-bottom, 0px) + 8px)');
+    html.style.setProperty('--v21133-page-width', 'min(430px, calc(100vw - 20px))');
+    html.style.setProperty('--v21133-combo-bottom', 'calc(env(safe-area-inset-bottom, 0px) + 102px)');
+
+    const muted = (html.dataset.v21132MutedLegacyObservers || '').split('|').filter(Boolean);
+    html.dataset.v21133MutedLegacyObserverCount = String(new Set(muted).size);
+    html.dataset.v21133ObserverBudget = 'v21132-legacy-mutes-plus-v21133-single-light-sync';
+    document.body.dataset.v21133Screen = screen;
+
+    dom.app.querySelectorAll<HTMLElement>('.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav').forEach((nav) => {
+      nav.classList.add('v21133-bottom-nav-final');
+      nav.dataset.v21133Owner = screen === 'fishing' ? 'hidden-on-fishing' : 'same-right-bottom-anchor';
+      nav.dataset.noSwipe = 'true';
+    });
+
+    dom.app.querySelectorAll<HTMLElement>('.runtime-menu-screen').forEach((root) => {
+      root.classList.add('v21133-runtime-page-final');
+      root.dataset.v21133Owner = 'centered-page-root';
+    });
+    dom.app.querySelectorAll<HTMLElement>('.runtime-hud,.runtime-content,.runtime-card-list,.runtime-panel,.runtime-hero-card,.shop-list,.mission-list,.dex-grid,.inventory-grid,.gear-grid,.map-card,.v204-map-shell,.v204-inventory-shell,.v204-quest-board').forEach((node) => {
+      node.classList.add('v21133-page-column-final');
+      node.dataset.v21133Owner = 'centered-page-column';
+    });
+
+    const village = dom.app.querySelector<HTMLElement>('.village-world-screen');
+    if (village) {
+      village.classList.add('v21133-village-final');
+      village.dataset.v21133Owner = 'village-guide-expedition-nav-ledger';
+      village.querySelectorAll('.v21122-village-guide-popup,.v21124-village-guide-popup,.v21125-village-guide-popup,.v21126-village-guide-popup,.v21128-village-guide-popup,.v21129-village-guide-popup,.v21130-village-guide-popup,.v21131-village-guide-popup,.v21132-village-guide-popup').forEach((node) => node.remove());
+      const modalOpen = Boolean(village.querySelector('.v2097-expedition-body-open,.v2130-build-confirm-card,.v2097-build-tray')) || document.body.classList.contains('v2097-expedition-open') || document.body.classList.contains('v2097-build-open');
+      const openingActive = Boolean(village.querySelector('.v2199-opening-cinematic,.v2192-opening-cinematic'));
+      const dismissed = (() => { try { return localStorage.getItem('aqua-v21133-guide-dismissed') === '1'; } catch { return false; } })();
+      if (screen === 'village' && !dismissed && !modalOpen && !openingActive) {
+        let guide = village.querySelector<HTMLElement>('.v21133-village-guide-popup');
+        if (!guide) {
+          guide = document.createElement('section');
+          guide.className = 'v21133-village-guide-popup';
+          guide.dataset.noSwipe = 'true';
+          guide.dataset.v21133Owner = 'first-village-guided-route';
+          guide.setAttribute('role', 'dialog');
+          guide.setAttribute('aria-live', 'polite');
+          guide.setAttribute('aria-label', '처음 마을 추천 진행 가이드');
+          guide.innerHTML = `<div class="v21133-guide-card"><span class="v21133-guide-eyebrow">처음 할 일</span><strong>낚시로 골드를 모으고 개척 목표를 확인해요</strong><p>낚시 → 가방·퀘스트 확인 → 개척 순서로 진행하면 초반 목표가 자연스럽게 이어집니다.</p><div class="v21133-guide-steps"><span>1 낚시</span><span>2 보상 확인</span><span>3 개척</span></div><div class="v21133-guide-actions"><button type="button" data-v21133-guide-fishing>낚시 가기</button><button type="button" data-v21133-guide-expedition>개척 보기</button><button type="button" data-v21133-guide-dismiss>닫기</button></div></div>`;
+          guide.querySelector<HTMLButtonElement>('[data-v21133-guide-fishing]')?.addEventListener('click', () => { try { localStorage.setItem('aqua-v21133-guide-dismissed', '1'); } catch { /* ignore */ } void this.go('fishing' as Screen); });
+          guide.querySelector<HTMLButtonElement>('[data-v21133-guide-expedition]')?.addEventListener('click', () => { village.querySelector<HTMLButtonElement>('[data-v2097-expedition-toggle]')?.click(); this.syncV21133SingleGovernorLedgerUi('guide-expedition'); });
+          guide.querySelector<HTMLButtonElement>('[data-v21133-guide-dismiss]')?.addEventListener('click', () => { try { localStorage.setItem('aqua-v21133-guide-dismissed', '1'); } catch { /* ignore */ } guide?.remove(); });
+          village.appendChild(guide);
+        }
+      } else {
+        village.querySelectorAll('.v21133-village-guide-popup').forEach((node) => node.remove());
+      }
+      village.querySelectorAll<HTMLElement>('.v2097-expedition-body,.v2097-expedition-body-open,.v2097-expedition-board').forEach((node) => {
+        node.classList.add('v21133-expedition-final');
+        node.dataset.v21133Owner = 'expedition-full-visible-safe-scroll';
+        node.dataset.noSwipe = 'true';
+      });
+      village.querySelectorAll<HTMLElement>('.v2130-build-confirm-card,.v2097-build-tray').forEach((node) => {
+        node.classList.add('v21133-village-modal-final');
+        node.dataset.v21133Owner = 'village-modal-safe-scroll';
+        node.dataset.noSwipe = 'true';
+      });
+    }
+
+    const fishing = dom.app.querySelector<HTMLElement>('.fishing-screen');
+    if (fishing && screen === 'fishing') {
+      const raw = fishing.dataset.fishingPhase || document.body.dataset.fishingPhase || (this.state as string) || 'idle';
+      const phase = fishing.querySelector<HTMLElement>('.catch-result-card:not(.hidden)') ? 'result' : fishing.querySelector<HTMLElement>('.bite-callout:not(.hidden)') ? 'bite' : raw;
+      const focused = /bite|reeling|result|success|fail/i.test(phase);
+      fishing.classList.add('v21133-fishing-final-screen');
+      fishing.classList.toggle('v21133-fishing-focused', focused);
+      fishing.dataset.v21133FishingPhase = phase;
+      document.body.dataset.v21133FishingPhase = phase;
+      fishing.querySelectorAll<HTMLElement>('.water-overlay,.caustic-overlay,.fishing-3d-ambient,.underwater-webgl-host,.v3d-caustics,.v3d-bubbles,.v3d-depth-fog,[class*="sea-lane-card"],.v21124-sea-lane-owned,.v21128-sea-lane-final,.v21130-sea-lane-final,.v21132-sea-lane-final').forEach((node) => {
+        node.classList.add('v21133-water-budget-final');
+        node.dataset.v21133Owner = focused ? 'hidden-during-focus-phase' : 'idle-only-water-effect-budget';
+      });
+      fishing.querySelectorAll<HTMLElement>('.fishing-loadout-strip').forEach((node) => {
+        node.classList.add('v21133-loadout-final');
+        node.dataset.v21133Owner = focused ? 'hidden-during-focus-phase' : 'stable-loadout-no-scale';
+        node.querySelectorAll<HTMLElement>('*').forEach((child) => child.classList.add('v21133-loadout-child-final'));
+      });
+      fishing.querySelectorAll<HTMLElement>('.combo-badge').forEach((node) => { node.classList.add('v21133-combo-final'); node.dataset.v21133Owner = 'near-cast-button-gap'; });
+      fishing.querySelectorAll<HTMLElement>('.bite-callout').forEach((node) => { node.classList.add('v21133-bite-final'); node.dataset.v21133Owner = 'center-fixed-no-top-jump'; });
+      fishing.querySelectorAll<HTMLElement>('.catch-result-card').forEach((node) => { node.classList.add('v21133-result-final'); node.dataset.v21133Owner = 'center-fixed-no-water-flicker'; });
     }
   }
 

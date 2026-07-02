@@ -1,5 +1,85 @@
 # AI_HANDOFF_CARDVILLE
 
+- 기준 패키지 버전: `2.1.133`
+- 현재 작업 기준: `v2.1.133`
+- 작업 환경: GitHub Desktop, Firebase 무료 플랜, 로컬 저장 fallback 유지.
+- 필수 산출물: `AF-v2.1.133-full.zip`, `AF-v2.1.133-patch.zip`.
+- 문서 파일 제한: 산출물 안의 `.md`는 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 허용.
+
+## 작업중인 내용
+
+- 현재 작업 기준은 `v2.1.133 single governor ledger` 패치다.
+- 목표는 사용자가 반복 요청한 UI/UX 흔들림, 체감 랙, 코드 꼬임, 예전 보정 코드가 계속 살아나는 문제를 줄이는 것이다.
+- 핵심 원칙: `style` observer loop와 반복 inline style 덮어쓰기를 늘리지 않고, v2.1.132 legacy mute 호환 위에 v2.1.133 단일 경량 governor를 둔다.
+- 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 오프닝 video-only, 플레이어 8방향 파일명/flip 금지는 변경하지 않는다.
+
+## 기록
+
+### v2.1.133 single governor ledger 패치 기록
+
+- v2.1.132 full 기준에서 시작했다.
+- 새 패스 `installV21133SingleGovernorLedgerPass()`와 `syncV21133SingleGovernorLedgerUi()`를 추가했다.
+- 부팅 초기에 `v21133-single-governor-ledger-root`, `dataset.v21133SingleGovernorLedger = active`, `dataset.v21133UiPolicy = single-light-observer-ledger-no-style-loop-no-extra-layout-write`를 기록한다.
+- v2.1.132는 `handoff-to-v21133-single-governor-ledger` 상태가 되며 최신 UI sync 소유권은 v2.1.133이 가진다. 단, v2.1.132의 legacy observer mute 신호는 유지해 오래된 observer guard가 계속 동작하도록 했다.
+- v2.1.133 최신 패스는 `style` 속성 MutationObserver를 설치하지 않는다. class, data-screen, data-fishing-phase, aria-hidden, childList, visualViewport 변화만 감시한다.
+- 동일 화면/phase/가이드/모달/viewport signature가 변하지 않으면 sync를 건너뛰어 반복 보정으로 인한 랙과 깜박임 체감을 줄인다.
+- `v21132MutedLegacyObservers`를 집계해 `v21133MutedLegacyObserverCount`, `v21133ObserverBudget`으로 남긴다. 다음 AI는 이 값으로 예전 보정 코드 mute 상태를 빠르게 확인할 수 있다.
+- 초반 마을 가이드, 하단 메뉴, 상점/가방/퀘스트/지도/도감/장비/랭킹 중앙 정렬, 개척 팝업, 건설 모달, 낚시 물길/장비/연속성공/물었다/결과창을 `v21133-*` 단일 governor 기준으로 다시 묶었다.
+- 첫 마을 가이드는 새 저장 키 `aqua-v21133-guide-dismissed`를 사용하고, 기존 v21122/v21124/v21125/v21126/v21128/v21129/v21130/v21131/v21132 가이드 DOM은 제거한다.
+- 낚시 `bite/reeling/result/success/fail` 집중 단계에서는 물길/수중효과/장비 strip 숨김 기준을 유지한다.
+- `README.md`, `AI_HANDOFF_CARDVILLE.md`, `public/offline.html`, `public/sw.js`, `src/data.ts`, `package.json`, `package-lock.json`을 v2.1.133 기준으로 동기화했다.
+- 신규 검증 스크립트 `tools/check-v21133-single-governor-ledger.mjs`를 추가했다.
+
+## 다음 업데이트 예상 내역
+
+- 실제 모바일에서 v2.1.133 이후 observer debt count가 안정적으로 유지되는지 확인한다.
+- 첫 마을 중앙 가이드가 오프닝 이후 즉시 뜨는지 확인한다.
+- 개척 팝업이 반절만 보이지 않고 중앙 fixed + 내부 스크롤로 유지되는지 확인한다.
+- 상점/가방/퀘스트/지도/도감 페이지 우측 쏠림을 캡처 기준으로 확인한다.
+- 낚시 중 물길 바, 낚싯대/미끼 strip, `물었다!`, 성공 결과창 깜박임을 재검수한다.
+- 체감 랙이 남으면 다음 패치에서 `RuntimeQualityManager`, Pixi ticker, DOM/WebGL effect budget을 직접 줄인다.
+- 오래된 observer 패스 실제 삭제는 GitHub Actions와 모바일 실기기 검증 후 단계적으로 판단한다.
+- Firebase/Pixi/Vite minor 업데이트는 GitHub Actions에서 `npm ci`, `typecheck`, `build` 통과 후만 검토한다. Firebase 무료 플랜과 로컬 fallback은 유지한다.
+
+## 필수 결과 확인 명령
+
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## 산출물 zip 점검 명령
+
+```bash
+python3 - <<'PY'
+import zipfile, sys
+for zpath in sys.argv[1:]:
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+    md = [n for n in names if n.lower().endswith('.md')]
+    banned = [n for n in names if '.git/' in n or 'node_modules/' in n or 'dist/' in n or 'reports/' in n or n.endswith('.log') or n.lower().endswith(('.svg', '.svgz'))]
+    print(zpath)
+    print('markdown:', md)
+    print('banned:', banned[:20], 'count=', len(banned))
+PY AF-v2.1.133-full.zip AF-v2.1.133-patch.zip
+```
+
+## 고정 작업환경/산출 규칙
+
+- GitHub Desktop 사용 기준.
+- Firebase는 무료 플랜 기준. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제 금지.
+- Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 한다.
+- 문서 기록은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용한다. 추가 `.md`, 임시 리포트, 로그 파일을 산출물에 넣지 않는다.
+- 결과물은 항상 두 개다: `AF-v2.1.133-full.zip`, `AF-v2.1.133-patch.zip`.
+- 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크.
+
+# 이전 인수인계 기록
+
+# AI_HANDOFF_CARDVILLE
+
 - 기준 패키지 버전: `2.1.132`
 - 현재 작업 기준: `v2.1.132`
 - 작업 환경: GitHub Desktop, Firebase 무료 플랜, 로컬 저장 fallback 유지.
