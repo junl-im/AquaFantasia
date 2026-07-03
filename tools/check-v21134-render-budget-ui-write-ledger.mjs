@@ -71,13 +71,21 @@ must(main.includes("if (this.state === 'bite') {\n        ev.preventDefault();\n
 must(main.includes("window.addEventListener('pointerup', hardStopReelInput") && main.includes("window.addEventListener('touchend', hardStopReelInput"), 'group 7 global reel input release guard missing');
 must(main.includes('stopFallbackInput') && main.includes("this.reelMode = 'neutral'; this.updateTensionUI();"), 'group 7 fallback reel release reset missing');
 must(css.includes('g7 targeted repair') && css.includes('.fishing-top-sea-lane') && css.includes('.fishing-top-loadout'), 'group 7 fishing top CSS missing');
+
+// group 8 targeted repair checks: existing menu/fishing owners only, no new pass.
+for (const screen of ['map', 'inventory', 'dex', 'shop', 'mission']) {
+  must(!main.includes(`this.mountBottomNav(root, '${screen}')`), `group 8 ${screen} bottom nav call must be removed`);
+}
+must(main.includes("root.dataset.noBottomNav = 'close-button-navigation-only'") && main.includes("btn.classList.add('is-pressing')"), 'group 8 menu close-only/press feedback source missing');
+must(css.includes('g8 targeted repair') && css.includes('data-no-bottom-nav="close-button-navigation-only"') && css.includes('.v2098-nav-item:is(:active,.is-pressing)'), 'group 8 page/nav feedback CSS missing');
+must(css.includes('grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)') && css.includes('> div:nth-child(n+3)') && main.includes('fishingSlotBait'), 'group 8 two-column loadout CSS/source missing');
 must(css.includes('legacy-bite-action-merged-hidden') && css.includes('물었다! '), 'group 7 single bite prompt CSS missing');
 must(css.includes('bottom: calc(env(safe-area-inset-bottom, 0px) + 26px)') && css.includes('bottom: calc(env(safe-area-inset-bottom, 0px) + 84px)'), 'group 7 reel button vertical adjustment missing');
 must(css.includes('padding-left: max(14px, env(safe-area-inset-left, 0px))') && css.includes('width: min(420px, calc(100vw - 28px))'), 'group 7 symmetric menu panel CSS missing');
 
-const handoffTokens = ['기준 패키지 버전: `2.1.134`','현재 작업 기준: `v2.1.134`','v2.1.134 render budget ui write ledger 패치 기록','## 작업중인 내용','## 기록','## 다음 업데이트 예상 내역','## 필수 결과 확인 명령','GitHub Desktop','Firebase 무료 플랜','npm run validate','npm run ci:registry:check','npm run ci:install','npm run typecheck','npm run build','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','코드 꼬임','예전 보정 코드','render budget','UI write budget','그룹 2 삭제','group 4','group 5','group 6','invalid selector','guide selector','인트로 영상','legacy ready gate','hard exit','openingExitCompleted','초반 마을 가이드','개척 팝업','물길','낚싯대','물었다','group 7','릴링 시작','찌 감기','좌우 여백','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip'];
+const handoffTokens = ['기준 패키지 버전: `2.1.134`','현재 작업 기준: `v2.1.134`','v2.1.134 render budget ui write ledger 패치 기록','## 작업중인 내용','## 기록','## 다음 업데이트 예상 내역','## 필수 결과 확인 명령','GitHub Desktop','Firebase 무료 플랜','npm run validate','npm run ci:registry:check','npm run ci:install','npm run typecheck','npm run build','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','코드 꼬임','예전 보정 코드','render budget','UI write budget','그룹 2 삭제','group 4','group 5','group 6','invalid selector','guide selector','인트로 영상','legacy ready gate','hard exit','openingExitCompleted','초반 마을 가이드','개척 팝업','물길','낚싯대','물었다','group 7','릴링 시작','찌 감기','좌우 여백','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','group 8','하단 메뉴','클릭 피드백','반반 정렬','AF-v2.1.134-g8-full.zip','AF-v2.1.134-g8-patch.zip'];
 for (const token of handoffTokens) must(handoff.includes(token), `handoff missing token: ${token}`);
-for (const token of ['AquaFantasia v2.1.134','운영/산출 고정 규칙','결과 공유 형식','GitHub Desktop','Firebase 무료 플랜','zip 내부 점검 명령','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','render budget ui write ledger','그룹 2 삭제','group 4','group 5','group 6','invalid selector','guide selector','인트로 영상','legacy ready gate','hard exit','openingExitCompleted','group 7','릴링 시작','찌 감기','좌우 여백','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip']) must(readme.includes(token), `README missing operating token: ${token}`);
+for (const token of ['AquaFantasia v2.1.134','운영/산출 고정 규칙','결과 공유 형식','GitHub Desktop','Firebase 무료 플랜','zip 내부 점검 명령','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','render budget ui write ledger','그룹 2 삭제','group 4','group 5','group 6','invalid selector','guide selector','인트로 영상','legacy ready gate','hard exit','openingExitCompleted','group 7','릴링 시작','찌 감기','좌우 여백','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','group 8','하단 메뉴','클릭 피드백','반반 정렬','AF-v2.1.134-g8-full.zip','AF-v2.1.134-g8-patch.zip']) must(readme.includes(token), `README missing operating token: ${token}`);
 
 const mdFiles = [];
 const walk = (dir) => {

@@ -1,3 +1,29 @@
+# AquaFantasia AI Handoff - v2.1.134-g8
+
+## 작업중인 내용
+- 기준: `AF-v2.1.134-g7-full.zip` 이후 group 8 targeted layout/navigation patch.
+- 범위: 상점/가방/퀘스트/지도/도감 패널 좌우 여백 균형, 해당 화면 하단 메뉴 제거, 남는 하단 메뉴 클릭 피드백, 낚시 상단 낚싯대/미끼 반반 정렬.
+- 새 `install...Pass()` / `sync...Ui()` 함수 추가 없음. 새 보정 레이어 추가 없음.
+
+## 기록
+- 메뉴 패널 문제: g7의 중앙 정렬 후에도 실제 화면에서는 기존 page width와 하단 메뉴 영향이 남아 오른쪽 여백이 좁아 보일 수 있었다. 기존 v2.1.134 page CSS owner 안에서 shop/inventory/mission/map/dex의 page column 폭을 더 보수적으로 줄이고 좌우 safe-area padding을 동일하게 맞췄다.
+- navigation 정책: shop/inventory/mission/map/dex에서는 `this.mountBottomNav(root, ...)` 호출을 삭제했다. 우측 상단 닫기 버튼으로 마을에 돌아온 뒤 메뉴 이동하는 구조로 통합했다.
+- 하단 메뉴 클릭감: 남아 있는 하단 메뉴 버튼에 `is-pressing` class를 pointerdown 동안 붙이고, CSS에서 :active/.is-pressing scale/brightness/inset shadow를 적용했다.
+- 낚시 장비 strip: 낚싯대만 보이고 미끼가 사라져 보이는 문제를 줄이기 위해 기존 `.fishing-top-loadout/.fishing-loadout-strip`을 같은 줄 2열 grid로 강제하고, 두 셀의 이미지/텍스트가 각각 50% 안에서 ellipsis 처리되도록 정리했다.
+- 삭제한 함수 없음. 이번은 기존 로직 자리의 직접 수정이며 그룹 1/그룹 2 삭제 코드는 되살리지 않았다.
+
+## 다음 업데이트 예상 내역
+- 실제 실행에서 상점/가방/퀘스트/지도/도감 좌우 여백이 동일한지 확인.
+- 위 5개 화면에서 하단 메뉴가 나오지 않고 우측 상단 닫기만 남는지 확인.
+- 마을 하단 메뉴를 눌렀을 때 눌림 피드백이 보이는지 확인.
+- 낚시 상단에서 낚싯대/미끼가 같은 줄 반반으로 모두 보이는지 확인.
+
+## 산출물
+- `AF-v2.1.134-g8-full.zip`
+- `AF-v2.1.134-g8-patch.zip`
+
+---
+
 # AquaFantasia AI Handoff - v2.1.134-g7
 
 ## 작업중인 내용

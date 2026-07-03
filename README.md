@@ -1,3 +1,30 @@
+# AquaFantasia v2.1.134-g8
+
+## 운영/산출 고정 규칙
+- GitHub Desktop 사용, Firebase 무료 플랜 유지.
+- 새 `install...Pass()` / `sync...Ui()` 함수 추가 금지. 기존 로직 자리에서 직접 수정.
+- 이번 범위는 상점/가방/퀘스트/지도/도감 패널 좌우 여백, 해당 페이지 하단 메뉴 제거, 메뉴바 클릭 피드백, 낚시 상단 낚싯대/미끼 반반 정렬 복구로 제한.
+- 불필요한 `.md` 파일 생성 금지. 문서는 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 유지.
+- 결과 공유 형식: 작업중인 내용 → 기록 → 다음 업데이트 예상 내역 → full zip → patch zip.
+
+## group 8 변경사항
+- 상점/가방/퀘스트/지도/도감 화면은 우측 여백이 좁아 보이지 않도록 기존 v2.1.134 page owner CSS 안에서 page column 폭을 `min(392px, 100vw - 42px)` 기준으로 더 보수적으로 줄이고 좌우 safe-area padding을 동일하게 맞췄다.
+- 위 5개 화면에서는 `this.mountBottomNav(...)` 호출을 삭제했다. 우측 상단 닫기 버튼으로 마을에 돌아온 뒤 메뉴 이동하는 흐름으로 통합했다.
+- 하단 메뉴가 남는 화면에는 pointer press class와 CSS `:active/.is-pressing` 효과를 추가해 누른 느낌이 보이게 했다.
+- 낚시 본게임 상단 장비 strip은 낚싯대와 미끼가 같은 줄에서 반반 보이도록 2열 grid로 고정하고, 세 번째 이후 잡음 셀은 숨겼다.
+- 미끼 셀이 사라지지 않도록 각 셀의 이미지/텍스트 표시와 ellipsis overflow를 기존 CSS owner 안에서 직접 보강했다.
+
+## zip 내부 점검 명령
+```bash
+npm run validate
+```
+
+## 파일명
+- `AF-v2.1.134-g8-full.zip`
+- `AF-v2.1.134-g8-patch.zip`
+
+---
+
 # AquaFantasia v2.1.134-g7
 
 ## 운영/산출 고정 규칙

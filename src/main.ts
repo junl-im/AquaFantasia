@@ -1705,6 +1705,9 @@ class AquaFantasiaGame {
     root.dataset.v2097UiReset = `direct-source-v2097-${active}-stable`;
     root.dataset.v2098UiRecovery = `v2098-${active}-menu-recovery`;
     root.setAttribute('data-runtime-screen', active);
+    if (['shop', 'inventory', 'mission', 'map', 'dex'].includes(active)) {
+      root.dataset.noBottomNav = 'close-button-navigation-only';
+    }
     root.dataset.v2133UiEngine = `premium-aqua-card-stable-${active}`;
     root.dataset.v2159PremiumAquaPage = `aqua-skin-card-readable-scroll-${active}`;
     root.dataset.v2163PagePolish = `hud-gap-toast-ledger-dex-${active}`;
@@ -2314,8 +2317,12 @@ class AquaFantasiaGame {
         <span>${item.label}</span>
       </button>`).join('');
     nav.querySelectorAll<HTMLButtonElement>('[data-v2098-nav]').forEach((btn) => {
-      btn.addEventListener('pointerdown', (ev) => { ev.stopPropagation(); }, { capture: true });
-      btn.addEventListener('pointerup', (ev) => { ev.stopPropagation(); }, { capture: true });
+      const releasePress = () => btn.classList.remove('is-pressing');
+      btn.addEventListener('pointerdown', (ev) => { ev.stopPropagation(); btn.classList.add('is-pressing'); }, { capture: true });
+      btn.addEventListener('pointerup', (ev) => { ev.stopPropagation(); releasePress(); }, { capture: true });
+      btn.addEventListener('pointercancel', releasePress, { capture: true });
+      btn.addEventListener('pointerleave', releasePress, { capture: true });
+      btn.addEventListener('blur', releasePress);
       btn.addEventListener('click', (ev) => {
         ev.preventDefault();
         ev.stopPropagation();
@@ -3616,7 +3623,6 @@ class AquaFantasiaGame {
       this.renderMap();
     }));
     root.querySelectorAll<HTMLButtonElement>('[data-go-fishing]').forEach((btn) => btn.addEventListener('click', () => { void this.go('fishing'); }));
-    this.mountBottomNav(root, 'map');
   }
 
   private renderGear(): void {
@@ -3703,7 +3709,6 @@ class AquaFantasiaGame {
     root.querySelectorAll<HTMLButtonElement>('[data-go-map]').forEach((btn) => btn.addEventListener('click', () => { void this.go('map'); }));
     root.querySelector<HTMLButtonElement>('[data-go-shop]')?.addEventListener('click', () => { void this.go('shop'); });
     root.querySelector<HTMLButtonElement>('[data-go-mission]')?.addEventListener('click', () => { void this.go('mission'); });
-    this.mountBottomNav(root, 'inventory');
   }
 
   private renderDex(): void {
@@ -3725,7 +3730,6 @@ class AquaFantasiaGame {
       <section class="v2074-dex-growth v204-window-card"><article><strong>${this.save.village.development}</strong><span>마을 발전도</span></article><article><strong>${this.save.village.tourists}</strong><span>관광객</span></article><article><strong>${this.save.village.autoIncome}</strong><span>자동수익</span></article></section><div class="v950-filter-row" aria-label="도감 필터 미리보기"><span>COMMON</span><span>RARE</span><span>EPIC</span><span>BOSS</span></div><section class="dex-grid runtime-dex-grid">${cards}</section>`;
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-fishing]')?.addEventListener('click', () => { void this.go('fishing'); });
-    this.mountBottomNav(root, 'dex');
   }
 
   private renderShop(): void {
@@ -3783,7 +3787,6 @@ class AquaFantasiaGame {
       this.toast.show({ type: 'reward', title: '무료 보상 수령!', message: '50G와 미끼 1개를 받았습니다.', actionScreen: 'shop' });
       this.renderShop();
     });
-    this.mountBottomNav(root, 'shop');
   }
 
   private missionGoals(): Array<{ id: string; category: string; title: string; desc: string; max: number; value: number; reward: number; event?: boolean }> {
@@ -3888,7 +3891,6 @@ class AquaFantasiaGame {
     dom.app.appendChild(root);
     root.querySelector<HTMLButtonElement>('[data-go-map]')?.addEventListener('click', () => { void this.go('map'); });
     root.querySelectorAll<HTMLButtonElement>('[data-mission]').forEach((btn) => btn.addEventListener('click', () => this.tapMissionCard(btn.dataset.mission ?? '')));
-    this.mountBottomNav(root, 'mission');
   }
 
   private renderRanking(): void {
