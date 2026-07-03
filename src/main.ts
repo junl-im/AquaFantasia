@@ -1953,16 +1953,16 @@ class AquaFantasiaGame {
           <div class="v2135-fishing-skill-strip" aria-label="추천 릴 입력"><span>추천</span><strong data-v2135-command>캐스팅 준비</strong><em data-v2135-balance>밸런스 0%</em><i data-v2136-assist>복구 준비</i></div>
         </section>
         <aside class="v2140-fishing-priority-hint v2142-fishing-priority-hint v2143-fishing-priority-hint v2144-fishing-priority-hint v2145-fishing-priority-hint v2146-fishing-priority-hint v2147-fishing-priority-hint v2148-fishing-priority-hint v2149-fishing-priority-hint v2150-fishing-priority-hint v2151-fishing-priority-hint v2152-fishing-priority-hint v2153-fishing-priority-hint v2154-fishing-priority-hint v2155-fishing-priority-hint v2158-fishing-priority-hint v2159-fishing-priority-hint v2161-fishing-priority-hint v2162-fishing-priority-hint v2163-fishing-priority-hint v2167-fishing-priority-hint v2168-fishing-priority-hint v2171-fishing-priority-hint" aria-live="polite"><strong data-v2140-priority-title>낚시 준비</strong><span data-v2140-priority-body>캐스팅 후 입질이 오면 게이지를 먼저 보세요.</span></aside>
-        <button class="v2198-bite-action v2197-bite-action v2142-bite-action v2143-bite-action v2144-bite-action v2145-bite-action v2146-bite-action v2147-bite-action v2148-bite-action v2149-bite-action v2150-bite-action v2151-bite-action v2152-bite-action v2153-bite-action v2154-bite-action v2155-bite-action v2158-bite-action v2159-bite-action v2161-bite-action v2162-bite-action v2167-bite-action v2168-bite-action v2171-bite-action hidden" type="button" data-v2142-bite-action data-v2143-bite-action data-v2144-bite-action data-v2145-bite-action data-v2146-bite-action data-v2147-bite-action data-v2148-bite-action data-v2149-bite-action data-v2150-bite-action data-v2151-bite-action data-v2152-bite-action data-v2153-bite-action data-v2154-bite-action data-v2155-bite-action data-v2158-bite-action data-v2159-bite-action data-v2161-bite-action data-v2162-bite-action aria-label="입질 후 릴링 시작"><strong>릴링 시작</strong><span>입질 신호가 오면 눌러 텐션 게이지로 전환</span></button>
+        <button class="legacy-bite-action-merged-hidden v2198-bite-action v2197-bite-action v2142-bite-action v2143-bite-action v2144-bite-action v2145-bite-action v2146-bite-action v2147-bite-action v2148-bite-action v2149-bite-action v2150-bite-action v2151-bite-action v2152-bite-action v2153-bite-action v2154-bite-action v2155-bite-action v2158-bite-action v2159-bite-action v2161-bite-action v2162-bite-action v2167-bite-action v2168-bite-action v2171-bite-action hidden" type="button" data-v2142-bite-action data-v2143-bite-action data-v2144-bite-action data-v2145-bite-action data-v2146-bite-action data-v2147-bite-action data-v2148-bite-action data-v2149-bite-action data-v2150-bite-action data-v2151-bite-action data-v2152-bite-action data-v2153-bite-action data-v2154-bite-action data-v2155-bite-action data-v2158-bite-action data-v2159-bite-action data-v2161-bite-action data-v2162-bite-action aria-label="입질 후 릴링 시작"><strong>물었다! 릴링 시작</strong><span>중앙 안내 하나로 통합됨</span></button>
       </div>
       <div class="fishing-hud v2135-fishing-hud v2137-fishing-hud v2138-fishing-hud v2139-fishing-hud v2140-fishing-hud v2142-fishing-hud v2143-fishing-hud v2144-fishing-hud v2145-fishing-hud v2146-fishing-hud v2147-fishing-hud v2148-fishing-hud v2149-fishing-hud v2150-fishing-hud v2151-fishing-hud v2152-fishing-hud v2153-fishing-hud v2154-fishing-hud v2155-fishing-hud v2158-fishing-hud v2159-fishing-hud v2160-fishing-hud v2161-fishing-hud v2162-fishing-hud v2163-fishing-hud v2164-fishing-hud v2165-fishing-hud v2167-fishing-hud v2168-fishing-hud v2171-fishing-hud v205-fishing-hud v2028-fishing-hud v2029-fishing-hud v2030-fishing-hud v2031-fishing-hud v2044-fishing-hud v2032-fishing-hud v2033-fishing-hud v2034-fishing-hud v2035-fishing-hud v2036-fishing-hud v2037-fishing-hud v2038-fishing-hud v2039-fishing-hud v2040-fishing-hud v2041-fishing-hud v2043-fishing-hud v2044-fishing-hud v2047-fishing-hud v2048-fishing-hud v2049-fishing-hud v2050-fishing-hud v2131-fishing-hud v2132-fishing-hud" aria-label="플레이어 정보">
         <div class="hud-chip region" data-hud-region><strong>${region.name}</strong><span>${region.tide}</span></div>
         <div class="hud-chip" data-hud-coins><img src="./assets/v92/icons/coin.png" alt="" /><strong>${this.save.coins.toLocaleString('ko-KR')}</strong></div>
         <div class="hud-chip" data-hud-lures><img src="./assets/v205/fishing/slot_bait.png" alt="" /><strong>${this.save.gear.lureStock}</strong></div>
       </div>
-      <aside class="v21129-sea-lane-final v21129-direct-sea-lane v21128-sea-lane-final v21128-direct-sea-lane v21124-sea-lane-owned v2137-sea-lane-card v2138-sea-lane-card v2139-sea-lane-card v2140-sea-lane-card v2142-sea-lane-card v2143-sea-lane-card v2144-sea-lane-card v2145-sea-lane-card v2146-sea-lane-card v2147-sea-lane-card v2148-sea-lane-card v2149-sea-lane-card v2150-sea-lane-card v2151-sea-lane-card v2152-sea-lane-card v2153-sea-lane-card v2154-sea-lane-card v2155-sea-lane-card v2158-sea-lane-card v2159-sea-lane-card v2160-sea-lane-card v2161-sea-lane-card v2162-sea-lane-card v2164-sea-lane-card v2165-sea-lane-card v2166-sea-lane-card v2167-sea-lane-card v2168-sea-lane-card v2171-sea-lane-card v2172-sea-lane-card v2174-sea-lane-card" aria-label="선택 수역 물길 정보"><span>바다물길</span><strong>${region.name}</strong><em>${region.subtitle} · ${region.tide}</em></aside>
+      <aside class="fishing-top-sea-lane v21129-sea-lane-final v21129-direct-sea-lane v21128-sea-lane-final v21128-direct-sea-lane v21124-sea-lane-owned v2137-sea-lane-card v2138-sea-lane-card v2139-sea-lane-card v2140-sea-lane-card v2142-sea-lane-card v2143-sea-lane-card v2144-sea-lane-card v2145-sea-lane-card v2146-sea-lane-card v2147-sea-lane-card v2148-sea-lane-card v2149-sea-lane-card v2150-sea-lane-card v2151-sea-lane-card v2152-sea-lane-card v2153-sea-lane-card v2154-sea-lane-card v2155-sea-lane-card v2158-sea-lane-card v2159-sea-lane-card v2160-sea-lane-card v2161-sea-lane-card v2162-sea-lane-card v2164-sea-lane-card v2165-sea-lane-card v2166-sea-lane-card v2167-sea-lane-card v2168-sea-lane-card v2171-sea-lane-card v2172-sea-lane-card v2174-sea-lane-card" aria-label="선택 수역 물길 정보"><span>바다물길</span><strong>${region.name}</strong><em>${region.subtitle} · ${region.tide}</em></aside>
       <div class="stage-ui v2028-stage-ui"></div><div class="cute-action-layer" aria-hidden="true"></div>
-      <aside class="fishing-loadout-strip v21131-loadout-final v21130-loadout-final v21129-loadout-final v21129-direct-loadout v21128-loadout-final v21128-direct-loadout v21124-loadout-owned v21116-loadout-stable v2199-fishing-loadout v2198-fishing-loadout v2197-fishing-loadout v2196-fishing-loadout v2195-fishing-loadout v2194-fishing-loadout v2137-fishing-loadout v2138-fishing-loadout v2139-fishing-loadout v2140-fishing-loadout v2142-fishing-loadout v2143-fishing-loadout v2144-fishing-loadout v2145-fishing-loadout v2146-fishing-loadout v2147-fishing-loadout v2148-fishing-loadout v2149-fishing-loadout v2150-fishing-loadout v2151-fishing-loadout v2152-fishing-loadout v2153-fishing-loadout v2154-fishing-loadout v2155-fishing-loadout v2158-fishing-loadout v2159-fishing-loadout v2160-fishing-loadout v2161-fishing-loadout v2162-fishing-loadout v2163-fishing-loadout v2164-fishing-loadout v2165-fishing-loadout v2166-fishing-loadout v2167-fishing-loadout v2168-fishing-loadout v2169-fishing-loadout v2170-fishing-loadout v2171-fishing-loadout v2172-fishing-loadout v2174-fishing-loadout" aria-label="낚시 장비">
+      <aside class="fishing-loadout-strip fishing-top-loadout v21131-loadout-final v21130-loadout-final v21129-loadout-final v21129-direct-loadout v21128-loadout-final v21128-direct-loadout v21124-loadout-owned v21116-loadout-stable v2199-fishing-loadout v2198-fishing-loadout v2197-fishing-loadout v2196-fishing-loadout v2195-fishing-loadout v2194-fishing-loadout v2137-fishing-loadout v2138-fishing-loadout v2139-fishing-loadout v2140-fishing-loadout v2142-fishing-loadout v2143-fishing-loadout v2144-fishing-loadout v2145-fishing-loadout v2146-fishing-loadout v2147-fishing-loadout v2148-fishing-loadout v2149-fishing-loadout v2150-fishing-loadout v2151-fishing-loadout v2152-fishing-loadout v2153-fishing-loadout v2154-fishing-loadout v2155-fishing-loadout v2158-fishing-loadout v2159-fishing-loadout v2160-fishing-loadout v2161-fishing-loadout v2162-fishing-loadout v2163-fishing-loadout v2164-fishing-loadout v2165-fishing-loadout v2166-fishing-loadout v2167-fishing-loadout v2168-fishing-loadout v2169-fishing-loadout v2170-fishing-loadout v2171-fishing-loadout v2172-fishing-loadout v2174-fishing-loadout" aria-label="낚시 장비">
         <div class="v21116-loadout-cell v21129-loadout-child-final v21128-loadout-child-final v2199-loadout-cell v2198-loadout-cell v2197-loadout-cell v2196-loadout-cell v2195-loadout-cell v2194-loadout-cell v2193-loadout-cell v2142-loadout-cell v2163-loadout-cell v2164-loadout-cell v2165-loadout-cell v2166-loadout-cell v2167-loadout-cell v2168-loadout-cell v2169-loadout-cell v2170-loadout-cell v2171-loadout-cell v2172-loadout-cell v2174-loadout-cell v2185-loadout-cell v2192-loadout-cell"><img src="${ASSET.fishingSlotRod}" alt="" /><span class="v2199-loadout-copy v2198-loadout-copy v2197-loadout-copy v2196-loadout-copy v2195-loadout-copy v2194-loadout-copy v2193-loadout-copy v2185-loadout-copy v2192-loadout-copy"><strong>낚싯대</strong><em>Lv.${this.save.gear.rodLevel} · 장력 안정</em></span></div>
         <div class="v21116-loadout-cell v21129-loadout-child-final v21128-loadout-child-final v2199-loadout-cell v2198-loadout-cell v2197-loadout-cell v2196-loadout-cell v2195-loadout-cell v2194-loadout-cell v2193-loadout-cell v2142-loadout-cell v2163-loadout-cell v2164-loadout-cell v2165-loadout-cell v2166-loadout-cell v2167-loadout-cell v2168-loadout-cell v2169-loadout-cell v2170-loadout-cell v2171-loadout-cell v2172-loadout-cell v2174-loadout-cell v2185-loadout-cell v2192-loadout-cell"><img src="${ASSET.fishingSlotBait}" alt="" /><span class="v2199-loadout-copy v2198-loadout-copy v2197-loadout-copy v2196-loadout-copy v2195-loadout-copy v2194-loadout-copy v2193-loadout-copy v2185-loadout-copy v2192-loadout-copy"><strong>미끼</strong><em>${this.save.gear.lureStock}개 · 캐스팅 소모</em></span></div>
       </aside>
@@ -2183,13 +2183,16 @@ class AquaFantasiaGame {
     root.addEventListener('pointercancel', hardStopReelInput, { signal: fishingInputSignal });
     const stopAllReelInputs = (ev?: Event) => { endWind(ev); endRelease(ev); stopHold(); stopTouchHold(); };
     window.addEventListener('mouseup', stopAllReelInputs, { passive: false, signal: fishingInputSignal });
+    window.addEventListener('pointerup', hardStopReelInput, { passive: true, signal: fishingInputSignal });
+    window.addEventListener('pointercancel', hardStopReelInput, { passive: true, signal: fishingInputSignal });
+    window.addEventListener('touchend', hardStopReelInput, { passive: true, signal: fishingInputSignal });
+    window.addEventListener('touchcancel', hardStopReelInput, { passive: true, signal: fishingInputSignal });
     root.addEventListener('pointerdown', (ev: PointerEvent) => {
       const target = ev.target as HTMLElement | null;
       if (target?.closest('.bottom-nav, .fishing-hud, .recent-catch-strip, .fishing-loadout-strip, .cast-button, .bite-callout, .v2055-reel-console, .reel-panel, .v2053-reel-touch-zone, .v2054-reel-touch-zone, .hold-pad, .v2057-reel-button, [data-v2143-bite-action], [data-v2144-bite-action], [data-v2145-bite-action], [data-v2146-bite-action], [data-v2147-bite-action], [data-v2148-bite-action], [data-v2149-bite-action], [data-v2150-bite-action], [data-v2151-bite-action], [data-v2152-bite-action], [data-v2153-bite-action], [data-v2154-bite-action], [data-v2158-bite-action], [data-v2159-bite-action], [data-v2161-bite-action], [data-v2162-bite-action]')) return;
       if (this.state === 'bite') {
         ev.preventDefault();
         this.startReeling();
-        setReelInput(true, ev);
         return;
       }
       if (this.state !== 'reeling') return;
@@ -2204,7 +2207,11 @@ class AquaFantasiaGame {
       if (target?.closest('.bottom-nav, .fishing-hud, .recent-catch-strip, .fishing-loadout-strip, .cast-button, .bite-callout, .v2055-reel-console, .reel-panel, .v2053-reel-touch-zone, .v2054-reel-touch-zone, .hold-pad, .v2057-reel-button, [data-v2143-bite-action], [data-v2144-bite-action], [data-v2145-bite-action], [data-v2146-bite-action], [data-v2147-bite-action], [data-v2148-bite-action], [data-v2149-bite-action], [data-v2150-bite-action], [data-v2151-bite-action], [data-v2152-bite-action], [data-v2153-bite-action], [data-v2154-bite-action], [data-v2158-bite-action], [data-v2159-bite-action], [data-v2161-bite-action], [data-v2162-bite-action]')) return;
       const touch = ev.touches.item(0);
       if (!touch) return;
-      if (this.state === 'bite') this.startReeling();
+      if (this.state === 'bite') {
+        ev.preventDefault();
+        this.startReeling();
+        return;
+      }
       if (this.state !== 'reeling') return;
       ev.preventDefault();
       setReelInput(true, touch);
@@ -2549,9 +2556,6 @@ class AquaFantasiaGame {
       if (this.state === 'idle') this.castLine();
       else if (this.state === 'bite') {
         this.startReeling();
-        this.holding = true;
-        this.reelPanel?.classList.add('is-holding');
-        this.stageHost?.classList.add('is-reel-holding');
         this.spawnTouchRing(ev.clientX, ev.clientY);
       } else if (this.state === 'reeling') {
         this.holding = true;
@@ -2559,10 +2563,15 @@ class AquaFantasiaGame {
         this.spawnTouchRing(ev.clientX, ev.clientY);
       }
     });
-    this.stageHost.addEventListener('pointerup', () => { if (this.state === 'reeling') this.holding = false; });
-    this.stageHost.addEventListener('pointercancel', () => { if (this.state === 'reeling') this.holding = false; });
-    this.stageHost.addEventListener('pointerleave', () => { if (this.state === 'reeling') this.holding = false; });
-    this.stageHost.addEventListener('lostpointercapture', () => { if (this.state === 'reeling') this.holding = false; });
+    const stopFallbackInput = () => { if (this.state === 'reeling') { this.holding = false; this.reelMode = 'neutral'; this.updateTensionUI(); } };
+    this.stageHost.addEventListener('pointerup', stopFallbackInput);
+    this.stageHost.addEventListener('pointercancel', stopFallbackInput);
+    this.stageHost.addEventListener('pointerleave', stopFallbackInput);
+    this.stageHost.addEventListener('lostpointercapture', stopFallbackInput);
+    window.addEventListener('pointerup', stopFallbackInput, { passive: true });
+    window.addEventListener('pointercancel', stopFallbackInput, { passive: true });
+    window.addEventListener('touchend', stopFallbackInput, { passive: true });
+    window.addEventListener('touchcancel', stopFallbackInput, { passive: true });
     app.ticker.add(() => this.tick());
     this.configureV21134RenderBudget('pixi-stage-init');
     this.state = 'idle';
@@ -3430,7 +3439,6 @@ class AquaFantasiaGame {
       ev.preventDefault();
       ev.stopPropagation();
       this.startReeling();
-      this.holding = true;
     }, { once: true });
     if (!existing) this.stageHost?.appendChild(callout);
   }
@@ -4141,16 +4149,18 @@ class AquaFantasiaGame {
       if (this.state === 'idle') this.castLineFallback();
       else if (this.state === 'bite') {
         this.startReeling();
-        this.holding = true;
-        this.reelPanel?.classList.add('is-holding');
-        this.stageHost?.classList.add('is-reel-holding');
         this.spawnTouchRing(ev.clientX, ev.clientY);
-      } else if (this.state === 'reeling') { this.holding = true; this.spawnTouchRing(ev.clientX, ev.clientY); }
+      } else if (this.state === 'reeling') { this.holding = true; this.reelMode = 'wind'; this.spawnTouchRing(ev.clientX, ev.clientY); }
     });
-    this.stageHost.addEventListener('pointerup', () => { if (this.state === 'reeling') this.holding = false; });
-    this.stageHost.addEventListener('pointercancel', () => { if (this.state === 'reeling') this.holding = false; });
-    this.stageHost.addEventListener('pointerleave', () => { if (this.state === 'reeling') this.holding = false; });
-    this.stageHost.addEventListener('lostpointercapture', () => { if (this.state === 'reeling') this.holding = false; });
+    const stopFallbackInput = () => { if (this.state === 'reeling') { this.holding = false; this.reelMode = 'neutral'; this.updateTensionUI(); } };
+    this.stageHost.addEventListener('pointerup', stopFallbackInput);
+    this.stageHost.addEventListener('pointercancel', stopFallbackInput);
+    this.stageHost.addEventListener('pointerleave', stopFallbackInput);
+    this.stageHost.addEventListener('lostpointercapture', stopFallbackInput);
+    window.addEventListener('pointerup', stopFallbackInput, { passive: true });
+    window.addEventListener('pointercancel', stopFallbackInput, { passive: true });
+    window.addEventListener('touchend', stopFallbackInput, { passive: true });
+    window.addEventListener('touchcancel', stopFallbackInput, { passive: true });
     if (this.fallbackTicker) window.clearInterval(this.fallbackTicker);
     const fallbackFps = this.v21134RecommendedFps('fallback-render');
     this.fallbackTicker = window.setInterval(() => { if (this.fallbackMode) this.tick(); }, 1000 / fallbackFps);
@@ -6632,7 +6642,7 @@ class AquaFantasiaGame {
     html.style.setProperty('--v21134-visual-height', `${vh}px`);
     html.style.setProperty('--v21134-nav-right', 'calc(env(safe-area-inset-right, 0px) + 8px)');
     html.style.setProperty('--v21134-nav-bottom', 'calc(env(safe-area-inset-bottom, 0px) + 8px)');
-    html.style.setProperty('--v21134-page-width', vw <= 380 ? 'min(420px, calc(100vw - 16px))' : 'min(430px, calc(100vw - 20px))');
+    html.style.setProperty('--v21134-page-width', vw <= 380 ? 'min(412px, calc(100vw - 22px))' : 'min(420px, calc(100vw - 28px))');
     html.style.setProperty('--v21134-combo-bottom', vh <= 650 ? 'calc(env(safe-area-inset-bottom, 0px) + 88px)' : 'calc(env(safe-area-inset-bottom, 0px) + 102px)');
     document.body.dataset.v21134Screen = screen;
 

@@ -1,3 +1,32 @@
+# AquaFantasia v2.1.134-g7
+
+## 운영/산출 고정 규칙
+- GitHub Desktop 사용, Firebase 무료 플랜 유지.
+- 새 `install...Pass()` / `sync...Ui()` 함수 추가 금지. 기존 로직 자리에서 직접 수정.
+- 이번 범위는 낚시 본게임 상단 정보, 입질 안내 중복, 릴 입력 해제, 메뉴 패널 좌우 여백으로 제한.
+- 불필요한 `.md` 파일 생성 금지. 문서는 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 유지.
+- 결과 공유 형식: 작업중인 내용 → 기록 → 다음 업데이트 예상 내역 → full zip → patch zip.
+
+## group 7 변경사항
+- 낚시 본게임 상단의 물길/낚싯대/미끼 strip이 화면 왼쪽 밖으로 밀리지 않도록 기존 v2.1.134 CSS owner 안에서 중앙 고정으로 정리했다.
+- 별도 `릴링 시작` stage 버튼은 숨기고, `물었다!` callout 하나에서 릴링 진입을 처리하도록 통합했다.
+- 입질 상태에서 화면/안내를 누르면 릴링 상태로만 들어가고, 자동으로 감기 입력을 시작하지 않게 했다.
+- 손을 뗀 뒤에도 게이지가 계속 올라가는 문제를 줄이기 위해 window-level `pointerup`, `pointercancel`, `touchend`, `touchcancel`에서 reel 입력을 hard stop한다.
+- fallback 낚시 stage에서도 손을 떼면 `holding=false`, `reelMode=neutral`로 돌아가도록 정리했다.
+- `누르고 찌 감기` 버튼이 너무 아래 붙지 않도록 기존 reel console 위치를 살짝 위로 올렸다.
+- 상점/가방/퀘스트/지도/도감 runtime page column의 좌우 여백이 동등해지도록 기존 v2.1.134 page centering CSS를 보강했다.
+
+## zip 내부 점검 명령
+```bash
+npm run validate
+```
+
+## 파일명
+- `AF-v2.1.134-g7-full.zip`
+- `AF-v2.1.134-g7-patch.zip`
+
+---
+
 # AquaFantasia v2.1.134-g6
 
 ## 운영/산출 고정 규칙

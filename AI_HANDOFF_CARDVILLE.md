@@ -1,3 +1,32 @@
+# AquaFantasia AI Handoff - v2.1.134-g7
+
+## 작업중인 내용
+- 기준: `AF-v2.1.134-g6-full.zip` 이후 group 7 targeted UI/input patch.
+- 범위: 낚시 본게임 상단 물길/낚싯대/미끼 위치, `물었다!`/`릴링 시작` 중복, 릴 입력 해제 안정성, 상점/가방/퀘스트/지도/도감 패널 좌우 여백.
+- 새 `install...Pass()` / `sync...Ui()` 함수 추가 없음. 새 보정 레이어 추가 없음.
+
+## 기록
+- 낚시 상단 UI 문제: 기존 좌측 고정 계열 selector가 살아 있어 물길 카드와 장비 strip이 좁은 화면에서 왼쪽으로 밀릴 수 있었다. 기존 v2.1.134 CSS owner 안에서 `.fishing-top-sea-lane`, `.fishing-top-loadout`을 중앙 50% 기준으로 고정했다.
+- 입질 안내 중복 문제: stage 안의 별도 `*-bite-action` 버튼과 `.bite-callout`이 동시에 표시될 수 있었다. stage button은 `legacy-bite-action-merged-hidden`으로 숨기고, `.bite-callout` 하나에서 `물었다! 릴링 시작` 안내를 담당하도록 통합했다.
+- 릴 입력 버그: 입질 상태에서 화면을 누르면 `startReeling()` 직후 `setReelInput(true)`가 같이 실행되어 손을 떼는 이벤트가 누락되면 감기 상태가 남을 수 있었다. 입질 탭은 릴링 진입만 수행하고 자동 감기 입력은 시작하지 않도록 정리했다.
+- 릴 입력 해제 보강: window-level `pointerup`, `pointercancel`, `touchend`, `touchcancel`에서 `hardStopReelInput()`을 호출해 root 밖에서 손을 떼도 `holding=false`, `reelMode=neutral`로 돌아가게 했다.
+- fallback 낚시 stage도 `pointerup/cancel/leave/lostpointercapture`와 window release에서 `reelMode=neutral`로 복귀하도록 통합했다.
+- `누르고 찌 감기` 버튼은 기존 `.v2055-reel-console` 위치를 safe-area bottom + 26px로 올렸다.
+- 메뉴 패널 문제: runtime menu root/content가 기존 patch CSS 영향으로 오른쪽으로 치우칠 수 있어, 기존 v2.1.134 page owner 안에서 flex center, equal safe-area padding, `width: min(420px, calc(100vw - 28px))`로 좌우 여백을 맞췄다.
+- 삭제한 함수 없음. 이번은 기존 로직 자리의 직접 수정이며 그룹 1/그룹 2 삭제 코드는 되살리지 않았다.
+
+## 다음 업데이트 예상 내역
+- 실제 실행에서 낚시 상단 물길/낚싯대/미끼가 화면 안 중앙에 있는지 확인.
+- 물고기가 물었을 때 `물었다! 릴링 시작` 안내 하나만 보이는지 확인.
+- `누르고 찌 감기`를 길게 누른 뒤 손을 떼면 게이지가 즉시 자연 하강/중립으로 돌아가는지 확인.
+- 상점/가방/퀘스트/지도/도감 패널 좌우 여백이 같은지 확인.
+
+## 산출물
+- `AF-v2.1.134-g7-full.zip`
+- `AF-v2.1.134-g7-patch.zip`
+
+---
+
 # AquaFantasia AI Handoff - v2.1.134-g6
 
 ## 작업중인 내용
@@ -105,11 +134,11 @@
 - v2.1.133 full 기준에서 시작했다.
 - 새 패스 `installV21134RenderBudgetUiWriteLedgerPass()`와 `syncV21134RenderBudgetUiWriteLedgerUi()`를 추가했다.
 - 부팅 초기에 `v21134-render-budget-ui-write-ledger-root`, `dataset.v21134RenderBudgetUiWriteLedger = active`, `dataset.v21134UiPolicy = single-governor-plus-rounded-fishing-ui-writes-and-pixi-fps-budget`을 기록한다.
-- v2.1.133은 `handoff-to-v21134-render-budget-ui-write-ledger` 상태가 되며 최신 UI sync 소유권은 v2.1.134가 가진다.
+- 그룹 2까지 삭제/통합한 뒤 최신 UI sync 소유권은 v2.1.134가 가진다.
 - v2.1.134 최신 패스는 `style` 속성 MutationObserver를 설치하지 않는다. class, data-screen, data-fishing-phase, aria-hidden, childList, visualViewport 변화만 감시한다.
 - 낚시 전투 중 `updateTensionUI()`의 장력/포획/저항/안전구간/위험도 표시값을 반올림 signature로 묶었다. signature가 변하지 않으면 DOM query/text/style write를 건너뛰어 랙과 깜박임 체감을 줄인다.
 - Pixi ticker에는 v2.1.134 FPS budget을 적용한다. lite/compact/reduced-motion/save-data 환경은 낮은 FPS 예산, balanced/high 환경은 조작감을 유지하는 예산을 사용한다. HTML fallback ticker도 동일 기준으로 24~30fps 예산을 사용한다.
-- `v21132MutedLegacyObservers`를 집계해 `v21134MutedLegacyObserverCount`, `v21134ObserverBudget`, `v21134UiWriteBudget`으로 남긴다. 다음 AI는 이 값으로 예전 보정 코드 mute와 UI write budget 상태를 빠르게 확인할 수 있다.
+- `v21132MutedLegacyObservers`를 집계해 `v21134DeletedGroup2ObserverCount`, `v21134ObserverBudget`, `v21134UiWriteBudget`으로 남긴다. 다음 AI는 이 값으로 예전 보정 코드 삭제/통합과 UI write budget 상태를 빠르게 확인할 수 있다.
 - 초반 마을 가이드, 하단 메뉴, 상점/가방/퀘스트/지도/도감/장비/랭킹 중앙 정렬, 개척 팝업, 건설 모달, 낚시 물길/장비/연속성공/물었다/결과창을 `v21134-*` 단일 governor 기준으로 다시 묶었다.
 - 첫 마을 가이드는 새 저장 키 `aqua-v21134-guide-dismissed`를 사용하고, 기존 v21122/v21124/v21125/v21126/v21128/v21129/v21130/v21131/v21132/v21133 가이드 DOM은 제거한다.
 - 낚시 `bite/reeling/result/success/fail` 집중 단계에서는 물길/수중효과/장비 strip 숨김 기준을 유지한다.

@@ -64,9 +64,20 @@ must(css.includes('.v21134-expedition-final.v2097-expedition-body-open') && css.
 must(css.includes('.v21134-water-budget-final') && css.includes('.v21134-loadout-final'), 'v2.1.134 fishing CSS missing');
 must(css.includes('.combo-badge.v21134-combo-final:not(.hidden)') && css.includes('.v21134-bite-final') && css.includes('.v21134-result-final'), 'v2.1.134 combo/bite/result CSS missing');
 
-const handoffTokens = ['기준 패키지 버전: `2.1.134`','현재 작업 기준: `v2.1.134`','v2.1.134 render budget ui write ledger 패치 기록','## 작업중인 내용','## 기록','## 다음 업데이트 예상 내역','## 필수 결과 확인 명령','GitHub Desktop','Firebase 무료 플랜','npm run validate','npm run ci:registry:check','npm run ci:install','npm run typecheck','npm run build','AF-v2.1.134-g6-full.zip','AF-v2.1.134-g6-patch.zip','코드 꼬임','예전 보정 코드','render budget','UI write budget','그룹 2 삭제','group 4','group 5','group 6','invalid selector','guide selector','인트로 영상','legacy ready gate','hard exit','openingExitCompleted','초반 마을 가이드','개척 팝업','물길','낚싯대','물었다'];
+// group 7 targeted repair checks: no new pass, direct fishing/menu fixes only.
+must(main.includes('fishing-top-sea-lane') && main.includes('fishing-top-loadout'), 'group 7 fishing top lane/loadout anchors missing');
+must(main.includes('legacy-bite-action-merged-hidden') && main.includes('중앙 안내 하나로 통합됨'), 'group 7 bite action merge marker missing');
+must(main.includes("if (this.state === 'bite') {\n        ev.preventDefault();\n        this.startReeling();\n        return;\n      }") && !main.includes("this.startReeling();\n        setReelInput(true, ev);"), 'group 7 bite tap must not auto-start wind input' && !main.includes("this.startReeling();\n        this.holding = true;"), 'group 7 bite tap must not auto-start wind input');
+must(main.includes("window.addEventListener('pointerup', hardStopReelInput") && main.includes("window.addEventListener('touchend', hardStopReelInput"), 'group 7 global reel input release guard missing');
+must(main.includes('stopFallbackInput') && main.includes("this.reelMode = 'neutral'; this.updateTensionUI();"), 'group 7 fallback reel release reset missing');
+must(css.includes('g7 targeted repair') && css.includes('.fishing-top-sea-lane') && css.includes('.fishing-top-loadout'), 'group 7 fishing top CSS missing');
+must(css.includes('legacy-bite-action-merged-hidden') && css.includes('물었다! '), 'group 7 single bite prompt CSS missing');
+must(css.includes('bottom: calc(env(safe-area-inset-bottom, 0px) + 26px)') && css.includes('bottom: calc(env(safe-area-inset-bottom, 0px) + 84px)'), 'group 7 reel button vertical adjustment missing');
+must(css.includes('padding-left: max(14px, env(safe-area-inset-left, 0px))') && css.includes('width: min(420px, calc(100vw - 28px))'), 'group 7 symmetric menu panel CSS missing');
+
+const handoffTokens = ['기준 패키지 버전: `2.1.134`','현재 작업 기준: `v2.1.134`','v2.1.134 render budget ui write ledger 패치 기록','## 작업중인 내용','## 기록','## 다음 업데이트 예상 내역','## 필수 결과 확인 명령','GitHub Desktop','Firebase 무료 플랜','npm run validate','npm run ci:registry:check','npm run ci:install','npm run typecheck','npm run build','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','코드 꼬임','예전 보정 코드','render budget','UI write budget','그룹 2 삭제','group 4','group 5','group 6','invalid selector','guide selector','인트로 영상','legacy ready gate','hard exit','openingExitCompleted','초반 마을 가이드','개척 팝업','물길','낚싯대','물었다','group 7','릴링 시작','찌 감기','좌우 여백','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip'];
 for (const token of handoffTokens) must(handoff.includes(token), `handoff missing token: ${token}`);
-for (const token of ['AquaFantasia v2.1.134','운영/산출 고정 규칙','결과 공유 형식','GitHub Desktop','Firebase 무료 플랜','zip 내부 점검 명령','AF-v2.1.134-g6-full.zip','AF-v2.1.134-g6-patch.zip','render budget ui write ledger','그룹 2 삭제','group 4','group 5','group 6','invalid selector','guide selector','인트로 영상','legacy ready gate','hard exit','openingExitCompleted']) must(readme.includes(token), `README missing operating token: ${token}`);
+for (const token of ['AquaFantasia v2.1.134','운영/산출 고정 규칙','결과 공유 형식','GitHub Desktop','Firebase 무료 플랜','zip 내부 점검 명령','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','render budget ui write ledger','그룹 2 삭제','group 4','group 5','group 6','invalid selector','guide selector','인트로 영상','legacy ready gate','hard exit','openingExitCompleted','group 7','릴링 시작','찌 감기','좌우 여백','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip']) must(readme.includes(token), `README missing operating token: ${token}`);
 
 const mdFiles = [];
 const walk = (dir) => {

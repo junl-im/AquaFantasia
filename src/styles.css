@@ -67846,3 +67846,83 @@ html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] :is([
     transition: none !important;
   }
 }
+
+/* g7 targeted repair: fishing top info centering, single bite prompt, release-safe reel input, and symmetric menu panels. */
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen :is(.fishing-top-sea-lane,.v2137-sea-lane-card,.v2171-sea-lane-card) {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: calc(env(safe-area-inset-top, 0px) + 54px) !important;
+  bottom: auto !important;
+  width: min(340px, calc(100vw - 24px)) !important;
+  max-width: calc(100vw - 24px) !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  translate: none !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+  overflow: hidden !important;
+  z-index: 520 !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen :is(.fishing-top-loadout,.fishing-loadout-strip,.v2199-fishing-loadout,.v2171-fishing-loadout):not(.hidden) {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: calc(env(safe-area-inset-top, 0px) + 116px) !important;
+  bottom: auto !important;
+  width: min(340px, calc(100vw - 24px)) !important;
+  max-width: calc(100vw - 24px) !important;
+  transform: translate3d(-50%, 0, 0) !important;
+  translate: none !important;
+  box-sizing: border-box !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  z-index: 521 !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen :is(.fishing-top-loadout,.fishing-loadout-strip) > div {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen :is(.legacy-bite-action-merged-hidden,[class*="-bite-action"]) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .bite-callout.v21134-bite-final button::before {
+  content: "물었다! ";
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen[data-fishing-phase="reeling"] .v2055-reel-console:not(.hidden),
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen.fishing-phase-reeling .v2055-reel-console:not(.hidden) {
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 26px) !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen[data-fishing-phase="reeling"] .v2053-reel-touch-zone:not(.hidden),
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen.fishing-phase-reeling .v2053-reel-touch-zone:not(.hidden) {
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 84px) !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen]:not([data-screen="fishing"]) .runtime-menu-screen.v21134-runtime-page-final {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding-left: max(14px, env(safe-area-inset-left, 0px)) !important;
+  padding-right: max(14px, env(safe-area-inset-right, 0px)) !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen]:not([data-screen="fishing"]) .v21134-page-column-final {
+  width: min(420px, calc(100vw - 28px)) !important;
+  max-width: min(420px, calc(100vw - 28px)) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  justify-self: center !important;
+  align-self: center !important;
+  left: auto !important;
+  right: auto !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen]:not([data-screen="fishing"]) .v21134-page-column-final > * {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
