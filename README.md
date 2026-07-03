@@ -1,3 +1,38 @@
+# AquaFantasia v2.1.135
+
+## 작업중인 내용
+- 목적: g7~g9 UI 패치가 사용자의 실제 사이트에서 전혀 반영되지 않는 문제를 우선 해결한다. cache reflection 경로를 고정한다.
+- 범위: 서비스워커/cache/version/deploy reflection 경로만 수정했다. 낚시 판정, 보상, 마을 좌표, 건설 로직, Firebase 로직은 변경하지 않았다.
+- 새 `install...Pass()` / `sync...Ui()` 함수는 추가하지 않았다.
+
+## 기록
+- 확인 결과 g9 full/patch의 실제 UI 소스 변경은 들어 있었지만, 기준 패키지 버전과 `APP_VERSION`, `CACHE_NAME`, `public/sw.js` cache namespace가 계속 `2.1.134` / `aqua-fantasia-v2.1.134-render-budget-ui-write-ledger`로 남아 있었다.
+- g9 patch zip에도 `src/data.ts`, `public/sw.js`, `public/offline.html`, `package.json`, `package-lock.json`, `index.html`이 빠져 있어 patch만 적용하는 경우 브라우저/서비스워커가 새 버전을 식별하기 어렵다.
+- 그래서 이번에는 패키지 버전을 `2.1.135`로 올리고 cache namespace를 `aqua-fantasia-v2.1.135-cache-reflection-deploy-hotfix`로 변경했다.
+- `index.html`에 `aqua-app-version` meta marker를 추가해 실제 배포 HTML에서 버전을 확인하기 쉽게 했다.
+- `registerServiceWorker()`는 기존 위치에서 직접 수정해 `./sw.js?cache=${CACHE_NAME}`로 등록하고, waiting/active/installing worker에 `AQUA_SKIP_WAITING`, `AQUA_FORCE_CACHE_SWEEP`을 보낸다.
+- 서비스워커는 HTML/JS/CSS/manifest/document 요청을 network reload 우선으로 처리하고, 새 cache namespace 외의 `aqua-fantasia-*` cache를 삭제한다.
+- 런타임 html dataset에 `deployReflectionVersion`, `deployReflectionCache`, `serviceWorkerReflection`, `cacheSweepVersion`을 남겨 실제 최신 코드가 실행됐는지 확인할 수 있게 했다.
+- `AI_HANDOFF_CARDVILLE.md`와 이 README에는 “예전 걸 mute한다”가 아니라 “캐시/배포 반영 경로를 수정했다”로 기록한다.
+
+## 다음 업데이트 예상 내역
+- GitHub Actions Pages deploy가 성공한 뒤 실제 사이트에서 개발자도구 콘솔 또는 Elements의 `<html>` dataset으로 `deployReflectionVersion=2.1.135`가 보이는지 확인한다.
+- `2.1.135`가 보이면 g7~g9 UI 수정이 실제로 반영된 상태에서 하단 메뉴 투명도, 개척창 메뉴 숨김, ㄱ자 아이콘바, 낚시 미끼 표시를 다시 확인한다.
+- `2.1.135`가 보이지 않으면 코드 문제가 아니라 Pages deploy 또는 브라우저 cache가 아직 구버전을 제공하는 상태로 판단한다.
+
+## 필수 결과 확인 명령
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## 산출물
+- `AF-v2.1.135-full.zip`
+- `AF-v2.1.135-patch.zip`
+
 # AquaFantasia v2.1.134-g9
 
 ## 운영/산출 고정 규칙

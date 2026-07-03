@@ -1,3 +1,42 @@
+# AquaFantasia AI Handoff - v2.1.135
+
+- 기준 패키지 버전: `2.1.135`
+
+## 작업중인 내용
+- 기준: `AF-v2.1.134-g9-full.zip` 이후 cache reflection deploy hotfix.
+- 사용자가 “패치가 전혀 반영이 안 됐다”고 보고했다. 이번 작업은 UI 자체를 더 얹는 것이 아니라, g7~g9 수정이 실제 브라우저/서비스워커/Pages 배포 결과에 반영되도록 version/cache/update 경로를 고친 것이다.
+- 새 `install...Pass()` / `sync...Ui()` 함수는 추가하지 않았다.
+
+## 기록
+- 조사 결과 g9 full/patch에는 UI 수정 파일이 들어 있었지만 `package.json`, `package-lock.json`, `src/data.ts`, `public/sw.js`는 여전히 `2.1.134`와 `aqua-fantasia-v2.1.134-render-budget-ui-write-ledger`를 사용했다.
+- g9 patch zip에는 `src/data.ts`, `public/sw.js`, `public/offline.html`, `package.json`, `package-lock.json`, `index.html`이 포함되지 않아 patch-only 적용 시 cache/version이 바뀌지 않았다.
+- 이 때문에 GitHub Pages 배포가 성공해도 기존 서비스워커/cache 또는 이전 빌드가 사용자에게 계속 보이면 “아무 패치도 반영되지 않음”처럼 보일 수 있었다.
+- 패키지 버전은 `2.1.135`, cache namespace는 `aqua-fantasia-v2.1.135-cache-reflection-deploy-hotfix`로 변경했다.
+- `public/sw.js`는 HTML/JS/CSS/manifest/document 요청을 network reload 우선으로 처리하고, `AQUA_SKIP_WAITING`, `AQUA_FORCE_CACHE_SWEEP` message를 처리한다.
+- `registerServiceWorker()`는 기존 메서드 자리에서 직접 수정했다. `./sw.js?cache=${CACHE_NAME}`로 등록하고 waiting/active/installing worker에 activation/cache sweep message를 보낸다.
+- `sweepCaches()`는 삭제한 cache 수와 적용 버전을 html dataset에 남긴다.
+- `index.html`에는 `aqua-app-version=2.1.135` meta marker를 추가했다.
+- 런타임 확인 marker: `<html data-deploy-reflection-version="2.1.135" data-service-worker-reflection="registered-update-requested" data-cache-sweep-version="2.1.135">`.
+- 이번 작업은 예전 패스를 mute한 것이 아니라, 패치 반영을 막던 cache/version/deploy reflection 경로를 수정한 것이다.
+
+## 다음 업데이트 예상 내역
+- GitHub Actions deploy가 성공한 뒤 실제 사이트에서 `deployReflectionVersion=2.1.135`를 확인한다.
+- 그 다음 g7~g9에서 수정한 하단 메뉴 투명도, 개척/건설 창 메뉴 숨김, HUD/개척바 폭, ㄱ자 우측 아이콘바, 낚싯대/미끼 반반 정렬을 실제 화면에서 다시 판정한다.
+- 여전히 2.1.135가 안 보이면 코드가 아니라 Pages deploy failure 또는 브라우저 cache 잔류를 먼저 처리해야 한다.
+
+## 필수 결과 확인 명령
+```bash
+npm run validate
+npm run ci:registry:check
+npm run ci:install
+npm run typecheck
+npm run build
+```
+
+## 산출물
+- `AF-v2.1.135-full.zip`
+- `AF-v2.1.135-patch.zip`
+
 # AquaFantasia AI Handoff - v2.1.134-g9
 
 ## 작업중인 내용

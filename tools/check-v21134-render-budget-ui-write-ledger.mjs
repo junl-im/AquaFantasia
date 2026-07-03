@@ -7,8 +7,8 @@ const read = (p) => fs.readFileSync(path.join(root, p), 'utf8');
 const json = (p) => JSON.parse(read(p));
 const must = (cond, msg) => { if (!cond) { console.error(`[v21134] ${msg}`); process.exit(1); } };
 
-const version = '2.1.134';
-const cache = 'aqua-fantasia-v2.1.134-render-budget-ui-write-ledger';
+const version = '2.1.135';
+const cache = 'aqua-fantasia-v2.1.135-cache-reflection-deploy-hotfix';
 const pkg = json('package.json');
 const lock = json('package-lock.json');
 const main = read('src/main.ts');
@@ -16,15 +16,17 @@ const css = read('src/styles.css');
 const data = read('src/data.ts');
 const sw = read('public/sw.js');
 const offline = read('public/offline.html');
+const index = read('index.html');
 const readme = read('README.md');
 const handoff = read('AI_HANDOFF_CARDVILLE.md');
 
-must(pkg.version === version, 'package version must be 2.1.134');
-must(lock.version === version && lock.packages?.['']?.version === version, 'package-lock version must be 2.1.134');
-must(pkg.scripts.validate === 'node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v21134-render-budget-ui-write-ledger.mjs', 'validate script must use v2.1.134 guard');
+must(pkg.version === version, 'package version must be 2.1.135');
+must(lock.version === version && lock.packages?.['']?.version === version, 'package-lock version must be 2.1.135');
+must(pkg.scripts.validate === 'node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v21134-render-budget-ui-write-ledger.mjs', 'validate script must use v2.1.135 cache reflection guard');
 must(data.includes(`APP_VERSION = '${version}'`) && data.includes(cache), 'src/data version/cache missing');
-must(sw.includes('v2.1.134') && sw.includes(cache) && sw.includes('url.origin !== self.location.origin') && sw.includes('response.ok'), 'service worker cache containment missing');
-must(offline.includes('v2.1.134') && offline.includes('render budget ui write ledger'), 'offline page not synced');
+must(index.includes('aqua-app-version') && index.includes(version), 'index cache reflection version marker missing');
+must(sw.includes('v2.1.135') && sw.includes(cache) && sw.includes('AQUA_SKIP_WAITING') && sw.includes("cache: 'reload'") && sw.includes('shouldReloadFromNetwork') && sw.includes('url.origin !== self.location.origin') && sw.includes('response.ok'), 'service worker cache containment missing');
+must(offline.includes('v2.1.135') && offline.includes('cache reflection deploy hotfix'), 'offline page not synced');
 
 must(main.includes('installV21134RenderBudgetUiWriteLedgerPass') && main.includes('syncV21134RenderBudgetUiWriteLedgerUi'), 'v2.1.134 pass/sync missing');
 must(main.includes('configureV21134RenderBudget') && main.includes('v21134RecommendedFps'), 'v2.1.134 render budget methods missing');
@@ -41,6 +43,7 @@ must(main.includes('lastTensionUiSignature') && main.includes('rounded-signature
 must(main.includes('ticker.maxFPS = fps') && main.includes('fallbackFps = this.v21134RecommendedFps'), 'v2.1.134 Pixi/fallback FPS budget missing');
 must(!main.includes('webkit-playsinline loop preload="auto"') && main.includes("openingVideo?.removeAttribute('loop')") && main.includes('openingVideo.loop = false') && main.includes("openingVideo?.addEventListener('ended', finishVillageOpeningAfterMinimum") && main.includes("root.dataset.openingExitFallback = 'autoplay-failed'") && main.includes("root.dataset.openingExitFallback = 'max-duration'") && main.includes('armOpeningStallFallback') && main.includes('openingHardExitTimer') && main.includes("root.dataset.openingExitFallback = 'hard-max-duration'") && main.includes("root.dataset.openingExitFallback = 'timeupdate-reached-duration'") && main.includes("root.dataset.openingExitFallback = 'video-stalled'") && main.includes("this.syncV21134RenderBudgetUiWriteLedgerUi('opening-finished-village-ready')"), 'opening video exit fallback missing');
 must(main.includes("v2027-village-ready v2173-village-ready") && main.includes("root.classList.add('v2027-village-ready'") && main.includes('root.dataset.villageEntryReady') && main.includes('openingExitCompleted') && main.includes('[class*="opening-cinematic"]'), 'opening exit must restore legacy ready gate and remove opening overlays');
+must(main.includes('deployReflectionVersion') && main.includes('serviceWorkerReflection') && main.includes('AQUA_SKIP_WAITING') && main.includes('encodeURIComponent(CACHE_NAME)') && main.includes('controllerchange') && main.includes('cacheSweepVersion'), 'v2.1.135 cache reflection/service worker update guard missing');
 
 const installStart = main.indexOf('private installV21134RenderBudgetUiWriteLedgerPass');
 const syncStart = main.indexOf('private syncV21134RenderBudgetUiWriteLedgerUi');
@@ -93,9 +96,9 @@ must(css.includes('g9 targeted repair') && css.includes('rgba(255, 255, 255, .08
 must(css.includes('--village-left-panel-width') && css.includes('.village-corner-toolbar') && css.includes('.village-corner-build') && css.includes('.village-corner-fishing'), 'group 9 HUD/toolbar CSS missing');
 must(css.includes('img[src*="slot_bait"]') && css.includes('body[data-v21134-fishing-phase] .fishing-screen :is(.fishing-top-loadout,.fishing-loadout-strip,.v21134-loadout-final):not(.hidden)'), 'group 9 visible bait loadout CSS missing');
 
-const handoffTokens = ['기준 패키지 버전: `2.1.134`','현재 작업 기준: `v2.1.134`','v2.1.134 render budget ui write ledger 패치 기록','## 작업중인 내용','## 기록','## 다음 업데이트 예상 내역','## 필수 결과 확인 명령','GitHub Desktop','Firebase 무료 플랜','npm run validate','npm run ci:registry:check','npm run ci:install','npm run typecheck','npm run build','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','코드 꼬임','예전 보정 코드','render budget','UI write budget','그룹 2 삭제','group 4','group 5','group 6','invalid selector','guide selector','인트로 영상','legacy ready gate','hard exit','openingExitCompleted','초반 마을 가이드','개척 팝업','물길','낚싯대','물었다','group 7','릴링 시작','찌 감기','좌우 여백','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','group 8','하단 메뉴','클릭 피드백','반반 정렬','AF-v2.1.134-g8-full.zip','AF-v2.1.134-g8-patch.zip','group 9','투명','ㄱ자','HUD','개척 바','미끼','AF-v2.1.134-g9-full.zip','AF-v2.1.134-g9-patch.zip'];
+const handoffTokens = ['기준 패키지 버전: `2.1.134`','현재 작업 기준: `v2.1.134`','v2.1.134 render budget ui write ledger 패치 기록','## 작업중인 내용','## 기록','## 다음 업데이트 예상 내역','## 필수 결과 확인 명령','GitHub Desktop','Firebase 무료 플랜','npm run validate','npm run ci:registry:check','npm run ci:install','npm run typecheck','npm run build','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','코드 꼬임','예전 보정 코드','render budget','UI write budget','그룹 2 삭제','group 4','group 5','group 6','invalid selector','guide selector','인트로 영상','legacy ready gate','hard exit','openingExitCompleted','초반 마을 가이드','개척 팝업','물길','낚싯대','물었다','group 7','릴링 시작','찌 감기','좌우 여백','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','group 8','하단 메뉴','클릭 피드백','반반 정렬','AF-v2.1.134-g8-full.zip','AF-v2.1.134-g8-patch.zip','group 9','투명','ㄱ자','HUD','개척 바','미끼','AF-v2.1.134-g9-full.zip','AF-v2.1.134-g9-patch.zip','v2.1.135','cache reflection','서비스워커','AF-v2.1.135-full.zip','AF-v2.1.135-patch.zip'];
 for (const token of handoffTokens) must(handoff.includes(token), `handoff missing token: ${token}`);
-for (const token of ['AquaFantasia v2.1.134','운영/산출 고정 규칙','결과 공유 형식','GitHub Desktop','Firebase 무료 플랜','zip 내부 점검 명령','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','render budget ui write ledger','그룹 2 삭제','group 4','group 5','group 6','invalid selector','guide selector','인트로 영상','legacy ready gate','hard exit','openingExitCompleted','group 7','릴링 시작','찌 감기','좌우 여백','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','group 8','하단 메뉴','클릭 피드백','반반 정렬','AF-v2.1.134-g8-full.zip','AF-v2.1.134-g8-patch.zip','group 9','투명','ㄱ자','HUD','개척 바','미끼','AF-v2.1.134-g9-full.zip','AF-v2.1.134-g9-patch.zip']) must(readme.includes(token), `README missing operating token: ${token}`);
+for (const token of ['AquaFantasia v2.1.134','운영/산출 고정 규칙','결과 공유 형식','GitHub Desktop','Firebase 무료 플랜','zip 내부 점검 명령','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','render budget ui write ledger','그룹 2 삭제','group 4','group 5','group 6','invalid selector','guide selector','인트로 영상','legacy ready gate','hard exit','openingExitCompleted','group 7','릴링 시작','찌 감기','좌우 여백','AF-v2.1.134-g7-full.zip','AF-v2.1.134-g7-patch.zip','group 8','하단 메뉴','클릭 피드백','반반 정렬','AF-v2.1.134-g8-full.zip','AF-v2.1.134-g8-patch.zip','group 9','투명','ㄱ자','HUD','개척 바','미끼','AF-v2.1.134-g9-full.zip','AF-v2.1.134-g9-patch.zip','v2.1.135','cache reflection','서비스워커','AF-v2.1.135-full.zip','AF-v2.1.135-patch.zip']) must(readme.includes(token), `README missing operating token: ${token}`);
 
 const mdFiles = [];
 const walk = (dir) => {
@@ -111,5 +114,5 @@ walk('.');
 const allowed = new Set(['AI_HANDOFF_CARDVILLE.md','README.md']);
 for (const md of mdFiles.map((x) => x.replace(/^\.\//, ''))) must(allowed.has(md), `unexpected markdown file: ${md}`);
 
-console.log('[v21134] render budget ui write ledger checks passed');
+console.log('[v21135] cache reflection + render budget ui write ledger checks passed');
 console.log(JSON.stringify({ ok: true, version, renderBudget: true, files: fs.readdirSync(root).length }, null, 2));

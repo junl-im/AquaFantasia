@@ -521,6 +521,15 @@ class AquaFantasiaGame {
         this.activateV2092UiStableShell();
         */
     document.documentElement.dataset.cacheName = CACHE_NAME;
+    document.documentElement.dataset.deployReflectionVersion = APP_VERSION;
+    document.documentElement.dataset.deployReflectionCache = CACHE_NAME;
+    try {
+      const previous = localStorage.getItem('aqua-last-runtime-version');
+      document.documentElement.dataset.previousRuntimeVersion = previous || 'none';
+      localStorage.setItem('aqua-last-runtime-version', APP_VERSION);
+    } catch {
+      document.documentElement.dataset.previousRuntimeVersion = 'storage-blocked';
+    }
     if (!this.hasWebGL()) document.documentElement.classList.add('pixi-fallback-ready');
     this.bindViewportGuard();
     this.installViewportSafeLock();
@@ -6795,10 +6804,36 @@ class AquaFantasiaGame {
   private async registerServiceWorker(): Promise<void> {
     if (!('serviceWorker' in navigator)) return;
     try {
-      const reg = await navigator.serviceWorker.register('./sw.js');
+      let reloadedForVersion = false;
+      const reloadKey = `aqua-sw-reloaded-${APP_VERSION}`;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (reloadedForVersion) return;
+        reloadedForVersion = true;
+        try {
+          if (sessionStorage.getItem(reloadKey) === '1') return;
+          sessionStorage.setItem(reloadKey, '1');
+        } catch {
+          // Session storage can be blocked. A single controllerchange reload is still safe.
+        }
+        window.location.reload();
+      }, { once: true });
+      const reg = await navigator.serviceWorker.register(`./sw.js?cache=${encodeURIComponent(CACHE_NAME)}`);
       await reg.update();
-      reg.active?.postMessage({ type: 'AQUA_FORCE_CACHE_SWEEP' });
+      const requestActivation = (worker?: ServiceWorker | null) => {
+        worker?.postMessage({ type: 'AQUA_SKIP_WAITING', cacheName: CACHE_NAME, version: APP_VERSION });
+        worker?.postMessage({ type: 'AQUA_FORCE_CACHE_SWEEP', cacheName: CACHE_NAME, version: APP_VERSION });
+      };
+      requestActivation(reg.waiting);
+      requestActivation(reg.active);
+      if (reg.installing) {
+        reg.installing.addEventListener('statechange', () => {
+          if (reg.installing?.state === 'installed') requestActivation(reg.installing);
+        });
+      }
+      document.documentElement.dataset.serviceWorkerCache = CACHE_NAME;
+      document.documentElement.dataset.serviceWorkerReflection = 'registered-update-requested';
     } catch (error) {
+      document.documentElement.dataset.serviceWorkerReflection = 'registration-skipped';
       console.warn('[AquaFantasia] service worker skipped', error);
     }
   }
@@ -6807,9 +6842,14 @@ class AquaFantasiaGame {
     try {
       if (!('caches' in window)) return;
       const keys = await caches.keys();
-      await Promise.all(keys.filter((key) => key.startsWith('aqua-fantasia-') && key !== CACHE_NAME).map((key) => caches.delete(key)));
+      const deleted = keys.filter((key) => key.startsWith('aqua-fantasia-') && key !== CACHE_NAME);
+      await Promise.all(deleted.map((key) => caches.delete(key)));
       localStorage.setItem('aqua-cache-version', APP_VERSION);
+      localStorage.setItem('aqua-cache-name', CACHE_NAME);
+      document.documentElement.dataset.cacheSweepDeleted = String(deleted.length);
+      document.documentElement.dataset.cacheSweepVersion = APP_VERSION;
     } catch {
+      document.documentElement.dataset.cacheSweepVersion = 'blocked';
       // CacheStorage can be blocked. The game still works online.
     }
   }
