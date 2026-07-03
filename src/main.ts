@@ -1354,10 +1354,10 @@ class AquaFantasiaGame {
     dom.app.appendChild(root);
     const dismissV21130Guide = () => {
       try { localStorage.setItem('aqua-v21130-guide-dismissed', '1'); } catch { /* noop */ }
-      root.querySelector<HTMLElement>('[data-v21132-direct-guide data-v21131-direct-guide data-v21130-direct-guide]')?.remove();
+      root.querySelector<HTMLElement>('[data-v21130-direct-guide]')?.remove();
     };
     const bindV21130Guide = () => {
-      const guide = root.querySelector<HTMLElement>('[data-v21132-direct-guide data-v21131-direct-guide data-v21130-direct-guide]');
+      const guide = root.querySelector<HTMLElement>('[data-v21130-direct-guide]');
       if (!guide || guide.dataset.v21130Bound === 'true') return;
       guide.dataset.v21130Bound = 'true';
       guide.querySelector<HTMLButtonElement>('[data-v21130-guide-dismiss]')?.addEventListener('click', dismissV21130Guide);
@@ -1367,7 +1367,7 @@ class AquaFantasiaGame {
     const mountV21130Guide = () => {
       if (root.querySelector('.v2199-opening-cinematic,.v2173-opening-cinematic,.v2119-opening-cinematic')) return;
       try { if (localStorage.getItem('aqua-v21130-guide-dismissed') === '1') return; } catch { /* noop */ }
-      if (!root.querySelector('[data-v21132-direct-guide data-v21131-direct-guide data-v21130-direct-guide]')) {
+      if (!root.querySelector('[data-v21130-direct-guide]')) {
         const guide = document.createElement('section');
         guide.className = 'v21132-village-guide-popup v21132-direct-guide v21132-owned-final v21131-village-guide-popup v21131-direct-guide v21131-owned-final v21130-village-guide-popup v21130-direct-guide v21130-owned-final';
         guide.dataset.v21130DirectGuide = 'true';

@@ -1,3 +1,29 @@
+# AquaFantasia v2.1.134-g6
+
+## 운영/산출 고정 규칙
+- GitHub Desktop 사용, Firebase 무료 플랜 유지.
+- 새 `install...Pass()` / `sync...Ui()` 함수 추가 금지. 기존 로직 자리에서 직접 수정.
+- 불필요한 `.md` 파일 생성 금지. 문서는 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 유지.
+- 결과 공유 형식: 작업중인 내용 → 기록 → 다음 업데이트 예상 내역 → full zip → patch zip.
+
+## group 6 변경사항
+- 인트로 영상이 끝에서 멈추는 원인을 확정했다.
+- `renderVillage()`의 첫 가이드 바인딩 selector가 invalid selector라서 `querySelector()`가 브라우저에서 `SyntaxError`를 던질 수 있었고, 이 때문에 오프닝 종료 핸들러가 설치되기 전에 실행이 끊길 수 있었다.
+- invalid selector `[data-v21132-direct-guide data-v21131-direct-guide data-v21130-direct-guide]`를 실제 DOM에 맞는 `[data-v21130-direct-guide]`로 통합했다.
+- `tools/check-v21134-render-budget-ui-write-ledger.mjs`에 invalid selector 재발 방지 검증을 추가했다. guide selector 검증 포함.
+- GitHub Pages deploy 로그의 `Deployment failed, try again later`는 Pages 동기화 실패로, 이 상태에서는 패치가 사이트에 반영되지 않는다.
+
+## zip 내부 점검 명령
+```bash
+npm run validate
+```
+
+## 파일명
+- `AF-v2.1.134-g6-full.zip`
+- `AF-v2.1.134-g6-patch.zip`
+
+---
+
 # AquaFantasia v2.1.134
 
 ## v2.1.134 변경사항

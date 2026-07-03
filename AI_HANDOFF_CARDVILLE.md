@@ -1,3 +1,28 @@
+# AquaFantasia AI Handoff - v2.1.134-g6
+
+## 작업중인 내용
+- 기준: `AF-v2.1.134-g5-full.zip` 이후 group 6 hotfix.
+- 범위: 인트로 영상 이후 게임 진입 불가 원인 확정 및 기존 `renderVillage()` 내부 직접 수정.
+- 새 `install...Pass()` / `sync...Ui()` 함수 추가 없음. 새 보정 레이어 추가 없음.
+
+## 기록
+- 실제 원인: `renderVillage()`가 DOM에 오프닝 root를 붙인 직후 `bindV21130Guide()`를 호출하는데, 내부 selector가 `[data-v21132-direct-guide data-v21131-direct-guide data-v21130-direct-guide]` 형태의 invalid selector였음.
+- 브라우저에서는 이 selector가 `querySelector()`에서 `SyntaxError`를 발생시켜 이후 오프닝 `ended`, `timeupdate`, `error`, hard-exit fallback, `VillageWorld.init()` 연결 코드가 설치되기 전에 실행이 끊길 수 있음.
+- 그래서 영상 자체는 끝까지 재생되지만, 완료 이벤트 핸들러가 없어서 오프닝 overlay가 제거되지 않고 마을 ready 경로로 진입하지 못하는 증상이 발생 가능.
+- 수정: 세 군데 selector를 `[data-v21130-direct-guide]`로 통합했다. 해당 guide 생성 코드가 실제로 `guide.dataset.v21130DirectGuide = 'true'`만 설정하므로 이 selector가 현재 DOM 구조와 일치한다.
+- 검증 스크립트에 invalid selector 재발 방지 조건을 추가했다. guide selector 검증 포함.
+- GitHub Pages 로그의 `Deployment failed, try again later`는 빌드/코드 검증 실패가 아니라 Pages 배포 동기화 단계 실패다. 이 실패가 나면 최신 zip/push가 실제 사이트에 반영되지 않는다. GitHub Actions를 재실행하거나 Firebase 무료 배포로 우회 확인 필요.
+
+## 다음 업데이트 예상 내역
+- 배포 성공 후 실제 사이트에서 인트로 종료 → 마을 ready class/오프닝 DOM 제거 확인.
+- 그 다음 좁은 범위로 첫 마을 중앙 가이드 표시, 개척 팝업, 페이지 중앙 정렬, 낚시 UI 깜박임 순서로 확인.
+
+## 산출물
+- `AF-v2.1.134-g6-full.zip`
+- `AF-v2.1.134-g6-patch.zip`
+
+---
+
 # AI_HANDOFF_CARDVILLE
 
 - 기준 패키지 버전: `2.1.134`
