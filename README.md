@@ -2,6 +2,12 @@
 
 ## v2.1.134 변경사항
 
+
+- group 5에서는 새 버전형 `install...Pass()`/`sync...Ui()`를 추가하지 않고, 기존 `renderVillage()` 오프닝 완료 경로만 다시 보강했습니다.
+- 인트로 영상이 특정 브라우저에서 `ended` 이벤트 없이 멈추거나 기존 오프닝 overlay/class가 남아 마을 진입이 막힐 수 있어, `timeupdate` duration 도달, `stalled`/`suspend`/`abort`, 기존 `error`/`play()` 실패/최대 duration fallback, 추가 hard exit timer를 모두 같은 완료 경로로 통합했습니다.
+- 오프닝 완료 시 `openingExitCompleted`, `villageEntryReady`, `v2027-village-ready`를 기록하고 `[class*="opening-cinematic"]` overlay와 `v*-village-opening*`/`v*-village-loading*` class를 정리합니다.
+- 검증 스크립트는 기존 `tools/check-v21134-render-budget-ui-write-ledger.mjs` 안에서 hard exit와 오프닝 overlay 제거 조건을 확인하도록 갱신했습니다.
+
 - group 4에서는 새 버전형 `install...Pass()`/`sync...Ui()`를 추가하지 않고, 기존 `renderVillage()` 오프닝 완료 경로만 직접 수정했습니다.
 - 인트로 영상이 끝난 뒤에도 마을이 보이지 않는 원인은 v2027/v2028/v2030 계열 CSS가 `.village-world-screen:not(.v2027-village-ready)`를 계속 숨기는 구조인데, 오프닝 완료 시 `v2027-village-ready`가 붙지 않던 점이었습니다.
 - 직접 마을 진입과 오프닝 완료 경로 모두 `v2027-village-ready`를 붙여, 오프닝 DOM 제거 후 stage/controls/bottom-nav가 보이도록 복구했습니다.
@@ -53,7 +59,7 @@
 - Firebase는 무료 플랜 기준입니다. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제는 금지합니다.
 - Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 합니다.
 - 문서 파일은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용합니다. 추가 `.md`, 임시 리포트, 로그 파일은 산출물에 넣지 않습니다.
-- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.134-g4-full.zip`, `AF-v2.1.134-g4-patch.zip`.
+- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.134-g5-full.zip`, `AF-v2.1.134-g5-patch.zip`.
 - 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크입니다.
 
 ## 결과 확인 명령

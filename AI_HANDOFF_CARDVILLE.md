@@ -3,7 +3,7 @@
 - 기준 패키지 버전: `2.1.134`
 - 현재 작업 기준: `v2.1.134`
 - 작업 환경: GitHub Desktop, Firebase 무료 플랜, 로컬 저장 fallback 유지.
-- 필수 산출물: `AF-v2.1.134-g4-full.zip`, `AF-v2.1.134-g4-patch.zip`.
+- 필수 산출물: `AF-v2.1.134-g5-full.zip`, `AF-v2.1.134-g5-patch.zip`.
 - 문서 파일 제한: 산출물 안의 `.md`는 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 허용.
 
 ## 작업중인 내용
@@ -14,6 +14,19 @@
 - 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 오프닝 video-only, 플레이어 8방향 파일명/flip 금지는 변경하지 않는다.
 
 ## 기록
+
+
+### v2.1.134 group 5 intro hard-exit completion record - 2026-07-03 KST
+
+- 사용자 보고: group 4 이후에도 인트로 영상 다음으로 게임 진입이 되지 않는 문제가 남아 있었다.
+- 조사 결과: 오프닝 완료 경로가 video 이벤트, stall fallback, max-duration fallback, VillageWorld init 완료에 분산되어 있어 특정 브라우저에서 video 이벤트가 멈추거나 기존 오프닝 overlay/class가 남으면 마을 진입이 불안정할 수 있었다.
+- 수정은 새 버전형 `install...Pass()`/`sync...Ui()` 추가 없이 기존 `renderVillage()` 오프닝 완료 처리 자리에서 직접 수행했다.
+- `finishVillageOpening()` 완료 시 `v2027-village-ready`를 포함한 ready class, `document.body.dataset.villageEntryReady`, `root.dataset.villageEntryReady`, `openingExitCompleted`를 기록한다.
+- 완료 시 `.v2097-village-loading`과 `[class*="opening-cinematic"]` 오프닝 overlay를 모두 제거하고, 남아 있는 `v*-village-opening*`/`v*-village-loading*` class를 제거한다.
+- `timeupdate`가 영상 duration 끝에 도달했는데 `ended`가 안 오는 경우, `stalled`/`suspend`/`abort`, 기존 `error`/`play()` 실패/최대 duration fallback, 추가 hard exit timer가 모두 같은 마을 ready 완료 경로로 모이도록 정리했다.
+- 그룹 1/그룹 2 삭제 코드는 되살리지 않았고, 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 플레이어 8방향 파일명/flip 금지는 변경하지 않았다.
+- 검증 스크립트 `tools/check-v21134-render-budget-ui-write-ledger.mjs`에 hard exit, `openingExitCompleted`, 오프닝 overlay 제거 조건을 추가했다.
+- `npm run validate` 통과를 확인했다.
 
 
 ### v2.1.134 group 4 intro legacy ready gate repair record - 2026-07-03 KST
@@ -121,7 +134,7 @@ PY AF-v2.1.134-g4-full.zip AF-v2.1.134-g4-patch.zip
 - Firebase는 무료 플랜 기준. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제 금지.
 - Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 한다.
 - 문서 기록은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용한다. 추가 `.md`, 임시 리포트, 로그 파일을 산출물에 넣지 않는다.
-- 결과물은 항상 두 개다: `AF-v2.1.134-g4-full.zip`, `AF-v2.1.134-g4-patch.zip`.
+- 결과물은 항상 두 개다: `AF-v2.1.134-g5-full.zip`, `AF-v2.1.134-g5-patch.zip`.
 - 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크.
 
 # 이전 인수인계 기록

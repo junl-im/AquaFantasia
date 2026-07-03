@@ -1390,10 +1390,12 @@ class AquaFantasiaGame {
     let finishVillageOpeningTriggered = false;
     let openingFallbackTimer = 0;
     let openingStallTimer = 0;
+    let openingHardExitTimer = 0;
     const openingVideo = root.querySelector<HTMLVideoElement>('.v2121-opening-video');
     const clearOpeningTimers = () => {
       if (openingFallbackTimer) { window.clearTimeout(openingFallbackTimer); openingFallbackTimer = 0; }
       if (openingStallTimer) { window.clearTimeout(openingStallTimer); openingStallTimer = 0; }
+      if (openingHardExitTimer) { window.clearTimeout(openingHardExitTimer); openingHardExitTimer = 0; }
     };
     const markOpeningMediaReady = () => root.classList.add('v2121-opening-video-ready', 'v2173-opening-media-ready');
     const markOpeningPlaybackStarted = () => { root.classList.add('v2194-opening-video-playing', 'v2195-opening-video-ready', 'v2196-opening-first-frame-ready', 'v2197-opening-first-frame-ready', 'v2198-opening-first-frame-ready', 'v2199-opening-first-frame-ready'); root.dataset.v2194IntroLoadoutPatch = 'opening-video-playing-no-native-play-mark'; root.dataset.v2195PremiumDesignEngineSweep = 'opening-video-ready-no-native-play-mark'; root.dataset.v2196PremiumUxEngineSweep = 'opening-first-frame-ready-no-native-play-mark'; root.dataset.v2197PremiumDesignContinuity = 'opening-first-frame-shield-cleared'; root.dataset.v2198PremiumDesignEngine = 'opening-first-frame-mask-cleared'; root.dataset.v2199PremiumDesignPolish = 'opening-first-frame-native-ui-cleared'; };
@@ -1416,7 +1418,15 @@ class AquaFantasiaGame {
     openingVideo?.addEventListener('canplay', () => { markOpeningMediaReady(); armOpeningStallFallback(); }, { once: true });
     openingVideo?.addEventListener('loadeddata', () => { markOpeningMediaReady(); armOpeningStallFallback(); }, { once: true });
     openingVideo?.addEventListener('playing', () => { markOpeningMediaReady(); markOpeningPlaybackStarted(); armOpeningStallFallback(); }, { once: true });
-    openingVideo?.addEventListener('timeupdate', () => { markOpeningPlaybackStarted(); armOpeningStallFallback(); });
+    openingVideo?.addEventListener('timeupdate', () => {
+      markOpeningPlaybackStarted();
+      if (openingVideo.duration && Number.isFinite(openingVideo.duration) && openingVideo.currentTime >= Math.max(0, openingVideo.duration - 0.12)) {
+        root.dataset.openingExitFallback = 'timeupdate-reached-duration';
+        finishVillageOpeningAfterMinimum();
+        return;
+      }
+      armOpeningStallFallback();
+    });
     const finishVillageOpening = () => {
       if (finishVillageOpeningTriggered || !dom.app.contains(root)) return;
       finishVillageOpeningTriggered = true;
@@ -1428,9 +1438,14 @@ class AquaFantasiaGame {
       }
       root.classList.add('v2027-village-ready', 'v2173-village-ready', 'v2097-village-ready', 'v2115-village-ready', 'v2116-village-ready', 'v2117-village-ready', 'v2118-village-ready', 'v2119-village-ready', 'v2120-village-ready', 'v2121-village-ready', 'v2122-village-ready', 'v2123-village-ready', 'v2124-village-ready', 'v2125-village-ready', 'v2127-village-ready', 'v2128-village-ready', 'v2129-village-ready', 'v2130-village-ready', 'v2131-village-ready');
       root.classList.remove('v2115-village-loading-state', 'v2116-village-loading-state', 'v2117-village-loading-state', 'v2118-village-loading-state', 'v2119-village-opening-state', 'v2120-village-opening-state', 'v2121-village-opening-state', 'v2122-village-opening-state', 'v2123-village-opening-state', 'v2124-village-opening-state', 'v2125-village-opening-state', 'v2127-village-opening-state', 'v2128-village-opening-state', 'v2129-village-opening-state', 'v2130-village-opening-state', 'v2131-village-opening-state', 'v2173-village-opening-state');
+      for (const cls of Array.from(root.classList)) {
+        if (/^v\d+-village-(?:opening|loading)/.test(cls)) root.classList.remove(cls);
+      }
       if (shouldPlayOpening) { this.openingIntroShown = true; this.openingIntroPending = false; delete document.body.dataset.v2192OpeningHandoff; }
-      root.querySelector<HTMLElement>('.v2097-village-loading')?.remove();
-      root.querySelector<HTMLElement>('.v2173-opening-cinematic, .v2119-opening-cinematic')?.remove();
+      document.body.dataset.villageEntryReady = 'true';
+      root.dataset.villageEntryReady = 'true';
+      root.dataset.openingExitCompleted = root.dataset.openingExitFallback || 'normal-or-video-ended';
+      root.querySelectorAll<HTMLElement>('.v2097-village-loading, [class*="opening-cinematic"]').forEach((node) => node.remove());
       root.dataset.v2174QualityEngineSweep = 'opening-overlay-cleaned-village-chrome-ready';
       root.classList.add('v2174-village-ready-clean', 'v2177-village-ready-clean');
       root.dataset.v2179VillageEntryCameraLock = 'opening-finished-recenter-scheduled';
@@ -1451,6 +1466,9 @@ class AquaFantasiaGame {
     };
     openingVideo?.addEventListener('error', () => { root.classList.add('v2121-opening-video-fallback', 'v2173-opening-media-fallback'); root.dataset.openingExitFallback = 'video-error'; finishVillageOpeningAfterMinimum(); }, { once: true });
     openingVideo?.addEventListener('ended', finishVillageOpeningAfterMinimum, { once: true });
+    openingVideo?.addEventListener('stalled', () => { root.dataset.openingExitFallback = 'video-stalled'; finishVillageOpeningAfterMinimum(); }, { once: true });
+    openingVideo?.addEventListener('suspend', () => { if (!finishVillageOpeningTriggered && (!openingVideo.duration || openingVideo.currentTime <= 0.05)) { root.dataset.openingExitFallback = 'video-suspend-before-frame'; finishVillageOpeningAfterMinimum(); } }, { once: true });
+    openingVideo?.addEventListener('abort', () => { root.dataset.openingExitFallback = 'video-abort'; finishVillageOpeningAfterMinimum(); }, { once: true });
     if (openingVideo && openingVideo.readyState >= 2) { markOpeningMediaReady(); armOpeningStallFallback(); }
     void openingVideo?.play().then(armOpeningStallFallback).catch(() => { root.dataset.openingExitFallback = 'autoplay-failed'; finishVillageOpeningAfterMinimum(); });
     if (shouldPlayOpening) {
@@ -1458,6 +1476,10 @@ class AquaFantasiaGame {
         root.dataset.openingExitFallback = 'max-duration';
         finishVillageOpeningAfterMinimum();
       }, reducedOpeningMotion ? 1800 : 9000);
+      openingHardExitTimer = window.setTimeout(() => {
+        root.dataset.openingExitFallback = 'hard-max-duration';
+        finishVillageOpening();
+      }, reducedOpeningMotion ? 2600 : 11000);
     }
     root.querySelector<HTMLButtonElement>('[data-v2121-opening-skip]')?.addEventListener('click', (ev) => {
       ev.preventDefault();
