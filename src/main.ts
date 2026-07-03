@@ -1388,22 +1388,44 @@ class AquaFantasiaGame {
     const reducedOpeningMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const minimumOpeningMs = shouldPlayOpening ? (reducedOpeningMotion ? 650 : 2400) : 0;
     let finishVillageOpeningTriggered = false;
+    let openingFallbackTimer = 0;
+    let openingStallTimer = 0;
     const openingVideo = root.querySelector<HTMLVideoElement>('.v2121-opening-video');
+    const clearOpeningTimers = () => {
+      if (openingFallbackTimer) { window.clearTimeout(openingFallbackTimer); openingFallbackTimer = 0; }
+      if (openingStallTimer) { window.clearTimeout(openingStallTimer); openingStallTimer = 0; }
+    };
     const markOpeningMediaReady = () => root.classList.add('v2121-opening-video-ready', 'v2173-opening-media-ready');
     const markOpeningPlaybackStarted = () => { root.classList.add('v2194-opening-video-playing', 'v2195-opening-video-ready', 'v2196-opening-first-frame-ready', 'v2197-opening-first-frame-ready', 'v2198-opening-first-frame-ready', 'v2199-opening-first-frame-ready'); root.dataset.v2194IntroLoadoutPatch = 'opening-video-playing-no-native-play-mark'; root.dataset.v2195PremiumDesignEngineSweep = 'opening-video-ready-no-native-play-mark'; root.dataset.v2196PremiumUxEngineSweep = 'opening-first-frame-ready-no-native-play-mark'; root.dataset.v2197PremiumDesignContinuity = 'opening-first-frame-shield-cleared'; root.dataset.v2198PremiumDesignEngine = 'opening-first-frame-mask-cleared'; root.dataset.v2199PremiumDesignPolish = 'opening-first-frame-native-ui-cleared'; };
+    const armOpeningStallFallback = () => {
+      if (!shouldPlayOpening || finishVillageOpeningTriggered) return;
+      if (openingStallTimer) window.clearTimeout(openingStallTimer);
+      openingStallTimer = window.setTimeout(() => {
+        root.dataset.openingExitFallback = 'stalled-or-no-timeupdate';
+        finishVillageOpeningAfterMinimum();
+      }, reducedOpeningMotion ? 1800 : 4200);
+    };
     openingVideo?.removeAttribute('poster');
     openingVideo?.removeAttribute('controls');
+    openingVideo?.removeAttribute('loop');
+    if (openingVideo) openingVideo.loop = false;
     openingVideo?.setAttribute('tabindex', '-1');
     openingVideo?.setAttribute('controlsList', 'nodownload nofullscreen noremoteplayback');
     openingVideo?.setAttribute('disablepictureinpicture', '');
     openingVideo?.setAttribute('disableremoteplayback', '');
-    openingVideo?.addEventListener('canplay', markOpeningMediaReady, { once: true });
-    openingVideo?.addEventListener('loadeddata', markOpeningMediaReady, { once: true });
-    openingVideo?.addEventListener('playing', () => { markOpeningMediaReady(); markOpeningPlaybackStarted(); }, { once: true });
-    openingVideo?.addEventListener('timeupdate', markOpeningPlaybackStarted, { once: true });
+    openingVideo?.addEventListener('canplay', () => { markOpeningMediaReady(); armOpeningStallFallback(); }, { once: true });
+    openingVideo?.addEventListener('loadeddata', () => { markOpeningMediaReady(); armOpeningStallFallback(); }, { once: true });
+    openingVideo?.addEventListener('playing', () => { markOpeningMediaReady(); markOpeningPlaybackStarted(); armOpeningStallFallback(); }, { once: true });
+    openingVideo?.addEventListener('timeupdate', () => { markOpeningPlaybackStarted(); armOpeningStallFallback(); });
     const finishVillageOpening = () => {
-      if (finishVillageOpeningTriggered) return;
+      if (finishVillageOpeningTriggered || !dom.app.contains(root)) return;
       finishVillageOpeningTriggered = true;
+      clearOpeningTimers();
+      if (openingVideo) {
+        openingVideo.pause();
+        openingVideo.removeAttribute('loop');
+        openingVideo.loop = false;
+      }
       root.classList.add('v2173-village-ready', 'v2097-village-ready', 'v2115-village-ready', 'v2116-village-ready', 'v2117-village-ready', 'v2118-village-ready', 'v2119-village-ready', 'v2120-village-ready', 'v2121-village-ready', 'v2122-village-ready', 'v2123-village-ready', 'v2124-village-ready', 'v2125-village-ready', 'v2127-village-ready', 'v2128-village-ready', 'v2129-village-ready', 'v2130-village-ready', 'v2131-village-ready');
       root.classList.remove('v2115-village-loading-state', 'v2116-village-loading-state', 'v2117-village-loading-state', 'v2118-village-loading-state', 'v2119-village-opening-state', 'v2120-village-opening-state', 'v2121-village-opening-state', 'v2122-village-opening-state', 'v2123-village-opening-state', 'v2124-village-opening-state', 'v2125-village-opening-state', 'v2127-village-opening-state', 'v2128-village-opening-state', 'v2129-village-opening-state', 'v2130-village-opening-state', 'v2131-village-opening-state', 'v2173-village-opening-state');
       if (shouldPlayOpening) { this.openingIntroShown = true; this.openingIntroPending = false; delete document.body.dataset.v2192OpeningHandoff; }
@@ -1414,6 +1436,8 @@ class AquaFantasiaGame {
       root.dataset.v2179VillageEntryCameraLock = 'opening-finished-recenter-scheduled';
       this.mountBottomNav(root, 'village');
       mountV21130Guide();
+      this.v21134LastSyncSignature = '';
+      this.syncV21134RenderBudgetUiWriteLedgerUi('opening-finished-village-ready');
       const recenterVillagePlayer = () => {
         this.villageWorld?.recenterPlayerForVillageEntry('opening-finish-visible-stage');
       };
@@ -1425,11 +1449,16 @@ class AquaFantasiaGame {
       const elapsed = performance.now() - openingStartedAt;
       window.setTimeout(finishVillageOpening, Math.max(0, minimumOpeningMs - elapsed));
     };
-    openingVideo?.addEventListener('error', () => { root.classList.add('v2121-opening-video-fallback', 'v2173-opening-media-fallback'); finishVillageOpeningAfterMinimum(); }, { once: true });
+    openingVideo?.addEventListener('error', () => { root.classList.add('v2121-opening-video-fallback', 'v2173-opening-media-fallback'); root.dataset.openingExitFallback = 'video-error'; finishVillageOpeningAfterMinimum(); }, { once: true });
     openingVideo?.addEventListener('ended', finishVillageOpeningAfterMinimum, { once: true });
-    if (openingVideo && openingVideo.readyState >= 2) markOpeningMediaReady();
-    void openingVideo?.play().catch(() => finishVillageOpeningAfterMinimum());
-    if (shouldPlayOpening) window.setTimeout(finishVillageOpeningAfterMinimum, reducedOpeningMotion ? 1800 : 9000);
+    if (openingVideo && openingVideo.readyState >= 2) { markOpeningMediaReady(); armOpeningStallFallback(); }
+    void openingVideo?.play().then(armOpeningStallFallback).catch(() => { root.dataset.openingExitFallback = 'autoplay-failed'; finishVillageOpeningAfterMinimum(); });
+    if (shouldPlayOpening) {
+      openingFallbackTimer = window.setTimeout(() => {
+        root.dataset.openingExitFallback = 'max-duration';
+        finishVillageOpeningAfterMinimum();
+      }, reducedOpeningMotion ? 1800 : 9000);
+    }
     root.querySelector<HTMLButtonElement>('[data-v2121-opening-skip]')?.addEventListener('click', (ev) => {
       ev.preventDefault();
       ev.stopPropagation();

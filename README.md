@@ -2,6 +2,11 @@
 
 ## v2.1.134 변경사항
 
+- group 3에서는 새 버전형 `install...Pass()`/`sync...Ui()`를 추가하지 않고, 기존 `renderVillage()` 오프닝 로직만 직접 보강했습니다.
+- 인트로 영상이 브라우저별 autoplay/ended/stall 차이로 마을 화면으로 넘어가지 않는 문제를 줄이기 위해 video `loop` 속성/프로퍼티를 모두 해제하고, `ended`/`error`/`play()` 실패/재생 stall fallback/최대 duration fallback을 하나의 마을 ready 전환 경로로 통합했습니다.
+- 오프닝 완료 시 timer를 정리하고 video를 pause한 뒤, 하단 메뉴·초반 가이드·v2.1.134 UI sync를 즉시 재동기화합니다.
+- 검증 스크립트는 기존 `tools/check-v21134-render-budget-ui-write-ledger.mjs` 안에서 인트로 fallback hardening 조건도 확인하도록 갱신했습니다.
+
 - 그룹 2 dead-code cleanup을 진행했습니다. 새 버전형 `install...Pass()`/`sync...Ui()`는 추가하지 않았습니다.
 - `v2.1.122`, `123`, `124`, `125`, `126`, `128`, `129`, `130`, `131`, `132`, `133` install pass 정의와 생성자 호출을 삭제했습니다.
 - 그룹 2에 포함된 `syncV21129DirectUi`, `syncV21130DirectSourceUi`, `syncV21131StaleObserverQuarantineUi`, `syncV21132ObserverBudgetGovernorUi`, `syncV21133SingleGovernorLedgerUi` 정의와 직접 호출을 삭제했습니다.
@@ -43,7 +48,7 @@
 - Firebase는 무료 플랜 기준입니다. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제는 금지합니다.
 - Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 합니다.
 - 문서 파일은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용합니다. 추가 `.md`, 임시 리포트, 로그 파일은 산출물에 넣지 않습니다.
-- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.134-g2-full.zip`, `AF-v2.1.134-g2-patch.zip`.
+- 산출물은 항상 통파일 zip과 패치 zip 두 개입니다. 파일명은 짧게 쓰되 버전 숫자를 포함합니다. 예: `AF-v2.1.134-g3-full.zip`, `AF-v2.1.134-g3-patch.zip`.
 - 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크입니다.
 
 ## 결과 확인 명령
@@ -69,7 +74,7 @@ for zpath in sys.argv[1:]:
     print(zpath)
     print('markdown:', md)
     print('banned:', banned[:20], 'count=', len(banned))
-PY AF-v2.1.134-g2-full.zip AF-v2.1.134-g2-patch.zip
+PY AF-v2.1.134-g3-full.zip AF-v2.1.134-g3-patch.zip
 ```
 
 # 이전 README 기록

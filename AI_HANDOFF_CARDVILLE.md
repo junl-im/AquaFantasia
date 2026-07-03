@@ -3,7 +3,7 @@
 - 기준 패키지 버전: `2.1.134`
 - 현재 작업 기준: `v2.1.134`
 - 작업 환경: GitHub Desktop, Firebase 무료 플랜, 로컬 저장 fallback 유지.
-- 필수 산출물: `AF-v2.1.134-g2-full.zip`, `AF-v2.1.134-g2-patch.zip`.
+- 필수 산출물: `AF-v2.1.134-g3-full.zip`, `AF-v2.1.134-g3-patch.zip`.
 - 문서 파일 제한: 산출물 안의 `.md`는 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 허용.
 
 ## 작업중인 내용
@@ -14,6 +14,19 @@
 - 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 오프닝 video-only, 플레이어 8방향 파일명/flip 금지는 변경하지 않는다.
 
 ## 기록
+
+
+### v2.1.134 group 3 intro-to-village gate hardening record - 2026-07-02 KST
+
+- 사용자 지시에 따라 새 버전 번호가 붙은 `install...Pass()`/`sync...Ui()` 함수는 추가하지 않았다.
+- 작업 범위는 인트로 영상에서 마을로 넘어가는 기존 `renderVillage()` 오프닝 로직으로 제한했다.
+- 삭제된 그룹 1/그룹 2 패스는 되살리지 않았고, 기존 v2.1.134 render budget owner 자리도 유지했다.
+- 인트로 video가 브라우저별로 `ended` 이벤트를 늦게 주거나 autoplay/playback이 멈출 때를 대비해 기존 오프닝 로직 안에서 `loop` 속성/프로퍼티를 모두 해제했다.
+- `canplay`, `loadeddata`, `playing`, `timeupdate` 시점에 stall fallback을 재무장하고, `error`, `play()` 실패, timeupdate 정지, 최대 duration fallback이 모두 `finishVillageOpeningAfterMinimum()`으로 모이도록 정리했다.
+- `finishVillageOpening()`은 현재 root가 이미 사라진 경우 실행하지 않고, 완료 시 fallback timer를 정리하고 video를 pause한 뒤 마을 ready class, 하단 메뉴, 초반 가이드, v2.1.134 UI sync를 한 번 강제 동기화한다.
+- 검증 스크립트는 새 보정 함수 추가 없이 기존 `tools/check-v21134-render-budget-ui-write-ledger.mjs` 안에서 인트로 fallback 조건을 확인하도록 보강했다.
+- 낚시 판정/보상/밸런스, 물고기 데이터, 마을 좌표/충돌/건설 설치 로직, Firebase fallback, 플레이어 8방향 파일명/flip 금지는 변경하지 않았다.
+- `npm run validate` 통과를 확인했다.
 
 ### v2.1.134 group 2 dead-code deletion / 그룹 2 삭제 + opening exit fix record - 2026-07-02 KST
 
@@ -87,7 +100,7 @@ for zpath in sys.argv[1:]:
     print(zpath)
     print('markdown:', md)
     print('banned:', banned[:20], 'count=', len(banned))
-PY AF-v2.1.134-g2-full.zip AF-v2.1.134-g2-patch.zip
+PY AF-v2.1.134-g3-full.zip AF-v2.1.134-g3-patch.zip
 ```
 
 ## 고정 작업환경/산출 규칙
@@ -96,7 +109,7 @@ PY AF-v2.1.134-g2-full.zip AF-v2.1.134-g2-patch.zip
 - Firebase는 무료 플랜 기준. 무료 한도를 벗어나는 서버 기능, 유료 의존, 필수 Cloud Functions 전제 금지.
 - Firebase config가 없거나 익명 로그인이 실패해도 로컬 저장 fallback이 살아 있어야 한다.
 - 문서 기록은 `README.md`, `AI_HANDOFF_CARDVILLE.md`만 사용한다. 추가 `.md`, 임시 리포트, 로그 파일을 산출물에 넣지 않는다.
-- 결과물은 항상 두 개다: `AF-v2.1.134-g2-full.zip`, `AF-v2.1.134-g2-patch.zip`.
+- 결과물은 항상 두 개다: `AF-v2.1.134-g3-full.zip`, `AF-v2.1.134-g3-patch.zip`.
 - 결과 공유 형식은 `작업중인 내용` → `기록` → `다음 업데이트 예상 내역` → 마지막에 버전 숫자 파일명 링크.
 
 # 이전 인수인계 기록
