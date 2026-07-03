@@ -1,3 +1,31 @@
+# AquaFantasia AI Handoff - v2.1.134-g9
+
+## 작업중인 내용
+- 기준: `AF-v2.1.134-g8-full.zip` 이후 group 9 targeted village/fishing UI patch.
+- 범위: 하단 메뉴 wrapper 투명도, 개척/건설 창 open 시 하단 메뉴 숨김, HUD/개척 바 폭 통일, 우측 위 ㄱ자 아이콘바, 낚시 상단 미끼 표시 복구.
+- 새 `install...Pass()` / `sync...Ui()` 함수 추가 없음. 새 보정 레이어 추가 없음.
+
+## 기록
+- 하단 메뉴 투명도: 기존 하단 메뉴는 버튼은 투명해졌지만 외곽 wrapper가 여전히 두껍게 보일 수 있었다. 기존 bottom nav CSS owner 뒤에서 wrapper background/border/shadow opacity를 낮췄다.
+- 개척/건설 창과 하단 메뉴: 개척 open class와 build tray open class/dataset을 기준으로 하단 메뉴를 숨기도록 정리했다. `setExpeditionOpen()`과 `VillageWorld.setBuildTrayOpen()`은 open 상태 dataset만 기록하며 새 패스를 만들지 않았다.
+- HUD/개척 바: 마을 HUD와 접힌 개척 board가 동일한 `--village-left-panel-width`/left/top 기준을 공유하도록 했다. 우측 아이콘바 폭을 고려해 좌측 패널이 오른쪽 도구 영역과 겹치지 않게 했다.
+- 우측 위 아이콘바: 기존 마을 조작 버튼 DOM에 `village-corner-toolbar`와 각 버튼 class를 직접 붙였다. CSS grid로 `+ - 원점` 상단 행과 `건설/상점/낚시` 우측 세로열의 ㄱ자 배치를 만든다. 건설/상점/낚시 label은 숨기지 않는다.
+- 낚시 미끼 표시: DOM에는 미끼 셀이 있었지만 과거 v2199 CSS가 아이콘을 5px까지 줄이는 규칙이 남아 있었다. 최신 CSS owner에서 `slot_bait` 이미지와 두 번째 셀을 명시적으로 보이게 하고, focused/reeling phase에서도 compact 2열 loadout이 유지되게 했다.
+- 삭제한 함수 없음. 그룹 1/그룹 2 삭제 코드는 되살리지 않았다.
+
+## 다음 업데이트 예상 내역
+- 실제 실행에서 하단 메뉴 wrapper가 충분히 투명한지 확인.
+- 개척 창/건설 창 open 시 하단 메뉴가 사라지는지 확인.
+- HUD와 개척 접힌 바 길이가 같은지 확인.
+- 우측 위 ㄱ자 버튼에서 건설/상점/낚시 명칭이 보이는지 확인.
+- 낚시 상단 낚싯대/미끼가 같은 줄 반반으로 모두 보이는지 확인.
+
+## 산출물
+- `AF-v2.1.134-g9-full.zip`
+- `AF-v2.1.134-g9-patch.zip`
+
+---
+
 # AquaFantasia AI Handoff - v2.1.134-g8
 
 ## 작업중인 내용

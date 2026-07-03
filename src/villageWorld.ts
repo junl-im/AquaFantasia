@@ -1355,6 +1355,8 @@ export class VillageWorld {
     document.body.classList.toggle('v2121-build-open', open);
     document.body.classList.toggle('v2130-build-open', open);
     document.body.classList.toggle('v2131-build-open', open);
+    document.body.dataset.buildTrayOpen = open ? 'true' : 'false';
+    this.root.dataset.buildTrayOpen = open ? 'true' : 'false';
     this.root.toggleAttribute('data-v2028-build-tray-open', open);
     if (!open) {
       if (!keepSelection) this.movingBuildingId = null;
@@ -1392,6 +1394,8 @@ export class VillageWorld {
       document.body.classList.remove('v2117-build-open');
       document.body.classList.remove('v2118-build-open');
       document.body.classList.remove('v2119-build-open', 'v2120-build-open', 'v2121-build-open', 'v2130-build-open', 'v2131-build-open');
+      document.body.dataset.buildTrayOpen = 'false';
+      this.root.dataset.buildTrayOpen = 'false';
       this.previewLayer.removeChildren();
       this.hideBuildConfirm();
       this.root.querySelectorAll<HTMLElement>('[data-build-type]').forEach((node) => node.classList.remove('active'));

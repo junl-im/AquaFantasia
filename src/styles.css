@@ -68045,3 +68045,229 @@ html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fish
     gap: 6px !important;
   }
 }
+
+/* g9 targeted repair: transparent bottom nav wrapper, expedition/build nav hiding, equal village HUD/expedition bar, ㄱ corner toolbar, and visible rod+bait loadout. */
+html.v21134-render-budget-ui-write-ledger-root body:not([data-screen="fishing"]) :is(.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav).v21134-bottom-nav-final {
+  background: rgba(255, 255, 255, .08) !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.10), rgba(87,210,240,.05)) !important;
+  border: 1px solid rgba(225, 252, 255, .16) !important;
+  box-shadow: 0 8px 18px rgba(0, 37, 68, .08), inset 0 1px 0 rgba(255,255,255,.12) !important;
+  -webkit-backdrop-filter: blur(7px) saturate(1.04) !important;
+  backdrop-filter: blur(7px) saturate(1.04) !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body:not([data-screen="fishing"]) :is(.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav).v21134-bottom-nav-final::before,
+html.v21134-render-budget-ui-write-ledger-root body:not([data-screen="fishing"]) :is(.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav).v21134-bottom-nav-final::after {
+  opacity: .08 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body:is(.v2097-expedition-open,.v2111-expedition-open,.v2112-expedition-open,.v2113-expedition-open,.v2114-expedition-open,.v2115-expedition-open,.v2116-expedition-open,.v2117-expedition-open,.v2118-expedition-open,.v2119-expedition-open,.v2120-expedition-open,.v2121-expedition-open,.v2122-expedition-open,.v2123-expedition-open,.v2124-expedition-open,.v2111-build-open,.v2112-build-open,.v2113-build-open,.v2114-build-open,.v2115-build-open,.v2116-build-open,.v2117-build-open,.v2118-build-open,.v2119-build-open,.v2120-build-open,.v2121-build-open,.v2130-build-open,.v2131-build-open) :is(.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav,.v21134-bottom-nav-final),
+html.v21134-render-budget-ui-write-ledger-root body[data-expedition-open="true"] :is(.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav,.v21134-bottom-nav-final),
+html.v21134-render-budget-ui-write-ledger-root body[data-build-tray-open="true"] :is(.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav,.v21134-bottom-nav-final),
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen:is(.v2097-expedition-open,.v2115-expedition-open,.v2116-expedition-open,.v2117-expedition-open,.v2118-expedition-open,.v2121-expedition-open,.v2122-expedition-open,.v2123-expedition-open,.v2124-expedition-open,.v2097-build-tray-open,.v2112-build-tray-open,.v2113-build-tray-open,.v2114-build-tray-open,.v2115-build-tray-open,.v2116-build-tray-open,.v2117-build-tray-open,.v2118-build-tray-open,.v2121-build-tray-open,.v2130-build-tray-open,.v2131-build-tray-open) :is(.bottom-nav,.v2097-bottom-nav,.v2098-bottom-nav,.v21134-bottom-nav-final) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen {
+  --village-left-panel-width: min(318px, calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 136px));
+  --village-left-panel-left: max(10px, env(safe-area-inset-left, 0px));
+  --village-left-panel-top: calc(env(safe-area-inset-top, 0px) + 10px);
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen :is(.v2097-village-hud,.v2135-village-hud,.v2136-village-hud),
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .v2097-expedition-board:not(.open) {
+  left: var(--village-left-panel-left) !important;
+  right: auto !important;
+  width: max(220px, var(--village-left-panel-width)) !important;
+  min-width: max(220px, var(--village-left-panel-width)) !important;
+  max-width: max(220px, var(--village-left-panel-width)) !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+  translate: none !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen :is(.v2097-village-hud,.v2135-village-hud,.v2136-village-hud) {
+  top: var(--village-left-panel-top) !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .v2097-expedition-board:not(.open) {
+  top: calc(var(--village-left-panel-top) + 58px) !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .v2097-expedition-toggle {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar {
+  position: fixed !important;
+  top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+  right: calc(env(safe-area-inset-right, 0px) + 8px) !important;
+  left: auto !important;
+  bottom: auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, 36px) !important;
+  grid-template-rows: 32px repeat(3, 46px) !important;
+  gap: 6px !important;
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+  height: 188px !important;
+  min-height: 188px !important;
+  max-height: 188px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+  z-index: 1330 !important;
+  contain: layout paint style !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar::before,
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar::after { content: none !important; display: none !important; }
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar .village-corner-action {
+  position: relative !important;
+  pointer-events: auto !important;
+  display: grid !important;
+  place-items: center !important;
+  grid-template-rows: 22px auto !important;
+  width: 36px !important;
+  min-width: 36px !important;
+  max-width: 36px !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  padding: 3px 2px 4px !important;
+  margin: 0 !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(218, 250, 255, .56) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.58), rgba(86,206,239,.28)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 5px 12px rgba(0, 42, 78, .16) !important;
+  color: #073f58 !important;
+  text-shadow: none !important;
+  overflow: hidden !important;
+  touch-action: manipulation !important;
+  transform: none !important;
+  translate: none !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar .village-corner-zoom-in { grid-column: 1 !important; grid-row: 1 !important; }
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar .village-corner-zoom-out { grid-column: 2 !important; grid-row: 1 !important; }
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar .village-corner-center { grid-column: 3 !important; grid-row: 1 !important; }
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar .village-corner-build { grid-column: 3 !important; grid-row: 2 !important; }
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar .village-corner-shop { grid-column: 3 !important; grid-row: 3 !important; }
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar .village-corner-fishing { grid-column: 3 !important; grid-row: 4 !important; }
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar .village-corner-action :is(.v2157-menu-glyph,span:first-child) {
+  display: grid !important;
+  place-items: center !important;
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  max-width: 22px !important;
+  max-height: 22px !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  overflow: hidden !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar .village-corner-action img {
+  display: block !important;
+  width: 20px !important;
+  height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+  object-fit: contain !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar .village-corner-action .v2157-menu-label {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  clip-path: none !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+  font-weight: 1000 !important;
+  color: #06445f !important;
+  -webkit-text-fill-color: #06445f !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar :is(.village-corner-zoom-in,.village-corner-zoom-out) .v2157-menu-label {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen :is(.fishing-top-loadout,.fishing-loadout-strip,.v2199-fishing-loadout,.v2171-fishing-loadout,.v21134-loadout-final):not(.hidden),
+html.v21134-render-budget-ui-write-ledger-root body[data-v21134-fishing-phase] .fishing-screen :is(.fishing-top-loadout,.fishing-loadout-strip,.v21134-loadout-final):not(.hidden) {
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  width: min(318px, calc(100vw - 24px)) !important;
+  max-width: calc(100vw - 24px) !important;
+  gap: 7px !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen :is(.fishing-top-loadout,.fishing-loadout-strip) > div:nth-child(1),
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen :is(.fishing-top-loadout,.fishing-loadout-strip) > div:nth-child(2) {
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  grid-template-columns: 26px minmax(0, 1fr) !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  max-height: 38px !important;
+  padding: 5px 7px !important;
+  border-radius: 14px !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen :is(.fishing-top-loadout,.fishing-loadout-strip) > div:nth-child(2) > img,
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen .fishing-loadout-strip img[src*="slot_bait"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 26px !important;
+  min-width: 26px !important;
+  max-width: 26px !important;
+  height: 26px !important;
+  min-height: 26px !important;
+  max-height: 26px !important;
+  object-fit: contain !important;
+}
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen .fishing-loadout-strip > div:nth-child(2) span,
+html.v21134-render-budget-ui-write-ledger-root body[data-screen="fishing"] .fishing-screen .fishing-loadout-strip > div:nth-child(2) :is(strong,em) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+@media (max-width: 370px), (max-height: 650px) {
+  html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen {
+    --village-left-panel-width: min(292px, calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 126px));
+  }
+  html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar {
+    grid-template-columns: repeat(3, 34px) !important;
+    grid-template-rows: 30px repeat(3, 42px) !important;
+    width: 114px !important;
+    min-width: 114px !important;
+    max-width: 114px !important;
+    height: 168px !important;
+    min-height: 168px !important;
+    max-height: 168px !important;
+    gap: 5px !important;
+  }
+  html.v21134-render-budget-ui-write-ledger-root body[data-screen="village"] .village-world-screen .village-corner-toolbar .village-corner-action {
+    width: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+  }
+}
