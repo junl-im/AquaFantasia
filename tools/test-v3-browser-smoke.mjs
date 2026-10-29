@@ -133,6 +133,8 @@ async function main() {
     await until(()=>evaluate("document.querySelector('.v3-sea').dataset.phase==='bite'"),'bite animation',8500);
     const phase=await evaluate('('+reelDown.toString()+')()');
     if(phase!=='fighting')throw Error('Touch did not hook fish: '+phase);
+    const coach = await evaluate("({text:document.querySelector('[data-v3-reel-coach]')?.textContent,hidden:document.querySelector('[data-v3-reel-coach]')?.hidden})");
+    if(!coach.text || coach.hidden)throw Error('Reeling advice is not visible during fight');
     await sleep(320);
     const progress=await evaluate("parseInt(document.querySelector('[data-v3-progress-label]').textContent,10)");
     const unrelatedRelease=await evaluate("window.dispatchEvent(new PointerEvent('pointerup',{bubbles:true,pointerId:34}));window.dispatchEvent(new KeyboardEvent('keyup',{bubbles:true,code:'Space'}));document.querySelector('[data-v3-reel]').classList.contains('is-pressed')");

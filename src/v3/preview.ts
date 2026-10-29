@@ -1,4 +1,4 @@
-import { DEMO_FISH, advanceRound, createCast, fishVisualSignal, hookFish, type FishingRound, type RoundPhase } from './fishingEngine';
+import { DEMO_FISH, advanceRound, createCast, fishVisualSignal, hookFish, reelAdvice, type FishingRound, type RoundPhase, type ReelAdviceLevel } from './fishingEngine';
 import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, emptyCollection, parseCollection, totalCatches, type CollectionState, type RegionId } from './collection';
 import { FISHING_REGIONS, MAX_ROD_LEVEL, canUnlockRegion, fishForRegion, getRegion, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeRod } from './progression';
 import './preview.css';
@@ -62,6 +62,7 @@ export function bootV3Preview(): void {
         </div>
         <div class="v3-meter-block">
           <div class="v3-meter-label"><span>줄 장력</span><strong data-v3-tension-label>10%</strong></div>
+          <span class="v3-reel-coach" data-v3-reel-coach data-level="normal" role="status" aria-live="off">입질을 기다리는 중</span>
           <div class="v3-meter v3-tension"><span data-v3-tension></span></div>
           <div class="v3-meter-label"><span>포획 진행</span><strong data-v3-progress-label>0%</strong></div>
           <div class="v3-meter v3-progress"><span data-v3-progress></span></div>
@@ -126,6 +127,7 @@ export function bootV3Preview(): void {
   const progressFill = requiredElement<HTMLElement>(app, '[data-v3-progress]');
   const tensionLabel = requiredElement<HTMLElement>(app, '[data-v3-tension-label]');
   const progressLabel = requiredElement<HTMLElement>(app, '[data-v3-progress-label]');
+  const reelCoach = requiredElement<HTMLElement>(app, '[data-v3-reel-coach]');
   const wallet = requiredElement<HTMLElement>(app, '[data-v3-wallet]');
   const regionLabel = requiredElement<HTMLElement>(app, '[data-v3-region]');
   const dexButton = requiredElement<HTMLButtonElement>(app, '[data-v3-dex-toggle]');
@@ -174,6 +176,7 @@ export function bootV3Preview(): void {
   let lastPhase: RoundPhase | 'ready' = 'ready';
   let previousTime = performance.now();
   let lastPaint = 0;
+  let lastAdvice: ReelAdviceLevel = 'normal';
 
   function readCollection(): CollectionState {
     try { return parseCollection(window.localStorage.getItem(V3_COLLECTION_KEY)); }
@@ -312,10 +315,21 @@ export function bootV3Preview(): void {
       waiting: '입질 기다리는 중', bite: '물었다!', fighting: '릴링 중',
       landed: '포획 성공!', escaped: '다음에는 꼭!',
     } satisfies Record<RoundPhase, string>)[phase];
+    const advice = reelAdvice(round);
+    if (phase === 'fighting') {
+      reelCoach.hidden = false;
+      reelCoach.dataset.level = advice.level;
+      reelCoach.textContent = advice.title;
+      if (advice.level === 'danger' && lastAdvice !== 'danger') haptic(35);
+      lastAdvice = advice.level;
+    } else {
+      reelCoach.hidden = true;
+      lastAdvice = 'normal';
+    }
     const messages: Record<RoundPhase, string> = {
       waiting: '물결이 움직이고 있어요',
       bite: '지금! 낚싯대를 잡아 주세요',
-      fighting: round.tension >= 0.8 ? '위험! 잠깐 손을 떼세요!' : '줄의 장력을 느껴 보세요',
+      fighting: advice.title,
       landed: '멋진 물고기를 낚았어요!',
       escaped: '아쉽지만 다음 기회가 있어요',
     };
@@ -323,15 +337,16 @@ export function bootV3Preview(): void {
     detail.textContent = phase === 'waiting'
       ? `입질 예상까지 약 ${Math.max(0, round.biteIn).toFixed(1)}초`
       : phase === 'bite' ? `입질 남은 시간 ${Math.max(0, round.biteWindow).toFixed(1)}초`
-        : phase === 'fighting' ? (held ? '감는 중 · 장력이 높으면 손을 떼세요' : '손을 떼어 장력을 낮추는 중')
+        : phase === 'fighting' ? advice.message
           : phase === 'landed' ? '한 번 더 던지거나 다른 물고기를 만나 보세요'
             : FAIL_MESSAGES[round.reason] ?? '다시 도전해 보세요';
     const tension = Math.round(round.tension * 100);
     const progress = Math.round(round.progress * 100);
     tensionFill.style.width = `${Math.min(100, tension)}%`;
-    tensionFill.classList.toggle('is-danger', tension >= 80);
-    reelButton.classList.toggle('is-warning', phase === 'fighting' && tension >= 80);
-    sea.dataset.danger = phase === 'fighting' && tension >= 80 ? 'true' : 'false';
+    const danger = phase === 'fighting' && advice.level === 'danger';
+    tensionFill.classList.toggle('is-danger', danger);
+    reelButton.classList.toggle('is-warning', danger);
+    sea.dataset.danger = danger ? 'true' : 'false';
     progressFill.style.width = `${progress}%`;
     tensionLabel.textContent = `${tension}%`;
     progressLabel.textContent = `${progress}%`;
@@ -354,7 +369,7 @@ export function bootV3Preview(): void {
     hint.textContent = !canSaveCollection
       ? '브라우저 저장이 제한돼 이번 V3 기록은 새로고침 후 사라질 수 있어요'
       : phase === 'fighting'
-      ? '누르면 감고, 손을 떼면 즉시 멈춥니다 · 장력 100%면 줄이 끊어져요'
+      ? advice.message
       : 'PC 스페이스바 / 모바일 큰 버튼 · 이 미리보기는 기존 저장에 영향을 주지 않습니다';
   }
 

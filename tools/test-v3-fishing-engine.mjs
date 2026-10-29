@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DEMO_FISH, createCast, hookFish, advanceRound, fishVisualSignal, rewardFor } from '../src/v3/fishingEngine.ts';
+import { DEMO_FISH, createCast, hookFish, advanceRound, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
 
 function waitForBite(round) {
   let state = round;
@@ -89,4 +89,32 @@ test('invalid frame durations cannot corrupt game state', () => {
   assert.equal(advanceRound(initial, Number.NaN, true), initial);
   assert.equal(advanceRound(initial, -1, true), initial);
   assert.ok(advanceRound(initial, 100, true).elapsed <= 0.1);
+});
+
+test('coaching has repeatable phase and tension advice for all fish behaviors', () => {
+  for (const fish of DEMO_FISH) {
+    const waiting = createCast(fish, 101, 2);
+    assert.equal(reelAdvice(waiting).level, 'normal');
+    let state = hookFish(waitForBite(waiting));
+    assert.equal(reelAdvice(state).level, 'reel');
+    const medium = { ...state, tension: 0.41, fightElapsed: 2.3 };
+    assert.ok(['normal','ease'].includes(reelAdvice(medium).level));
+    const high = { ...state, tension: 0.88 };
+    assert.equal(reelAdvice(high).level, 'danger');
+    assert.match(reelAdvice(high).message, /손을 떼/);
+    assert.deepEqual(reelAdvice(medium), reelAdvice(medium));
+    assert.equal(reelAdvice({ ...state, phase: 'landed' }).level, 'normal');
+  }
+});
+test('surging fish progress more slowly during a strong pull than passive fish', () => {
+  const boss = DEMO_FISH.find(f => f.behavior === 'boss');
+  const steady = DEMO_FISH.find(f => f.behavior === 'steady');
+  let b = hookFish(waitForBite(createCast(boss, 1, 3)));
+  let c = hookFish(waitForBite(createCast(steady, 1, 3)));
+  b = { ...b, fightElapsed: 0, tension: .2 };
+  c = { ...c, fightElapsed: 0, tension: .2 };
+  const nextBoss = advanceRound(b, .05, true);
+  const nextSteady = advanceRound(c, .05, true);
+  assert.ok(nextBoss.progress > 0 && nextSteady.progress > 0);
+  assert.ok(nextBoss.progress < nextSteady.progress);
 });

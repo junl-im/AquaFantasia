@@ -27,6 +27,13 @@ export interface FishingRound {
   readonly reason: 'none' | 'missed' | 'snapped' | 'exhausted';
 }
 
+export type ReelAdviceLevel = 'normal' | 'reel' | 'ease' | 'danger';
+export interface ReelAdvice {
+  readonly level: ReelAdviceLevel;
+  readonly title: string;
+  readonly message: string;
+}
+
 export interface FishVisualSignal {
   /** Normalized movement used by the UI; independent from screen resolution. */
   readonly x: number;
@@ -112,6 +119,29 @@ export function fishVisualSignal(round: FishingRound): FishVisualSignal {
   }
 }
 
+/** Coaching reads the same deterministic resistance as the actual fishing rules. */
+export function reelAdvice(round: FishingRound): ReelAdvice {
+  if (round.phase !== 'fighting') {
+    return { level: 'normal', title: '준비', message: '입질이 오면 챔질하세요' };
+  }
+  const resistance = fishVisualSignal(round).intensity;
+  const surging = ['dart', 'trickster', 'boss'].includes(round.fish.behavior)
+    && resistance >= 0.58;
+  const releaseAt = surging ? 0.56 : 0.68;
+  if (round.tension >= 0.84) {
+    return { level: 'danger', title: '줄 끊김 위험!', message: '지금 손을 떼고 장력을 낮추세요' };
+  }
+  if (round.tension >= releaseAt) {
+    return { level: 'ease', title: surging ? '돌진 중 · 잠시 쉬기' : '장력 높음 · 손 떼기',
+      message: '줄이 느슨해지면 다시 감으세요' };
+  }
+  if (round.tension <= 0.27) {
+    return { level: 'reel', title: '좋은 순간 · 감기!', message: '지금 줄을 감아 거리를 좁히세요' };
+  }
+  return { level: 'normal', title: surging ? '저항 주의' : '안정적인 장력',
+    message: surging ? '갑작스러운 돌진에 대비하세요' : '장력을 확인하며 천천히 감으세요' };
+}
+
 /** Holding reels and raises tension; releasing stops the reel and cools the line. */
 export function advanceRound(round: FishingRound, seconds: number, holding: boolean): FishingRound {
   if (!Number.isFinite(seconds) || seconds <= 0) return round;
@@ -139,8 +169,12 @@ export function advanceRound(round: FishingRound, seconds: number, holding: bool
     ? (0.135 + pulling * 0.9 - fatigue * 0.05) * rodStrength * dt
     : (-0.3 + pulling * 0.2) * dt;
   const tension = clamp(round.tension + tensionChange, 0, 1.1);
+  const isSurgeFish = round.fish.behavior === 'dart' || round.fish.behavior === 'trickster'
+    || round.fish.behavior === 'boss';
+  // Large, sudden pulls briefly slow reeling rather than changing rewards or the timer.
+  const surgeFactor = isSurgeFish ? 1 - clamp((pulling - 0.12) * 1.15, 0, 0.16) : 1;
   const progressRate = holding
-    ? (0.068 / round.fish.difficulty) * reelSpeed * (1 - Math.max(0, tension - 0.67) * 0.28)
+    ? (0.068 / round.fish.difficulty) * reelSpeed * surgeFactor * (1 - Math.max(0, tension - 0.67) * 0.28)
     : -0.008;
   const progress = clamp(round.progress + progressRate * dt, 0, 1);
   const peakTension = Math.max(round.peakTension, tension);

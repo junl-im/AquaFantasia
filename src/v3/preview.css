@@ -653,3 +653,33 @@ body.v3-preview-mode #toast-root { display: none !important; }
 }
 .v3-screen.v3-lite-mode .v3-dex-dialog::backdrop,
 .v3-screen.v3-lite-mode .v3-harbor-dialog::backdrop { backdrop-filter: none !important; }
+
+/* Active reel coaching, tuned for a compact HUD (CSS only; no vector elements). */
+.v3-reel-coach {
+  display: block;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 4px 9px;
+  margin: -1px 0 1px;
+  border-radius: 8px;
+  color: #072d46;
+  background: #9fe8df;
+  font-size: 11px;
+  font-weight: 850;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.v3-reel-coach[hidden] { display: none !important; }
+.v3-reel-coach[data-level="reel"] { background: #a8edc2; color: #154730; }
+.v3-reel-coach[data-level="ease"] { background: #ffd894; color: #693e11; }
+.v3-reel-coach[data-level="danger"] { background: #ffc0b7; color: #751c30; }
+.v3-sea[data-phase="landed"] .v3-result[data-rarity="legendary"]:not([hidden]) {
+  border-color: #f7d687;
+  background: linear-gradient(145deg, rgba(69, 52, 93, .96), rgba(12, 62, 107, .94));
+}
+.v3-sea[data-phase="landed"] .v3-result:not([hidden]) .v3-result-kicker {
+  letter-spacing: .08em;
+}
+@media (orientation: landscape) and (max-height: 540px) {
+  .v3-reel-coach { font-size: 10px; padding: 2px 7px; margin: 0; }
+}
