@@ -146,7 +146,10 @@ async function main() {
     if(ws&&ws.readyState===1)ws.close();
     if(chrome)chrome.kill('SIGKILL');
     vite.kill('SIGKILL');
-    fs.rmSync(profile,{recursive:true,force:true});
+    await sleep(400);
+    // Chrome can still be flushing a profile after SIGKILL; cleanup must not mask test errors.
+    try { fs.rmSync(profile,{recursive:true,force:true,maxRetries:8,retryDelay:200}); }
+    catch(err) { console.warn('[V3 browser] temporary profile cleanup warning:',String(err)); }
   }
 }
 main().catch(error=>{console.error('[V3 browser] FAIL:',error);process.exitCode=1;});
