@@ -164,7 +164,7 @@ async function main() {
     const dexBefore=await evaluate("({all:document.querySelectorAll('[data-v3-dex-fish]').length,filter:document.querySelector('[data-v3-dex-filter=all]')?.getAttribute('aria-pressed')})");
     if(dexBefore.all!==6||dexBefore.filter!=='true')throw Error('Dex all filter failed: '+JSON.stringify(dexBefore));
     await evaluate("document.querySelector('[data-v3-dex-filter=found]').click();true");
-    if(!await evaluate("document.querySelector('.v3-dex-empty')?.textContent.includes('첫 낚시')))throw Error('Empty discovered collection not explained');
+    if(!await evaluate("Boolean(document.querySelector('.v3-dex-empty')?.textContent.includes('첫 낚시'))"))throw Error('Empty discovered collection not explained');
     await evaluate("document.querySelector('[data-v3-dex-filter=missing]').click();true");
     if(!await evaluate("document.querySelectorAll('[data-v3-dex-fish]').length===6"))throw Error('Missing fish filter failed');
     await capture('dex-missing-390x844');
