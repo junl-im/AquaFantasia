@@ -508,3 +508,97 @@ body.v3-preview-mode #toast-root { display: none !important; }
   .v3-cast, .v3-reel { min-height: 51px; }
   .v3-harbor-dialog { max-height: 94dvh; padding: 12px; }
 }
+
+/* V3 responsive hardening: one-screen portrait, split sea/controls in short landscape. */
+.v3-screen { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+.v3-top, .v3-title-wrap, .v3-console, .v3-sea { min-width: 0; }
+.v3-sea { min-height: 0; }
+.v3-fish {
+  opacity: 0;
+  pointer-events: none;
+}
+.v3-sea[data-phase="waiting"] .v3-fish,
+.v3-sea[data-phase="bite"] .v3-fish,
+.v3-sea[data-phase="escaped"] .v3-fish { opacity: 0; }
+.v3-sea[data-phase="fighting"] .v3-fish {
+  opacity: .69;
+  filter: brightness(0) drop-shadow(0 8px 16px rgba(17, 226, 218, .36));
+}
+.v3-sea[data-phase="landed"] .v3-fish {
+  opacity: 1;
+  filter: drop-shadow(0 12px 14px rgba(0, 10, 40, .5));
+}
+.v3-sea[data-phase="landed"] .v3-center-status { display: none; }
+.v3-sea[data-phase="landed"] .v3-result:not([hidden]) {
+  top: 50%;
+  bottom: auto;
+  max-height: 94%;
+  overflow: hidden;
+  transform: translate(-50%, -50%);
+}
+.v3-console-top > button { flex: none; }
+.v3-screen button:active:not(:disabled) { filter: brightness(1.06); }
+@media (orientation: portrait) and (max-height: 540px) {
+  .v3-screen { padding: max(5px, env(safe-area-inset-top)) 7px max(5px, env(safe-area-inset-bottom)); }
+  .v3-top { min-height: 45px; padding: 1px 3px 4px; }
+  .v3-top h1 { font-size: 18px; }
+  .v3-eyebrow { font-size: 9px; }
+  .v3-region { font-size: 10px; }
+  .v3-header-actions { gap: 3px; }
+  .v3-sound, .v3-exit { min-height: 24px; padding: 4px 7px !important; }
+  .v3-sea { min-height: 0; }
+  .v3-console { gap: 4px; padding: 7px 9px; }
+  .v3-cast, .v3-reel { min-height: 46px; }
+  .v3-hint { font-size: 10px; }
+  .v3-meter { height: 10px; }
+  .v3-result:not([hidden]) { padding: 7px; gap: 2px; }
+  .v3-result strong { font-size: 18px; }
+}
+@media (orientation: landscape) and (max-height: 540px) {
+  .v3-screen {
+    grid-template-columns: minmax(0, 1.1fr) minmax(240px, .9fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: 8px;
+    padding: max(5px, env(safe-area-inset-top)) max(6px, env(safe-area-inset-right))
+      max(5px, env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-left));
+  }
+  .v3-top {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    align-items: center;
+    min-height: 43px;
+    padding: 1px 4px 5px;
+  }
+  .v3-top h1 { font-size: clamp(16px, 2.9vw, 20px); }
+  .v3-eyebrow, .v3-region { font-size: 9px; }
+  .v3-header-actions { flex-direction: row; align-items: center; gap: 5px; }
+  .v3-sound, .v3-exit { min-height: 28px; padding: 6px 8px !important; }
+  .v3-sea { grid-column: 1; grid-row: 2; min-height: 0; border-radius: 14px; }
+  .v3-console {
+    grid-column: 2;
+    grid-row: 2;
+    min-height: 0;
+    margin-top: 0;
+    justify-content: space-around;
+    gap: 5px;
+    padding: 9px;
+    border-radius: 14px;
+  }
+  .v3-console-top { gap: 5px; }
+  .v3-console-top button { font-size: 10px !important; padding: 5px 7px !important; min-height: 28px; }
+  .v3-wallet { font-size: 11px; }
+  .v3-meter-block { gap: 3px; }
+  .v3-meter { height: 9px; }
+  .v3-controls { grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: 5px; }
+  .v3-cast, .v3-reel { min-height: 47px; font-size: 12px !important; border-radius: 11px !important; }
+  .v3-hint { display: none; }
+  .v3-center-status { top: 9px; gap: 3px; }
+  .v3-center-status h2 { font-size: 18px; }
+  .v3-center-status p { font-size: 11px; }
+  .v3-result:not([hidden]) { padding: 8px; gap: 2px; }
+  .v3-result strong { font-size: 19px; }
+  .v3-dex-dialog, .v3-harbor-dialog { max-height: 92dvh; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v3-screen *, .v3-screen *::before, .v3-screen *::after { animation: none !important; transition: none !important; }
+}

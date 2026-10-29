@@ -339,6 +339,7 @@ export function bootV3Preview(): void {
     const fish = fishForRegion(collection, castCount);
     fishImage.src = fish.image;
     const seed = Math.floor(Math.random() * 0xffffffff);
+    castButton.blur();
     castCount += 1;
     round = createCast(fish, seed, collection.rodLevel);
     lastPhase = 'ready';
@@ -418,7 +419,8 @@ export function bootV3Preview(): void {
   window.addEventListener('keydown', (event) => {
     if (dexDialog.open || harborDialog.open) return;
     if (event.code !== 'Space' || event.repeat) return;
-    if (event.target instanceof HTMLButtonElement && event.target !== reelButton) return;
+    if (event.target instanceof HTMLButtonElement && event.target !== castButton && event.target !== reelButton) return;
+    if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
     event.preventDefault();
     startReeling();
   });

@@ -67,6 +67,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: V3 Chromium viewport and touch smoke
+        run: node tools/test-v3-browser-smoke.mjs
+
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
