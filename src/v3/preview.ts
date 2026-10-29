@@ -1,4 +1,5 @@
-import { DEMO_FISH, advanceRound, createCast, fishVisualSignal, hookFish, rewardFor, type FishingRound, type RoundPhase } from './fishingEngine';
+import { DEMO_FISH, advanceRound, createCast, fishVisualSignal, hookFish, type FishingRound, type RoundPhase } from './fishingEngine';
+import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, emptyCollection, parseCollection, totalCatches, type CollectionState } from './collection';
 import './preview.css';
 
 const PREVIEW_REGION = '잔잔한 해변';
@@ -48,12 +49,13 @@ export function bootV3Preview(): void {
         <div class="v3-result" data-v3-result hidden role="status" aria-live="polite">
           <span class="v3-result-kicker">오늘의 포획</span>
           <strong data-v3-result-name></strong>
+          <span class="v3-result-detail" data-v3-result-detail></span>
           <span data-v3-result-reward></span>
         </div>
       </section>
       <section class="v3-console" aria-label="낚시 조작 패널">
         <div class="v3-console-top">
-          <span class="v3-round-label">ONE-TOUCH FISHING</span>
+          <button type="button" class="v3-dex-toggle" data-v3-dex-toggle>도감 0 / 6</button>
           <span class="v3-wallet" data-v3-wallet>체험 코인 0</span>
         </div>
         <div class="v3-meter-block">
@@ -68,6 +70,18 @@ export function bootV3Preview(): void {
         </div>
         <p class="v3-hint" data-v3-hint>입질이 오면 오른쪽 버튼을 누르세요 · PC에서는 스페이스바</p>
       </section>
+      <dialog class="v3-dex-dialog" data-v3-dex-dialog aria-labelledby="v3-dex-title">
+        <header class="v3-dex-header">
+          <div>
+            <span class="v3-dex-eyebrow">AQUA FIELD GUIDE</span>
+            <h2 id="v3-dex-title">바다 생물 도감</h2>
+          </div>
+          <button type="button" class="v3-dex-close" data-v3-dex-close>닫기 ✕</button>
+        </header>
+        <p class="v3-dex-summary" data-v3-dex-summary></p>
+        <div class="v3-dex-grid" data-v3-dex-grid></div>
+        <p class="v3-dex-note">V3 전용 도감 · 기존 게임 기록과 독립적으로 보관됩니다</p>
+      </dialog>
     </main>
   `;
 
@@ -83,12 +97,18 @@ export function bootV3Preview(): void {
   const detail = requiredElement<HTMLElement>(app, '[data-v3-detail]');
   const result = requiredElement<HTMLElement>(app, '[data-v3-result]');
   const resultName = requiredElement<HTMLElement>(app, '[data-v3-result-name]');
+  const resultDetail = requiredElement<HTMLElement>(app, '[data-v3-result-detail]');
   const resultReward = requiredElement<HTMLElement>(app, '[data-v3-result-reward]');
   const tensionFill = requiredElement<HTMLElement>(app, '[data-v3-tension]');
   const progressFill = requiredElement<HTMLElement>(app, '[data-v3-progress]');
   const tensionLabel = requiredElement<HTMLElement>(app, '[data-v3-tension-label]');
   const progressLabel = requiredElement<HTMLElement>(app, '[data-v3-progress-label]');
   const wallet = requiredElement<HTMLElement>(app, '[data-v3-wallet]');
+  const dexButton = requiredElement<HTMLButtonElement>(app, '[data-v3-dex-toggle]');
+  const dexDialog = requiredElement<HTMLDialogElement>(app, '[data-v3-dex-dialog]');
+  const dexClose = requiredElement<HTMLButtonElement>(app, '[data-v3-dex-close]');
+  const dexSummary = requiredElement<HTMLElement>(app, '[data-v3-dex-summary]');
+  const dexGrid = requiredElement<HTMLElement>(app, '[data-v3-dex-grid]');
   const hint = requiredElement<HTMLElement>(app, '[data-v3-hint]');
   const backButton = requiredElement<HTMLButtonElement>(app, '[data-v3-exit]');
   const soundButton = requiredElement<HTMLButtonElement>(app, '[data-v3-sound]');
@@ -110,11 +130,48 @@ export function bootV3Preview(): void {
   let round: FishingRound | null = null;
   let held = false;
   let soundEnabled = true;
-  let coins = 0;
+  let collection: CollectionState = readCollection();
+  let canSaveCollection = true;
   let castCount = 0;
   let lastPhase: RoundPhase | 'ready' = 'ready';
   let previousTime = performance.now();
   let lastPaint = 0;
+
+  function readCollection(): CollectionState {
+    try { return parseCollection(window.localStorage.getItem(V3_COLLECTION_KEY)); }
+    catch { return emptyCollection(); }
+  }
+
+  function saveCollection(): boolean {
+    try {
+      window.localStorage.setItem(V3_COLLECTION_KEY, JSON.stringify(collection));
+      return true;
+    } catch { return false; }
+  }
+
+  function updateCollectionBadge(): void {
+    wallet.textContent = `체험 코인 ${collection.coins.toLocaleString('ko-KR')}`;
+    dexButton.textContent = `도감 ${discoveredSpecies(collection)} / ${DEMO_FISH.length}`;
+  }
+
+  function showDex(): void {
+    stopReeling();
+    const discovered = discoveredSpecies(collection);
+    dexSummary.textContent = `${discovered}/${DEMO_FISH.length}종 발견 · 총 ${totalCatches(collection)}회 포획`;
+    dexGrid.innerHTML = DEMO_FISH.map((fish) => {
+      const entry = collection.records[fish.id];
+      return `<article class="v3-dex-card ${entry ? 'is-discovered' : 'is-unknown'}">
+        <img src="${fish.image}" alt="" loading="lazy" decoding="async" />
+        <div class="v3-dex-info">
+          <strong>${entry ? fish.name : '미발견 물고기'}</strong>
+          <span>${entry ? `최대 ${entry.bestLengthCm.toFixed(1)}cm · ${RARITY_LABELS[entry.rarest]}` : '물음표 속 새로운 만남'}</span>
+          <small>${entry ? `포획 ${entry.count}회` : '아직 발견하지 못했어요'}</small>
+        </div>
+      </article>`;
+    }).join('');
+    dexDialog.showModal();
+    dexClose.focus();
+  }
 
   function playFeedback(kind: SoundKind): void {
     if (!soundEnabled) return;
@@ -148,11 +205,16 @@ export function bootV3Preview(): void {
       stopReeling();
       playFeedback('success');
       haptic([80, 40, 110]);
-      const reward = rewardFor(round);
-      coins += reward;
+      const catchOutcome = collectCatch(collection, round);
+      collection = catchOutcome.state;
+      canSaveCollection = saveCollection();
+      const caught = catchOutcome.result;
       result.hidden = false;
-      resultName.textContent = round.fish.name;
-      resultReward.textContent = `+${reward} 체험 코인 · 장력 최고 ${Math.round(round.peakTension * 100)}%`;
+      result.dataset.rarity = caught.rarity;
+      resultName.textContent = `${round.fish.name} · ${RARITY_LABELS[caught.rarity]}`;
+      resultDetail.textContent = `${caught.lengthCm.toFixed(1)}cm · ${caught.firstDiscovery ? '첫 발견 ✦' : caught.newSizeRecord ? '개인 최고 기록 ↑' : '도감 수집 완료'}`;
+      resultReward.textContent = `+${caught.earnedCoins} 코인 · 장력 최고 ${Math.round(round.peakTension * 100)}%`;
+      updateCollectionBadge();
     } else if (phase === 'escaped') {
       stopReeling();
       playFeedback('fail');
@@ -207,8 +269,10 @@ export function bootV3Preview(): void {
     reelButton.textContent = phase === 'bite' ? '지금 눌러 챔질!' : phase === 'fighting' ? '누르고 릴 감기' : '입질 기다리는 중';
     castButton.disabled = !['landed', 'escaped'].includes(phase);
     castButton.textContent = '다시 던지기';
-    wallet.textContent = `체험 코인 ${coins.toLocaleString('ko-KR')}`;
-    hint.textContent = phase === 'fighting'
+    updateCollectionBadge();
+    hint.textContent = !canSaveCollection
+      ? '브라우저 저장이 제한돼 이번 V3 기록은 새로고침 후 사라질 수 있어요'
+      : phase === 'fighting'
       ? '누르면 감고, 손을 떼면 즉시 멈춥니다 · 장력 100%면 줄이 끊어져요'
       : 'PC 스페이스바 / 모바일 큰 버튼 · 이 미리보기는 기존 저장에 영향을 주지 않습니다';
   }
@@ -235,6 +299,12 @@ export function bootV3Preview(): void {
   }
 
   castButton.addEventListener('click', cast);
+  dexButton.addEventListener('click', showDex);
+  dexClose.addEventListener('click', () => dexDialog.close());
+  dexDialog.addEventListener('close', () => dexButton.focus());
+  dexDialog.addEventListener('click', (event) => {
+    if (event.target === dexDialog) dexDialog.close();
+  });
   soundButton.addEventListener('click', () => {
     soundEnabled = !soundEnabled;
     if (!soundEnabled) Object.values(sounds).forEach((clip) => clip.pause());
@@ -260,6 +330,7 @@ export function bootV3Preview(): void {
     previousTime = performance.now();
   });
   window.addEventListener('keydown', (event) => {
+    if (dexDialog.open) return;
     if (event.code !== 'Space' || event.repeat) return;
     if (event.target instanceof HTMLButtonElement && event.target !== reelButton) return;
     event.preventDefault();
@@ -277,7 +348,7 @@ export function bootV3Preview(): void {
   function frame(now: number): void {
     const elapsed = Math.min(0.1, Math.max(0, (now - previousTime) / 1000));
     previousTime = now;
-    if (round && !document.hidden) {
+    if (round && !document.hidden && !dexDialog.open) {
       // Bounded fixed steps keep slow frames from changing the underlying physics.
       let remaining = elapsed;
       while (remaining > 0) {
@@ -298,5 +369,6 @@ export function bootV3Preview(): void {
   castButton.disabled = false;
   castButton.textContent = '낚싯줄 던지기';
   reelButton.disabled = true;
+  updateCollectionBadge();
   requestAnimationFrame(frame);
 }

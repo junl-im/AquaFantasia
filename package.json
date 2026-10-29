@@ -10,7 +10,7 @@
     "validate": "node tools/clean-old-patch-docs.mjs && node tools/validate-clean.mjs && node tools/check-v21134-render-budget-ui-write-ledger.mjs",
     "runtime:check": "node tools/check-v2014-background-dock-scroll-polish.mjs --runtime",
     "audit": "node tools/validate-clean.mjs && node tools/check-v2014-background-dock-scroll-polish.mjs --audit",
-    "v3:test": "node --experimental-strip-types --test tools/test-v3-fishing-engine.mjs tools/test-v3-repo-safety.mjs",
+    "v3:test": "node --experimental-strip-types --test tools/test-v3-fishing-engine.mjs tools/test-v3-collection.mjs tools/test-v3-repo-safety.mjs",
     "typecheck": "tsc --noEmit",
     "ci:install": "npm ci --ignore-scripts --no-audit --progress=false --registry=https://registry.npmjs.org/ --fetch-retries=5 --fetch-retry-mintimeout=20000 --fetch-retry-maxtimeout=120000",
     "ci:registry:check": "node tools/check-npm-registry-access.mjs"
