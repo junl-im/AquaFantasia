@@ -13,9 +13,9 @@ export interface FishingRegion {
   readonly fishWeights: readonly number[];
 }
 export const FISHING_REGIONS: readonly FishingRegion[] = [
-  { id: 'shore', name: '잔잔한 해변', description: '낚시의 시작, 물결이 부드러운 곳', requiredDiscoveries: 0, requiredRodLevel: 1, unlockPrice: 0, fishIds: ['bubble', 'lake'], fishWeights: [60, 40] },
-  { id: 'coral-bay', name: '산호빛 만', description: '다채로운 물고기가 숨어 있는 산호초', requiredDiscoveries: 2, requiredRodLevel: 2, unlockPrice: 280, fishIds: ['pearl', 'clown', 'coral'], fishWeights: [46, 34, 20] },
-  { id: 'deep-blue', name: '푸른 심해', description: '강한 저항과 전설의 물고기를 만나는 곳', requiredDiscoveries: 4, requiredRodLevel: 3, unlockPrice: 900, fishIds: ['king', 'clown', 'coral'], fishWeights: [12, 44, 44] },
+  { id: 'shore', name: '잔잔한 해변', description: '낚시의 시작, 물결이 부드러운 곳', requiredDiscoveries: 0, requiredRodLevel: 1, unlockPrice: 0, fishIds: ['bubble', 'lake', 'foam'], fishWeights: [53, 32, 15] },
+  { id: 'coral-bay', name: '산호빛 만', description: '다채로운 물고기가 숨어 있는 산호초', requiredDiscoveries: 2, requiredRodLevel: 2, unlockPrice: 280, fishIds: ['pearl', 'clown', 'coral', 'anemone', 'ribbon'], fishWeights: [29, 22, 18, 18, 13] },
+  { id: 'deep-blue', name: '푸른 심해', description: '강한 저항과 전설의 물고기를 만나는 곳', requiredDiscoveries: 4, requiredRodLevel: 3, unlockPrice: 900, fishIds: ['king', 'clown', 'coral', 'lantern', 'phantom', 'leviathan'], fishWeights: [12, 26, 25, 15, 13, 9] },
 ];
 
 export const MAX_ROD_LEVEL = 4;
@@ -94,7 +94,7 @@ export function nextFishingGoal(state: CollectionState): FishingGoal {
   const currentRegionIndex = FISHING_REGIONS.findIndex((region) => region.id === state.selectedRegion);
   if (discoveries === DEMO_FISH.length && FISHING_REGIONS.every((region) => state.unlockedRegions.includes(region.id))) {
     return { kind: 'complete', action: 'fish',
-      message: '도감 6종 완성! 전설 등급과 최고 크기 기록에 도전하세요' };
+      message: '도감 12종 완성! 전설 등급과 최고 크기 기록에 도전하세요' };
   }
   for (const region of FISHING_REGIONS.slice(1)) {
     if (!state.unlockedRegions.includes(region.id)) {
@@ -130,5 +130,5 @@ export function nextFishingGoal(state: CollectionState): FishingGoal {
       message: `다음 목표 · 도감 완성까지 새로운 물고기 ${DEMO_FISH.length - discoveries}종` };
   }
   return { kind: 'complete', action: 'fish',
-    message: '도감 6종 완성! 전설 등급과 최고 크기 기록에 도전하세요' };
+    message: '도감 12종 완성! 전설 등급과 최고 크기 기록에 도전하세요' };
 }

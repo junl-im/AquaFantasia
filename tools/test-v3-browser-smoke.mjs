@@ -162,11 +162,13 @@ async function main() {
     await evaluate("document.querySelector('[data-v3-dex-toggle]').click();true");
     if(!await evaluate("document.querySelector('[data-v3-dex-dialog]').open"))throw Error('Dex modal failed');
     const dexBefore=await evaluate("({all:document.querySelectorAll('[data-v3-dex-fish]').length,filter:document.querySelector('[data-v3-dex-filter=all]')?.getAttribute('aria-pressed')})");
-    if(dexBefore.all!==6||dexBefore.filter!=='true')throw Error('Dex all filter failed: '+JSON.stringify(dexBefore));
+    if(dexBefore.all!==12||dexBefore.filter!=='true')throw Error('Dex all filter failed: '+JSON.stringify(dexBefore));
     await evaluate("document.querySelector('[data-v3-dex-filter=found]').click();true");
     if(!await evaluate("Boolean(document.querySelector('.v3-dex-empty')?.textContent.includes('첫 낚시'))"))throw Error('Empty discovered collection not explained');
     await evaluate("document.querySelector('[data-v3-dex-filter=missing]').click();true");
-    if(!await evaluate("document.querySelectorAll('[data-v3-dex-fish]').length===6"))throw Error('Missing fish filter failed');
+    if(!await evaluate("document.querySelectorAll('[data-v3-dex-fish]').length===12"))throw Error('Missing fish filter failed');
+    const rosterAssets=await evaluate("(async()=>{const sources=[...document.querySelectorAll('[data-v3-dex-fish] img')].map(img=>img.getAttribute('src'));return await Promise.all(sources.map(src=>new Promise(resolve=>{const img=new Image();img.onload=()=>resolve({ok:img.naturalWidth>0,src});img.onerror=()=>resolve({ok:false,src});img.src=src;})));})()");
+    if(rosterAssets.length!==12||rosterAssets.some(x=>!x.ok))throw Error('Missing fish PNG artwork: '+JSON.stringify(rosterAssets.filter(x=>!x.ok)));
     await capture('dex-missing-390x844');
     await evaluate("document.querySelector('[data-v3-dex-close]').click();document.querySelector('[data-v3-harbor-toggle]').click();true");
     if(!await evaluate("document.querySelector('[data-v3-harbor-dialog]').open"))throw Error('Harbor modal failed');
@@ -191,7 +193,7 @@ async function main() {
     await send('Page.reload',{ignoreCache:true});
     await until(()=>evaluate("performance.timeOrigin !== "+priorLiteDocumentOrigin+" && document.querySelector('.v3-screen.v3-lite-mode') && Boolean(document.querySelector('[data-v3-harbor-toggle]')?.offsetWidth) && document.querySelector('[data-v3-wallet]')?.textContent?.includes('250')"),'new document and persisted lite mode after browser reload');
     const nextObjective=await evaluate("document.querySelector('[data-v3-hint]')?.textContent");
-    if(!nextObjective?.includes('도감 완성까지')||!nextObjective.includes('2종'))
+    if(!nextObjective?.includes('도감 완성까지')||!nextObjective.includes('8종'))
       throw Error('Late-game objective did not update: '+nextObjective);
     if(await evaluate("localStorage.getItem('aqua-fantasia-save-v650')")!=='LEGACY_UNTOUCHED')
       throw Error('Legacy V2 save was unexpectedly modified after reload');

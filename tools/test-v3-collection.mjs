@@ -46,11 +46,11 @@ test('repeat catches preserve best length, highest rarity and total captures', (
   assert.ok(b.state.coins > a.state.coins);
 });
 
-test('six species fill the dex and survive validated JSON round-trip', () => {
+test('twelve species fill the dex and survive validated JSON round-trip', () => {
   let state = emptyCollection();
   for (const fish of DEMO_FISH) state = collectCatch(state, land(fish, 21)).state;
-  assert.equal(discoveredSpecies(state), 6);
-  assert.equal(totalCatches(state), 6);
+  assert.equal(discoveredSpecies(state), 12);
+  assert.equal(totalCatches(state), 12);
   assert.deepEqual(parseCollection(JSON.stringify(state)), state);
 });
 
@@ -71,4 +71,21 @@ test('corrupted and foreign records never populate or crash the V3 dex', () => {
 
 test('V3 collection storage key is isolated from legacy save namespaces', () => {
   assert.match(V3_COLLECTION_KEY, /^aquafantasia:v3:/);
+});
+
+test('original six-species collection upgrades in-place without losing progress', () => {
+  const original = Object.fromEntries(DEMO_FISH.slice(0, 6).map((fish) =>
+    [fish.id, {count:2, bestLengthCm:37.2, rarest:'rare'}]));
+  const raw=JSON.stringify({...emptyCollection(),coins:1820,rodLevel:3,
+    unlockedRegions:['shore','coral-bay','deep-blue'],selectedRegion:'deep-blue',records:original});
+  const migrated=parseCollection(raw);
+  assert.equal(migrated.coins,1820);
+  assert.equal(migrated.rodLevel,3);
+  assert.equal(discoveredSpecies(migrated),6);
+  assert.equal(totalCatches(migrated),12);
+  assert.deepEqual(migrated.records,original);
+  const added=collectCatch(migrated,land(DEMO_FISH[10],77)).state;
+  assert.equal(discoveredSpecies(added),7);
+  assert.deepEqual(added.records.bubble,original.bubble);
+  assert.equal(parseCollection(JSON.stringify(added)).selectedRegion,'deep-blue');
 });

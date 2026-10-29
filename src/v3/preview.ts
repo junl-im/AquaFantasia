@@ -60,7 +60,7 @@ export function bootAquaFantasia(): void {
       </section>
       <section class="v3-console" aria-label="낚시 조작 패널">
         <div class="v3-console-top">
-          <button type="button" class="v3-dex-toggle" data-v3-dex-toggle>도감 0 / 6</button>
+          <button type="button" class="v3-dex-toggle" data-v3-dex-toggle>도감 0 / ${DEMO_FISH.length}</button>
           <button type="button" class="v3-harbor-toggle" data-v3-harbor-toggle>항구 · 강화</button>
           <span class="v3-wallet" data-v3-wallet>보유 코인 0</span>
         </div>

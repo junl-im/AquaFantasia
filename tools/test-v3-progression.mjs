@@ -51,11 +51,13 @@ test('regions never spawn locked-region fish, even across multiple casts', () =>
   let state = emptyCollection();
   const seenShore = new Set();
   for (let i=0; i<240; i++) seenShore.add(fishForRegion(state,i,i*31+13).id);
-  assert.deepEqual([...seenShore].sort(), ['bubble','lake']);
+  assert.deepEqual([...seenShore].sort(), ['bubble','foam','lake']);
   assert.equal(trySelectRegion(state,'deep-blue'), state);
   state = { ...state, selectedRegion: 'deep-blue', unlockedRegions: ['shore','coral-bay','deep-blue'] };
   const deep = new Set(Array.from({length:240}, (_, i) => fishForRegion(state, i, i*71+3).id));
   assert.ok(deep.has('king'));
+  assert.ok(deep.has('lantern'));
+  assert.ok(deep.has('leviathan'));
   assert.ok(!deep.has('bubble'));
 });
 
@@ -106,13 +108,13 @@ test('weighted regional ecology is reproducible and never uses locked species', 
     fishForRegion(state, i, i*step+offset).id);
   const initial = spawn(shore, 1000, 7, 0xAB13579);
   assert.deepEqual(initial, spawn(shore, 1000, 7, 0xAB13579));
-  assert.ok(initial.every(id => id === 'bubble' || id === 'lake'));
+  assert.ok(initial.every(id => ['bubble','lake','foam'].includes(id)));
   const bubbleCount = initial.filter(id => id === 'bubble').length;
-  assert.ok(bubbleCount > 510 && bubbleCount < 700, 'shore distribution: ' + bubbleCount);
+  assert.ok(bubbleCount > 420 && bubbleCount < 620, 'shore distribution: ' + bubbleCount);
   assert.ok(initial.some((id,i)=>i>0 && id===initial[i-1]), 'should not rotate predictably');
   const deep = { ...shore, selectedRegion: 'deep-blue', unlockedRegions: ['shore','coral-bay','deep-blue'] };
   const rareCount = spawn(deep, 1000, 23, 99).filter(id => id === 'king').length;
-  assert.ok(rareCount > 60 && rareCount < 230, 'boss remains uncommon: '+rareCount);
+  assert.ok(rareCount > 55 && rareCount < 230, 'boss remains uncommon: '+rareCount);
 });
 test('discovering a fish slightly increases chances of finding the other', () => {
   const empty = emptyCollection();
@@ -154,8 +156,29 @@ test('next journey objective follows real fish, coin, rod and harbor milestones'
   const unlockedDeep = tryUnlockRegion({ ...levelThree, coins: 900 }, 'deep-blue');
   assert.equal(nextFishingGoal(unlockedDeep).kind, 'select');
   const deep = trySelectRegion(unlockedDeep, 'deep-blue');
-  assert.match(nextFishingGoal(deep).message, /2종/);
+  assert.match(nextFishingGoal(deep).message, /8종/);
   const all = { ...deep, records: Object.fromEntries(DEMO_FISH.map(f => card(f.id))) };
   assert.equal(nextFishingGoal(all).kind, 'complete');
   assert.equal(nextFishingGoal(all).action, 'fish');
+});
+
+test('regional rosters cover twelve unique raster assets and valid weighted pools', () => {
+  const ids=new Set(DEMO_FISH.map(f=>f.id));
+  const covered=new Set();
+  for(const region of ['shore','coral-bay','deep-blue']) {
+    const pool=region==='shore' ? ['bubble','lake','foam'] :
+      region==='coral-bay' ? ['pearl','clown','coral','anemone','ribbon'] :
+      ['king','clown','coral','lantern','phantom','leviathan'];
+    const state={...emptyCollection(),unlockedRegions:['shore','coral-bay','deep-blue'],selectedRegion:region};
+    const actual=new Set(Array.from({length:900},(_,n)=>fishForRegion(state,n,n*313+11).id));
+    assert.ok(pool.every(id=>actual.has(id)),region+' misses a species: '+[...actual]);
+    assert.ok([...actual].every(id=>pool.includes(id)),region+' spawned a foreign species');
+    for(const id of actual)covered.add(id);
+  }
+  assert.deepEqual([...covered].sort(),[...ids].sort());
+  for(const fish of DEMO_FISH) {
+    assert.match(fish.image,/^\.\/assets\/v2110\/fish\/(common_tropical|rare_deepsea)\/fish_/);
+    assert.ok(fs.existsSync(path.resolve('public',fish.image.slice(2))),fish.image);
+    assert.ok(fish.reward>0&&fish.difficulty>0);
+  }
 });

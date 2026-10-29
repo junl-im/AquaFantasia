@@ -11,8 +11,10 @@ function waitForBite(round) {
   return state;
 }
 
-test('six distinct fish behaviors and deterministic opening', () => {
-  assert.equal(DEMO_FISH.length, 6);
+test('twelve unique fish and six behavior archetypes stay deterministic', () => {
+  assert.equal(DEMO_FISH.length, 12);
+  assert.equal(new Set(DEMO_FISH.map((fish) => fish.id)).size, 12);
+  assert.equal(new Set(DEMO_FISH.map((fish) => fish.image)).size, 12);
   assert.equal(new Set(DEMO_FISH.map((fish) => fish.behavior)).size, 6);
   assert.deepEqual(createCast(DEMO_FISH[0], 42), createCast(DEMO_FISH[0], 42));
 });

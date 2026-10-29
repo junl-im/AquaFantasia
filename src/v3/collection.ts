@@ -19,6 +19,8 @@ const RARITY_MULTIPLIER: Readonly<Record<CatchRarity, number>> = {
 const LENGTH_RANGES_CM: Readonly<Record<string, readonly [number, number]>> = {
   bubble: [12, 27], lake: [28, 55], pearl: [17, 42],
   clown: [33, 71], coral: [13, 34], king: [57, 118],
+  foam: [14, 32], anemone: [24, 57], ribbon: [27, 66],
+  lantern: [43, 96], phantom: [48, 113], leviathan: [82, 172],
 };
 
 export interface FishRecord {

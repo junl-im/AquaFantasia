@@ -50,6 +50,12 @@ export const DEMO_FISH: readonly FishProfile[] = [
   { id: 'clown', name: '하늘가오리', behavior: 'wave', difficulty: 1.05, image: './assets/v2110/fish/common_tropical/fish_common_004.png', reward: 140 },
   { id: 'coral', name: '작은 금붕어', behavior: 'trickster', difficulty: 1.13, image: './assets/v2110/fish/common_tropical/fish_common_006.png', reward: 165 },
   { id: 'king', name: '푸른보석고기', behavior: 'boss', difficulty: 1.28, image: './assets/v2110/fish/rare_deepsea/fish_rare_002.png', reward: 360 },
+  { id: 'foam', name: '물결비늘', behavior: 'wave', difficulty: 0.86, image: './assets/v2110/fish/common_tropical/fish_common_005.png', reward: 64 },
+  { id: 'anemone', name: '산호숨결', behavior: 'steady', difficulty: 1.04, image: './assets/v2110/fish/common_tropical/fish_common_007.png', reward: 122 },
+  { id: 'ribbon', name: '리본꼬리', behavior: 'dart', difficulty: 1.11, image: './assets/v2110/fish/common_tropical/fish_common_008.png', reward: 151 },
+  { id: 'lantern', name: '심해등불', behavior: 'heavy', difficulty: 1.21, image: './assets/v2110/fish/rare_deepsea/fish_rare_001.png', reward: 235 },
+  { id: 'phantom', name: '유령비늘', behavior: 'trickster', difficulty: 1.23, image: './assets/v2110/fish/rare_deepsea/fish_rare_003.png', reward: 290 },
+  { id: 'leviathan', name: '검푸른 지느러미', behavior: 'boss', difficulty: 1.32, image: './assets/v2110/fish/rare_deepsea/fish_rare_004.png', reward: 445 },
 ];
 
 function clamp(value: number, low: number, high: number): number {
