@@ -162,15 +162,17 @@ async function main() {
       records:Object.fromEntries(['bubble','lake','pearl','clown'].map(id=>[id,{count:1,bestLengthCm:30,rarest:'common'}]))
     });
     await evaluate("(localStorage.setItem('aqua-fantasia-save-v650','LEGACY_UNTOUCHED'),localStorage.setItem('aquafantasia:v3:collection:v1',"+JSON.stringify(sample)+"),true)");
+    const priorDocumentOrigin=await evaluate('performance.timeOrigin');
     await send('Page.reload',{ignoreCache:true});
-    // Page.reload can return before the new document is mounted; distinguish old and new UI.
-    await until(()=>evaluate("Boolean(document.querySelector('[data-v3-harbor-toggle]')?.offsetWidth) && document.querySelector('[data-v3-wallet]')?.textContent?.includes('2,000')"),'hydrated V3 wallet after reload',12000);
+    // Reload returns before the old document is replaced; do not accept stale HUD values.
+    await until(()=>evaluate("performance.timeOrigin !== "+priorDocumentOrigin+" && Boolean(document.querySelector('[data-v3-harbor-toggle]')?.offsetWidth) && document.querySelector('[data-v3-wallet]')?.textContent?.includes('2,000')"),'new V3 document and hydrated wallet after reload',12000);
     const grown=await evaluate('('+showHarborAndGrow.toString()+')()');
     if(grown.rod!==3||grown.region!=='deep-blue'||grown.coins!==250||grown.species!==4||grown.legacy!=='LEGACY_UNTOUCHED'
       ||grown.lite!=='1'||grown.litePressed!=='true'||!grown.liteClass)
       throw Error('Progression / lite setting / legacy save isolation failed: '+JSON.stringify(grown));
+    const priorLiteDocumentOrigin=await evaluate('performance.timeOrigin');
     await send('Page.reload',{ignoreCache:true});
-    await until(()=>evaluate("document.querySelector('.v3-screen.v3-lite-mode') && document.querySelector('[data-v3-wallet]')?.textContent?.includes('250')"),'lite mode persisted after browser reload');
+    await until(()=>evaluate("performance.timeOrigin !== "+priorLiteDocumentOrigin+" && document.querySelector('.v3-screen.v3-lite-mode') && Boolean(document.querySelector('[data-v3-harbor-toggle]')?.offsetWidth) && document.querySelector('[data-v3-wallet]')?.textContent?.includes('250')"),'new document and persisted lite mode after browser reload');
     if(await evaluate("localStorage.getItem('aqua-fantasia-save-v650')")!=='LEGACY_UNTOUCHED')
       throw Error('Legacy V2 save was unexpectedly modified after reload');
     await evaluate("document.querySelector('[data-v3-harbor-toggle]').click();true");
