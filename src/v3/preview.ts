@@ -97,6 +97,10 @@ export function bootV3Preview(): void {
           <p>릴링 속도와 줄의 내구도를 높여 더 강한 물고기를 상대하세요.</p>
           <button type="button" class="v3-harbor-upgrade" data-v3-upgrade>강화하기</button>
         </section>
+        <section class="v3-lite-options" aria-label="화면 연출 설정">
+          <span><strong>절전 연출</strong><small>저사양 기기용 · 불필요한 애니메이션 감소</small></span>
+          <button type="button" data-v3-lite aria-pressed="false">절전 끔</button>
+        </section>
         <p class="v3-harbor-section-title">탐험할 바다 선택</p>
         <div class="v3-harbor-regions" data-v3-region-list></div>
         <p class="v3-dex-note">V3 전용 코인으로만 진행 · 기존 게임 세이브에는 영향이 없습니다</p>
@@ -135,6 +139,8 @@ export function bootV3Preview(): void {
   const rodStatus = requiredElement<HTMLElement>(app, '[data-v3-rod-status]');
   const upgradeButton = requiredElement<HTMLButtonElement>(app, '[data-v3-upgrade]');
   const regionList = requiredElement<HTMLElement>(app, '[data-v3-region-list]');
+  const liteButton = requiredElement<HTMLButtonElement>(app, '[data-v3-lite]');
+  const screen = requiredElement<HTMLElement>(app, '.v3-screen');
   const hint = requiredElement<HTMLElement>(app, '[data-v3-hint]');
   const backButton = requiredElement<HTMLButtonElement>(app, '[data-v3-exit]');
   const soundButton = requiredElement<HTMLButtonElement>(app, '[data-v3-sound]');
@@ -155,6 +161,12 @@ export function bootV3Preview(): void {
 
   let round: FishingRound | null = null;
   let held = false;
+  let pointerOwner: number | null = null;
+  let keyboardOwner = false;
+  const V3_LITE_KEY = 'aquafantasia:v3:lite:v1';
+  let liteMode = false;
+  try { liteMode = window.localStorage.getItem(V3_LITE_KEY) === '1'; }
+  catch { /* Storage may be unavailable; continue with standard visuals. */ }
   let soundEnabled = true;
   let collection: CollectionState = readCollection();
   let canSaveCollection = true;
@@ -182,7 +194,14 @@ export function bootV3Preview(): void {
     sea.dataset.region = collection.selectedRegion;
   }
 
+  function applyVisualMode(): void {
+    screen.classList.toggle('v3-lite-mode', liteMode || reducedMotion);
+    liteButton.textContent = liteMode ? '절전 켬' : '절전 끔';
+    liteButton.setAttribute('aria-pressed', String(liteMode));
+  }
+
   function renderHarbor(): void {
+    applyVisualMode();
     const price = rodUpgradePrice(collection.rodLevel);
     rodStatus.textContent = `낚싯대 Lv.${collection.rodLevel} / ${MAX_ROD_LEVEL}`;
     upgradeButton.disabled = price === null || collection.coins < price;
@@ -246,7 +265,11 @@ export function bootV3Preview(): void {
     try { navigator.vibrate?.(pattern); } catch { /* Optional device feedback. */ }
   }
 
-  function stopReeling(): void {
+  function stopReeling(pointerId?: number): void {
+    // A second finger lifting must not cancel the finger actually holding the reel.
+    if (pointerId !== undefined && pointerOwner !== pointerId) return;
+    pointerOwner = null;
+    keyboardOwner = false;
     held = false;
     reelButton.classList.remove('is-pressed');
   }
@@ -316,7 +339,7 @@ export function bootV3Preview(): void {
     fishCue.hidden = phase !== 'fighting';
     fishCue.textContent = visual.cue;
     sea.dataset.surge = phase === 'fighting' && visual.intensity > 0.65 ? 'true' : 'false';
-    if (phase === 'fighting' && !reducedMotion) {
+    if (phase === 'fighting' && !reducedMotion && !liteMode) {
       fishImage.style.transform = `translate(calc(-50% + ${Math.round(visual.x * 45)}px), ${Math.round(visual.y * 24)}px) rotate(${visual.rotation.toFixed(1)}deg)`;
       fishingLine.style.transform = `translateX(-50%) rotate(${(visual.x * 11).toFixed(1)}deg)`;
     } else {
@@ -348,10 +371,12 @@ export function bootV3Preview(): void {
     render();
   }
 
-  function startReeling(): void {
-    if (!round) return;
+  function startReeling(source: number | 'keyboard'): void {
+    if (!round || held) return;
     if (round.phase === 'bite') round = hookFish(round);
     if (round.phase !== 'fighting') return;
+    if (source === 'keyboard') keyboardOwner = true;
+    else pointerOwner = source;
     held = true;
     reelButton.classList.add('is-pressed');
     render();
@@ -359,6 +384,12 @@ export function bootV3Preview(): void {
 
   castButton.addEventListener('click', cast);
   dexButton.addEventListener('click', showDex);
+  liteButton.addEventListener('click', () => {
+    liteMode = !liteMode;
+    try { window.localStorage.setItem(V3_LITE_KEY, liteMode ? '1' : '0'); }
+    catch { /* Visual setting still works until page refresh. */ }
+    applyVisualMode();
+  });
   harborButton.addEventListener('click', showHarbor);
   harborClose.addEventListener('click', () => harborDialog.close());
   harborDialog.addEventListener('close', () => harborButton.focus());
@@ -400,19 +431,21 @@ export function bootV3Preview(): void {
     soundButton.setAttribute('aria-pressed', String(soundEnabled));
   });
   reelButton.addEventListener('pointerdown', (event) => {
-    if (reelButton.disabled) return;
+    if (reelButton.disabled || held) return;
     event.preventDefault();
-    try { reelButton.setPointerCapture(event.pointerId); } catch { /* optional capture */ }
-    startReeling();
+    startReeling(event.pointerId);
+    if (pointerOwner === event.pointerId) {
+      try { reelButton.setPointerCapture(event.pointerId); } catch { /* Optional capture. */ }
+    }
   });
   for (const name of ['pointerup', 'pointercancel', 'lostpointercapture'] as const) {
-    reelButton.addEventListener(name, stopReeling);
+    reelButton.addEventListener(name, (event) => stopReeling(event.pointerId));
   }
-  window.addEventListener('pointerup', stopReeling);
-  window.addEventListener('pointercancel', stopReeling);
-  window.addEventListener('touchcancel', stopReeling);
-  window.addEventListener('blur', stopReeling);
-  window.addEventListener('pagehide', stopReeling);
+  window.addEventListener('pointerup', (event) => stopReeling(event.pointerId));
+  window.addEventListener('pointercancel', (event) => stopReeling(event.pointerId));
+  window.addEventListener('touchcancel', () => stopReeling());
+  window.addEventListener('blur', () => stopReeling());
+  window.addEventListener('pagehide', () => stopReeling());
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) stopReeling();
     previousTime = performance.now();
@@ -423,10 +456,10 @@ export function bootV3Preview(): void {
     if (event.target instanceof HTMLButtonElement && event.target !== castButton && event.target !== reelButton) return;
     if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
     event.preventDefault();
-    startReeling();
+    startReeling('keyboard');
   });
   window.addEventListener('keyup', (event) => {
-    if (event.code === 'Space') stopReeling();
+    if (event.code === 'Space' && keyboardOwner) stopReeling();
   });
   backButton.addEventListener('click', () => {
     const url = new URL(window.location.href);
@@ -446,7 +479,7 @@ export function bootV3Preview(): void {
         remaining -= step;
       }
       if (round.phase !== 'fighting') stopReeling();
-      if (now - lastPaint > 32 || round.phase !== lastPhase) {
+      if (now - lastPaint > (liteMode || reducedMotion ? 100 : 32) || round.phase !== lastPhase) {
         render();
         lastPaint = now;
       }
@@ -458,6 +491,7 @@ export function bootV3Preview(): void {
   castButton.disabled = false;
   castButton.textContent = '낚싯줄 던지기';
   reelButton.disabled = true;
+  applyVisualMode();
   updateCollectionBadge();
   requestAnimationFrame(frame);
 }

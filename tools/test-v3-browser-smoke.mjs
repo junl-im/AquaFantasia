@@ -50,6 +50,8 @@ function showHarborAndGrow() {
     el.click();
   };
   click('[data-v3-harbor-toggle]');
+  click('[data-v3-lite]');
+  const litePressed=document.querySelector('[data-v3-lite]').getAttribute('aria-pressed');
   click('[data-v3-upgrade]');
   click('[data-v3-upgrade]');
   click('button[data-v3-region-id="coral-bay"][data-v3-region-action="unlock"]');
@@ -59,7 +61,9 @@ function showHarborAndGrow() {
   click('[data-v3-harbor-close]');
   const save=JSON.parse(localStorage.getItem('aquafantasia:v3:collection:v1'));
   return {rod:save.rodLevel,region:save.selectedRegion,coins:save.coins,
-    species:Object.keys(save.records).length,legacy:localStorage.getItem('aqua-fantasia-save-v650')};
+    species:Object.keys(save.records).length,legacy:localStorage.getItem('aqua-fantasia-save-v650'),
+    lite:localStorage.getItem('aquafantasia:v3:lite:v1'),litePressed,
+    liteClass:document.querySelector('.v3-screen').classList.contains('v3-lite-mode')};
 }
 async function main() {
   const profile=fs.mkdtempSync(path.join(os.tmpdir(),'aqua-v3-qa-'));
@@ -131,7 +135,12 @@ async function main() {
     if(phase!=='fighting')throw Error('Touch did not hook fish: '+phase);
     await sleep(320);
     const progress=await evaluate("parseInt(document.querySelector('[data-v3-progress-label]').textContent,10)");
+    const unrelatedRelease=await evaluate("window.dispatchEvent(new PointerEvent('pointerup',{bubbles:true,pointerId:34}));window.dispatchEvent(new KeyboardEvent('keyup',{bubbles:true,code:'Space'}));document.querySelector('[data-v3-reel]').classList.contains('is-pressed')");
+    if(!unrelatedRelease)throw Error('Another finger or unrelated keyup cancelled the held reel');
     await evaluate("window.dispatchEvent(new PointerEvent('pointerup',{bubbles:true,pointerId:33}));true");
+    if(await evaluate("document.querySelector('[data-v3-reel]').classList.contains('is-pressed')")) throw Error('Owning pointer did not release the reel');
+    await evaluate("document.querySelector('[data-v3-reel]').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,pointerId:35,pointerType:'touch',isPrimary:true}));window.dispatchEvent(new Event('blur'));true");
+    if(await evaluate("document.querySelector('[data-v3-reel]').classList.contains('is-pressed')")) throw Error('Blur failed to release reel');
     if(!(progress>0))throw Error('Reeling does not advance capture');
     await evaluate("document.querySelector('[data-v3-dex-toggle]').click();true");
     if(!await evaluate("document.querySelector('[data-v3-dex-dialog]').open"))throw Error('Dex modal failed');
@@ -147,8 +156,13 @@ async function main() {
     // Page.reload can return before the new document is mounted; distinguish old and new UI.
     await until(()=>evaluate("Boolean(document.querySelector('[data-v3-harbor-toggle]')?.offsetWidth) && document.querySelector('[data-v3-wallet]')?.textContent?.includes('2,000')"),'hydrated V3 wallet after reload',12000);
     const grown=await evaluate('('+showHarborAndGrow.toString()+')()');
-    if(grown.rod!==3||grown.region!=='deep-blue'||grown.coins!==250||grown.species!==4||grown.legacy!=='LEGACY_UNTOUCHED')
-      throw Error('Progression / legacy save isolation failed: '+JSON.stringify(grown));
+    if(grown.rod!==3||grown.region!=='deep-blue'||grown.coins!==250||grown.species!==4||grown.legacy!=='LEGACY_UNTOUCHED'
+      ||grown.lite!=='1'||grown.litePressed!=='true'||!grown.liteClass)
+      throw Error('Progression / lite setting / legacy save isolation failed: '+JSON.stringify(grown));
+    await send('Page.reload',{ignoreCache:true});
+    await until(()=>evaluate("document.querySelector('.v3-screen.v3-lite-mode') && document.querySelector('[data-v3-wallet]')?.textContent?.includes('250')"),'lite mode persisted after browser reload');
+    if(await evaluate("localStorage.getItem('aqua-fantasia-save-v650')")!=='LEGACY_UNTOUCHED')
+      throw Error('Legacy V2 save was unexpectedly modified after reload');
     await evaluate("document.querySelector('[data-v3-harbor-toggle]').click();true");
     await capture('harbor-deep-blue-390x844');
     await evaluate("document.querySelector('[data-v3-harbor-close]').click();true");
