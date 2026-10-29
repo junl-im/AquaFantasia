@@ -426,3 +426,85 @@ body.v3-preview-mode #toast-root { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .v3-screen *, .v3-screen *::before { animation: none !important; transition: none !important; }
 }
+
+/* V3 harbor controls use CSS surfaces and raster artwork only. */
+.v3-console-top { flex-wrap: wrap; }
+.v3-wallet { margin-left: auto; white-space: nowrap; }
+.v3-harbor-toggle {
+  min-height: 31px;
+  padding: 6px 12px !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  color: #fff0ce !important;
+  background: linear-gradient(160deg, #a76c40, #795035) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 224, 151, .55) !important;
+}
+.v3-harbor-dialog {
+  box-sizing: border-box;
+  width: min(94vw, 560px);
+  max-height: min(89dvh, 690px);
+  margin: auto;
+  padding: 17px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid rgba(253, 216, 153, .55);
+  border-radius: 22px;
+  color: #f1fff9;
+  background: linear-gradient(160deg, #153952, #082b47 70%, #071f35);
+  box-shadow: 0 25px 65px rgba(0, 8, 25, .72);
+  font-family: "Pretendard", "Noto Sans KR", system-ui, sans-serif;
+}
+.v3-harbor-dialog::backdrop { background: rgba(0, 13, 27, .8); }
+.v3-harbor-dialog button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 10px 13px;
+  font-size: 12px;
+  font-weight: 900;
+  border: 1px solid rgba(254, 227, 154, .35);
+  color: #102d42;
+  background: linear-gradient(155deg, #ffe5a0, #e7a965);
+  touch-action: manipulation;
+}
+.v3-harbor-dialog button:disabled { opacity: .45; cursor: default; }
+.v3-harbor-gear {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 13px;
+  margin-top: 14px;
+  border-radius: 14px;
+  background: rgba(30, 99, 119, .47);
+  box-shadow: inset 0 0 0 1px rgba(126, 208, 215, .22);
+}
+.v3-harbor-gear strong { color: #ffe3a2; font-size: 16px; }
+.v3-harbor-gear p { color: #c9eae8; margin: 0 0 4px; font-size: 12px; }
+.v3-harbor-section-title { margin: 17px 0 9px; color: #ffdf9f; font-weight: 900; font-size: 14px; }
+.v3-harbor-regions { display: grid; gap: 9px; }
+.v3-harbor-region {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(12, 68, 91, .65);
+  box-shadow: inset 0 0 0 1px rgba(128, 230, 214, .24);
+}
+.v3-harbor-region.is-active { box-shadow: inset 0 0 0 2px #77e8bd; }
+.v3-harbor-region strong { font-size: 14px; color: #ecfff9; }
+.v3-harbor-region span { font-size: 12px; color: #d4f0ee; }
+.v3-harbor-region small { font-size: 11px; color: #9ed0d5; }
+.v3-harbor-region-state { color: #ffe1ab !important; font-weight: 800; }
+.v3-harbor-region button { min-height: 37px; }
+@media (max-height: 620px) {
+  .v3-console { gap: 5px; padding: 8px 10px; }
+  .v3-top { min-height: 54px; padding: 2px 6px 6px; }
+  .v3-console-top { gap: 5px; }
+  .v3-console-top button { font-size: 11px !important; }
+  .v3-cast, .v3-reel { min-height: 51px; }
+  .v3-harbor-dialog { max-height: 94dvh; padding: 12px; }
+}

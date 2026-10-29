@@ -1,5 +1,6 @@
 import { DEMO_FISH, advanceRound, createCast, fishVisualSignal, hookFish, type FishingRound, type RoundPhase } from './fishingEngine';
-import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, emptyCollection, parseCollection, totalCatches, type CollectionState } from './collection';
+import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, emptyCollection, parseCollection, totalCatches, type CollectionState, type RegionId } from './collection';
+import { FISHING_REGIONS, MAX_ROD_LEVEL, canUnlockRegion, fishForRegion, getRegion, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeRod } from './progression';
 import './preview.css';
 
 const PREVIEW_REGION = '잔잔한 해변';
@@ -25,7 +26,7 @@ export function bootV3Preview(): void {
         <div class="v3-title-wrap">
           <span class="v3-eyebrow">AQUAFANTASIA · V3 LAB</span>
           <h1>환상의 바다를 낚다</h1>
-          <span class="v3-region">✦ ${PREVIEW_REGION} · 낚시 엔진 실험실</span>
+          <span class="v3-region" data-v3-region>✦ ${PREVIEW_REGION} · 낚시 엔진 실험실</span>
         </div>
         <div class="v3-header-actions">
           <button class="v3-sound" type="button" data-v3-sound aria-pressed="true">효과음 켬</button>
@@ -56,6 +57,7 @@ export function bootV3Preview(): void {
       <section class="v3-console" aria-label="낚시 조작 패널">
         <div class="v3-console-top">
           <button type="button" class="v3-dex-toggle" data-v3-dex-toggle>도감 0 / 6</button>
+          <button type="button" class="v3-harbor-toggle" data-v3-harbor-toggle>항구 · 강화</button>
           <span class="v3-wallet" data-v3-wallet>체험 코인 0</span>
         </div>
         <div class="v3-meter-block">
@@ -82,6 +84,23 @@ export function bootV3Preview(): void {
         <div class="v3-dex-grid" data-v3-dex-grid></div>
         <p class="v3-dex-note">V3 전용 도감 · 기존 게임 기록과 독립적으로 보관됩니다</p>
       </dialog>
+      <dialog class="v3-harbor-dialog" data-v3-harbor-dialog aria-labelledby="v3-harbor-title">
+        <header class="v3-dex-header">
+          <div>
+            <span class="v3-dex-eyebrow">HARBOR WORKSHOP</span>
+            <h2 id="v3-harbor-title">항구 · 장비와 탐험</h2>
+          </div>
+          <button type="button" class="v3-dex-close" data-v3-harbor-close>닫기 ✕</button>
+        </header>
+        <section class="v3-harbor-gear" aria-label="낚싯대 강화">
+          <strong data-v3-rod-status>낚싯대 Lv.1</strong>
+          <p>릴링 속도와 줄의 내구도를 높여 더 강한 물고기를 상대하세요.</p>
+          <button type="button" class="v3-harbor-upgrade" data-v3-upgrade>강화하기</button>
+        </section>
+        <p class="v3-harbor-section-title">탐험할 바다 선택</p>
+        <div class="v3-harbor-regions" data-v3-region-list></div>
+        <p class="v3-dex-note">V3 전용 코인으로만 진행 · 기존 게임 세이브에는 영향이 없습니다</p>
+      </dialog>
     </main>
   `;
 
@@ -104,11 +123,18 @@ export function bootV3Preview(): void {
   const tensionLabel = requiredElement<HTMLElement>(app, '[data-v3-tension-label]');
   const progressLabel = requiredElement<HTMLElement>(app, '[data-v3-progress-label]');
   const wallet = requiredElement<HTMLElement>(app, '[data-v3-wallet]');
+  const regionLabel = requiredElement<HTMLElement>(app, '[data-v3-region]');
   const dexButton = requiredElement<HTMLButtonElement>(app, '[data-v3-dex-toggle]');
   const dexDialog = requiredElement<HTMLDialogElement>(app, '[data-v3-dex-dialog]');
   const dexClose = requiredElement<HTMLButtonElement>(app, '[data-v3-dex-close]');
   const dexSummary = requiredElement<HTMLElement>(app, '[data-v3-dex-summary]');
   const dexGrid = requiredElement<HTMLElement>(app, '[data-v3-dex-grid]');
+  const harborButton = requiredElement<HTMLButtonElement>(app, '[data-v3-harbor-toggle]');
+  const harborDialog = requiredElement<HTMLDialogElement>(app, '[data-v3-harbor-dialog]');
+  const harborClose = requiredElement<HTMLButtonElement>(app, '[data-v3-harbor-close]');
+  const rodStatus = requiredElement<HTMLElement>(app, '[data-v3-rod-status]');
+  const upgradeButton = requiredElement<HTMLButtonElement>(app, '[data-v3-upgrade]');
+  const regionList = requiredElement<HTMLElement>(app, '[data-v3-region-list]');
   const hint = requiredElement<HTMLElement>(app, '[data-v3-hint]');
   const backButton = requiredElement<HTMLButtonElement>(app, '[data-v3-exit]');
   const soundButton = requiredElement<HTMLButtonElement>(app, '[data-v3-sound]');
@@ -152,6 +178,37 @@ export function bootV3Preview(): void {
   function updateCollectionBadge(): void {
     wallet.textContent = `체험 코인 ${collection.coins.toLocaleString('ko-KR')}`;
     dexButton.textContent = `도감 ${discoveredSpecies(collection)} / ${DEMO_FISH.length}`;
+    regionLabel.textContent = `✦ ${getRegion(collection.selectedRegion).name} · 낚싯대 Lv.${collection.rodLevel}`;
+  }
+
+  function renderHarbor(): void {
+    const price = rodUpgradePrice(collection.rodLevel);
+    rodStatus.textContent = `낚싯대 Lv.${collection.rodLevel} / ${MAX_ROD_LEVEL}`;
+    upgradeButton.disabled = price === null || collection.coins < price;
+    upgradeButton.textContent = price === null ? '최고 단계 달성!' : `낚싯대 강화 · ${price} 코인`;
+    const discoveryCount = discoveredSpecies(collection);
+    regionList.innerHTML = FISHING_REGIONS.map((region) => {
+      const unlocked = collection.unlockedRegions.includes(region.id);
+      const selected = collection.selectedRegion === region.id;
+      const ready = canUnlockRegion(collection, region.id);
+      const label = selected ? '현재 낚시터' : unlocked ? '여기서 낚시하기'
+        : ready ? `해금 · ${region.unlockPrice} 코인` : '조건 미달';
+      const button = selected ? '' : `<button type="button" data-v3-region-action="${unlocked ? 'select' : 'unlock'}" data-v3-region-id="${region.id}" ${!unlocked && !ready ? 'disabled' : ''}>${label}</button>`;
+      return `<article class="v3-harbor-region ${selected ? 'is-active' : ''}">
+        <strong>${region.name}</strong>
+        <span>${region.description}</span>
+        <small>필요 도감 ${region.requiredDiscoveries}종 · 낚싯대 Lv.${region.requiredRodLevel} · 비용 ${region.unlockPrice}코인</small>
+        <span class="v3-harbor-region-state">${selected ? '이곳에서 낚시 중' : unlocked ? '탐험 가능' : discoveryCount >= region.requiredDiscoveries ? '장비·코인을 확인하세요' : `도감 ${region.requiredDiscoveries - discoveryCount}종 더 발견 필요`}</span>
+        ${button}
+      </article>`;
+    }).join('');
+  }
+
+  function showHarbor(): void {
+    stopReeling();
+    renderHarbor();
+    harborDialog.showModal();
+    harborClose.focus();
   }
 
   function showDex(): void {
@@ -279,11 +336,11 @@ export function bootV3Preview(): void {
 
   function cast(): void {
     stopReeling();
-    const fish = DEMO_FISH[castCount % DEMO_FISH.length];
+    const fish = fishForRegion(collection, castCount);
     fishImage.src = fish.image;
     const seed = Math.floor(Math.random() * 0xffffffff);
     castCount += 1;
-    round = createCast(fish, seed);
+    round = createCast(fish, seed, collection.rodLevel);
     lastPhase = 'ready';
     result.hidden = true;
     render();
@@ -300,6 +357,35 @@ export function bootV3Preview(): void {
 
   castButton.addEventListener('click', cast);
   dexButton.addEventListener('click', showDex);
+  harborButton.addEventListener('click', showHarbor);
+  harborClose.addEventListener('click', () => harborDialog.close());
+  harborDialog.addEventListener('close', () => harborButton.focus());
+  harborDialog.addEventListener('click', (event) => {
+    if (event.target === harborDialog) harborDialog.close();
+  });
+  upgradeButton.addEventListener('click', () => {
+    const updated = tryUpgradeRod(collection);
+    if (updated === collection) return;
+    collection = updated;
+    canSaveCollection = saveCollection();
+    updateCollectionBadge();
+    renderHarbor();
+  });
+  regionList.addEventListener('click', (event) => {
+    const button = event.target instanceof Element ? event.target.closest<HTMLButtonElement>('button[data-v3-region-action]') : null;
+    if (!button || button.disabled) return;
+    const id = button.dataset.v3RegionId;
+    const region = FISHING_REGIONS.find((candidate) => candidate.id === id);
+    if (!region) return;
+    const next = button.dataset.v3RegionAction === 'unlock'
+      ? tryUnlockRegion(collection, region.id as RegionId)
+      : trySelectRegion(collection, region.id as RegionId);
+    if (next === collection) return;
+    collection = next;
+    canSaveCollection = saveCollection();
+    updateCollectionBadge();
+    renderHarbor();
+  });
   dexClose.addEventListener('click', () => dexDialog.close());
   dexDialog.addEventListener('close', () => dexButton.focus());
   dexDialog.addEventListener('click', (event) => {
@@ -330,7 +416,7 @@ export function bootV3Preview(): void {
     previousTime = performance.now();
   });
   window.addEventListener('keydown', (event) => {
-    if (dexDialog.open) return;
+    if (dexDialog.open || harborDialog.open) return;
     if (event.code !== 'Space' || event.repeat) return;
     if (event.target instanceof HTMLButtonElement && event.target !== reelButton) return;
     event.preventDefault();
@@ -348,7 +434,7 @@ export function bootV3Preview(): void {
   function frame(now: number): void {
     const elapsed = Math.min(0.1, Math.max(0, (now - previousTime) / 1000));
     previousTime = now;
-    if (round && !document.hidden && !dexDialog.open) {
+    if (round && !document.hidden && !dexDialog.open && !harborDialog.open) {
       // Bounded fixed steps keep slow frames from changing the underlying physics.
       let remaining = elapsed;
       while (remaining > 0) {
