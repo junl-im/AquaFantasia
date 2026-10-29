@@ -179,6 +179,7 @@ export function bootV3Preview(): void {
     wallet.textContent = `체험 코인 ${collection.coins.toLocaleString('ko-KR')}`;
     dexButton.textContent = `도감 ${discoveredSpecies(collection)} / ${DEMO_FISH.length}`;
     regionLabel.textContent = `✦ ${getRegion(collection.selectedRegion).name} · 낚싯대 Lv.${collection.rodLevel}`;
+    sea.dataset.region = collection.selectedRegion;
   }
 
   function renderHarbor(): void {
@@ -336,9 +337,9 @@ export function bootV3Preview(): void {
 
   function cast(): void {
     stopReeling();
-    const fish = fishForRegion(collection, castCount);
-    fishImage.src = fish.image;
     const seed = Math.floor(Math.random() * 0xffffffff);
+    const fish = fishForRegion(collection, castCount, seed);
+    fishImage.src = fish.image;
     castButton.blur();
     castCount += 1;
     round = createCast(fish, seed, collection.rodLevel);

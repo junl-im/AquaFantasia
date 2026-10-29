@@ -602,3 +602,23 @@ body.v3-preview-mode #toast-root { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .v3-screen *, .v3-screen *::before, .v3-screen *::after { animation: none !important; transition: none !important; }
 }
+
+/* Regional water palette, CSS + existing WebP artwork; raster only. */
+.v3-sea[data-region="coral-bay"] {
+  background-image:
+    linear-gradient(165deg, rgba(121, 36, 101, .18), rgba(22, 108, 130, .39) 53%, rgba(7, 42, 83, .76)),
+    var(--v3-water-image, none),
+    radial-gradient(ellipse at 58% 18%, #e0a8d0, #42b9b4 48%, #12527b);
+}
+.v3-sea[data-region="coral-bay"] .v3-sea-haze {
+  background: radial-gradient(ellipse at 51% 32%, rgba(252, 174, 216, .29), transparent 59%);
+}
+.v3-sea[data-region="deep-blue"] {
+  background-image:
+    linear-gradient(172deg, rgba(2, 17, 60, .32), rgba(4, 29, 76, .66) 54%, rgba(0, 9, 29, .91)),
+    var(--v3-water-image, none),
+    radial-gradient(ellipse at 32% 15%, #237aba, #06396a 60%, #010c2c);
+}
+.v3-sea[data-region="deep-blue"] .v3-sea-haze {
+  background: radial-gradient(ellipse at 50% 24%, rgba(84, 127, 224, .29), transparent 67%);
+}

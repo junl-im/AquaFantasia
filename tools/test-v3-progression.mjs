@@ -50,11 +50,11 @@ test('region unlocking requires discoveries, equipment, and sufficient coins', (
 test('regions never spawn locked-region fish, even across multiple casts', () => {
   let state = emptyCollection();
   const seenShore = new Set();
-  for (let i=0; i<12; i++) seenShore.add(fishForRegion(state,i).id);
+  for (let i=0; i<240; i++) seenShore.add(fishForRegion(state,i,i*31+13).id);
   assert.deepEqual([...seenShore].sort(), ['bubble','lake']);
   assert.equal(trySelectRegion(state,'deep-blue'), state);
   state = { ...state, selectedRegion: 'deep-blue', unlockedRegions: ['shore','coral-bay','deep-blue'] };
-  const deep = new Set(Array.from({length:12}, (_, i) => fishForRegion(state, i).id));
+  const deep = new Set(Array.from({length:240}, (_, i) => fishForRegion(state, i, i*71+3).id));
   assert.ok(deep.has('king'));
   assert.ok(!deep.has('bubble'));
 });
@@ -98,4 +98,28 @@ test('V3 CI prohibits vector files and references',()=>{
     const failFile=spawnSync(process.execPath,[checker,tmp],{encoding:'utf8'});
     assert.notEqual(failFile.status,0);
   } finally { fs.rmSync(tmp,{recursive:true,force:true}); }
+});
+
+test('weighted regional ecology is reproducible and never uses locked species', () => {
+  const shore = emptyCollection();
+  const spawn = (state, n, step, offset) => Array.from({length:n}, (_,i) =>
+    fishForRegion(state, i, i*step+offset).id);
+  const initial = spawn(shore, 1000, 7, 0xAB13579);
+  assert.deepEqual(initial, spawn(shore, 1000, 7, 0xAB13579));
+  assert.ok(initial.every(id => id === 'bubble' || id === 'lake'));
+  const bubbleCount = initial.filter(id => id === 'bubble').length;
+  assert.ok(bubbleCount > 510 && bubbleCount < 700, 'shore distribution: ' + bubbleCount);
+  assert.ok(initial.some((id,i)=>i>0 && id===initial[i-1]), 'should not rotate predictably');
+  const deep = { ...shore, selectedRegion: 'deep-blue', unlockedRegions: ['shore','coral-bay','deep-blue'] };
+  const rareCount = spawn(deep, 1000, 23, 99).filter(id => id === 'king').length;
+  assert.ok(rareCount > 60 && rareCount < 230, 'boss remains uncommon: '+rareCount);
+});
+test('discovering a fish slightly increases chances of finding the other', () => {
+  const empty = emptyCollection();
+  const discovered = { ...empty, records: { bubble: { count:1, bestLengthCm:17, rarest:'common' } } };
+  const sample = state => Array.from({length:3000}, (_,i)=>fishForRegion(state,i,i*5+137).id)
+    .filter(id=>id==='lake').length;
+  const before=sample(empty), after=sample(discovered);
+  assert.ok(after>before, 'discovery bonus should help exploration');
+  assert.ok(after<2700, 'unseen is not guaranteed');
 });
