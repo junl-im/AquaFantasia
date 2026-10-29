@@ -1529,3 +1529,13 @@ PY AF-v2.1.120-full.zip AF-v2.1.120-patch.zip
 
 
 
+
+
+## AquaFantasia V3 production launch — 2026-10-30
+- V3 now boots at the default root URL; `?preview=v3` is no longer required.
+- The old V2 entry, opening video preload, back-to-legacy button and laboratory text are removed from the production path.
+- V3 self-contained fishing, collections, harbor upgrades, three regions and six initial fish remain active.
+- PWA uses new `aqua-fantasia-v3-launch-20261030` cache and network-first app shell; old AquaFantasia caches are deleted when the new service worker activates.
+- PWA manifest allows portrait and landscape; GitHub Pages relative path remains supported.
+- No SVG asset is permitted. The old version remains only in git history/source until separate cleanup; it is no longer loaded by the app.
+- Production launch smoke must validate the root entry, six viewports, interactions and collection persistence.

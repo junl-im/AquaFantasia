@@ -803,3 +803,7 @@ body.v3-preview-mode #toast-root { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .v3-bite-ripples span, .v3-catch-glimmer span { animation: none !important; }
 }
+
+/* Launch layout: header is now a single-action brand, no obsolete legacy-game exit. */
+.v3-screen .v3-header-actions { justify-content: center; }
+.v3-screen .v3-top { align-items: center; }

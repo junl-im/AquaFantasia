@@ -3,7 +3,7 @@ import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, empt
 import { FISHING_REGIONS, MAX_ROD_LEVEL, canUnlockRegion, fishForRegion, getRegion, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeRod } from './progression';
 import './preview.css';
 
-const PREVIEW_REGION = '잔잔한 해변';
+const START_REGION = '잔잔한 해변';
 const FAIL_MESSAGES: Record<string, string> = {
   missed: '입질을 놓쳤어요. 다음에는 물었다는 신호에 바로 눌러 주세요.',
   snapped: '줄의 장력이 너무 높았어요. 잠시 손을 떼고 다시 감아 보세요.',
@@ -12,25 +12,25 @@ const FAIL_MESSAGES: Record<string, string> = {
 
 function requiredElement<T extends Element>(root: ParentNode, selector: string): T {
   const found = root.querySelector<T>(selector);
-  if (!found) throw new Error(`AquaFantasia v3 preview: missing ${selector}`);
+  if (!found) throw new Error(`AquaFantasia V3: missing ${selector}`);
   return found;
 }
 
-export function bootV3Preview(): void {
+export function bootAquaFantasia(): void {
   const app = document.getElementById('app');
   if (!app) throw new Error('AquaFantasia app root not found');
   document.body.classList.add('v3-preview-mode');
+  document.documentElement.dataset.aquaGameVersion = '3.0.0';
   app.innerHTML = `
-    <main class="v3-screen" aria-label="AquaFantasia 새 낚시 엔진 미리보기">
+    <main class="v3-screen" aria-label="아쿠아 판타지아 낚시게임">
       <header class="v3-top">
         <div class="v3-title-wrap">
-          <span class="v3-eyebrow">AQUAFANTASIA · V3 LAB</span>
+          <span class="v3-eyebrow">AQUAFANTASIA · THE NEW SEA</span>
           <h1>환상의 바다를 낚다</h1>
-          <span class="v3-region" data-v3-region>✦ ${PREVIEW_REGION} · 낚시 엔진 실험실</span>
+          <span class="v3-region" data-v3-region>✦ ${START_REGION} · 낚시를 시작하세요</span>
         </div>
         <div class="v3-header-actions">
           <button class="v3-sound" type="button" data-v3-sound aria-pressed="true">효과음 켬</button>
-          <button class="v3-exit" type="button" data-v3-exit aria-label="기존 게임으로 돌아가기">기존 게임 ↗</button>
         </div>
       </header>
       <section class="v3-sea" aria-label="낚시 바다">
@@ -87,7 +87,7 @@ export function bootV3Preview(): void {
         </header>
         <p class="v3-dex-summary" data-v3-dex-summary></p>
         <div class="v3-dex-grid" data-v3-dex-grid></div>
-        <p class="v3-dex-note">V3 전용 도감 · 기존 게임 기록과 독립적으로 보관됩니다</p>
+        <p class="v3-dex-note">새로운 바다에서 수집한 물고기가 여기에 기록됩니다</p>
       </dialog>
       <dialog class="v3-harbor-dialog" data-v3-harbor-dialog aria-labelledby="v3-harbor-title">
         <header class="v3-dex-header">
@@ -108,7 +108,7 @@ export function bootV3Preview(): void {
         </section>
         <p class="v3-harbor-section-title">탐험할 바다 선택</p>
         <div class="v3-harbor-regions" data-v3-region-list></div>
-        <p class="v3-dex-note">V3 전용 코인으로만 진행 · 기존 게임 세이브에는 영향이 없습니다</p>
+        <p class="v3-dex-note">낚시로 획득한 코인으로 장비를 강화하고 바다를 해금하세요</p>
       </dialog>
     </main>
   `;
@@ -152,7 +152,6 @@ export function bootV3Preview(): void {
   const liteButton = requiredElement<HTMLButtonElement>(app, '[data-v3-lite]');
   const screen = requiredElement<HTMLElement>(app, '.v3-screen');
   const hint = requiredElement<HTMLElement>(app, '[data-v3-hint]');
-  const backButton = requiredElement<HTMLButtonElement>(app, '[data-v3-exit]');
   const soundButton = requiredElement<HTMLButtonElement>(app, '[data-v3-sound]');
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
   const soundFiles = {
@@ -383,7 +382,7 @@ export function bootV3Preview(): void {
       ? '브라우저 저장이 제한돼 이번 V3 기록은 새로고침 후 사라질 수 있어요'
       : phase === 'fighting'
       ? advice.message
-      : 'PC 스페이스바 / 모바일 큰 버튼 · 이 미리보기는 기존 저장에 영향을 주지 않습니다';
+      : 'PC 스페이스바 / 모바일 릴 버튼 · 손을 떼어 장력을 조절하세요';
   }
 
   function cast(): void {
@@ -489,12 +488,6 @@ export function bootV3Preview(): void {
   window.addEventListener('keyup', (event) => {
     if (event.code === 'Space' && keyboardOwner) stopReeling();
   });
-  backButton.addEventListener('click', () => {
-    const url = new URL(window.location.href);
-    url.searchParams.delete('preview');
-    window.location.assign(url.href);
-  });
-
   function frame(now: number): void {
     const elapsed = Math.min(0.1, Math.max(0, (now - previousTime) / 1000));
     previousTime = now;
