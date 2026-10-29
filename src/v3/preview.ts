@@ -327,7 +327,7 @@ export function bootV3Preview(): void {
     reelButton.textContent = phase === 'bite' ? '지금 눌러 챔질!' : phase === 'fighting' ? '누르고 릴 감기' : '입질 기다리는 중';
     castButton.disabled = !['landed', 'escaped'].includes(phase);
     castButton.textContent = '다시 던지기';
-    updateCollectionBadge();
+    // Wallet/region badges are updated on saves, upgrades, unlocks and boot, not 30 times a second.
     hint.textContent = !canSaveCollection
       ? '브라우저 저장이 제한돼 이번 V3 기록은 새로고침 후 사라질 수 있어요'
       : phase === 'fighting'

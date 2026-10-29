@@ -100,6 +100,12 @@ async function main() {
       if(answer.exceptionDetails)throw Error('Page exception: '+JSON.stringify(answer.exceptionDetails));
       return answer.result?.value;
     }
+    const screenshots = path.resolve('v3-qa-screenshots');
+    async function capture(name) {
+      const shot = await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+      fs.mkdirSync(screenshots,{recursive:true});
+      fs.writeFileSync(path.join(screenshots,name+'.png'),Buffer.from(shot.data,'base64'));
+    }
     async function nav(w,h,mobile) {
       await send('Emulation.setDeviceMetricsOverride',{width:w,height:h,deviceScaleFactor:1,mobile});
       await send('Page.navigate',{url});
@@ -114,6 +120,7 @@ async function main() {
       const clipped=keys.filter(k=>state[k]&&(state[k].left< -2||state[k].top< -2||state[k].right>w+2||state[k].bottom>h+2));
       if(missing.length||clipped.length||state.scrollW>w+2||state.scrollH>h+2||state.sea.height<45)
         throw Error('Viewport '+w+'x'+h+' failed: '+JSON.stringify({missing,clipped,state}));
+      await capture('home-'+w+'x'+h);
       console.log('[V3 browser] viewport '+w+'x'+h+' PASS; sea '+Math.round(state.sea.height)+'px');
     }
     await nav(390,844,true);
@@ -137,10 +144,15 @@ async function main() {
     });
     await evaluate("(localStorage.setItem('aqua-fantasia-save-v650','LEGACY_UNTOUCHED'),localStorage.setItem('aquafantasia:v3:collection:v1',"+JSON.stringify(sample)+"),true)");
     await send('Page.reload',{ignoreCache:true});
-    await until(()=>evaluate("Boolean(document.querySelector('[data-v3-harbor-toggle]')?.offsetWidth)"),'reload after save');
+    // Page.reload can return before the new document is mounted; distinguish old and new UI.
+    await until(()=>evaluate("Boolean(document.querySelector('[data-v3-harbor-toggle]')?.offsetWidth) && document.querySelector('[data-v3-wallet]')?.textContent?.includes('2,000')"),'hydrated V3 wallet after reload',12000);
     const grown=await evaluate('('+showHarborAndGrow.toString()+')()');
     if(grown.rod!==3||grown.region!=='deep-blue'||grown.coins!==250||grown.species!==4||grown.legacy!=='LEGACY_UNTOUCHED')
       throw Error('Progression / legacy save isolation failed: '+JSON.stringify(grown));
+    await evaluate("document.querySelector('[data-v3-harbor-toggle]').click();true");
+    await capture('harbor-deep-blue-390x844');
+    await evaluate("document.querySelector('[data-v3-harbor-close]').click();true");
+    await capture('deep-blue-390x844');
     console.log('[V3 browser] touch, fish PNG, dialogs, upgrades, new regions, legacy save isolation PASS');
   } finally {
     if(ws&&ws.readyState===1)ws.close();
