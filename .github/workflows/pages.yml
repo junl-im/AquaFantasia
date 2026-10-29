@@ -61,6 +61,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: V3 fishing and safety tests
+        run: npm run v3:test
+
       - name: Build
         run: npm run build
 
