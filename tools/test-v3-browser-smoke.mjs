@@ -114,9 +114,11 @@ async function main() {
       await send('Emulation.setDeviceMetricsOverride',{width:w,height:h,deviceScaleFactor:1,mobile});
       await send('Page.navigate',{url});
       await until(()=>evaluate("Boolean(document.querySelector('.v3-screen')&&document.querySelector('[data-v3-cast]'))"),'V3 DOM');
-      const launch=await evaluate("({version:document.documentElement.dataset.aquaGameVersion,lab:document.querySelector('.v3-eyebrow')?.textContent,exit:!!document.querySelector('[data-v3-exit]'),old:!!document.querySelector('.legacy-game')})");
+      const launch=await evaluate("({version:document.documentElement.dataset.aquaGameVersion,lab:document.querySelector('.v3-eyebrow')?.textContent,exit:!!document.querySelector('[data-v3-exit]'),old:!!document.querySelector('.legacy-game'),goal:document.querySelector('[data-v3-hint]')?.textContent,harborGoal:document.querySelector('[data-v3-harbor-toggle]')?.dataset.goalReady})");
       if(launch.version!=='3.0.0'||launch.exit||launch.lab?.includes('LAB')||launch.old)
         throw Error('The default URL must boot the new V3 production game: '+JSON.stringify(launch));
+      if(!launch.goal?.includes('다음 목표')||launch.harborGoal!=='false')
+        throw Error('Fresh player should see first progression objective: '+JSON.stringify(launch));
       await sleep(150);
     }
     for(const [w,h,mobile] of [[320,568,true],[375,667,true],[390,844,true],[667,375,true],[844,390,true],[1280,800,false]]) {
@@ -173,6 +175,9 @@ async function main() {
     const priorLiteDocumentOrigin=await evaluate('performance.timeOrigin');
     await send('Page.reload',{ignoreCache:true});
     await until(()=>evaluate("performance.timeOrigin !== "+priorLiteDocumentOrigin+" && document.querySelector('.v3-screen.v3-lite-mode') && Boolean(document.querySelector('[data-v3-harbor-toggle]')?.offsetWidth) && document.querySelector('[data-v3-wallet]')?.textContent?.includes('250')"),'new document and persisted lite mode after browser reload');
+    const nextObjective=await evaluate("document.querySelector('[data-v3-hint]')?.textContent");
+    if(!nextObjective?.includes('도감 완성까지')||!nextObjective.includes('2종'))
+      throw Error('Late-game objective did not update: '+nextObjective);
     if(await evaluate("localStorage.getItem('aqua-fantasia-save-v650')")!=='LEGACY_UNTOUCHED')
       throw Error('Legacy V2 save was unexpectedly modified after reload');
     await evaluate("document.querySelector('[data-v3-harbor-toggle]').click();true");

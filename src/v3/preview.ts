@@ -1,6 +1,6 @@
 import { DEMO_FISH, advanceRound, createCast, fishVisualSignal, hookFish, reelAdvice, type FishingRound, type RoundPhase, type ReelAdviceLevel } from './fishingEngine';
 import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, emptyCollection, parseCollection, totalCatches, type CollectionState, type RegionId } from './collection';
-import { FISHING_REGIONS, MAX_ROD_LEVEL, canUnlockRegion, fishForRegion, getRegion, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeRod } from './progression';
+import { FISHING_REGIONS, MAX_ROD_LEVEL, canUnlockRegion, fishForRegion, getRegion, nextFishingGoal, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeRod } from './progression';
 import './preview.css';
 
 const START_REGION = '잔잔한 해변';
@@ -48,7 +48,7 @@ export function bootAquaFantasia(): void {
         <div class="v3-center-status">
           <span class="v3-phase-tag" data-v3-phase-tag>준비</span>
           <h2 data-v3-message>새로운 물결을 만나러 가볼까요?</h2>
-          <p data-v3-detail>낚싯줄을 던지고 물고기의 움직임을 느껴 보세요</p>
+          <p data-v3-detail>① 줄 던지기 · ② 입질에 챔질 · ③ 장력을 조절하며 릴링</p>
         </div>
         <div class="v3-result" data-v3-result hidden role="status" aria-live="polite">
           <span class="v3-result-crest" data-v3-result-crest aria-hidden="true">✦</span>
@@ -198,6 +198,10 @@ export function bootAquaFantasia(): void {
   }
 
   function updateCollectionBadge(): void {
+    const goal = nextFishingGoal(collection);
+    harborButton.dataset.goalReady = goal.action === 'harbor' ? 'true' : 'false';
+    harborButton.setAttribute('aria-label', goal.action === 'harbor' ? '항구 · 다음 목표를 진행할 수 있어요' : '항구 · 강화와 수역 이동');
+    if (!round || round.phase === 'landed' || round.phase === 'escaped') hint.textContent = goal.message;
     wallet.textContent = `체험 코인 ${collection.coins.toLocaleString('ko-KR')}`;
     dexButton.textContent = `도감 ${discoveredSpecies(collection)} / ${DEMO_FISH.length}`;
     regionLabel.textContent = `✦ ${getRegion(collection.selectedRegion).name} · 낚싯대 Lv.${collection.rodLevel}`;
@@ -376,13 +380,16 @@ export function bootAquaFantasia(): void {
     reelButton.disabled = !['bite', 'fighting'].includes(phase);
     reelButton.textContent = phase === 'bite' ? '지금 눌러 챔질!' : phase === 'fighting' ? '누르고 릴 감기' : '입질 기다리는 중';
     castButton.disabled = !['landed', 'escaped'].includes(phase);
-    castButton.textContent = '다시 던지기';
+    castButton.textContent = phase === 'landed' ? '다음 물고기 낚기'
+      : phase === 'escaped' ? '다시 도전하기' : '다시 던지기';
     // Wallet/region badges are updated on saves, upgrades, unlocks and boot, not 30 times a second.
     hint.textContent = !canSaveCollection
       ? '브라우저 저장이 제한돼 이번 V3 기록은 새로고침 후 사라질 수 있어요'
       : phase === 'fighting'
       ? advice.message
-      : 'PC 스페이스바 / 모바일 릴 버튼 · 손을 떼어 장력을 조절하세요';
+      : phase === 'waiting' ? '입질이 올 때까지 기다리세요 · 물리면 버튼을 누르세요'
+      : phase === 'bite' ? '지금 릴 버튼을 누르고 물고기를 잡으세요!'
+      : nextFishingGoal(collection).message;
   }
 
   function cast(): void {

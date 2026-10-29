@@ -6,7 +6,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { DEMO_FISH, advanceRound, createCast, hookFish } from '../src/v3/fishingEngine.ts';
 import { emptyCollection, parseCollection } from '../src/v3/collection.ts';
-import { canUnlockRegion, fishForRegion, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeRod } from '../src/v3/progression.ts';
+import { canUnlockRegion, fishForRegion, nextFishingGoal, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeRod } from '../src/v3/progression.ts';
 
 test('V3 old collection data migrates without losing coins or records', () => {
   const legacy = JSON.stringify({ version: 1, coins: 275, records: { bubble: { count: 4, bestLengthCm: 22.5, rarest: 'rare' } } });
@@ -122,4 +122,40 @@ test('discovering a fish slightly increases chances of finding the other', () =>
   const before=sample(empty), after=sample(discovered);
   assert.ok(after>before, 'discovery bonus should help exploration');
   assert.ok(after<2700, 'unseen is not guaranteed');
+});
+
+test('next journey objective follows real fish, coin, rod and harbor milestones', () => {
+  const card = (id) => [id, { count: 1, bestLengthCm: 20, rarest: 'common' }];
+  const withTwo = { ...emptyCollection(), records: Object.fromEntries(['bubble','lake'].map(card)) };
+  assert.equal(nextFishingGoal(emptyCollection()).kind, 'discover');
+  assert.match(nextFishingGoal(emptyCollection()).message, /2종/);
+  assert.equal(nextFishingGoal(withTwo).kind, 'earn');
+  assert.match(nextFishingGoal(withTwo).message, /160코인/);
+
+  const canUpgrade = { ...withTwo, coins: 160 };
+  assert.deepEqual({kind:nextFishingGoal(canUpgrade).kind,action:nextFishingGoal(canUpgrade).action},{kind:'upgrade',action:'harbor'});
+  const upgraded = tryUpgradeRod(canUpgrade);
+  assert.equal(nextFishingGoal(upgraded).kind, 'earn');
+  assert.match(nextFishingGoal(upgraded).message, /280코인/);
+  const readyToUnlock = { ...upgraded, coins: 280 };
+  assert.equal(nextFishingGoal(readyToUnlock).kind, 'unlock');
+  const unlocked = tryUnlockRegion(readyToUnlock, 'coral-bay');
+  assert.equal(nextFishingGoal(unlocked).kind, 'select');
+  const atCoral = trySelectRegion(unlocked, 'coral-bay');
+  assert.equal(nextFishingGoal(atCoral).kind, 'discover');
+  assert.match(nextFishingGoal(atCoral).message, /2종/);
+
+  const four = { ...atCoral, records: Object.fromEntries(['bubble','lake','pearl','clown'].map(card)) };
+  assert.equal(nextFishingGoal(four).kind, 'earn');
+  const readyForDeepUpgrade = { ...four, coins: 410 };
+  assert.equal(nextFishingGoal(readyForDeepUpgrade).kind, 'upgrade');
+  const levelThree = tryUpgradeRod(readyForDeepUpgrade);
+  assert.match(nextFishingGoal(levelThree).message, /900코인/);
+  const unlockedDeep = tryUnlockRegion({ ...levelThree, coins: 900 }, 'deep-blue');
+  assert.equal(nextFishingGoal(unlockedDeep).kind, 'select');
+  const deep = trySelectRegion(unlockedDeep, 'deep-blue');
+  assert.match(nextFishingGoal(deep).message, /2종/);
+  const all = { ...deep, records: Object.fromEntries(DEMO_FISH.map(f => card(f.id))) };
+  assert.equal(nextFishingGoal(all).kind, 'complete');
+  assert.equal(nextFishingGoal(all).action, 'fish');
 });

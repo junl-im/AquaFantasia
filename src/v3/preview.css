@@ -807,3 +807,13 @@ body.v3-preview-mode #toast-root { display: none !important; }
 /* Launch layout: header is now a single-action brand, no obsolete legacy-game exit. */
 .v3-screen .v3-header-actions { justify-content: center; }
 .v3-screen .v3-top { align-items: center; }
+
+/* Goal-ready harbor: restrained, readable state instead of decorative flashing. */
+.v3-harbor-toggle[data-goal-ready="true"] {
+  background: linear-gradient(160deg, #b17b41, #805229) !important;
+  box-shadow: inset 0 0 0 2px #f0d999, 0 2px 0 rgba(14, 38, 43, .45) !important;
+}
+.v3-harbor-toggle[data-goal-ready="true"]:focus-visible {
+  outline: 3px solid #fff9d5;
+  outline-offset: 2px;
+}

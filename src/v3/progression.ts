@@ -82,3 +82,47 @@ export function fishForRegion(state: CollectionState, castCount: number, seed = 
   }
   return pool[pool.length - 1].fish;
 }
+
+/** One actionable objective at a time. Data-driven so progress survives reloads. */
+export interface FishingGoal {
+  readonly kind: 'discover' | 'earn' | 'upgrade' | 'unlock' | 'select' | 'complete';
+  readonly action: 'fish' | 'harbor';
+  readonly message: string;
+}
+export function nextFishingGoal(state: CollectionState): FishingGoal {
+  const discoveries = discoveredSpecies(state);
+  for (const region of FISHING_REGIONS.slice(1)) {
+    if (!state.unlockedRegions.includes(region.id)) {
+      if (discoveries < region.requiredDiscoveries) {
+        const missing = region.requiredDiscoveries - discoveries;
+        return { kind: 'discover', action: 'fish',
+          message: `다음 목표 · ${region.name} 탐험을 위해 새로운 물고기 ${missing}종 발견` };
+      }
+      if (state.rodLevel < region.requiredRodLevel) {
+        const price = rodUpgradePrice(state.rodLevel);
+        if (price !== null && state.coins < price) {
+          return { kind: 'earn', action: 'fish',
+            message: `다음 목표 · 장비 강화까지 ${(price - state.coins).toLocaleString('ko-KR')}코인 모으기` };
+        }
+        return { kind: 'upgrade', action: 'harbor',
+          message: `다음 목표 · 항구에서 낚싯대 Lv.${state.rodLevel + 1} 강화` };
+      }
+      if (state.coins < region.unlockPrice) {
+        return { kind: 'earn', action: 'fish',
+          message: `다음 목표 · ${region.name} 해금까지 ${(region.unlockPrice - state.coins).toLocaleString('ko-KR')}코인 모으기` };
+      }
+      return { kind: 'unlock', action: 'harbor',
+        message: `다음 목표 · 항구에서 ${region.name} 해금 가능!` };
+    }
+    if (state.selectedRegion !== region.id) {
+      return { kind: 'select', action: 'harbor',
+        message: `다음 목표 · 항구에서 ${region.name}(으)로 이동` };
+    }
+  }
+  if (discoveries < DEMO_FISH.length) {
+    return { kind: 'discover', action: 'fish',
+      message: `다음 목표 · 도감 완성까지 새로운 물고기 ${DEMO_FISH.length - discoveries}종` };
+  }
+  return { kind: 'complete', action: 'fish',
+    message: '도감 6종 완성! 전설 등급과 최고 크기 기록에 도전하세요' };
+}
