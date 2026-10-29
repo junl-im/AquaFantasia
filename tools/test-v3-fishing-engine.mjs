@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DEMO_FISH, createCast, hookFish, advanceRound, rewardFor } from '../src/v3/fishingEngine.ts';
+import { DEMO_FISH, createCast, hookFish, advanceRound, fishVisualSignal, rewardFor } from '../src/v3/fishingEngine.ts';
 
 function waitForBite(round) {
   let state = round;
@@ -15,6 +15,25 @@ test('six distinct fish behaviors and deterministic opening', () => {
   assert.equal(DEMO_FISH.length, 6);
   assert.equal(new Set(DEMO_FISH.map((fish) => fish.behavior)).size, 6);
   assert.deepEqual(createCast(DEMO_FISH[0], 42), createCast(DEMO_FISH[0], 42));
+});
+
+test('all visual motions are finite, bounded, and tied to fish behavior', () => {
+  const cues = new Set();
+  for (const fish of DEMO_FISH) {
+    let state = hookFish(waitForBite(createCast(fish, 19)));
+    for (let i = 0; i < 95; i += 1) state = advanceRound(state, 0.05, false);
+    const visual = fishVisualSignal(state);
+    assert.deepEqual(visual, fishVisualSignal(state));
+    for (const value of [visual.x, visual.y, visual.rotation, visual.intensity]) {
+      assert.ok(Number.isFinite(value));
+    }
+    assert.ok(Math.abs(visual.x) <= 1);
+    assert.ok(Math.abs(visual.y) <= 1);
+    assert.ok(Math.abs(visual.rotation) <= 30);
+    assert.ok(visual.intensity >= 0 && visual.intensity <= 1);
+    cues.add(visual.cue);
+  }
+  assert.equal(cues.size, 6);
 });
 
 test('baiting and bite timeout have explicit transitions', () => {

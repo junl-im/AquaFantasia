@@ -26,6 +26,15 @@ export interface FishingRound {
   readonly reason: 'none' | 'missed' | 'snapped' | 'exhausted';
 }
 
+export interface FishVisualSignal {
+  /** Normalized movement used by the UI; independent from screen resolution. */
+  readonly x: number;
+  readonly y: number;
+  readonly rotation: number;
+  readonly intensity: number;
+  readonly cue: string;
+}
+
 export const DEMO_FISH: readonly FishProfile[] = [
   { id: 'bubble', name: '바늘꼬리', behavior: 'steady', difficulty: 0.82, image: './assets/v2110/fish/common_tropical/fish_common_001.png', reward: 55 },
   { id: 'lake', name: '투명메기', behavior: 'dart', difficulty: 0.95, image: './assets/v2110/fish/common_tropical/fish_common_002.png', reward: 72 },
@@ -74,6 +83,30 @@ function fishPull(round: FishingRound): number {
     case 'wave': return base + Math.max(0, wave) * 0.095;
     case 'trickster': return base + (cycle > 2.5 && cycle < 3.7 ? 0.12 : 0);
     case 'boss': return base + 0.045 + (cycle < 1.2 ? 0.14 : 0);
+  }
+}
+
+/** Deterministic visual behavior matching each fish's resistance archetype. */
+export function fishVisualSignal(round: FishingRound): FishVisualSignal {
+  const t = round.fightElapsed;
+  const offset = (round.seed % 97) / 97;
+  const angle = offset * Math.PI * 2;
+  const wave = (speed: number) => Math.sin(t * speed + angle);
+  const intensity = clamp((fishPull(round) - 0.04) / 0.27, 0, 1);
+
+  switch (round.fish.behavior) {
+    case 'steady':
+      return { x: wave(1.2) * 0.23, y: wave(1.8) * 0.08, rotation: wave(1.3) * 5, intensity, cue: '잔잔한 유영' };
+    case 'dart':
+      return { x: wave(4.3) * 0.78, y: wave(2.4) * 0.16, rotation: wave(4.3) * 18, intensity, cue: intensity > 0.55 ? '빠른 돌진!' : '날렵한 움직임' };
+    case 'heavy':
+      return { x: wave(0.8) * 0.13, y: 0.17 + wave(1.2) * 0.06, rotation: wave(0.9) * 3, intensity, cue: '묵직한 저항' };
+    case 'wave':
+      return { x: wave(1.9) * 0.36, y: wave(3.2) * 0.32, rotation: wave(1.9) * 12, intensity, cue: '파도 따라 유영' };
+    case 'trickster':
+      return { x: wave(3.5) * 0.62, y: wave(5.1) * 0.2, rotation: wave(3.5) * 25, intensity, cue: '방향 급변!' };
+    case 'boss':
+      return { x: wave(1.25) * 0.47, y: wave(2.1) * 0.25, rotation: wave(1.25) * 13, intensity, cue: intensity > 0.6 ? '보스 폭주!' : '심해의 위압감' };
   }
 }
 

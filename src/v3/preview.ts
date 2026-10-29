@@ -1,4 +1,4 @@
-import { DEMO_FISH, advanceRound, createCast, hookFish, rewardFor, type FishingRound, type RoundPhase } from './fishingEngine';
+import { DEMO_FISH, advanceRound, createCast, fishVisualSignal, hookFish, rewardFor, type FishingRound, type RoundPhase } from './fishingEngine';
 import './preview.css';
 
 const PREVIEW_REGION = '잔잔한 해변';
@@ -26,7 +26,10 @@ export function bootV3Preview(): void {
           <h1>환상의 바다를 낚다</h1>
           <span class="v3-region">✦ ${PREVIEW_REGION} · 낚시 엔진 실험실</span>
         </div>
-        <button class="v3-exit" type="button" data-v3-exit aria-label="기존 게임으로 돌아가기">기존 게임 ↗</button>
+        <div class="v3-header-actions">
+          <button class="v3-sound" type="button" data-v3-sound aria-pressed="true">효과음 켬</button>
+          <button class="v3-exit" type="button" data-v3-exit aria-label="기존 게임으로 돌아가기">기존 게임 ↗</button>
+        </div>
       </header>
       <section class="v3-sea" aria-label="낚시 바다">
         <div class="v3-sea-haze" aria-hidden="true"></div>
@@ -34,7 +37,9 @@ export function bootV3Preview(): void {
         <div class="v3-bubble v3-bubble-two" aria-hidden="true"></div>
         <div class="v3-bubble v3-bubble-three" aria-hidden="true"></div>
         <div class="v3-float" aria-hidden="true"></div>
+        <div class="v3-line" data-v3-line aria-hidden="true"></div>
         <img class="v3-fish" data-v3-fish alt="" decoding="async" />
+        <span class="v3-fish-cue" data-v3-cue hidden></span>
         <div class="v3-center-status">
           <span class="v3-phase-tag" data-v3-phase-tag>준비</span>
           <h2 data-v3-message>새로운 물결을 만나러 가볼까요?</h2>
@@ -69,6 +74,8 @@ export function bootV3Preview(): void {
   const castButton = requiredElement<HTMLButtonElement>(app, '[data-v3-cast]');
   const reelButton = requiredElement<HTMLButtonElement>(app, '[data-v3-reel]');
   const fishImage = requiredElement<HTMLImageElement>(app, '[data-v3-fish]');
+  const fishingLine = requiredElement<HTMLElement>(app, '[data-v3-line]');
+  const fishCue = requiredElement<HTMLElement>(app, '[data-v3-cue]');
   const sea = requiredElement<HTMLElement>(app, '.v3-sea');
   sea.style.setProperty('--v3-water-image', `url("${new URL('./assets/v101/water/water_clear_calm.webp', window.location.href).href}")`);
   const phaseTag = requiredElement<HTMLElement>(app, '[data-v3-phase-tag]');
@@ -84,14 +91,45 @@ export function bootV3Preview(): void {
   const wallet = requiredElement<HTMLElement>(app, '[data-v3-wallet]');
   const hint = requiredElement<HTMLElement>(app, '[data-v3-hint]');
   const backButton = requiredElement<HTMLButtonElement>(app, '[data-v3-exit]');
+  const soundButton = requiredElement<HTMLButtonElement>(app, '[data-v3-sound]');
+  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+  const soundFiles = {
+    cast: './assets/audio/cast.wav',
+    bite: './assets/audio/bite.wav',
+    success: './assets/audio/success.wav',
+    fail: './assets/audio/fail.wav',
+  } as const;
+  type SoundKind = keyof typeof soundFiles;
+  const sounds = Object.fromEntries(Object.entries(soundFiles).map(([key, src]) => {
+    const clip = new Audio(new URL(src, window.location.href).href);
+    clip.preload = 'none';
+    clip.volume = 0.22;
+    return [key, clip];
+  })) as Record<SoundKind, HTMLAudioElement>;
 
   let round: FishingRound | null = null;
   let held = false;
+  let soundEnabled = true;
   let coins = 0;
   let castCount = 0;
   let lastPhase: RoundPhase | 'ready' = 'ready';
   let previousTime = performance.now();
   let lastPaint = 0;
+
+  function playFeedback(kind: SoundKind): void {
+    if (!soundEnabled) return;
+    const clip = sounds[kind];
+    try {
+      clip.pause();
+      clip.currentTime = 0;
+      void clip.play().catch(() => undefined);
+    } catch { /* Sound is optional; never block fishing. */ }
+  }
+
+  function haptic(pattern: number | number[]): void {
+    if (reducedMotion || document.hidden) return;
+    try { navigator.vibrate?.(pattern); } catch { /* Optional device feedback. */ }
+  }
 
   function stopReeling(): void {
     held = false;
@@ -101,8 +139,15 @@ export function bootV3Preview(): void {
   function phaseChanged(phase: RoundPhase): void {
     if (!round || phase === lastPhase) return;
     lastPhase = phase;
+    if (phase === 'waiting') playFeedback('cast');
+    if (phase === 'bite') {
+      playFeedback('bite');
+      haptic([60, 40, 60]);
+    }
     if (phase === 'landed') {
       stopReeling();
+      playFeedback('success');
+      haptic([80, 40, 110]);
       const reward = rewardFor(round);
       coins += reward;
       result.hidden = false;
@@ -110,6 +155,7 @@ export function bootV3Preview(): void {
       resultReward.textContent = `+${reward} 체험 코인 · 장력 최고 ${Math.round(round.peakTension * 100)}%`;
     } else if (phase === 'escaped') {
       stopReeling();
+      playFeedback('fail');
       result.hidden = true;
     }
   }
@@ -141,9 +187,22 @@ export function bootV3Preview(): void {
     const progress = Math.round(round.progress * 100);
     tensionFill.style.width = `${Math.min(100, tension)}%`;
     tensionFill.classList.toggle('is-danger', tension >= 80);
+    reelButton.classList.toggle('is-warning', phase === 'fighting' && tension >= 80);
+    sea.dataset.danger = phase === 'fighting' && tension >= 80 ? 'true' : 'false';
     progressFill.style.width = `${progress}%`;
     tensionLabel.textContent = `${tension}%`;
     progressLabel.textContent = `${progress}%`;
+    const visual = fishVisualSignal(round);
+    fishCue.hidden = phase !== 'fighting';
+    fishCue.textContent = visual.cue;
+    sea.dataset.surge = phase === 'fighting' && visual.intensity > 0.65 ? 'true' : 'false';
+    if (phase === 'fighting' && !reducedMotion) {
+      fishImage.style.transform = `translate(calc(-50% + ${Math.round(visual.x * 45)}px), ${Math.round(visual.y * 24)}px) rotate(${visual.rotation.toFixed(1)}deg)`;
+      fishingLine.style.transform = `translateX(-50%) rotate(${(visual.x * 11).toFixed(1)}deg)`;
+    } else {
+      fishImage.style.transform = '';
+      fishingLine.style.transform = '';
+    }
     reelButton.disabled = !['bite', 'fighting'].includes(phase);
     reelButton.textContent = phase === 'bite' ? '지금 눌러 챔질!' : phase === 'fighting' ? '누르고 릴 감기' : '입질 기다리는 중';
     castButton.disabled = !['landed', 'escaped'].includes(phase);
@@ -176,6 +235,12 @@ export function bootV3Preview(): void {
   }
 
   castButton.addEventListener('click', cast);
+  soundButton.addEventListener('click', () => {
+    soundEnabled = !soundEnabled;
+    if (!soundEnabled) Object.values(sounds).forEach((clip) => clip.pause());
+    soundButton.textContent = soundEnabled ? '효과음 켬' : '효과음 끔';
+    soundButton.setAttribute('aria-pressed', String(soundEnabled));
+  });
   reelButton.addEventListener('pointerdown', (event) => {
     if (reelButton.disabled) return;
     event.preventDefault();
