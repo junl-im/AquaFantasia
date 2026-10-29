@@ -91,6 +91,11 @@ export interface FishingGoal {
 }
 export function nextFishingGoal(state: CollectionState): FishingGoal {
   const discoveries = discoveredSpecies(state);
+  const currentRegionIndex = FISHING_REGIONS.findIndex((region) => region.id === state.selectedRegion);
+  if (discoveries === DEMO_FISH.length && FISHING_REGIONS.every((region) => state.unlockedRegions.includes(region.id))) {
+    return { kind: 'complete', action: 'fish',
+      message: '도감 6종 완성! 전설 등급과 최고 크기 기록에 도전하세요' };
+  }
   for (const region of FISHING_REGIONS.slice(1)) {
     if (!state.unlockedRegions.includes(region.id)) {
       if (discoveries < region.requiredDiscoveries) {
@@ -114,9 +119,10 @@ export function nextFishingGoal(state: CollectionState): FishingGoal {
       return { kind: 'unlock', action: 'harbor',
         message: `다음 목표 · 항구에서 ${region.name} 해금 가능!` };
     }
-    if (state.selectedRegion !== region.id) {
+    // Visiting a later sea counts as progressing beyond earlier unlocked regions.
+    if (currentRegionIndex < FISHING_REGIONS.indexOf(region)) {
       return { kind: 'select', action: 'harbor',
-        message: `다음 목표 · 항구에서 ${region.name}(으)로 이동` };
+        message: `다음 목표 · 항구에서 ${region.name}으로 이동` };
     }
   }
   if (discoveries < DEMO_FISH.length) {
