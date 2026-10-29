@@ -4,7 +4,7 @@ import { DEMO_FISH, createCast, advanceRound, hookFish } from '../src/v3/fishing
 import { collectCatch, emptyCollection, parseCollection, totalCatches, discoveredSpecies } from '../src/v3/collection.ts';
 
 /** Deterministic stress exercise across all fish, rod levels and varied seeds. */
-test('144 adaptive catches preserve bounded physics, rewards and reload integrity', () => {
+test('all species pass 24 adaptive catches each, preserving rewards and reload integrity', () => {
   let collection = emptyCollection();
   let completed = 0;
   for (const fish of DEMO_FISH) {
@@ -41,9 +41,11 @@ test('144 adaptive catches preserve bounded physics, rewards and reload integrit
       }
     }
   }
-  assert.equal(totalCatches(collection), 144);
-  assert.equal(discoveredSpecies(collection), 6);
-  assert.ok(collection.coins >= 144);
+  const totalTrials = DEMO_FISH.length * 4 * 6;
+  assert.equal(completed, totalTrials);
+  assert.equal(totalCatches(collection), totalTrials);
+  assert.equal(discoveredSpecies(collection), DEMO_FISH.length);
+  assert.ok(collection.coins >= totalTrials);
 });
 
 test('reel fatigue and motion never advance a finalized round', () => {
