@@ -1,7 +1,7 @@
 {
   "name": "아쿠아 판타지아",
   "short_name": "아쿠아판타지아",
-  "description": "세로 전용 2.5D 모바일 캐주얼 낚시 게임",
+  "description": "바다를 탐험하고 물고기를 수집하는 모바일·PC 낚시게임",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",
@@ -11,7 +11,7 @@
     "minimal-ui",
     "browser"
   ],
-  "orientation": "portrait-primary",
+  "orientation": "any",
   "background_color": "#031827",
   "theme_color": "#031827",
   "icons": [

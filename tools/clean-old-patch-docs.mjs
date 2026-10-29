@@ -2,7 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
-const removed = [];
+// The legacy filename is retained for the existing validation command.
+// It must never delete user documents, logs, backups, or generated artifacts.
+const preserved = [];
 const skipDirs = new Set(['node_modules', '.git']);
 const allowedRootMarkdown = new Set(['README.md', 'AI_HANDOFF_CARDVILLE.md']);
 
@@ -10,11 +12,8 @@ function relOf(p) {
   return path.relative(root, p).replace(/\\/g, '/');
 }
 
-function removeEntry(p) {
-  if (!fs.existsSync(p)) return;
-  const rel = relOf(p);
-  fs.rmSync(p, { recursive: true, force: true });
-  removed.push(rel);
+function noteEntry(p) {
+  preserved.push(relOf(p));
 }
 
 function isAllowedRootMarkdown(rel, name) {
@@ -48,21 +47,22 @@ function walk(dir) {
     const st = fs.statSync(p);
     if (st.isDirectory()) {
       if (isBackupDir(rel, name) || isForbiddenGeneratedDir(rel, name)) {
-        removeEntry(p);
+        noteEntry(p);
       } else {
         walk(p);
       }
       continue;
     }
-    if (st.isFile() && isForbiddenTempFile(rel, name)) removeEntry(p);
+    if (st.isFile() && isForbiddenTempFile(rel, name)) noteEntry(p);
   }
 }
 
 walk(root);
 
-if (removed.length) {
-  console.log('[clean-old-patch-docs] removed stale package artifacts:');
-  for (const rel of removed) console.log(`- ${rel}`);
+if (preserved.length) {
+  console.log('[clean-old-patch-docs] read-only audit; preserved all matching files/directories:');
+  for (const rel of preserved.slice(0, 30)) console.log(`- ${rel}`);
+  if (preserved.length > 30) console.log(`- ... and ${preserved.length - 30} more`);
 } else {
-  console.log('[clean-old-patch-docs] no stale package artifacts found');
+  console.log('[clean-old-patch-docs] read-only audit; no legacy artifacts found');
 }

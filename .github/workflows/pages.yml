@@ -61,8 +61,23 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: V3 fishing and safety tests
+        run: npm run v3:test
+
       - name: Build
         run: npm run build
+
+      - name: V3 Chromium viewport and touch smoke
+        run: node tools/test-v3-browser-smoke.mjs
+
+      - name: Upload V3 viewport screenshots
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: aqua-v3-viewport-qa
+          path: v3-qa-screenshots/
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
