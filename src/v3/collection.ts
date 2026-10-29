@@ -3,6 +3,8 @@ import { DEMO_FISH, rewardFor, type FishingRound } from './fishingEngine.ts';
 /** V3-only namespace. Never read or write the v2 game-save keys. */
 export const V3_COLLECTION_KEY = 'aquafantasia:v3:collection:v1';
 export type CatchRarity = 'common' | 'uncommon' | 'rare' | 'legendary';
+export type RegionId = 'shore' | 'coral-bay' | 'deep-blue';
+
 
 export const RARITY_LABELS: Readonly<Record<CatchRarity, string>> = {
   common: '일반', uncommon: '특별', rare: '희귀', legendary: '전설',
@@ -29,6 +31,9 @@ export interface CollectionState {
   readonly version: 1;
   readonly coins: number;
   readonly records: Readonly<Record<string, FishRecord>>;
+  readonly rodLevel: number;
+  readonly unlockedRegions: readonly RegionId[];
+  readonly selectedRegion: RegionId;
 }
 
 export interface CatchResult {
@@ -41,7 +46,7 @@ export interface CatchResult {
 }
 
 export function emptyCollection(): CollectionState {
-  return { version: 1, coins: 0, records: {} };
+  return { version: 1, coins: 0, records: {}, rodLevel: 1, unlockedRegions: ['shore'], selectedRegion: 'shore' };
 }
 
 export function discoveredSpecies(state: CollectionState): number {
@@ -60,7 +65,7 @@ export function parseCollection(raw: string | null): CollectionState {
     if (!input || typeof input !== 'object' || !('version' in input) || input.version !== 1) {
       return emptyCollection();
     }
-    const data = input as { coins?: unknown; records?: unknown };
+    const data = input as { coins?: unknown; records?: unknown; rodLevel?: unknown; unlockedRegions?: unknown; selectedRegion?: unknown };
     const coins = typeof data.coins === 'number' && Number.isSafeInteger(data.coins)
       && data.coins >= 0 && data.coins <= 1_000_000_000 ? data.coins : 0;
     const records: Record<string, FishRecord> = {};
@@ -75,7 +80,18 @@ export function parseCollection(raw: string | null): CollectionState {
       if (typeof record.rarest !== 'string' || !(record.rarest in RARITY_LEVEL)) continue;
       records[fish.id] = { count: record.count, bestLengthCm: record.bestLengthCm, rarest: record.rarest as CatchRarity };
     }
-    return { version: 1, coins, records };
+    const allowed: readonly RegionId[] = ['shore', 'coral-bay', 'deep-blue'];
+    const rodLevel = typeof data.rodLevel === 'number' && Number.isSafeInteger(data.rodLevel)
+      && data.rodLevel >= 1 && data.rodLevel <= 4 ? data.rodLevel : 1;
+    const inputRegions = Array.isArray(data.unlockedRegions) ? data.unlockedRegions : [];
+    const unlockedRegions: RegionId[] = ['shore'];
+    for (const id of allowed) {
+      if (id !== 'shore' && inputRegions.includes(id)) unlockedRegions.push(id);
+    }
+    const selectedRegion: RegionId = typeof data.selectedRegion === 'string'
+      && unlockedRegions.some((region) => region === data.selectedRegion)
+      ? data.selectedRegion as RegionId : 'shore';
+    return { version: 1, coins, records, rodLevel, unlockedRegions, selectedRegion };
   } catch {
     return emptyCollection();
   }
@@ -115,7 +131,7 @@ export function collectCatch(state: CollectionState, round: FishingRound): { sta
     },
   };
   return {
-    state: { version: 1, coins: Math.min(state.coins + earnedCoins, 1_000_000_000), records },
+    state: { ...state, coins: Math.min(state.coins + earnedCoins, 1_000_000_000), records },
     result: { ...measured, earnedCoins, firstDiscovery, newSizeRecord },
   };
 }

@@ -15,6 +15,7 @@ export interface FishingRound {
   readonly phase: RoundPhase;
   readonly fish: FishProfile;
   readonly seed: number;
+  readonly rodLevel: number;
   readonly elapsed: number;
   readonly fightElapsed: number;
   readonly biteIn: number;
@@ -56,9 +57,10 @@ function seedFraction(seed: number): number {
   return ((Math.imul(normalizedSeed(seed), 1664525) + 1013904223) >>> 0) / 4294967296;
 }
 
-export function createCast(fish: FishProfile, seed = 1): FishingRound {
+export function createCast(fish: FishProfile, seed = 1, rodLevel = 1): FishingRound {
   return {
     phase: 'waiting', fish, seed: normalizedSeed(seed),
+    rodLevel: Number.isSafeInteger(rodLevel) ? clamp(rodLevel, 1, 4) : 1,
     elapsed: 0, fightElapsed: 0, biteIn: 1.2 + seedFraction(seed) * 2.2,
     biteWindow: 3.8, tension: 0.1, progress: 0, fatigue: 0,
     peakTension: 0.1, reason: 'none',
@@ -131,12 +133,14 @@ export function advanceRound(round: FishingRound, seconds: number, holding: bool
   const fightElapsed = round.fightElapsed + dt;
   const pulling = fishPull({ ...round, fightElapsed });
   const fatigue = clamp(round.fatigue + (holding ? 0.013 : -0.004) * dt, 0, 1);
+  const rodStrength = 1 - (round.rodLevel - 1) * 0.08;
+  const reelSpeed = 1 + (round.rodLevel - 1) * 0.12;
   const tensionChange = holding
-    ? (0.135 + pulling * 0.9 - fatigue * 0.05) * dt
+    ? (0.135 + pulling * 0.9 - fatigue * 0.05) * rodStrength * dt
     : (-0.3 + pulling * 0.2) * dt;
   const tension = clamp(round.tension + tensionChange, 0, 1.1);
   const progressRate = holding
-    ? (0.068 / round.fish.difficulty) * (1 - Math.max(0, tension - 0.67) * 0.28)
+    ? (0.068 / round.fish.difficulty) * reelSpeed * (1 - Math.max(0, tension - 0.67) * 0.28)
     : -0.008;
   const progress = clamp(round.progress + progressRate * dt, 0, 1);
   const peakTension = Math.max(round.peakTension, tension);
