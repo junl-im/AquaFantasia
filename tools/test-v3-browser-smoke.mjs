@@ -131,7 +131,12 @@ async function main() {
     await evaluate("document.querySelector('[data-v3-cast]').click(); true");
     await until(()=>evaluate("document.querySelector('[data-v3-fish]').naturalWidth>0"),'PNG fish asset',9000);
     await until(()=>evaluate("document.querySelector('.v3-sea').dataset.phase==='bite'"),'bite animation',8500);
+    const biteVisual=await evaluate("({window:document.querySelector('[data-v3-bite-window]')?.hidden,fill:document.querySelector('[data-v3-bite-fill]')?.getBoundingClientRect().width,ripples:getComputedStyle(document.querySelector('.v3-bite-ripples')).opacity})");
+    if(biteVisual.window || !(biteVisual.fill>3) || Number(biteVisual.ripples)<.9)
+      throw Error('Bite wave/countdown not visible: '+JSON.stringify(biteVisual));
+    await capture('bite-390x844');
     const phase=await evaluate('('+reelDown.toString()+')()');
+    if(!(await evaluate("document.querySelector('[data-v3-bite-window]').hidden"))) throw Error('Countdown persisted during fight');
     if(phase!=='fighting')throw Error('Touch did not hook fish: '+phase);
     const coach = await evaluate("({text:document.querySelector('[data-v3-reel-coach]')?.textContent,hidden:document.querySelector('[data-v3-reel-coach]')?.hidden})");
     if(!coach.text || coach.hidden)throw Error('Reeling advice is not visible during fight');

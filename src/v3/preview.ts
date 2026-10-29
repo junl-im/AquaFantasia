@@ -39,8 +39,11 @@ export function bootV3Preview(): void {
         <div class="v3-bubble v3-bubble-two" aria-hidden="true"></div>
         <div class="v3-bubble v3-bubble-three" aria-hidden="true"></div>
         <div class="v3-float" aria-hidden="true"></div>
+        <div class="v3-bite-ripples" aria-hidden="true"><span></span><span></span></div>
+        <div class="v3-bite-window" data-v3-bite-window hidden aria-hidden="true"><span data-v3-bite-fill></span></div>
         <div class="v3-line" data-v3-line aria-hidden="true"></div>
         <img class="v3-fish" data-v3-fish alt="" decoding="async" />
+        <div class="v3-catch-glimmer" aria-hidden="true"><span></span><span></span><span></span></div>
         <span class="v3-fish-cue" data-v3-cue hidden></span>
         <div class="v3-center-status">
           <span class="v3-phase-tag" data-v3-phase-tag>준비</span>
@@ -48,7 +51,8 @@ export function bootV3Preview(): void {
           <p data-v3-detail>낚싯줄을 던지고 물고기의 움직임을 느껴 보세요</p>
         </div>
         <div class="v3-result" data-v3-result hidden role="status" aria-live="polite">
-          <span class="v3-result-kicker">오늘의 포획</span>
+          <span class="v3-result-crest" data-v3-result-crest aria-hidden="true">✦</span>
+          <span class="v3-result-kicker" data-v3-result-kicker>오늘의 포획</span>
           <strong data-v3-result-name></strong>
           <span class="v3-result-detail" data-v3-result-detail></span>
           <span data-v3-result-reward></span>
@@ -114,12 +118,16 @@ export function bootV3Preview(): void {
   const fishImage = requiredElement<HTMLImageElement>(app, '[data-v3-fish]');
   const fishingLine = requiredElement<HTMLElement>(app, '[data-v3-line]');
   const fishCue = requiredElement<HTMLElement>(app, '[data-v3-cue]');
+  const biteWindow = requiredElement<HTMLElement>(app, '[data-v3-bite-window]');
+  const biteFill = requiredElement<HTMLElement>(app, '[data-v3-bite-fill]');
   const sea = requiredElement<HTMLElement>(app, '.v3-sea');
   sea.style.setProperty('--v3-water-image', `url("${new URL('./assets/v101/water/water_clear_calm.webp', window.location.href).href}")`);
   const phaseTag = requiredElement<HTMLElement>(app, '[data-v3-phase-tag]');
   const message = requiredElement<HTMLElement>(app, '[data-v3-message]');
   const detail = requiredElement<HTMLElement>(app, '[data-v3-detail]');
   const result = requiredElement<HTMLElement>(app, '[data-v3-result]');
+  const resultKicker = requiredElement<HTMLElement>(app, '[data-v3-result-kicker]');
+  const resultCrest = requiredElement<HTMLElement>(app, '[data-v3-result-crest]');
   const resultName = requiredElement<HTMLElement>(app, '[data-v3-result-name]');
   const resultDetail = requiredElement<HTMLElement>(app, '[data-v3-result-detail]');
   const resultReward = requiredElement<HTMLElement>(app, '[data-v3-result-reward]');
@@ -288,13 +296,16 @@ export function bootV3Preview(): void {
     if (phase === 'landed') {
       stopReeling();
       playFeedback('success');
-      haptic([80, 40, 110]);
       const catchOutcome = collectCatch(collection, round);
       collection = catchOutcome.state;
       canSaveCollection = saveCollection();
       const caught = catchOutcome.result;
+      haptic(caught.rarity === 'legendary' ? [90, 45, 110, 55, 140] : [80, 40, 110]);
       result.hidden = false;
       result.dataset.rarity = caught.rarity;
+      result.dataset.discovery = caught.firstDiscovery ? 'new' : caught.newSizeRecord ? 'record' : 'repeat';
+      resultKicker.textContent = caught.firstDiscovery ? '새로운 생물 발견!' : caught.newSizeRecord ? '최고 기록 경신!' : '오늘의 포획';
+      resultCrest.textContent = caught.rarity === 'legendary' ? '★' : caught.firstDiscovery ? '✦' : '◆';
       resultName.textContent = `${round.fish.name} · ${RARITY_LABELS[caught.rarity]}`;
       resultDetail.textContent = `${caught.lengthCm.toFixed(1)}cm · ${caught.firstDiscovery ? '첫 발견 ✦' : caught.newSizeRecord ? '개인 최고 기록 ↑' : '도감 수집 완료'}`;
       resultReward.textContent = `+${caught.earnedCoins} 코인 · 장력 최고 ${Math.round(round.peakTension * 100)}%`;
@@ -311,6 +322,8 @@ export function bootV3Preview(): void {
     phaseChanged(round.phase);
     const phase = round.phase;
     sea.dataset.phase = phase;
+    biteWindow.hidden = phase !== 'bite';
+    if (phase === 'bite') biteFill.style.width = `${Math.max(0, Math.min(100, round.biteWindow / 3.8 * 100))}%`;
     phaseTag.textContent = ({
       waiting: '입질 기다리는 중', bite: '물었다!', fighting: '릴링 중',
       landed: '포획 성공!', escaped: '다음에는 꼭!',
