@@ -55,9 +55,14 @@ function showHarborAndGrow() {
   click('[data-v3-upgrade]');
   click('[data-v3-upgrade]');
   click('button[data-v3-region-id="coral-bay"][data-v3-region-action="unlock"]');
-  click('button[data-v3-region-id="coral-bay"][data-v3-region-action="select"]');
+  if(document.querySelector('button[data-v3-region-id="coral-bay"][data-v3-region-action="select"]')) {
+    throw Error('Coral bay should auto-select after unlocking');
+  }
+  if(document.querySelector('[data-v3-region]')?.textContent?.includes('산호빛 만')!==true)
+    throw Error('Unlocking coral bay did not move the player');
   click('button[data-v3-region-id="deep-blue"][data-v3-region-action="unlock"]');
-  click('button[data-v3-region-id="deep-blue"][data-v3-region-action="select"]');
+  if(document.querySelector('[data-v3-region]')?.textContent?.includes('푸른 심해')!==true)
+    throw Error('Unlocking deep blue did not move the player');
   click('[data-v3-harbor-close]');
   const save=JSON.parse(localStorage.getItem('aquafantasia:v3:collection:v1'));
   return {rod:save.rodLevel,region:save.selectedRegion,coins:save.coins,
@@ -156,8 +161,18 @@ async function main() {
     if(!(progress>0))throw Error('Reeling does not advance capture');
     await evaluate("document.querySelector('[data-v3-dex-toggle]').click();true");
     if(!await evaluate("document.querySelector('[data-v3-dex-dialog]').open"))throw Error('Dex modal failed');
+    const dexBefore=await evaluate("({all:document.querySelectorAll('[data-v3-dex-fish]').length,filter:document.querySelector('[data-v3-dex-filter=all]')?.getAttribute('aria-pressed')})");
+    if(dexBefore.all!==6||dexBefore.filter!=='true')throw Error('Dex all filter failed: '+JSON.stringify(dexBefore));
+    await evaluate("document.querySelector('[data-v3-dex-filter=found]').click();true");
+    if(!await evaluate("document.querySelector('.v3-dex-empty')?.textContent.includes('첫 낚시')))throw Error('Empty discovered collection not explained');
+    await evaluate("document.querySelector('[data-v3-dex-filter=missing]').click();true");
+    if(!await evaluate("document.querySelectorAll('[data-v3-dex-fish]').length===6"))throw Error('Missing fish filter failed');
+    await capture('dex-missing-390x844');
     await evaluate("document.querySelector('[data-v3-dex-close]').click();document.querySelector('[data-v3-harbor-toggle]').click();true");
     if(!await evaluate("document.querySelector('[data-v3-harbor-dialog]').open"))throw Error('Harbor modal failed');
+    const lockedConditions=await evaluate("({chips:document.querySelectorAll('[data-v3-region-id=coral-bay]').length,required:document.querySelectorAll('.v3-harbor-region .v3-region-requirements span').length,objective:document.querySelector('[data-v3-harbor-objective]')?.textContent})");
+    if(lockedConditions.required!==6||!lockedConditions.objective?.includes('다음 목표')) throw Error('Harbor requirements not visible: '+JSON.stringify(lockedConditions));
+    await capture('harbor-locked-390x844');
     await evaluate("document.querySelector('[data-v3-harbor-close]').click();true");
     const sample=JSON.stringify({
       version:1,coins:2000,rodLevel:1,unlockedRegions:['shore'],selectedRegion:'shore',
@@ -181,6 +196,8 @@ async function main() {
     if(await evaluate("localStorage.getItem('aqua-fantasia-save-v650')")!=='LEGACY_UNTOUCHED')
       throw Error('Legacy V2 save was unexpectedly modified after reload');
     await evaluate("document.querySelector('[data-v3-harbor-toggle]').click();true");
+    const unlockedConditions=await evaluate("({active:document.querySelector('.v3-harbor-region.is-active .v3-harbor-region-head strong')?.textContent,opened:document.querySelectorAll('.v3-region-opened').length,objective:document.querySelector('[data-v3-harbor-objective]')?.textContent})");
+    if(unlockedConditions.active!=='푸른 심해'||unlockedConditions.opened!==3||!unlockedConditions.objective?.includes('도감 완성까지'))throw Error('Deep blue harbor state not reflected: '+JSON.stringify(unlockedConditions));
     await capture('harbor-deep-blue-390x844');
     await evaluate("document.querySelector('[data-v3-harbor-close]').click();true");
     await capture('deep-blue-390x844');

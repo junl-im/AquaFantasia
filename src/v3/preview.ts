@@ -62,7 +62,7 @@ export function bootAquaFantasia(): void {
         <div class="v3-console-top">
           <button type="button" class="v3-dex-toggle" data-v3-dex-toggle>도감 0 / 6</button>
           <button type="button" class="v3-harbor-toggle" data-v3-harbor-toggle>항구 · 강화</button>
-          <span class="v3-wallet" data-v3-wallet>체험 코인 0</span>
+          <span class="v3-wallet" data-v3-wallet>보유 코인 0</span>
         </div>
         <div class="v3-meter-block">
           <div class="v3-meter-label"><span>줄 장력</span><strong data-v3-tension-label>10%</strong></div>
@@ -86,6 +86,11 @@ export function bootAquaFantasia(): void {
           <button type="button" class="v3-dex-close" data-v3-dex-close>닫기 ✕</button>
         </header>
         <p class="v3-dex-summary" data-v3-dex-summary></p>
+        <div class="v3-dex-filters" role="group" aria-label="도감 표시 필터">
+          <button type="button" data-v3-dex-filter="all" aria-pressed="true">전체</button>
+          <button type="button" data-v3-dex-filter="found" aria-pressed="false">발견</button>
+          <button type="button" data-v3-dex-filter="missing" aria-pressed="false">미발견</button>
+        </div>
         <div class="v3-dex-grid" data-v3-dex-grid></div>
         <p class="v3-dex-note">새로운 바다에서 수집한 물고기가 여기에 기록됩니다</p>
       </dialog>
@@ -97,6 +102,7 @@ export function bootAquaFantasia(): void {
           </div>
           <button type="button" class="v3-dex-close" data-v3-harbor-close>닫기 ✕</button>
         </header>
+        <p class="v3-harbor-objective" data-v3-harbor-objective role="status" aria-live="polite"></p>
         <section class="v3-harbor-gear" aria-label="낚싯대 강화">
           <strong data-v3-rod-status>낚싯대 Lv.1</strong>
           <p>릴링 속도와 줄의 내구도를 높여 더 강한 물고기를 상대하세요.</p>
@@ -143,12 +149,14 @@ export function bootAquaFantasia(): void {
   const dexClose = requiredElement<HTMLButtonElement>(app, '[data-v3-dex-close]');
   const dexSummary = requiredElement<HTMLElement>(app, '[data-v3-dex-summary]');
   const dexGrid = requiredElement<HTMLElement>(app, '[data-v3-dex-grid]');
+  const dexFilters = requiredElement<HTMLElement>(app, '.v3-dex-filters');
   const harborButton = requiredElement<HTMLButtonElement>(app, '[data-v3-harbor-toggle]');
   const harborDialog = requiredElement<HTMLDialogElement>(app, '[data-v3-harbor-dialog]');
   const harborClose = requiredElement<HTMLButtonElement>(app, '[data-v3-harbor-close]');
   const rodStatus = requiredElement<HTMLElement>(app, '[data-v3-rod-status]');
   const upgradeButton = requiredElement<HTMLButtonElement>(app, '[data-v3-upgrade]');
   const regionList = requiredElement<HTMLElement>(app, '[data-v3-region-list]');
+  const harborObjective = requiredElement<HTMLElement>(app, '[data-v3-harbor-objective]');
   const liteButton = requiredElement<HTMLButtonElement>(app, '[data-v3-lite]');
   const screen = requiredElement<HTMLElement>(app, '.v3-screen');
   const hint = requiredElement<HTMLElement>(app, '[data-v3-hint]');
@@ -184,6 +192,7 @@ export function bootAquaFantasia(): void {
   let previousTime = performance.now();
   let lastPaint = 0;
   let lastAdvice: ReelAdviceLevel = 'normal';
+  let dexFilter: 'all' | 'found' | 'missing' = 'all';
 
   function readCollection(): CollectionState {
     try { return parseCollection(window.localStorage.getItem(V3_COLLECTION_KEY)); }
@@ -202,7 +211,7 @@ export function bootAquaFantasia(): void {
     harborButton.dataset.goalReady = goal.action === 'harbor' ? 'true' : 'false';
     harborButton.setAttribute('aria-label', goal.action === 'harbor' ? '항구 · 다음 목표를 진행할 수 있어요' : '항구 · 강화와 수역 이동');
     if (!round || round.phase === 'landed' || round.phase === 'escaped') hint.textContent = goal.message;
-    wallet.textContent = `체험 코인 ${collection.coins.toLocaleString('ko-KR')}`;
+    wallet.textContent = `보유 코인 ${collection.coins.toLocaleString('ko-KR')}`;
     dexButton.textContent = `도감 ${discoveredSpecies(collection)} / ${DEMO_FISH.length}`;
     regionLabel.textContent = `✦ ${getRegion(collection.selectedRegion).name} · 낚싯대 Lv.${collection.rodLevel}`;
     sea.dataset.region = collection.selectedRegion;
@@ -216,6 +225,7 @@ export function bootAquaFantasia(): void {
 
   function renderHarbor(): void {
     applyVisualMode();
+    harborObjective.textContent = nextFishingGoal(collection).message;
     const price = rodUpgradePrice(collection.rodLevel);
     rodStatus.textContent = `낚싯대 Lv.${collection.rodLevel} / ${MAX_ROD_LEVEL}`;
     upgradeButton.disabled = price === null || collection.coins < price;
@@ -225,14 +235,20 @@ export function bootAquaFantasia(): void {
       const unlocked = collection.unlockedRegions.includes(region.id);
       const selected = collection.selectedRegion === region.id;
       const ready = canUnlockRegion(collection, region.id);
-      const label = selected ? '현재 낚시터' : unlocked ? '여기서 낚시하기'
-        : ready ? `해금 · ${region.unlockPrice} 코인` : '조건 미달';
+      const label = selected ? '현재 낚시터' : unlocked ? '이곳에서 낚시'
+        : ready ? `해금하고 이동 · ${region.unlockPrice}코인` : '조건 확인';
       const button = selected ? '' : `<button type="button" data-v3-region-action="${unlocked ? 'select' : 'unlock'}" data-v3-region-id="${region.id}" ${!unlocked && !ready ? 'disabled' : ''}>${label}</button>`;
-      return `<article class="v3-harbor-region ${selected ? 'is-active' : ''}">
-        <strong>${region.name}</strong>
-        <span>${region.description}</span>
-        <small>필요 도감 ${region.requiredDiscoveries}종 · 낚싯대 Lv.${region.requiredRodLevel} · 비용 ${region.unlockPrice}코인</small>
-        <span class="v3-harbor-region-state">${selected ? '이곳에서 낚시 중' : unlocked ? '탐험 가능' : discoveryCount >= region.requiredDiscoveries ? '장비·코인을 확인하세요' : `도감 ${region.requiredDiscoveries - discoveryCount}종 더 발견 필요`}</span>
+      const requirements = unlocked
+        ? `<span class="v3-region-opened">${selected ? '현재 탐험 중' : '탐험 가능'} · ${region.fishIds.length}종 서식</span>`
+        : `<div class="v3-region-requirements" aria-label="${region.name} 해금 조건">
+            <span data-met="${discoveryCount >= region.requiredDiscoveries}">도감 ${discoveryCount}/${region.requiredDiscoveries}종</span>
+            <span data-met="${collection.rodLevel >= region.requiredRodLevel}">장비 Lv.${collection.rodLevel}/${region.requiredRodLevel}</span>
+            <span data-met="${collection.coins >= region.unlockPrice}">코인 ${collection.coins.toLocaleString('ko-KR')}/${region.unlockPrice.toLocaleString('ko-KR')}</span>
+          </div>`;
+      return `<article class="v3-harbor-region ${selected ? 'is-active' : ''}" data-v3-region-ready="${ready}">
+        <div class="v3-harbor-region-head"><strong>${region.name}</strong><span class="v3-region-state">${selected ? '낚시 중' : unlocked ? '열림' : ready ? '해금 가능' : '잠김'}</span></div>
+        <p class="v3-harbor-region-description">${region.description}</p>
+        ${requirements}
         ${button}
       </article>`;
     }).join('');
@@ -245,21 +261,33 @@ export function bootAquaFantasia(): void {
     harborClose.focus();
   }
 
-  function showDex(): void {
-    stopReeling();
+  function renderDex(): void {
     const discovered = discoveredSpecies(collection);
+    const fishList = DEMO_FISH.filter((fish) => dexFilter === 'all'
+      || (dexFilter === 'found' ? Boolean(collection.records[fish.id]) : !collection.records[fish.id]));
     dexSummary.textContent = `${discovered}/${DEMO_FISH.length}종 발견 · 총 ${totalCatches(collection)}회 포획`;
-    dexGrid.innerHTML = DEMO_FISH.map((fish) => {
+    for (const button of dexFilters.querySelectorAll<HTMLButtonElement>('[data-v3-dex-filter]')) {
+      button.setAttribute('aria-pressed', String(button.dataset.v3DexFilter === dexFilter));
+    }
+    dexGrid.innerHTML = fishList.length ? fishList.map((fish) => {
       const entry = collection.records[fish.id];
-      return `<article class="v3-dex-card ${entry ? 'is-discovered' : 'is-unknown'}">
-        <img src="${fish.image}" alt="" loading="lazy" decoding="async" />
+      const habitat = FISHING_REGIONS.find((region) => region.fishIds.includes(fish.id))?.name ?? '미지의 바다';
+      return `<article class="v3-dex-card ${entry ? 'is-discovered' : 'is-unknown'}" data-v3-dex-fish="${fish.id}">
+        <div class="v3-dex-fish-image"><img src="${fish.image}" alt="" loading="lazy" decoding="async" /></div>
         <div class="v3-dex-info">
-          <strong>${entry ? fish.name : '미발견 물고기'}</strong>
-          <span>${entry ? `최대 ${entry.bestLengthCm.toFixed(1)}cm · ${RARITY_LABELS[entry.rarest]}` : '물음표 속 새로운 만남'}</span>
-          <small>${entry ? `포획 ${entry.count}회` : '아직 발견하지 못했어요'}</small>
+          <strong>${entry ? fish.name : '??? 미발견'}</strong>
+          <span class="v3-dex-habitat">${habitat}</span>
+          <span>${entry ? `최대 ${entry.bestLengthCm.toFixed(1)}cm · ${RARITY_LABELS[entry.rarest]}` : '아직 낚지 못한 생물'}</span>
+          <small>${entry ? `포획 ${entry.count}회` : '낚시터를 탐험해 발견해 보세요'}</small>
         </div>
       </article>`;
-    }).join('');
+    }).join('') : `<p class="v3-dex-empty">${dexFilter === 'found' ? '아직 발견한 물고기가 없어요. 첫 낚시를 시작하세요!' : '모든 물고기를 발견했어요!'}</p>`;
+  }
+
+  function showDex(): void {
+    stopReeling();
+    dexFilter = 'all';
+    renderDex();
     dexDialog.showModal();
     dexClose.focus();
   }
@@ -418,6 +446,16 @@ export function bootAquaFantasia(): void {
 
   castButton.addEventListener('click', cast);
   dexButton.addEventListener('click', showDex);
+  dexFilters.addEventListener('click', (event) => {
+    const button = event.target instanceof Element
+      ? event.target.closest<HTMLButtonElement>('button[data-v3-dex-filter]') : null;
+    if (!button) return;
+    const next = button.dataset.v3DexFilter;
+    if (next === 'all' || next === 'found' || next === 'missing') {
+      dexFilter = next;
+      renderDex();
+    }
+  });
   liteButton.addEventListener('click', () => {
     liteMode = !liteMode;
     try { window.localStorage.setItem(V3_LITE_KEY, liteMode ? '1' : '0'); }
@@ -445,7 +483,7 @@ export function bootAquaFantasia(): void {
     const region = FISHING_REGIONS.find((candidate) => candidate.id === id);
     if (!region) return;
     const next = button.dataset.v3RegionAction === 'unlock'
-      ? tryUnlockRegion(collection, region.id as RegionId)
+      ? trySelectRegion(tryUnlockRegion(collection, region.id as RegionId), region.id as RegionId)
       : trySelectRegion(collection, region.id as RegionId);
     if (next === collection) return;
     collection = next;
