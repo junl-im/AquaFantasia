@@ -92,5 +92,10 @@ test('V3 CI prohibits vector files and references',()=>{
     fs.writeFileSync(path.join(tmp,'src/v3/demo.css'),'.test { background: url(thing.svg) }');
     const fail=spawnSync(process.execPath,[checker,tmp],{encoding:'utf8'});
     assert.notEqual(fail.status,0);
+    fs.writeFileSync(path.join(tmp,'src/v3/demo.css'),'.test { background: url(thing.png) }');
+    fs.mkdirSync(path.join(tmp,'public/assets'), { recursive: true });
+    fs.writeFileSync(path.join(tmp,'public/assets/forbidden.svg'), '<vector />');
+    const failFile=spawnSync(process.execPath,[checker,tmp],{encoding:'utf8'});
+    assert.notEqual(failFile.status,0);
   } finally { fs.rmSync(tmp,{recursive:true,force:true}); }
 });
