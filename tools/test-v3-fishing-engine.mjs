@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DEMO_FISH, createCast, hookFish, advanceRound, bossFinalStand, bossFinalState, fightImpact, landingSignal, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
+import { visualMotion, waterResponse, rodAction } from '../src/v3/visualMotion.ts';
+import { surfaceMotion } from '../src/v3/surfaceMotion.ts';
 
 function waitForBite(round) {
   let state = round;
@@ -265,4 +267,153 @@ test('steady controlled tension boosts reel efficiency without removing snap dan
   snapped=advanceRound(snapped,.1,true);
   assert.equal(snapped.phase,'escaped');
   assert.equal(snapped.reason,'snapped');
+});
+
+test('V4 character frames, flexible fishing rod and fish tail track real phases', () => {
+  const f=DEMO_FISH[0];
+  const base=createCast(f,13);
+  assert.equal(visualMotion(null,false,0,0,false).pose,'idle');
+  assert.equal(visualMotion(base,false,0,.2,false).pose,'cast');
+  assert.equal(visualMotion(base,false,.9,2,false).frame,0);
+  const bite={...base,phase:'bite'};
+  assert.equal(visualMotion(bite,false,0,2,false).pose,'hook');
+  assert.equal(visualMotion(bite,false,0,2,false).frame,3);
+  const fighting={...bite,phase:'fighting',fightElapsed:2,tension:.6,progress:.25};
+  const held=visualMotion(fighting,true,1,3,false);
+  const released=visualMotion(fighting,false,1,3,false);
+  assert.equal(held.pose,'reel');
+  assert.equal(released.pose,'brace');
+  assert.ok(held.rodBend > released.rodBend);
+  assert.ok(held.tailAmplitude > 0 && released.tailAmplitude > 0);
+  assert.ok(held.tailFrequency > 0);
+  assert.deepEqual(visualMotion(fighting,true,1,3,false),held);
+  assert.equal(visualMotion(fighting,true,1,3,true).tailAmplitude,0);
+  const danger=visualMotion({...fighting,tension:.87},true,1,3,false);
+  assert.ok(danger.rodBend>held.rodBend);
+  assert.equal(visualMotion({...fighting,phase:'landed'},false,1,3,false).pose,'land');
+  assert.equal(visualMotion({...fighting,phase:'escaped'},false,1,3,false).pose,'fail');
+  assert.equal(visualMotion({...fighting,phase:'landed'},false,1,3,false).tailAmplitude,0);
+});
+
+test('V4 cast travels from rod tip, splashes once, then bites with a submerged float', () => {
+  const casting=createCast(DEMO_FISH[0],83);
+  const ready=surfaceMotion(null,0,0,false);
+  assert.equal(ready.visible,false);
+  const launch=surfaceMotion(casting,0,0,false);
+  const inFlight=surfaceMotion(casting,.34,.34,false);
+  const splash=surfaceMotion(casting,.72,.72,false);
+  const settled=surfaceMotion(casting,1.50,1.50,false);
+  assert.equal(launch.castTravel,0);
+  assert.equal(inFlight.castTravel,.5);
+  assert.ok(inFlight.castLift>.9);
+  assert.equal(splash.castTravel,1);
+  assert.ok(splash.ripple>.5);
+  assert.equal(settled.ripple,0);
+  assert.equal(settled.castLift,0);
+  assert.equal(settled.visible,true);
+  const lite=surfaceMotion(casting,.34,.34,true);
+  assert.ok(lite.castLift<inFlight.castLift);
+  assert.ok(surfaceMotion(casting,.72,.72,true).ripple<splash.ripple);
+
+  const biting={...casting,phase:'bite'};
+  const dip=surfaceMotion(biting,.1,2.3,false);
+  assert.equal(dip.castTravel,1);
+  assert.ok(dip.biteDip>.4 && dip.ripple>.5);
+  assert.deepEqual(surfaceMotion(biting,.1,2.3,false),dip);
+  for(const phase of ['fighting','landed','escaped']) {
+    const state=surfaceMotion({...casting,phase},.2,2.3,false);
+    assert.equal(state.visible,false,phase);
+    assert.equal(state.ripple,0,phase);
+  }
+});
+
+test('V4 raster fish fin flex and damped fisher effort are phase-aware and deterministic', () => {
+  const fish=DEMO_FISH.find(f=>f.behavior==='dart');
+  assert.ok(fish);
+  const fishing={...hookFish({...createCast(fish,139,3),phase:'bite'}),
+    phase:'fighting',tension:.48,progress:.36,fightElapsed:2.1};
+  const movement=visualMotion(fishing,true,.7,2.5,false);
+  assert.ok(movement.finAmplitude>0);
+  assert.ok(movement.finFrequency>movement.tailFrequency*.7);
+  assert.ok(movement.fisherEffort>0 && movement.fisherEffort<=1);
+  assert.deepEqual(visualMotion(fishing,true,.7,2.5,false),movement);
+  const danger=visualMotion({...fishing,tension:.88},true,.7,2.5,false);
+  assert.ok(danger.fisherEffort>movement.fisherEffort);
+  const lite=visualMotion(fishing,true,.7,2.5,true);
+  assert.equal(lite.finAmplitude,0);
+  assert.equal(lite.tailAmplitude,0);
+  const steady=visualMotion({...fishing,fish:{...fish,behavior:'steady'}},true,.7,2.5,false);
+  assert.ok(steady.finAmplitude>0);
+  assert.notEqual(steady.finAmplitude,movement.finAmplitude);
+  for(const phase of ['waiting','bite','landed','escaped']) {
+    const m=visualMotion({...fishing,phase},false,.3,2.5,false);
+    assert.equal(m.finAmplitude,0,phase);
+    assert.equal(m.fisherEffort,0,phase);
+  }
+});
+
+
+test('V4 fishing line slack and underwater wake respond to real pressure without changing rules', () => {
+  const fish=DEMO_FISH.find(f=>f.behavior==='dart');
+  assert.ok(fish);
+  const round={...hookFish({...createCast(fish,140,3),phase:'bite'}),
+    phase:'fighting',progress:.40,tension:.34,fightElapsed:.75};
+  const held=waterResponse(round,true,false);
+  const released=waterResponse(round,false,false);
+  const strained=waterResponse({...round,tension:.91},true,false);
+  const near=waterResponse({...round,progress:.96},true,false);
+  const resting=waterResponse({...round,phase:'waiting'},true,false);
+  const lite=waterResponse({...round,progress:.96},true,true);
+  assert.ok(held.lineSag<released.lineSag,'holding the reel should pull line taut');
+  assert.ok(strained.lineSag<held.lineSag,'higher tension must further straighten line');
+  assert.ok(held.wakeStrength>0 && held.wakeStrength<=1);
+  assert.ok(near.wakeStrength>=held.wakeStrength);
+  assert.ok(near.surfaceSpray>0 && held.surfaceSpray===0);
+  assert.equal(lite.wakeStrength,0);
+  assert.equal(lite.surfaceSpray,0);
+  assert.deepEqual(waterResponse(round,true,false),held,'visual feedback must be deterministic');
+  assert.equal(resting.wakeStrength,0);
+  assert.deepEqual(waterResponse(null,false,false),{lineSag:0,wakeStrength:0,surfaceSpray:0});
+  for(const phase of ['landed','escaped']) {
+    assert.deepEqual(waterResponse({...round,phase},false,false),{lineSag:0,wakeStrength:0,surfaceSpray:0});
+  }
+  for(const state of [held,released,strained,near,lite]) {
+    for(const value of Object.values(state)) assert.ok(Number.isFinite(value) && value>=0 && value<=1);
+  }
+});
+
+
+test('V4 separate fishing rod casts, flexes and turns its reel only during real input', () => {
+  const fish=DEMO_FISH.find(f=>f.behavior==='wave');
+  assert.ok(fish);
+  const casting=createCast(fish,55,3);
+  const launch=rodAction(casting,false,0,0,false);
+  const middle=rodAction(casting,false,.32,.32,false);
+  const settle=rodAction(casting,false,.80,.80,false);
+  assert.ok(middle.angle>launch.angle,'rod should swing forward during cast');
+  assert.ok(middle.flex>0,'cast should load the tip');
+  assert.deepEqual(settle,rodAction(null,false,0,0,false));
+  const strike=rodAction({...casting,phase:'bite'},false,.1,2,false);
+  assert.ok(strike.angle<settle.angle,'hook-set should pull the rod back');
+  const fight={...hookFish({...casting,phase:'bite'}),
+    phase:'fighting',progress:.4,tension:.57,fightElapsed:1.2};
+  const held=rodAction(fight,true,.4,2.1,false);
+  const brace=rodAction(fight,false,.4,2.1,false);
+  const strain=rodAction({...fight,tension:.93},true,.4,2.1,false);
+  assert.ok(held.flex>strike.flex);
+  assert.ok(strain.flex>held.flex,'high line pressure should bend the rod more');
+  assert.ok(brace.angle>held.angle,'releasing should change the fisher rod stance');
+  assert.ok(held.reelTurn>0);
+  assert.equal(brace.reelTurn,0,'spool stops when releasing the button');
+  assert.deepEqual(rodAction(fight,true,.4,2.1,false),held);
+  const lite=rodAction(casting,false,.32,.32,true);
+  assert.ok(lite.flex<middle.flex,'lite mode should minimize the casting spring');
+  for(const phase of ['landed','escaped']) {
+    const state=rodAction({...fight,phase},true,.1,3,false);
+    assert.equal(state.reelTurn,0);
+  }
+  for(const pose of [launch,middle,settle,strike,held,brace,strain,lite]) {
+    for(const value of Object.values(pose))assert.ok(Number.isFinite(value));
+    assert.ok(pose.flex>=0&&pose.flex<=1);
+  }
 });

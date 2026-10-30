@@ -294,6 +294,76 @@ async function main() {
     await capture('real-catch-reveal-390x844');
     console.log('[V3 browser] real live catch artwork and viewport PASS: '+liveResult.fish);
     console.log('[V3 browser] touch, fish PNG, dialogs, upgrades, new regions, legacy save isolation PASS');
+    // Real PixiJS render is separate from the public release, opt-in for design review.
+    await send('Page.navigate',{url:url+'?visual=1'});
+    await until(()=>evaluate("document.querySelector('.v3-sea')?.dataset.v3SceneStatus==='ready'"),'opt-in PixiJS scene initialized',20000);
+    const pixi=await evaluate("({canvas:!!document.querySelector('.v3-pixi-canvas'),width:document.querySelector('.v3-pixi-canvas')?.width,height:document.querySelector('.v3-pixi-canvas')?.height,app:!!document.querySelector('.v3-visual-rebuild'),scrollW:document.documentElement.scrollWidth,innerW:innerWidth})");
+    if(!pixi.canvas||!(pixi.width>0)||!(pixi.height>0)||!pixi.app||pixi.scrollW>pixi.innerW+2)
+      throw Error('V4 visual scene failed to mount correctly: '+JSON.stringify(pixi));
+    await capture('visual-v4-pixi-390x844');
+    const skins=await evaluate("(()=>{const style=(sel,pseudo)=>{const e=document.querySelector(sel);if(!e)return null;const x=getComputedStyle(e,pseudo);return {bg:x.backgroundImage,border:x.borderTopLeftRadius+'|'+x.borderTopRightRadius,icon:pseudo?x.backgroundImage:undefined}};return {cast:style('.v3-cast'),reel:style('.v3-reel'),dex:style('.v3-dex-toggle'),harbor:style('.v3-harbor-toggle'),castIcon:style('.v3-cast','::before'),reelIcon:style('.v3-reel','::before'),dexIcon:style('.v3-dex-toggle','::before'),harborIcon:style('.v3-harbor-toggle','::before'),frame:style('.v3-console'),tension:style('.v3-tension'),progress:style('.v3-progress')}})()");
+    if(!skins.cast||!skins.reel||skins.cast.bg===skins.reel.bg||
+      skins.cast.border===skins.reel.border||skins.dex.bg===skins.harbor.bg||
+      skins.tension.bg===skins.progress.bg||skins.castIcon?.bg==='none'||
+      skins.reelIcon?.bg==='none'||skins.dexIcon?.bg==='none'||skins.harborIcon?.bg==='none')
+      throw Error('Bespoke V4 button skins must be distinct and illustrated: '+JSON.stringify(skins));
+    await evaluate("document.querySelector('[data-v3-dex-toggle]').click();true");
+    const dexSkin=await evaluate("({open:document.querySelector('[data-v3-dex-dialog]').open,all:getComputedStyle(document.querySelector('[data-v3-dex-filter=all]')).backgroundImage,found:getComputedStyle(document.querySelector('[data-v3-dex-filter=found]')).backgroundImage})");
+    if(!dexSkin.open)throw Error('Custom field-guide frame failed to open');
+    await capture('visual-v4-field-guide-390x844');
+    await evaluate("document.querySelector('[data-v3-dex-filter=found]').click();true");
+    const selectedTab=await evaluate("({selected:document.querySelector('[data-v3-dex-filter=found]').getAttribute('aria-pressed'),bg:getComputedStyle(document.querySelector('[data-v3-dex-filter=found]')).backgroundImage})");
+    if(selectedTab.selected!=='true'||selectedTab.bg===dexSkin.found)
+      throw Error('Distinct discovered-tab pressed skin did not update: '+JSON.stringify(selectedTab));
+    await evaluate("document.querySelector('[data-v3-dex-close]').click();document.querySelector('[data-v3-harbor-toggle]').click();true");
+    const harborSkin=await evaluate("(()=>{const el=document.querySelector('[data-v3-harbor-dialog]');const cards=[...document.querySelectorAll('.v3-harbor-region')];return {open:el.open,regions:cards.map(c=>({biome:c.dataset.v3Biome,bg:getComputedStyle(c).backgroundImage})),rod:getComputedStyle(document.querySelector('[data-v3-upgrade]')).backgroundImage,brake:getComputedStyle(document.querySelector('[data-v3-brake-upgrade]')).backgroundImage,close:getComputedStyle(document.querySelector('[data-v3-harbor-close]')).backgroundImage}})()");
+    if(!harborSkin.open||harborSkin.regions.length!==3||
+      new Set(harborSkin.regions.map(x=>x.bg)).size!==3||
+      harborSkin.rod===harborSkin.brake)
+      throw Error('Harbor must have individual regional and upgrade frames: '+JSON.stringify(harborSkin));
+    await capture('visual-v4-workshop-390x844');
+    await evaluate("document.querySelector('[data-v3-harbor-close]').click();true");
+    console.log('[V3 browser] V4 bespoke cast/reel/navigation, tabs and biome/workshop frames PASS');
+    const idleMotion=await evaluate("({pose:document.querySelector('.v3-sea')?.dataset.v3FisherPose,frame:document.querySelector('.v3-sea')?.dataset.v3FisherFrame})");
+    if(idleMotion.pose!=='idle'||idleMotion.frame!=='0')throw Error('V4 fisher must initialize idle: '+JSON.stringify(idleMotion));
+    await evaluate("document.querySelector('[data-v3-cast]').click();true");
+    await until(()=>evaluate("document.querySelector('.v3-sea')?.dataset.v3ScenePhase==='bite'"),'real V4 bite and hook',12000);
+    await evaluate("document.querySelector('[data-v3-reel]').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,pointerId:81,pointerType:'touch',isPrimary:true}));true");
+    await until(()=>evaluate("document.querySelector('.v3-sea')?.dataset.v3ScenePhase==='fighting'"),'V4 fish hooked for mesh animation',3000);
+    await until(()=>evaluate("Number(document.querySelector('.v3-sea')?.dataset.v3FishBend)>0.05"),'V4 fish mesh deforms in action',4000);
+    const motionSample=await evaluate("({pose:document.querySelector('.v3-sea')?.dataset.v3FisherPose,frame:document.querySelector('.v3-sea')?.dataset.v3FisherFrame,bend:Number(document.querySelector('.v3-sea')?.dataset.v3FishBend),rod:Number(document.querySelector('.v3-sea')?.dataset.v3RodBend),held:document.querySelector('.v3-sea')?.dataset.v3SceneHeld,lineSag:Number(document.querySelector('.v3-sea')?.dataset.v4LineSag),wake:Number(document.querySelector('.v3-sea')?.dataset.v4WakeStrength),rodFlex:Number(document.querySelector('.v3-sea')?.dataset.v4RodFlex),rodTipX:Number(document.querySelector('.v3-sea')?.dataset.v4RodTipX),rodTipY:Number(document.querySelector('.v3-sea')?.dataset.v4RodTipY)})");
+    if(motionSample.pose!=='reel'||motionSample.held!=='true'||motionSample.bend<=0||motionSample.rod<=0||!(motionSample.lineSag>0)||!(motionSample.wake>0)||!(motionSample.rodFlex>0)||!Number.isFinite(motionSample.rodTipX)||!Number.isFinite(motionSample.rodTipY))
+      throw Error('V4 hooked sprite/rod/mesh motion is not coupled to reeling: '+JSON.stringify(motionSample));
+    await capture('visual-v4-real-reeling-390x844');
+    await evaluate("window.dispatchEvent(new PointerEvent('pointerup',{bubbles:true,pointerId:81,pointerType:'touch'}));true");
+    await until(()=>evaluate("document.querySelector('.v3-sea')?.dataset.v3FisherPose==='brace'"),'V4 released reel pose',3000);
+    const releasedSag=await evaluate("Number(document.querySelector('.v3-sea')?.dataset.v4LineSag)");
+    if(!(releasedSag>motionSample.lineSag))
+      throw Error('V4 line should visibly relax after releasing the reel: '+JSON.stringify({releasedSag,motionSample}));
+    await capture('visual-v4-cast-390x844');
+    console.log('[V3 browser] animated 4-frame fisher, real reel/brace poses and deformable fish mesh PASS');
+    // A narrow phone and widescreen desktop need their own rendered screenshots,
+    // not merely the standard V3 DOM overflow checks.
+    for (const [w,h,mobile] of [[320,568,true],[1280,800,false]]) {
+      await send('Emulation.setDeviceMetricsOverride',{width:w,height:h,deviceScaleFactor:1,mobile});
+      await send('Page.navigate',{url:url+'?visual=1'});
+      await until(()=>evaluate("document.querySelector('.v3-sea')?.dataset.v3SceneStatus==='ready'"),'V4 scene '+w+'x'+h,20000);
+      const v4layout=await evaluate('('+layoutSnapshot.toString()+')()');
+      const c=await evaluate("({width:document.querySelector('.v3-pixi-canvas')?.width,height:document.querySelector('.v3-pixi-canvas')?.height,canvasRect:(()=>{const r=document.querySelector('.v3-pixi-canvas')?.getBoundingClientRect();return r?{width:r.width,height:r.height}:null})()})");
+      if(w===1280 && (v4layout.sea?.right>=v4layout.console?.left||
+        v4layout.console?.left<700||v4layout.sea?.width<650))
+        throw Error('Desktop V4 must use a side command deck, not a narrow phone strip: '+JSON.stringify(v4layout));
+      const sonar=await evaluate("({display:getComputedStyle(document.querySelector('[data-v4-sonar]')).display,label:document.querySelector('[data-v4-sonar-note]')?.textContent,target:document.querySelector('[data-v4-sonar]')?.style.getPropertyValue('--v4-target-y')})");
+      if(w===1280 && (sonar.display==='none'||!sonar.label||!sonar.target))
+        throw Error('Live desktop sonar must be readable and physically driven: '+JSON.stringify(sonar));
+      if(w<1024 && sonar.display!=='none')
+        throw Error('Sonar must not consume precious mobile space: '+JSON.stringify(sonar));
+      if(!c.width||!c.height||!c.canvasRect || c.canvasRect.width<100 ||
+        v4layout.scrollW>w+2 || v4layout.scrollH>h+2 || v4layout.console.bottom>h+3)
+        throw Error('V4 responsive visual stage overflows '+w+'x'+h+': '+JSON.stringify({v4layout,c}));
+      await capture('visual-v4-pixi-'+w+'x'+h);
+    }
+    console.log('[V3 browser] PixiJS V4 opt-in visual canvas, 320/390/1280 responsive and cast PASS');
   } finally {
     if(ws&&ws.readyState===1)ws.close();
     if(chrome)chrome.kill('SIGKILL');
