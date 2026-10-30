@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DEMO_FISH, createCast, hookFish, advanceRound, bossFinalStand, bossFinalState, fightImpact, landingSignal, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
-import { visualMotion, waterResponse } from '../src/v3/visualMotion.ts';
+import { visualMotion, waterResponse, rodAction } from '../src/v3/visualMotion.ts';
 import { surfaceMotion } from '../src/v3/surfaceMotion.ts';
 
 function waitForBite(round) {
@@ -379,5 +379,41 @@ test('V4 fishing line slack and underwater wake respond to real pressure without
   }
   for(const state of [held,released,strained,near,lite]) {
     for(const value of Object.values(state)) assert.ok(Number.isFinite(value) && value>=0 && value<=1);
+  }
+});
+
+
+test('V4 separate fishing rod casts, flexes and turns its reel only during real input', () => {
+  const fish=DEMO_FISH.find(f=>f.behavior==='wave');
+  assert.ok(fish);
+  const casting=createCast(fish,55,3);
+  const launch=rodAction(casting,false,0,0,false);
+  const middle=rodAction(casting,false,.32,.32,false);
+  const settle=rodAction(casting,false,.80,.80,false);
+  assert.ok(middle.angle>launch.angle,'rod should swing forward during cast');
+  assert.ok(middle.flex>0,'cast should load the tip');
+  assert.deepEqual(settle,rodAction(null,false,0,0,false));
+  const strike=rodAction({...casting,phase:'bite'},false,.1,2,false);
+  assert.ok(strike.angle<settle.angle,'hook-set should pull the rod back');
+  const fight={...hookFish({...casting,phase:'bite'}),
+    phase:'fighting',progress:.4,tension:.57,fightElapsed:1.2};
+  const held=rodAction(fight,true,.4,2.1,false);
+  const brace=rodAction(fight,false,.4,2.1,false);
+  const strain=rodAction({...fight,tension:.93},true,.4,2.1,false);
+  assert.ok(held.flex>strike.flex);
+  assert.ok(strain.flex>held.flex,'high line pressure should bend the rod more');
+  assert.ok(brace.angle>held.angle,'releasing should change the fisher rod stance');
+  assert.ok(held.reelTurn>0);
+  assert.equal(brace.reelTurn,0,'spool stops when releasing the button');
+  assert.deepEqual(rodAction(fight,true,.4,2.1,false),held);
+  const lite=rodAction(casting,false,.32,.32,true);
+  assert.ok(lite.flex<middle.flex,'lite mode should minimize the casting spring');
+  for(const phase of ['landed','escaped']) {
+    const state=rodAction({...fight,phase},true,.1,3,false);
+    assert.equal(state.reelTurn,0);
+  }
+  for(const pose of [launch,middle,settle,strike,held,brace,strain,lite]) {
+    for(const value of Object.values(pose))assert.ok(Number.isFinite(value));
+    assert.ok(pose.flex>=0&&pose.flex<=1);
   }
 });
