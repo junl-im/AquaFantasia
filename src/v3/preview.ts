@@ -2,6 +2,7 @@ import { DEMO_FISH, advanceRound, bossFinalState, createCast, fightImpact, fishV
 import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, emptyCollection, parseCollection, totalCatches, type CollectionState, type RegionId } from './collection';
 import { FISHING_REGIONS, MAX_BRAKE_LEVEL, MAX_ROD_LEVEL, brakeUpgradePrice, canUnlockRegion, fishForRegion, getRegion, nextFishingGoal, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeBrake, tryUpgradeRod } from './progression';
 import './preview.css';
+import type { VisualStage } from './visualScene';
 
 const START_REGION = '잔잔한 해변';
 const WATER_ART: Readonly<Record<RegionId, string>> = {
@@ -181,6 +182,19 @@ export function bootAquaFantasia(): void {
   const harborObjective = requiredElement<HTMLElement>(app, '[data-v3-harbor-objective]');
   const liteButton = requiredElement<HTMLButtonElement>(app, '[data-v3-lite]');
   const screen = requiredElement<HTMLElement>(app, '.v3-screen');
+  const visualRequested = new URLSearchParams(window.location.search).get('visual') === '1';
+  let visualStage: VisualStage | null = null;
+  if (visualRequested) {
+    screen.classList.add('v3-visual-rebuild');
+    void import('./visualScene').then(({mountVisualStage}) => mountVisualStage(sea)).then((stage) => {
+      visualStage = stage;
+      stage.update(round, held, collection.selectedRegion, liteMode || reducedMotion);
+    }).catch((error: unknown) => {
+      screen.classList.remove('v3-visual-rebuild');
+      sea.dataset.v3SceneStatus='fallback';
+      console.warn('Optional visual scene could not initialize, returning to V3 fallback',error);
+    });
+  }
   const hint = requiredElement<HTMLElement>(app, '[data-v3-hint]');
   const soundButton = requiredElement<HTMLButtonElement>(app, '[data-v3-sound]');
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
@@ -458,6 +472,7 @@ export function bootAquaFantasia(): void {
         : round.tension > 0.76 ? 'danger' : held ? 'pulling' : 'releasing';
     sea.dataset.reelRhythm = rhythm;
     screen.dataset.reelRhythm = rhythm;
+    visualStage?.update(round, held, collection.selectedRegion, liteMode || reducedMotion);
     if (phase === 'fighting' &&
       ((finalStand && !lastFinalStand) || (impact.active && (!lastImpact || lastImpactCue !== impact.cue)))) {
       const now = performance.now();

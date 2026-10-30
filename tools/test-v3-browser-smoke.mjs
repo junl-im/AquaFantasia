@@ -294,6 +294,17 @@ async function main() {
     await capture('real-catch-reveal-390x844');
     console.log('[V3 browser] real live catch artwork and viewport PASS: '+liveResult.fish);
     console.log('[V3 browser] touch, fish PNG, dialogs, upgrades, new regions, legacy save isolation PASS');
+    // Real PixiJS render is separate from the public release, opt-in for design review.
+    await send('Page.navigate',{url:url+'?visual=1'});
+    await until(()=>evaluate("document.querySelector('.v3-sea')?.dataset.v3SceneStatus==='ready'"),'opt-in PixiJS scene initialized',20000);
+    const pixi=await evaluate("({canvas:!!document.querySelector('.v3-pixi-canvas'),width:document.querySelector('.v3-pixi-canvas')?.width,height:document.querySelector('.v3-pixi-canvas')?.height,app:!!document.querySelector('.v3-visual-rebuild'),scrollW:document.documentElement.scrollWidth,innerW:innerWidth})");
+    if(!pixi.canvas||!(pixi.width>0)||!(pixi.height>0)||!pixi.app||pixi.scrollW>pixi.innerW+2)
+      throw Error('V4 visual scene failed to mount correctly: '+JSON.stringify(pixi));
+    await capture('visual-v4-pixi-390x844');
+    await evaluate("document.querySelector('[data-v3-cast]').click();true");
+    await until(()=>evaluate("document.querySelector('.v3-sea')?.dataset.v3ScenePhase==='fighting' || document.querySelector('.v3-sea')?.dataset.v3ScenePhase==='bite'"),'live stage reacts to casting',12000);
+    await capture('visual-v4-cast-390x844');
+    console.log('[V3 browser] PixiJS V4 opt-in visual canvas, resize and cast PASS');
   } finally {
     if(ws&&ws.readyState===1)ws.close();
     if(chrome)chrome.kill('SIGKILL');
