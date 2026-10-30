@@ -1,4 +1,4 @@
-import { DEMO_FISH, advanceRound, bossFinalState, createCast, fightImpact, fishVisualSignal, hookFish, reelAdvice, type FishingRound, type RoundPhase, type ReelAdviceLevel } from './fishingEngine';
+import { DEMO_FISH, advanceRound, bossFinalState, createCast, fightImpact, fishVisualSignal, hookFish, landingSignal, reelAdvice, type FishingRound, type RoundPhase, type ReelAdviceLevel } from './fishingEngine';
 import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, emptyCollection, parseCollection, totalCatches, type CollectionState, type RegionId } from './collection';
 import { FISHING_REGIONS, MAX_BRAKE_LEVEL, MAX_ROD_LEVEL, brakeUpgradePrice, canUnlockRegion, fishForRegion, getRegion, nextFishingGoal, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeBrake, tryUpgradeRod } from './progression';
 import './preview.css';
@@ -46,6 +46,7 @@ export function bootAquaFantasia(): void {
         <div class="v3-float" aria-hidden="true"></div>
         <div class="v3-bite-ripples" aria-hidden="true"><span></span><span></span></div>
         <img class="v3-strike-splash" src="./assets/v205/fishing/water_splash.png" alt="" decoding="async" aria-hidden="true" />
+        <img class="v3-landing-splash" data-v3-landing-splash src="./assets/v205/fishing/wave_splash.png" alt="" decoding="async" aria-hidden="true" />
         <div class="v3-last-stand" data-v3-last-stand hidden role="status" aria-live="off">
           <strong>마지막 승부!</strong><span>돌진에 맞춰 릴 버튼을 놓았다 다시 감으세요</span>
         </div>
@@ -54,6 +55,7 @@ export function bootAquaFantasia(): void {
         <img class="v3-fish" data-v3-fish alt="" decoding="async" />
         <div class="v3-catch-glimmer" aria-hidden="true"><span></span><span></span><span></span></div>
         <span class="v3-fish-cue" data-v3-cue hidden></span>
+        <span class="v3-approach-note" data-v3-approach hidden></span>
         <div class="v3-center-status">
           <span class="v3-phase-tag" data-v3-phase-tag>준비</span>
           <h2 data-v3-message>새로운 물결을 만나러 가볼까요?</h2>
@@ -139,6 +141,7 @@ export function bootAquaFantasia(): void {
   const fishImage = requiredElement<HTMLImageElement>(app, '[data-v3-fish]');
   const fishingLine = requiredElement<HTMLElement>(app, '[data-v3-line]');
   const fishCue = requiredElement<HTMLElement>(app, '[data-v3-cue]');
+  const approachNote = requiredElement<HTMLElement>(app, '[data-v3-approach]');
   const biteWindow = requiredElement<HTMLElement>(app, '[data-v3-bite-window]');
   const lastStandBanner = requiredElement<HTMLElement>(app, '[data-v3-last-stand]');
   const biteFill = requiredElement<HTMLElement>(app, '[data-v3-bite-fill]');
@@ -440,11 +443,21 @@ export function bootAquaFantasia(): void {
     progressLabel.textContent = `${progress}%`;
     const visual = fishVisualSignal(round);
     const impact = fightImpact(round);
+    const approach = landingSignal(round);
+    sea.dataset.approach = phase === 'fighting' ? approach.stage : 'distant';
+    approachNote.hidden = phase !== 'fighting' || approach.stage === 'distant';
+    approachNote.textContent = approach.label;
+    sea.style.setProperty('--v3-surface-rise', `${Math.round(approach.proximity * 32)}%`);
     fishCue.hidden = phase !== 'fighting';
     fishCue.textContent = impact.active ? impact.label : visual.cue;
     sea.dataset.surge = impact.active ? 'true' : 'false';
     sea.dataset.strike = impact.active && !liteMode && !reducedMotion ? 'true' : 'false';
     sea.dataset.impact = impact.cue;
+    const rhythm = phase !== 'fighting' ? 'idle'
+      : held && round.tension >= 0.24 && round.tension <= 0.57 ? 'steady'
+        : round.tension > 0.76 ? 'danger' : held ? 'pulling' : 'releasing';
+    sea.dataset.reelRhythm = rhythm;
+    screen.dataset.reelRhythm = rhythm;
     if (phase === 'fighting' &&
       ((finalStand && !lastFinalStand) || (impact.active && (!lastImpact || lastImpactCue !== impact.cue)))) {
       const now = performance.now();
@@ -479,7 +492,8 @@ export function bootAquaFantasia(): void {
     hint.textContent = !canSaveCollection
       ? '브라우저 저장이 제한돼 이번 V3 기록은 새로고침 후 사라질 수 있어요'
       : phase === 'fighting'
-      ? advice.message
+      ? (approach.stage === 'surface' && advice.level !== 'ease' && advice.level !== 'danger'
+          ? `${approach.label} · ${advice.message}` : advice.message)
       : phase === 'waiting' ? '입질이 올 때까지 기다리세요 · 물리면 버튼을 누르세요'
       : phase === 'bite' ? '지금 릴 버튼을 누르고 물고기를 잡으세요!'
       : nextFishingGoal(collection).message;

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DEMO_FISH, createCast, hookFish, advanceRound, bossFinalStand, bossFinalState, fightImpact, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
+import { DEMO_FISH, createCast, hookFish, advanceRound, bossFinalStand, bossFinalState, fightImpact, landingSignal, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
 
 function waitForBite(round) {
   let state = round;
@@ -229,4 +229,40 @@ test('boss surge has more pull and less reel progress than its recovery window',
   assert.ok(a.progress-surge.progress < b.progress-recover.progress);
   const easing=advanceRound({...surge,tension:0.68},.05,false);
   assert.ok(easing.tension<0.68,'player can always recover by releasing the reel');
+});
+
+test('surface proximity follows actual capture progress, clamps, and disappears on escape', () => {
+  const fish = DEMO_FISH[0];
+  const fresh=createCast(fish,5);
+  assert.deepEqual(landingSignal(fresh),{stage:'distant',proximity:0,label:''});
+  const fight={...hookFish({...fresh,phase:'bite'}),progress:0.61};
+  assert.equal(landingSignal(fight).stage,'distant');
+  const near=landingSignal({...fight,progress:0.78});
+  const almost=landingSignal({...fight,progress:0.94});
+  assert.equal(near.stage,'approaching');
+  assert.ok(near.proximity>0 && near.proximity<1);
+  assert.equal(almost.stage,'surface');
+  assert.ok(almost.proximity>near.proximity);
+  assert.equal(landingSignal({...fight,progress:1.4}).proximity,1);
+  assert.equal(landingSignal({...fight,phase:'landed',progress:1}).stage,'surface');
+  assert.equal(landingSignal({...fight,phase:'escaped',progress:0.94}).stage,'distant');
+});
+
+test('steady controlled tension boosts reel efficiency without removing snap danger', () => {
+  const fish=DEMO_FISH[0];
+  const round={...hookFish({...createCast(fish,39,2),phase:'bite'}),progress:.4,
+    fightElapsed:1.1, tension:.32, peakTension:.32};
+  const soft={...round,tension:.18};
+  const high={...round,tension:.80};
+  const stable=advanceRound(round,.05,true);
+  const slack=advanceRound(soft,.05,true);
+  const strained=advanceRound(high,.05,true);
+  assert.ok(stable.progress-round.progress>slack.progress-soft.progress,
+    'the midrange should reward steady control');
+  assert.ok(stable.progress-round.progress>strained.progress-high.progress,
+    'dangerous tension must not outperform controlled tension');
+  let snapped={...round,tension:.999,peakTension:.999};
+  snapped=advanceRound(snapped,.1,true);
+  assert.equal(snapped.phase,'escaped');
+  assert.equal(snapped.reason,'snapped');
 });

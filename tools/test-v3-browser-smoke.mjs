@@ -83,6 +83,10 @@ function catchOneFish() {
     if(!cast || !reel || !sea || !tension)return reject(Error('Missing V3 play controls'));
     const pointer=73;
     let holding=false;
+    let sawApproach=false, sawSurface=false;
+    let minFishBottom=Infinity,maxFishBottom=-Infinity;
+    const fishArt=document.querySelector('[data-v3-fish]');
+    const approachNote=document.querySelector('[data-v3-approach]');
     const release=()=>{
       if(!holding)return;
       window.dispatchEvent(new PointerEvent('pointerup',{bubbles:true,pointerId:pointer,pointerType:'touch'}));
@@ -100,6 +104,11 @@ function catchOneFish() {
       const strength=(parseFloat(tension.textContent)||0)/100;
       if(phase==='bite')hold();
       if(phase==='fighting') {
+        const near=sea.dataset.approach;
+        sawApproach ||= near==='approaching';
+        sawSurface ||= near==='surface';
+        const bottom=fishArt?parseFloat(getComputedStyle(fishArt).bottom):NaN;
+        if(Number.isFinite(bottom)) {minFishBottom=Math.min(minFishBottom,bottom);maxFishBottom=Math.max(maxFishBottom,bottom);}
         if(holding && strength>.61)release();
         if(!holding && strength<.27)hold();
       }
@@ -114,7 +123,11 @@ function catchOneFish() {
           resolve({phase,visible:panel?.hidden===false,img:art?.naturalWidth||0,
             alt:art?.alt,fish:document.querySelector('[data-v3-result-name]')?.textContent,
             inside:!!rect&&rect.top>=water.top-3&&rect.bottom<=water.bottom+3,
-            reelState:reel.disabled});
+            reelState:reel.disabled,
+            approach:sawApproach,surface:sawSurface,surfaceRisePx:maxFishBottom-minFishBottom,
+            approachHidden:approachNote?.hidden===true,
+            splash:document.querySelector('[data-v3-landing-splash]')?.naturalWidth||0,
+            splashAnimation:getComputedStyle(document.querySelector('[data-v3-landing-splash]')).animationName});
         },550);
       } else if(performance.now()-start>65000) {
         clearInterval(timer);
@@ -266,7 +279,9 @@ async function main() {
     const fishRevealBefore=await evaluate("({present:!!document.querySelector('[data-v3-result-fish]'),hidden:document.querySelector('[data-v3-result]')?.hidden})");
     if(!fishRevealBefore.present||fishRevealBefore.hidden!==true)throw Error('Catch reveal artwork/card missing before fishing: '+JSON.stringify(fishRevealBefore));
     const liveResult=await evaluate('('+catchOneFish.toString()+')()');
-    if(liveResult.phase!=='landed'||!liveResult.visible||!(liveResult.img>0)||!liveResult.inside||!liveResult.fish||liveResult.reelState!==true)
+    if(liveResult.phase!=='landed'||!liveResult.visible||!(liveResult.img>0)||!liveResult.inside||!liveResult.fish||liveResult.reelState!==true
+      ||!liveResult.approach||!liveResult.surface||liveResult.surfaceRisePx<10||!liveResult.approachHidden
+      ||!(liveResult.splash>0)||liveResult.splashAnimation!=='v3-catch-splash')
       throw Error('Live catch / fish artwork / panel viewport failed: '+JSON.stringify(liveResult));
     await capture('real-catch-reveal-390x844');
     console.log('[V3 browser] real live catch artwork and viewport PASS: '+liveResult.fish);

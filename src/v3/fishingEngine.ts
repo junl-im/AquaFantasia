@@ -53,6 +53,23 @@ export interface FightImpact {
   readonly label: string;
 }
 
+export interface LandingSignal {
+  readonly stage: 'distant' | 'approaching' | 'surface';
+  /** 0..1 of the final 38% of the encounter; drives PNG movement and progress hints. */
+  readonly proximity: number;
+  readonly label: string;
+}
+export function landingSignal(round: FishingRound): LandingSignal {
+  if (round.phase !== 'fighting' && round.phase !== 'landed') {
+    return { stage: 'distant', proximity: 0, label: '' };
+  }
+  const progress = clamp(round.progress, 0, 1);
+  const proximity = clamp((progress - 0.62) / 0.38, 0, 1);
+  if (progress >= 0.9) return { stage: 'surface', proximity, label: '수면 직전! 끝까지 장력을 조절하세요' };
+  if (progress >= 0.62) return { stage: 'approaching', proximity, label: '물고기가 수면으로 다가옵니다' };
+  return { stage: 'distant', proximity: 0, label: '' };
+}
+
 export interface FishVisualSignal {
   /** Normalized movement used by the UI; independent from screen resolution. */
   readonly x: number;
@@ -265,8 +282,11 @@ export function advanceRound(round: FishingRound, seconds: number, holding: bool
   const finalBoss = bossFinalState(round);
   const finalStandFactor = finalBoss.pattern === 'none' ? 1
     : finalBoss.phase === 'surge' ? 0.87 : 0.98;
+  // Modest skill reward for maintaining a controlled midrange; never overrides danger.
+  const controlledReel = holding && tension >= 0.24 && tension <= 0.57 ? 1.06 : 1;
   const progressRate = holding
-    ? (0.068 / round.fish.difficulty) * reelSpeed * surgeFactor * finalStandFactor * (1 - Math.max(0, tension - 0.67) * 0.28)
+    ? (0.068 / round.fish.difficulty) * reelSpeed * surgeFactor * finalStandFactor * controlledReel
+      * (1 - Math.max(0, tension - 0.67) * 0.28)
     : -0.008;
   const progress = clamp(round.progress + progressRate * dt, 0, 1);
   const peakTension = Math.max(round.peakTension, tension);
