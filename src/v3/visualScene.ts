@@ -1,7 +1,8 @@
 /* Experimental V4 scene — live PixiJS 8, opt-in only (?visual=1).
    Uses only existing repository raster assets. The production DOM/HUD and saved
    collection remain unchanged until the visual direction is reviewed. */
-import { Application, Assets, Container, Graphics, Sprite, type Texture } from 'pixi.js';
+import { AnimatedSprite, Application, Assets, Container, Graphics, MeshPlane, Sprite, type Texture } from 'pixi.js';
+import { visualMotion } from './visualMotion';
 import { fishVisualSignal, landingSignal, type FishingRound } from './fishingEngine';
 import type { RegionId } from './collection';
 
@@ -40,13 +41,15 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
   app.canvas.style.pointerEvents = 'none';
   host.prepend(app.canvas);
 
-  const [underwater, skyTexture, shadowTexture, boatTexture, fisherTexture, floatTexture, splashTexture] =
+  const [underwater, skyTexture, shadowTexture, boatTexture, fisherFrames, floatTexture, splashTexture] =
     await Promise.all([
       Assets.load<Texture>(path(ART.shore)),
       Assets.load<Texture>(path('./assets/v12/bg/ocean_portrait.webp')),
       Assets.load<Texture>(path('./assets/v205/fishing/fish_shadow_common.png')),
       Assets.load<Texture>(path('./assets/v2110/objects/fishing_props/fishing_prop_001.png')),
-      Assets.load<Texture>(path('./assets/v2110/character/fisher_walk_frames/fisher_direction_01_frame_01.png')),
+      Promise.all([1,2,3,4].map(i => Assets.load<Texture>(
+        path(`./assets/v2110/character/fisher_walk_frames/fisher_direction_01_frame_0${i}.png`)
+      ))),
       Assets.load<Texture>(path('./assets/art/fishing_float.png')),
       Assets.load<Texture>(path('./assets/v205/fishing/wave_splash.png')),
     ]);
@@ -95,10 +98,12 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     farFish.addChild(g);
     return {sprite:g,offset:i * .417,depth:(i%7)/7};
   });
-  const fish = new Sprite();
-  fish.anchor.set(.5);
+  // One real deformable mesh per fish; animate its texture vertices to bend the tail.
+  const fish = new Container();
   fish.zIndex = 5;
   stage.addChild(fish);
+  let fishBody: MeshPlane | null = null;
+  let fishRest: Float32Array | null = null;
   const fishingLine = new Graphics();
   fishingLine.zIndex = 8;
   stage.addChild(fishingLine);
@@ -112,9 +117,10 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
   const boat = new Sprite(boatTexture);
   boat.anchor.set(.5, .5);
   vessel.addChild(boat);
-  const fisher = new Sprite(fisherTexture);
+  const fisher = new AnimatedSprite({textures:fisherFrames,autoPlay:false,loop:true});
   fisher.anchor.set(.5, 1);
   vessel.addChild(fisher);
+  let previousFrame = -1;
   const splash = new Sprite(splashTexture);
   splash.anchor.set(.5);
   splash.zIndex = 11;
@@ -129,6 +135,7 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
   let lastWidth = 0;
   let lastHeight = 0;
   let lastPhase = '';
+  let phaseAt = 0;
   let landingAt = -100;
   let strikeAt = -100;
   let oldSurge = false;
@@ -151,13 +158,20 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
       fishReady = false;
       if (image) void Assets.load<Texture>(path(image)).then((tex) => {
         if (disposed || ticket !== textureTicket) return;
-        fish.texture = tex;
+        if (fishBody) { fish.removeChild(fishBody); fishBody.destroy(); }
+        const mesh = new MeshPlane({texture:tex,verticesX:9,verticesY:3});
+        // MeshPlane has no Sprite.anchor: center it with its pivot instead.
+        mesh.pivot.set(tex.width/2,tex.height/2);
+        fish.addChild(mesh);
+        fishBody=mesh;
+        fishRest=new Float32Array(mesh.geometry.getAttribute('aPosition').buffer.data);
         fishReady = true;
         fish.visible = true;
-      }).catch(() => { fishReady = false; fish.visible = false; });
+      }).catch(() => { if(ticket===textureTicket){fishReady = false; fish.visible = false;} });
     }
     const phase = round?.phase || 'ready';
     if (phase !== lastPhase) {
+      phaseAt=elapsed;
       if (phase === 'landed') landingAt = elapsed;
       if (phase === 'waiting') { landingAt = -100; oldSurge = false; }
       lastPhase = phase;
@@ -196,8 +210,7 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     const splashW=Math.min(280,w*.53);
     splash.width=splashW;
     splash.scale.y=splash.scale.x;
-    fish.width=Math.min(160,w*.34);
-    fish.scale.y=fish.scale.x;
+    // Fish mesh dimensions are set when its actual texture arrives; no squash.
   }
 
   app.ticker.add((ticker) => {
@@ -224,8 +237,16 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     for(let x=0;x<=w+15;x+=20) seaSurface.lineTo(x,horizon+7+Math.sin(x*.021-waveTime*1.1)*3);
     seaSurface.stroke({color:0x95e8ef,width:1.25,alpha:.46});
 
+    const motion=visualMotion(round,held,Math.max(0,elapsed-phaseAt),elapsed,lite);
     vessel.y = horizon + Math.max(14,h*.06) + (lite?0:Math.sin(elapsed*1.45)*2.8);
     vessel.rotation = lite?0:Math.sin(elapsed*1.13)*.013;
+    if (motion.frame !== previousFrame) {
+      fisher.gotoAndStop(motion.frame);
+      previousFrame=motion.frame;
+    }
+    fisher.rotation=lite ? motion.rodBend*.5 : motion.rodBend;
+    // Avoid nonuniform face/body squash: rotate a framed pose around its feet.
+    fisher.skew.x = 0;
     bobber.x=w*.59; bobber.y=horizon + h*.056 + Math.sin(waveTime*2.1)*2;
     bobber.width=Math.min(54,w*.12); bobber.scale.y=bobber.scale.x;
     bobber.visible=phase==='waiting'||phase==='bite'||phase==='fighting';
@@ -248,26 +269,49 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     const surge=fx>.65;
     if (surge && !oldSurge) strikeAt=elapsed;
     oldSurge=surge;
-    if(round && fishReady) {
+    if(round && fishReady && fishBody && fishRest) {
       const dx=visual?.x??0,dy=visual?.y??0;
       fish.visible=phase==='fighting'||phase==='landed';
       fish.x=w*(.59 + dx*.10);
       fish.y=h*(.73 - (approach?.proximity??0)*.31 + dy*.065);
       const natural=Math.min(w*.32,170);
-      const fishScale=natural/fish.texture.width*(.77+progress*.29);
+      const fishScale=natural/fishBody.texture.width*(.77+progress*.29);
       fish.scale.set(phase==='landed'?fishScale*1.16:fishScale);
       fish.rotation=(visual?.rotation??0)*Math.PI/180*.38;
       fish.alpha=phase==='landed'?1:.87;
-    } else fish.visible=false;
+      const attribute=fishBody.geometry.getAttribute('aPosition').buffer;
+      const vertices=attribute.data;
+      let bendMax=0;
+      for(let i=0;i<vertices.length;i+=2){
+        const x=fishRest[i],y=fishRest[i+1];
+        // Source fish portraits face left: keep head fixed and bend body/tail right.
+        const tail=clamp((x/fishBody.texture.width-.30)/.70,0,1);
+        const wave=Math.sin(elapsed*motion.tailFrequency + tail*2.4);
+        const shift=motion.tailAmplitude*fishBody.texture.height*tail*tail*wave;
+        vertices[i]=x+shift*.13;
+        vertices[i+1]=y+shift;
+        bendMax=Math.max(bendMax,Math.abs(shift));
+      }
+      attribute.update();
+      host.dataset.v3FishBend=bendMax.toFixed(2);
+    } else {
+      fish.visible=false;
+      host.dataset.v3FishBend='0';
+    }
 
     fishingLine.clear();
-    if(phase==='fighting'||phase==='bite') {
-      const startX=w*.335, startY=horizon-h*.13;
+    if(phase==='waiting'||phase==='fighting'||phase==='bite') {
+      // Attach line to the actual fisher raster's rod tip, rather than a fixed
+      // fraction of the screen. This follows boat bob + fisher pull rotation.
+      const tipX=fisher.width*.33, tipY=-fisher.height*.82;
+      const angle=fisher.rotation+vessel.rotation;
+      const startX=vessel.x+fisher.x + tipX*Math.cos(angle)-tipY*Math.sin(angle);
+      const startY=vessel.y+fisher.y + tipX*Math.sin(angle)+tipY*Math.cos(angle);
       const endX=phase==='fighting'?fish.x:bobber.x;
       const endY=phase==='fighting'?fish.y:bobber.y;
       const bend=(held?1:-1)*Math.min(38,w*.065);
       fishingLine.moveTo(startX,startY)
-        .bezierCurveTo(startX+w*.12,horizon-h*.085,endX+bend,horizon+h*.13,endX,endY)
+        .bezierCurveTo(startX+w*.09,horizon-h*.04,endX+bend,horizon+h*.13,endX,endY)
         .stroke({color:fx>.67?0xffd7a5:0xf1ffff,width:1.8,alpha:.83});
     }
     const catchAge=elapsed-landingAt;
@@ -281,6 +325,9 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     host.dataset.v3SceneStatus='ready';
     host.dataset.v3ScenePhase=phase;
     host.dataset.v3SceneHeld=String(held);
+    host.dataset.v3FisherPose=motion.pose;
+    host.dataset.v3FisherFrame=String(motion.frame);
+    host.dataset.v3RodBend=motion.rodBend.toFixed(3);
   });
 
   return {

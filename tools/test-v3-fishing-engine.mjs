@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DEMO_FISH, createCast, hookFish, advanceRound, bossFinalStand, bossFinalState, fightImpact, landingSignal, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
+import { visualMotion } from '../src/v3/visualMotion.ts';
 
 function waitForBite(round) {
   let state = round;
@@ -265,4 +266,30 @@ test('steady controlled tension boosts reel efficiency without removing snap dan
   snapped=advanceRound(snapped,.1,true);
   assert.equal(snapped.phase,'escaped');
   assert.equal(snapped.reason,'snapped');
+});
+
+test('V4 character frames, flexible fishing rod and fish tail track real phases', () => {
+  const f=DEMO_FISH[0];
+  const base=createCast(f,13);
+  assert.equal(visualMotion(null,false,0,0,false).pose,'idle');
+  assert.equal(visualMotion(base,false,0,.2,false).pose,'cast');
+  assert.equal(visualMotion(base,false,.9,2,false).frame,0);
+  const bite={...base,phase:'bite'};
+  assert.equal(visualMotion(bite,false,0,2,false).pose,'hook');
+  assert.equal(visualMotion(bite,false,0,2,false).frame,3);
+  const fighting={...bite,phase:'fighting',fightElapsed:2,tension:.6,progress:.25};
+  const held=visualMotion(fighting,true,1,3,false);
+  const released=visualMotion(fighting,false,1,3,false);
+  assert.equal(held.pose,'reel');
+  assert.equal(released.pose,'brace');
+  assert.ok(held.rodBend > released.rodBend);
+  assert.ok(held.tailAmplitude > 0 && released.tailAmplitude > 0);
+  assert.ok(held.tailFrequency > 0);
+  assert.deepEqual(visualMotion(fighting,true,1,3,false),held);
+  assert.equal(visualMotion(fighting,true,1,3,true).tailAmplitude,0);
+  const danger=visualMotion({...fighting,tension:.87},true,1,3,false);
+  assert.ok(danger.rodBend>held.rodBend);
+  assert.equal(visualMotion({...fighting,phase:'landed'},false,1,3,false).pose,'land');
+  assert.equal(visualMotion({...fighting,phase:'escaped'},false,1,3,false).pose,'fail');
+  assert.equal(visualMotion({...fighting,phase:'landed'},false,1,3,false).tailAmplitude,0);
 });
