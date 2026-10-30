@@ -326,3 +326,28 @@ test('V4 cast travels from rod tip, splashes once, then bites with a submerged f
     assert.equal(state.ripple,0,phase);
   }
 });
+
+test('V4 raster fish fin flex and damped fisher effort are phase-aware and deterministic', () => {
+  const fish=DEMO_FISH.find(f=>f.behavior==='dart');
+  assert.ok(fish);
+  const fishing={...hookFish({...createCast(fish,139,3),phase:'bite'}),
+    phase:'fighting',tension:.48,progress:.36,fightElapsed:2.1};
+  const movement=visualMotion(fishing,true,.7,2.5,false);
+  assert.ok(movement.finAmplitude>0);
+  assert.ok(movement.finFrequency>movement.tailFrequency*.7);
+  assert.ok(movement.fisherEffort>0 && movement.fisherEffort<=1);
+  assert.deepEqual(visualMotion(fishing,true,.7,2.5,false),movement);
+  const danger=visualMotion({...fishing,tension:.88},true,.7,2.5,false);
+  assert.ok(danger.fisherEffort>movement.fisherEffort);
+  const lite=visualMotion(fishing,true,.7,2.5,true);
+  assert.equal(lite.finAmplitude,0);
+  assert.equal(lite.tailAmplitude,0);
+  const steady=visualMotion({...fishing,fish:{...fish,behavior:'steady'}},true,.7,2.5,false);
+  assert.ok(steady.finAmplitude>0);
+  assert.notEqual(steady.finAmplitude,movement.finAmplitude);
+  for(const phase of ['waiting','bite','landed','escaped']) {
+    const m=visualMotion({...fishing,phase},false,.3,2.5,false);
+    assert.equal(m.finAmplitude,0,phase);
+    assert.equal(m.fisherEffort,0,phase);
+  }
+});
