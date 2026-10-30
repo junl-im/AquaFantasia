@@ -304,7 +304,20 @@ async function main() {
     await evaluate("document.querySelector('[data-v3-cast]').click();true");
     await until(()=>evaluate("document.querySelector('.v3-sea')?.dataset.v3ScenePhase==='fighting' || document.querySelector('.v3-sea')?.dataset.v3ScenePhase==='bite'"),'live stage reacts to casting',12000);
     await capture('visual-v4-cast-390x844');
-    console.log('[V3 browser] PixiJS V4 opt-in visual canvas, resize and cast PASS');
+    // A narrow phone and widescreen desktop need their own rendered screenshots,
+    // not merely the standard V3 DOM overflow checks.
+    for (const [w,h,mobile] of [[320,568,true],[1280,800,false]]) {
+      await send('Emulation.setDeviceMetricsOverride',{width:w,height:h,deviceScaleFactor:1,mobile});
+      await send('Page.navigate',{url:url+'?visual=1'});
+      await until(()=>evaluate("document.querySelector('.v3-sea')?.dataset.v3SceneStatus==='ready'"),'V4 scene '+w+'x'+h,20000);
+      const v4layout=await evaluate('('+layoutSnapshot.toString()+')()');
+      const c=await evaluate("({width:document.querySelector('.v3-pixi-canvas')?.width,height:document.querySelector('.v3-pixi-canvas')?.height,canvasRect:(()=>{const r=document.querySelector('.v3-pixi-canvas')?.getBoundingClientRect();return r?{width:r.width,height:r.height}:null})()})");
+      if(!c.width||!c.height||!c.canvasRect || c.canvasRect.width<100 ||
+        v4layout.scrollW>w+2 || v4layout.scrollH>h+2 || v4layout.console.bottom>h+3)
+        throw Error('V4 responsive visual stage overflows '+w+'x'+h+': '+JSON.stringify({v4layout,c}));
+      await capture('visual-v4-pixi-'+w+'x'+h);
+    }
+    console.log('[V3 browser] PixiJS V4 opt-in visual canvas, 320/390/1280 responsive and cast PASS');
   } finally {
     if(ws&&ws.readyState===1)ws.close();
     if(chrome)chrome.kill('SIGKILL');
