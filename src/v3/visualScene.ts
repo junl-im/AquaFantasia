@@ -2,7 +2,7 @@
    Uses only existing repository raster assets. The production DOM/HUD and saved
    collection remain unchanged until the visual direction is reviewed. */
 import { AnimatedSprite, Application, Assets, Container, Graphics, MeshPlane, Sprite, type Texture } from 'pixi.js';
-import { visualMotion, waterResponse } from './visualMotion';
+import { visualMotion, waterResponse, rodAction } from './visualMotion';
 import { surfaceMotion } from './surfaceMotion';
 import { fishVisualSignal, landingSignal, type FishingRound } from './fishingEngine';
 import type { RegionId } from './collection';
@@ -136,9 +136,14 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
   const fisher = new AnimatedSprite({textures:fisherFrames,autoPlay:false,loop:true});
   fisher.anchor.set(.5, 1);
   vessel.addChild(fisher);
+  // A separate fishing rod pivots from the hand. It is drawn in Pixi, never SVG.
+  const rod = new Graphics();
+  vessel.addChild(rod);
   let previousFrame = -1;
   let easedLean = 0;
   let easedEffort = 0;
+  let easedRodAngle = .07;
+  let easedRodFlex = 0;
   const splash = new Sprite(splashTexture);
   splash.anchor.set(.5);
   splash.zIndex = 11;
@@ -258,6 +263,7 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
 
     const phaseAge=Math.max(0,elapsed-phaseAt);
     const motion=visualMotion(round,held,phaseAge,elapsed,lite);
+    const rodTarget=rodAction(round,held,phaseAge,elapsed,lite);
     const water=waterResponse(round,held,lite);
     const surface=surfaceMotion(round,phaseAge,elapsed,lite);
     vessel.y = horizon + Math.max(14,h*.06) + (lite?0:Math.sin(elapsed*1.45)*2.8);
@@ -274,11 +280,40 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     fisher.y=-boat.height*.15 + (lite?0:Math.sin(elapsed*(5+easedEffort*3))*1.7*easedEffort);
     // Keep the character's real proportions; do not scale or skew limbs.
     fisher.skew.x = 0;
-    // The cast starts at the moving fisher's rod tip, not at a teleported float.
-    const tipX=fisher.width*.33, tipY=-fisher.height*.82;
-    const angle=fisher.rotation+vessel.rotation;
-    const startX=vessel.x+fisher.x + tipX*Math.cos(angle)-tipY*Math.sin(angle);
-    const startY=vessel.y+fisher.y + tipX*Math.sin(angle)+tipY*Math.cos(angle);
+    // Damp the independent rod gesture. Its actual rendered tip is also the
+    // float/line origin, so no invisible teleporting attachment survives.
+    const rodResponse=1-Math.exp(-dt*(motion.pose==='cast'?17:motion.pose==='hook'?15:9));
+    easedRodAngle+=(rodTarget.angle-easedRodAngle)*rodResponse;
+    easedRodFlex+=(rodTarget.flex-easedRodFlex)*rodResponse;
+    const length=Math.min(Math.max(fisher.height*1.25,50),w*.31,h*.22);
+    const handleX=fisher.x+fisher.width*.16;
+    const handleY=fisher.y-fisher.height*.34;
+    const theta=.68+easedRodAngle;
+    const tipX=handleX+Math.sin(theta)*length;
+    const tipY=handleY-Math.cos(theta)*length+easedRodFlex*length*.15;
+    const dxRod=tipX-handleX,dyRod=tipY-handleY;
+    const c1x=handleX+dxRod*.28,c1y=handleY+dyRod*.30;
+    const c2x=handleX+dxRod*.72,c2y=handleY+dyRod*.73+easedRodFlex*length*.18;
+    rod.clear();
+    // Two tapered strokes, a short grip and a turning reel handle give the
+    // rod a readable silhouette without external art or an SVG asset.
+    rod.moveTo(handleX-4,handleY+6)
+      .lineTo(handleX+dxRod*.19,handleY+dyRod*.18)
+      .stroke({color:0x173947,width:4.5,alpha:.95});
+    rod.moveTo(handleX,handleY)
+      .bezierCurveTo(c1x,c1y,c2x,c2y,tipX,tipY)
+      .stroke({color:0x214b55,width:3.5,alpha:.97});
+    rod.moveTo(handleX+1,handleY-1)
+      .bezierCurveTo(c1x,c1y-1,c2x,c2y-1,tipX,tipY)
+      .stroke({color:0xe8c994,width:1.45,alpha:.93});
+    const reelX=handleX+dxRod*.14,reelY=handleY+dyRod*.12+5;
+    rod.circle(reelX,reelY,5.2).fill({color:0x193b49,alpha:.96})
+      .stroke({color:0xe9c780,width:1.2});
+    rod.circle(reelX+Math.cos(rodTarget.reelTurn)*2.6,
+      reelY+Math.sin(rodTarget.reelTurn)*2.6,1.35).fill(0xf5e6ba);
+    const vesselCos=Math.cos(vessel.rotation),vesselSin=Math.sin(vessel.rotation);
+    const startX=vessel.x+tipX*vesselCos-tipY*vesselSin;
+    const startY=vessel.y+tipX*vesselSin+tipY*vesselCos;
     const flight=surface.castTravel * surface.castTravel * (3 - 2*surface.castTravel);
     const targetX=w*.59, targetY=horizon+h*.056;
     bobber.x=startX+(targetX-startX)*flight;
@@ -427,6 +462,10 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     host.dataset.v4LineSag=water.lineSag.toFixed(3);
     host.dataset.v4WakeStrength=water.wakeStrength.toFixed(3);
     host.dataset.v4SurfaceSpray=water.surfaceSpray.toFixed(3);
+    host.dataset.v4RodAngle=easedRodAngle.toFixed(3);
+    host.dataset.v4RodFlex=easedRodFlex.toFixed(3);
+    host.dataset.v4RodTipX=startX.toFixed(1);
+    host.dataset.v4RodTipY=startY.toFixed(1);
   });
 
   return {
