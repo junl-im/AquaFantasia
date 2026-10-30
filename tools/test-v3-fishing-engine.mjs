@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DEMO_FISH, createCast, hookFish, advanceRound, bossFinalStand, bossFinalState, fightImpact, landingSignal, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
 import { visualMotion } from '../src/v3/visualMotion.ts';
+import { surfaceMotion } from '../src/v3/surfaceMotion.ts';
 
 function waitForBite(round) {
   let state = round;
@@ -292,4 +293,36 @@ test('V4 character frames, flexible fishing rod and fish tail track real phases'
   assert.equal(visualMotion({...fighting,phase:'landed'},false,1,3,false).pose,'land');
   assert.equal(visualMotion({...fighting,phase:'escaped'},false,1,3,false).pose,'fail');
   assert.equal(visualMotion({...fighting,phase:'landed'},false,1,3,false).tailAmplitude,0);
+});
+
+test('V4 cast travels from rod tip, splashes once, then bites with a submerged float', () => {
+  const casting=createCast(DEMO_FISH[0],83);
+  const ready=surfaceMotion(null,0,0,false);
+  assert.equal(ready.visible,false);
+  const launch=surfaceMotion(casting,0,0,false);
+  const inFlight=surfaceMotion(casting,.34,.34,false);
+  const splash=surfaceMotion(casting,.72,.72,false);
+  const settled=surfaceMotion(casting,1.50,1.50,false);
+  assert.equal(launch.castTravel,0);
+  assert.equal(inFlight.castTravel,.5);
+  assert.ok(inFlight.castLift>.9);
+  assert.equal(splash.castTravel,1);
+  assert.ok(splash.ripple>.5);
+  assert.equal(settled.ripple,0);
+  assert.equal(settled.castLift,0);
+  assert.equal(settled.visible,true);
+  const lite=surfaceMotion(casting,.34,.34,true);
+  assert.ok(lite.castLift<inFlight.castLift);
+  assert.ok(surfaceMotion(casting,.72,.72,true).ripple<splash.ripple);
+
+  const biting={...casting,phase:'bite'};
+  const dip=surfaceMotion(biting,.1,2.3,false);
+  assert.equal(dip.castTravel,1);
+  assert.ok(dip.biteDip>.4 && dip.ripple>.5);
+  assert.deepEqual(surfaceMotion(biting,.1,2.3,false),dip);
+  for(const phase of ['fighting','landed','escaped']) {
+    const state=surfaceMotion({...casting,phase},.2,2.3,false);
+    assert.equal(state.visible,false,phase);
+    assert.equal(state.ripple,0,phase);
+  }
 });
