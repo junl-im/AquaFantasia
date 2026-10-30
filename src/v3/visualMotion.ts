@@ -63,3 +63,37 @@ export function visualMotion(
       return {pose:'fail',frame:1,rodBend:.07,tailAmplitude:0,tailFrequency:0,finAmplitude:0,finFrequency:0,fisherEffort:0};
   }
 }
+
+/**
+ * V4's visible line and water response. Values are presentation-only:
+ * they never mutate tension, catch progress, rewards, or saved collection.
+ */
+export interface WaterResponse {
+  /** 0 = taut line, 1 = deeply slack; canvas maps this to a bounded pixel sag. */
+  lineSag: number;
+  /** Underwater wake driven by fish pressure and its approach to the surface. */
+  wakeStrength: number;
+  /** Short raster spray only as the real fish nears the surface. */
+  surfaceSpray: number;
+}
+
+export function waterResponse(
+  round: FishingRound | null,
+  held: boolean,
+  lite: boolean,
+): WaterResponse {
+  const quiet = { lineSag: 0, wakeStrength: 0, surfaceSpray: 0 };
+  if (!round) return quiet;
+  if (round.phase === 'waiting') return { ...quiet, lineSag: .28 };
+  if (round.phase === 'bite') return { ...quiet, lineSag: .22 };
+  if (round.phase !== 'fighting') return quiet;
+
+  const tension = clamp(round.tension, 0, 1);
+  const impact = clamp(fightImpact(round).strength, 0, 1);
+  const surface = clamp((round.progress - .62) / .38, 0, 1);
+  return {
+    lineSag: clamp((held ? .12 : .30) * (1 - .72 * tension), .015, .36),
+    wakeStrength: lite ? 0 : clamp(.15 + impact * .62 + surface * .17, 0, .94),
+    surfaceSpray: lite ? 0 : clamp(surface * (.18 + impact * .67), 0, .85),
+  };
+}
