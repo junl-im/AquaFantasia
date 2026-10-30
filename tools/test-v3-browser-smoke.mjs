@@ -335,6 +335,9 @@ async function main() {
       await until(()=>evaluate("document.querySelector('.v3-sea')?.dataset.v3SceneStatus==='ready'"),'V4 scene '+w+'x'+h,20000);
       const v4layout=await evaluate('('+layoutSnapshot.toString()+')()');
       const c=await evaluate("({width:document.querySelector('.v3-pixi-canvas')?.width,height:document.querySelector('.v3-pixi-canvas')?.height,canvasRect:(()=>{const r=document.querySelector('.v3-pixi-canvas')?.getBoundingClientRect();return r?{width:r.width,height:r.height}:null})()})");
+      if(w===1280 && (v4layout.sea?.right>=v4layout.console?.left||
+        v4layout.console?.left<700||v4layout.sea?.width<650))
+        throw Error('Desktop V4 must use a side command deck, not a narrow phone strip: '+JSON.stringify(v4layout));
       if(!c.width||!c.height||!c.canvasRect || c.canvasRect.width<100 ||
         v4layout.scrollW>w+2 || v4layout.scrollH>h+2 || v4layout.console.bottom>h+3)
         throw Error('V4 responsive visual stage overflows '+w+'x'+h+': '+JSON.stringify({v4layout,c}));

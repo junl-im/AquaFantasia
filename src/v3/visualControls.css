@@ -411,3 +411,104 @@
 @media(prefers-reduced-motion:reduce) {
   .v3-visual-rebuild button,.v3-visual-rebuild button::before {transition:none!important}
 }
+
+
+/* Desktop V4: a real playfield with an independent starboard command deck.
+   The old 740px smartphone strip looked miniature on a 1280px monitor. */
+@media (min-width: 1024px) and (min-height: 600px) {
+  .v3-visual-rebuild {
+    max-width:1160px;
+    grid-template-columns:minmax(0,1fr) 325px;
+    grid-template-rows:auto minmax(0,1fr);
+    column-gap:12px;
+    row-gap:10px;
+    padding:12px;
+    background:linear-gradient(155deg,#082a3e,#0c3145 52%,#061a2e);
+    border-left:1px solid rgba(130,188,189,.35);
+    border-right:1px solid rgba(130,188,189,.35);
+  }
+  .v3-visual-rebuild .v3-top {
+    grid-column:1/-1;
+    grid-row:1;
+    min-height:75px;
+    padding:8px 16px 9px;
+    border-radius:14px 14px 5px 5px;
+  }
+  .v3-visual-rebuild .v3-sea {
+    grid-column:1;
+    grid-row:2;
+    min-height:0;
+    border:2px solid rgba(128,190,186,.82);
+    border-bottom:4px solid #466e70;
+    border-radius:18px 5px 16px 5px;
+  }
+  .v3-visual-rebuild .v3-console {
+    grid-column:2;
+    grid-row:2;
+    min-height:0;
+    min-width:0;
+    margin-top:0;
+    padding:16px 14px;
+    gap:12px;
+    border:1px solid #acb18b;
+    border-top:3px solid #d4ba79;
+    border-bottom:4px solid #204c53;
+    border-radius:5px 19px 5px 19px;
+    justify-content:space-between;
+  }
+  .v3-visual-rebuild .v3-console-top {
+    align-items:stretch;
+    justify-content:center;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:8px;
+  }
+  .v3-visual-rebuild .v3-console-top button {
+    min-height:45px;
+    min-width:0;
+    font-size:11px!important;
+  }
+  .v3-visual-rebuild .v3-wallet {
+    grid-column:1/-1;
+    justify-self:stretch;
+    text-align:center;
+    font-size:12px;
+  }
+  .v3-visual-rebuild .v3-meter-block {
+    padding:14px 12px;
+    gap:9px;
+    margin-top:auto;
+    margin-bottom:auto;
+    border-radius:12px 4px 12px 4px;
+  }
+  .v3-visual-rebuild .v3-meter {height:16px}
+  .v3-visual-rebuild .v3-progress {height:14px}
+  .v3-visual-rebuild .v3-controls {
+    display:grid;
+    grid-template-columns:1fr;
+    gap:11px;
+  }
+  .v3-visual-rebuild .v3-cast,
+  .v3-visual-rebuild .v3-reel {
+    min-height:82px;
+    padding-left:65px!important;
+    font-size:18px!important;
+  }
+  .v3-visual-rebuild .v3-cast::before {width:59px;height:63px;left:4px}
+  .v3-visual-rebuild .v3-reel::before {width:50px;height:62px;left:8px}
+  .v3-visual-rebuild .v3-hint {
+    line-height:1.3;
+    font-size:11px;
+    text-align:center;
+  }
+  .v3-visual-rebuild .v3-center-status {
+    left:55%;
+    right:12px;
+    padding:10px 12px;
+  }
+  .v3-visual-rebuild .v3-center-status h2 {font-size:clamp(17px,2vw,22px)}
+  .v3-visual-rebuild .v3-center-status p {font-size:12px}
+}
+/* The buoy art is a white-matted PNG; multiply blends its matte into the blue
+   button instead of presenting a rectangular white sticker. */
+.v3-visual-rebuild .v3-cast::before {mix-blend-mode:multiply}
