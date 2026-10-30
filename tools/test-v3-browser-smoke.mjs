@@ -73,6 +73,57 @@ function showHarborAndGrow() {
     lite:localStorage.getItem('aquafantasia:v3:lite:v1'),litePressed,
     liteClass:document.querySelector('.v3-screen').classList.contains('v3-lite-mode')};
 }
+/** Real browser input and animation frames: catch one fish and verify the PNG reveal. */
+function catchOneFish() {
+  return new Promise((resolve,reject)=>{
+    const cast=document.querySelector('[data-v3-cast]');
+    const reel=document.querySelector('[data-v3-reel]');
+    const sea=document.querySelector('.v3-sea');
+    const tension=document.querySelector('[data-v3-tension-label]');
+    if(!cast || !reel || !sea || !tension)return reject(Error('Missing V3 play controls'));
+    const pointer=73;
+    let holding=false;
+    const release=()=>{
+      if(!holding)return;
+      window.dispatchEvent(new PointerEvent('pointerup',{bubbles:true,pointerId:pointer,pointerType:'touch'}));
+      holding=false;
+    };
+    const hold=()=>{
+      if(holding)return;
+      reel.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,pointerId:pointer,pointerType:'touch',isPrimary:true}));
+      holding=reel.classList.contains('is-pressed');
+    };
+    cast.click();
+    const start=performance.now();
+    const timer=setInterval(()=>{
+      const phase=sea.dataset.phase;
+      const strength=(parseFloat(tension.textContent)||0)/100;
+      if(phase==='bite')hold();
+      if(phase==='fighting') {
+        if(holding && strength>.61)release();
+        if(!holding && strength<.27)hold();
+      }
+      if(phase==='landed'||phase==='escaped') {
+        clearInterval(timer);
+        release();
+        // Allow async image decoding and the reveal animation to settle.
+        setTimeout(()=>{
+          const panel=document.querySelector('[data-v3-result]');
+          const art=document.querySelector('[data-v3-result-fish]');
+          const rect=panel?.getBoundingClientRect(),water=sea.getBoundingClientRect();
+          resolve({phase,visible:panel?.hidden===false,img:art?.naturalWidth||0,
+            alt:art?.alt,fish:document.querySelector('[data-v3-result-name]')?.textContent,
+            inside:!!rect&&rect.top>=water.top-3&&rect.bottom<=water.bottom+3,
+            reelState:reel.disabled});
+        },550);
+      } else if(performance.now()-start>65000) {
+        clearInterval(timer);
+        release();
+        reject(Error('Timed out waiting for a complete live catch: '+phase));
+      }
+    },55);
+  });
+}
 async function main() {
   const profile=fs.mkdtempSync(path.join(os.tmpdir(),'aqua-v3-qa-'));
   const vite=spawn(process.execPath,['node_modules/vite/bin/vite.js','--host','127.0.0.1','--port','4178','--strictPort'],{stdio:'ignore'});
@@ -212,8 +263,13 @@ async function main() {
     await capture('harbor-deep-blue-390x844');
     await evaluate("document.querySelector('[data-v3-harbor-close]').click();true");
     await capture('deep-blue-390x844');
-    const fishReveal=await evaluate("(async()=>{const v=document.querySelector('[data-v3-result-fish]');const b=document.querySelector('[data-v3-result]');return {present:!!v,hidden:b?.hidden,dimensions:v?.getBoundingClientRect().height,src:v?.getAttribute('src')};})()");
-    if(!fishReveal.present||fishReveal.hidden!==true)throw Error('Catch reveal artwork/card missing before a successful catch: '+JSON.stringify(fishReveal));
+    const fishRevealBefore=await evaluate("({present:!!document.querySelector('[data-v3-result-fish]'),hidden:document.querySelector('[data-v3-result]')?.hidden})");
+    if(!fishRevealBefore.present||fishRevealBefore.hidden!==true)throw Error('Catch reveal artwork/card missing before fishing: '+JSON.stringify(fishRevealBefore));
+    const liveResult=await evaluate('('+catchOneFish.toString()+')()');
+    if(liveResult.phase!=='landed'||!liveResult.visible||!(liveResult.img>0)||!liveResult.inside||!liveResult.fish||liveResult.reelState!==true)
+      throw Error('Live catch / fish artwork / panel viewport failed: '+JSON.stringify(liveResult));
+    await capture('real-catch-reveal-390x844');
+    console.log('[V3 browser] real live catch artwork and viewport PASS: '+liveResult.fish);
     console.log('[V3 browser] touch, fish PNG, dialogs, upgrades, new regions, legacy save isolation PASS');
   } finally {
     if(ws&&ws.readyState===1)ws.close();

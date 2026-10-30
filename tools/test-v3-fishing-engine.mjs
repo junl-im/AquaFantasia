@@ -165,7 +165,9 @@ test('fish impact is a deterministic physical pull cue, not a random overlay', (
 test('final stand activates only on late boss fights and follows actual pull strength', () => {
   const boss=DEMO_FISH.find(f=>f.behavior==='boss');
   const normal=DEMO_FISH.find(f=>f.behavior==='steady');
-  const active={...hookFish({...createCast(boss,71,3,2),phase:'bite'}),progress:0.78,tension:0.32,fightElapsed:5.1};
+  // Sample the short crystal burst, not the recovery interval.
+  const active={...hookFish({...createCast(boss,71,3,2),phase:'bite'}),progress:0.78,tension:0.32,fightElapsed:0.1};
+  assert.equal(bossFinalState(active).phase,'surge');
   assert.equal(bossFinalStand({...active,progress:0.779}),false);
   assert.equal(bossFinalStand(active),true);
   assert.equal(bossFinalStand({...active,fish:normal}),false);
