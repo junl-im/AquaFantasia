@@ -2,7 +2,7 @@
    Uses only existing repository raster assets. The production DOM/HUD and saved
    collection remain unchanged until the visual direction is reviewed. */
 import { AnimatedSprite, Application, Assets, Container, Graphics, MeshPlane, Sprite, type Texture } from 'pixi.js';
-import { visualMotion } from './visualMotion';
+import { visualMotion, waterResponse } from './visualMotion';
 import { surfaceMotion } from './surfaceMotion';
 import { fishVisualSignal, landingSignal, type FishingRound } from './fishingEngine';
 import type { RegionId } from './collection';
@@ -105,6 +105,14 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
   stage.addChild(fish);
   let fishBody: MeshPlane | null = null;
   let fishRest: Float32Array | null = null;
+  // These live BELOW the line and bobber, preserving their hit-free Pixi stage.
+  const fishWake = new Graphics();
+  fishWake.zIndex = 6;
+  stage.addChild(fishWake);
+  const surfaceBurst = new Sprite(splashTexture);
+  surfaceBurst.anchor.set(.5);
+  surfaceBurst.zIndex = 7;
+  stage.addChild(surfaceBurst);
   const fishingLine = new Graphics();
   fishingLine.zIndex = 8;
   stage.addChild(fishingLine);
@@ -250,6 +258,7 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
 
     const phaseAge=Math.max(0,elapsed-phaseAt);
     const motion=visualMotion(round,held,phaseAge,elapsed,lite);
+    const water=waterResponse(round,held,lite);
     const surface=surfaceMotion(round,phaseAge,elapsed,lite);
     vessel.y = horizon + Math.max(14,h*.06) + (lite?0:Math.sin(elapsed*1.45)*2.8);
     vessel.rotation = lite?0:Math.sin(elapsed*1.13)*.013;
@@ -356,15 +365,45 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
       host.dataset.v4FinFlutter='0';
     }
 
+    // Subtle underwater wakes follow actual fish resistance and its ascent.
+    // A separate sprite reuses the existing PNG splash; no vector assets.
+    fishWake.clear();
+    if (fish.visible && water.wakeStrength > 0) {
+      const strength=water.wakeStrength;
+      const span=Math.min(w*.30,135);
+      const tailX=fish.x-Math.min(fish.width*.38,span*.66);
+      for (let ring=0;ring<2;ring++) {
+        const width=span*(.25 + strength*.23 + ring*.14);
+        const height=span*(.045 + strength*.045 + ring*.025);
+        fishWake.ellipse(fish.x,fish.y+8+ring*5,width,height)
+          .stroke({color:ring?0x77dce8:0xd7ffff,width:ring?1.2:1.8,alpha:(.36-ring*.11)*strength});
+      }
+      fishWake.moveTo(tailX,fish.y+4)
+        .bezierCurveTo(tailX-span*.16,fish.y-7,tailX-span*.23,fish.y+13,tailX-span*.34,fish.y+6)
+        .stroke({color:0xa4f4fa,width:1.5,alpha:strength*.48});
+    }
+    surfaceBurst.visible=phase==='fighting' && fish.visible && water.surfaceSpray>.12;
+    if(surfaceBurst.visible) {
+      const flicker=.86 + .14*Math.sin(elapsed*13);
+      surfaceBurst.position.set(clamp(fish.x,w*.12,w*.88),horizon+10);
+      surfaceBurst.scale.set(Math.min(w*.24,118)/splashTexture.width*(.5+water.surfaceSpray*.55));
+      surfaceBurst.alpha=water.surfaceSpray*.68*flicker;
+    }
+
     fishingLine.clear();
     if(phase==='waiting'||phase==='fighting'||phase==='bite') {
       // Rod origin is shared with the ballistic cast, so the line stays attached.
       const endX=phase==='fighting'?fish.x:bobber.x;
       const endY=phase==='fighting'?fish.y:bobber.y;
-      const bend=(held?1:-1)*Math.min(38,w*.065);
+      // High tension straightens the line; releasing the reel gives it slack.
+      const tension=phase==='fighting'?clamp(round?.tension??0,0,1):0;
+      const sag=water.lineSag*Math.min(h*.20,94);
+      const dx=endX-startX,dy=endY-startY;
+      const flex=(held?-1:1)*Math.min(w*.055,24)*(1-tension*.5);
       fishingLine.moveTo(startX,startY)
-        .bezierCurveTo(startX+w*.09,horizon-h*.04,endX+bend,horizon+h*.13,endX,endY)
-        .stroke({color:fx>.67?0xffd7a5:0xf1ffff,width:1.8,alpha:.83});
+        .bezierCurveTo(startX+dx*.30,startY+dy*.18+sag*.60,
+          endX-dx*.23+flex,endY-dy*.23+sag,endX,endY)
+        .stroke({color:tension>.78?0xffc7a0:0xf1ffff,width:1.4+tension*.75,alpha:.88});
     }
     const catchAge=elapsed-landingAt;
     splash.visible=!lite && catchAge>=0 && catchAge<.8;
@@ -385,6 +424,9 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     host.dataset.v4BiteDip=surface.biteDip.toFixed(3);
     host.dataset.v4SurfaceRipple=surface.ripple.toFixed(3);
     host.dataset.v4FloatVisible=String(surface.visible);
+    host.dataset.v4LineSag=water.lineSag.toFixed(3);
+    host.dataset.v4WakeStrength=water.wakeStrength.toFixed(3);
+    host.dataset.v4SurfaceSpray=water.surfaceSpray.toFixed(3);
   });
 
   return {
