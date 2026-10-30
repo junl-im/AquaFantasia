@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DEMO_FISH, createCast, hookFish, advanceRound, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
+import { DEMO_FISH, createCast, hookFish, advanceRound, fightImpact, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
 
 function waitForBite(round) {
   let state = round;
@@ -135,4 +135,29 @@ test('drag brake levels lower buildup from the same heavy fish without eliminati
   assert.equal(createCast(fish,67,2,9).brakeLevel,3,'invalid high levels clamp');
   assert.equal(createCast(fish,67,2,NaN).brakeLevel,1,'invalid values fall back');
   assert.ok(b.tension>baseline.tension,'brake does not remove the need to release');
+});
+
+test('fish impact is a deterministic physical pull cue, not a random overlay', () => {
+  const rush = DEMO_FISH.find(f => f.behavior === 'boss');
+  const fish = hookFish({...createCast(rush, 19), phase:'bite'});
+  const statuses=new Set();
+  const active=[];
+  const silent=[];
+  for(let i=0;i<230;i++){
+    const r={...fish,fightElapsed:i*.05};
+    const cue=fightImpact(r);
+    const visual=fishVisualSignal(r);
+    assert.ok(Number.isFinite(cue.strength));
+    assert.ok(cue.strength>=0&&cue.strength<=1);
+    assert.equal(cue.strength,visual.intensity);
+    assert.deepEqual(fightImpact(r),cue);
+    statuses.add(cue.active);
+    (cue.active?active:silent).push(cue.strength);
+  }
+  assert.deepEqual([...statuses].sort(),[false,true]);
+  assert.ok(Math.min(...active)>=0.57);
+  assert.ok(Math.max(...silent)<0.57);
+  assert.equal(fightImpact(createCast(rush,2)).active,false);
+  const heavy=DEMO_FISH.find(f=>f.behavior==='heavy');
+  assert.equal(fightImpact({...fish,fish:heavy}).active,false);
 });

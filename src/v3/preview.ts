@@ -1,9 +1,14 @@
-import { DEMO_FISH, advanceRound, createCast, fishVisualSignal, hookFish, reelAdvice, type FishingRound, type RoundPhase, type ReelAdviceLevel } from './fishingEngine';
+import { DEMO_FISH, advanceRound, createCast, fightImpact, fishVisualSignal, hookFish, reelAdvice, type FishingRound, type RoundPhase, type ReelAdviceLevel } from './fishingEngine';
 import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, emptyCollection, parseCollection, totalCatches, type CollectionState, type RegionId } from './collection';
 import { FISHING_REGIONS, MAX_BRAKE_LEVEL, MAX_ROD_LEVEL, brakeUpgradePrice, canUnlockRegion, fishForRegion, getRegion, nextFishingGoal, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeBrake, tryUpgradeRod } from './progression';
 import './preview.css';
 
 const START_REGION = '잔잔한 해변';
+const WATER_ART: Readonly<Record<RegionId, string>> = {
+  shore: './assets/v101/water/water_clear_calm.webp',
+  'coral-bay': './assets/v101/water/water_coral_reef.webp',
+  'deep-blue': './assets/v101/water/water_abyss_canyon.webp',
+};
 const FAIL_MESSAGES: Record<string, string> = {
   missed: '입질을 놓쳤어요. 다음에는 물었다는 신호에 바로 눌러 주세요.',
   snapped: '줄의 장력이 너무 높았어요. 잠시 손을 떼고 다시 감아 보세요.',
@@ -40,6 +45,7 @@ export function bootAquaFantasia(): void {
         <div class="v3-bubble v3-bubble-three" aria-hidden="true"></div>
         <div class="v3-float" aria-hidden="true"></div>
         <div class="v3-bite-ripples" aria-hidden="true"><span></span><span></span></div>
+        <img class="v3-strike-splash" src="./assets/v205/fishing/water_splash.png" alt="" decoding="async" aria-hidden="true" />
         <div class="v3-bite-window" data-v3-bite-window hidden aria-hidden="true"><span data-v3-bite-fill></span></div>
         <div class="v3-line" data-v3-line aria-hidden="true"></div>
         <img class="v3-fish" data-v3-fish alt="" decoding="async" />
@@ -132,7 +138,7 @@ export function bootAquaFantasia(): void {
   const biteWindow = requiredElement<HTMLElement>(app, '[data-v3-bite-window]');
   const biteFill = requiredElement<HTMLElement>(app, '[data-v3-bite-fill]');
   const sea = requiredElement<HTMLElement>(app, '.v3-sea');
-  sea.style.setProperty('--v3-water-image', `url("${new URL('./assets/v101/water/water_clear_calm.webp', window.location.href).href}")`);
+  sea.style.setProperty('--v3-water-image', `url("${new URL(WATER_ART.shore, window.location.href).href}")`);
   const phaseTag = requiredElement<HTMLElement>(app, '[data-v3-phase-tag]');
   const message = requiredElement<HTMLElement>(app, '[data-v3-message]');
   const detail = requiredElement<HTMLElement>(app, '[data-v3-detail]');
@@ -174,6 +180,7 @@ export function bootAquaFantasia(): void {
     bite: './assets/audio/bite.wav',
     success: './assets/audio/success.wav',
     fail: './assets/audio/fail.wav',
+    strike: './assets/audio/tap.wav',
   } as const;
   type SoundKind = keyof typeof soundFiles;
   const sounds = Object.fromEntries(Object.entries(soundFiles).map(([key, src]) => {
@@ -199,6 +206,9 @@ export function bootAquaFantasia(): void {
   let previousTime = performance.now();
   let lastPaint = 0;
   let lastAdvice: ReelAdviceLevel = 'normal';
+  let lastImpact = false;
+  let lastImpactCue = 'steady';
+  let lastImpactAt = -2000;
   let dexFilter: 'all' | 'found' | 'missing' = 'all';
 
   function readCollection(): CollectionState {
@@ -222,6 +232,8 @@ export function bootAquaFantasia(): void {
     dexButton.textContent = `도감 ${discoveredSpecies(collection)} / ${DEMO_FISH.length}`;
     regionLabel.textContent = `✦ ${getRegion(collection.selectedRegion).name} · 낚싯대 Lv.${collection.rodLevel}`;
     sea.dataset.region = collection.selectedRegion;
+    sea.style.setProperty('--v3-water-image',
+      `url("${new URL(WATER_ART[collection.selectedRegion], window.location.href).href}")`);
   }
 
   function applyVisualMode(): void {
@@ -406,18 +418,37 @@ export function bootAquaFantasia(): void {
     tensionLabel.textContent = `${tension}%`;
     progressLabel.textContent = `${progress}%`;
     const visual = fishVisualSignal(round);
+    const impact = fightImpact(round);
     fishCue.hidden = phase !== 'fighting';
-    fishCue.textContent = visual.cue;
-    sea.dataset.surge = phase === 'fighting' && visual.intensity > 0.65 ? 'true' : 'false';
+    fishCue.textContent = impact.active ? impact.label : visual.cue;
+    sea.dataset.surge = impact.active ? 'true' : 'false';
+    sea.dataset.strike = impact.active && !liteMode && !reducedMotion ? 'true' : 'false';
+    sea.dataset.impact = impact.cue;
+    if (phase === 'fighting' && impact.active && (!lastImpact || lastImpactCue !== impact.cue)) {
+      const now = performance.now();
+      if (now - lastImpactAt >= 1250) {
+        playFeedback('strike');
+        haptic(impact.cue === 'surge' ? [28, 22, 34] : 24);
+        lastImpactAt = now;
+      }
+    }
+    lastImpact = impact.active;
+    lastImpactCue = impact.cue;
     if (phase === 'fighting' && !reducedMotion && !liteMode) {
-      fishImage.style.transform = `translate(calc(-50% + ${Math.round(visual.x * 45)}px), ${Math.round(visual.y * 24)}px) rotate(${visual.rotation.toFixed(1)}deg)`;
-      fishingLine.style.transform = `translateX(-50%) rotate(${(visual.x * 11).toFixed(1)}deg)`;
+      const strikeMotion = impact.active ? 1.25 : 1;
+      const swayX = Math.round(visual.x * 45 * strikeMotion);
+      fishImage.style.transform = `translate(calc(-50% + ${swayX}px), ${Math.round(visual.y * 24)}px) rotate(${visual.rotation.toFixed(1)}deg)`;
+      fishingLine.style.transform = `translateX(-50%) rotate(${(visual.x * (impact.active ? 16 : 11)).toFixed(1)}deg)`;
+      sea.style.setProperty('--v3-strike-x', `${swayX}px`);
     } else {
       fishImage.style.transform = '';
       fishingLine.style.transform = '';
     }
     reelButton.disabled = !['bite', 'fighting'].includes(phase);
-    reelButton.textContent = phase === 'bite' ? '지금 눌러 챔질!' : phase === 'fighting' ? '누르고 릴 감기' : '입질 기다리는 중';
+    reelButton.textContent = phase === 'bite' ? '지금 눌러 챔질!'
+      : phase === 'fighting' ? advice.level === 'danger' ? '위험! 손 떼기'
+        : advice.level === 'ease' ? '잠시 손 떼고 조절' : '누르고 릴 감기'
+        : '입질 기다리는 중';
     castButton.disabled = !['landed', 'escaped'].includes(phase);
     castButton.textContent = phase === 'landed' ? '다음 물고기 낚기'
       : phase === 'escaped' ? '다시 도전하기' : '다시 던지기';
@@ -440,6 +471,7 @@ export function bootAquaFantasia(): void {
     castCount += 1;
     round = createCast(fish, seed, collection.rodLevel, collection.brakeLevel);
     lastPhase = 'ready';
+    lastImpact = false;
     result.hidden = true;
     render();
   }

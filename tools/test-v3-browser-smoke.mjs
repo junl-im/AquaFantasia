@@ -141,6 +141,9 @@ async function main() {
       console.log('[V3 browser] viewport '+w+'x'+h+' PASS; sea '+Math.round(state.sea.height)+'px');
     }
     await nav(390,844,true);
+    const starterSea=await evaluate("({region:document.querySelector('.v3-sea')?.dataset.region,art:document.querySelector('.v3-sea')?.style.getPropertyValue('--v3-water-image'),splash:document.querySelector('.v3-strike-splash')?.getAttribute('src')})");
+    if(starterSea.region!=='shore'||!starterSea.art.includes('water_clear_calm.webp')||!starterSea.splash?.endsWith('water_splash.png'))
+      throw Error('Region/impact raster artwork did not boot: '+JSON.stringify(starterSea));
     await evaluate("document.querySelector('[data-v3-cast]').click(); true");
     await until(()=>evaluate("document.querySelector('[data-v3-fish]').naturalWidth>0"),'PNG fish asset',9000);
     await until(()=>evaluate("document.querySelector('.v3-sea').dataset.phase==='bite'"),'bite animation',8500);
@@ -151,8 +154,8 @@ async function main() {
     const phase=await evaluate('('+reelDown.toString()+')()');
     if(!(await evaluate("document.querySelector('[data-v3-bite-window]').hidden"))) throw Error('Countdown persisted during fight');
     if(phase!=='fighting')throw Error('Touch did not hook fish: '+phase);
-    const coach = await evaluate("({text:document.querySelector('[data-v3-reel-coach]')?.textContent,hidden:document.querySelector('[data-v3-reel-coach]')?.hidden})");
-    if(!coach.text || coach.hidden)throw Error('Reeling advice is not visible during fight');
+    const coach = await evaluate("({text:document.querySelector('[data-v3-reel-coach]')?.textContent,hidden:document.querySelector('[data-v3-reel-coach]')?.hidden,splash:document.querySelector('.v3-strike-splash')?.naturalWidth})");
+    if(!coach.text || coach.hidden || !(coach.splash>0))throw Error('Reeling advice/splash PNG missing: '+JSON.stringify(coach));
     await sleep(320);
     const progress=await evaluate("parseInt(document.querySelector('[data-v3-progress-label]').textContent,10)");
     const unrelatedRelease=await evaluate("window.dispatchEvent(new PointerEvent('pointerup',{bubbles:true,pointerId:34}));window.dispatchEvent(new KeyboardEvent('keyup',{bubbles:true,code:'Space'}));document.querySelector('[data-v3-reel]').classList.contains('is-pressed')");
@@ -203,8 +206,8 @@ async function main() {
     await evaluate("document.querySelector('[data-v3-harbor-toggle]').click();true");
     const brakePersisted=await evaluate("({text:document.querySelector('[data-v3-brake-status]')?.textContent,disabled:document.querySelector('[data-v3-brake-upgrade]')?.disabled})");
     if(!brakePersisted.text?.includes('Lv.2')||!brakePersisted.disabled)throw Error('Brake should persist and the next 680-coin upgrade should be disabled: '+JSON.stringify(brakePersisted));
-    const unlockedConditions=await evaluate("({active:document.querySelector('.v3-harbor-region.is-active .v3-harbor-region-head strong')?.textContent,opened:document.querySelectorAll('.v3-region-opened').length,objective:document.querySelector('[data-v3-harbor-objective]')?.textContent})");
-    if(unlockedConditions.active!=='푸른 심해'||unlockedConditions.opened!==3||!unlockedConditions.objective?.includes('도감 완성까지'))throw Error('Deep blue harbor state not reflected: '+JSON.stringify(unlockedConditions));
+    const unlockedConditions=await evaluate("({active:document.querySelector('.v3-harbor-region.is-active .v3-harbor-region-head strong')?.textContent,opened:document.querySelectorAll('.v3-region-opened').length,objective:document.querySelector('[data-v3-harbor-objective]')?.textContent,sea:document.querySelector('.v3-sea')?.dataset.region,art:document.querySelector('.v3-sea')?.style.getPropertyValue('--v3-water-image')})");
+    if(unlockedConditions.active!=='푸른 심해'||unlockedConditions.opened!==3||!unlockedConditions.objective?.includes('도감 완성까지')||unlockedConditions.sea!=='deep-blue'||!unlockedConditions.art?.includes('water_abyss_canyon.webp'))throw Error('Deep blue harbor state not reflected: '+JSON.stringify(unlockedConditions));
     await capture('harbor-deep-blue-390x844');
     await evaluate("document.querySelector('[data-v3-harbor-close]').click();true");
     await capture('deep-blue-390x844');

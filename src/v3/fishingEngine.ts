@@ -35,6 +35,14 @@ export interface ReelAdvice {
   readonly message: string;
 }
 
+export interface FightImpact {
+  /** Set only while the real physics model reports a meaningful pull burst. */
+  readonly active: boolean;
+  readonly strength: number;
+  readonly cue: 'surge' | 'swerve' | 'wave' | 'steady';
+  readonly label: string;
+}
+
 export interface FishVisualSignal {
   /** Normalized movement used by the UI; independent from screen resolution. */
   readonly x: number;
@@ -125,6 +133,25 @@ export function fishVisualSignal(round: FishingRound): FishVisualSignal {
     case 'boss':
       return { x: wave(1.25) * 0.47, y: wave(2.1) * 0.25, rotation: wave(1.25) * 13, intensity, cue: intensity > 0.6 ? '보스 폭주!' : '심해의 위압감' };
   }
+}
+
+/** Drives audio, splash, line motion and guidance from the very same physical pull. */
+export function fightImpact(round: FishingRound): FightImpact {
+  if (round.phase !== 'fighting') {
+    return { active: false, strength: 0, cue: 'steady', label: '대기' };
+  }
+  const strength = clamp((fishPull(round) - 0.04) / 0.27, 0, 1);
+  const behavior = round.fish.behavior;
+  const isSurge = behavior === 'dart' || behavior === 'trickster' || behavior === 'boss';
+  const active = isSurge ? strength >= 0.57 : behavior === 'wave' && strength >= 0.48;
+  return {
+    active,
+    strength,
+    cue: isSurge ? (behavior === 'trickster' ? 'swerve' : 'surge') : behavior === 'wave' ? 'wave' : 'steady',
+    label: !active ? '장력 유지' : behavior === 'boss' ? '강력한 심해 돌진!'
+      : behavior === 'trickster' ? '방향 급변! 줄을 놓으세요'
+        : behavior === 'dart' ? '급속 돌진! 장력 주의' : '거센 물결! 타이밍을 보세요',
+  };
 }
 
 /** Coaching reads the same deterministic resistance as the actual fishing rules. */
