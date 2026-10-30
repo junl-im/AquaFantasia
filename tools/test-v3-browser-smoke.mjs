@@ -141,8 +141,8 @@ async function main() {
       console.log('[V3 browser] viewport '+w+'x'+h+' PASS; sea '+Math.round(state.sea.height)+'px');
     }
     await nav(390,844,true);
-    const starterSea=await evaluate("({region:document.querySelector('.v3-sea')?.dataset.region,art:document.querySelector('.v3-sea')?.style.getPropertyValue('--v3-water-image'),splash:document.querySelector('.v3-strike-splash')?.getAttribute('src')})");
-    if(starterSea.region!=='shore'||!starterSea.art.includes('water_clear_calm.webp')||!starterSea.splash?.endsWith('water_splash.png'))
+    const starterSea=await evaluate("({region:document.querySelector('.v3-sea')?.dataset.region,art:document.querySelector('.v3-sea')?.style.getPropertyValue('--v3-water-image'),splash:document.querySelector('.v3-strike-splash')?.getAttribute('src'),finalHidden:document.querySelector('[data-v3-last-stand]')?.hidden})");
+    if(starterSea.region!=='shore'||!starterSea.art.includes('water_clear_calm.webp')||!starterSea.splash?.endsWith('water_splash.png')||starterSea.finalHidden!==true)
       throw Error('Region/impact raster artwork did not boot: '+JSON.stringify(starterSea));
     await evaluate("document.querySelector('[data-v3-cast]').click(); true");
     await until(()=>evaluate("document.querySelector('[data-v3-fish]').naturalWidth>0"),'PNG fish asset',9000);
@@ -154,6 +154,7 @@ async function main() {
     const phase=await evaluate('('+reelDown.toString()+')()');
     if(!(await evaluate("document.querySelector('[data-v3-bite-window]').hidden"))) throw Error('Countdown persisted during fight');
     if(phase!=='fighting')throw Error('Touch did not hook fish: '+phase);
+    if(!await evaluate("document.querySelector('[data-v3-last-stand]').hidden"))throw Error('Final boss stage leaked into beginner fish');
     const coach = await evaluate("({text:document.querySelector('[data-v3-reel-coach]')?.textContent,hidden:document.querySelector('[data-v3-reel-coach]')?.hidden,splash:document.querySelector('.v3-strike-splash')?.naturalWidth})");
     if(!coach.text || coach.hidden || !(coach.splash>0))throw Error('Reeling advice/splash PNG missing: '+JSON.stringify(coach));
     await sleep(320);

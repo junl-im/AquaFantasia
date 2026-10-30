@@ -1,4 +1,4 @@
-import { DEMO_FISH, advanceRound, createCast, fightImpact, fishVisualSignal, hookFish, reelAdvice, type FishingRound, type RoundPhase, type ReelAdviceLevel } from './fishingEngine';
+import { DEMO_FISH, advanceRound, bossFinalStand, createCast, fightImpact, fishVisualSignal, hookFish, reelAdvice, type FishingRound, type RoundPhase, type ReelAdviceLevel } from './fishingEngine';
 import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, emptyCollection, parseCollection, totalCatches, type CollectionState, type RegionId } from './collection';
 import { FISHING_REGIONS, MAX_BRAKE_LEVEL, MAX_ROD_LEVEL, brakeUpgradePrice, canUnlockRegion, fishForRegion, getRegion, nextFishingGoal, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeBrake, tryUpgradeRod } from './progression';
 import './preview.css';
@@ -46,6 +46,9 @@ export function bootAquaFantasia(): void {
         <div class="v3-float" aria-hidden="true"></div>
         <div class="v3-bite-ripples" aria-hidden="true"><span></span><span></span></div>
         <img class="v3-strike-splash" src="./assets/v205/fishing/water_splash.png" alt="" decoding="async" aria-hidden="true" />
+        <div class="v3-last-stand" data-v3-last-stand hidden role="status" aria-live="off">
+          <strong>마지막 승부!</strong><span>돌진에 맞춰 릴 버튼을 놓았다 다시 감으세요</span>
+        </div>
         <div class="v3-bite-window" data-v3-bite-window hidden aria-hidden="true"><span data-v3-bite-fill></span></div>
         <div class="v3-line" data-v3-line aria-hidden="true"></div>
         <img class="v3-fish" data-v3-fish alt="" decoding="async" />
@@ -136,6 +139,7 @@ export function bootAquaFantasia(): void {
   const fishingLine = requiredElement<HTMLElement>(app, '[data-v3-line]');
   const fishCue = requiredElement<HTMLElement>(app, '[data-v3-cue]');
   const biteWindow = requiredElement<HTMLElement>(app, '[data-v3-bite-window]');
+  const lastStandBanner = requiredElement<HTMLElement>(app, '[data-v3-last-stand]');
   const biteFill = requiredElement<HTMLElement>(app, '[data-v3-bite-fill]');
   const sea = requiredElement<HTMLElement>(app, '.v3-sea');
   sea.style.setProperty('--v3-water-image', `url("${new URL(WATER_ART.shore, window.location.href).href}")`);
@@ -207,6 +211,7 @@ export function bootAquaFantasia(): void {
   let lastPaint = 0;
   let lastAdvice: ReelAdviceLevel = 'normal';
   let lastImpact = false;
+  let lastFinalStand = false;
   let lastImpactCue = 'steady';
   let lastImpactAt = -2000;
   let dexFilter: 'all' | 'found' | 'missing' = 'all';
@@ -326,7 +331,7 @@ export function bootAquaFantasia(): void {
   }
 
   function haptic(pattern: number | number[]): void {
-    if (reducedMotion || document.hidden) return;
+    if (reducedMotion || liteMode || document.hidden) return;
     try { navigator.vibrate?.(pattern); } catch { /* Optional device feedback. */ }
   }
 
@@ -358,11 +363,15 @@ export function bootAquaFantasia(): void {
       result.hidden = false;
       result.dataset.rarity = caught.rarity;
       result.dataset.discovery = caught.firstDiscovery ? 'new' : caught.newSizeRecord ? 'record' : 'repeat';
-      resultKicker.textContent = caught.firstDiscovery ? '새로운 생물 발견!' : caught.newSizeRecord ? '최고 기록 경신!' : '오늘의 포획';
+      resultKicker.textContent = caught.rarity === 'legendary' ? '전설 등급 포획!'
+        : caught.rarity === 'rare' ? '희귀 등급 포획!'
+          : caught.firstDiscovery ? '새로운 생물 발견!'
+            : caught.newSizeRecord ? '최고 기록 경신!' : '오늘의 포획';
       resultCrest.textContent = caught.rarity === 'legendary' ? '★' : caught.firstDiscovery ? '✦' : '◆';
       resultName.textContent = `${round.fish.name} · ${RARITY_LABELS[caught.rarity]}`;
       resultDetail.textContent = `${caught.lengthCm.toFixed(1)}cm · ${caught.firstDiscovery ? '첫 발견 ✦' : caught.newSizeRecord ? '개인 최고 기록 ↑' : '도감 수집 완료'}`;
-      resultReward.textContent = `+${caught.earnedCoins} 코인 · 장력 최고 ${Math.round(round.peakTension * 100)}%`;
+      resultReward.textContent = `+${caught.earnedCoins} 코인 · ${round.peakTension < 0.7 ? '안정적 포획 보너스' : '장력 최고 ' + Math.round(round.peakTension * 100) + '%'}`;
+      result.dataset.clean = round.peakTension < 0.7 ? 'true' : 'false';
       updateCollectionBadge();
     } else if (phase === 'escaped') {
       stopReeling();
@@ -376,6 +385,9 @@ export function bootAquaFantasia(): void {
     phaseChanged(round.phase);
     const phase = round.phase;
     sea.dataset.phase = phase;
+    const finalStand = bossFinalStand(round);
+    lastStandBanner.hidden = !finalStand;
+    sea.dataset.lastStand = finalStand ? 'true' : 'false';
     biteWindow.hidden = phase !== 'bite';
     if (phase === 'bite') biteFill.style.width = `${Math.max(0, Math.min(100, round.biteWindow / 3.8 * 100))}%`;
     phaseTag.textContent = ({
@@ -424,14 +436,16 @@ export function bootAquaFantasia(): void {
     sea.dataset.surge = impact.active ? 'true' : 'false';
     sea.dataset.strike = impact.active && !liteMode && !reducedMotion ? 'true' : 'false';
     sea.dataset.impact = impact.cue;
-    if (phase === 'fighting' && impact.active && (!lastImpact || lastImpactCue !== impact.cue)) {
+    if (phase === 'fighting' &&
+      ((finalStand && !lastFinalStand) || (impact.active && (!lastImpact || lastImpactCue !== impact.cue)))) {
       const now = performance.now();
       if (now - lastImpactAt >= 1250) {
         playFeedback('strike');
-        haptic(impact.cue === 'surge' ? [28, 22, 34] : 24);
+        haptic(finalStand && !lastFinalStand ? [38, 25, 48] : impact.cue === 'surge' ? [28, 22, 34] : 24);
         lastImpactAt = now;
       }
     }
+    lastFinalStand = finalStand;
     lastImpact = impact.active;
     lastImpactCue = impact.cue;
     if (phase === 'fighting' && !reducedMotion && !liteMode) {
@@ -472,6 +486,7 @@ export function bootAquaFantasia(): void {
     round = createCast(fish, seed, collection.rodLevel, collection.brakeLevel);
     lastPhase = 'ready';
     lastImpact = false;
+    lastFinalStand = false;
     result.hidden = true;
     render();
   }

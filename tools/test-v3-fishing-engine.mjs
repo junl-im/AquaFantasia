@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DEMO_FISH, createCast, hookFish, advanceRound, fightImpact, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
+import { DEMO_FISH, createCast, hookFish, advanceRound, bossFinalStand, fightImpact, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
 
 function waitForBite(round) {
   let state = round;
@@ -160,4 +160,34 @@ test('fish impact is a deterministic physical pull cue, not a random overlay', (
   assert.equal(fightImpact(createCast(rush,2)).active,false);
   const heavy=DEMO_FISH.find(f=>f.behavior==='heavy');
   assert.equal(fightImpact({...fish,fish:heavy}).active,false);
+});
+
+test('final stand activates only on late boss fights and follows actual pull strength', () => {
+  const boss=DEMO_FISH.find(f=>f.behavior==='boss');
+  const normal=DEMO_FISH.find(f=>f.behavior==='steady');
+  const active={...hookFish({...createCast(boss,71,3,2),phase:'bite'}),progress:0.78,tension:0.32,fightElapsed:5.1};
+  assert.equal(bossFinalStand({...active,progress:0.779}),false);
+  assert.equal(bossFinalStand(active),true);
+  assert.equal(bossFinalStand({...active,fish:normal}),false);
+  assert.equal(bossFinalStand({...active,phase:'landed'}),false);
+  assert.equal(fightImpact(active).lastStand,true);
+  assert.equal(fightImpact({...active,progress:0.779}).lastStand,false);
+  const before={...active,progress:0.779};
+  const a=advanceRound(before,.05,true),b=advanceRound(active,.05,true);
+  assert.ok(b.tension>a.tension,'final boss pull should raise tension more strongly');
+  assert.ok((b.progress-active.progress)<(a.progress-before.progress),'final phase should resist reeling');
+  assert.equal(reelAdvice({...active,tension:0.54}).level,'ease');
+  assert.match(reelAdvice({...active,tension:0.54}).title,/최후의 저항/);
+  assert.equal(reelAdvice({...active,tension:0.42}).title,'포획 직전 · 마지막 승부!');
+  assert.ok(advanceRound({...active,tension:0.55},.05,false).tension<0.55,'letting go should ease final tension');
+});
+
+test('result state never marks a finished boss as still in final combat',()=>{
+  const boss=DEMO_FISH.find(f=>f.behavior==='boss');
+  const initial={...createCast(boss,2),phase:'fighting',progress:0.85};
+  assert.equal(fightImpact(initial).lastStand,true);
+  for(const phase of ['landed','escaped','waiting','bite']) {
+    assert.equal(fightImpact({...initial,phase}).lastStand,false);
+    assert.equal(bossFinalStand({...initial,phase}),false);
+  }
 });
