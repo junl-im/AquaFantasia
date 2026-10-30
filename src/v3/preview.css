@@ -1237,3 +1237,20 @@ body.v3-preview-mode #toast-root { display: none !important; }
   .v3-visual-rebuild .v3-center-status {top:4px;padding:3px 6px;}
   .v3-visual-rebuild .v3-console {padding:7px 10px;}
 }
+
+/* V4 review refinement: keep HUD on the right of the visible fisherman, not over his face. */
+.v3-visual-rebuild .v3-center-status {
+  left:49%;
+  right:8px;
+  align-items:flex-end;
+  text-align:right;
+  background:linear-gradient(95deg,transparent,rgba(4,35,54,.58) 52%,rgba(4,35,54,.72));
+}
+.v3-visual-rebuild .v3-center-status h2 {text-align:right;font-size:clamp(14px,3.7vw,20px)}
+.v3-visual-rebuild .v3-center-status p {font-size:clamp(9px,2.25vw,12px);text-align:right}
+@media (max-width:400px) {
+  .v3-visual-rebuild .v3-center-status {left:46%;top:6px;padding:4px 6px;}
+}
+@media (orientation:landscape) and (max-height:540px) {
+  .v3-visual-rebuild .v3-center-status {left:49%;top:3px;padding:2px 4px;}
+}

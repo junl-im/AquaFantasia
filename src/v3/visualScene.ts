@@ -40,9 +40,11 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
   app.canvas.style.pointerEvents = 'none';
   host.prepend(app.canvas);
 
-  const [underwater, boatTexture, fisherTexture, floatTexture, splashTexture] =
+  const [underwater, skyTexture, shadowTexture, boatTexture, fisherTexture, floatTexture, splashTexture] =
     await Promise.all([
       Assets.load<Texture>(path(ART.shore)),
+      Assets.load<Texture>(path('./assets/v12/bg/ocean_portrait.webp')),
+      Assets.load<Texture>(path('./assets/v205/fishing/fish_shadow_common.png')),
       Assets.load<Texture>(path('./assets/v2110/objects/fishing_props/fishing_prop_001.png')),
       Assets.load<Texture>(path('./assets/v2110/character/fisher_walk_frames/fisher_direction_01_frame_01.png')),
       Assets.load<Texture>(path('./assets/art/fishing_float.png')),
@@ -56,6 +58,13 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
   stage.addChild(backdrop);
 
   // Wide bands of sky hide the underwater surface above the horizon.
+  const skyPhoto = new Sprite(skyTexture);
+  skyPhoto.zIndex = 1;
+  stage.addChild(skyPhoto);
+  const skyMask = new Graphics();
+  skyMask.zIndex = 1;
+  stage.addChild(skyMask);
+  skyPhoto.mask = skyMask;
   const sky = new Graphics();
   sky.zIndex = 1;
   stage.addChild(sky);
@@ -69,6 +78,15 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
   const farFish = new Container();
   farFish.zIndex = 4;
   stage.addChild(farFish);
+  const shadows = Array.from({length:3},(_,i)=>{
+    const sprite=new Sprite(shadowTexture);
+    sprite.anchor.set(.5);
+    sprite.alpha = .12 - i*.019;
+    sprite.width=60 + i*19;
+    sprite.scale.y=sprite.scale.x;
+    farFish.addChild(sprite);
+    return {sprite,depth:i};
+  });
   const bubbles = Array.from({ length: 23 }, (_, i) => {
     const g = new Graphics();
     const size = i % 4 === 0 ? 3.8 : i % 3 === 0 ? 2.4 : 1.5;
@@ -154,11 +172,13 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     backdrop.position.set((w-backdrop.width)/2,(h-backdrop.height)/2);
 
     const horizon = h * .235;
-    sky.clear();
-    sky.rect(0,0,w,horizon*.42).fill(0x87d4ec);
-    sky.rect(0,horizon*.42,w,horizon*.36).fill(0x92dced);
-    sky.rect(0,horizon*.78,w,horizon*.22).fill(0x83c9de);
-    sky.ellipse(w*.78,horizon*.36,w*.14,horizon*.32).fill({color:0xffefc2,alpha:.62});
+    const skyScale = Math.max(w / skyTexture.width, horizon / (skyTexture.height*.33));
+    skyPhoto.scale.set(skyScale);
+    skyPhoto.x=(w-skyTexture.width*skyScale)/2;
+    // Crop the hand-painted sky above its existing watercolor horizon.
+    skyPhoto.y=horizon - skyTexture.height*skyScale*.405;
+    skyMask.clear().rect(0,0,w,horizon).fill(0xffffff);
+    sky.clear().rect(0,0,w,horizon).fill({color:0x3e9aae,alpha:.085});
     light.clear();
     for(let i=0;i<5;i++){
       const left=w*(.4+i*.1);
@@ -209,6 +229,10 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     bobber.width=Math.min(54,w*.12); bobber.scale.y=bobber.scale.x;
     bobber.visible=phase==='waiting'||phase==='bite'||phase==='fighting';
 
+    for(const sh of shadows) {
+      sh.sprite.x=w*(.37+sh.depth*.21)+Math.sin(elapsed*(.18+sh.depth*.07)+sh.depth*2)*w*.04;
+      sh.sprite.y=h*(.53+sh.depth*.09)+Math.sin(elapsed*.42+sh.depth*1.9)*7;
+    }
     for(const bubble of bubbles){
       const t=(bubble.offset+elapsed*(lite?.09:.16)+bubble.depth)%1;
       bubble.sprite.x=w*(.1 + ((bubble.offset*2.7)% .8)) + Math.sin(elapsed*.45+bubble.offset*6)*9;
