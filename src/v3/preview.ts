@@ -78,6 +78,11 @@ export function bootAquaFantasia(): void {
           <button type="button" class="v3-harbor-toggle" data-v3-harbor-toggle>항구 · 강화</button>
           <span class="v3-wallet" data-v3-wallet>보유 코인 0</span>
         </div>
+        <div class="v4-sonar" data-v4-sonar data-phase="ready" aria-hidden="true">
+          <div class="v4-sonar-top"><strong>포획 탐지계</strong><span>REEL SONAR</span></div>
+          <div class="v4-sonar-disc"><span class="v4-sonar-point"></span><span class="v4-sonar-center"></span></div>
+          <p class="v4-sonar-note" data-v4-sonar-note>바다를 탐색하는 중</p>
+        </div>
         <div class="v3-meter-block">
           <div class="v3-meter-label"><span>줄 장력</span><strong data-v3-tension-label>10%</strong></div>
           <span class="v3-reel-coach" data-v3-reel-coach data-level="normal" role="status" aria-live="off">입질을 기다리는 중</span>
@@ -163,6 +168,8 @@ export function bootAquaFantasia(): void {
   const progressFill = requiredElement<HTMLElement>(app, '[data-v3-progress]');
   const tensionLabel = requiredElement<HTMLElement>(app, '[data-v3-tension-label]');
   const progressLabel = requiredElement<HTMLElement>(app, '[data-v3-progress-label]');
+  const sonarGauge = requiredElement<HTMLElement>(app, '[data-v4-sonar]');
+  const sonarNote = requiredElement<HTMLElement>(app, '[data-v4-sonar-note]');
   const reelCoach = requiredElement<HTMLElement>(app, '[data-v3-reel-coach]');
   const wallet = requiredElement<HTMLElement>(app, '[data-v3-wallet]');
   const regionLabel = requiredElement<HTMLElement>(app, '[data-v3-region]');
@@ -407,6 +414,14 @@ export function bootAquaFantasia(): void {
     phaseChanged(round.phase);
     const phase = round.phase;
     sea.dataset.phase = phase;
+    sonarGauge.dataset.phase = phase;
+    sonarGauge.style.setProperty('--v4-target-y', `${Math.round(72 - round.progress * 51)}%`);
+    sonarGauge.style.setProperty('--v4-signal', String(Math.round(round.tension * 100)));
+    sonarNote.textContent = phase === 'bite' ? '입질 감지 · 챔질 기회'
+      : phase === 'fighting' ? `포획 ${Math.round(round.progress * 100)}% · 장력 ${Math.round(round.tension * 100)}%`
+        : phase === 'landed' ? '포획 성공 · 기록 완료'
+          : phase === 'escaped' ? '신호 소실 · 다시 도전'
+            : phase === 'waiting' ? '찌 움직임을 탐지 중' : '새로운 바다를 탐색하세요';
     const bossState = bossFinalState(round);
     const finalStand = bossState.pattern !== 'none';
     lastStandBanner.hidden = !finalStand;

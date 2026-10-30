@@ -512,3 +512,76 @@
 /* The buoy art is a white-matted PNG; multiply blends its matte into the blue
    button instead of presenting a rectangular white sticker. */
 .v3-visual-rebuild .v3-cast::before {mix-blend-mode:multiply}
+
+
+/* Dedicated desktop sonar: live data from the SAME fishing round, not a fake meter.
+   This does not consume vertical space on phones. */
+.v4-sonar {display:none}
+@media(min-width:1024px) and (min-height:600px) {
+  .v3-visual-rebuild .v4-sonar {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+    min-height:145px;
+    padding:9px 10px 7px;
+    background:
+      radial-gradient(circle at 50% 76%,rgba(51,142,139,.18),transparent 70%),
+      linear-gradient(130deg,#071e30,#103e4b);
+    border:1px solid #618f97;
+    border-top:2px solid #c6c28a;
+    border-radius:15px 4px 13px 4px;
+    box-shadow:inset 0 0 0 2px rgba(4,26,39,.8),inset 0 2px 1px rgba(224,255,247,.15);
+  }
+  .v3-visual-rebuild .v4-sonar-top {
+    width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;
+  }
+  .v3-visual-rebuild .v4-sonar-top strong {font-size:12px;color:#dcf9e0;letter-spacing:.03em}
+  .v3-visual-rebuild .v4-sonar-top span {font-size:9px;color:#8db5b7;letter-spacing:.09em}
+  .v3-visual-rebuild .v4-sonar-disc {
+    position:relative;
+    width:88px;height:88px;flex:none;overflow:hidden;border-radius:50%;
+    background:
+      linear-gradient(180deg,transparent 49%,rgba(149,226,199,.25) 50%,transparent 51%),
+      linear-gradient(90deg,transparent 49%,rgba(149,226,199,.25) 50%,transparent 51%),
+      repeating-radial-gradient(circle at 50% 50%,rgba(122,225,204,.19) 0 1px,transparent 1px 17px),
+      radial-gradient(circle,#173f4a,#052231 80%);
+    border:2px solid #99c7aa;
+    box-shadow:0 0 0 4px rgba(33,85,83,.55),inset 0 0 12px #030e19;
+  }
+  .v3-visual-rebuild .v4-sonar-disc::before {
+    content:"";position:absolute;inset:-4px;
+    border-radius:50%;
+    background:conic-gradient(from 0deg,transparent 0deg,rgba(110,240,194,.26) 50deg,transparent 92deg 360deg);
+    animation:v4-sonar-sweep 6.5s linear infinite;
+    pointer-events:none;
+  }
+  .v3-visual-rebuild .v4-sonar-point {
+    position:absolute;left:62%;top:var(--v4-target-y,72%);
+    width:8px;height:8px;transform:translate(-50%,-50%);
+    background:#ffe1a0;border:2px solid #fff4c8;border-radius:50%;
+    box-shadow:0 0 5px rgba(245,213,138,.55);
+    transition:top 180ms linear;
+  }
+  .v3-visual-rebuild .v4-sonar[data-phase="fighting"] .v4-sonar-point {
+    background:#e1fbf8;border-color:#ffffff;
+  }
+  .v3-visual-rebuild .v4-sonar[data-phase="landed"] .v4-sonar-point {
+    background:#e5c46b;box-shadow:0 0 8px #f8db85;
+  }
+  .v3-visual-rebuild .v4-sonar-center {
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:3px;height:3px;border-radius:50%;background:#d3fff6;
+  }
+  .v3-visual-rebuild .v4-sonar-note {
+    margin:5px 0 0;color:#bcd6d0;font-size:10px;font-weight:750;line-height:1.2;
+    font-variant-numeric:tabular-nums;max-width:100%;
+  }
+  .v3-visual-rebuild .v3-meter-block {margin-top:0;margin-bottom:0}
+}
+@keyframes v4-sonar-sweep {to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce) {
+  .v3-visual-rebuild .v4-sonar-disc::before {animation:none}
+  .v3-visual-rebuild .v4-sonar-point {transition:none}
+}
+.v3-lite-mode.v3-visual-rebuild .v4-sonar-disc::before {animation:none}
