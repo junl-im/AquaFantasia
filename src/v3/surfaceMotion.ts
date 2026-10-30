@@ -29,7 +29,7 @@ export function surfaceMotion(
   switch(round.phase) {
     case 'waiting': {
       const t = clamp01(age / .68);
-      const lift = Math.sin(t * Math.PI);
+      const lift = t >= 1 ? 0 : Math.sin(t * Math.PI);
       const settle = age >= .59 && age < 1.26
         ? clamp01((age - .59) / .13) * (1 - clamp01((age - .72) / .54))
         : 0;
