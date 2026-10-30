@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DEMO_FISH, createCast, hookFish, advanceRound, bossFinalStand, bossFinalState, fightImpact, landingSignal, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
-import { visualMotion } from '../src/v3/visualMotion.ts';
+import { visualMotion, waterResponse } from '../src/v3/visualMotion.ts';
 import { surfaceMotion } from '../src/v3/surfaceMotion.ts';
 
 function waitForBite(round) {
@@ -349,5 +349,35 @@ test('V4 raster fish fin flex and damped fisher effort are phase-aware and deter
     const m=visualMotion({...fishing,phase},false,.3,2.5,false);
     assert.equal(m.finAmplitude,0,phase);
     assert.equal(m.fisherEffort,0,phase);
+  }
+});
+
+
+test('V4 fishing line slack and underwater wake respond to real pressure without changing rules', () => {
+  const fish=DEMO_FISH.find(f=>f.behavior==='dart');
+  assert.ok(fish);
+  const round={...hookFish({...createCast(fish,140,3),phase:'bite'}),
+    phase:'fighting',progress:.40,tension:.34,fightElapsed:.75};
+  const held=waterResponse(round,true,false);
+  const released=waterResponse(round,false,false);
+  const strained=waterResponse({...round,tension:.91},true,false);
+  const near=waterResponse({...round,progress:.96},true,false);
+  const resting=waterResponse({...round,phase:'waiting'},true,false);
+  const lite=waterResponse({...round,progress:.96},true,true);
+  assert.ok(held.lineSag<released.lineSag,'holding the reel should pull line taut');
+  assert.ok(strained.lineSag<held.lineSag,'higher tension must further straighten line');
+  assert.ok(held.wakeStrength>0 && held.wakeStrength<=1);
+  assert.ok(near.wakeStrength>=held.wakeStrength);
+  assert.ok(near.surfaceSpray>0 && held.surfaceSpray===0);
+  assert.equal(lite.wakeStrength,0);
+  assert.equal(lite.surfaceSpray,0);
+  assert.deepEqual(waterResponse(round,true,false),held,'visual feedback must be deterministic');
+  assert.equal(resting.wakeStrength,0);
+  assert.deepEqual(waterResponse(null,false,false),{lineSag:0,wakeStrength:0,surfaceSpray:0});
+  for(const phase of ['landed','escaped']) {
+    assert.deepEqual(waterResponse({...round,phase},false,false),{lineSag:0,wakeStrength:0,surfaceSpray:0});
+  }
+  for(const state of [held,released,strained,near,lite]) {
+    for(const value of Object.values(state)) assert.ok(Number.isFinite(value) && value>=0 && value<=1);
   }
 });
