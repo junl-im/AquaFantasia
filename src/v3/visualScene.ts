@@ -185,11 +185,12 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
       light.poly([left,horizon+2,left+w*.025,horizon+2,left+w*.18,h,left-w*.13,h])
         .fill({color:0xc9faff,alpha: i%2===0?.047:.025});
     }
-    vessel.position.set(w*.235,horizon + h*.005);
-    const boatW = Math.min(w*.47,255);
+    vessel.position.set(w*.235,horizon + Math.max(14,h*.06));
+    // Respect viewport HEIGHT as well as width: never crop the fisher's head.
+    const boatW = Math.min(w*.43,265,h*.52);
     boat.width = boatW;
     boat.scale.y = boat.scale.x;
-    fisher.height = Math.min(91, Math.max(50,w*.20));
+    fisher.height = Math.min(87,Math.max(40,w*.20),h*.19);
     fisher.scale.x = fisher.scale.y;
     fisher.position.set(-boatW*.04,-boat.height*.15);
     const splashW=Math.min(280,w*.53);
@@ -223,7 +224,7 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     for(let x=0;x<=w+15;x+=20) seaSurface.lineTo(x,horizon+7+Math.sin(x*.021-waveTime*1.1)*3);
     seaSurface.stroke({color:0x95e8ef,width:1.25,alpha:.46});
 
-    vessel.y = horizon + (lite?0:Math.sin(elapsed*1.45)*2.8);
+    vessel.y = horizon + Math.max(14,h*.06) + (lite?0:Math.sin(elapsed*1.45)*2.8);
     vessel.rotation = lite?0:Math.sin(elapsed*1.13)*.013;
     bobber.x=w*.59; bobber.y=horizon + h*.056 + Math.sin(waveTime*2.1)*2;
     bobber.width=Math.min(54,w*.12); bobber.scale.y=bobber.scale.x;
