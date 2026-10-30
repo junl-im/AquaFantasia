@@ -104,6 +104,7 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
 
   let current: StageState = { round: null, held: false, region: 'shore', lite: false };
   let currentImage = '';
+  let fishReady = false;
   let currentRegion: RegionId = 'shore';
   let textureTicket = 0;
   let elapsed = 0;
@@ -129,11 +130,13 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
       currentImage = image;
       const ticket = ++textureTicket;
       fish.visible = false;
+      fishReady = false;
       if (image) void Assets.load<Texture>(path(image)).then((tex) => {
         if (disposed || ticket !== textureTicket) return;
         fish.texture = tex;
+        fishReady = true;
         fish.visible = true;
-      }).catch(() => { fish.visible = false; });
+      }).catch(() => { fishReady = false; fish.visible = false; });
     }
     const phase = round?.phase || 'ready';
     if (phase !== lastPhase) {
@@ -220,7 +223,7 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     const surge=fx>.65;
     if (surge && !oldSurge) strikeAt=elapsed;
     oldSurge=surge;
-    if(round && fish.texture.valid) {
+    if(round && fishReady) {
       const dx=visual?.x??0,dy=visual?.y??0;
       fish.visible=phase==='fighting'||phase==='landed';
       fish.x=w*(.59 + dx*.10);
