@@ -1,6 +1,6 @@
 import { DEMO_FISH, advanceRound, createCast, fishVisualSignal, hookFish, reelAdvice, type FishingRound, type RoundPhase, type ReelAdviceLevel } from './fishingEngine';
 import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, emptyCollection, parseCollection, totalCatches, type CollectionState, type RegionId } from './collection';
-import { FISHING_REGIONS, MAX_ROD_LEVEL, canUnlockRegion, fishForRegion, getRegion, nextFishingGoal, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeRod } from './progression';
+import { FISHING_REGIONS, MAX_BRAKE_LEVEL, MAX_ROD_LEVEL, brakeUpgradePrice, canUnlockRegion, fishForRegion, getRegion, nextFishingGoal, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeBrake, tryUpgradeRod } from './progression';
 import './preview.css';
 
 const START_REGION = '잔잔한 해변';
@@ -108,6 +108,11 @@ export function bootAquaFantasia(): void {
           <p>릴링 속도와 줄의 내구도를 높여 더 강한 물고기를 상대하세요.</p>
           <button type="button" class="v3-harbor-upgrade" data-v3-upgrade>강화하기</button>
         </section>
+        <section class="v3-harbor-gear v3-harbor-brake" aria-label="릴 드래그 브레이크 강화">
+          <strong data-v3-brake-status>드래그 브레이크 Lv.1</strong>
+          <p>물고기가 돌진할 때 릴 감기로 쌓이는 장력을 줄여 줍니다. 줄을 완전히 보호하지는 못해요.</p>
+          <button type="button" class="v3-harbor-brake-upgrade" data-v3-brake-upgrade>브레이크 강화</button>
+        </section>
         <section class="v3-lite-options" aria-label="화면 연출 설정">
           <span><strong>절전 연출</strong><small>저사양 기기용 · 불필요한 애니메이션 감소</small></span>
           <button type="button" data-v3-lite aria-pressed="false">절전 끔</button>
@@ -155,6 +160,8 @@ export function bootAquaFantasia(): void {
   const harborClose = requiredElement<HTMLButtonElement>(app, '[data-v3-harbor-close]');
   const rodStatus = requiredElement<HTMLElement>(app, '[data-v3-rod-status]');
   const upgradeButton = requiredElement<HTMLButtonElement>(app, '[data-v3-upgrade]');
+  const brakeStatus = requiredElement<HTMLElement>(app, '[data-v3-brake-status]');
+  const brakeUpgradeButton = requiredElement<HTMLButtonElement>(app, '[data-v3-brake-upgrade]');
   const regionList = requiredElement<HTMLElement>(app, '[data-v3-region-list]');
   const harborObjective = requiredElement<HTMLElement>(app, '[data-v3-harbor-objective]');
   const liteButton = requiredElement<HTMLButtonElement>(app, '[data-v3-lite]');
@@ -230,6 +237,10 @@ export function bootAquaFantasia(): void {
     rodStatus.textContent = `낚싯대 Lv.${collection.rodLevel} / ${MAX_ROD_LEVEL}`;
     upgradeButton.disabled = price === null || collection.coins < price;
     upgradeButton.textContent = price === null ? '최고 단계 달성!' : `낚싯대 강화 · ${price} 코인`;
+    const brakePrice = brakeUpgradePrice(collection.brakeLevel);
+    brakeStatus.textContent = `드래그 브레이크 Lv.${collection.brakeLevel} / ${MAX_BRAKE_LEVEL} · 장력 상승 ${(collection.brakeLevel - 1) * 8.5}% 감소`;
+    brakeUpgradeButton.disabled = brakePrice === null || collection.coins < brakePrice;
+    brakeUpgradeButton.textContent = brakePrice === null ? '브레이크 최대 강화!' : `브레이크 강화 · ${brakePrice} 코인`;
     const discoveryCount = discoveredSpecies(collection);
     regionList.innerHTML = FISHING_REGIONS.map((region) => {
       const unlocked = collection.unlockedRegions.includes(region.id);
@@ -427,7 +438,7 @@ export function bootAquaFantasia(): void {
     fishImage.src = fish.image;
     castButton.blur();
     castCount += 1;
-    round = createCast(fish, seed, collection.rodLevel);
+    round = createCast(fish, seed, collection.rodLevel, collection.brakeLevel);
     lastPhase = 'ready';
     result.hidden = true;
     render();
@@ -470,6 +481,14 @@ export function bootAquaFantasia(): void {
   });
   upgradeButton.addEventListener('click', () => {
     const updated = tryUpgradeRod(collection);
+    if (updated === collection) return;
+    collection = updated;
+    canSaveCollection = saveCollection();
+    updateCollectionBadge();
+    renderHarbor();
+  });
+  brakeUpgradeButton.addEventListener('click', () => {
+    const updated = tryUpgradeBrake(collection);
     if (updated === collection) return;
     collection = updated;
     canSaveCollection = saveCollection();

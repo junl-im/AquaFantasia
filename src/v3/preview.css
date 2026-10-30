@@ -944,3 +944,16 @@ body.v3-preview-mode #toast-root { display: none !important; }
   .v3-harbor-objective { margin-top: 8px; padding: 8px 10px; }
   .v3-dex-filters button { min-height: 32px; }
 }
+
+/* Separate brake gear slot: distinct restrained chrome, still CSS-only. */
+.v3-harbor-brake {
+  background: linear-gradient(135deg, rgba(29, 73, 104, .82), rgba(11, 49, 76, .87));
+  box-shadow: inset 0 0 0 1px rgba(131, 194, 241, .33);
+}
+.v3-harbor-brake strong { color: #b7eaff; }
+.v3-harbor-dialog button.v3-harbor-brake-upgrade {
+  min-height: 42px;
+  background: linear-gradient(160deg, #b4eaff, #67b9e8);
+  border: 1px solid rgba(186, 234, 255, .58);
+  color: #083951;
+}

@@ -120,3 +120,19 @@ test('surging fish progress more slowly during a strong pull than passive fish',
   assert.ok(nextBoss.progress > 0 && nextSteady.progress > 0);
   assert.ok(nextBoss.progress < nextSteady.progress);
 });
+
+test('drag brake levels lower buildup from the same heavy fish without eliminating risk', () => {
+  const fish = DEMO_FISH.find(f => f.behavior === 'boss');
+  const low = createCast(fish, 67, 2, 1), high = createCast(fish, 67, 2, 3);
+  assert.equal(low.brakeLevel, 1);
+  assert.equal(high.brakeLevel, 3);
+  const baseline = {...hookFish({...low,phase:'bite'}),tension:0.22, fightElapsed:1.1};
+  const improved = {...baseline, brakeLevel:3};
+  const a = advanceRound(baseline,0.05,true);
+  const b = advanceRound(improved,0.05,true);
+  assert.ok(b.tension < a.tension,'brake should reduce load');
+  assert.equal(b.progress,a.progress,'brake should not magically change reel speed');
+  assert.equal(createCast(fish,67,2,9).brakeLevel,3,'invalid high levels clamp');
+  assert.equal(createCast(fish,67,2,NaN).brakeLevel,1,'invalid values fall back');
+  assert.ok(b.tension>baseline.tension,'brake does not remove the need to release');
+});

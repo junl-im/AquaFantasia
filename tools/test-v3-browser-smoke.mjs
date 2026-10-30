@@ -61,11 +61,14 @@ function showHarborAndGrow() {
   if(document.querySelector('[data-v3-region]')?.textContent?.includes('산호빛 만')!==true)
     throw Error('Unlocking coral bay did not move the player');
   click('button[data-v3-region-id="deep-blue"][data-v3-region-action="unlock"]');
+  click('[data-v3-brake-upgrade]');
+  const newBrakeText=document.querySelector('[data-v3-brake-status]')?.textContent;
+  if(!newBrakeText?.includes('Lv.2'))throw Error('Brake upgrade was not applied');
   if(document.querySelector('[data-v3-region]')?.textContent?.includes('푸른 심해')!==true)
     throw Error('Unlocking deep blue did not move the player');
   click('[data-v3-harbor-close]');
   const save=JSON.parse(localStorage.getItem('aquafantasia:v3:collection:v1'));
-  return {rod:save.rodLevel,region:save.selectedRegion,coins:save.coins,
+  return {rod:save.rodLevel,brake:save.brakeLevel,region:save.selectedRegion,coins:save.coins,
     species:Object.keys(save.records).length,legacy:localStorage.getItem('aqua-fantasia-save-v650'),
     lite:localStorage.getItem('aquafantasia:v3:lite:v1'),litePressed,
     liteClass:document.querySelector('.v3-screen').classList.contains('v3-lite-mode')};
@@ -186,18 +189,20 @@ async function main() {
     // Reload returns before the old document is replaced; do not accept stale HUD values.
     await until(()=>evaluate("performance.timeOrigin !== "+priorDocumentOrigin+" && Boolean(document.querySelector('[data-v3-harbor-toggle]')?.offsetWidth) && document.querySelector('[data-v3-wallet]')?.textContent?.includes('2,000')"),'new V3 document and hydrated wallet after reload',12000);
     const grown=await evaluate('('+showHarborAndGrow.toString()+')()');
-    if(grown.rod!==3||grown.region!=='deep-blue'||grown.coins!==250||grown.species!==4||grown.legacy!=='LEGACY_UNTOUCHED'
+    if(grown.rod!==3||grown.brake!==2||grown.region!=='deep-blue'||grown.coins!==10||grown.species!==4||grown.legacy!=='LEGACY_UNTOUCHED'
       ||grown.lite!=='1'||grown.litePressed!=='true'||!grown.liteClass)
       throw Error('Progression / lite setting / legacy save isolation failed: '+JSON.stringify(grown));
     const priorLiteDocumentOrigin=await evaluate('performance.timeOrigin');
     await send('Page.reload',{ignoreCache:true});
-    await until(()=>evaluate("performance.timeOrigin !== "+priorLiteDocumentOrigin+" && document.querySelector('.v3-screen.v3-lite-mode') && Boolean(document.querySelector('[data-v3-harbor-toggle]')?.offsetWidth) && document.querySelector('[data-v3-wallet]')?.textContent?.includes('250')"),'new document and persisted lite mode after browser reload');
+    await until(()=>evaluate("performance.timeOrigin !== "+priorLiteDocumentOrigin+" && document.querySelector('.v3-screen.v3-lite-mode') && Boolean(document.querySelector('[data-v3-harbor-toggle]')?.offsetWidth) && document.querySelector('[data-v3-wallet]')?.textContent?.includes('10')"),'new document and persisted lite mode after browser reload');
     const nextObjective=await evaluate("document.querySelector('[data-v3-hint]')?.textContent");
     if(!nextObjective?.includes('도감 완성까지')||!nextObjective.includes('8종'))
       throw Error('Late-game objective did not update: '+nextObjective);
     if(await evaluate("localStorage.getItem('aqua-fantasia-save-v650')")!=='LEGACY_UNTOUCHED')
       throw Error('Legacy V2 save was unexpectedly modified after reload');
     await evaluate("document.querySelector('[data-v3-harbor-toggle]').click();true");
+    const brakePersisted=await evaluate("({text:document.querySelector('[data-v3-brake-status]')?.textContent,disabled:document.querySelector('[data-v3-brake-upgrade]')?.disabled})");
+    if(!brakePersisted.text?.includes('Lv.2')||!brakePersisted.disabled)throw Error('Brake should persist and the next 680-coin upgrade should be disabled: '+JSON.stringify(brakePersisted));
     const unlockedConditions=await evaluate("({active:document.querySelector('.v3-harbor-region.is-active .v3-harbor-region-head strong')?.textContent,opened:document.querySelectorAll('.v3-region-opened').length,objective:document.querySelector('[data-v3-harbor-objective]')?.textContent})");
     if(unlockedConditions.active!=='푸른 심해'||unlockedConditions.opened!==3||!unlockedConditions.objective?.includes('도감 완성까지'))throw Error('Deep blue harbor state not reflected: '+JSON.stringify(unlockedConditions));
     await capture('harbor-deep-blue-390x844');

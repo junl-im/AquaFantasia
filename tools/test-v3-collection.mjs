@@ -89,3 +89,18 @@ test('original six-species collection upgrades in-place without losing progress'
   assert.deepEqual(added.records.bubble,original.bubble);
   assert.equal(parseCollection(JSON.stringify(added)).selectedRegion,'deep-blue');
 });
+
+test('pre-brake save migrates with zero losses and malformed brake levels reset safely', () => {
+  const legacy = JSON.stringify({version:1,coins:1100,rodLevel:4,
+    unlockedRegions:['shore','coral-bay'],selectedRegion:'coral-bay',
+    records:{bubble:{count:3,bestLengthCm:21,rarest:'uncommon'}}});
+  const migrated=parseCollection(legacy);
+  assert.equal(migrated.brakeLevel,1);
+  assert.equal(migrated.coins,1100);
+  assert.equal(migrated.rodLevel,4);
+  assert.equal(migrated.selectedRegion,'coral-bay');
+  assert.equal(migrated.records.bubble.count,3);
+  assert.equal(parseCollection(JSON.stringify({...migrated,brakeLevel:3})).brakeLevel,3);
+  assert.equal(parseCollection(JSON.stringify({...migrated,brakeLevel:Infinity})).brakeLevel,1);
+  assert.equal(parseCollection(JSON.stringify({...migrated,brakeLevel:999})).brakeLevel,1);
+});

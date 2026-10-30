@@ -16,6 +16,7 @@ export interface FishingRound {
   readonly fish: FishProfile;
   readonly seed: number;
   readonly rodLevel: number;
+  readonly brakeLevel: number;
   readonly elapsed: number;
   readonly fightElapsed: number;
   readonly biteIn: number;
@@ -70,10 +71,11 @@ function seedFraction(seed: number): number {
   return ((Math.imul(normalizedSeed(seed), 1664525) + 1013904223) >>> 0) / 4294967296;
 }
 
-export function createCast(fish: FishProfile, seed = 1, rodLevel = 1): FishingRound {
+export function createCast(fish: FishProfile, seed = 1, rodLevel = 1, brakeLevel = 1): FishingRound {
   return {
     phase: 'waiting', fish, seed: normalizedSeed(seed),
     rodLevel: Number.isSafeInteger(rodLevel) ? clamp(rodLevel, 1, 4) : 1,
+    brakeLevel: Number.isSafeInteger(brakeLevel) ? clamp(brakeLevel, 1, 3) : 1,
     elapsed: 0, fightElapsed: 0, biteIn: 1.2 + seedFraction(seed) * 2.2,
     biteWindow: 3.8, tension: 0.1, progress: 0, fatigue: 0,
     peakTension: 0.1, reason: 'none',
@@ -171,8 +173,10 @@ export function advanceRound(round: FishingRound, seconds: number, holding: bool
   const fatigue = clamp(round.fatigue + (holding ? 0.013 : -0.004) * dt, 0, 1);
   const rodStrength = 1 - (round.rodLevel - 1) * 0.08;
   const reelSpeed = 1 + (round.rodLevel - 1) * 0.12;
+  // Brake reduces line strain under fish surges, but cannot completely remove risk.
+  const brakeSafety = 1 - (round.brakeLevel - 1) * 0.085;
   const tensionChange = holding
-    ? (0.135 + pulling * 0.9 - fatigue * 0.05) * rodStrength * dt
+    ? (0.135 + pulling * 0.9 - fatigue * 0.05) * rodStrength * brakeSafety * dt
     : (-0.3 + pulling * 0.2) * dt;
   const tension = clamp(round.tension + tensionChange, 0, 1.1);
   const isSurgeFish = round.fish.behavior === 'dart' || round.fish.behavior === 'trickster'

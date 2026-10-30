@@ -6,7 +6,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { DEMO_FISH, advanceRound, createCast, hookFish } from '../src/v3/fishingEngine.ts';
 import { emptyCollection, parseCollection } from '../src/v3/collection.ts';
-import { canUnlockRegion, fishForRegion, nextFishingGoal, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeRod } from '../src/v3/progression.ts';
+import { brakeUpgradePrice, canUnlockRegion, fishForRegion, nextFishingGoal, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeBrake, tryUpgradeRod } from '../src/v3/progression.ts';
 
 test('V3 old collection data migrates without losing coins or records', () => {
   const legacy = JSON.stringify({ version: 1, coins: 275, records: { bubble: { count: 4, bestLengthCm: 22.5, rarest: 'rare' } } });
@@ -181,4 +181,23 @@ test('regional rosters cover twelve unique raster assets and valid weighted pool
     assert.ok(fs.existsSync(path.resolve('public',fish.image.slice(2))),fish.image);
     assert.ok(fish.reward>0&&fish.difficulty>0);
   }
+});
+
+test('brake upgrades charge once, cap at three and leave other progress untouched', () => {
+  const initial={...emptyCollection(),coins:5000,rodLevel:3,
+    unlockedRegions:['shore','coral-bay'],selectedRegion:'coral-bay'};
+  const two=tryUpgradeBrake(initial),three=tryUpgradeBrake(two);
+  assert.equal(brakeUpgradePrice(1),240);
+  assert.equal(brakeUpgradePrice(2),680);
+  assert.equal(brakeUpgradePrice(3),null);
+  assert.equal(two.brakeLevel,2);
+  assert.equal(three.brakeLevel,3);
+  assert.equal(three.coins,5000-240-680);
+  assert.equal(tryUpgradeBrake(three),three);
+  assert.equal(initial.brakeLevel,1);
+  assert.equal(three.rodLevel,3);
+  assert.equal(three.selectedRegion,'coral-bay');
+  const cannotAfford={...initial,coins:239};
+  assert.equal(tryUpgradeBrake(cannotAfford),cannotAfford);
+  assert.deepEqual(parseCollection(JSON.stringify(three)),three);
 });

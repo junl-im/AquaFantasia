@@ -30,6 +30,19 @@ export function tryUpgradeRod(state: CollectionState): CollectionState {
   if (price === null || state.coins < price) return state;
   return { ...state, coins: state.coins - price, rodLevel: state.rodLevel + 1 };
 }
+/** Independent brake upgrades reduce sudden tension while reeling; they never alter drops or saves from older versions. */
+export const MAX_BRAKE_LEVEL = 3;
+const BRAKE_UPGRADE_PRICES = [240, 680] as const;
+export function brakeUpgradePrice(level: number): number | null {
+  return Number.isSafeInteger(level) && level >= 1 && level < MAX_BRAKE_LEVEL
+    ? BRAKE_UPGRADE_PRICES[level - 1] : null;
+}
+export function tryUpgradeBrake(state: CollectionState): CollectionState {
+  const price = brakeUpgradePrice(state.brakeLevel);
+  if (price === null || state.coins < price) return state;
+  return { ...state, coins: state.coins - price, brakeLevel: state.brakeLevel + 1 };
+}
+
 export function getRegion(id: RegionId): FishingRegion {
   const region = FISHING_REGIONS.find((candidate) => candidate.id === id);
   if (!region) throw new Error('Unknown fishing region');

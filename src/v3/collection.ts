@@ -34,6 +34,8 @@ export interface CollectionState {
   readonly coins: number;
   readonly records: Readonly<Record<string, FishRecord>>;
   readonly rodLevel: number;
+  /** Drag-brake upgrade. Older V3 saves lacking this property migrate to level 1. */
+  readonly brakeLevel: number;
   readonly unlockedRegions: readonly RegionId[];
   readonly selectedRegion: RegionId;
 }
@@ -48,7 +50,7 @@ export interface CatchResult {
 }
 
 export function emptyCollection(): CollectionState {
-  return { version: 1, coins: 0, records: {}, rodLevel: 1, unlockedRegions: ['shore'], selectedRegion: 'shore' };
+  return { version: 1, coins: 0, records: {}, rodLevel: 1, brakeLevel: 1, unlockedRegions: ['shore'], selectedRegion: 'shore' };
 }
 
 export function discoveredSpecies(state: CollectionState): number {
@@ -67,7 +69,7 @@ export function parseCollection(raw: string | null): CollectionState {
     if (!input || typeof input !== 'object' || !('version' in input) || input.version !== 1) {
       return emptyCollection();
     }
-    const data = input as { coins?: unknown; records?: unknown; rodLevel?: unknown; unlockedRegions?: unknown; selectedRegion?: unknown };
+    const data = input as { coins?: unknown; records?: unknown; rodLevel?: unknown; brakeLevel?: unknown; unlockedRegions?: unknown; selectedRegion?: unknown };
     const coins = typeof data.coins === 'number' && Number.isSafeInteger(data.coins)
       && data.coins >= 0 && data.coins <= 1_000_000_000 ? data.coins : 0;
     const records: Record<string, FishRecord> = {};
@@ -85,6 +87,8 @@ export function parseCollection(raw: string | null): CollectionState {
     const allowed: readonly RegionId[] = ['shore', 'coral-bay', 'deep-blue'];
     const rodLevel = typeof data.rodLevel === 'number' && Number.isSafeInteger(data.rodLevel)
       && data.rodLevel >= 1 && data.rodLevel <= 4 ? data.rodLevel : 1;
+    const brakeLevel = typeof data.brakeLevel === 'number' && Number.isSafeInteger(data.brakeLevel)
+      && data.brakeLevel >= 1 && data.brakeLevel <= 3 ? data.brakeLevel : 1;
     const inputRegions = Array.isArray(data.unlockedRegions) ? data.unlockedRegions : [];
     const unlockedRegions: RegionId[] = ['shore'];
     for (const id of allowed) {
@@ -93,7 +97,7 @@ export function parseCollection(raw: string | null): CollectionState {
     const selectedRegion: RegionId = typeof data.selectedRegion === 'string'
       && unlockedRegions.some((region) => region === data.selectedRegion)
       ? data.selectedRegion as RegionId : 'shore';
-    return { version: 1, coins, records, rodLevel, unlockedRegions, selectedRegion };
+    return { version: 1, coins, records, rodLevel, brakeLevel, unlockedRegions, selectedRegion };
   } catch {
     return emptyCollection();
   }
