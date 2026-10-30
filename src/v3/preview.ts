@@ -78,7 +78,7 @@ export function bootAquaFantasia(): void {
           <button type="button" class="v3-harbor-toggle" data-v3-harbor-toggle>항구 · 강화</button>
           <span class="v3-wallet" data-v3-wallet>보유 코인 0</span>
         </div>
-        <div class="v4-sonar" data-v4-sonar data-phase="ready" aria-hidden="true">
+        <div class="v4-sonar" data-v4-sonar data-phase="ready" style="--v4-target-y:72%" aria-hidden="true">
           <div class="v4-sonar-top"><strong>포획 탐지계</strong><span>REEL SONAR</span></div>
           <div class="v4-sonar-disc"><span class="v4-sonar-point"></span><span class="v4-sonar-center"></span></div>
           <p class="v4-sonar-note" data-v4-sonar-note>바다를 탐색하는 중</p>
