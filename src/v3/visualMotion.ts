@@ -97,3 +97,50 @@ export function waterResponse(
     surfaceSpray: lite ? 0 : clamp(surface * (.18 + impact * .67), 0, .85),
   };
 }
+
+/** A separate V4 rod prop pivots from the fisher's hand instead of following walk frames. */
+export interface RodAction {
+  /** Offset in radians from the rod's forward resting angle. */
+  angle: number;
+  /** Visible bend in [0,1]; only presentation, never modifies the line limit. */
+  flex: number;
+  /** Reel handle turns only while the player actually holds the control. */
+  reelTurn: number;
+}
+
+export function rodAction(
+  round: FishingRound | null,
+  held: boolean,
+  phaseAge: number,
+  elapsed: number,
+  lite: boolean,
+): RodAction {
+  const idle = {angle: .07, flex: 0, reelTurn: 0};
+  if (!round) return idle;
+  switch (round.phase) {
+    case 'waiting': {
+      const t = clamp(phaseAge / .62, 0, 1);
+      if (t >= 1) return idle;
+      return {
+        angle: -.32 + .47*t + (lite ? 0 : .18*Math.sin(t*Math.PI)),
+        flex: (lite ? .025 : .09)*Math.sin(t*Math.PI),
+        reelTurn: 0,
+      };
+    }
+    case 'bite':
+      return {angle: -.18, flex: .12, reelTurn: 0};
+    case 'fighting': {
+      const tension = clamp(round.tension, 0, 1);
+      const impact = clamp(fightImpact(round).strength, 0, 1);
+      return {
+        angle: clamp(.05 + tension*.38 + impact*.07 + (held ? -.04 : .09), -.4, .65),
+        flex: clamp(.08 + tension*.64 + impact*.14, 0, .88),
+        reelTurn: held ? Math.max(0, elapsed) * (lite ? 6 : 11) : 0,
+      };
+    }
+    case 'landed':
+      return {angle: -.36, flex: .05, reelTurn: 0};
+    case 'escaped':
+      return {angle: .20, flex: .02, reelTurn: 0};
+  }
+}
