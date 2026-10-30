@@ -301,6 +301,29 @@ async function main() {
     if(!pixi.canvas||!(pixi.width>0)||!(pixi.height>0)||!pixi.app||pixi.scrollW>pixi.innerW+2)
       throw Error('V4 visual scene failed to mount correctly: '+JSON.stringify(pixi));
     await capture('visual-v4-pixi-390x844');
+    const skins=await evaluate("(()=>{const style=(sel,pseudo)=>{const e=document.querySelector(sel);if(!e)return null;const x=getComputedStyle(e,pseudo);return {bg:x.backgroundImage,border:x.borderTopLeftRadius+'|'+x.borderTopRightRadius,icon:pseudo?x.backgroundImage:undefined}};return {cast:style('.v3-cast'),reel:style('.v3-reel'),dex:style('.v3-dex-toggle'),harbor:style('.v3-harbor-toggle'),castIcon:style('.v3-cast','::before'),reelIcon:style('.v3-reel','::before'),dexIcon:style('.v3-dex-toggle','::before'),harborIcon:style('.v3-harbor-toggle','::before'),frame:style('.v3-console'),tension:style('.v3-tension'),progress:style('.v3-progress')}})()");
+    if(!skins.cast||!skins.reel||skins.cast.bg===skins.reel.bg||
+      skins.cast.border===skins.reel.border||skins.dex.bg===skins.harbor.bg||
+      skins.tension.bg===skins.progress.bg||skins.castIcon?.bg==='none'||
+      skins.reelIcon?.bg==='none'||skins.dexIcon?.bg==='none'||skins.harborIcon?.bg==='none')
+      throw Error('Bespoke V4 button skins must be distinct and illustrated: '+JSON.stringify(skins));
+    await evaluate("document.querySelector('[data-v3-dex-toggle]').click();true");
+    const dexSkin=await evaluate("({open:document.querySelector('[data-v3-dex-dialog]').open,all:getComputedStyle(document.querySelector('[data-v3-dex-filter=all]')).backgroundImage,found:getComputedStyle(document.querySelector('[data-v3-dex-filter=found]')).backgroundImage})");
+    if(!dexSkin.open)throw Error('Custom field-guide frame failed to open');
+    await capture('visual-v4-field-guide-390x844');
+    await evaluate("document.querySelector('[data-v3-dex-filter=found]').click();true");
+    const selectedTab=await evaluate("({selected:document.querySelector('[data-v3-dex-filter=found]').getAttribute('aria-pressed'),bg:getComputedStyle(document.querySelector('[data-v3-dex-filter=found]')).backgroundImage})");
+    if(selectedTab.selected!=='true'||selectedTab.bg===dexSkin.found)
+      throw Error('Distinct discovered-tab pressed skin did not update: '+JSON.stringify(selectedTab));
+    await evaluate("document.querySelector('[data-v3-dex-close]').click();document.querySelector('[data-v3-harbor-toggle]').click();true");
+    const harborSkin=await evaluate("(()=>{const el=document.querySelector('[data-v3-harbor-dialog]');const cards=[...document.querySelectorAll('.v3-harbor-region')];return {open:el.open,regions:cards.map(c=>({biome:c.dataset.v3Biome,bg:getComputedStyle(c).backgroundImage})),rod:getComputedStyle(document.querySelector('[data-v3-upgrade]')).backgroundImage,brake:getComputedStyle(document.querySelector('[data-v3-brake-upgrade]')).backgroundImage,close:getComputedStyle(document.querySelector('[data-v3-harbor-close]')).backgroundImage}})()");
+    if(!harborSkin.open||harborSkin.regions.length!==3||
+      new Set(harborSkin.regions.map(x=>x.bg)).size!==3||
+      harborSkin.rod===harborSkin.brake)
+      throw Error('Harbor must have individual regional and upgrade frames: '+JSON.stringify(harborSkin));
+    await capture('visual-v4-workshop-390x844');
+    await evaluate("document.querySelector('[data-v3-harbor-close]').click();true");
+    console.log('[V3 browser] V4 bespoke cast/reel/navigation, tabs and biome/workshop frames PASS');
     await evaluate("document.querySelector('[data-v3-cast]').click();true");
     await until(()=>evaluate("document.querySelector('.v3-sea')?.dataset.v3ScenePhase==='fighting' || document.querySelector('.v3-sea')?.dataset.v3ScenePhase==='bite'"),'live stage reacts to casting',12000);
     await capture('visual-v4-cast-390x844');

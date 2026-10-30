@@ -2,6 +2,7 @@ import { DEMO_FISH, advanceRound, bossFinalState, createCast, fightImpact, fishV
 import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, emptyCollection, parseCollection, totalCatches, type CollectionState, type RegionId } from './collection';
 import { FISHING_REGIONS, MAX_BRAKE_LEVEL, MAX_ROD_LEVEL, brakeUpgradePrice, canUnlockRegion, fishForRegion, getRegion, nextFishingGoal, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeBrake, tryUpgradeRod } from './progression';
 import './preview.css';
+import './visualControls.css';
 import type { VisualStage } from './visualScene';
 
 const START_REGION = '잔잔한 해변';
@@ -292,7 +293,7 @@ export function bootAquaFantasia(): void {
             <span data-met="${collection.rodLevel >= region.requiredRodLevel}">장비 Lv.${collection.rodLevel}/${region.requiredRodLevel}</span>
             <span data-met="${collection.coins >= region.unlockPrice}">코인 ${collection.coins.toLocaleString('ko-KR')}/${region.unlockPrice.toLocaleString('ko-KR')}</span>
           </div>`;
-      return `<article class="v3-harbor-region ${selected ? 'is-active' : ''}" data-v3-region-ready="${ready}">
+      return `<article class="v3-harbor-region ${selected ? 'is-active' : ''}" data-v3-biome="${region.id}" data-v3-region-ready="${ready}">
         <div class="v3-harbor-region-head"><strong>${region.name}</strong><span class="v3-region-state">${selected ? '낚시 중' : unlocked ? '열림' : ready ? '해금 가능' : '잠김'}</span></div>
         <p class="v3-harbor-region-description">${region.description}</p>
         ${requirements}

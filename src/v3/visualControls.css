@@ -1,0 +1,413 @@
+/* AquaFantasia V4 bespoke control skins.
+   This file is SCOPED to the isolated V4 visual-review screen. Never touches
+   production V3. Each function gets its own artwork, silhouette, and frame.
+   Raster PNG/WebP + CSS only; do not introduce SVG. */
+
+/* Framing material: enamel navigation plate, not the old generic rounded card. */
+.v3-visual-rebuild .v3-top {
+  border: 1px solid #d1b980;
+  border-bottom: 3px solid #6f997e;
+  border-radius: 21px 8px 0 0;
+  background:
+    linear-gradient(110deg,rgba(235,207,145,.10),transparent 32%,rgba(23,111,121,.16) 85%),
+    linear-gradient(174deg,#1b4e62,#0a303e 82%);
+  box-shadow:inset 0 1px 0 rgba(250,242,205,.47),inset 0 -1px 0 rgba(5,17,35,.7),0 3px 12px rgba(0,10,31,.24);
+}
+.v3-visual-rebuild .v3-top::after {
+  content:"";
+  position:absolute;pointer-events:none;right:13px;bottom:5px;
+  width:26px;height:3px;border-radius:3px;
+  background:linear-gradient(90deg,transparent,#c2d9bc,transparent);
+  opacity:.7;
+}
+.v3-visual-rebuild .v3-eyebrow {color:#9de7dd;letter-spacing:.15em}
+.v3-visual-rebuild .v3-region {color:#ffdf9c}
+.v3-visual-rebuild .v3-sea {
+  border:2px solid rgba(128,190,186,.82);
+  border-top:0;
+  border-bottom:4px solid #466e70;
+  border-radius:0 0 16px 16px;
+  box-shadow:inset 0 0 0 1px rgba(232,248,225,.18),0 7px 18px rgba(0,17,38,.37);
+}
+.v3-visual-rebuild .v3-center-status {
+  border-right:2px solid rgba(196,234,205,.34);
+  border-radius:0 8px 8px 0;
+}
+.v3-visual-rebuild .v3-phase-tag {
+  border:1px solid rgba(238,221,150,.6);
+  border-radius:4px 11px 4px 11px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.26);
+}
+
+/* Boat workshop console: layered wood/enamel cheeks; no repeated button skin. */
+.v3-visual-rebuild .v3-console {
+  position:relative;
+  border:1px solid #9eab87;
+  border-top:3px solid #d4ba79;
+  border-bottom:4px solid #204c53;
+  border-radius:11px 11px 23px 23px;
+  background:
+    repeating-linear-gradient(0deg,rgba(255,244,205,.025) 0 2px,transparent 2px 8px),
+    linear-gradient(125deg,#225363,#103746 58%,#0c293a 85%,#194454);
+  box-shadow:inset 0 1px 0 rgba(255,246,214,.28),inset 0 -3px 0 rgba(3,12,23,.33),0 -6px 22px rgba(0,13,30,.33);
+}
+.v3-visual-rebuild .v3-console::before,
+.v3-visual-rebuild .v3-console::after {
+  content:"";position:absolute;pointer-events:none;
+  bottom:10px;width:3px;height:50%;opacity:.7;
+  background:linear-gradient(180deg,transparent,#d2bb85,transparent);
+}
+.v3-visual-rebuild .v3-console::before {left:4px}
+.v3-visual-rebuild .v3-console::after {right:4px}
+
+/* Independently tooled small controls. Respect the existing programmatic labels. */
+.v3-visual-rebuild button:focus-visible,
+.v3-visual-rebuild .v3-dex-dialog button:focus-visible,
+.v3-visual-rebuild .v3-harbor-dialog button:focus-visible {
+  outline:3px solid #fff6c0 !important;outline-offset:3px;
+}
+.v3-visual-rebuild .v3-sound {
+  position:relative;white-space:nowrap;
+  padding:5px 11px 5px 28px!important;
+  border:1px solid #8accd1!important;border-radius:14px 5px 13px 5px!important;
+  color:#d8fff7!important;
+  background:linear-gradient(130deg,#277884,#164856 72%,#173846)!important;
+  box-shadow:inset 0 1px 0 rgba(242,255,255,.4),0 2px 0 rgba(3,22,30,.5)!important;
+}
+.v3-visual-rebuild .v3-sound::before {
+  content:"♪";position:absolute;left:10px;top:50%;
+  transform:translateY(-55%);font-size:17px;color:#ffe7a7;
+}
+.v3-visual-rebuild .v3-sound[aria-pressed="false"] {
+  border-color:#718c98!important;color:#b7cbd4!important;
+  background:linear-gradient(130deg,#445965,#293b4d)!important;
+}
+.v3-visual-rebuild .v3-sound[aria-pressed="false"]::before {content:"×";color:#c8d4dc}
+
+/* Field guide: sea-green enamel tab, separate PNG badge. */
+.v3-visual-rebuild .v3-dex-toggle {
+  position:relative;min-width:0;padding:7px 10px 7px 34px!important;
+  border:1px solid #8ae2c8!important;
+  border-radius:13px 4px 13px 4px!important;
+  background:linear-gradient(145deg,#227f80,#146173 58%,#0e495e)!important;
+  color:#effff5!important;font-size:11px!important;letter-spacing:-.02em;
+  box-shadow:inset 0 2px 0 rgba(225,255,248,.35),inset 0 -3px 0 rgba(3,43,53,.52),0 3px 0 #073647!important;
+}
+.v3-visual-rebuild .v3-dex-toggle::before {
+  content:"";position:absolute;top:50%;left:5px;
+  width:25px;height:25px;transform:translateY(-50%);
+  background:url("./../../public/assets/v12/icons/fish_card_common.png") center/contain no-repeat;
+  pointer-events:none;
+}
+/* Harbor: iron-riveted, weathered bronze, unique chest insignia. */
+.v3-visual-rebuild .v3-harbor-toggle {
+  position:relative;min-width:0;padding:7px 9px 7px 33px!important;
+  border:1px solid #e8bf77!important;border-radius:4px 14px 4px 14px!important;
+  background:linear-gradient(145deg,#947348,#7c543a 58%,#513a30)!important;
+  color:#fff4db!important;font-size:11px!important;
+  box-shadow:inset 0 2px 0 rgba(255,239,199,.34),inset 0 -3px 0 #4d332a,0 3px 0 #182a31!important;
+}
+.v3-visual-rebuild .v3-harbor-toggle::before {
+  content:"";position:absolute;top:50%;left:4px;
+  width:26px;height:26px;transform:translateY(-50%);
+  background:url("./../../public/assets/v205/fishing/treasure_chest.png") center/contain no-repeat;
+  pointer-events:none;
+}
+.v3-visual-rebuild .v3-wallet {
+  position:relative;white-space:nowrap;flex-shrink:0;
+  padding:5px 9px 5px 16px;
+  border:1px solid rgba(241,204,125,.55);
+  border-radius:3px 11px 3px 11px;
+  background:linear-gradient(120deg,rgba(106,80,44,.68),rgba(35,61,59,.55));
+  color:#ffe9a6;font-size:11px;
+  box-shadow:inset 0 1px 0 rgba(255,237,182,.16);
+}
+.v3-visual-rebuild .v3-wallet::before {
+  content:"";position:absolute;left:7px;top:50%;
+  transform:translateY(-50%);width:4px;height:4px;
+  border-radius:50%;background:#ffdd82;
+}
+
+/* Pressure gauge = riveted steel with explicit warning zones.
+   Catch progress = pearl-blue engraved channel; not the same frame. */
+.v3-visual-rebuild .v3-meter-block {
+  gap:4px;padding:8px 11px 9px;
+  background:linear-gradient(160deg,rgba(5,23,34,.79),rgba(15,60,67,.75));
+  border:1px solid rgba(126,183,182,.5);
+  border-radius:10px 4px 12px 4px;
+  box-shadow:inset 0 1px 0 rgba(234,255,240,.13),0 2px 0 rgba(0,19,27,.3);
+}
+.v3-visual-rebuild .v3-meter-label:first-child span {color:#ffcfab}
+.v3-visual-rebuild .v3-meter-label:nth-of-type(2) span {color:#a6f6ee}
+.v3-visual-rebuild .v3-tension {
+  height:13px;border:1px solid #ab7660;border-radius:3px;
+  background:repeating-linear-gradient(90deg,#362d31 0 11%,#493536 11% 12.5%);
+  box-shadow:inset 0 2px 5px #180e12,0 1px 0 rgba(255,193,157,.37);
+}
+.v3-visual-rebuild .v3-tension > span {
+  border-radius:2px 1px 1px 2px;
+  background:linear-gradient(90deg,#4fd9ad 0%,#d6b55d 50%,#ef7d61 77%,#d54b61 100%);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.4),inset 0 -2px 0 rgba(40,11,16,.23);
+}
+.v3-visual-rebuild .v3-tension > span.is-danger {
+  background:repeating-linear-gradient(115deg,#e35c58 0 10px,#f2a46c 10px 17px);
+  box-shadow:0 0 8px rgba(246,104,88,.65),inset 0 1px 0 rgba(255,231,213,.35);
+}
+.v3-visual-rebuild .v3-progress {
+  height:11px;border:1px solid #609da5;border-radius:10px 3px 10px 3px;
+  background:linear-gradient(180deg,#051e34,#153c52);
+  box-shadow:inset 0 2px 5px #051c26,0 1px 0 rgba(142,246,240,.31);
+}
+.v3-visual-rebuild .v3-progress > span {
+  border-radius:10px 2px 8px 2px;
+  background:linear-gradient(90deg,#2477a2,#3abdc3 52%,#bbf6dc);
+  box-shadow:inset 0 1px 1px rgba(236,255,255,.45);
+}
+.v3-visual-rebuild .v3-reel-coach {
+  align-self:flex-start;border-radius:3px 9px 3px 9px;
+  border:1px solid #70c7bd;
+  background:#9ce6d3;color:#083b47;
+  padding:4px 8px;line-height:1.2;
+}
+.v3-visual-rebuild .v3-reel-coach[data-level="ease"] {
+  background:#ffdfa2;border-color:#c39153;color:#513726;
+}
+.v3-visual-rebuild .v3-reel-coach[data-level="danger"] {
+  background:#f18f84;border-color:#ffd1a2;color:#4b1725;
+}
+
+/* Main action 1 = blue sea-glass cast lever, with buoy artwork.
+   Main action 2 = brass mechanical reel, with its OWN rod icon and press depth. */
+.v3-visual-rebuild .v3-controls {grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:8px}
+.v3-visual-rebuild .v3-cast {
+  position:relative;isolation:isolate;overflow:hidden;
+  min-height:67px;padding:8px 6px 8px 39px!important;
+  border:2px solid #93dfe4!important;
+  border-bottom:5px solid #194e73!important;
+  border-radius:18px 5px 16px 5px!important;
+  background:linear-gradient(145deg,#51bed1 0%,#277aa5 45%,#145b87 75%,#143d65)!important;
+  color:#f6fffe!important;text-shadow:0 1px 2px #09344f;
+  box-shadow:inset 0 2px 0 rgba(246,255,255,.63),inset 0 -2px 0 rgba(3,39,66,.45),0 4px 0 #092d4a!important;
+}
+.v3-visual-rebuild .v3-cast::before {
+  content:"";position:absolute;left:0;top:50%;
+  transform:translateY(-50%);
+  width:44px;height:48px;
+  background:url("./../../public/assets/art/fishing_float.png") center/contain no-repeat;
+  pointer-events:none;z-index:-1;
+}
+.v3-visual-rebuild .v3-cast:active:not(:disabled) {
+  transform:translateY(3px);box-shadow:inset 0 2px 3px rgba(6,50,75,.48),0 1px 0 #092d4a!important;
+}
+.v3-visual-rebuild .v3-reel {
+  position:relative;isolation:isolate;overflow:hidden;
+  min-height:67px;padding:8px 6px 8px 37px!important;
+  border:2px solid #ffdf9c!important;
+  border-bottom:5px solid #ad6739!important;
+  border-radius:5px 18px 5px 18px!important;
+  background:linear-gradient(150deg,#ffe6a2 0%,#f1be69 36%,#ca8548 83%,#a85c38)!important;
+  color:#342825!important;text-shadow:0 1px 0 rgba(255,245,215,.49);
+  box-shadow:inset 0 2px 0 rgba(255,249,228,.8),inset 0 -2px 0 rgba(92,36,17,.3),0 4px 0 #57382e!important;
+}
+.v3-visual-rebuild .v3-reel::before {
+  content:"";position:absolute;left:4px;top:50%;width:31px;height:39px;
+  background:url("./../../public/assets/v12/icons/rod.png") center/contain no-repeat;
+  transform:translateY(-50%) rotate(-13deg);
+  pointer-events:none;opacity:.91;
+}
+.v3-visual-rebuild .v3-reel.is-pressed {
+  transform:translateY(3px);
+  filter:saturate(1.2)!important;
+  box-shadow:inset 0 3px 7px rgba(98,46,16,.28),0 1px 0 #57382e!important;
+}
+.v3-visual-rebuild .v3-reel.is-warning:not(:disabled) {
+  border-color:#ffd1a5!important;border-bottom-color:#8c3940!important;
+  background:linear-gradient(140deg,#ffbd8e,#e97774 50%,#b34857)!important;
+  color:#441d25!important;
+  box-shadow:inset 0 1px 0 #fff0d4,0 3px 0 #703c43!important;
+}
+.v3-visual-rebuild .v3-cast:disabled,
+.v3-visual-rebuild .v3-reel:disabled {filter:saturate(.5);opacity:.57}
+.v3-visual-rebuild .v3-hint {color:#b5d6cf}
+
+/* Result frame is a treasure plaque, not an enlarged ordinary HUD card. */
+.v3-visual-rebuild .v3-result:not([hidden]) {
+  border:3px ridge #f6d891;
+  border-radius:16px 5px 17px 5px;
+  background:
+    radial-gradient(ellipse at 50% 4%,rgba(147,246,239,.23),transparent 64%),
+    linear-gradient(145deg,rgba(14,77,96,.97),rgba(7,32,59,.97) 75%);
+  box-shadow:inset 0 0 0 2px rgba(248,238,181,.2),0 16px 30px rgba(0,15,27,.55);
+}
+.v3-visual-rebuild .v3-result[data-rarity="legendary"]:not([hidden]) {
+  border-color:#ffda81;
+  background:radial-gradient(ellipse at 50% 0%,rgba(250,218,133,.25),transparent 75%),linear-gradient(145deg,#583e64,#122e50);
+}
+.v3-visual-rebuild .v3-result[data-rarity="rare"]:not([hidden]) {
+  border-color:#ceaeec;
+  background:radial-gradient(ellipse at 50% 0%,rgba(196,144,253,.21),transparent 75%),linear-gradient(145deg,#34456b,#11274d);
+}
+
+/* Field guide: parchment-teal opening cover; independent close hatch and tabs. */
+.v3-visual-rebuild .v3-dex-dialog {
+  border:3px double #9adacc;
+  border-radius:20px 5px 20px 5px;
+  background:linear-gradient(145deg,#225a63,#0c3c55 52%,#082938);
+  box-shadow:inset 0 0 0 3px rgba(14,56,72,.8),0 20px 68px rgba(0,9,22,.8);
+  scrollbar-width:thin;scrollbar-color:#69b7aa #113e4b;
+}
+.v3-visual-rebuild .v3-dex-dialog .v3-dex-header {
+  border-bottom:1px solid rgba(157,229,206,.5);padding-bottom:9px;
+}
+.v3-visual-rebuild .v3-dex-dialog .v3-dex-header h2 {color:#e4fff1}
+.v3-visual-rebuild .v3-dex-dialog .v3-dex-close {
+  border:1px solid #a1e5dc!important;border-radius:18px 4px 18px 4px!important;
+  background:linear-gradient(135deg,#3c8993,#176279)!important;color:white!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4)!important;
+}
+.v3-visual-rebuild .v3-dex-dialog .v3-dex-filters {gap:5px}
+.v3-visual-rebuild .v3-dex-dialog [data-v3-dex-filter] {
+  min-height:34px;min-width:0;border:1px solid #638a91!important;
+  background:linear-gradient(150deg,#225269,#123949)!important;
+  color:#d3e8e4!important;font-size:12px!important;
+  box-shadow:inset 0 1px 0 rgba(240,255,252,.12)!important;
+}
+.v3-visual-rebuild .v3-dex-dialog [data-v3-dex-filter="all"] {border-radius:11px 3px 5px 3px!important}
+.v3-visual-rebuild .v3-dex-dialog [data-v3-dex-filter="found"] {border-radius:3px 3px 11px 11px!important}
+.v3-visual-rebuild .v3-dex-dialog [data-v3-dex-filter="missing"] {border-radius:3px 11px 3px 5px!important}
+.v3-visual-rebuild .v3-dex-dialog [data-v3-dex-filter="all"][aria-pressed="true"] {
+  background:linear-gradient(150deg,#a2e5bd,#519e92)!important;color:#053846!important;border-color:#caf5cb!important;
+}
+.v3-visual-rebuild .v3-dex-dialog [data-v3-dex-filter="found"][aria-pressed="true"] {
+  background:linear-gradient(150deg,#e8d69e,#b7a36b)!important;color:#3d3929!important;border-color:#f4e7bd!important;
+}
+.v3-visual-rebuild .v3-dex-dialog [data-v3-dex-filter="missing"][aria-pressed="true"] {
+  background:linear-gradient(150deg,#c6b6dc,#806eaa)!important;color:#1c2344!important;border-color:#d8c9eb!important;
+}
+.v3-visual-rebuild .v3-dex-dialog .v3-dex-card.is-discovered {
+  border:1px solid rgba(198,233,193,.48);border-radius:13px 3px 13px 3px;
+  background:linear-gradient(145deg,rgba(68,134,125,.48),rgba(11,55,69,.82));
+  box-shadow:inset 0 1px 0 rgba(208,248,223,.17);
+}
+.v3-visual-rebuild .v3-dex-dialog .v3-dex-card.is-unknown {
+  border:1px dashed rgba(161,191,188,.35);border-radius:4px 13px 4px 13px;
+  background:linear-gradient(145deg,rgba(44,65,75,.62),rgba(12,38,56,.78));
+}
+
+/* Harbor: bronze workshop manual, controls carved differently from field guide. */
+.v3-visual-rebuild .v3-harbor-dialog {
+  border:3px ridge #d3a86f;border-radius:5px 24px 5px 24px;
+  color:#fff5e4;
+  background:linear-gradient(145deg,#544232,#173d4a 38%,#0c2639 85%);
+  box-shadow:inset 0 0 0 3px rgba(225,183,110,.15),0 23px 70px rgba(0,10,24,.8);
+  scrollbar-width:thin;scrollbar-color:#c69f69 #1c3a45;
+}
+.v3-visual-rebuild .v3-harbor-dialog .v3-dex-header {
+  border-bottom:2px solid rgba(225,187,125,.44);padding-bottom:9px;
+}
+.v3-visual-rebuild .v3-harbor-dialog .v3-dex-header h2 {color:#ffe1a6}
+.v3-visual-rebuild .v3-harbor-dialog .v3-dex-close {
+  border:1px solid #f2cf94!important;border-radius:4px 14px 4px 14px!important;
+  background:linear-gradient(135deg,#a0774e,#664631)!important;color:#fff3d9!important;
+  box-shadow:inset 0 1px 0 rgba(255,236,195,.33)!important;
+}
+.v3-visual-rebuild .v3-harbor-dialog .v3-harbor-gear {
+  position:relative;padding:13px 13px 13px 53px;
+  border:1px solid #80b9ae;border-radius:12px 3px 12px 3px;
+  background:linear-gradient(130deg,#285c65,#154052 75%);
+  box-shadow:inset 0 1px 0 rgba(220,255,242,.16);
+}
+.v3-visual-rebuild .v3-harbor-dialog .v3-harbor-gear::before {
+  content:"";position:absolute;top:13px;left:10px;width:36px;height:45px;
+  background:url("./../../public/assets/v12/icons/rod.png") center/contain no-repeat;
+  filter:drop-shadow(0 2px 3px rgba(2,16,33,.4));
+  pointer-events:none;
+}
+.v3-visual-rebuild .v3-harbor-dialog .v3-harbor-brake {
+  border:1px solid #d4b07c;border-radius:3px 12px 3px 12px;
+  background:linear-gradient(130deg,#5f5044,#284b55 72%);
+}
+.v3-visual-rebuild .v3-harbor-dialog .v3-harbor-brake::before {
+  background-image:url("./../../public/assets/v205/fishing/gauge_vertical.png");
+}
+.v3-visual-rebuild .v3-harbor-dialog [data-v3-upgrade] {
+  border:1px solid #c4f0cc!important;border-radius:11px 3px 11px 3px!important;
+  background:linear-gradient(145deg,#a4e1b0,#5cae95)!important;color:#103d43!important;
+  box-shadow:inset 0 1px 0 #efffe7,0 2px 0 #22544f!important;
+}
+.v3-visual-rebuild .v3-harbor-dialog [data-v3-brake-upgrade] {
+  border:1px solid #ffdda2!important;border-radius:3px 12px 3px 12px!important;
+  background:linear-gradient(145deg,#ffdda4,#bc9360)!important;color:#4a3324!important;
+  box-shadow:inset 0 1px 0 #fff2d5,0 2px 0 #67452e!important;
+}
+.v3-visual-rebuild .v3-harbor-dialog .v3-lite-options {
+  border:1px solid #638e9a;border-radius:12px 4px 12px 4px;
+  background:linear-gradient(130deg,#183c53,#284859);
+}
+.v3-visual-rebuild .v3-harbor-dialog [data-v3-lite] {
+  border:1px solid #8197a3!important;border-radius:18px!important;
+  background:linear-gradient(135deg,#465f6b,#2d4553)!important;color:#e0eff1!important;
+}
+.v3-visual-rebuild .v3-harbor-dialog [data-v3-lite][aria-pressed="true"] {
+  border-color:#a9e5d9!important;background:linear-gradient(135deg,#6eb9a6,#36786d)!important;color:#073d3d!important;
+}
+/* Three different biome frames: sand, coral and abyss enamel. */
+.v3-visual-rebuild .v3-harbor-region[data-v3-biome="shore"] {
+  border:1px solid #d6c18a;border-radius:14px 3px 10px 3px;
+  background:linear-gradient(155deg,#606755,#254b54 76%);
+}
+.v3-visual-rebuild .v3-harbor-region[data-v3-biome="coral-bay"] {
+  border:1px solid #d5a2b5;border-radius:3px 15px 3px 12px;
+  background:linear-gradient(145deg,#634d69,#253957 73%);
+}
+.v3-visual-rebuild .v3-harbor-region[data-v3-biome="deep-blue"] {
+  border:1px solid #729bc4;border-radius:13px 13px 4px 4px;
+  background:linear-gradient(145deg,#263d70,#101e45 80%);
+}
+.v3-visual-rebuild .v3-harbor-region.is-active {
+  box-shadow:inset 0 0 0 2px rgba(225,255,207,.7),0 3px 15px rgba(96,237,199,.13);
+}
+.v3-visual-rebuild .v3-harbor-region[data-v3-region-ready="true"]:not(.is-active) {
+  box-shadow:inset 0 0 0 1px rgba(232,243,192,.25);
+}
+.v3-visual-rebuild .v3-harbor-dialog [data-v3-region-action="select"] {
+  border:1px solid #b0e3da!important;border-radius:13px 3px 13px 3px!important;
+  background:linear-gradient(140deg,#83d3c5,#378f9f)!important;color:#103746!important;
+}
+.v3-visual-rebuild .v3-harbor-dialog [data-v3-region-action="unlock"] {
+  border:1px solid #edd2a0!important;border-radius:3px 13px 3px 13px!important;
+  background:linear-gradient(140deg,#e8c47b,#ab8253)!important;color:#453224!important;
+}
+.v3-visual-rebuild .v3-harbor-dialog [data-v3-region-action="unlock"]:disabled {
+  background:linear-gradient(145deg,#636d73,#3c4b58)!important;
+  color:#b7c6c9!important;border-color:#7c8a93!important;
+}
+.v3-visual-rebuild .v3-harbor-dialog button:active:not(:disabled),
+.v3-visual-rebuild .v3-dex-dialog button:active:not(:disabled) {transform:translateY(1px)}
+.v3-visual-rebuild .v3-harbor-dialog button:disabled {opacity:.52}
+
+/* Modest one-screen tuning: no cut off controls, no scrollbars in the main game. */
+@media(max-width:400px) {
+  .v3-visual-rebuild .v3-console {padding:8px 8px 10px;gap:5px}
+  .v3-visual-rebuild .v3-console-top {gap:4px}
+  .v3-visual-rebuild .v3-dex-toggle,
+  .v3-visual-rebuild .v3-harbor-toggle {font-size:10px!important;padding-left:28px!important;padding-right:6px!important}
+  .v3-visual-rebuild .v3-dex-toggle::before,
+  .v3-visual-rebuild .v3-harbor-toggle::before {width:22px;height:22px;left:3px}
+  .v3-visual-rebuild .v3-wallet {font-size:10px;padding:4px 5px 4px 12px}
+  .v3-visual-rebuild .v3-cast,.v3-visual-rebuild .v3-reel {min-height:53px;font-size:12px!important}
+  .v3-visual-rebuild .v3-cast {padding-left:32px!important}
+  .v3-visual-rebuild .v3-cast::before {width:35px;height:37px}
+  .v3-visual-rebuild .v3-reel {padding-left:31px!important}
+  .v3-visual-rebuild .v3-reel::before {width:27px;height:34px;left:3px}
+}
+@media(orientation:landscape) and (max-height:540px) {
+  .v3-visual-rebuild .v3-console {gap:4px;padding:7px 9px}
+  .v3-visual-rebuild .v3-console-top {gap:4px}
+  .v3-visual-rebuild .v3-cast,.v3-visual-rebuild .v3-reel {min-height:45px}
+  .v3-visual-rebuild .v3-meter-block {gap:3px;padding:5px 8px}
+  .v3-visual-rebuild .v3-wallet {padding:4px 6px}
+}
+@media(prefers-reduced-motion:reduce) {
+  .v3-visual-rebuild button,.v3-visual-rebuild button::before {transition:none!important}
+}
