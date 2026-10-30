@@ -1040,3 +1040,60 @@ body.v3-preview-mode #toast-root { display: none !important; }
   .v3-last-stand:not([hidden]) { bottom: 8px; padding: 6px 8px; max-width: 40%; }
   .v3-last-stand span { font-size: 9px; }
 }
+
+/* Boss-specific motion and physical catch reveal use existing raster fish artwork. */
+.v3-sea[data-last-stand="true"][data-boss-phase="surge"] .v3-last-stand {
+  border-color: rgba(255, 161, 128, .95);
+  background: linear-gradient(155deg, rgba(103, 36, 52, .94), rgba(51, 32, 73, .94));
+}
+.v3-sea[data-boss-pattern="crystal-flurry"][data-last-stand="true"] .v3-last-stand strong { color: #e2edff; }
+.v3-sea[data-boss-pattern="abyss-undertow"][data-last-stand="true"] .v3-last-stand strong { color: #ffddb7; }
+.v3-result:not([hidden]) {
+  z-index: 4;
+  bottom: 3%;
+  width: min(88%, 340px);
+  max-height: 96%;
+  box-sizing: border-box;
+  padding: 9px 11px;
+  gap: 2px;
+  animation: v3-catch-reveal 470ms cubic-bezier(.2, .8, .3, 1) both;
+}
+.v3-result-fish {
+  width: min(62%, 175px);
+  height: clamp(48px, 10.5vh, 80px);
+  min-height: 0;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 7px rgba(0, 16, 35, .38));
+  pointer-events: none;
+}
+.v3-result[data-rarity="legendary"] .v3-result-fish {
+  filter: drop-shadow(0 0 14px rgba(255, 212, 124, .62));
+}
+.v3-result[data-rarity="rare"] .v3-result-fish {
+  filter: drop-shadow(0 0 11px rgba(195, 171, 255, .48));
+}
+.v3-sea[data-phase="landed"] .v3-center-status { visibility: hidden; }
+.v3-result:not([hidden]) strong[data-v3-result-name] {
+  font-size: clamp(15px, 3.7vw, 22px);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.v3-result:not([hidden]) .v3-result-crest {
+  font-size: 15px;
+  line-height: 1;
+}
+.v3-result:not([hidden]) .v3-result-detail { font-size: 12px; }
+.v3-result:not([hidden]) span[data-v3-result-reward] { font-size: 11px; }
+@keyframes v3-catch-reveal {
+  from { opacity: 0; transform: translate(-50%, 12px) scale(.94); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+@media (max-height: 620px) {
+  .v3-result-fish { height: clamp(38px, 9vh, 53px); }
+  .v3-result:not([hidden]) { padding: 6px 10px; gap: 1px; }
+  .v3-result:not([hidden]) .v3-result-kicker { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v3-result:not([hidden]) { animation: none !important; }
+}
+.v3-screen.v3-lite-mode .v3-result:not([hidden]) { animation: none; }

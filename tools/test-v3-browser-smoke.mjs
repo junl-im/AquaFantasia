@@ -212,6 +212,8 @@ async function main() {
     await capture('harbor-deep-blue-390x844');
     await evaluate("document.querySelector('[data-v3-harbor-close]').click();true");
     await capture('deep-blue-390x844');
+    const fishReveal=await evaluate("(async()=>{const v=document.querySelector('[data-v3-result-fish]');const b=document.querySelector('[data-v3-result]');return {present:!!v,hidden:b?.hidden,dimensions:v?.getBoundingClientRect().height,src:v?.getAttribute('src')};})()");
+    if(!fishReveal.present||fishReveal.hidden!==true)throw Error('Catch reveal artwork/card missing before a successful catch: '+JSON.stringify(fishReveal));
     console.log('[V3 browser] touch, fish PNG, dialogs, upgrades, new regions, legacy save isolation PASS');
   } finally {
     if(ws&&ws.readyState===1)ws.close();

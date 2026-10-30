@@ -1,4 +1,4 @@
-import { DEMO_FISH, advanceRound, bossFinalStand, createCast, fightImpact, fishVisualSignal, hookFish, reelAdvice, type FishingRound, type RoundPhase, type ReelAdviceLevel } from './fishingEngine';
+import { DEMO_FISH, advanceRound, bossFinalState, createCast, fightImpact, fishVisualSignal, hookFish, reelAdvice, type FishingRound, type RoundPhase, type ReelAdviceLevel } from './fishingEngine';
 import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, emptyCollection, parseCollection, totalCatches, type CollectionState, type RegionId } from './collection';
 import { FISHING_REGIONS, MAX_BRAKE_LEVEL, MAX_ROD_LEVEL, brakeUpgradePrice, canUnlockRegion, fishForRegion, getRegion, nextFishingGoal, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeBrake, tryUpgradeRod } from './progression';
 import './preview.css';
@@ -60,6 +60,7 @@ export function bootAquaFantasia(): void {
           <p data-v3-detail>① 줄 던지기 · ② 입질에 챔질 · ③ 장력을 조절하며 릴링</p>
         </div>
         <div class="v3-result" data-v3-result hidden role="status" aria-live="polite">
+          <img class="v3-result-fish" data-v3-result-fish alt="" decoding="async" />
           <span class="v3-result-crest" data-v3-result-crest aria-hidden="true">✦</span>
           <span class="v3-result-kicker" data-v3-result-kicker>오늘의 포획</span>
           <strong data-v3-result-name></strong>
@@ -148,6 +149,7 @@ export function bootAquaFantasia(): void {
   const detail = requiredElement<HTMLElement>(app, '[data-v3-detail]');
   const result = requiredElement<HTMLElement>(app, '[data-v3-result]');
   const resultKicker = requiredElement<HTMLElement>(app, '[data-v3-result-kicker]');
+  const resultFish = requiredElement<HTMLImageElement>(app, '[data-v3-result-fish]');
   const resultCrest = requiredElement<HTMLElement>(app, '[data-v3-result-crest]');
   const resultName = requiredElement<HTMLElement>(app, '[data-v3-result-name]');
   const resultDetail = requiredElement<HTMLElement>(app, '[data-v3-result-detail]');
@@ -361,6 +363,8 @@ export function bootAquaFantasia(): void {
       const caught = catchOutcome.result;
       haptic(caught.rarity === 'legendary' ? [90, 45, 110, 55, 140] : [80, 40, 110]);
       result.hidden = false;
+      resultFish.src = round.fish.image;
+      resultFish.alt = `포획한 ${round.fish.name}`;
       result.dataset.rarity = caught.rarity;
       result.dataset.discovery = caught.firstDiscovery ? 'new' : caught.newSizeRecord ? 'record' : 'repeat';
       resultKicker.textContent = caught.rarity === 'legendary' ? '전설 등급 포획!'
@@ -385,9 +389,14 @@ export function bootAquaFantasia(): void {
     phaseChanged(round.phase);
     const phase = round.phase;
     sea.dataset.phase = phase;
-    const finalStand = bossFinalStand(round);
+    const bossState = bossFinalState(round);
+    const finalStand = bossState.pattern !== 'none';
     lastStandBanner.hidden = !finalStand;
+    const finalNote = lastStandBanner.querySelector('span');
+    if (finalNote && finalStand) finalNote.textContent = bossState.label;
     sea.dataset.lastStand = finalStand ? 'true' : 'false';
+    sea.dataset.bossPattern = bossState.pattern;
+    sea.dataset.bossPhase = bossState.phase;
     biteWindow.hidden = phase !== 'bite';
     if (phase === 'bite') biteFill.style.width = `${Math.max(0, Math.min(100, round.biteWindow / 3.8 * 100))}%`;
     phaseTag.textContent = ({

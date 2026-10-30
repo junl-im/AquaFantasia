@@ -35,10 +35,19 @@ export interface ReelAdvice {
   readonly message: string;
 }
 
+export type BossFinalPattern = 'none' | 'crystal-flurry' | 'abyss-undertow';
+export interface BossFinalState {
+  readonly pattern: BossFinalPattern;
+  readonly phase: 'inactive' | 'surge' | 'recover';
+  readonly pressure: number;
+  readonly label: string;
+}
 export interface FightImpact {
   /** Set only while the real physics model reports a meaningful pull burst. */
   readonly active: boolean;
   readonly lastStand: boolean;
+  readonly bossPattern: BossFinalPattern;
+  readonly bossPhase: 'inactive' | 'surge' | 'recover';
   readonly strength: number;
   readonly cue: 'surge' | 'swerve' | 'wave' | 'steady';
   readonly label: string;
@@ -100,6 +109,28 @@ export function bossFinalStand(round: FishingRound): boolean {
   return round.phase === 'fighting' && round.fish.behavior === 'boss' && round.progress >= 0.78;
 }
 
+/** The actual boss-specific resistance curve; shared by physics, cues, and on-screen feedback. */
+export function bossFinalState(round: FishingRound): BossFinalState {
+  if (!bossFinalStand(round)) {
+    return { pattern: 'none', phase: 'inactive', pressure: 0, label: '' };
+  }
+  const offset = (round.seed % 97) / 97;
+  if (round.fish.id === 'leviathan') {
+    // Slow, weighty undertow. The long release window is deliberate, not cosmetic.
+    const cycle = (round.fightElapsed + offset * 0.5) % 2.9;
+    const surge = cycle < 1.18;
+    return { pattern: 'abyss-undertow', phase: surge ? 'surge' : 'recover',
+      pressure: surge ? 0.092 + Math.sin(cycle / 1.18 * Math.PI) * 0.036 : 0.018,
+      label: surge ? '심해 압박! 릴을 놓으세요' : '심해가 잠잠해졌어요 · 다시 감기' };
+  }
+  // Short repeated crystal strikes, clearly distinct from the leviathan's long pull.
+  const cycle = (round.fightElapsed + offset * 0.35) % 1.8;
+  const surge = cycle < 0.48;
+  return { pattern: 'crystal-flurry', phase: surge ? 'surge' : 'recover',
+    pressure: surge ? 0.095 + Math.sin(cycle / 0.48 * Math.PI) * 0.035 : 0.018,
+    label: surge ? '수정 돌진! 잠시 손을 떼세요' : '수정 돌진이 멎었어요 · 기회!' };
+}
+
 function fishPull(round: FishingRound): number {
   const { behavior, difficulty } = round.fish;
   const t = round.fightElapsed;
@@ -114,7 +145,7 @@ function fishPull(round: FishingRound): number {
     case 'wave': return base + Math.max(0, wave) * 0.095;
     case 'trickster': return base + (cycle > 2.5 && cycle < 3.7 ? 0.12 : 0);
     case 'boss': return base + 0.045 + (cycle < 1.2 ? 0.14 : 0)
-      + (bossFinalStand(round) ? 0.052 + Math.max(0, Math.sin(t * 4.3 + offset)) * 0.023 : 0);
+      + bossFinalState(round).pressure;
   }
 }
 
@@ -145,20 +176,24 @@ export function fishVisualSignal(round: FishingRound): FishVisualSignal {
 /** Drives audio, splash, line motion and guidance from the very same physical pull. */
 export function fightImpact(round: FishingRound): FightImpact {
   if (round.phase !== 'fighting') {
-    return { active: false, lastStand: false, strength: 0, cue: 'steady', label: '대기' };
+    return { active: false, lastStand: false, bossPattern: 'none', bossPhase: 'inactive',
+      strength: 0, cue: 'steady', label: '대기' };
   }
   const strength = clamp((fishPull(round) - 0.04) / 0.27, 0, 1);
   const behavior = round.fish.behavior;
   const isSurge = behavior === 'dart' || behavior === 'trickster' || behavior === 'boss';
-  const lastStand = bossFinalStand(round);
+  const boss = bossFinalState(round);
+  const lastStand = boss.pattern !== 'none';
   const active = isSurge ? strength >= 0.57 : behavior === 'wave' && strength >= 0.48;
   return {
     active,
     lastStand,
+    bossPattern: boss.pattern,
+    bossPhase: boss.phase,
     strength,
     cue: isSurge ? (behavior === 'trickster' ? 'swerve' : 'surge') : behavior === 'wave' ? 'wave' : 'steady',
-    label: !active ? (lastStand ? '최후의 저항 · 타이밍 조절' : '장력 유지')
-      : lastStand ? '최후의 돌진! 줄을 잠시 놓으세요' : behavior === 'boss' ? '강력한 심해 돌진!'
+    label: lastStand ? boss.label
+      : !active ? '장력 유지' : behavior === 'boss' ? '강력한 심해 돌진!'
       : behavior === 'trickster' ? '방향 급변! 줄을 놓으세요'
         : behavior === 'dart' ? '급속 돌진! 장력 주의' : '거센 물결! 타이밍을 보세요',
   };
@@ -172,20 +207,25 @@ export function reelAdvice(round: FishingRound): ReelAdvice {
   const resistance = fishVisualSignal(round).intensity;
   const surging = ['dart', 'trickster', 'boss'].includes(round.fish.behavior)
     && resistance >= 0.58;
-  const lastStand = bossFinalStand(round);
-  const releaseAt = lastStand ? 0.50 : surging ? 0.56 : 0.68;
+  const boss = bossFinalState(round);
+  const lastStand = boss.pattern !== 'none';
+  const releaseAt = lastStand && boss.phase === 'surge' ? 0.46 : surging ? 0.56 : 0.68;
   if (round.tension >= 0.84) {
     return { level: 'danger', title: '줄 끊김 위험!', message: '지금 손을 떼고 장력을 낮추세요' };
   }
   if (round.tension >= releaseAt) {
-    return { level: 'ease', title: lastStand ? '최후의 저항 · 손 떼기' : surging ? '돌진 중 · 잠시 쉬기' : '장력 높음 · 손 떼기',
-      message: '줄이 느슨해지면 다시 감으세요' };
+    return { level: 'ease', title: lastStand ? boss.phase === 'surge'
+      ? '최후의 압박 · 손 떼기' : '막판 장력 높음 · 손 떼기'
+      : surging ? '돌진 중 · 잠시 쉬기' : '장력 높음 · 손 떼기',
+      message: lastStand ? boss.label : '줄이 느슨해지면 다시 감으세요' };
   }
   if (round.tension <= 0.27) {
     return { level: 'reel', title: '좋은 순간 · 감기!', message: '지금 줄을 감아 거리를 좁히세요' };
   }
-  return { level: 'normal', title: lastStand ? '포획 직전 · 마지막 승부!' : surging ? '저항 주의' : '안정적인 장력',
-    message: lastStand ? '막판 돌진을 살피며 짧게 감았다 놓으세요'
+  return { level: 'normal', title: lastStand ? boss.phase === 'surge'
+      ? '최후의 저항 · 긴장!' : '포획 직전 · 감기 기회!'
+      : surging ? '저항 주의' : '안정적인 장력',
+    message: lastStand ? boss.label
       : surging ? '갑작스러운 돌진에 대비하세요' : '장력을 확인하며 천천히 감으세요' };
 }
 
@@ -222,7 +262,9 @@ export function advanceRound(round: FishingRound, seconds: number, holding: bool
     || round.fish.behavior === 'boss';
   // Large, sudden pulls briefly slow reeling rather than changing rewards or the timer.
   const surgeFactor = isSurgeFish ? 1 - clamp((pulling - 0.12) * 1.15, 0, 0.16) : 1;
-  const finalStandFactor = bossFinalStand(round) ? 0.91 : 1;
+  const finalBoss = bossFinalState(round);
+  const finalStandFactor = finalBoss.pattern === 'none' ? 1
+    : finalBoss.phase === 'surge' ? 0.87 : 0.98;
   const progressRate = holding
     ? (0.068 / round.fish.difficulty) * reelSpeed * surgeFactor * finalStandFactor * (1 - Math.max(0, tension - 0.67) * 0.28)
     : -0.008;

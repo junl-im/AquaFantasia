@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DEMO_FISH, createCast, hookFish, advanceRound, bossFinalStand, fightImpact, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
+import { DEMO_FISH, createCast, hookFish, advanceRound, bossFinalStand, bossFinalState, fightImpact, fishVisualSignal, rewardFor, reelAdvice } from '../src/v3/fishingEngine.ts';
 
 function waitForBite(round) {
   let state = round;
@@ -177,8 +177,8 @@ test('final stand activates only on late boss fights and follows actual pull str
   assert.ok(b.tension>a.tension,'final boss pull should raise tension more strongly');
   assert.ok((b.progress-active.progress)<(a.progress-before.progress),'final phase should resist reeling');
   assert.equal(reelAdvice({...active,tension:0.54}).level,'ease');
-  assert.match(reelAdvice({...active,tension:0.54}).title,/최후의 저항/);
-  assert.equal(reelAdvice({...active,tension:0.42}).title,'포획 직전 · 마지막 승부!');
+  assert.match(reelAdvice({...active,tension:0.54}).title,/최후의 압박|막판 장력/);
+  assert.match(reelAdvice({...active,tension:0.42}).title,/최후의 저항|감기 기회/);
   assert.ok(advanceRound({...active,tension:0.55},.05,false).tension<0.55,'letting go should ease final tension');
 });
 
@@ -190,4 +190,41 @@ test('result state never marks a finished boss as still in final combat',()=>{
     assert.equal(fightImpact({...initial,phase}).lastStand,false);
     assert.equal(bossFinalStand({...initial,phase}),false);
   }
+});
+
+test('blue jewel and leviathan use different deterministic boss pulses and recoveries', () => {
+  const king = DEMO_FISH.find(f=>f.id==='king');
+  const leviathan = DEMO_FISH.find(f=>f.id==='leviathan');
+  const make = (fish,t) => ({...hookFish({...createCast(fish,29,3,2),phase:'bite'}),
+    progress:0.84,tension:0.28,fightElapsed:t});
+  const tally = (fish) => {
+    const states=Array.from({length:160},(_,i)=>bossFinalState(make(fish,i*.05)));
+    assert.ok(states.some(x=>x.phase==='surge'));
+    assert.ok(states.some(x=>x.phase==='recover'));
+    assert.ok(states.every(x=>x.pressure>=0 && x.pressure<0.2));
+    const count=states.reduce((total,s,i)=>total+(i>0&&s.phase==='surge'&&states[i-1].phase!=='surge'?1:0),0);
+    return {states,count};
+  };
+  const a=tally(king),b=tally(leviathan);
+  assert.equal(a.states[0].pattern,'crystal-flurry');
+  assert.equal(b.states[0].pattern,'abyss-undertow');
+  assert.ok(a.count>b.count,'crystal bursts should be shorter and more frequent');
+  assert.ok(a.states.some(s=>s.label.includes('수정')));
+  assert.ok(b.states.some(s=>s.label.includes('심해')));
+  assert.deepEqual(bossFinalState(make(leviathan,2.8)),bossFinalState(make(leviathan,2.8)));
+  assert.equal(bossFinalState({...make(leviathan,3),progress:0.77}).pattern,'none');
+});
+
+test('boss surge has more pull and less reel progress than its recovery window',()=>{
+  const boss=DEMO_FISH.find(f=>f.id==='leviathan');
+  const make=(time)=>({...hookFish({...createCast(boss,51,2,2),phase:'bite'}),
+    progress:0.82,tension:0.25,fightElapsed:time});
+  const surge = Array.from({length:100},(_,i)=>make(i*.05)).find(r=>bossFinalState(r).phase==='surge');
+  const recover = Array.from({length:100},(_,i)=>make(i*.05)).find(r=>bossFinalState(r).phase==='recover');
+  assert.ok(surge && recover);
+  const a=advanceRound(surge,.05,true), b=advanceRound(recover,.05,true);
+  assert.ok(a.tension-surge.tension > b.tension-recover.tension);
+  assert.ok(a.progress-surge.progress < b.progress-recover.progress);
+  const easing=advanceRound({...surge,tension:0.68},.05,false);
+  assert.ok(easing.tension<0.68,'player can always recover by releasing the reel');
 });
