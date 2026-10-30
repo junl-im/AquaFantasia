@@ -3,6 +3,7 @@
    collection remain unchanged until the visual direction is reviewed. */
 import { AnimatedSprite, Application, Assets, Container, Graphics, MeshPlane, Sprite, type Texture } from 'pixi.js';
 import { visualMotion } from './visualMotion';
+import { surfaceMotion } from './surfaceMotion';
 import { fishVisualSignal, landingSignal, type FishingRound } from './fishingEngine';
 import type { RegionId } from './collection';
 
@@ -107,6 +108,13 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
   const fishingLine = new Graphics();
   fishingLine.zIndex = 8;
   stage.addChild(fishingLine);
+  const surfaceRipples = new Graphics();
+  surfaceRipples.zIndex = 8;
+  stage.addChild(surfaceRipples);
+  const castSplash = new Sprite(splashTexture);
+  castSplash.anchor.set(.5);
+  castSplash.zIndex = 8;
+  stage.addChild(castSplash);
   const bobber = new Sprite(floatTexture);
   bobber.anchor.set(.5);
   bobber.zIndex = 9;
@@ -237,7 +245,9 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     for(let x=0;x<=w+15;x+=20) seaSurface.lineTo(x,horizon+7+Math.sin(x*.021-waveTime*1.1)*3);
     seaSurface.stroke({color:0x95e8ef,width:1.25,alpha:.46});
 
-    const motion=visualMotion(round,held,Math.max(0,elapsed-phaseAt),elapsed,lite);
+    const phaseAge=Math.max(0,elapsed-phaseAt);
+    const motion=visualMotion(round,held,phaseAge,elapsed,lite);
+    const surface=surfaceMotion(round,phaseAge,elapsed,lite);
     vessel.y = horizon + Math.max(14,h*.06) + (lite?0:Math.sin(elapsed*1.45)*2.8);
     vessel.rotation = lite?0:Math.sin(elapsed*1.13)*.013;
     if (motion.frame !== previousFrame) {
@@ -247,9 +257,38 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     fisher.rotation=lite ? motion.rodBend*.5 : motion.rodBend;
     // Avoid nonuniform face/body squash: rotate a framed pose around its feet.
     fisher.skew.x = 0;
-    bobber.x=w*.59; bobber.y=horizon + h*.056 + Math.sin(waveTime*2.1)*2;
+    // The cast starts at the moving fisher's rod tip, not at a teleported float.
+    const tipX=fisher.width*.33, tipY=-fisher.height*.82;
+    const angle=fisher.rotation+vessel.rotation;
+    const startX=vessel.x+fisher.x + tipX*Math.cos(angle)-tipY*Math.sin(angle);
+    const startY=vessel.y+fisher.y + tipX*Math.sin(angle)+tipY*Math.cos(angle);
+    const flight=surface.castTravel * surface.castTravel * (3 - 2*surface.castTravel);
+    const targetX=w*.59, targetY=horizon+h*.056;
+    bobber.x=startX+(targetX-startX)*flight;
+    bobber.y=startY+(targetY-startY)*flight
+      - surface.castLift*Math.min(h*.17,95)
+      + (surface.castTravel>=1 ? Math.sin(waveTime*2.1)*2 : 0)
+      + surface.biteDip*Math.min(20,h*.035);
     bobber.width=Math.min(54,w*.12); bobber.scale.y=bobber.scale.x;
-    bobber.visible=phase==='waiting'||phase==='bite'||phase==='fighting';
+    bobber.visible=surface.visible;
+    surfaceRipples.clear();
+    if(surface.ripple>0 && surface.castTravel>.86) {
+      for(let i=0;i<2;i++) {
+        const opacity=Math.max(0,surface.ripple-i*.24);
+        if(opacity<=0) continue;
+        const spread=13+i*12+(1-opacity)*14;
+        surfaceRipples.ellipse(bobber.x,bobber.y+4,spread,spread*.25)
+          .stroke({color:i===0?0xf7ffff:0x74dfea,width:1.6,alpha:opacity*.77});
+      }
+    }
+    const castSplashAge=phaseAge-.60;
+    castSplash.visible=phase==='waiting' && !lite && castSplashAge>=0 && castSplashAge<.42;
+    if(castSplash.visible) {
+      const t=castSplashAge/.42;
+      castSplash.position.set(targetX,targetY+8);
+      castSplash.scale.set(Math.min(95,w*.22)/splashTexture.width*(.48+t*.65));
+      castSplash.alpha=Math.sin(Math.PI*t)*.70;
+    }
 
     for(const sh of shadows) {
       sh.sprite.x=w*(.37+sh.depth*.21)+Math.sin(elapsed*(.18+sh.depth*.07)+sh.depth*2)*w*.04;
@@ -301,12 +340,7 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
 
     fishingLine.clear();
     if(phase==='waiting'||phase==='fighting'||phase==='bite') {
-      // Attach line to the actual fisher raster's rod tip, rather than a fixed
-      // fraction of the screen. This follows boat bob + fisher pull rotation.
-      const tipX=fisher.width*.33, tipY=-fisher.height*.82;
-      const angle=fisher.rotation+vessel.rotation;
-      const startX=vessel.x+fisher.x + tipX*Math.cos(angle)-tipY*Math.sin(angle);
-      const startY=vessel.y+fisher.y + tipX*Math.sin(angle)+tipY*Math.cos(angle);
+      // Rod origin is shared with the ballistic cast, so the line stays attached.
       const endX=phase==='fighting'?fish.x:bobber.x;
       const endY=phase==='fighting'?fish.y:bobber.y;
       const bend=(held?1:-1)*Math.min(38,w*.065);
@@ -328,6 +362,10 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     host.dataset.v3FisherPose=motion.pose;
     host.dataset.v3FisherFrame=String(motion.frame);
     host.dataset.v3RodBend=motion.rodBend.toFixed(3);
+    host.dataset.v4CastTravel=surface.castTravel.toFixed(3);
+    host.dataset.v4BiteDip=surface.biteDip.toFixed(3);
+    host.dataset.v4SurfaceRipple=surface.ripple.toFixed(3);
+    host.dataset.v4FloatVisible=String(surface.visible);
   });
 
   return {
