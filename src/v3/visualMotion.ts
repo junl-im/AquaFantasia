@@ -1,5 +1,5 @@
 /** Pure V4 animation poses: visuals follow fishing input, not random loops. */
-import { fightImpact, type FishingRound } from './fishingEngine';
+import { fightImpact, type FishingRound } from './fishingEngine.ts';
 
 export type FisherPose = 'idle' | 'cast' | 'hook' | 'reel' | 'brace' | 'land' | 'fail';
 export interface VisualMotion {
