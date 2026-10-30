@@ -331,12 +331,15 @@ async function main() {
     await evaluate("document.querySelector('[data-v3-reel]').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,pointerId:81,pointerType:'touch',isPrimary:true}));true");
     await until(()=>evaluate("document.querySelector('.v3-sea')?.dataset.v3ScenePhase==='fighting'"),'V4 fish hooked for mesh animation',3000);
     await until(()=>evaluate("Number(document.querySelector('.v3-sea')?.dataset.v3FishBend)>0.05"),'V4 fish mesh deforms in action',4000);
-    const motionSample=await evaluate("({pose:document.querySelector('.v3-sea')?.dataset.v3FisherPose,frame:document.querySelector('.v3-sea')?.dataset.v3FisherFrame,bend:Number(document.querySelector('.v3-sea')?.dataset.v3FishBend),rod:Number(document.querySelector('.v3-sea')?.dataset.v3RodBend),held:document.querySelector('.v3-sea')?.dataset.v3SceneHeld})");
-    if(motionSample.pose!=='reel'||motionSample.held!=='true'||motionSample.bend<=0||motionSample.rod<=0)
+    const motionSample=await evaluate("({pose:document.querySelector('.v3-sea')?.dataset.v3FisherPose,frame:document.querySelector('.v3-sea')?.dataset.v3FisherFrame,bend:Number(document.querySelector('.v3-sea')?.dataset.v3FishBend),rod:Number(document.querySelector('.v3-sea')?.dataset.v3RodBend),held:document.querySelector('.v3-sea')?.dataset.v3SceneHeld,lineSag:Number(document.querySelector('.v3-sea')?.dataset.v4LineSag),wake:Number(document.querySelector('.v3-sea')?.dataset.v4WakeStrength)})");
+    if(motionSample.pose!=='reel'||motionSample.held!=='true'||motionSample.bend<=0||motionSample.rod<=0||!(motionSample.lineSag>0)||!(motionSample.wake>0))
       throw Error('V4 hooked sprite/rod/mesh motion is not coupled to reeling: '+JSON.stringify(motionSample));
     await capture('visual-v4-real-reeling-390x844');
     await evaluate("window.dispatchEvent(new PointerEvent('pointerup',{bubbles:true,pointerId:81,pointerType:'touch'}));true");
     await until(()=>evaluate("document.querySelector('.v3-sea')?.dataset.v3FisherPose==='brace'"),'V4 released reel pose',3000);
+    const releasedSag=await evaluate("Number(document.querySelector('.v3-sea')?.dataset.v4LineSag)");
+    if(!(releasedSag>motionSample.lineSag))
+      throw Error('V4 line should visibly relax after releasing the reel: '+JSON.stringify({releasedSag,motionSample}));
     await capture('visual-v4-cast-390x844');
     console.log('[V3 browser] animated 4-frame fisher, real reel/brace poses and deformable fish mesh PASS');
     // A narrow phone and widescreen desktop need their own rendered screenshots,
