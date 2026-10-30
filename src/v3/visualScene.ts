@@ -129,6 +129,8 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
   fisher.anchor.set(.5, 1);
   vessel.addChild(fisher);
   let previousFrame = -1;
+  let easedLean = 0;
+  let easedEffort = 0;
   const splash = new Sprite(splashTexture);
   splash.anchor.set(.5);
   splash.zIndex = 11;
@@ -167,7 +169,7 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
       if (image) void Assets.load<Texture>(path(image)).then((tex) => {
         if (disposed || ticket !== textureTicket) return;
         if (fishBody) { fish.removeChild(fishBody); fishBody.destroy(); }
-        const mesh = new MeshPlane({texture:tex,verticesX:9,verticesY:3});
+        const mesh = new MeshPlane({texture:tex,verticesX:13,verticesY:5});
         // MeshPlane has no Sprite.anchor: center it with its pivot instead.
         mesh.pivot.set(tex.width/2,tex.height/2);
         fish.addChild(mesh);
@@ -223,7 +225,8 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
 
   app.ticker.add((ticker) => {
     if (disposed) return;
-    elapsed += Math.min(ticker.deltaMS/1000,.05);
+    const dt=Math.min(ticker.deltaMS/1000,.05);
+    elapsed += dt;
     const w=app.screen.width, h=app.screen.height;
     if (w<=0 || h<=0) return;
     if (Math.abs(w-lastWidth)>1 || Math.abs(h-lastHeight)>1) {
@@ -254,8 +257,13 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
       fisher.gotoAndStop(motion.frame);
       previousFrame=motion.frame;
     }
-    fisher.rotation=lite ? motion.rodBend*.5 : motion.rodBend;
-    // Avoid nonuniform face/body squash: rotate a framed pose around its feet.
+    // Smooth abrupt reel/brace transitions instead of snapping the whole raster body.
+    const response=1-Math.exp(-dt*(motion.pose==='hook'?16:motion.pose==='reel'?11:7));
+    easedLean+=(motion.rodBend-easedLean)*response;
+    easedEffort+=(motion.fisherEffort-easedEffort)*response;
+    fisher.rotation=lite ? easedLean*.5 : easedLean;
+    fisher.y=-boat.height*.15 + (lite?0:Math.sin(elapsed*(5+easedEffort*3))*1.7*easedEffort);
+    // Keep the character's real proportions; do not scale or skew limbs.
     fisher.skew.x = 0;
     // The cast starts at the moving fisher's rod tip, not at a teleported float.
     const tipX=fisher.width*.33, tipY=-fisher.height*.82;
@@ -320,22 +328,32 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
       fish.alpha=phase==='landed'?1:.87;
       const attribute=fishBody.geometry.getAttribute('aPosition').buffer;
       const vertices=attribute.data;
-      let bendMax=0;
+      let bendMax=0,finMax=0;
+      const textureW=fishBody.texture.width,textureH=fishBody.texture.height;
       for(let i=0;i<vertices.length;i+=2){
         const x=fishRest[i],y=fishRest[i+1];
-        // Source fish portraits face left: keep head fixed and bend body/tail right.
-        const tail=clamp((x/fishBody.texture.width-.30)/.70,0,1);
+        // Local body shear keeps the portrait's head stable while its tail bends.
+        const tail=clamp((x/textureW-.30)/.70,0,1);
         const wave=Math.sin(elapsed*motion.tailFrequency + tail*2.4);
-        const shift=motion.tailAmplitude*fishBody.texture.height*tail*tail*wave;
-        vertices[i]=x+shift*.13;
-        vertices[i+1]=y+shift;
+        const shift=motion.tailAmplitude*textureH*tail*tail*wave;
+        // Upper/lower mesh rows respond at different phases like fin membranes.
+        // This does not pretend there are separately illustrated fin sprites.
+        const v=clamp(y/textureH,0,1);
+        const edge=Math.pow(Math.abs(v-.5)*2,.7);
+        const finWave=Math.sin(elapsed*motion.finFrequency+tail*3.8+(v>.5?1.65:0));
+        const finShift=motion.finAmplitude*textureH*edge*tail*finWave;
+        vertices[i]=x+shift*.13+finShift*.09;
+        vertices[i+1]=y+shift+finShift;
         bendMax=Math.max(bendMax,Math.abs(shift));
+        finMax=Math.max(finMax,Math.abs(finShift));
       }
       attribute.update();
       host.dataset.v3FishBend=bendMax.toFixed(2);
+      host.dataset.v4FinFlutter=finMax.toFixed(2);
     } else {
       fish.visible=false;
       host.dataset.v3FishBend='0';
+      host.dataset.v4FinFlutter='0';
     }
 
     fishingLine.clear();
@@ -362,6 +380,7 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     host.dataset.v3FisherPose=motion.pose;
     host.dataset.v3FisherFrame=String(motion.frame);
     host.dataset.v3RodBend=motion.rodBend.toFixed(3);
+    host.dataset.v4FisherEffort=easedEffort.toFixed(3);
     host.dataset.v4CastTravel=surface.castTravel.toFixed(3);
     host.dataset.v4BiteDip=surface.biteDip.toFixed(3);
     host.dataset.v4SurfaceRipple=surface.ripple.toFixed(3);
