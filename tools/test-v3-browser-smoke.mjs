@@ -276,6 +276,14 @@ async function main() {
     await capture('harbor-deep-blue-390x844');
     await evaluate("document.querySelector('[data-v3-harbor-close]').click();true");
     await capture('deep-blue-390x844');
+    const liteSplash=await evaluate("({lite:document.querySelector('.v3-screen').classList.contains('v3-lite-mode'),splashDisplay:getComputedStyle(document.querySelector('[data-v3-landing-splash]')).display})");
+    if(!liteSplash.lite||liteSplash.splashDisplay!=='none')
+      throw Error('Reduced FX mode must hide landing splash animation: '+JSON.stringify(liteSplash));
+    // Switch to normal visual mode to verify that landing splash really animates.
+    await evaluate("document.querySelector('[data-v3-harbor-toggle]').click();document.querySelector('[data-v3-lite]').click();document.querySelector('[data-v3-harbor-close]').click();true");
+    const normalSplash=await evaluate("({lite:document.querySelector('.v3-screen').classList.contains('v3-lite-mode'),splashDisplay:getComputedStyle(document.querySelector('[data-v3-landing-splash]')).display})");
+    if(normalSplash.lite||normalSplash.splashDisplay==='none')
+      throw Error('Standard mode did not restore landing splash effects: '+JSON.stringify(normalSplash));
     const fishRevealBefore=await evaluate("({present:!!document.querySelector('[data-v3-result-fish]'),hidden:document.querySelector('[data-v3-result]')?.hidden})");
     if(!fishRevealBefore.present||fishRevealBefore.hidden!==true)throw Error('Catch reveal artwork/card missing before fishing: '+JSON.stringify(fishRevealBefore));
     const liveResult=await evaluate('('+catchOneFish.toString()+')()');
