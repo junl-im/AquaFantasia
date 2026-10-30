@@ -338,6 +338,11 @@ async function main() {
       if(w===1280 && (v4layout.sea?.right>=v4layout.console?.left||
         v4layout.console?.left<700||v4layout.sea?.width<650))
         throw Error('Desktop V4 must use a side command deck, not a narrow phone strip: '+JSON.stringify(v4layout));
+      const sonar=await evaluate("({display:getComputedStyle(document.querySelector('[data-v4-sonar]')).display,label:document.querySelector('[data-v4-sonar-note]')?.textContent,target:document.querySelector('[data-v4-sonar]')?.style.getPropertyValue('--v4-target-y')})");
+      if(w===1280 && (sonar.display==='none'||!sonar.label||!sonar.target))
+        throw Error('Live desktop sonar must be readable and physically driven: '+JSON.stringify(sonar));
+      if(w<1024 && sonar.display!=='none')
+        throw Error('Sonar must not consume precious mobile space: '+JSON.stringify(sonar));
       if(!c.width||!c.height||!c.canvasRect || c.canvasRect.width<100 ||
         v4layout.scrollW>w+2 || v4layout.scrollH>h+2 || v4layout.console.bottom>h+3)
         throw Error('V4 responsive visual stage overflows '+w+'x'+h+': '+JSON.stringify({v4layout,c}));
