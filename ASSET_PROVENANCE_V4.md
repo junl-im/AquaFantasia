@@ -49,3 +49,10 @@
 - **코드 범위:** `src/v3/visualMotion.ts`, `src/v3/visualScene.ts`, `tools/test-v3-fishing-engine.mjs`. 낚시 규칙·보상·도감·세이브 변경 없음. V4 실험 브랜치에서만 실행.
 - **자동 QA:** [GitHub Actions #41035938629](https://github.com/junl-im/AquaFantasia/actions/runs/41035938629) 검증 성공, 정식 배포 생략. Node 테스트 54개, 빌드·타입 검사·Chromium 뷰포트/터치 통과. `aqua-v3-viewport-qa` PNG 캡처는 7일 보관.
 - **추가 미검증:** 모바일 물리 기기, 스크린샷 사람 눈 검수, 실제 분리형 지느러미·손·낚싯대 관절 리깅, 이질적인 아트 스타일 통일. V4 초안 PR을 정식 병합하지 않음.
+
+## V4 프로젝트 전용 신규 원화 — 낚싯대 (2026-11-05)
+- **파일:** `public/assets/v4_original/fishing_rod_ocean_cel.png`, 투명 RGBA PNG 724×2172px.
+- **제작 경위:** 사용자 AquaFantasia 게임 프로젝트용으로 OpenAI 이미지 생성 도구를 이용해 이 대화에서 새로 제작한 2.5D 수채/셀셰이딩 판타지 낚싯대 이미지. 외부 게임·오픈소스 팩에서 가져온 그림이 아님. 원본 프롬프트 주제: 청록 흑연 로드, 황동 릴, 코르크 손잡이, 독립 투명 배경.
+- **적용 방식:** `src/v3/visualScene.ts`의 PixiJS `MeshPlane`(3×12 정점) 텍스처로 사용. 실제 줄 장력과 릴 입력을 읽어 상부 정점을 변형하고 찌/낚싯줄 기점이 메시 끝을 추적. PNG 로딩 실패 시 기존 단순 Canvas 그리기 폴백만 사용.
+- **추적/제약:** 사용자 프로젝트 `junl-im/AquaFantasia`에 전용 등록. 생성 이미지이며 제3자 아트가 포함되었다는 소유권·완전 독창성·독점권 법적 보증은 하지 않음. 다른 기존 PNG의 권리 검수는 별개 미완료. 새 SVG 없음.
+- **출시 상태:** `visual-rebuild-v4` / Draft PR #4에서만 검수. 사용자의 전체 그림체·원근감 및 모바일 시각 승인 이전에는 공개 V3를 대체하지 않음.
