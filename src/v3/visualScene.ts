@@ -42,7 +42,7 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
   app.canvas.style.pointerEvents = 'none';
   host.prepend(app.canvas);
 
-  const [underwater, skyTexture, shadowTexture, boatTexture, fisherFrames, floatTexture, splashTexture] =
+  const [underwater, skyTexture, shadowTexture, boatTexture, fisherFrames, floatTexture, splashTexture, rodTexture] =
     await Promise.all([
       Assets.load<Texture>(path(ART.shore)),
       Assets.load<Texture>(path('./assets/v12/bg/ocean_portrait.webp')),
@@ -53,6 +53,8 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
       ))),
       Assets.load<Texture>(path('./assets/art/fishing_float.png')),
       Assets.load<Texture>(path('./assets/v205/fishing/wave_splash.png')),
+      // V4 bespoke transparent painting. Keep gameplay usable if an asset fails.
+      Assets.load<Texture>(path('./assets/v4_original/fishing_rod_ocean_cel.png')).catch(() => null),
     ]);
 
   const stage = app.stage;
@@ -139,6 +141,15 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
   // A separate fishing rod pivots from the hand. It is drawn in Pixi, never SVG.
   const rod = new Graphics();
   vessel.addChild(rod);
+  const paintedRod = rodTexture
+    ? new MeshPlane({texture:rodTexture,verticesX:3,verticesY:12}) : null;
+  const paintedRodRest = paintedRod
+    ? new Float32Array(paintedRod.geometry.getAttribute('aPosition').buffer.data) : null;
+  if (paintedRod && rodTexture) {
+    // Pivot is the cork grip near the fisher's hand, not the image center.
+    paintedRod.pivot.set(rodTexture.width*.44,rodTexture.height*.95);
+    vessel.addChild(paintedRod);
+  }
   let previousFrame = -1;
   let easedLean = 0;
   let easedEffort = 0;
@@ -289,28 +300,51 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     const handleX=fisher.x+fisher.width*.16;
     const handleY=fisher.y-fisher.height*.34;
     const theta=.68+easedRodAngle;
-    const tipX=handleX+Math.sin(theta)*length;
-    const tipY=handleY-Math.cos(theta)*length+easedRodFlex*length*.15;
-    const dxRod=tipX-handleX,dyRod=tipY-handleY;
-    const c1x=handleX+dxRod*.28,c1y=handleY+dyRod*.30;
-    const c2x=handleX+dxRod*.72,c2y=handleY+dyRod*.73+easedRodFlex*length*.18;
+    let tipX=handleX+Math.sin(theta)*length;
+    let tipY=handleY-Math.cos(theta)*length+easedRodFlex*length*.15;
     rod.clear();
-    // Two tapered strokes, a short grip and a turning reel handle give the
-    // rod a readable silhouette without external art or an SVG asset.
-    rod.moveTo(handleX-4,handleY+6)
-      .lineTo(handleX+dxRod*.19,handleY+dyRod*.18)
-      .stroke({color:0x173947,width:4.5,alpha:.95});
-    rod.moveTo(handleX,handleY)
-      .bezierCurveTo(c1x,c1y,c2x,c2y,tipX,tipY)
-      .stroke({color:0x214b55,width:3.5,alpha:.97});
-    rod.moveTo(handleX+1,handleY-1)
-      .bezierCurveTo(c1x,c1y-1,c2x,c2y-1,tipX,tipY)
-      .stroke({color:0xe8c994,width:1.45,alpha:.93});
-    const reelX=handleX+dxRod*.14,reelY=handleY+dyRod*.12+5;
-    rod.circle(reelX,reelY,5.2).fill({color:0x193b49,alpha:.96})
-      .stroke({color:0xe9c780,width:1.2});
-    rod.circle(reelX+Math.cos(rodTarget.reelTurn)*2.6,
-      reelY+Math.sin(rodTarget.reelTurn)*2.6,1.35).fill(0xf5e6ba);
+    if (paintedRod && paintedRodRest && rodTexture) {
+      // Bend only the upper shaft of the bespoke PNG; the painted reel and
+      // cork grip remain fixed to the hand. No texture cropping or SVG.
+      const scale=length/(rodTexture.height*.94);
+      paintedRod.position.set(handleX,handleY);
+      paintedRod.rotation=theta;
+      paintedRod.scale.set(scale);
+      const vertexBuffer=paintedRod.geometry.getAttribute('aPosition').buffer;
+      const vertices=vertexBuffer.data;
+      for(let i=0;i<vertices.length;i+=2) {
+        const originalY=paintedRodRest[i+1];
+        const upper=clamp((.95-originalY/rodTexture.height)/.94,0,1);
+        vertices[i]=paintedRodRest[i]+easedRodFlex*rodTexture.height*.105*upper*upper;
+        vertices[i+1]=originalY;
+      }
+      vertexBuffer.update();
+      // The line's origin is computed from the SAME displaced top as the mesh.
+      const pivotX=rodTexture.width*.44,pivotY=rodTexture.height*.95;
+      const topX=(rodTexture.width*.445+easedRodFlex*rodTexture.height*.105-pivotX)*scale;
+      const topY=(rodTexture.height*.01-pivotY)*scale;
+      tipX=handleX+topX*Math.cos(theta)-topY*Math.sin(theta);
+      tipY=handleY+topX*Math.sin(theta)+topY*Math.cos(theta);
+    } else {
+      // Soft fallback keeps the full fishing loop usable during image failures.
+      const dxRod=tipX-handleX,dyRod=tipY-handleY;
+      const c1x=handleX+dxRod*.28,c1y=handleY+dyRod*.30;
+      const c2x=handleX+dxRod*.72,c2y=handleY+dyRod*.73+easedRodFlex*length*.18;
+      rod.moveTo(handleX-4,handleY+6)
+        .lineTo(handleX+dxRod*.19,handleY+dyRod*.18)
+        .stroke({color:0x173947,width:4.5,alpha:.95});
+      rod.moveTo(handleX,handleY)
+        .bezierCurveTo(c1x,c1y,c2x,c2y,tipX,tipY)
+        .stroke({color:0x214b55,width:3.5,alpha:.97});
+      rod.moveTo(handleX+1,handleY-1)
+        .bezierCurveTo(c1x,c1y-1,c2x,c2y-1,tipX,tipY)
+        .stroke({color:0xe8c994,width:1.45,alpha:.93});
+      const reelX=handleX+dxRod*.14,reelY=handleY+dyRod*.12+5;
+      rod.circle(reelX,reelY,5.2).fill({color:0x193b49,alpha:.96})
+        .stroke({color:0xe9c780,width:1.2});
+      rod.circle(reelX+Math.cos(rodTarget.reelTurn)*2.6,
+        reelY+Math.sin(rodTarget.reelTurn)*2.6,1.35).fill(0xf5e6ba);
+    }
     const vesselCos=Math.cos(vessel.rotation),vesselSin=Math.sin(vessel.rotation);
     const startX=vessel.x+tipX*vesselCos-tipY*vesselSin;
     const startY=vessel.y+tipX*vesselSin+tipY*vesselCos;
@@ -466,6 +500,8 @@ export async function mountVisualStage(host: HTMLElement): Promise<VisualStage> 
     host.dataset.v4RodFlex=easedRodFlex.toFixed(3);
     host.dataset.v4RodTipX=startX.toFixed(1);
     host.dataset.v4RodTipY=startY.toFixed(1);
+    host.dataset.v4RodArtwork=paintedRod ? 'painted' : 'fallback';
+    host.dataset.v4RodMeshBend=paintedRod ? (easedRodFlex*length*.105).toFixed(2) : '0';
   });
 
   return {
