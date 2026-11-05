@@ -300,6 +300,10 @@ async function main() {
     const pixi=await evaluate("({canvas:!!document.querySelector('.v3-pixi-canvas'),width:document.querySelector('.v3-pixi-canvas')?.width,height:document.querySelector('.v3-pixi-canvas')?.height,app:!!document.querySelector('.v3-visual-rebuild'),scrollW:document.documentElement.scrollWidth,innerW:innerWidth})");
     if(!pixi.canvas||!(pixi.width>0)||!(pixi.height>0)||!pixi.app||pixi.scrollW>pixi.innerW+2)
       throw Error('V4 visual scene failed to mount correctly: '+JSON.stringify(pixi));
+    // Regression: Korean status copy must wrap inside the visual stage on phones.
+    const statusWrap=await evaluate("(()=>{const h=document.querySelector('.v3-center-status h2'),s=document.querySelector('.v3-sea');const a=h.getBoundingClientRect(),b=s.getBoundingClientRect();return {left:a.left,right:a.right,seaRight:b.right,scrollW:h.scrollWidth,clientW:h.clientWidth,height:a.height};})()");
+    if(statusWrap.right>statusWrap.seaRight-5||statusWrap.scrollW>statusWrap.clientW+2)
+      throw Error('V4 mobile status text overflows the water viewport: '+JSON.stringify(statusWrap));
     await capture('visual-v4-pixi-390x844');
     const skins=await evaluate("(()=>{const style=(sel,pseudo)=>{const e=document.querySelector(sel);if(!e)return null;const x=getComputedStyle(e,pseudo);return {bg:x.backgroundImage,border:x.borderTopLeftRadius+'|'+x.borderTopRightRadius,icon:pseudo?x.backgroundImage:undefined}};return {cast:style('.v3-cast'),reel:style('.v3-reel'),dex:style('.v3-dex-toggle'),harbor:style('.v3-harbor-toggle'),castIcon:style('.v3-cast','::before'),reelIcon:style('.v3-reel','::before'),dexIcon:style('.v3-dex-toggle','::before'),harborIcon:style('.v3-harbor-toggle','::before'),frame:style('.v3-console'),tension:style('.v3-tension'),progress:style('.v3-progress')}})()");
     if(!skins.cast||!skins.reel||skins.cast.bg===skins.reel.bg||
