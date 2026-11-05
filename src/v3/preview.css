@@ -1278,3 +1278,30 @@ body.v3-preview-mode #toast-root { display: none !important; }
   .v3-visual-rebuild .v3-center-status p {display:none}
   .v3-visual-rebuild .v3-phase-tag {min-height:22px;padding:3px 8px;font-size:10px}
 }
+
+/* V4 mobile status: wrap within the water viewport without clipping Korean copy. */
+.v3-visual-rebuild .v3-center-status h2,
+.v3-visual-rebuild .v3-center-status p {
+  box-sizing:border-box;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+@media (max-width:420px) {
+  .v3-visual-rebuild .v3-center-status {
+    left:47%;
+    right:8px;
+    padding:5px 5px 8px;
+  }
+  .v3-visual-rebuild .v3-center-status h2 {
+    font-size:clamp(12px,3.35vw,15px);
+    line-height:1.28;
+  }
+  .v3-visual-rebuild .v3-center-status p {
+    font-size:9px;
+    line-height:1.3;
+  }
+}
