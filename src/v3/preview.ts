@@ -2,6 +2,8 @@ import { DEMO_FISH, advanceRound, bossFinalState, createCast, fightImpact, fishV
 import { V3_COLLECTION_KEY, RARITY_LABELS, collectCatch, discoveredSpecies, emptyCollection, parseCollection, totalCatches, type CollectionState, type RegionId } from './collection';
 import { FISHING_REGIONS, MAX_BRAKE_LEVEL, MAX_ROD_LEVEL, brakeUpgradePrice, canUnlockRegion, fishForRegion, getRegion, nextFishingGoal, rodUpgradePrice, trySelectRegion, tryUnlockRegion, tryUpgradeBrake, tryUpgradeRod } from './progression';
 import './preview.css';
+import './visualControls.css';
+import type { VisualStage } from './visualScene';
 
 const START_REGION = '잔잔한 해변';
 const WATER_ART: Readonly<Record<RegionId, string>> = {
@@ -75,6 +77,11 @@ export function bootAquaFantasia(): void {
           <button type="button" class="v3-dex-toggle" data-v3-dex-toggle>도감 0 / ${DEMO_FISH.length}</button>
           <button type="button" class="v3-harbor-toggle" data-v3-harbor-toggle>항구 · 강화</button>
           <span class="v3-wallet" data-v3-wallet>보유 코인 0</span>
+        </div>
+        <div class="v4-sonar" data-v4-sonar data-phase="ready" style="--v4-target-y:72%" aria-hidden="true">
+          <div class="v4-sonar-top"><strong>포획 탐지계</strong><span>REEL SONAR</span></div>
+          <div class="v4-sonar-disc"><span class="v4-sonar-point"></span><span class="v4-sonar-center"></span></div>
+          <p class="v4-sonar-note" data-v4-sonar-note>바다를 탐색하는 중</p>
         </div>
         <div class="v3-meter-block">
           <div class="v3-meter-label"><span>줄 장력</span><strong data-v3-tension-label>10%</strong></div>
@@ -161,6 +168,8 @@ export function bootAquaFantasia(): void {
   const progressFill = requiredElement<HTMLElement>(app, '[data-v3-progress]');
   const tensionLabel = requiredElement<HTMLElement>(app, '[data-v3-tension-label]');
   const progressLabel = requiredElement<HTMLElement>(app, '[data-v3-progress-label]');
+  const sonarGauge = requiredElement<HTMLElement>(app, '[data-v4-sonar]');
+  const sonarNote = requiredElement<HTMLElement>(app, '[data-v4-sonar-note]');
   const reelCoach = requiredElement<HTMLElement>(app, '[data-v3-reel-coach]');
   const wallet = requiredElement<HTMLElement>(app, '[data-v3-wallet]');
   const regionLabel = requiredElement<HTMLElement>(app, '[data-v3-region]');
@@ -181,6 +190,19 @@ export function bootAquaFantasia(): void {
   const harborObjective = requiredElement<HTMLElement>(app, '[data-v3-harbor-objective]');
   const liteButton = requiredElement<HTMLButtonElement>(app, '[data-v3-lite]');
   const screen = requiredElement<HTMLElement>(app, '.v3-screen');
+  const visualRequested = new URLSearchParams(window.location.search).get('visual') === '1';
+  let visualStage: VisualStage | null = null;
+  if (visualRequested) {
+    screen.classList.add('v3-visual-rebuild');
+    void import('./visualScene').then(({mountVisualStage}) => mountVisualStage(sea)).then((stage) => {
+      visualStage = stage;
+      stage.update(round, held, collection.selectedRegion, liteMode || reducedMotion);
+    }).catch((error: unknown) => {
+      screen.classList.remove('v3-visual-rebuild');
+      sea.dataset.v3SceneStatus='fallback';
+      console.warn('Optional visual scene could not initialize, returning to V3 fallback',error);
+    });
+  }
   const hint = requiredElement<HTMLElement>(app, '[data-v3-hint]');
   const soundButton = requiredElement<HTMLButtonElement>(app, '[data-v3-sound]');
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
@@ -278,7 +300,7 @@ export function bootAquaFantasia(): void {
             <span data-met="${collection.rodLevel >= region.requiredRodLevel}">장비 Lv.${collection.rodLevel}/${region.requiredRodLevel}</span>
             <span data-met="${collection.coins >= region.unlockPrice}">코인 ${collection.coins.toLocaleString('ko-KR')}/${region.unlockPrice.toLocaleString('ko-KR')}</span>
           </div>`;
-      return `<article class="v3-harbor-region ${selected ? 'is-active' : ''}" data-v3-region-ready="${ready}">
+      return `<article class="v3-harbor-region ${selected ? 'is-active' : ''}" data-v3-biome="${region.id}" data-v3-region-ready="${ready}">
         <div class="v3-harbor-region-head"><strong>${region.name}</strong><span class="v3-region-state">${selected ? '낚시 중' : unlocked ? '열림' : ready ? '해금 가능' : '잠김'}</span></div>
         <p class="v3-harbor-region-description">${region.description}</p>
         ${requirements}
@@ -392,6 +414,14 @@ export function bootAquaFantasia(): void {
     phaseChanged(round.phase);
     const phase = round.phase;
     sea.dataset.phase = phase;
+    sonarGauge.dataset.phase = phase;
+    sonarGauge.style.setProperty('--v4-target-y', `${Math.round(72 - round.progress * 51)}%`);
+    sonarGauge.style.setProperty('--v4-signal', String(Math.round(round.tension * 100)));
+    sonarNote.textContent = phase === 'bite' ? '입질 감지 · 챔질 기회'
+      : phase === 'fighting' ? `포획 ${Math.round(round.progress * 100)}% · 장력 ${Math.round(round.tension * 100)}%`
+        : phase === 'landed' ? '포획 성공 · 기록 완료'
+          : phase === 'escaped' ? '신호 소실 · 다시 도전'
+            : phase === 'waiting' ? '찌 움직임을 탐지 중' : '새로운 바다를 탐색하세요';
     const bossState = bossFinalState(round);
     const finalStand = bossState.pattern !== 'none';
     lastStandBanner.hidden = !finalStand;
@@ -458,6 +488,7 @@ export function bootAquaFantasia(): void {
         : round.tension > 0.76 ? 'danger' : held ? 'pulling' : 'releasing';
     sea.dataset.reelRhythm = rhythm;
     screen.dataset.reelRhythm = rhythm;
+    visualStage?.update(round, held, collection.selectedRegion, liteMode || reducedMotion);
     if (phase === 'fighting' &&
       ((finalStand && !lastFinalStand) || (impact.active && (!lastImpact || lastImpactCue !== impact.cue)))) {
       const now = performance.now();
